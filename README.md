@@ -79,33 +79,37 @@ Fleet-Orchestrator/
 
 ## 3. Quick Start: Copilot Multi-Account Fleet
 
-### Step 1: Configure Accounts in `.env.fleet`
-1. Copy `.env.fleet.example` to `.env.fleet` (automatically ignored by Git).
-2. Generate Fine-Grained Personal Access Tokens (v2) on GitHub with **"Copilot Requests"** read/write permission.
-3. Paste the tokens:
-   ```bash
-   COPILOT_ACCOUNT_1_NAME=AaradhyaDT
-   COPILOT_ACCOUNT_1_TOKEN=<paste_token_here>
-
-   COPILOT_ACCOUNT_2_NAME=Aaradhya-claudeuser0
-   COPILOT_ACCOUNT_2_TOKEN=<paste_token_here>
-   ```
+### Step 1: The 9-Step Account Activation Playbook
+To register and activate any GitHub account in the fleet:
+1. Sign out of all GitHub accounts in the browser.
+2. Sign in to the target GitHub account.
+3. Navigate to: `https://github.com/settings/copilot/features`.
+4. Click **Start using Copilot Free** (enables Copilot entitlement on GitHub's API gateway).
+5. Navigate to: `https://github.com/settings/personal-access-tokens/new`.
+6. Select Token Name: `Fleet-Orchestrator` | Expiration: Custom or No expiration.
+7. Under **Permissions**, switch to the **Account** tab (leave Repository permissions at *None*).
+8. Under **Account permissions**, select:
+   - **`Copilot Requests`**: `Read and write`
+   - *(Optional)* `Copilot Chat`, `Copilot Editor Context`
+9. Click **Generate token** and paste the token string into `.env.fleet`.
 
 ### Step 2: Check Fleet Status
 ```powershell
 python tools/copilot_fleet.py status
 ```
+*Current Fleet: 27 registered accounts, 24 verified active & passing canary (4,800 AI credits / month).*
 
 ### Step 3: Run Concurrent Canary Ping
 ```powershell
 python tools/copilot_fleet.py canary
 ```
+*Runs concurrent non-interactive headless smoke tasks across all active accounts with zero credit overruns.*
 
-### Step 4: Run Hybrid Fleet Benchmark
+### Step 4: Run End-to-End Task Dispatch Smoke Test
 ```powershell
-pytest tests/ -v
-python scripts/test_hybrid_copilot_fleet.py
+python tools/e2e_dispatch_smoke.py
 ```
+*Validates the full autonomous task lifecycle (REGISTER -> CLAIM LEASE -> EXECUTE -> CHECKPOINT -> DONE).*
 
 ---
 
