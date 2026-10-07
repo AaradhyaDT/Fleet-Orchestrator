@@ -1,0 +1,94 @@
+# Windows OS temporary files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+Desktop.ini
+$RECYCLE.BIN/
+
+# PowerShell history & transient log files
+*.log
+*.tmp
+*.mht
+!dev-logs/
+
+# Visual Studio Code & IDE settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.idea/
+
+# Claude Desktop profile runtime output
+.claude-profiles/
+
+# Python bytecode/cache (mcp-servers/notebooklm-mcp/run_server.py)
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+.env
+.env.*
+!.env.example
+!.env.fleet.example
+*.db
+*.sqlite
+*.sqlite3
+.copilot-workers/
+
+# Local generated state / analysis artifacts
+graphify-out/*
+graphify-out/cache/**
+!graphify-out/.graphify*
+!graphify-out/graph.json
+!graphify-out/graph.html
+!graphify-out/GRAPH_TREE.html
+!graphify-out/Claude-Desktop-callflow.html
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/manifest.json
+!graphify-out/wiki/
+*.sig
+.gemini/
+GEMINI.md
+
+# Google Calendar OAuth client secret & cached token — never commit
+gcal-credentials.json
+gcal-token.json
+
+# Sensitive context & private notes
+*private-context*
+*personal-context*
+*secret-context*
+*.private.md
+*.local.md
+*secrets*
+private/
+secrets/
+
+# Credentials, tokens, keys & auth caches
+*credentials*.json
+*token*.json
+*secret*.json
+*.pem
+*.key
+*.pfx
+*.p12
+*.cert
+*.crt
+storage_state*.json
+cookies*.json
+.notebooklm-mcp-cli/
+*.sqlite-journal
+*.db-journal
+
+# Generated deliverables
+/outputs/*.pdf
+
