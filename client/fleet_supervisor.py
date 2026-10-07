@@ -169,6 +169,8 @@ def create_adapter(inst: dict[str, Any]) -> BaseWorkerAdapter:
         worktree = inst.get("Worktree")
         timeout = float(inst.get("Timeout", 180.0))
         max_continues = int(inst.get("MaxContinues", 5))
+        github_tok = inst.get("GitHubToken") or (os.getenv(inst.get("EnvToken", "")) if inst.get("EnvToken") else None)
+        max_credits = int(inst["MaxAiCredits"]) if "MaxAiCredits" in inst and inst["MaxAiCredits"] is not None else None
         return CopilotCLIAdapter(
             worker_id=worker_id,
             nickname=nickname,
@@ -177,6 +179,9 @@ def create_adapter(inst: dict[str, Any]) -> BaseWorkerAdapter:
             timeout=timeout,
             max_autopilot_continues=max_continues,
             model=model if model != "claude-3-5-sonnet" else None,
+            github_token=github_tok,
+            copilot_home=inst.get("CopilotHome"),
+            max_ai_credits=max_credits,
         )
 
     raise ValueError(f"Unknown provider '{provider}' for worker '{worker_id}'")

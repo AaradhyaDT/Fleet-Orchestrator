@@ -153,8 +153,8 @@ async def cmd_canary(args: argparse.Namespace) -> None:
             nickname=acc["name"],
             github_token=acc["token"],
             copilot_home=acc["state_dir"],
-            timeout=30.0,
-            max_ai_credits=5,
+            timeout=60.0,
+            max_ai_credits=30,
         )
         res = await adapter.execute_task(
             task_id=f"canary_{acc['worker_id']}",
