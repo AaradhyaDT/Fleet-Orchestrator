@@ -31,7 +31,10 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Literal
 
-from mcp.server.mcpserver import MCPServer
+try:
+    from mcp.server.fastmcp import FastMCP as MCPServer
+except ImportError:
+    from mcp.server.mcpserver import MCPServer
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 STATE_ROOT = REPO_ROOT / "orchestrator-state"
@@ -144,15 +147,26 @@ def _next_task_id() -> str:
     return f"{prefix}{seq:03d}"
 
 
-srv = MCPServer(
-    name="orchestrator-mcp",
-    description=(
-        "File-based task coordination for orchestrator/divider/executor "
-        "roles across multiple Claude Desktop profiles. State is JSON "
-        "under orchestrator-state/, synced by sync.ps1 — see "
-        "orchestrator-state/SCHEMA.md for the file contract."
-    ),
-)
+try:
+    srv = MCPServer(
+        name="orchestrator-mcp",
+        instructions=(
+            "File-based task coordination for orchestrator/divider/executor "
+            "roles across multiple Claude Desktop profiles. State is JSON "
+            "under orchestrator-state/, synced by sync.ps1 — see "
+            "orchestrator-state/SCHEMA.md for the file contract."
+        ),
+    )
+except TypeError:
+    srv = MCPServer(
+        name="orchestrator-mcp",
+        description=(
+            "File-based task coordination for orchestrator/divider/executor "
+            "roles across multiple Claude Desktop profiles. State is JSON "
+            "under orchestrator-state/, synced by sync.ps1 — see "
+            "orchestrator-state/SCHEMA.md for the file contract."
+        ),
+    )
 
 
 @srv.tool(

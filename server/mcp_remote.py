@@ -6,7 +6,10 @@ from datetime import datetime, timezone, timedelta
 from typing import Any, cast
 
 import aiosqlite
-from mcp.server.mcpserver import MCPServer
+try:
+    from mcp.server.fastmcp import FastMCP as MCPServer
+except ImportError:
+    from mcp.server.mcpserver import MCPServer
 
 from server.core.config import settings
 from server.core.database import get_db_conn
@@ -14,7 +17,7 @@ from server.core.pipeline_engine import pipeline_engine
 
 mcp_server = MCPServer(
     name="remote-orchestrator",
-    description=(
+    instructions=(
         "Hosted Remote Orchestration & Shared Context MCP server for Claude Desktop profiles. "
         "Provides cross-profile coordination, distributed task execution, SKU pipelines, "
         "shared team memory, and durable project context over HTTPS/SSE."
