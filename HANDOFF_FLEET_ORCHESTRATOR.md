@@ -69,6 +69,11 @@
    - Built autonomous batch executor (`python tools/copilot_fleet.py batch --specs "..." --concurrency 2`).
    - Verified dry-run and live batch task execution independent of Claude Desktop.
 
+4. **Continuous Google Drive & NotebookLM Knowledge Base**:
+   - Built zero-dependency automated sync engine (`scripts/sync_drive.py` and `.github/workflows/sync-drive.yml`) synchronizing living markdown files (`README.md`, `HANDOFF_FLEET_ORCHESTRATOR.md`, `team-context.md`, `team-memory.md`) into Google Drive folder `1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF` under parent `Super-NLM` (`1wn330GxoGoMf956xClHxULnsJQWxohxx`).
+   - Created dedicated Google NotebookLM knowledge base `6a37d992-6ceb-4d72-a909-e10e9cca32b6` (URL: https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6) with all 4 Google Docs attached as live-updating sources.
+   - Tracks file hashes and Google Drive permanent file IDs via `drive-manifest.json`.
+
 ---
 
 ## 4. Operational Invariants & Rules

@@ -7,25 +7,25 @@
       "drive_file_id": "1IPM7NtGMqOxrpvCwJ9uOtF0h3jjoAayWfP57rgq6cgc",
       "drive_file_name": "fleet-orchestrator_README.md",
       "description": "Fleet Orchestrator \u2014 Headless Autonomous Copilot Fleet Engine",
-      "sha256": "272ec36433da8362"
+      "sha256": "e5c571d1f70e4944"
     },
     "HANDOFF_FLEET_ORCHESTRATOR.md": {
       "drive_file_id": "17-KjT6qlQkYjBWPkMC1BtgFUNPFzFvuvnA-sZ3v0BdM",
       "drive_file_name": "fleet-orchestrator_HANDOFF.md",
       "description": "Fleet Orchestrator \u2014 Architecture & Operational Handoff",
-      "sha256": "cb29e59fd14efda4"
+      "sha256": "a0a134ddebb7acf0"
     },
     "team-context.md": {
       "drive_file_id": "1IHRflyaIlGBD2Z3lmMCygzPGwZ8ef9XOFEbmfC1NycU",
       "drive_file_name": "fleet-orchestrator_team-context.md",
       "description": "Fleet Orchestrator \u2014 Team Context & Shared Conventions",
-      "sha256": "0d738f0040533b29"
+      "sha256": "e48f10f04572b361"
     },
     "team-memory.md": {
       "drive_file_id": "1GwCvv6X_y0VFfRhxuvBU0mICtlOG62OegvVC9c9q_zs",
       "drive_file_name": "fleet-orchestrator_team-memory.md",
       "description": "Fleet Orchestrator \u2014 Team Memory & Accumulated Knowledge Log",
-      "sha256": "82f41448b2363d94"
+      "sha256": "7c6af080450258ce"
     }
   }
 }

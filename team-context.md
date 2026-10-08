@@ -18,3 +18,11 @@ paragraph, it means the file was never filled in — edit
 
 Repo: github.com/AaradhyaDT/SPARK (main). Tracker: dev_logs/SPARK_TRACKER.md — dense, versioned, authoritative; read §0/§1/§2 before acting. sync.ps1 present — mandatory workflow for any commit once a repo/sync.ps1 is touched this session (see repo-conventions).
 Deep-research board: parent task_2026-08-21_001, 19 child tracks task_2026-08-21_002–\_020 (see orch memory for full context: NLM notebook 2c00f5a4 already has 6 core academic sources loaded — check before searching cold; 3b67fc33 is now proposal/deck reference only, not tracker-current).
+
+## Fleet-Orchestrator Ecosystem Knowledge Base
+
+- Repository: `F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator` (github.com/AaradhyaDT/Fleet-Orchestrator)
+- Google Drive Docs Folder: `1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF` (inside Super-NLM parent `1wn330GxoGoMf956xClHxULnsJQWxohxx`)
+- Dedicated NotebookLM: `6a37d992-6ceb-4d72-a909-e10e9cca32b6` (https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6)
+- Manifest & Continuous Sync: `drive-manifest.json`, `scripts/sync_drive.py`, `.github/workflows/sync-drive.yml`
+

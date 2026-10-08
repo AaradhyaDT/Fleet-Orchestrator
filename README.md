@@ -68,9 +68,11 @@ Fleet-Orchestrator/
 │
 ├── .github/workflows/             # GitHub Actions CI/CD workflows
 │   ├── ci.yml                     # Dynamic matrix CI/CD & container verification
-│   └── self-healing-watchdog.yml  # Autonomous scheduled health sentinel
+│   ├── self-healing-watchdog.yml  # Autonomous scheduled health sentinel
+│   └── sync-drive.yml             # Continuous Google Drive & NotebookLM documentation sync
 │
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
+│   ├── sync_drive.py              # Zero-dependency Google Drive doc sync engine
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
 ├── tests/                         # Full automated pytest test suite (173+ tests)
@@ -78,6 +80,7 @@ Fleet-Orchestrator/
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
 ├── .env.fleet.example             # Multi-account token template (safe example)
+├── drive-manifest.json            # Google Drive & NotebookLM live sync manifest
 ├── launch_copilot_fleet.bat       # One-click Windows fleet launcher
 ├── sync.ps1                       # Ecosystem synchronization with pre-commit gates & selective CI
 ├── sync.bat                       # Zero-friction execution wrapper (-SkipCI / -NoCI)
@@ -151,6 +154,23 @@ pytest tests/
 
 ---
 
-## 5. License
+## 5. Living Documentation & NotebookLM Knowledge Base
+
+Fleet-Orchestrator maintains a continuous, bidirectional documentation pipeline that synchronizes living repository documents into Google Drive and anchors them into a dedicated Google NotebookLM knowledge base:
+
+- **Google Drive Folder**: [`Fleet-Orchestrator`](https://drive.google.com/drive/folders/1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF) (`1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF`)
+  - Subfolder of parent **Super-NLM** (`1wn330GxoGoMf956xClHxULnsJQWxohxx`) at `My Drive > Share to Aaradhya > Super-NLM`.
+  - Automatically converts markdown files (`README.md`, `HANDOFF_FLEET_ORCHESTRATOR.md`, `team-context.md`, `team-memory.md`) into native Google Docs while preserving permanent file IDs.
+- **Dedicated Google NotebookLM**: [`Fleet-Orchestrator`](https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6) (`6a37d992-6ceb-4d72-a909-e10e9cca32b6`)
+  - Grounded directly on the Google Drive live sources.
+  - Enables instant semantic search, multi-turn technical Q&A, and cross-repo synthesis across all Fleet-Orchestrator architecture and operations.
+- **Automated Sync Engine (`scripts/sync_drive.py` & `.github/workflows/sync-drive.yml`)**:
+  - Triggers on every push to `main` touching repository documentation or manifests.
+  - Zero third-party dependencies (pure standard library `urllib` with exponential backoff and jitter).
+  - Tracked via [`drive-manifest.json`](drive-manifest.json) using SHA-256 change detection.
+
+---
+
+## 6. License
 
 MIT License. Developed by Aaradhya Dev Tamrakar.
