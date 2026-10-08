@@ -1,0 +1,31 @@
+{
+  "folder_id": "1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF",
+  "folder_url": "https://drive.google.com/drive/folders/1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF",
+  "notebook_id": "95a79d26-2f87-42cd-8cb9-8361a1e56059",
+  "files": {
+    "README.md": {
+      "drive_file_id": "1IPM7NtGMqOxrpvCwJ9uOtF0h3jjoAayWfP57rgq6cgc",
+      "drive_file_name": "fleet-orchestrator_README.md",
+      "description": "Fleet Orchestrator \u2014 Headless Autonomous Copilot Fleet Engine",
+      "sha256": "272ec36433da8362"
+    },
+    "HANDOFF_FLEET_ORCHESTRATOR.md": {
+      "drive_file_id": "17-KjT6qlQkYjBWPkMC1BtgFUNPFzFvuvnA-sZ3v0BdM",
+      "drive_file_name": "fleet-orchestrator_HANDOFF.md",
+      "description": "Fleet Orchestrator \u2014 Architecture & Operational Handoff",
+      "sha256": "cb29e59fd14efda4"
+    },
+    "team-context.md": {
+      "drive_file_id": "1IHRflyaIlGBD2Z3lmMCygzPGwZ8ef9XOFEbmfC1NycU",
+      "drive_file_name": "fleet-orchestrator_team-context.md",
+      "description": "Fleet Orchestrator \u2014 Team Context & Shared Conventions",
+      "sha256": "0d738f0040533b29"
+    },
+    "team-memory.md": {
+      "drive_file_id": "1GwCvv6X_y0VFfRhxuvBU0mICtlOG62OegvVC9c9q_zs",
+      "drive_file_name": "fleet-orchestrator_team-memory.md",
+      "description": "Fleet Orchestrator \u2014 Team Memory & Accumulated Knowledge Log",
+      "sha256": "986b6b04ca1f5002"
+    }
+  }
+}
