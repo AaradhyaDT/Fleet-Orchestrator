@@ -637,6 +637,10 @@ class FleetControlApp(tk.Tk):
                 self.log("[!] No active window handles found in active_fleet.json.")
                 return
 
+            user32 = getattr(getattr(ctypes, "windll", None), "user32", None)
+            sw = user32.GetSystemMetrics(0) if user32 else 1920
+            sh = user32.GetSystemMetrics(1) if user32 else 1080
+
             num_windows = max(1, len(hwnds))
             col_w = max(300, sw // num_windows)
 
