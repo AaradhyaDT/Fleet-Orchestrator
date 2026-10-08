@@ -9,7 +9,7 @@ echo Watching orchestrator-state\tasks for pending code tasks...
 echo Press Ctrl+C to stop.
 echo.
 
-python tools\copilot_queue_worker.py
+python tools\copilot_queue_worker.py %*
 if errorlevel 1 (
     echo.
     echo [!] Worker exited with code %errorlevel%.

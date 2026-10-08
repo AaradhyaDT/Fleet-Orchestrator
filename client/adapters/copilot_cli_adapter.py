@@ -176,6 +176,29 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
 
             tokens_used = usage_data.get("total_tokens", usage_data.get("tokens", 0))
             model_used = usage_data.get("model", self.model or "copilot-cli-autopilot")
+            credits_used = int(
+                usage_data.get("credits_used")
+                or usage_data.get("ai_credits_used")
+                or usage_data.get("credits")
+                or usage_data.get("ai_credits")
+                or (1 if proc.returncode == 0 else 0)
+            )
+
+            # Detect quota / rate limit exhaustion in output/errors
+            combined_err = f"{stderr_str} {stdout_str}".lower()
+            quota_exhausted = any(
+                p in combined_err
+                for p in [
+                    "credit limit",
+                    "credits exhausted",
+                    "quota exceeded",
+                    "usage limit",
+                    "rate limit",
+                    "out of credits",
+                    "insufficient credits",
+                    "429",
+                ]
+            )
 
             if proc.returncode == 0:
                 return {
@@ -184,6 +207,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "result_text": stdout_str if stdout_str else f"Task {task_id} completed successfully.",
                     "model_used": model_used,
                     "tokens_used": tokens_used,
+                    "credits_used": credits_used,
+                    "usage_data": usage_data,
+                    "quota_exhausted": quota_exhausted,
                     "error": None,
                 }
             else:
@@ -193,6 +219,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "result_text": stdout_str,
                     "model_used": model_used,
                     "tokens_used": tokens_used,
+                    "credits_used": credits_used,
+                    "usage_data": usage_data,
+                    "quota_exhausted": quota_exhausted,
                     "error": f"CLI_EXIT_{proc.returncode}: {stderr_str[:300] if stderr_str else 'Command failed'}",
                 }
 
@@ -209,6 +238,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 "result_text": "",
                 "model_used": self.model or "copilot-cli",
                 "tokens_used": 0,
+                "credits_used": 0,
+                "usage_data": {},
+                "quota_exhausted": False,
                 "error": f"TIMEOUT: Exceeded {self.timeout}s execution window",
             }
         except Exception as e:
@@ -224,6 +256,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 "result_text": "",
                 "model_used": self.model or "copilot-cli",
                 "tokens_used": 0,
+                "credits_used": 0,
+                "usage_data": {},
+                "quota_exhausted": False,
                 "error": f"SUBPROCESS_ERROR: {e}",
             }
         finally:

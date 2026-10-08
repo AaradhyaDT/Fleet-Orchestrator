@@ -93,3 +93,6 @@ cookies*.json
 # Generated deliverables
 /outputs/*.pdf
 
+# Isolated Git Worktrees for Fleet Queue Workers
+.worktrees/
+

@@ -159,3 +159,54 @@ async def test_copilot_cli_env_and_credits_isolation(tmp_path):
         assert env_passed.get("COPILOT_HOME") == str(copilot_home)
         assert copilot_home.exists()
 
+
+@pytest.mark.asyncio
+async def test_copilot_cli_usage_file_parsing():
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-usage",
+        nickname="Usage Tester",
+        copilot_path="copilot.exe",
+    )
+
+    mock_proc = AsyncMock()
+    mock_proc.returncode = 0
+    mock_proc.communicate.return_value = (b"Autopilot task completed", b"")
+
+    async def fake_subprocess_exec(*args, **kwargs):
+        # Find usage file from args
+        if "--usage-output-file" in args:
+            idx = args.index("--usage-output-file")
+            usage_file = Path(args[idx + 1])
+            usage_file.write_text(json.dumps({
+                "total_tokens": 850,
+                "credits_used": 3,
+                "model": "gpt-4o",
+            }), encoding="utf-8")
+        return mock_proc
+
+    with patch("asyncio.create_subprocess_exec", side_effect=fake_subprocess_exec):
+        res = await adapter.execute_task("task_usage", "spec", "code", {})
+        assert res["success"] is True
+        assert res["credits_used"] == 3
+        assert res["tokens_used"] == 850
+        assert res["model_used"] == "gpt-4o"
+        assert res["quota_exhausted"] is False
+
+
+@pytest.mark.asyncio
+async def test_copilot_cli_quota_exhaustion_detection():
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-quota",
+        nickname="Quota Tester",
+        copilot_path="copilot.exe",
+    )
+
+    mock_proc = AsyncMock()
+    mock_proc.returncode = 1
+    mock_proc.communicate.return_value = (b"", b"Error: Usage limit reached. 429 Rate limit / Out of credits.")
+
+    with patch("asyncio.create_subprocess_exec", return_value=mock_proc):
+        res = await adapter.execute_task("task_quota", "spec", "code", {})
+        assert res["success"] is False
+        assert res["quota_exhausted"] is True
+
