@@ -50,7 +50,8 @@ Fleet-Orchestrator/
 │       ├── copilot_cli_adapter.py # GitHub Copilot CLI subprocess adapter
 │       ├── copilot_headless.py    # Asynchronous Copilot REST + tool loop
 │       ├── claude_desktop_proxy.py# Claude Desktop UI/CDP bridge
-│       ├── gemini_free_adapter.py # Gemini Free-tier adapter
+│       ├── gemini_api_adapter.py  # Modern google-genai v2.25.0 adapter (Gemini 3.8 Flash)
+│       ├── gemini_free_adapter.py # Backward-compatible Gemini adapter
 │       ├── groq_adapter.py        # Groq LLM adapter
 │       └── ollama_local_adapter.py# Ollama local models adapter
 │
@@ -65,7 +66,7 @@ Fleet-Orchestrator/
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (110+ tests)
+├── tests/                         # Full automated pytest test suite (169+ tests)
 ├── .env.fleet.example             # Multi-account token template (safe example)
 ├── launch_copilot_fleet.bat       # One-click Windows fleet launcher
 ├── sync.ps1                       # Ecosystem synchronization with pre-commit gates
