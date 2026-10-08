@@ -588,9 +588,12 @@ class CopilotQueueWorker:
             status="idle",
         )
 
-    async def process_one_task(self) -> bool:
+    async def process_one_task(self, target_task_id: str | None = None) -> bool:
         """Picks up, claims, and executes a single pending code task. Returns True if a task was processed."""
-        pending = self.find_pending_code_tasks()
+        if target_task_id:
+            pending = [t for t in self.find_pending_code_tasks() if t.get("id") == target_task_id]
+        else:
+            pending = self.find_pending_code_tasks()
         if not pending:
             return False
 
@@ -664,7 +667,7 @@ class CopilotQueueWorker:
 
         if self.concurrency <= 1:
             while self._running:
-                processed = await self.process_one_task()
+                processed = await self.process_one_task(target_task_id=target_task_id)
                 if once:
                     break
                 if not processed:
@@ -675,7 +678,7 @@ class CopilotQueueWorker:
             async def _worker_loop():
                 while self._running:
                     async with semaphore:
-                        processed = await self.process_one_task()
+                        processed = await self.process_one_task(target_task_id=target_task_id)
                     if once:
                         break
                     if not processed:
@@ -702,6 +705,7 @@ async def main() -> None:
     parser.add_argument("--worker-id", type=str, default=None, help="Bind this worker process to a specific worker ID (e.g. copilot-w1)")
     parser.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
     parser.add_argument("--once", action="store_true", help="Process at most one task and exit")
+    parser.add_argument("--task-id", type=str, default=None, help="Target a specific pending task ID")
 
     args = parser.parse_args()
 
@@ -724,7 +728,7 @@ async def main() -> None:
             # Windows may not support add_signal_handler for all signals
             pass
 
-    await worker.run(once=args.once)
+    await worker.run(once=args.once, target_task_id=args.task_id)
 
 
 if __name__ == "__main__":
