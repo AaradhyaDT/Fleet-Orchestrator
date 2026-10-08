@@ -3,16 +3,26 @@ name: Fleet-Orchestrator CI/CD
 on:
   push:
     branches: [main, "feat/**", "fix/**"]
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'docs/**'
+    paths:
+      - 'client/**'
+      - 'server/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'requirements*.txt'
+      - 'ruff.toml'
+      - 'pytest.ini'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [main]
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'docs/**'
+    paths:
+      - 'client/**'
+      - 'server/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'requirements*.txt'
+      - 'ruff.toml'
+      - 'pytest.ini'
+      - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 concurrency:

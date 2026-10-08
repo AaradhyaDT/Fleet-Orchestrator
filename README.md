@@ -79,12 +79,28 @@ Fleet-Orchestrator/
 ├── ruff.toml                      # Linter configuration
 ├── .env.fleet.example             # Multi-account token template (safe example)
 ├── launch_copilot_fleet.bat       # One-click Windows fleet launcher
-├── sync.ps1                       # Ecosystem synchronization with pre-commit gates
-├── sync.bat                       # Zero-friction execution wrapper
+├── sync.ps1                       # Ecosystem synchronization with pre-commit gates & selective CI
+├── sync.bat                       # Zero-friction execution wrapper (-SkipCI / -NoCI)
 ├── AGENTS.md                      # Operational rules & epistemic invariants
 ├── GEMINI.md                      # Antigravity IDE agent pointer
 └── README.md                      # Repository documentation
 ```
+
+---
+
+## 2.1 Selective Synchronization & CI/CD Controls
+
+To guarantee that day-to-day work (updating task queues, logging scratchpads, syncing memory, writing docs) is completely friction-free without triggering expensive CI builds:
+
+- **Strict Code Path Filtering (`.github/workflows/ci.yml`)**:
+  GitHub Actions CI only executes when files in `client/`, `server/`, `tools/`, or `tests/` are modified. Operational state (`orchestrator-state/`), logs, and documentation (`*.md`) never trigger CI runs.
+- **Selective CI Bypass (`-SkipCI` / `-NoCI`)**:
+  ```powershell
+  .\sync.bat -SkipCI                        # Rapid sync bypassing remote CI
+  .\sync.bat -m "feat(wip): draft" -NoCI    # Custom commit with [skip ci]
+  ```
+- **Automated Non-Code Detection**:
+  `sync.ps1` automatically detects when staged changes are strictly non-code and appends `[skip ci]` to the commit message.
 
 ---
 

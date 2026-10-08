@@ -13,7 +13,10 @@ param (
     [Alias("m")]
     [string]$Message,
 
-    [switch]$PullOnly
+    [switch]$PullOnly,
+
+    [Alias("NoCI", "SkipActions")]
+    [switch]$SkipCI
 )
 
 Set-StrictMode -Version Latest
@@ -151,11 +154,27 @@ function Get-AutoCommitMessage {
         }
     }
 
-    if ($hunkContext) {
-        return "${prefix}: update ${summary} - ${hunkContext}${churn}"
+    $baseMsg = if ($hunkContext) {
+        "${prefix}: update ${summary} - ${hunkContext}${churn}"
+    } else {
+        "${prefix}: update ${summary}${churn}"
     }
 
-    return "${prefix}: update ${summary}${churn}"
+    $stagedFiles = git diff --cached --name-only 2>$null
+    if ($stagedFiles) {
+        $hasCodeFiles = $false
+        foreach ($sf in $stagedFiles) {
+            if ($sf -match '^(client|server|tools|tests)/' -or $sf -match '^requirements.*\.txt$' -or $sf -eq 'ruff.toml' -or $sf -eq 'pytest.ini') {
+                $hasCodeFiles = $true
+                break
+            }
+        }
+        if (-not $hasCodeFiles -and $baseMsg -notmatch '\[(skip[ -]ci|ci[ -]skip)\]') {
+            $baseMsg = "$baseMsg [skip ci]"
+        }
+    }
+
+    return $baseMsg
 }
 
 function Sync-MemoryToTeamMemory {
@@ -297,6 +316,10 @@ try {
         if ($Message) {
             Write-Notice -Message "Auto-generated commit message: '$Message'"
         }
+    }
+
+    if ($SkipCI -and $Message -and $Message -notmatch '\[(skip[ -]ci|ci[ -]skip)\]') {
+        $Message = "$Message [skip ci]"
     }
 
     if ($Message) {
