@@ -59,14 +59,24 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Schemas, worker roles, and live status
 ├── worker-prompts/                # Specialized role system prompts (lead, scout, coder, qa)
 ├── tools/                         # CLI controllers and dashboards
+│   ├── ci_secret_scanner.py       # Standalone secret leakage audit tool
+│   ├── ci_self_healing_runner.py  # Self-healing test runner with flaky retries
+│   ├── fleet_watchdog.py          # Scheduled health & invariant sentinel
 │   ├── copilot_fleet.py           # Multi-account Copilot fleet controller
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
 │   └── fleet_gui.py               # Tkinter desktop control panel
 │
+├── .github/workflows/             # GitHub Actions CI/CD workflows
+│   ├── ci.yml                     # Dynamic matrix CI/CD & container verification
+│   └── self-healing-watchdog.yml  # Autonomous scheduled health sentinel
+│
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (169+ tests)
+├── tests/                         # Full automated pytest test suite (173+ tests)
+├── requirements.txt               # Unified project dependencies
+├── requirements-dev.txt           # CI/CD and linting dependencies
+├── ruff.toml                      # Linter configuration
 ├── .env.fleet.example             # Multi-account token template (safe example)
 ├── launch_copilot_fleet.bat       # One-click Windows fleet launcher
 ├── sync.ps1                       # Ecosystem synchronization with pre-commit gates
