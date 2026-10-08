@@ -2,15 +2,18 @@
 """
 Copilot Fleet Controller CLI:
 Discovers pooled accounts from .env.fleet, provides live status auditing,
-credit allocation tracking, and concurrent task dispatch across isolated workers.
+real-time quota & monthly credit burn rate dashboard, concurrent canary checks,
+autonomous task submission, and standalone batch execution independent of Claude Desktop.
 """
 
 from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 import httpx
@@ -82,6 +85,132 @@ def discover_accounts(env_vars: dict[str, str]) -> list[dict[str, Any]]:
     return accounts
 
 
+def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, Any]:
+    """Computes real-time fleet quota capacity, monthly credit burn rate, and worker states."""
+    from tools.copilot_queue_worker import resolve_state_dir
+
+    resolved_state = resolve_state_dir(str(state_dir) if state_dir else None)
+    live_status_dir = resolved_state / "live-status"
+    tasks_dir = resolved_state / "tasks"
+    checkpoints_dir = resolved_state / "checkpoints"
+
+    env_vars = load_env_fleet()
+    accounts = discover_accounts(env_vars)
+
+    total_registered = len(accounts)
+    ready_workers = 0
+    total_monthly_credits = 0
+    total_credits_used = 0
+
+    worker_metrics = []
+    status_counts = {"idle": 0, "busy": 0, "cooldown": 0, "offline": 0}
+
+    now_dt = datetime.now(timezone.utc)
+
+    for acc in accounts:
+        wid = acc["worker_id"]
+        limit = acc["monthly_credits"]
+        total_monthly_credits += limit
+        has_token = acc["has_token"]
+        if has_token:
+            ready_workers += 1
+
+        used = 0
+        current_task = None
+        note = "Uninitialized"
+        heartbeat = None
+        cooldown_until = None
+        worker_status = "idle" if has_token else "offline"
+
+        status_file = live_status_dir / f"{wid}.json"
+        if status_file.exists():
+            try:
+                with open(status_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                used = data.get("credits_used", 0)
+                current_task = data.get("current_task_id")
+                note = data.get("note", "")
+                heartbeat = data.get("heartbeat_at")
+                cooldown_until = data.get("cooldown_until")
+
+                if cooldown_until:
+                    exp = datetime.fromisoformat(cooldown_until.replace("Z", "+00:00"))
+                    if now_dt < exp:
+                        worker_status = "cooldown"
+                    elif current_task:
+                        worker_status = "busy"
+                    elif has_token:
+                        worker_status = "idle"
+                elif current_task:
+                    worker_status = "busy"
+                elif has_token:
+                    worker_status = data.get("status", "idle")
+            except Exception:
+                pass
+
+        total_credits_used += used
+        status_counts[worker_status] = status_counts.get(worker_status, 0) + 1
+
+        remaining = max(0, limit - used)
+        worker_metrics.append({
+            "index": acc["index"],
+            "worker_id": wid,
+            "name": acc["name"],
+            "has_token": has_token,
+            "status": worker_status,
+            "monthly_credits": limit,
+            "credits_used": used,
+            "credits_remaining": remaining,
+            "current_task_id": current_task,
+            "cooldown_until": cooldown_until,
+            "heartbeat_at": heartbeat,
+            "note": note,
+        })
+
+    total_remaining = max(0, total_monthly_credits - total_credits_used)
+    burn_pct = round((total_credits_used / total_monthly_credits * 100), 2) if total_monthly_credits > 0 else 0.0
+
+    pending_count = len(list(tasks_dir.glob("task_*.json"))) if tasks_dir.exists() else 0
+    checkpoints_count = len(list(checkpoints_dir.glob("task_*.json"))) if checkpoints_dir.exists() else 0
+
+    return {
+        "fleet": {
+            "total_registered_accounts": total_registered,
+            "ready_accounts": ready_workers,
+            "total_monthly_credits": total_monthly_credits,
+            "total_credits_used": total_credits_used,
+            "total_credits_remaining": total_remaining,
+            "burn_rate_pct": burn_pct,
+            "status_counts": status_counts,
+        },
+        "tasks": {
+            "total_tasks_tracked": pending_count,
+            "completed_checkpoints": checkpoints_count,
+        },
+        "workers": worker_metrics,
+    }
+
+
+def create_task_payload(spec: str, kind: str = "code", task_id: str | None = None, parent_id: str | None = None) -> dict[str, Any]:
+    """Generates a task JSON payload conforming to orchestrator-state/SCHEMA.md."""
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    tid = task_id or f"task_{date_str}_{os.urandom(3).hex()}"
+    return {
+        "id": tid,
+        "parent_id": parent_id,
+        "kind": kind,
+        "spec": spec,
+        "status": "pending",
+        "owner_account": None,
+        "branch_name": None,
+        "blocked_reason": None,
+        "created_by": "fleet_cli",
+        "created_at": now,
+        "updated_at": now,
+    }
+
+
 async def cmd_status(args: argparse.Namespace) -> None:
     """Displays fleet account topology, token readiness, and monthly credit headroom."""
     env_vars = load_env_fleet()
@@ -132,6 +261,199 @@ async def cmd_status(args: argparse.Namespace) -> None:
     print(f"Active Ready Workers: {active_workers} / {len(accounts)}")
     print(f"Pooled Monthly Capacity: {total_credits} AI credits")
     print("=" * 70 + "\n")
+
+
+def cmd_dashboard(args: argparse.Namespace) -> None:
+    """Surfaces real-time quota telemetry and credit burn rate dashboard."""
+    metrics = get_fleet_quota_metrics(state_dir=args.state_dir)
+
+    if getattr(args, "json", False):
+        print(json.dumps(metrics, indent=2))
+        return
+
+    f = metrics["fleet"]
+    t = metrics["tasks"]
+
+    print("\n" + "=" * 80)
+    print(" GITHUB COPILOT MULTI-ACCOUNT CLI FLEET QUOTA & BURN-RATE DASHBOARD")
+    print("=" * 80)
+
+    bar_width = 30
+    filled = int(round(bar_width * (f["burn_rate_pct"] / 100.0)))
+    bar = "=" * filled + "-" * (bar_width - filled)
+
+    print(f" Pooled Monthly Capacity: {f['total_monthly_credits']:,} AI Credits ({f['total_registered_accounts']} accounts)")
+    print(f" Consumed Credits:        {f['total_credits_used']:,} credits ({f['burn_rate_pct']}% burn rate)")
+    print(f" Remaining Quota:         {f['total_credits_remaining']:,} credits")
+    print(f" Monthly Burn Bar:        [{bar}] {f['burn_rate_pct']}%")
+    print(
+        f" Fleet Worker Topology:   {f['ready_accounts']} Ready | {f['status_counts'].get('idle', 0)} Idle | "
+        f"{f['status_counts'].get('busy', 0)} Busy | {f['status_counts'].get('cooldown', 0)} Cooldown | "
+        f"{f['status_counts'].get('offline', 0)} Offline"
+    )
+    print(f" State Pipeline:          {t['total_tasks_tracked']} Tasks Tracked | {t['completed_checkpoints']} Checkpoints Complete")
+    print("-" * 80)
+
+    print(f" {'WORKER':<12} {'NICKNAME':<16} {'STATUS':<10} {'CREDITS USED / POOL':<22} {'TASK / NOTE'}")
+    print(f" {'-'*12} {'-'*16} {'-'*10} {'-'*22} {'-'*18}")
+
+    for w in metrics["workers"]:
+        stat = w["status"].upper()
+        used_str = f"{w['credits_used']} / {w['monthly_credits']} ({w['credits_remaining']} left)"
+        note_str = w["current_task_id"] or (w["note"][:22] if w["note"] else "-")
+        if w["cooldown_until"]:
+            note_str = f"Cooldown until {w['cooldown_until'][11:19]}"
+        print(f" {w['worker_id']:<12} {w['name'][:15]:<16} {stat:<10} {used_str:<22} {note_str}")
+
+    print("=" * 80 + "\n")
+
+
+def cmd_submit(args: argparse.Namespace) -> None:
+    """Submits one or more tasks directly to orchestrator-state/tasks/ without Claude Desktop."""
+    from tools.copilot_queue_worker import resolve_state_dir
+
+    state_dir = resolve_state_dir(args.state_dir)
+    tasks_dir = state_dir / "tasks"
+    tasks_dir.mkdir(parents=True, exist_ok=True)
+
+    specs = []
+    if args.file:
+        file_path = Path(args.file)
+        if file_path.exists():
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = json.load(f)
+                if isinstance(content, list):
+                    for item in content:
+                        specs.append(item if isinstance(item, str) else item.get("spec", ""))
+                elif isinstance(content, dict) and "tasks" in content:
+                    for item in content["tasks"]:
+                        specs.append(item if isinstance(item, str) else item.get("spec", ""))
+    if args.spec:
+        specs.append(args.spec)
+
+    if not specs:
+        print("[!] No task spec provided. Use --spec '...' or --file tasks.json")
+        return
+
+    created_ids = []
+    for s in specs:
+        task = create_task_payload(spec=s, kind=args.kind, task_id=args.task_id if len(specs) == 1 else None)
+        tid = task["id"]
+        task_path = tasks_dir / f"{tid}.json"
+        with open(task_path, "w", encoding="utf-8") as f:
+            json.dump(task, f, indent=2)
+        created_ids.append(tid)
+        print(f"[+] Enqueued task {tid} -> {task_path.name}")
+
+    print(f"[*] Total {len(created_ids)} task(s) enqueued in {tasks_dir}")
+
+
+async def cmd_batch(args: argparse.Namespace) -> None:
+    """Executes a standalone batch of tasks autonomously and prints completion report."""
+    from tools.copilot_queue_worker import CopilotQueueWorker, resolve_state_dir
+
+    state_dir = resolve_state_dir(args.state_dir)
+    tasks_dir = state_dir / "tasks"
+    checkpoints_dir = state_dir / "checkpoints"
+    tasks_dir.mkdir(parents=True, exist_ok=True)
+    checkpoints_dir.mkdir(parents=True, exist_ok=True)
+
+    specs = []
+    if args.file:
+        file_path = Path(args.file)
+        if file_path.exists():
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = json.load(f)
+                if isinstance(content, list):
+                    for item in content:
+                        specs.append(item if isinstance(item, str) else item.get("spec", ""))
+                elif isinstance(content, dict) and "tasks" in content:
+                    for item in content["tasks"]:
+                        specs.append(item if isinstance(item, str) else item.get("spec", ""))
+    if args.specs:
+        specs.extend(args.specs)
+
+    if not specs:
+        print("[!] No task specs provided. Use --specs 'Task 1' 'Task 2' or --file tasks.json")
+        return
+
+    submitted_ids = []
+    for spec in specs:
+        task = create_task_payload(spec=spec, kind="code")
+        tid = task["id"]
+        task_path = tasks_dir / f"{tid}.json"
+        with open(task_path, "w", encoding="utf-8") as f:
+            json.dump(task, f, indent=2)
+        submitted_ids.append(tid)
+
+    print(f"\n[*] Submitted {len(submitted_ids)} tasks into {tasks_dir.name}/:")
+    for tid in submitted_ids:
+        print(f"    - {tid}")
+
+    # Launch worker runner
+    worker = CopilotQueueWorker(
+        state_dir=state_dir,
+        dry_run=args.dry_run,
+        concurrency=args.concurrency,
+        poll_interval=1.0,
+    )
+
+    print(f"\n[*] Starting autonomous batch execution (Concurrency: {args.concurrency}, Dry-run: {args.dry_run})...")
+
+    async def _monitor_loop():
+        while True:
+            all_finished = True
+            for tid in submitted_ids:
+                tp = tasks_dir / f"{tid}.json"
+                if tp.exists():
+                    try:
+                        with open(tp, "r", encoding="utf-8") as f:
+                            d = json.load(f)
+                        if d.get("status") not in ("done", "blocked"):
+                            all_finished = False
+                            break
+                    except Exception:
+                        all_finished = False
+                        break
+                else:
+                    all_finished = False
+                    break
+
+            if all_finished:
+                worker.stop()
+                break
+            await asyncio.sleep(0.5)
+
+    await asyncio.gather(
+        worker.run(),
+        _monitor_loop(),
+    )
+
+    # Print summary report
+    print("\n" + "=" * 80)
+    print(" STANDALONE AUTONOMOUS BATCH EXECUTION REPORT")
+    print("=" * 80)
+    for tid in submitted_ids:
+        cp_path = checkpoints_dir / f"{tid}.json"
+        if cp_path.exists():
+            with open(cp_path, "r", encoding="utf-8") as f:
+                cp = json.load(f)
+            print(f"[DONE] {tid}")
+            print(f"       Worker:     {cp.get('submitted_by')}")
+            print(f"       Branch:     {cp.get('branch_name')}")
+            print(f"       Commit SHA: {cp.get('commit_sha')}")
+            print(f"       Summary:    {cp.get('summary')}")
+        else:
+            tp = tasks_dir / f"{tid}.json"
+            status = "UNKNOWN"
+            reason = ""
+            if tp.exists():
+                with open(tp, "r", encoding="utf-8") as f:
+                    t = json.load(f)
+                status = t.get("status", "UNKNOWN")
+                reason = t.get("blocked_reason", "")
+            print(f"[{status.upper()}] {tid} - {reason}")
+    print("=" * 80 + "\n")
 
 
 async def cmd_canary(args: argparse.Namespace) -> None:
@@ -185,11 +507,38 @@ def main() -> None:
     subparsers.add_parser("status", help="Show fleet account status and credit headroom")
     subparsers.add_parser("canary", help="Run concurrent canary ping across ready accounts")
 
+    # Dashboard subparser
+    dash_parser = subparsers.add_parser("dashboard", help="Show real-time credit burn rate and quota telemetry dashboard")
+    dash_parser.add_argument("--json", action="store_true", help="Output dashboard metrics as JSON")
+    dash_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+
+    # Submit task subparser
+    submit_parser = subparsers.add_parser("submit", help="Enqueue task(s) into orchestrator-state/tasks/")
+    submit_parser.add_argument("--spec", type=str, default=None, help="Task specification description")
+    submit_parser.add_argument("--file", type=str, default=None, help="JSON file containing task specifications")
+    submit_parser.add_argument("--kind", type=str, default="code", choices=["code", "text"], help="Task kind (default: code)")
+    submit_parser.add_argument("--task-id", type=str, default=None, help="Custom task ID")
+    submit_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+
+    # Autonomous Batch execution subparser
+    batch_parser = subparsers.add_parser("batch", help="Submit and execute a batch of tasks autonomously")
+    batch_parser.add_argument("--specs", nargs="+", default=[], help="List of task specifications")
+    batch_parser.add_argument("--file", type=str, default=None, help="JSON file containing task specifications")
+    batch_parser.add_argument("--concurrency", type=int, default=2, help="Number of concurrent workers (default: 2)")
+    batch_parser.add_argument("--dry-run", action="store_true", help="Execute in dry-run simulation mode")
+    batch_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+
     args = parser.parse_args()
     if args.command == "status":
         asyncio.run(cmd_status(args))
     elif args.command == "canary":
         asyncio.run(cmd_canary(args))
+    elif args.command == "dashboard":
+        cmd_dashboard(args)
+    elif args.command == "submit":
+        cmd_submit(args)
+    elif args.command == "batch":
+        asyncio.run(cmd_batch(args))
 
 
 if __name__ == "__main__":

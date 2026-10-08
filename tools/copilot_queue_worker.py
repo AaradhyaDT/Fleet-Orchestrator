@@ -224,11 +224,20 @@ class CopilotQueueWorker:
     def claim_task(self, task_id: str, account: dict[str, Any]) -> dict[str, Any] | None:
         """
         Optimistically claims a task according to SCHEMA.md contract.
-        Re-reads file immediately before writing to avoid claim races.
-        Uses atomic file replacement for multi-process safety.
+        Uses kernel atomic O_CREAT | O_EXCL claim token plus atomic file replacement
+        to guarantee zero double-claims across concurrent OS processes.
         """
         task_path = self.tasks_dir / f"{task_id}.json"
         if not task_path.exists():
+            return None
+
+        # Cross-process atomic claim gate
+        lock_path = task_path.with_suffix(f".claim_{task_id}")
+        try:
+            fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.close(fd)
+        except (FileExistsError, OSError):
+            # Another worker process is concurrently claiming this task
             return None
 
         try:
@@ -264,6 +273,12 @@ class CopilotQueueWorker:
         except Exception as e:
             logger.error(f"Failed to claim task {task_id}: {e}")
             return None
+        finally:
+            if lock_path.exists():
+                try:
+                    lock_path.unlink()
+                except Exception:
+                    pass
 
     def _update_live_status(
         self,
@@ -656,7 +671,7 @@ class CopilotQueueWorker:
             self._mark_task_blocked(task_id, account, str(e))
             return False
 
-    async def run(self, once: bool = False) -> None:
+    async def run(self, once: bool = False, target_task_id: str | None = None) -> None:
         """Main queue worker loop supporting concurrent task execution."""
         self._running = True
         logger.info(

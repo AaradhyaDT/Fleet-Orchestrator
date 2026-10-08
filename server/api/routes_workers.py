@@ -69,6 +69,13 @@ async def list_workers(
         for r in rows
     ]
 
+@router.get("/quota-dashboard")
+async def get_quota_dashboard():
+    """Returns aggregated Copilot multi-account fleet quota metrics, monthly burn rate, and worker statuses."""
+    from tools.copilot_fleet import get_fleet_quota_metrics
+    return get_fleet_quota_metrics()
+
+
 @router.get("/{worker_id}", response_model=WorkerResponse)
 async def get_worker(worker_id: str, db: aiosqlite.Connection = Depends(get_db)):
     """Retrieve details for a specific worker."""
