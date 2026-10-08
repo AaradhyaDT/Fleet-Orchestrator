@@ -7,7 +7,7 @@
       "drive_file_id": "1IPM7NtGMqOxrpvCwJ9uOtF0h3jjoAayWfP57rgq6cgc",
       "drive_file_name": "fleet-orchestrator_README.md",
       "description": "Fleet Orchestrator \u2014 Headless Autonomous Copilot Fleet Engine",
-      "sha256": "e5c571d1f70e4944"
+      "sha256": "752fa2cc4f1db582"
     },
     "HANDOFF_FLEET_ORCHESTRATOR.md": {
       "drive_file_id": "17-KjT6qlQkYjBWPkMC1BtgFUNPFzFvuvnA-sZ3v0BdM",
@@ -25,7 +25,7 @@
       "drive_file_id": "1GwCvv6X_y0VFfRhxuvBU0mICtlOG62OegvVC9c9q_zs",
       "drive_file_name": "fleet-orchestrator_team-memory.md",
       "description": "Fleet Orchestrator \u2014 Team Memory & Accumulated Knowledge Log",
-      "sha256": "7c6af080450258ce"
+      "sha256": "2ecf40a29f94495e"
     }
   }
 }
