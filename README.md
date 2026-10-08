@@ -55,7 +55,8 @@ Fleet-Orchestrator/
 │       ├── groq_adapter.py        # Groq LLM adapter
 │       └── ollama_local_adapter.py# Ollama local models adapter
 │
-├── sku-templates/                 # Declarative DAG job expansion templates
+├── .agents/skills/fleet-orchestrator/ # Specialized Antigravity skill for swarm control
+├── sku-templates/                 # Declarative DAG job expansion templates (including iv_ii_course_study_pack.json)
 ├── orchestrator-state/            # Schemas, worker roles, and live status
 ├── worker-prompts/                # Specialized role system prompts (lead, scout, coder, qa)
 ├── tools/                         # CLI controllers and dashboards
@@ -72,6 +73,7 @@ Fleet-Orchestrator/
 │   └── sync-drive.yml             # Continuous Google Drive & NotebookLM documentation sync
 │
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
+│   ├── dispatch_iv_ii_tasks.py    # Autonomous task dispatcher for IV-II study packs
 │   ├── sync_drive.py              # Zero-dependency Google Drive doc sync engine
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │

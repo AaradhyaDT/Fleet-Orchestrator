@@ -1,0 +1,17 @@
+{
+  "sku_id": "iv_ii_course_study_pack",
+  "display_name": "Year IV Part II Academic Course Study Pack & Exam Trap Synthesis",
+  "pipeline": ["research", "draft", "qa", "format"],
+  "input_format": "markdown_and_pdf",
+  "input_columns": ["course_code", "course_title", "syllabus_path", "source_directory"],
+  "output_format": "markdown",
+  "output_columns": ["study_hub_path", "cheat_sheet_path", "exam_traps", "numerical_formulas"],
+  "quality_rules": [
+    "Strict KaTeX mathematical formatting ($...$ and $$...$$)",
+    "Every chapter must feature numerical formulas and high-yield edge cases",
+    "Adhere strictly to official Tribhuvan University IOE curriculum mark distribution",
+    "Zero fabricated or hallucinated statutes or formulas"
+  ],
+  "estimated_minutes_per_course": 5,
+  "courses_per_batch": 4
+}

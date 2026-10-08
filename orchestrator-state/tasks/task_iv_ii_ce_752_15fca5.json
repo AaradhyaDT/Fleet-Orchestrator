@@ -1,0 +1,19 @@
+{
+  "id": "task_iv_ii_ce_752_15fca5",
+  "sku_id": "iv_ii_course_study_pack",
+  "course_code": "CE 752",
+  "course_title": "Engineering Professional Practice",
+  "syllabus_path": "D:\\Misc Aaradhya\\Electronics (NEW 075-079)\\[IV-II]\\Engineering Professional Practice\\EPP_BEIE_IV_II_Syllabus.md",
+  "source_directory": "D:\\Misc Aaradhya\\Electronics (NEW 075-079)\\[IV-II]\\Engineering Professional Practice",
+  "target_hub": "D:\\Misc Aaradhya\\Electronics (NEW 075-079)\\[IV-II]\\Engineering Professional Practice\\StudyHub.md",
+  "status": "pending",
+  "pipeline_stages": [
+    "research",
+    "draft",
+    "qa",
+    "format"
+  ],
+  "current_stage": "research",
+  "priority": "high",
+  "created_at": "2026-10-08T13:46:26.249710+00:00"
+}
