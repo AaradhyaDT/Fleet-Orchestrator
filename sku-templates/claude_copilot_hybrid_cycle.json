@@ -1,0 +1,18 @@
+{
+  "sku_id": "claude_copilot_hybrid_cycle",
+  "display_name": "Claude Desktop Architect -> Copilot CLI 27 -> Claude Desktop QA",
+  "pipeline": ["plan", "code", "qa_review"],
+  "input_format": "json",
+  "input_columns": ["task_name", "spec", "target_files", "constraints"],
+  "output_format": "json",
+  "output_columns": ["task_name", "diff_patch", "test_report", "qa_verdict", "qa_notes"],
+  "quality_rules": [
+    "Strict type hints and docstrings on all exported symbols",
+    "Local unit tests must achieve 100% pass before checkpoint submission",
+    "Zero git branch contamination: all edits confined to isolated worktrees",
+    "Adversarial QA must emit explicit QA_VERDICT: PASS or QA_VERDICT: REVISE marker",
+    "Preserve scratchpad integrity across all handoff transitions"
+  ],
+  "estimated_minutes_per_record": 5,
+  "records_per_batch": 1
+}

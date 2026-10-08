@@ -44,7 +44,11 @@ class QuotaAwareScheduler:
         """Check if worker capabilities satisfy a task stage."""
         if "all" in caps or stage in caps:
             return True
-        if stage == "draft" and "writing" in caps:
+        if stage in ("draft", "plan", "architecture") and ("writing" in caps or "research" in caps):
+            return True
+        if stage in ("research", "spec", "decompose") and ("research" in caps or "writing" in caps):
+            return True
+        if stage in ("code", "refactor", "unit_test") and "code" in caps:
             return True
         if stage == "seo_optimize" and ("seo" in caps or "writing" in caps):
             return True
@@ -117,7 +121,7 @@ class QuotaAwareScheduler:
 
             # Stage affinity bonus:
             affinity_bonus = 0.0
-            if stage in ("qa", "qa_review", "audit") and "claude" in provider_type:
+            if stage in ("qa", "qa_review", "audit", "plan", "architecture", "research") and "claude" in provider_type:
                 affinity_bonus = 0.2
             elif stage in ("code", "draft", "refactor", "unit_test") and "copilot_cli" in provider_type:
                 affinity_bonus = 0.2
