@@ -1,0 +1,14 @@
+target-version = "py311"
+line-length = 120
+
+exclude = [
+    ".git",
+    ".pytest_cache",
+    "__pycache__",
+    ".worktrees",
+    "mcp-servers",
+]
+
+[lint]
+# Zero syntax errors, runtime crashes, or undefined variable names
+select = ["E9", "F63", "F7", "F82"]

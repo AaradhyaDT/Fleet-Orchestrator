@@ -1,0 +1,142 @@
+name: Fleet-Orchestrator CI/CD
+
+on:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'docs/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  security-and-lint:
+    name: 🛡️ Security Audit & Code Hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Linting & Security Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Run Ruff Linting
+        run: ruff check .
+
+      - name: Run Secret Leakage Audit
+        run: python tools/ci_secret_scanner.py --all
+
+      - name: Validate JSON Schemas & Templates
+        run: |
+          python -c "
+          import json, glob
+          for path in glob.glob('sku-templates/*.json') + glob.glob('orchestrator-state/**/*.json', recursive=True):
+              with open(path, 'r', encoding='utf-8') as f:
+                  json.load(f)
+          print('[+] All declarative DAG templates and schemas are syntactically valid JSON.')
+          "
+
+  test-matrix:
+    name: 🧪 Matrix Tests (${{ matrix.os }} - Py${{ matrix.python-version }})
+    needs: [security-and-lint]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install Runtime & Test Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run Self-Healing Test Suite
+        run: |
+          python tools/ci_self_healing_runner.py --max-retries 2 --pytest-args -v --junitxml=junit-test-results.xml
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: junit-test-results.xml
+          retention-days: 7
+
+  container-cd:
+    name: 🐳 Container Build & Verification
+    needs: [security-and-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Fleet-Orchestrator Container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: server/Dockerfile
+          push: false
+          tags: fleet-orchestrator:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  ci-verdict:
+    name: 🏁 CI/CD Verification Verdict
+    if: always()
+    needs: [security-and-lint, test-matrix, container-cd]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate Pipeline Status
+        run: |
+          if [[ "${{ needs.security-and-lint.result }}" != "success" ]]; then
+            echo "❌ Security & Linting check failed."
+            exit 1
+          fi
+          if [[ "${{ needs.test-matrix.result }}" != "success" ]]; then
+            echo "❌ One or more matrix test executions failed."
+            exit 1
+          fi
+          if [[ "${{ needs.container-cd.result }}" != "success" ]]; then
+            echo "❌ Container build failed."
+            exit 1
+          fi
+          echo "✅ All CI/CD gates passed cleanly."
+          exit 0

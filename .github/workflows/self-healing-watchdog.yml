@@ -1,0 +1,59 @@
+name: Self-Healing Fleet Sentinel & Health Watchdog
+
+on:
+  schedule:
+    # Run daily at 04:00 UTC to audit repository and database health
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sentinel-audit:
+    name: 🩺 Self-Healing Sentinel Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run Fleet Sentinel Integrity Audit
+        id: sentinel
+        run: |
+          python tools/fleet_watchdog.py
+
+      - name: Run Secret Leakage Audit
+        run: |
+          python tools/ci_secret_scanner.py --all
+
+      - name: Self-Healing Alert on Invariant Breach
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "🚨 [Sentinel Alert] Autonomous Invariant Breach Detected" \
+            --assignee "AaradhyaDT" \
+            --label "bug" \
+            --body "The scheduled Self-Healing Sentinel detected an invariant breach or schema anomaly during its periodic health audit. Please inspect the workflow run logs at: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+      - name: Write Sentinel Step Summary
+        if: always()
+        run: |
+          echo "## 🩺 Fleet Sentinel Health Check" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status == 'success' && '✅ Healthy' || '❌ Breach Detected' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Monitored Systems**: SQLite WAL Schemas, DAG Templates, Git Worktrees, Security Invariants" >> $GITHUB_STEP_SUMMARY
