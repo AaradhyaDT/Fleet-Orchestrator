@@ -7,6 +7,7 @@ from typing import Any
 import httpx
 
 from client.adapters.gemini_free_adapter import GeminiFreeAdapter
+from client.adapters.gemini_api_adapter import GeminiAPIAdapter
 from client.adapters.groq_adapter import GroqAdapter
 from client.adapters.ollama_local_adapter import OllamaLocalAdapter
 from client.adapters.claude_desktop_proxy import ClaudeDesktopProxyAdapter
@@ -81,7 +82,9 @@ def get_system_telemetry() -> dict[str, Any]:
     return {"cpu_percent": None, "memory_percent": None}
 
 def get_adapter() -> BaseWorkerAdapter:
-    if PROVIDER == "gemini_free":
+    if PROVIDER in ("gemini_api", "gemini"):
+        return GeminiAPIAdapter(worker_id=WORKER_ID, nickname="Gemini API Worker")
+    elif PROVIDER == "gemini_free":
         return GeminiFreeAdapter(worker_id=WORKER_ID, nickname="Gemini Free Worker")
     elif PROVIDER == "groq":
         return GroqAdapter(worker_id=WORKER_ID, nickname="Groq Worker")
