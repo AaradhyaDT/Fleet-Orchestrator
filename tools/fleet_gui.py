@@ -503,13 +503,14 @@ class FleetControlApp(tk.Tk):
         tbl_frame = tk.Frame(split_frame, bg=BG_CARD, highlightbackground=BORDER_COLOR, highlightthickness=1)
         tbl_frame.pack(side="left", fill="both", expand=True, padx=(0, 4))
 
-        t_cols = ("id", "stage", "kind", "status", "worker", "priority")
+        t_cols = ("id", "stage", "kind", "status", "worker", "dispatcher", "priority")
         self.tree_tasks = ttk.Treeview(tbl_frame, columns=t_cols, show="headings", height=12)
         self.tree_tasks.heading("id", text="Task ID")
         self.tree_tasks.heading("stage", text="Stage")
         self.tree_tasks.heading("kind", text="Kind")
         self.tree_tasks.heading("status", text="Status")
         self.tree_tasks.heading("worker", text="Assigned Worker")
+        self.tree_tasks.heading("dispatcher", text="Dispatcher / Creator")
         self.tree_tasks.heading("priority", text="Priority")
 
         self.tree_tasks.column("id", width=180, anchor="w")
@@ -517,6 +518,7 @@ class FleetControlApp(tk.Tk):
         self.tree_tasks.column("kind", width=70, anchor="center")
         self.tree_tasks.column("status", width=80, anchor="center")
         self.tree_tasks.column("worker", width=120, anchor="center")
+        self.tree_tasks.column("dispatcher", width=140, anchor="center")
         self.tree_tasks.column("priority", width=60, anchor="center")
 
         sb_t = ttk.Scrollbar(tbl_frame, orient="vertical", command=self.tree_tasks.yview)
@@ -596,6 +598,7 @@ class FleetControlApp(tk.Tk):
         meta_str = f"Stage: {task_data.get('current_stage') or task_data.get('stage') or 'code'}  •  Status: {task_data.get('status', '').upper()}"
         if task_data.get("sku_id"):
             meta_str += f"  •  SKU: {task_data.get('sku_id')}"
+        meta_str += f"  •  Dispatched by: {task_data.get('created_by') or 'unknown'}"
         self.insp_meta.config(text=meta_str)
 
         self.insp_text.delete("1.0", tk.END)
@@ -970,12 +973,13 @@ class FleetControlApp(tk.Tk):
             stage = t.get("current_stage") or t.get("stage") or "code"
             kind = t.get("kind") or "code"
             worker = t.get("owner_account") or t.get("owner_worker_id") or "-"
+            dispatcher = t.get("created_by") or "-"
             prio = t.get("priority", 5)
 
             self.tree_tasks.insert(
                 "",
                 "end",
-                values=(tid, stage, kind, st.upper(), worker, prio),
+                values=(tid, stage, kind, st.upper(), worker, dispatcher, prio),
             )
 
     def _auto_refresh_loop(self):
