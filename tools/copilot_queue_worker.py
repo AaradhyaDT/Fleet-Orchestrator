@@ -41,6 +41,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger("copilot_queue_worker")
 
+# Suppress noisy HTTP client logs from httpx/httpcore
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

@@ -51,3 +51,33 @@ def test_fleet_control_app_instantiation():
             pytest.skip("No graphical display available in current environment")
         else:
             raise e
+
+
+def test_httpx_logging_suppressed():
+    import logging
+    assert logging.getLogger("httpx").level >= logging.WARNING
+    assert logging.getLogger("httpcore").level >= logging.WARNING
+
+
+def test_fleet_gui_cli_dashboard_flag():
+    from tools.fleet_gui import main
+
+    with patch("tools.copilot_fleet.cmd_dashboard") as mock_dash:
+        with patch.object(sys, "argv", ["fleet_gui.py", "--dashboard"]):
+            main()
+            mock_dash.assert_called_once()
+
+    with patch("tools.copilot_fleet.cmd_dashboard") as mock_dash:
+        with patch.object(sys, "argv", ["fleet_gui.py", "-dashboarrd"]):
+            main()
+            mock_dash.assert_called_once()
+
+
+def test_fleet_gui_cli_status_flag():
+    from tools.fleet_gui import main
+
+    with patch("tools.copilot_fleet.cmd_status") as mock_status:
+        with patch.object(sys, "argv", ["fleet_gui.py", "-status"]):
+            main()
+            mock_status.assert_called_once()
+

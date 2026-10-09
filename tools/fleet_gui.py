@@ -24,9 +24,14 @@ import threading
 import time
 import tkinter as tk
 from tkinter import messagebox, ttk, scrolledtext
+import logging
 from typing import Any
 
 import httpx
+
+# Suppress noisy HTTP client logs
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 # Ensure repository root is on sys.path
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -147,6 +152,7 @@ class FleetControlApp(tk.Tk):
         # Initialize missing worker ledgers if needed
         initialize_fleet_ledgers(self.state_dir)
 
+        self._destroyed = False
         self._cached_metrics: dict[str, Any] = {}
         self._cached_tasks: list[dict[str, Any]] = []
         self._current_worker_filter = "All"
@@ -157,6 +163,10 @@ class FleetControlApp(tk.Tk):
 
         # Start background polling loop
         self._auto_refresh_loop()
+
+    def destroy(self):
+        self._destroyed = True
+        super().destroy()
 
     def _init_styles(self):
         self.style = ttk.Style(self)
@@ -794,8 +804,13 @@ class FleetControlApp(tk.Tk):
         # 1. Check server health
         server_ok = False
         try:
-            r = httpx.get(f"{ORCHESTRATOR_URL}/tasks", timeout=1.2)
-            server_ok = (r.status_code == 200)
+            # Probe /health to verify port 8000 is actually Fleet-Orchestrator and not another local daemon
+            health_url = ORCHESTRATOR_URL.rsplit("/api/v1", 1)[0] + "/health"
+            r = httpx.get(health_url, timeout=1.0)
+            if r.status_code == 200:
+                data = r.json()
+                if isinstance(data, dict) and data.get("status") == "ok" and "mcp_endpoint" in data:
+                    server_ok = True
         except Exception:
             server_ok = False
 
@@ -818,7 +833,11 @@ class FleetControlApp(tk.Tk):
         self._cached_tasks = tasks
 
         # Safe main thread update
-        self.after(0, lambda: self._apply_telemetry_updates(server_ok, metrics, tasks))
+        if not getattr(self, "_destroyed", False):
+            try:
+                self.after(0, lambda: self._apply_telemetry_updates(server_ok, metrics, tasks))
+            except Exception:
+                pass
 
     def _apply_telemetry_updates(self, server_ok: bool, metrics: dict[str, Any], tasks: list[dict[str, Any]]):
         # Update server badge
@@ -960,8 +979,13 @@ class FleetControlApp(tk.Tk):
             )
 
     def _auto_refresh_loop(self):
+        if getattr(self, "_destroyed", False):
+            return
         self.refresh_all()
-        self.after(5000, self._auto_refresh_loop)
+        try:
+            self.after(5000, self._auto_refresh_loop)
+        except Exception:
+            pass
 
     # =========================================================================
     # ACTIONS: WIN32 & VIRTUAL DESKTOP
@@ -1154,6 +1178,59 @@ class FleetControlApp(tk.Tk):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="Fleet-Orchestrator Control Center (v2.0) & Quota Dashboard",
+        add_help=True,
+    )
+    parser.add_argument(
+        "-d", "--dashboard", "--dash",
+        dest="dashboard",
+        action="store_true",
+        help="Print real-time terminal quota and credit burn rate dashboard instead of launching GUI",
+    )
+    parser.add_argument(
+        "-s", "--status",
+        dest="status",
+        action="store_true",
+        help="Print fleet account status table instead of launching GUI",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output telemetry metrics in JSON format (when used with --dashboard or --status)",
+    )
+    parser.add_argument(
+        "--state-dir",
+        type=str,
+        default=None,
+        help="Custom orchestrator-state directory",
+    )
+
+    args, _ = parser.parse_known_args()
+
+    # Normalize flags if passed with single dash or common typos (e.g. -dashboarrd, -dashboard, -status)
+    raw_args = [a.lower() for a in sys.argv[1:]]
+    dash_requested = args.dashboard or any(
+        a in ("-dashboard", "--dashboard", "-dashboarrd", "--dashboarrd", "-dash", "--dash", "-d")
+        for a in raw_args
+    )
+    status_requested = args.status or any(
+        a in ("-status", "--status", "-s")
+        for a in raw_args
+    )
+
+    if dash_requested:
+        from tools.copilot_fleet import cmd_dashboard
+        cmd_dashboard(args)
+        return
+
+    if status_requested:
+        from tools.copilot_fleet import cmd_status
+        asyncio.run(cmd_status(args))
+        return
+
+    print("Starting Fleet-Orchestrator Control Center (v2.0)...")
     enable_high_dpi_and_desktop()
     app = FleetControlApp()
     app.mainloop()
