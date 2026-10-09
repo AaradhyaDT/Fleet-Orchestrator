@@ -191,12 +191,18 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     }
 
 
-def create_task_payload(spec: str, kind: str = "code", task_id: str | None = None, parent_id: str | None = None) -> dict[str, Any]:
+def create_task_payload(
+    spec: str,
+    kind: str = "code",
+    task_id: str | None = None,
+    parent_id: str | None = None,
+    antigravity_scope: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Generates a task JSON payload conforming to orchestrator-state/SCHEMA.md."""
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     tid = task_id or f"task_{date_str}_{os.urandom(3).hex()}"
-    return {
+    payload: dict[str, Any] = {
         "id": tid,
         "parent_id": parent_id,
         "kind": kind,
@@ -209,6 +215,9 @@ def create_task_payload(spec: str, kind: str = "code", task_id: str | None = Non
         "created_at": now,
         "updated_at": now,
     }
+    if antigravity_scope:
+        payload["antigravity_scope"] = antigravity_scope
+    return payload
 
 
 async def cmd_status(args: argparse.Namespace) -> None:
@@ -335,9 +344,25 @@ def cmd_submit(args: argparse.Namespace) -> None:
         print("[!] No task spec provided. Use --spec '...' or --file tasks.json")
         return
 
+    antigravity_scope = None
+    if not getattr(args, "no_antigravity", False):
+        try:
+            from client.antigravity_bridge import build_antigravity_scope
+            antigravity_scope = build_antigravity_scope(conversation_id=getattr(args, "conversation_id", None))
+            if antigravity_scope.get("chat_context", {}).get("conversation_id"):
+                cid = antigravity_scope["chat_context"]["conversation_id"]
+                print(f"[*] Inherited Antigravity chat context from conversation: {cid}")
+        except Exception as e:
+            logger.debug(f"Could not harvest Antigravity scope: {e}")
+
     created_ids = []
     for s in specs:
-        task = create_task_payload(spec=s, kind=args.kind, task_id=args.task_id if len(specs) == 1 else None)
+        task = create_task_payload(
+            spec=s,
+            kind=args.kind,
+            task_id=args.task_id if len(specs) == 1 else None,
+            antigravity_scope=antigravity_scope,
+        )
         tid = task["id"]
         task_path = tasks_dir / f"{tid}.json"
         with open(task_path, "w", encoding="utf-8") as f:
@@ -377,9 +402,20 @@ async def cmd_batch(args: argparse.Namespace) -> None:
         print("[!] No task specs provided. Use --specs 'Task 1' 'Task 2' or --file tasks.json")
         return
 
+    antigravity_scope = None
+    if not getattr(args, "no_antigravity", False):
+        try:
+            from client.antigravity_bridge import build_antigravity_scope
+            antigravity_scope = build_antigravity_scope(conversation_id=getattr(args, "conversation_id", None))
+            if antigravity_scope.get("chat_context", {}).get("conversation_id"):
+                cid = antigravity_scope["chat_context"]["conversation_id"]
+                print(f"[*] Inherited Antigravity chat context from conversation: {cid}")
+        except Exception as e:
+            logger.debug(f"Could not harvest Antigravity scope: {e}")
+
     submitted_ids = []
     for spec in specs:
-        task = create_task_payload(spec=spec, kind="code")
+        task = create_task_payload(spec=spec, kind="code", antigravity_scope=antigravity_scope)
         tid = task["id"]
         task_path = tasks_dir / f"{tid}.json"
         with open(task_path, "w", encoding="utf-8") as f:
@@ -519,6 +555,8 @@ def main() -> None:
     submit_parser.add_argument("--kind", type=str, default="code", choices=["code", "text"], help="Task kind (default: code)")
     submit_parser.add_argument("--task-id", type=str, default=None, help="Custom task ID")
     submit_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+    submit_parser.add_argument("--conversation-id", type=str, default=None, help="Explicit Antigravity conversation ID")
+    submit_parser.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context inheritance")
 
     # Autonomous Batch execution subparser
     batch_parser = subparsers.add_parser("batch", help="Submit and execute a batch of tasks autonomously")
@@ -527,6 +565,8 @@ def main() -> None:
     batch_parser.add_argument("--concurrency", type=int, default=2, help="Number of concurrent workers (default: 2)")
     batch_parser.add_argument("--dry-run", action="store_true", help="Execute in dry-run simulation mode")
     batch_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+    batch_parser.add_argument("--conversation-id", type=str, default=None, help="Explicit Antigravity conversation ID")
+    batch_parser.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context inheritance")
 
     args = parser.parse_args()
     if args.command == "status":

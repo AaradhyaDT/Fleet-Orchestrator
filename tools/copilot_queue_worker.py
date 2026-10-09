@@ -412,6 +412,13 @@ class CopilotQueueWorker:
 
         if commit and is_git and not self.dry_run:
             try:
+                # Clean up ephemeral projected Antigravity context files before committing
+                try:
+                    from client.antigravity_bridge import cleanup_worktree_context
+                    cleanup_worktree_context(worktree_dir)
+                except Exception as e:
+                    logger.debug(f"Context cleanup notice: {e}")
+
                 status_proc = await asyncio.create_subprocess_exec(
                     "git", "status", "--porcelain",
                     cwd=str(worktree_dir),
@@ -506,6 +513,36 @@ class CopilotQueueWorker:
                 "usage_data": {"credits": 1, "tokens": 50},
             }
 
+        # Resolve and project Antigravity scope if available
+        antigravity_scope = task.get("antigravity_scope") or task.get("context", {}).get("antigravity_scope")
+        if not antigravity_scope:
+            if "chat_context" in task or "chat_context" in task.get("context", {}):
+                antigravity_scope = {
+                    "chat_context": task.get("chat_context") or task.get("context", {}).get("chat_context", {}),
+                    "antigravity_customizations": task.get("antigravity_customizations") or task.get("context", {}).get("antigravity_customizations", {}),
+                }
+            else:
+                # Auto-discover active Antigravity session if brain exists
+                try:
+                    from client.antigravity_bridge import build_antigravity_scope
+                    discovered = build_antigravity_scope(repo_root=self.repo_root)
+                    if discovered.get("chat_context", {}).get("conversation_id"):
+                        antigravity_scope = discovered
+                        task["antigravity_scope"] = antigravity_scope
+                except Exception:
+                    pass
+
+        if target_worktree and target_worktree.exists() and antigravity_scope:
+            try:
+                from client.antigravity_bridge import project_worktree_context
+                project_worktree_context(target_worktree, antigravity_scope)
+            except Exception as e:
+                logger.warning(f"Could not project Antigravity context into worktree: {e}")
+
+        has_customizations = bool(
+            antigravity_scope or (target_worktree and (target_worktree / "AGENTS.md").exists())
+        )
+
         adapter = CopilotCLIAdapter(
             worker_id=account["worker_id"],
             nickname=account["name"],
@@ -513,6 +550,7 @@ class CopilotQueueWorker:
             model=None,  # STRICT: Omits --model for provider auto-routing
             github_token=account.get("token") or None,
             copilot_home=account.get("state_dir") or None,
+            allow_custom_instructions=has_customizations,
         )
 
         logger.info(f"Executing {task_id} via Copilot CLI (Worker: {account['worker_id']}, Worktree: {target_worktree})...")

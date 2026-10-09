@@ -39,6 +39,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         github_token: str | None = None,
         copilot_home: str | Path | None = None,
         max_ai_credits: int | None = None,
+        allow_custom_instructions: bool = False,
     ):
         caps = capabilities or self.DEFAULT_CAPABILITIES
         super().__init__(worker_id, nickname, caps)
@@ -50,6 +51,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         self.github_token = github_token
         self.copilot_home = Path(copilot_home).resolve() if copilot_home else None
         self.max_ai_credits = max_ai_credits
+        self.allow_custom_instructions = allow_custom_instructions
 
     @staticmethod
     def _resolve_copilot_binary() -> str:
@@ -94,10 +96,15 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
             "--allow-all",
             "--no-ask-user",
             "--no-color",
-            "--no-custom-instructions",
+        ]
+
+        if not self.allow_custom_instructions:
+            cmd.append("--no-custom-instructions")
+
+        cmd.extend([
             "--max-autopilot-continues",
             str(self.max_autopilot_continues),
-        ]
+        ])
 
         if self.max_ai_credits is not None:
             cmd.extend(["--max-ai-credits", str(self.max_ai_credits)])
@@ -124,7 +131,23 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         Executes a task specification non-interactively using copilot CLI autopilot mode.
         Captures exit codes, stdout/stderr, and parses usage JSON statistics.
         """
+        directives_header = ""
+        if context:
+            antigravity_scope = context.get("antigravity_scope")
+            if not antigravity_scope and ("chat_context" in context or "antigravity_customizations" in context):
+                antigravity_scope = {
+                    "chat_context": context.get("chat_context", {}),
+                    "antigravity_customizations": context.get("antigravity_customizations", {}),
+                }
+            if antigravity_scope:
+                try:
+                    from client.antigravity_bridge import format_prompt_directives
+                    directives_header = format_prompt_directives(antigravity_scope) + "\n"
+                except Exception as e:
+                    directives_header = ""
+
         prompt = (
+            f"{directives_header}"
             f"TASK ID: {task_id}\n"
             f"STAGE: {stage}\n\n"
             f"SPECIFICATION:\n{spec}"
