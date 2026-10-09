@@ -1,0 +1,21 @@
+{
+  "id": "task_1791552690_format-fleet-pooled-capacity-display",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Update cmd_status in tools/copilot_fleet.py to display Pooled Monthly Capacity formatted as 'remaining/total AI credits' with percentage remaining. Calculate remaining by querying get_fleet_quota_metrics(state_dir=args.state_dir) to retrieve total_credits_used. Format as: print(f'Pooled Monthly Capacity: {rem_str}/{total_credits} AI credits ({pct_rem:.1f}% remaining)'). Ensure all tests in tests/test_copilot_fleet_dashboard.py and tests/test_quota_reconciliation.py pass.",
+  "status": "done",
+  "owner_account": "copilot-w1",
+  "branch_name": "task/task_1791552690_format-fleet-pooled-capacity-display",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-09T13:31:30Z",
+  "updated_at": "2026-10-09T13:40:12Z",
+  "task_id": "TASK-1791552690-format-fleet-pooled-capacity-display",
+  "title": "Format Fleet Pooled Capacity Display",
+  "repository": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator",
+  "prompt": "Update cmd_status in tools/copilot_fleet.py to display Pooled Monthly Capacity formatted as 'remaining/total AI credits' with percentage remaining. Calculate remaining by querying get_fleet_quota_metrics(state_dir=args.state_dir) to retrieve total_credits_used. Format as: print(f'Pooled Monthly Capacity: {rem_str}/{total_credits} AI credits ({pct_rem:.1f}% remaining)'). Ensure all tests in tests/test_copilot_fleet_dashboard.py and tests/test_quota_reconciliation.py pass.",
+  "branch": "feat/task-1791552690-format-fleet-pooled-capacity-display",
+  "priority": "normal",
+  "assigned_worker": null,
+  "max_retries": 3
+}

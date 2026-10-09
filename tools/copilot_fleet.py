@@ -296,9 +296,19 @@ async def cmd_status(args: argparse.Namespace) -> None:
                 total_credits += acc["monthly_credits"]
                 active_workers += 1
 
+    state_dir = getattr(args, "state_dir", None)
+    metrics = get_fleet_quota_metrics(state_dir=state_dir)
+    fleet = metrics.get("fleet", {})
+    total_credits = float(fleet.get("total_monthly_credits", 0.0))
+    total_credits_used = float(fleet.get("total_credits_used", 0.0))
+    remaining_credits = max(0.0, total_credits - total_credits_used)
+    pct_rem = (remaining_credits / total_credits * 100.0) if total_credits > 0 else 0.0
+    rem_str = f"{remaining_credits:,.0f}"
+    total_credits_str = f"{total_credits:,.0f}"
+
     print("\n" + "-" * 70)
     print(f"Active Ready Workers: {active_workers} / {len(accounts)}")
-    print(f"Pooled Monthly Capacity: {total_credits} AI credits")
+    print(f"Pooled Monthly Capacity: {rem_str}/{total_credits_str} AI credits ({pct_rem:.1f}% remaining)")
     print("=" * 70 + "\n")
 
 

@@ -1,0 +1,21 @@
+{
+  "id": "task_1791553766_scaffold-fast-discrete-event-priority-qu",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Create sim/fast_pqueue.py implementing a deterministic, zero-dependency binary min-heap priority queue with push, pop, peek, and capacity telemetry for discrete-event simulations. Add test_fast_pqueue.py in sim/ verifying FIFO tie-breaking and O(log N) operations.",
+  "status": "done",
+  "owner_account": "copilot-w1",
+  "branch_name": "task/task_1791553766_scaffold-fast-discrete-event-priority-qu",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-09T13:49:26Z",
+  "updated_at": "2026-10-09T13:53:37Z",
+  "task_id": "TASK-1791553766-scaffold-fast-discrete-event-priority-qu",
+  "title": "Scaffold Fast Discrete Event Priority Queue",
+  "repository": "brainstorm",
+  "prompt": "Create sim/fast_pqueue.py implementing a deterministic, zero-dependency binary min-heap priority queue with push, pop, peek, and capacity telemetry for discrete-event simulations. Add test_fast_pqueue.py in sim/ verifying FIFO tie-breaking and O(log N) operations.",
+  "branch": "feat/task-1791553766-scaffold-fast-discrete-event-priority-qu",
+  "priority": "high",
+  "assigned_worker": null,
+  "max_retries": 3
+}

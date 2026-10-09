@@ -114,7 +114,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
             cmd.extend(["--model", self.model])
 
         if self.worktree:
-            cmd.extend(["--worktree", str(self.worktree)])
+            cmd.extend(["-C", str(self.worktree)])
 
         if usage_file:
             cmd.extend(["--usage-output-file", usage_file])
