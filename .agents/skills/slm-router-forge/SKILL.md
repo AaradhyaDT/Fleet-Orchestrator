@@ -61,17 +61,31 @@ Synthesize instruction-tuning datasets grounded in real repository schemas, hist
 
 ### Stage 3: Cloud GPU Fine-Tuning (Unsloth on Colab)
 Execute fine-tuning on a cloud GPU (Colab Pro L4 Ada Lovelace or Free T4):
-1. **Dependency Hygiene**:
-   Avoid pinned xformers backtracking loops. Use clean wheel installation without `%%capture`:
-   ```python
-   !pip install --upgrade --no-cache-dir unsloth
-   ```
-2. **LoRA SFT Configuration**:
+
+1. **Tracked Colab Notebook**:
+   The authoritative fine-tuning pipeline is synced in the Fleet-Orchestrator Google Drive folder (`1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF`):
+   - **Colab Link**: [colab_train_intent_router](https://colab.research.google.com/drive/1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh)
+   - **Drive Permanent ID**: `1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh`
+   - **Local Mirror**: `notebooks/slm_time_router_forge.ipynb`
+
+2. **Dual Execution Pathways**:
+   - **Interactive Browser via `colab-mcp`**: Call `open_colab_browser_connection` to bind the local agent with the browser session and step through cells with real-time feedback.
+   - **Autonomous Headless via `colab` CLI**:
+     ```powershell
+     colab new -s router-forge --gpu L4
+     colab install -s router-forge unsloth "xformers<0.0.29" peft bitsandbytes
+     colab exec -s router-forge -f train_router.py
+     colab download -s router-forge /content/qwen_intent_router_q4_k_m.gguf ./models/
+     colab stop -s router-forge
+     ```
+
+3. **LoRA SFT Configuration**:
    - Model: `unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit`
    - Rank: $r=16, \alpha=32$ across all linear projections (`q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj`)
    - Max Sequence Length: 1024
-   - Epochs: 3 (typically ~135 gradient steps for 700 samples; finishes in ~90 seconds on L4 GPU)
-3. **Export to INT4 GGUF**:
+   - Epochs: 3 (typically ~135 gradient steps for 700 samples; finishes in ~60-90 seconds on L4 GPU)
+
+4. **Export to INT4 GGUF**:
    ```python
    model.save_pretrained_gguf("qwen_intent_router_q4", tokenizer, quantization_method = "q4_k_m")
    ```
