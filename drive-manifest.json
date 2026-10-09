@@ -24,8 +24,14 @@
     "team-memory.md": {
       "drive_file_id": "1GwCvv6X_y0VFfRhxuvBU0mICtlOG62OegvVC9c9q_zs",
       "drive_file_name": "fleet-orchestrator_team-memory.md",
-      "description": "Fleet Orchestrator \u2014 Team Memory & Accumulated Knowledge Log",
+      "description": "Fleet Orchestrator — Team Memory & Accumulated Knowledge Log",
       "sha256": "2ecf40a29f94495e"
+    },
+    "models/qwen_intent_router_q4_k_m.gguf": {
+      "drive_file_id": "1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK",
+      "drive_file_name": "qwen_intent_router_q4_k_m.gguf",
+      "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent & Skill Router (Q4_K_M GGUF)",
+      "sha256": "68e2824405149b24"
     }
   }
 }
