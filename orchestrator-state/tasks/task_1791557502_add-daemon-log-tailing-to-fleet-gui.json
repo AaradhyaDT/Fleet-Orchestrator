@@ -1,0 +1,22 @@
+{
+  "id": "task_1791557502_add-daemon-log-tailing-to-fleet-gui",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "In tools/fleet_gui.py:\n1. In FleetControlApp.__init__(), initialize self._stop_tailer = False, self._daemon_log_pos = 0, and start background daemon thread self._start_daemon_log_tailer().\n2. Implement _start_daemon_log_tailer(self):\n   Locates daemon_log_path = self.state_dir / 'logs' / 'worker_daemon.log'.\n   If it exists, initialize self._daemon_log_pos to the end of the file on startup (or last 20 lines) to avoid flooding.\n   Runs loop while not self._destroyed and not self._stop_tailer: sleeps 1.0s, seeks to self._daemon_log_pos, reads new lines, and for each line calls self.log(f'[DAEMON] {line.strip()}'). Updates self._daemon_log_pos.\n3. In destroy(self): set self._stop_tailer = True before calling super().destroy().\nEnsure all tests in tests/test_fleet_gui.py pass.",
+  "status": "claimed",
+  "owner_account": "copilot-w3",
+  "branch_name": "task/task_1791557502_add-daemon-log-tailing-to-fleet-gui",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-09T14:51:42Z",
+  "updated_at": "2026-10-09T14:51:44Z",
+  "task_id": "TASK-1791557502-add-daemon-log-tailing-to-fleet-gui",
+  "title": "add-daemon-log-tailing-to-fleet-gui",
+  "repository": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator",
+  "prompt": "In tools/fleet_gui.py:\n1. In FleetControlApp.__init__(), initialize self._stop_tailer = False, self._daemon_log_pos = 0, and start background daemon thread self._start_daemon_log_tailer().\n2. Implement _start_daemon_log_tailer(self):\n   Locates daemon_log_path = self.state_dir / 'logs' / 'worker_daemon.log'.\n   If it exists, initialize self._daemon_log_pos to the end of the file on startup (or last 20 lines) to avoid flooding.\n   Runs loop while not self._destroyed and not self._stop_tailer: sleeps 1.0s, seeks to self._daemon_log_pos, reads new lines, and for each line calls self.log(f'[DAEMON] {line.strip()}'). Updates self._daemon_log_pos.\n3. In destroy(self): set self._stop_tailer = True before calling super().destroy().\nEnsure all tests in tests/test_fleet_gui.py pass.",
+  "branch": "feat/task-1791557502-add-daemon-log-tailing-to-fleet-gui",
+  "priority": "high",
+  "assigned_worker": null,
+  "max_retries": 3,
+  "timeout": 300.0
+}
