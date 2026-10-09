@@ -96,3 +96,9 @@ cookies*.json
 # Isolated Git Worktrees for Fleet Queue Workers
 .worktrees/
 
+# Machine Learning model weights (keep in Google Drive / local storage)
+models/
+*.gguf
+*.safetensors
+*.bin
+*.onnx
