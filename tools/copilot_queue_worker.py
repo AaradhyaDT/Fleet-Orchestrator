@@ -20,6 +20,7 @@ import logging
 import os
 import shutil
 import signal
+import stat
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -106,14 +107,44 @@ class CopilotQueueWorker:
         self._current_account_idx = 0
         self._running = False
 
-        self.account_credits: dict[str, int] = {}
+        self.account_credits: dict[str, float] = {}
         self.account_cooldowns: dict[str, datetime] = {}
+        self._initialize_fleet_status_files()
         self._load_live_status_telemetry()
 
     def _ensure_dirs(self) -> None:
         self.tasks_dir.mkdir(parents=True, exist_ok=True)
         self.checkpoints_dir.mkdir(parents=True, exist_ok=True)
         self.live_status_dir.mkdir(parents=True, exist_ok=True)
+
+    def _initialize_fleet_status_files(self) -> None:
+        """Ensures all accounts have an initialized live-status file in orchestrator-state."""
+        self.live_status_dir.mkdir(parents=True, exist_ok=True)
+        now_str = _now_iso()
+        for acc in self.accounts:
+            wid = acc["worker_id"]
+            status_file = self.live_status_dir / f"{wid}.json"
+            if not status_file.exists():
+                limit = acc.get("monthly_credits", 200)
+                data = {
+                    "account": wid,
+                    "name": acc["name"],
+                    "status": "idle" if acc["has_token"] else "offline",
+                    "current_task_id": None,
+                    "credits_used": 0.0,
+                    "credits_remaining": float(limit),
+                    "monthly_credits": limit,
+                    "cooldown_until": None,
+                    "heartbeat_at": now_str,
+                    "note": "Ready (Initialized)" if acc["has_token"] else "No Token",
+                }
+                try:
+                    tmp = status_file.with_suffix(f".tmp.{os.getpid()}")
+                    with open(tmp, "w", encoding="utf-8") as f:
+                        json.dump(data, f, indent=2)
+                    os.replace(tmp, status_file)
+                except Exception:
+                    pass
 
     def _load_live_status_telemetry(self) -> None:
         """Loads existing credit telemetry and cooldown state from orchestrator-state/live-status/."""
@@ -128,8 +159,8 @@ class CopilotQueueWorker:
                 try:
                     with open(status_file, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                    if "credits_used" in data and isinstance(data["credits_used"], int):
-                        self.account_credits[wid] = data["credits_used"]
+                    if "credits_used" in data and isinstance(data["credits_used"], (int, float)):
+                        self.account_credits[wid] = float(data["credits_used"])
                     if "cooldown_until" in data and data["cooldown_until"]:
                         exp = datetime.fromisoformat(data["cooldown_until"].replace("Z", "+00:00"))
                         if exp > now:
@@ -160,9 +191,9 @@ class CopilotQueueWorker:
             status="cooldown",
         )
 
-    def record_credit_usage(self, worker_id: str, credits_used: int) -> int:
+    def record_credit_usage(self, worker_id: str, credits_used: float) -> float:
         """Records consumed credits and auto-cooldowns when monthly limit reached."""
-        current = self.account_credits.get(worker_id, 0) + credits_used
+        current = round(float(self.account_credits.get(worker_id, 0.0)) + float(credits_used), 2)
         self.account_credits[worker_id] = current
 
         limit = 200
@@ -171,9 +202,9 @@ class CopilotQueueWorker:
                 limit = acc.get("monthly_credits", 200)
                 break
 
-        logger.info(f"Worker {worker_id} credit update: +{credits_used} used (Total: {current}/{limit})")
+        logger.info(f"Worker {worker_id} credit update: +{credits_used:.2f} used (Total: {current:.2f}/{limit})")
         if current >= limit:
-            self.mark_cooldown(worker_id, minutes=60 * 24 * 30, reason=f"Monthly quota exhausted ({current}/{limit} credits)")
+            self.mark_cooldown(worker_id, minutes=60 * 24 * 30, reason=f"Monthly quota exhausted ({current:.2f}/{limit} credits)")
 
         return current
 
@@ -206,16 +237,26 @@ class CopilotQueueWorker:
             return []
 
         pending_tasks = []
-        for task_file in sorted(self.tasks_dir.glob("task_*.json")):
+        # Support both canonical task_*.json and legacy TASK-*.json
+        task_files = set(self.tasks_dir.glob("task_*.json")) | set(self.tasks_dir.glob("TASK-*.json"))
+        for task_file in sorted(task_files, key=lambda p: p.name):
             try:
                 with open(task_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                if (
-                    isinstance(data, dict)
-                    and data.get("kind") == "code"
-                    and data.get("status") == "pending"
-                ):
-                    pending_tasks.append(data)
+                if isinstance(data, dict):
+                    # Normalize field aliases for dual compatibility
+                    if "id" not in data and "task_id" in data:
+                        data["id"] = data["task_id"]
+                    if "spec" not in data and "prompt" in data:
+                        data["spec"] = data["prompt"]
+                    if "kind" not in data:
+                        data["kind"] = "code"
+
+                    stage = data.get("current_stage") or data.get("stage") or (data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None)
+                    is_eligible = (data.get("kind") == "code") or (stage in ["code", "draft", "research", "format", "refactor", "unit_test"])
+
+                    if is_eligible and data.get("status") == "pending":
+                        pending_tasks.append(data)
             except Exception as e:
                 logger.warning(f"Error reading task file {task_file.name}: {e}")
 
@@ -290,13 +331,13 @@ class CopilotQueueWorker:
         """Updates live status light in orchestrator-state/live-status/<account>.json."""
         status_file = self.live_status_dir / f"{account}.json"
 
-        used = self.account_credits.get(account, 0)
+        used = round(float(self.account_credits.get(account, 0.0)), 2)
         limit = 200
         for acc in self.accounts:
             if acc.get("worker_id") == account:
                 limit = acc.get("monthly_credits", 200)
                 break
-        rem = max(0, limit - used)
+        rem = max(0.0, round(limit - used, 2))
         cd_exp = self.account_cooldowns.get(account)
         cd_iso = cd_exp.strftime("%Y-%m-%dT%H:%M:%SZ") if cd_exp else None
 
@@ -481,10 +522,31 @@ class CopilotQueueWorker:
 
         # Clean up directory from filesystem if still present
         if worktree_dir.exists():
-            try:
-                shutil.rmtree(worktree_dir, ignore_errors=True)
-            except Exception as e:
-                logger.warning(f"Could not remove directory {worktree_dir}: {e}")
+            def _remove_readonly(func, path, exc_info):
+                try:
+                    os.chmod(path, stat.S_IWRITE | stat.S_IREAD)
+                    func(path)
+                except OSError:
+                    pass
+
+            for attempt in range(4):
+                try:
+                    shutil.rmtree(worktree_dir, onerror=_remove_readonly)
+                    if not worktree_dir.exists():
+                        break
+                except Exception:
+                    await asyncio.sleep(0.08 * (2 ** attempt))
+
+            if worktree_dir.exists() and sys.platform == "win32":
+                try:
+                    p = await asyncio.create_subprocess_exec(
+                        "cmd.exe", "/c", "rmdir", "/s", "/q", str(worktree_dir),
+                        stdout=asyncio.subprocess.DEVNULL,
+                        stderr=asyncio.subprocess.DEVNULL,
+                    )
+                    await p.communicate()
+                except Exception:
+                    pass
 
         return commit_sha
 
@@ -672,7 +734,7 @@ class CopilotQueueWorker:
             result = await self.execute_task(claimed_task, account, worktree_dir=worktree_dir)
 
             # Telemetry & Quota handling
-            credits_used = result.get("credits_used", 1 if result.get("success") else 0)
+            credits_used = float(result.get("credits_used", 1.0 if result.get("success") else 0.0))
             self.record_credit_usage(account["worker_id"], credits_used)
 
             if result.get("quota_exhausted"):

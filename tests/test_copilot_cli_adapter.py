@@ -210,3 +210,56 @@ async def test_copilot_cli_quota_exhaustion_detection():
         assert res["success"] is False
         assert res["quota_exhausted"] is True
 
+
+@pytest.mark.asyncio
+async def test_copilot_cli_nano_aiu_parsing():
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-nano",
+        nickname="Nano AIU Tester",
+        copilot_path="copilot.exe",
+    )
+
+    mock_proc = AsyncMock()
+    mock_proc.returncode = 0
+    mock_proc.communicate.return_value = (b"Task done\nAI Credits 0.55 (12s)", b"")
+
+    async def fake_subprocess_exec(*args, **kwargs):
+        if "--usage-output-file" in args:
+            idx = args.index("--usage-output-file")
+            usage_file = Path(args[idx + 1])
+            usage_file.write_text(json.dumps({
+                "totalNanoAiu": 553220000,
+                "currentModel": "mai-code-1.1-flash",
+                "tokenDetails": {
+                    "input": {"tokenCount": 27500},
+                    "cache_read": {"tokenCount": 1280},
+                    "output": {"tokenCount": 20},
+                },
+            }), encoding="utf-8")
+        return mock_proc
+
+    with patch("asyncio.create_subprocess_exec", side_effect=fake_subprocess_exec):
+        res = await adapter.execute_task("task_nano", "spec", "code", {})
+        assert res["success"] is True
+        assert res["credits_used"] == 0.55
+        assert res["tokens_used"] == 28800
+        assert res["model_used"] == "mai-code-1.1-flash"
+
+
+@pytest.mark.asyncio
+async def test_copilot_cli_stdout_credits_fallback():
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-fallback",
+        nickname="Fallback Tester",
+        copilot_path="copilot.exe",
+    )
+
+    mock_proc = AsyncMock()
+    mock_proc.returncode = 0
+    mock_proc.communicate.return_value = (b"Changes +1 -0\nAI Credits 1.75 (10s)\nTokens 500", b"")
+
+    with patch("asyncio.create_subprocess_exec", return_value=mock_proc):
+        res = await adapter.execute_task("task_fallback", "spec", "code", {})
+        assert res["success"] is True
+        assert res["credits_used"] == 1.75
+

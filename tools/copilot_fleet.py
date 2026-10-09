@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import logging
 import os
 import sys
 from datetime import datetime, timezone
@@ -21,6 +22,8 @@ import httpx
 # Ensure project root is in sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+logger = logging.getLogger("copilot_fleet")
 
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
 
@@ -85,6 +88,47 @@ def discover_accounts(env_vars: dict[str, str]) -> list[dict[str, Any]]:
     return accounts
 
 
+def initialize_fleet_ledgers(state_dir: Path | str | None = None) -> int:
+    """Ensures all discovered accounts have an initialized live-status file in orchestrator-state."""
+    from tools.copilot_queue_worker import resolve_state_dir
+
+    resolved_state = resolve_state_dir(str(state_dir) if state_dir else None)
+    live_status_dir = resolved_state / "live-status"
+    live_status_dir.mkdir(parents=True, exist_ok=True)
+
+    env_vars = load_env_fleet()
+    accounts = discover_accounts(env_vars)
+    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    created = 0
+    for acc in accounts:
+        wid = acc["worker_id"]
+        status_file = live_status_dir / f"{wid}.json"
+        if not status_file.exists():
+            limit = acc["monthly_credits"]
+            payload = {
+                "account": wid,
+                "name": acc["name"],
+                "status": "idle" if acc["has_token"] else "offline",
+                "current_task_id": None,
+                "credits_used": 0.0,
+                "credits_remaining": float(limit),
+                "monthly_credits": limit,
+                "cooldown_until": None,
+                "heartbeat_at": now_str,
+                "note": "Ready (Initialized)" if acc["has_token"] else "No Token",
+            }
+            try:
+                tmp = status_file.with_suffix(f".tmp.{os.getpid()}")
+                with open(tmp, "w", encoding="utf-8") as f:
+                    json.dump(payload, f, indent=2)
+                os.replace(tmp, status_file)
+                created += 1
+            except Exception:
+                pass
+    return created
+
+
 def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, Any]:
     """Computes real-time fleet quota capacity, monthly credit burn rate, and worker states."""
     from tools.copilot_queue_worker import resolve_state_dir
@@ -94,13 +138,16 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     tasks_dir = resolved_state / "tasks"
     checkpoints_dir = resolved_state / "checkpoints"
 
+    # Auto-initialize missing worker ledgers if needed
+    initialize_fleet_ledgers(resolved_state)
+
     env_vars = load_env_fleet()
     accounts = discover_accounts(env_vars)
 
     total_registered = len(accounts)
     ready_workers = 0
     total_monthly_credits = 0
-    total_credits_used = 0
+    total_credits_used = 0.0
 
     worker_metrics = []
     status_counts = {"idle": 0, "busy": 0, "cooldown": 0, "offline": 0}
@@ -115,9 +162,9 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
         if has_token:
             ready_workers += 1
 
-        used = 0
+        used = 0.0
         current_task = None
-        note = "Uninitialized"
+        note = "Ready" if has_token else "No Token"
         heartbeat = None
         cooldown_until = None
         worker_status = "idle" if has_token else "offline"
@@ -127,7 +174,8 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             try:
                 with open(status_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                used = data.get("credits_used", 0)
+                raw_used = data.get("credits_used", 0.0)
+                used = round(float(raw_used), 2)
                 current_task = data.get("current_task_id")
                 note = data.get("note", "")
                 heartbeat = data.get("heartbeat_at")
@@ -148,10 +196,10 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             except Exception:
                 pass
 
-        total_credits_used += used
+        total_credits_used = round(total_credits_used + used, 2)
         status_counts[worker_status] = status_counts.get(worker_status, 0) + 1
 
-        remaining = max(0, limit - used)
+        remaining = max(0.0, round(limit - used, 2))
         worker_metrics.append({
             "index": acc["index"],
             "worker_id": wid,
@@ -167,8 +215,8 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             "note": note,
         })
 
-    total_remaining = max(0, total_monthly_credits - total_credits_used)
-    burn_pct = round((total_credits_used / total_monthly_credits * 100), 2) if total_monthly_credits > 0 else 0.0
+    total_remaining = max(0.0, round(total_monthly_credits - total_credits_used, 2))
+    burn_pct = round((total_credits_used / total_monthly_credits * 100.0), 2) if total_monthly_credits > 0 else 0.0
 
     pending_count = len(list(tasks_dir.glob("task_*.json"))) if tasks_dir.exists() else 0
     checkpoints_count = len(list(checkpoints_dir.glob("task_*.json"))) if checkpoints_dir.exists() else 0
@@ -292,9 +340,9 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     bar = "=" * filled + "-" * (bar_width - filled)
 
     print(f" Pooled Monthly Capacity: {f['total_monthly_credits']:,} AI Credits ({f['total_registered_accounts']} accounts)")
-    print(f" Consumed Credits:        {f['total_credits_used']:,} credits ({f['burn_rate_pct']}% burn rate)")
-    print(f" Remaining Quota:         {f['total_credits_remaining']:,} credits")
-    print(f" Monthly Burn Bar:        [{bar}] {f['burn_rate_pct']}%")
+    print(f" Consumed Credits:        {f['total_credits_used']:,.2f} credits ({f['burn_rate_pct']:.2f}% burn rate)")
+    print(f" Remaining Quota:         {f['total_credits_remaining']:,.2f} credits")
+    print(f" Monthly Burn Bar:        [{bar}] {f['burn_rate_pct']:.2f}%")
     print(
         f" Fleet Worker Topology:   {f['ready_accounts']} Ready | {f['status_counts'].get('idle', 0)} Idle | "
         f"{f['status_counts'].get('busy', 0)} Busy | {f['status_counts'].get('cooldown', 0)} Cooldown | "
@@ -303,16 +351,16 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     print(f" State Pipeline:          {t['total_tasks_tracked']} Tasks Tracked | {t['completed_checkpoints']} Checkpoints Complete")
     print("-" * 80)
 
-    print(f" {'WORKER':<12} {'NICKNAME':<16} {'STATUS':<10} {'CREDITS USED / POOL':<22} {'TASK / NOTE'}")
-    print(f" {'-'*12} {'-'*16} {'-'*10} {'-'*22} {'-'*18}")
+    print(f" {'WORKER':<12} {'NICKNAME':<16} {'STATUS':<10} {'CREDITS USED / POOL':<24} {'TASK / NOTE'}")
+    print(f" {'-'*12} {'-'*16} {'-'*10} {'-'*24} {'-'*18}")
 
     for w in metrics["workers"]:
         stat = w["status"].upper()
-        used_str = f"{w['credits_used']} / {w['monthly_credits']} ({w['credits_remaining']} left)"
+        used_str = f"{w['credits_used']:.2f} / {w['monthly_credits']} ({w['credits_remaining']:.2f} left)"
         note_str = w["current_task_id"] or (w["note"][:22] if w["note"] else "-")
         if w["cooldown_until"]:
             note_str = f"Cooldown until {w['cooldown_until'][11:19]}"
-        print(f" {w['worker_id']:<12} {w['name'][:15]:<16} {stat:<10} {used_str:<22} {note_str}")
+        print(f" {w['worker_id']:<12} {w['name'][:15]:<16} {stat:<10} {used_str:<24} {note_str}")
 
     print("=" * 80 + "\n")
 

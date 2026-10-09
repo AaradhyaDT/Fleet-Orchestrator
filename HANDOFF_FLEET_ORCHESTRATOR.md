@@ -47,7 +47,7 @@
    - REST API endpoint `GET /api/v1/workers/quota-dashboard` surfacing live fleet quota telemetry.
 
 6. **Test Suite Status**:
-   - **159 / 159 tests passing** (100% pass rate in `pytest` across unit, integration, stress, and API test suites).
+   - **184 / 184 tests passing** (100% pass rate in `pytest` across unit, integration, stress, and API test suites).
 
 ---
 
@@ -73,6 +73,17 @@
    - Built zero-dependency automated sync engine (`scripts/sync_drive.py` and `.github/workflows/sync-drive.yml`) synchronizing living markdown files (`README.md`, `HANDOFF_FLEET_ORCHESTRATOR.md`, `team-context.md`, `team-memory.md`) into Google Drive folder `1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF` under parent `Super-NLM` (`1wn330GxoGoMf956xClHxULnsJQWxohxx`).
    - Created dedicated Google NotebookLM knowledge base `6a37d992-6ceb-4d72-a909-e10e9cca32b6` (URL: https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6) with all 4 Google Docs attached as live-updating sources.
    - Tracks file hashes and Google Drive permanent file IDs via `drive-manifest.json`.
+
+5. **Fleet Control Center GUI (v2.0) & Authentic AI Credits Accounting**:
+   - Overhauled `tools/fleet_gui.py` into a modern, production-grade Swarm Control Center featuring a persistent quota telemetry banner, dynamic color-coded burn-rate progress meter, and 4 dedicated tabs:
+     - **Tab 1 (Fleet Army Matrix)**: 27 pooled Copilot workers with live status tags, credit meters, and filter chips (`All`, `Busy`, `Idle`, `Cooldown`).
+     - **Tab 2 (Pipeline Tasks)**: Live task queue with status filtering, stage preview, and full specification inspector.
+     - **Tab 3 (Desktop Arranger)**: Win32 Virtual Desktop 2 controls, 3-column tiler, focus stack, and multi-instance prompt injection.
+     - **Tab 4 (Swarm Console)**: Real-time monospace activity stream with colored event tags and search filters.
+   - Fixed authentic Copilot CLI usage accounting in `client/adapters/copilot_cli_adapter.py`: parses `totalNanoAiu` ($10^9$ nano-AIU per credit), structured `tokenDetails`, and stdout regex fallback into 2-decimal float precision.
+   - Implemented `initialize_fleet_ledgers()` ensuring all 27 accounts have live status files in `orchestrator-state/live-status/`.
+   - Created `launch_fleet_gui.bat` and updated `launch_copilot_fleet.bat` [5].
+   - **184 / 184 tests passing** (100% pass rate in `pytest`).
 
 ---
 

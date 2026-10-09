@@ -66,7 +66,7 @@ Fleet-Orchestrator/
 │   ├── copilot_fleet.py           # Multi-account Copilot fleet controller
 │   ├── fast_intent_router.py      # Sub-50ms local intent router with LM Studio integration & fallback
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
-│   └── fleet_gui.py               # Tkinter desktop control panel
+│   └── fleet_gui.py               # Modern Fleet-Orchestrator Control Center v2.0 (Tkinter High-DPI GUI)
 │
 ├── .github/workflows/             # GitHub Actions CI/CD workflows
 │   ├── ci.yml                     # Dynamic matrix CI/CD & container verification
@@ -79,13 +79,14 @@ Fleet-Orchestrator/
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (173+ tests)
+├── tests/                         # Full automated pytest test suite (184+ tests)
 ├── requirements.txt               # Unified project dependencies
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
 ├── .env.fleet.example             # Multi-account token template (safe example)
 ├── drive-manifest.json            # Google Drive & NotebookLM live sync manifest
 ├── launch_copilot_fleet.bat       # One-click Windows fleet launcher
+├── launch_fleet_gui.bat           # Direct one-click launcher for Fleet Control Center GUI v2.0
 ├── sync.ps1                       # Ecosystem synchronization with pre-commit gates & selective CI
 ├── sync.bat                       # Zero-friction execution wrapper (-SkipCI / -NoCI)
 ├── AGENTS.md                      # Operational rules & epistemic invariants

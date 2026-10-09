@@ -10,6 +10,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import stat
+import time
 from pathlib import Path
 from typing import Any
 
@@ -312,9 +314,25 @@ def cleanup_worktree_context(worktree_dir: Path) -> None:
     """
     Cleans up ephemeral Antigravity projected context files prior to committing
     changes inside the worktree so they do not pollute repository commit history.
+    Uses retry loops and stat.S_IWRITE clearing to handle Windows NTFS file locks.
     """
     if not worktree_dir.exists():
         return
+
+    def _safe_unlink(f: Path, retries: int = 4) -> None:
+        if not f.exists():
+            return
+        for attempt in range(retries):
+            try:
+                try:
+                    f.chmod(stat.S_IWRITE | stat.S_IREAD)
+                except OSError:
+                    pass
+                f.unlink()
+                return
+            except (PermissionError, OSError):
+                if attempt < retries - 1:
+                    time.sleep(0.05 * (2 ** attempt))
 
     marker = worktree_dir / ".antigravity_projected"
     if marker.exists():
@@ -324,16 +342,11 @@ def cleanup_worktree_context(worktree_dir: Path) -> None:
                 fpath = line.strip()
                 if fpath:
                     target = worktree_dir / fpath
-                    if target.is_file():
-                        target.unlink()
-            marker.unlink()
+                    _safe_unlink(target)
+            _safe_unlink(marker)
         except Exception as e:
             logger.debug(f"Error cleaning projected context in {worktree_dir}: {e}")
     else:
         # Fallback cleanup for TASK_CONTEXT.md
         context_file = worktree_dir / "TASK_CONTEXT.md"
-        if context_file.exists():
-            try:
-                context_file.unlink()
-            except Exception:
-                pass
+        _safe_unlink(context_file)

@@ -14,10 +14,11 @@ echo   [1] Show Fleet Status
 echo   [2] Run Canary Test on All Ready Accounts
 echo   [3] Launch FastAPI Fleet Coordinator Server
 echo   [4] Launch Client Worker Fleet Supervisor Daemon
+echo   [5] Launch Fleet Control Center GUI (v2.0)
 echo   [Q] Quit
 echo.
 
-set /p CHOICE="Enter choice [1-4 or Q]: "
+set /p CHOICE="Enter choice [1-5 or Q]: "
 if /i "%CHOICE%"=="1" (
     python tools\copilot_fleet.py status
     goto end
@@ -34,6 +35,11 @@ if /i "%CHOICE%"=="3" (
 if /i "%CHOICE%"=="4" (
     echo Starting Fleet Supervisor ...
     python client\fleet_supervisor.py
+    goto end
+)
+if /i "%CHOICE%"=="5" (
+    echo Starting Fleet Control Center GUI (v2.0) ...
+    python tools\fleet_gui.py
     goto end
 )
 

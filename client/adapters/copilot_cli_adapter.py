@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -197,15 +198,51 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 except Exception:
                     usage_data = {}
 
+            # 1. Parse Token Details
             tokens_used = usage_data.get("total_tokens", usage_data.get("tokens", 0))
-            model_used = usage_data.get("model", self.model or "copilot-cli-autopilot")
-            credits_used = int(
-                usage_data.get("credits_used")
-                or usage_data.get("ai_credits_used")
-                or usage_data.get("credits")
-                or usage_data.get("ai_credits")
-                or (1 if proc.returncode == 0 else 0)
+            if not tokens_used and "tokenDetails" in usage_data:
+                td = usage_data.get("tokenDetails", {})
+                inp = td.get("input", {}).get("tokenCount", 0)
+                outp = td.get("output", {}).get("tokenCount", 0)
+                cache = td.get("cache_read", {}).get("tokenCount", 0)
+                tokens_used = inp + outp + cache
+
+            # 2. Parse Model
+            model_used = (
+                usage_data.get("currentModel")
+                or usage_data.get("model")
+                or self.model
+                or "copilot-cli-autopilot"
             )
+
+            # 3. Parse AI Credits (Authentic Nano-AIU or Request Cost or stdout fallback)
+            credits_used = 0.0
+            if "totalNanoAiu" in usage_data and usage_data["totalNanoAiu"] is not None:
+                # Nano AI Units: 1 credit = 1,000,000,000 nanoAiu
+                credits_used = round(float(usage_data["totalNanoAiu"]) / 1_000_000_000.0, 2)
+            elif "totalPremiumRequestCost" in usage_data and usage_data["totalPremiumRequestCost"] is not None:
+                credits_used = float(usage_data["totalPremiumRequestCost"])
+            elif any(k in usage_data for k in ["credits_used", "ai_credits_used", "credits", "ai_credits"]):
+                raw_credits = (
+                    usage_data.get("credits_used")
+                    or usage_data.get("ai_credits_used")
+                    or usage_data.get("credits")
+                    or usage_data.get("ai_credits")
+                )
+                try:
+                    credits_used = round(float(raw_credits), 2)
+                except (TypeError, ValueError):
+                    credits_used = 0.0
+            else:
+                # Attempt regex on stdout / stderr (e.g. "AI Credits 0.55 (12s)")
+                credit_match = re.search(r"(?:AI Credits|ai-credits|credits)[:\s]+([0-9.]+)", f"{stdout_str} {stderr_str}", re.IGNORECASE)
+                if credit_match:
+                    try:
+                        credits_used = round(float(credit_match.group(1)), 2)
+                    except ValueError:
+                        credits_used = 1.0 if proc.returncode == 0 else 0.0
+                else:
+                    credits_used = 1.0 if proc.returncode == 0 else 0.0
 
             # Detect quota / rate limit exhaustion in output/errors
             combined_err = f"{stderr_str} {stdout_str}".lower()
