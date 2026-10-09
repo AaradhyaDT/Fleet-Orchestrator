@@ -158,13 +158,19 @@ class FleetControlApp(tk.Tk):
         self._current_worker_filter = "All"
         self._current_task_filter = "All"
 
+        self._stop_tailer = False
+        self._daemon_log_pos = 0
+        self._cached_batches: list[dict[str, Any]] = []
+
         self._init_styles()
         self._build_ui()
 
-        # Start background polling loop
+        # Start background polling loop and log tailer
+        self._start_daemon_log_tailer()
         self._auto_refresh_loop()
 
     def destroy(self):
+        self._stop_tailer = True
         self._destroyed = True
         super().destroy()
 
