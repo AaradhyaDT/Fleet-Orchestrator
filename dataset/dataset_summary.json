@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-10-09T15:15:37.605462+00:00",
+  "total_unique_samples": 1941,
+  "train_samples": 1553,
+  "eval_samples": 388,
+  "split_ratio": "80/20",
+  "duration_distribution": {
+    "min_s": 3.0,
+    "median_s": 65.0,
+    "max_s": 1769.0,
+    "avg_s": 136.3
+  },
+  "time_tier_breakdown": {
+    "T0_MICRO": 201,
+    "T1_FAST": 724,
+    "T3_LONG": 354,
+    "T2_MEDIUM": 568,
+    "T4_EPIC": 94
+  },
+  "train_file": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\dataset\\task_time_train.jsonl",
+  "eval_file": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\dataset\\task_time_eval.jsonl"
+}

@@ -11,6 +11,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -76,11 +77,13 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
     async def check_health(self) -> bool:
         """Health check returns True if copilot executable is present and returns version code 0."""
         try:
+            flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
             proc = await asyncio.create_subprocess_exec(
                 self.copilot_path,
                 "--version",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                creationflags=flags,
             )
             stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10.0)
             return proc.returncode == 0 and b"Copilot CLI" in stdout
@@ -174,12 +177,21 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
 
         proc = None
         try:
+            flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+            startupinfo = None
+            if sys.platform == "win32":
+                startupinfo = subprocess.STARTUPINFO()
+                startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+                startupinfo.wShowWindow = subprocess.SW_HIDE
+
             proc = await asyncio.create_subprocess_exec(
                 *cmd,
                 cwd=cwd,
                 env=child_env,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                creationflags=flags,
+                startupinfo=startupinfo,
             )
 
             stdout_bytes, stderr_bytes = await asyncio.wait_for(

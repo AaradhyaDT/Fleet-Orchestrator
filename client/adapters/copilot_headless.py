@@ -9,6 +9,8 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -203,11 +205,13 @@ class CopilotHeadlessAdapter(BaseWorkerAdapter):
                 timeout = float(args.get("timeout", 30.0))
                 cwd = str(self.workspace_root) if self.workspace_root else None
 
+                flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
                 proc = await asyncio.create_subprocess_shell(
                     cmd,
                     cwd=cwd,
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=flags,
                 )
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
                 return {

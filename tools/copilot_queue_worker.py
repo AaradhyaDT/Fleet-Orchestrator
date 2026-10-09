@@ -49,6 +49,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("copilot_queue_worker")
 
+WIN32_NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+
 # Suppress noisy HTTP client logs from httpx/httpcore
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
@@ -435,6 +437,7 @@ class CopilotQueueWorker:
                 stderr=subprocess.PIPE,
                 text=True,
                 check=False,
+                creationflags=WIN32_NO_WINDOW,
             )
             return res.returncode == 0 and "true" in res.stdout.lower()
         except Exception:
@@ -462,6 +465,7 @@ class CopilotQueueWorker:
             cwd=str(self.repo_root),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            creationflags=WIN32_NO_WINDOW,
         )
         out, _ = await check_proc.communicate()
         branch_exists = bool(branch_name.strip() and branch_name in out.decode("utf-8", errors="replace"))
@@ -477,6 +481,7 @@ class CopilotQueueWorker:
             cwd=str(self.repo_root),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            creationflags=WIN32_NO_WINDOW,
         )
         _, err = await proc.communicate()
         if proc.returncode != 0:
@@ -519,6 +524,7 @@ class CopilotQueueWorker:
                     cwd=str(worktree_dir),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
                 )
                 status_out, _ = await status_proc.communicate()
                 has_changes = bool(status_out.strip())
@@ -529,6 +535,7 @@ class CopilotQueueWorker:
                         cwd=str(worktree_dir),
                         stdout=asyncio.subprocess.PIPE,
                         stderr=asyncio.subprocess.PIPE,
+                        creationflags=WIN32_NO_WINDOW,
                     )
                     await add_proc.communicate()
 
@@ -538,6 +545,7 @@ class CopilotQueueWorker:
                         cwd=str(worktree_dir),
                         stdout=asyncio.subprocess.PIPE,
                         stderr=asyncio.subprocess.PIPE,
+                        creationflags=WIN32_NO_WINDOW,
                     )
                     await commit_proc.communicate()
 
@@ -546,6 +554,7 @@ class CopilotQueueWorker:
                     cwd=str(worktree_dir),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
                 )
                 sha_out, _ = await sha_proc.communicate()
                 if sha_proc.returncode == 0:
@@ -561,6 +570,7 @@ class CopilotQueueWorker:
                     cwd=str(self.repo_root),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
                 )
                 await rm_proc.communicate()
 
@@ -569,6 +579,7 @@ class CopilotQueueWorker:
                     cwd=str(self.repo_root),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
                 )
                 await prune_proc.communicate()
             except Exception as e:
@@ -597,6 +608,7 @@ class CopilotQueueWorker:
                         "cmd.exe", "/c", "rmdir", "/s", "/q", str(worktree_dir),
                         stdout=asyncio.subprocess.DEVNULL,
                         stderr=asyncio.subprocess.DEVNULL,
+                        creationflags=WIN32_NO_WINDOW,
                     )
                     await p.communicate()
                 except Exception:
