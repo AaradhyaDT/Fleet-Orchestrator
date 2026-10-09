@@ -415,13 +415,20 @@ class FleetControlApp(tk.Tk):
         btn_canary = tk.Button(filter_bar, text="⚡ Run Canary Check", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_run_canary, cursor="hand2")
         btn_canary.pack(side="right", padx=12)
 
+        split_frame = tk.Frame(container, bg=BG_MAIN)
+        split_frame.pack(fill="both", expand=True, padx=4)
+
         # Workers Table
-        cols = ("id", "name", "provider", "status", "credits_used", "credits_rem", "current_task", "note")
-        self.tree_workers = ttk.Treeview(container, columns=cols, show="headings", height=14)
+        tbl_frame = tk.Frame(split_frame, bg=BG_CARD, highlightbackground=BORDER_COLOR, highlightthickness=1)
+        tbl_frame.pack(side="left", fill="both", expand=True, padx=(0, 4))
+
+        cols = ("id", "name", "provider", "status", "elapsed", "credits_used", "credits_rem", "current_task", "note")
+        self.tree_workers = ttk.Treeview(tbl_frame, columns=cols, show="headings", height=14)
         self.tree_workers.heading("id", text="Worker ID")
         self.tree_workers.heading("name", text="Nickname / Account")
         self.tree_workers.heading("provider", text="Provider")
         self.tree_workers.heading("status", text="Status")
+        self.tree_workers.heading("elapsed", text="Heartbeat")
         self.tree_workers.heading("credits_used", text="Credits Used")
         self.tree_workers.heading("credits_rem", text="Remaining")
         self.tree_workers.heading("current_task", text="Active Task")
@@ -431,17 +438,62 @@ class FleetControlApp(tk.Tk):
         self.tree_workers.column("name", width=150, anchor="w")
         self.tree_workers.column("provider", width=110, anchor="center")
         self.tree_workers.column("status", width=90, anchor="center")
+        self.tree_workers.column("elapsed", width=90, anchor="center")
         self.tree_workers.column("credits_used", width=100, anchor="e")
         self.tree_workers.column("credits_rem", width=100, anchor="e")
         self.tree_workers.column("current_task", width=160, anchor="w")
         self.tree_workers.column("note", width=220, anchor="w")
 
         # Scrollbar
-        sb_w = ttk.Scrollbar(container, orient="vertical", command=self.tree_workers.yview)
+        sb_w = ttk.Scrollbar(tbl_frame, orient="vertical", command=self.tree_workers.yview)
         self.tree_workers.configure(yscrollcommand=sb_w.set)
+        self.tree_workers.pack(side="left", fill="both", expand=True)
+        sb_w.pack(side="right", fill="y")
+        self.tree_workers.bind("<<TreeviewSelect>>", self._on_worker_selected)
 
-        self.tree_workers.pack(side="left", fill="both", expand=True, padx=(4, 0))
-        sb_w.pack(side="right", fill="y", padx=(0, 4))
+        # Right inspector panel
+        self.worker_insp_frame = tk.LabelFrame(
+            split_frame,
+            text=" Worker Inspector ",
+            font=FONT_SUBTITLE,
+            bg=BG_CARD,
+            fg=TEXT_PRIMARY,
+            relief="flat",
+            highlightbackground=BORDER_COLOR,
+            highlightthickness=1,
+            width=320,
+        )
+        self.worker_insp_frame.pack(side="right", fill="y", padx=(4, 0))
+        self.worker_insp_frame.pack_propagate(False)
+
+        self.worker_insp_title = tk.Label(
+            self.worker_insp_frame,
+            text="Select a worker",
+            font=FONT_BODY_BOLD,
+            bg=BG_CARD,
+            fg=TEXT_PRIMARY,
+            wraplength=280,
+            justify="left",
+        )
+        self.worker_insp_title.pack(anchor="w", padx=12, pady=(10, 6))
+
+        self.worker_insp_status = tk.Label(self.worker_insp_frame, text="Status: -", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED)
+        self.worker_insp_status.pack(anchor="w", padx=12, pady=(0, 8))
+
+        tk.Label(self.worker_insp_frame, text="Credits:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(anchor="w", padx=12, pady=(0, 2))
+        self.worker_insp_credits_bar = ttk.Progressbar(self.worker_insp_frame, orient="horizontal", length=200, mode="determinate", maximum=100)
+        self.worker_insp_credits_bar.pack(anchor="w", padx=12, fill="x", pady=(0, 4))
+        self.worker_insp_credits_text = tk.Label(self.worker_insp_frame, text="0.00 / 0.00 credits (0.0%)", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED)
+        self.worker_insp_credits_text.pack(anchor="w", padx=12, pady=(0, 10))
+
+        self.worker_insp_heartbeat = tk.Label(self.worker_insp_frame, text="Heartbeat: -", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED)
+        self.worker_insp_heartbeat.pack(anchor="w", padx=12, pady=(0, 6))
+        self.worker_insp_task = tk.Label(self.worker_insp_frame, text="Current Task: -", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED, wraplength=280, justify="left")
+        self.worker_insp_task.pack(anchor="w", padx=12, pady=(0, 6))
+
+        tk.Label(self.worker_insp_frame, text="Telemetry Note:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(anchor="w", padx=12, pady=(4, 2))
+        self.worker_insp_note = tk.Label(self.worker_insp_frame, text="-", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED, wraplength=280, justify="left")
+        self.worker_insp_note.pack(anchor="w", padx=12, pady=(0, 12), fill="x")
 
         # Status tag styling
         self.tree_workers.tag_configure("tag_idle", foreground=ACCENT_GREEN)
@@ -580,6 +632,59 @@ class FleetControlApp(tk.Tk):
             else:
                 btn.config(bg=BG_INPUT, fg=TEXT_SECONDARY)
         self._render_tasks_table()
+
+    def _format_worker_heartbeat(self, heartbeat_at: Any) -> str:
+        if heartbeat_at in (None, ""):
+            return "-"
+
+        if not isinstance(heartbeat_at, str):
+            return "-"
+
+        try:
+            hb = heartbeat_at.replace("Z", "+00:00")
+            dt = datetime.fromisoformat(hb)
+        except ValueError:
+            return "-"
+
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+
+        elapsed = max(0.0, (datetime.now(timezone.utc) - dt).total_seconds())
+        if elapsed < 60:
+            return f"{int(elapsed)}s"
+        if elapsed < 3600:
+            return f"{int(elapsed // 60)}m"
+        if elapsed < 86400:
+            return f"{int(elapsed // 3600)}h"
+        return f"{int(elapsed // 86400)}d"
+
+    def _on_worker_selected(self, event):
+        sel = self.tree_workers.selection()
+        if not sel:
+            return
+
+        item = self.tree_workers.item(sel[0])
+        values = item.get("values") or ()
+        worker_id = values[0] if values else None
+        if not worker_id:
+            return
+
+        worker = next((w for w in self._cached_metrics.get("workers", []) if str(w.get("worker_id")) == str(worker_id)), None)
+        if not worker:
+            return
+
+        status = str(worker.get("status") or "idle").upper()
+        total_credits = float(worker.get("monthly_credits", 0) or 0)
+        used_credits = float(worker.get("credits_used", 0.0) or 0.0)
+        pct = 0.0 if total_credits <= 0 else min(100.0, (used_credits / total_credits) * 100.0)
+
+        self.worker_insp_title.config(text=f"Worker: {worker.get('name') or worker_id}")
+        self.worker_insp_status.config(text=f"Status: {status}")
+        self.worker_insp_credits_bar.configure(maximum=100, value=pct)
+        self.worker_insp_credits_text.config(text=f"{used_credits:.2f} / {total_credits:.2f} credits ({pct:.1f}%)")
+        self.worker_insp_heartbeat.config(text=f"Heartbeat: {self._format_worker_heartbeat(worker.get('heartbeat_at'))}")
+        self.worker_insp_task.config(text=f"Current Task: {worker.get('current_task_id') or '-'}")
+        self.worker_insp_note.config(text=worker.get("note") or "No telemetry note available.")
 
     def _on_task_selected(self, event):
         sel = self.tree_tasks.selection()
@@ -926,11 +1031,32 @@ class FleetControlApp(tk.Tk):
             if self._current_worker_filter == "Cooldown" and st != "cooldown":
                 continue
 
-            tag = f"tag_{st}" if st in ("idle", "busy", "cooldown", "offline") else "tag_idle"
-            used_val = w.get("credits_used", 0.0)
-            rem_val = w.get("credits_remaining", 200.0)
-            total_lim = w.get("monthly_credits", 200)
-            used_str = f"{used_val:.2f} / {total_lim}"
+            heartbeat_at = w.get("heartbeat_at")
+            elapsed_str = self._format_worker_heartbeat(heartbeat_at)
+            stale_heartbeat = False
+            if heartbeat_at:
+                try:
+                    hb = heartbeat_at.replace("Z", "+00:00")
+                    dt = datetime.fromisoformat(hb)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    stale_heartbeat = (datetime.now(timezone.utc) - dt).total_seconds() > 120
+                except Exception:
+                    stale_heartbeat = True
+            elif st != "offline":
+                stale_heartbeat = True
+
+            if st == "offline":
+                tag = "tag_offline"
+            elif stale_heartbeat:
+                tag = "tag_cooldown"
+            else:
+                tag = f"tag_{st}" if st in ("idle", "busy", "cooldown", "offline") else "tag_idle"
+
+            used_val = float(w.get("credits_used", 0.0) or 0.0)
+            rem_val = float(w.get("credits_remaining", 200.0) or 0.0)
+            total_lim = float(w.get("monthly_credits", 200) or 200)
+            used_str = f"{used_val:.2f} / {total_lim:.2f}"
             rem_str = f"{rem_val:.2f}"
 
             task_str = w.get("current_task_id") or "-"
@@ -946,6 +1072,7 @@ class FleetControlApp(tk.Tk):
                     w.get("name"),
                     "Copilot CLI",
                     st.upper(),
+                    elapsed_str,
                     used_str,
                     rem_str,
                     task_str,

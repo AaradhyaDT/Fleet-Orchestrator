@@ -1,0 +1,22 @@
+{
+  "id": "task_1791557026_add-task-dispatcher-provenance-to-fleet-",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "In tools/fleet_gui.py:\n1. In _build_tab_tasks(), add 'dispatcher' column to tree_tasks between 'worker' and 'priority':\n   cols = ('id', 'stage', 'kind', 'status', 'worker', 'dispatcher', 'priority')\n   heading: 'Dispatcher / Creator'\n   column width: 140, anchor 'center'\n2. In _render_tasks_table(), populate the dispatcher column with t.get('created_by') or '-' for each task.\n3. In _on_task_selected(), include 'Dispatched by: ' + (task_data.get('created_by') or 'unknown') in insp_meta label.\nEnsure all tests in tests/test_fleet_gui.py pass without errors.",
+  "status": "done",
+  "owner_account": "copilot-w1",
+  "branch_name": "task/task_1791557026_add-task-dispatcher-provenance-to-fleet-",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-09T14:43:46Z",
+  "updated_at": "2026-10-09T14:44:53Z",
+  "task_id": "TASK-1791557026-add-task-dispatcher-provenance-to-fleet-",
+  "title": "add-task-dispatcher-provenance-to-fleet-gui",
+  "repository": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator",
+  "prompt": "In tools/fleet_gui.py:\n1. In _build_tab_tasks(), add 'dispatcher' column to tree_tasks between 'worker' and 'priority':\n   cols = ('id', 'stage', 'kind', 'status', 'worker', 'dispatcher', 'priority')\n   heading: 'Dispatcher / Creator'\n   column width: 140, anchor 'center'\n2. In _render_tasks_table(), populate the dispatcher column with t.get('created_by') or '-' for each task.\n3. In _on_task_selected(), include 'Dispatched by: ' + (task_data.get('created_by') or 'unknown') in insp_meta label.\nEnsure all tests in tests/test_fleet_gui.py pass without errors.",
+  "branch": "feat/task-1791557026-add-task-dispatcher-provenance-to-fleet-",
+  "priority": "high",
+  "assigned_worker": null,
+  "max_retries": 3,
+  "timeout": 300.0
+}

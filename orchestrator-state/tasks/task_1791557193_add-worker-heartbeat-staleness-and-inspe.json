@@ -1,0 +1,22 @@
+{
+  "id": "task_1791557193_add-worker-heartbeat-staleness-and-inspe",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "In tools/fleet_gui.py:\n1. In _build_tab_workers(), add 'elapsed' column to tree_workers:\n   cols = ('id', 'name', 'provider', 'status', 'elapsed', 'credits_used', 'credits_rem', 'current_task', 'note')\n   heading: 'Heartbeat'\n   column width: 90, anchor 'center'\n2. In _render_workers_table(), calculate elapsed time string from w.get('heartbeat_at') relative to current UTC time (e.g. '12s', '2m', '1h', or '-' if None). If w.get('heartbeat_at') is older than 120s or missing when status!='offline', use tag_cooldown or tag_offline.\n3. In _build_tab_workers(), split into left treeview table and right inspector frame (self.worker_insp_frame) with width 320, displaying selected worker details: title, status, credits progress bar/text, heartbeat, current task id, and telemetry note on <<TreeviewSelect>> event.\nEnsure all tests in tests/test_fleet_gui.py pass.",
+  "status": "claimed",
+  "owner_account": "copilot-w2",
+  "branch_name": "task/task_1791557193_add-worker-heartbeat-staleness-and-inspe",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-09T14:46:33Z",
+  "updated_at": "2026-10-09T14:46:33Z",
+  "task_id": "TASK-1791557193-add-worker-heartbeat-staleness-and-inspe",
+  "title": "add-worker-heartbeat-staleness-and-inspector",
+  "repository": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator",
+  "prompt": "In tools/fleet_gui.py:\n1. In _build_tab_workers(), add 'elapsed' column to tree_workers:\n   cols = ('id', 'name', 'provider', 'status', 'elapsed', 'credits_used', 'credits_rem', 'current_task', 'note')\n   heading: 'Heartbeat'\n   column width: 90, anchor 'center'\n2. In _render_workers_table(), calculate elapsed time string from w.get('heartbeat_at') relative to current UTC time (e.g. '12s', '2m', '1h', or '-' if None). If w.get('heartbeat_at') is older than 120s or missing when status!='offline', use tag_cooldown or tag_offline.\n3. In _build_tab_workers(), split into left treeview table and right inspector frame (self.worker_insp_frame) with width 320, displaying selected worker details: title, status, credits progress bar/text, heartbeat, current task id, and telemetry note on <<TreeviewSelect>> event.\nEnsure all tests in tests/test_fleet_gui.py pass.",
+  "branch": "feat/task-1791557193-add-worker-heartbeat-staleness-and-inspe",
+  "priority": "high",
+  "assigned_worker": null,
+  "max_retries": 3,
+  "timeout": 300.0
+}

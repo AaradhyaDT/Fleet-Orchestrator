@@ -667,6 +667,7 @@ class CopilotQueueWorker:
             github_token=account.get("token") or None,
             copilot_home=account.get("state_dir") or None,
             allow_custom_instructions=has_customizations,
+            timeout=float(task.get("timeout", 420.0)),
         )
 
         logger.info(f"Executing {task_id} via Copilot CLI (Worker: {account['worker_id']}, Worktree: {target_worktree})...")
