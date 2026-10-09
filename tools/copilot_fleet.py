@@ -89,57 +89,27 @@ def discover_accounts(env_vars: dict[str, str]) -> list[dict[str, Any]]:
 
 
 def initialize_fleet_ledgers(state_dir: Path | str | None = None) -> int:
-    """Ensures all discovered accounts have an initialized live-status file in orchestrator-state."""
-    from tools.copilot_queue_worker import resolve_state_dir
+    """Backward-compatible shim delegating to credit_ledger.initialize_ledgers."""
+    from tools.credit_ledger import initialize_ledgers, resolve_state_dir
 
     resolved_state = resolve_state_dir(str(state_dir) if state_dir else None)
-    live_status_dir = resolved_state / "live-status"
-    live_status_dir.mkdir(parents=True, exist_ok=True)
-
     env_vars = load_env_fleet()
     accounts = discover_accounts(env_vars)
-    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    created = 0
-    for acc in accounts:
-        wid = acc["worker_id"]
-        status_file = live_status_dir / f"{wid}.json"
-        if not status_file.exists():
-            limit = acc["monthly_credits"]
-            payload = {
-                "account": wid,
-                "name": acc["name"],
-                "status": "idle" if acc["has_token"] else "offline",
-                "current_task_id": None,
-                "credits_used": 0.0,
-                "credits_remaining": float(limit),
-                "monthly_credits": limit,
-                "cooldown_until": None,
-                "heartbeat_at": now_str,
-                "note": "Ready (Initialized)" if acc["has_token"] else "No Token",
-            }
-            try:
-                tmp = status_file.with_suffix(f".tmp.{os.getpid()}")
-                with open(tmp, "w", encoding="utf-8") as f:
-                    json.dump(payload, f, indent=2)
-                os.replace(tmp, status_file)
-                created += 1
-            except Exception:
-                pass
-    return created
+    return initialize_ledgers(resolved_state, accounts)
 
 
 def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, Any]:
-    """Computes real-time fleet quota capacity, monthly credit burn rate, and worker states."""
-    from tools.copilot_queue_worker import resolve_state_dir
+    """
+    Computes real-time fleet quota capacity, monthly credit burn rate, and worker states.
+    STRICTLY NON-MUTATING: Pure read-only path that performs in-memory synthesis and rollover
+    without writing any files to disk.
+    """
+    from tools.credit_ledger import resolve_state_dir
 
     resolved_state = resolve_state_dir(str(state_dir) if state_dir else None)
     live_status_dir = resolved_state / "live-status"
     tasks_dir = resolved_state / "tasks"
     checkpoints_dir = resolved_state / "checkpoints"
-
-    # Auto-initialize missing worker ledgers if needed
-    initialize_fleet_ledgers(resolved_state)
 
     env_vars = load_env_fleet()
     accounts = discover_accounts(env_vars)
@@ -153,6 +123,7 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     status_counts = {"idle": 0, "busy": 0, "cooldown": 0, "offline": 0}
 
     now_dt = datetime.now(timezone.utc)
+    current_utc_period = now_dt.strftime("%Y-%m")
 
     for acc in accounts:
         wid = acc["worker_id"]
@@ -174,25 +145,36 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             try:
                 with open(status_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                raw_used = data.get("credits_used", 0.0)
-                used = round(float(raw_used), 2)
-                current_task = data.get("current_task_id")
-                note = data.get("note", "")
-                heartbeat = data.get("heartbeat_at")
-                cooldown_until = data.get("cooldown_until")
 
-                if cooldown_until:
-                    exp = datetime.fromisoformat(cooldown_until.replace("Z", "+00:00"))
-                    if now_dt < exp:
-                        worker_status = "cooldown"
+                stored_period = data.get("period")
+                # In-memory rollover if stored period differs from current UTC period
+                if stored_period and stored_period != current_utc_period:
+                    used = 0.0
+                    current_task = None
+                    note = "New billing period (Rollover)"
+                    heartbeat = data.get("heartbeat_at")
+                    cooldown_until = None
+                    worker_status = "idle" if has_token else "offline"
+                else:
+                    raw_used = data.get("credits_used", 0.0)
+                    used = round(float(raw_used), 2)
+                    current_task = data.get("current_task_id")
+                    note = data.get("note", "")
+                    heartbeat = data.get("heartbeat_at")
+                    cooldown_until = data.get("cooldown_until")
+
+                    if cooldown_until:
+                        exp = datetime.fromisoformat(cooldown_until.replace("Z", "+00:00"))
+                        if now_dt < exp:
+                            worker_status = "cooldown"
+                        elif current_task:
+                            worker_status = "busy"
+                        elif has_token:
+                            worker_status = "idle"
                     elif current_task:
                         worker_status = "busy"
                     elif has_token:
-                        worker_status = "idle"
-                elif current_task:
-                    worker_status = "busy"
-                elif has_token:
-                    worker_status = data.get("status", "idle")
+                        worker_status = data.get("status", "idle")
             except Exception:
                 pass
 
@@ -333,6 +315,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
 
     print("\n" + "=" * 80)
     print(" GITHUB COPILOT MULTI-ACCOUNT CLI FLEET QUOTA & BURN-RATE DASHBOARD")
+    print(" Locally Observed Monthly AI Credits (Machine-local session telemetry)")
     print("=" * 80)
 
     bar_width = 30
@@ -542,6 +525,9 @@ async def cmd_batch(args: argparse.Namespace) -> None:
 
 async def cmd_canary(args: argparse.Namespace) -> None:
     """Executes concurrent non-interactive verification across all ready accounts."""
+    from tools.credit_ledger import sync_worker_ledger, resolve_state_dir
+
+    resolved_orch = resolve_state_dir(getattr(args, "state_dir", None))
     env_vars = load_env_fleet()
     accounts = discover_accounts(env_vars)
     ready = [a for a in accounts if a["has_token"]]
@@ -568,6 +554,10 @@ async def cmd_canary(args: argparse.Namespace) -> None:
             stage="canary",
             context={},
         )
+        try:
+            sync_worker_ledger(resolved_orch, acc)
+        except Exception as e:
+            logger.debug(f"Failed to sync worker ledger for {acc['worker_id']} after canary: {e}")
         return {"account": acc, "result": res}
 
     results = await asyncio.gather(*[_test_worker(a) for a in ready], return_exceptions=True)
@@ -584,6 +574,37 @@ async def cmd_canary(args: argparse.Namespace) -> None:
                 print(f"[-] {acc['worker_id']} ({acc['name']}): FAIL | Error: {res.get('error')}")
 
 
+def cmd_reconcile(args: argparse.Namespace) -> None:
+    """Reconciles live-status files and sidecar ledgers with authentic session logs."""
+    from tools.credit_ledger import reconcile_all_workers, resolve_state_dir
+
+    env_vars = load_env_fleet()
+    accounts = discover_accounts(env_vars)
+    resolved = resolve_state_dir(getattr(args, "state_dir", None))
+    summary = reconcile_all_workers(resolved, accounts, month_prefix=getattr(args, "month", None))
+
+    if getattr(args, "json", False):
+        print(json.dumps(summary, indent=2))
+        return
+
+    print("\n" + "=" * 80)
+    print(f" FLEET QUOTA RECONCILIATION SUMMARY (Period: {summary['period']})")
+    print(" Locally Observed Monthly AI Credits (Machine-local session telemetry)")
+    if summary.get("report_only"):
+        print(" [NOTE] Target month differs from current UTC month: Running in report-only mode (no live-status changes)")
+    print("=" * 80)
+    print(f" Total Registered Workers: {len(accounts)}")
+    print(f" Total Monthly Pool:       {summary['total_monthly_credits']} credits")
+    print(f" Total Reconciled Usage:   {summary['total_credits_used']:.2f} credits")
+    print("-" * 80)
+    for wid, info in summary["workers"].items():
+        used = info["credits_used"]
+        status = info.get("status", "idle")
+        exh = " [QUOTA EXHAUSTED]" if info.get("quota_exhausted") else ""
+        print(f" {wid:<12} {info['name'][:15]:<16} {status:<10} {used:>6.2f} credits{exh}")
+    print("=" * 80 + "\n")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Copilot Multi-Account Fleet Controller")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -595,6 +616,12 @@ def main() -> None:
     dash_parser = subparsers.add_parser("dashboard", help="Show real-time credit burn rate and quota telemetry dashboard")
     dash_parser.add_argument("--json", action="store_true", help="Output dashboard metrics as JSON")
     dash_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+
+    # Reconcile subparser
+    reconcile_parser = subparsers.add_parser("reconcile", help="Reconcile live status against authentic Copilot worker session event logs")
+    reconcile_parser.add_argument("--month", type=str, default=None, help="Target billing month prefix (YYYY-MM). Default: current UTC month. Past months run in report-only mode.")
+    reconcile_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
+    reconcile_parser.add_argument("--json", action="store_true", help="Output reconciliation summary as JSON")
 
     # Submit task subparser
     submit_parser = subparsers.add_parser("submit", help="Enqueue task(s) into orchestrator-state/tasks/")
@@ -616,13 +643,29 @@ def main() -> None:
     batch_parser.add_argument("--conversation-id", type=str, default=None, help="Explicit Antigravity conversation ID")
     batch_parser.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context inheritance")
 
-    args = parser.parse_args()
+    raw_args = list(sys.argv[1:])
+    normalized = []
+    for arg in raw_args:
+        if arg in ("-d", "--dashboard", "-dashboard", "-dashboarrd"):
+            normalized.append("dashboard")
+        elif arg in ("-s", "--status", "-status"):
+            normalized.append("status")
+        elif arg in ("-r", "--reconcile", "-reconcile"):
+            normalized.append("reconcile")
+        elif arg in ("-c", "--canary", "-canary"):
+            normalized.append("canary")
+        else:
+            normalized.append(arg)
+
+    args = parser.parse_args(normalized)
     if args.command == "status":
         asyncio.run(cmd_status(args))
     elif args.command == "canary":
         asyncio.run(cmd_canary(args))
     elif args.command == "dashboard":
         cmd_dashboard(args)
+    elif args.command == "reconcile":
+        cmd_reconcile(args)
     elif args.command == "submit":
         cmd_submit(args)
     elif args.command == "batch":

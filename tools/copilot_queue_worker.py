@@ -33,6 +33,14 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
 from tools.copilot_fleet import discover_accounts, load_env_fleet
+from tools.credit_ledger import (
+    resolve_state_dir,
+    next_billing_reset,
+    sync_worker_ledger,
+    parse_iso_utc,
+    atomic_write_json,
+    initialize_ledgers,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,33 +56,6 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def resolve_state_dir(explicit_path: str | None = None) -> Path:
-    """Finds orchestrator-state root directory."""
-    if explicit_path:
-        p = Path(explicit_path).resolve()
-        if p.exists():
-            return p
-
-    env_path = os.getenv("ORCHESTRATOR_STATE_DIR")
-    if env_path:
-        p = Path(env_path).resolve()
-        if p.exists():
-            return p
-
-    # Check local orchestrator-state in Fleet-Orchestrator
-    local_state = PROJECT_ROOT / "orchestrator-state"
-    if local_state.exists():
-        return local_state
-
-    # Check sibling Claude-Desktop/orchestrator-state
-    sibling_state = PROJECT_ROOT.parent / "Claude-Desktop" / "orchestrator-state"
-    if sibling_state.exists():
-        return sibling_state
-
-    # Fallback to local_state even if not yet populated
-    return local_state
 
 
 class CopilotQueueWorker:
@@ -113,6 +94,7 @@ class CopilotQueueWorker:
 
         self.account_credits: dict[str, float] = {}
         self.account_cooldowns: dict[str, datetime] = {}
+        self._account_file_mtimes: dict[str, float] = {}
         self._initialize_fleet_status_files()
         self._load_live_status_telemetry()
 
@@ -123,32 +105,7 @@ class CopilotQueueWorker:
 
     def _initialize_fleet_status_files(self) -> None:
         """Ensures all accounts have an initialized live-status file in orchestrator-state."""
-        self.live_status_dir.mkdir(parents=True, exist_ok=True)
-        now_str = _now_iso()
-        for acc in self.accounts:
-            wid = acc["worker_id"]
-            status_file = self.live_status_dir / f"{wid}.json"
-            if not status_file.exists():
-                limit = acc.get("monthly_credits", 200)
-                data = {
-                    "account": wid,
-                    "name": acc["name"],
-                    "status": "idle" if acc["has_token"] else "offline",
-                    "current_task_id": None,
-                    "credits_used": 0.0,
-                    "credits_remaining": float(limit),
-                    "monthly_credits": limit,
-                    "cooldown_until": None,
-                    "heartbeat_at": now_str,
-                    "note": "Ready (Initialized)" if acc["has_token"] else "No Token",
-                }
-                try:
-                    tmp = status_file.with_suffix(f".tmp.{os.getpid()}")
-                    with open(tmp, "w", encoding="utf-8") as f:
-                        json.dump(data, f, indent=2)
-                    os.replace(tmp, status_file)
-                except Exception:
-                    pass
+        initialize_ledgers(self.state_dir, self.accounts)
 
     def _load_live_status_telemetry(self) -> None:
         """Loads existing credit telemetry and cooldown state from orchestrator-state/live-status/."""
@@ -166,14 +123,35 @@ class CopilotQueueWorker:
                     if "credits_used" in data and isinstance(data["credits_used"], (int, float)):
                         self.account_credits[wid] = float(data["credits_used"])
                     if "cooldown_until" in data and data["cooldown_until"]:
-                        exp = datetime.fromisoformat(data["cooldown_until"].replace("Z", "+00:00"))
-                        if exp > now:
+                        exp = parse_iso_utc(data["cooldown_until"])
+                        if exp and exp > now:
                             self.account_cooldowns[wid] = exp
                 except Exception as e:
                     logger.debug(f"Could not load status for {wid}: {e}")
 
     def is_in_cooldown(self, worker_id: str) -> bool:
         """Returns True if worker is in active cooldown."""
+        # Re-check live status file on disk (cached by mtime) to catch external cooldowns
+        status_file = self.live_status_dir / f"{worker_id}.json"
+        if status_file.exists():
+            try:
+                mtime = status_file.stat().st_mtime
+                if mtime != self._account_file_mtimes.get(worker_id, 0.0):
+                    self._account_file_mtimes[worker_id] = mtime
+                    with open(status_file, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    cd = data.get("cooldown_until")
+                    if cd:
+                        exp = parse_iso_utc(cd)
+                        if exp and exp > datetime.now(timezone.utc):
+                            self.account_cooldowns[worker_id] = exp
+                        else:
+                            self.account_cooldowns.pop(worker_id, None)
+                    else:
+                        self.account_cooldowns.pop(worker_id, None)
+            except Exception:
+                pass
+
         exp = self.account_cooldowns.get(worker_id)
         if not exp:
             return False
@@ -182,33 +160,83 @@ class CopilotQueueWorker:
             return False
         return True
 
-    def mark_cooldown(self, worker_id: str, minutes: int = 60, reason: str = "") -> None:
+    def mark_cooldown(
+        self,
+        worker_id: str,
+        minutes: int | None = 60,
+        *,
+        until: datetime | None = None,
+        quota_exhausted: bool = False,
+        reason: str = "",
+    ) -> None:
         """Transitions worker account to cooldown state and updates live-status."""
         now = datetime.now(timezone.utc)
-        exp = now + timedelta(minutes=minutes)
+        if until:
+            exp = until
+        elif quota_exhausted:
+            exp = next_billing_reset(now)
+        else:
+            exp = now + timedelta(minutes=minutes if minutes is not None else 60)
+
         self.account_cooldowns[worker_id] = exp
-        logger.warning(f"Worker {worker_id} placed in COOLDOWN for {minutes}m. Reason: {reason}")
+        exp_iso = exp.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        note = f"Cooldown ({minutes}m): {reason}" if minutes else f"Cooldown: {reason}"
+        if quota_exhausted:
+            note = f"Exhausted: {reason} (Resets {exp.strftime('%Y-%m-%d')})"
+
+        logger.warning(f"Worker {worker_id} placed in COOLDOWN until {exp_iso}. Reason: {reason}")
         self._update_live_status(
             account=worker_id,
             current_task_id=None,
-            note=f"Cooldown ({minutes}m): {reason}",
+            note=note,
             status="cooldown",
+            cooldown_until=exp_iso,
+            quota_exhausted=quota_exhausted,
         )
 
-    def record_credit_usage(self, worker_id: str, credits_used: float) -> float:
+    def record_credit_usage(self, worker_id: str, credits_used: float, session_id: str | None = None) -> float:
         """Records consumed credits and auto-cooldowns when monthly limit reached."""
-        current = round(float(self.account_credits.get(worker_id, 0.0)) + float(credits_used), 2)
-        self.account_credits[worker_id] = current
-
-        limit = 200
+        acc_dict = None
         for acc in self.accounts:
             if acc.get("worker_id") == worker_id:
-                limit = acc.get("monthly_credits", 200)
+                acc_dict = acc
                 break
 
+        if not acc_dict:
+            acc_dict = {
+                "worker_id": worker_id,
+                "name": worker_id,
+                "monthly_credits": 200,
+                "state_dir": Path.home() / ".copilot-workers" / f"worker_{worker_id}",
+            }
+
+        # Check if worker_home session-state exists to decide if provisional credits needed
+        worker_home = Path(acc_dict.get("state_dir", ""))
+        sess_dir = worker_home / "session-state"
+        has_real_sessions = sess_dir.exists() and any(sess_dir.glob("*"))
+
+        # If no real session files exist on disk (e.g. test fixture), supply provisional_credits
+        prov = credits_used if not has_real_sessions else 0.0
+
+        res = sync_worker_ledger(
+            self.state_dir,
+            acc_dict,
+            provisional_credits=prov,
+        )
+
+        current = float(res.get("credits_used", 0.0))
+        self.account_credits[worker_id] = current
+        limit = acc_dict.get("monthly_credits", 200)
+
         logger.info(f"Worker {worker_id} credit update: +{credits_used:.2f} used (Total: {current:.2f}/{limit})")
-        if current >= limit:
-            self.mark_cooldown(worker_id, minutes=60 * 24 * 30, reason=f"Monthly quota exhausted ({current:.2f}/{limit} credits)")
+        if res.get("quota_exhausted") or current >= limit:
+            self.mark_cooldown(
+                worker_id,
+                until=next_billing_reset(),
+                quota_exhausted=True,
+                reason=f"Monthly quota exhausted ({current:.2f}/{limit} credits)",
+            )
 
         return current
 
@@ -331,42 +359,64 @@ class CopilotQueueWorker:
         current_task_id: str | None,
         note: str,
         status: str = "busy",
+        cooldown_until: str | None = None,
+        quota_exhausted: bool | None = None,
     ) -> None:
         """Updates live status light in orchestrator-state/live-status/<account>.json."""
         status_file = self.live_status_dir / f"{account}.json"
 
+        # Load fresh values from disk to avoid overwriting harvested credits
         used = round(float(self.account_credits.get(account, 0.0)), 2)
+        period = datetime.now(timezone.utc).strftime("%Y-%m")
         limit = 200
         for acc in self.accounts:
             if acc.get("worker_id") == account:
                 limit = acc.get("monthly_credits", 200)
                 break
+
+        is_quota_ex = quota_exhausted if quota_exhausted is not None else (used >= limit)
+        if status_file.exists():
+            try:
+                with open(status_file, "r", encoding="utf-8") as f:
+                    d = json.load(f)
+                if d.get("period") == period and "credits_used" in d:
+                    used = float(d["credits_used"])
+                    self.account_credits[account] = used
+                if quota_exhausted is None:
+                    is_quota_ex = d.get("quota_exhausted", is_quota_ex)
+            except Exception:
+                pass
+
         rem = max(0.0, round(limit - used, 2))
         cd_exp = self.account_cooldowns.get(account)
-        cd_iso = cd_exp.strftime("%Y-%m-%dT%H:%M:%SZ") if cd_exp else None
+        cd_iso = cooldown_until or (cd_exp.strftime("%Y-%m-%dT%H:%M:%SZ") if cd_exp else None)
 
         actual_status = status
-        if cd_exp and datetime.now(timezone.utc) < cd_exp:
-            actual_status = "cooldown"
+        if cd_iso:
+            exp_dt = parse_iso_utc(cd_iso)
+            if exp_dt and datetime.now(timezone.utc) < exp_dt:
+                actual_status = "cooldown"
+            else:
+                cd_iso = None
+                actual_status = "idle" if current_task_id is None else "busy"
         elif current_task_id is None:
             actual_status = "idle"
 
         data = {
             "account": account,
             "status": actual_status,
+            "period": period,
             "current_task_id": current_task_id,
             "credits_used": used,
             "credits_remaining": rem,
             "monthly_credits": limit,
+            "quota_exhausted": is_quota_ex,
             "cooldown_until": cd_iso,
             "heartbeat_at": _now_iso(),
             "note": note,
         }
         try:
-            tmp_file = status_file.with_suffix(f".tmp.{os.getpid()}")
-            with open(tmp_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-            os.replace(tmp_file, status_file)
+            atomic_write_json(status_file, data)
         except Exception as e:
             logger.warning(f"Could not update live-status for {account}: {e}")
 
@@ -742,7 +792,9 @@ class CopilotQueueWorker:
             self.record_credit_usage(account["worker_id"], credits_used)
 
             if result.get("quota_exhausted"):
-                self.mark_cooldown(account["worker_id"], minutes=60 * 24 * 30, reason="Copilot CLI quota exhausted")
+                self.mark_cooldown(account["worker_id"], until=next_billing_reset(), quota_exhausted=True, reason="Copilot CLI quota exhausted")
+            elif result.get("rate_limited_429"):
+                self.mark_cooldown(account["worker_id"], minutes=60, quota_exhausted=False, reason="Rate limited (HTTP 429)")
 
             # Commit changes and cleanup worktree
             commit_sha = await self.teardown_worktree(

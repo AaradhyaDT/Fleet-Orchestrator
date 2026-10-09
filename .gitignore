@@ -102,3 +102,11 @@ models/
 *.safetensors
 *.bin
 *.onnx
+
+# Copilot multi-account live-status telemetry & sidecars
+orchestrator-state/live-status/copilot-w*.json
+orchestrator-state/ledger/
+orchestrator-state/logs/
+*.lock
+*.tmp.*
+

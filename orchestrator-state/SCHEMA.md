@@ -82,7 +82,15 @@ history, just "what am I doing right now."
 ```json
 {
   "account": "user1",
+  "name": "worker_1",
+  "status": "idle",
   "current_task_id": "task_2026-08-02_001",
+  "period": "2026-10",
+  "credits_used": 2.50,
+  "credits_remaining": 197.50,
+  "monthly_credits": 200,
+  "quota_exhausted": false,
+  "cooldown_until": null,
   "heartbeat_at": "2026-08-02T10:22:41Z",
   "note": "wiring claim_task, about to run the test suite"
 }
@@ -95,6 +103,25 @@ history, just "what am I doing right now."
   this schema.
 - `note`: one line, free text, no history kept. This file is
   last-write-wins by design — it's a status light, not a log.
+- `period`: string (`"YYYY-MM"`). Stamped with the current billing month. If
+  read paths encounter an expired period, usage rolls over in-memory to 0.0
+  without mutating disk state.
+- `quota_exhausted`: boolean flag indicating whether the account has reached
+  its monthly quota (200 credits). When true, `cooldown_until` is set to the
+  1st of next month at 00:00:00 UTC.
+- `credits_used`: float locally observed credits used in the current billing period.
+- `credits_remaining`: float remaining credits in the monthly pool.
+- `monthly_credits`: integer monthly quota limit (default 200).
+- `cooldown_until`: ISO timestamp UTC until which the worker cannot claim tasks.
+
+## orchestrator-state/ledger/\<worker_id\>.json
+
+Per-worker sidecar ledger (ignored in Git). Maps authentic session UUIDs from
+`~/.copilot-workers/worker_*/session-state/*/events.jsonl` to consumed Nano-AIU
+credits, alongside provisional credits for test mocks.
+Protected by an OS file lock (`orchestrator-state/ledger/<worker_id>.lock`) using
+`msvcrt` on Windows and `fcntl` on POSIX.
+
 
 ## orchestrator-state/checkpoints/<task_id>.json
 

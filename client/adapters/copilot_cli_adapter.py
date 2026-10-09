@@ -244,21 +244,28 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 else:
                     credits_used = 1.0 if proc.returncode == 0 else 0.0
 
-            # Detect quota / rate limit exhaustion in output/errors
-            combined_err = f"{stderr_str} {stdout_str}".lower()
-            quota_exhausted = any(
-                p in combined_err
-                for p in [
-                    "credit limit",
-                    "credits exhausted",
-                    "quota exceeded",
-                    "usage limit",
-                    "rate limit",
-                    "out of credits",
-                    "insufficient credits",
-                    "429",
-                ]
-            )
+            # Calibrated classification order: check exhaustion first, then anchored 429, strictly on non-zero exit
+            quota_exhausted = False
+            rate_limited_429 = False
+
+            if proc.returncode != 0:
+                combined_tail = f"{stderr_str}\n{stdout_str[-1024:]}".lower()
+                # 1. Monthly quota / credit exhaustion takes precedence
+                if any(
+                    p in combined_tail
+                    for p in [
+                        "credit limit",
+                        "credits exhausted",
+                        "quota exceeded",
+                        "usage limit",
+                        "out of credits",
+                        "insufficient credits",
+                    ]
+                ):
+                    quota_exhausted = True
+                # 2. Transient HTTP 429 rate-limiting checked second
+                elif re.search(r"http[ /]*429|status[: =]*429|too many requests|rate.?limit", combined_tail):
+                    rate_limited_429 = True
 
             if proc.returncode == 0:
                 return {
@@ -269,7 +276,8 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "tokens_used": tokens_used,
                     "credits_used": credits_used,
                     "usage_data": usage_data,
-                    "quota_exhausted": quota_exhausted,
+                    "quota_exhausted": False,
+                    "rate_limited_429": False,
                     "error": None,
                 }
             else:
@@ -282,6 +290,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "credits_used": credits_used,
                     "usage_data": usage_data,
                     "quota_exhausted": quota_exhausted,
+                    "rate_limited_429": rate_limited_429,
                     "error": f"CLI_EXIT_{proc.returncode}: {stderr_str[:300] if stderr_str else 'Command failed'}",
                 }
 
