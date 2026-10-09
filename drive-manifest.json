@@ -30,8 +30,8 @@
     "models/qwen_intent_router_q4_k_m.gguf": {
       "drive_file_id": "1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK",
       "drive_file_name": "qwen_intent_router_q4_k_m.gguf",
-      "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent & Skill Router (Q4_K_M GGUF)",
-      "sha256": "68e2824405149b24"
+      "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent, Skill & Task Time Allocation Router (Q4_K_M GGUF)",
+      "sha256": "58473aca2106e275fe29636be6e078da4721a11f24dc5c8925b468454d5a5b81"
     },
     "notebooks/slm_time_router_forge.ipynb": {
       "drive_file_id": "1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh",
