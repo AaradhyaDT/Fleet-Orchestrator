@@ -33,7 +33,22 @@ def test_fleet_control_app_instantiation():
         assert hasattr(app, "canvas_burn")
         assert hasattr(app, "tree_workers")
         assert hasattr(app, "tree_tasks")
+        assert hasattr(app, "tree_batches")
+        assert hasattr(app, "worker_insp_frame")
+        assert hasattr(app, "batch_insp_frame")
         assert hasattr(app, "log_text")
+
+        # Test heartbeat formatting
+        assert app._format_worker_heartbeat(None) == "-"
+        assert app._format_worker_heartbeat("") == "-"
+
+        # Verify dispatcher column in tasks table
+        assert "dispatcher" in app.tree_tasks["columns"]
+        # Verify elapsed column in workers table
+        assert "elapsed" in app.tree_workers["columns"]
+        # Verify batch columns
+        assert "batch_id" in app.tree_batches["columns"]
+        assert "dispatcher" in app.tree_batches["columns"]
 
         # Test refresh execution
         app.refresh_all()

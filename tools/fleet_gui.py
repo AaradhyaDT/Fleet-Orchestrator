@@ -382,12 +382,17 @@ class FleetControlApp(tk.Tk):
         self.notebook.add(self.tab_tasks, text=" 📋 Pipeline Tasks ")
         self._build_tab_tasks()
 
-        # Tab 3: Windows & Desktop Arranger (Win32)
+        # Tab 3: Batch Monitor
+        self.tab_batches = tk.Frame(self.notebook, bg=BG_MAIN)
+        self.notebook.add(self.tab_batches, text=" 📦 Batch Monitor ")
+        self._build_tab_batches()
+
+        # Tab 4: Windows & Desktop Arranger (Win32)
         self.tab_arranger = tk.Frame(self.notebook, bg=BG_MAIN)
         self.notebook.add(self.tab_arranger, text=" 🪟 Windows & Desktop Arranger ")
         self._build_tab_arranger()
 
-        # Tab 4: Swarm Activity Console
+        # Tab 5: Swarm Activity Console
         self.tab_logs = tk.Frame(self.notebook, bg=BG_MAIN)
         self.notebook.add(self.tab_logs, text=" 📜 Swarm Activity Console ")
         self._build_tab_logs()
@@ -717,7 +722,169 @@ class FleetControlApp(tk.Tk):
         self.insp_text.insert("1.0", spec)
 
     # =========================================================================
-    # TAB 3: WINDOWS & DESKTOP ARRANGER (Win32)
+    # TAB 3: BATCH MONITOR
+    # =========================================================================
+    def _build_tab_batches(self):
+        container = tk.Frame(self.tab_batches, bg=BG_MAIN)
+        container.pack(fill="both", expand=True, pady=8)
+
+        # Split: Left Batches Table, Right Batch Detail Inspector
+        split_frame = tk.Frame(container, bg=BG_MAIN)
+        split_frame.pack(fill="both", expand=True, padx=4)
+
+        tbl_frame = tk.Frame(split_frame, bg=BG_CARD, highlightbackground=BORDER_COLOR, highlightthickness=1)
+        tbl_frame.pack(side="left", fill="both", expand=True, padx=(0, 4))
+
+        b_cols = ("batch_id", "dispatcher", "total", "done", "pending", "progress", "status")
+        self.tree_batches = ttk.Treeview(tbl_frame, columns=b_cols, show="headings", height=14)
+        self.tree_batches.heading("batch_id", text="Batch / Job ID")
+        self.tree_batches.heading("dispatcher", text="Dispatcher")
+        self.tree_batches.heading("total", text="Total Tasks")
+        self.tree_batches.heading("done", text="Done")
+        self.tree_batches.heading("pending", text="Pending")
+        self.tree_batches.heading("progress", text="Progress %")
+        self.tree_batches.heading("status", text="Status")
+
+        self.tree_batches.column("batch_id", width=220, anchor="w")
+        self.tree_batches.column("dispatcher", width=130, anchor="center")
+        self.tree_batches.column("total", width=80, anchor="center")
+        self.tree_batches.column("done", width=70, anchor="center")
+        self.tree_batches.column("pending", width=70, anchor="center")
+        self.tree_batches.column("progress", width=90, anchor="center")
+        self.tree_batches.column("status", width=90, anchor="center")
+
+        sb_b = ttk.Scrollbar(tbl_frame, orient="vertical", command=self.tree_batches.yview)
+        self.tree_batches.configure(yscrollcommand=sb_b.set)
+        self.tree_batches.pack(side="left", fill="both", expand=True)
+        sb_b.pack(side="right", fill="y")
+        self.tree_batches.bind("<<TreeviewSelect>>", self._on_batch_selected)
+
+        # Right Batch Inspector
+        self.batch_insp_frame = tk.LabelFrame(
+            split_frame,
+            text=" Batch Inspector ",
+            font=FONT_SUBTITLE,
+            bg=BG_CARD,
+            fg=TEXT_PRIMARY,
+            relief="flat",
+            highlightbackground=BORDER_COLOR,
+            highlightthickness=1,
+            width=360,
+        )
+        self.batch_insp_frame.pack(side="right", fill="both", padx=(4, 0))
+        self.batch_insp_frame.pack_propagate(False)
+
+        self.batch_insp_title = tk.Label(
+            self.batch_insp_frame,
+            text="Select a batch to inspect",
+            font=FONT_BODY_BOLD,
+            bg=BG_CARD,
+            fg=TEXT_PRIMARY,
+            wraplength=330,
+            justify="left",
+        )
+        self.batch_insp_title.pack(anchor="w", padx=12, pady=(10, 4))
+
+        self.batch_insp_meta = tk.Label(self.batch_insp_frame, text="", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED)
+        self.batch_insp_meta.pack(anchor="w", padx=12, pady=(0, 6))
+
+        tk.Label(self.batch_insp_frame, text="Batch Completion Progress:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(anchor="w", padx=12, pady=(2, 2))
+        self.batch_insp_bar = ttk.Progressbar(self.batch_insp_frame, orient="horizontal", length=240, mode="determinate")
+        self.batch_insp_bar.pack(anchor="w", padx=12, fill="x", pady=(0, 4))
+        self.batch_insp_pct_lbl = tk.Label(self.batch_insp_frame, text="0.0% Complete", font=FONT_BODY_MUTED, bg=BG_CARD, fg=ACCENT_CYAN)
+        self.batch_insp_pct_lbl.pack(anchor="w", padx=12, pady=(0, 8))
+
+        tk.Label(self.batch_insp_frame, text="Task Breakdown:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(anchor="w", padx=12, pady=(2, 2))
+        self.batch_tasks_text = scrolledtext.ScrolledText(
+            self.batch_insp_frame,
+            bg=BG_INPUT,
+            fg=TEXT_SECONDARY,
+            relief="flat",
+            bd=0,
+            padx=8,
+            pady=6,
+            font=FONT_MONO,
+            height=12,
+            wrap="word",
+        )
+        self.batch_tasks_text.pack(fill="both", expand=True, padx=12, pady=(0, 12))
+
+    def _render_batches_table(self):
+        for item in self.tree_batches.get_children():
+            self.tree_batches.delete(item)
+
+        groups: dict[str, list[dict[str, Any]]] = {}
+        for t in self._cached_tasks:
+            bid = t.get("job_id") or t.get("sku_id") or t.get("created_by") or "ungrouped"
+            groups.setdefault(bid, []).append(t)
+
+        self._cached_batches = []
+        for bid, btasks in sorted(groups.items()):
+            tot = len(btasks)
+            done_cnt = len([x for x in btasks if x.get("status") in ("done", "merged")])
+            pending_cnt = len([x for x in btasks if x.get("status") == "pending"])
+            claimed_cnt = len([x for x in btasks if x.get("status") == "claimed"])
+            blocked_cnt = len([x for x in btasks if x.get("status") == "blocked"])
+
+            pct = round((done_cnt / tot * 100.0), 1) if tot > 0 else 0.0
+            dispatcher = btasks[0].get("created_by") or "-"
+
+            if done_cnt == tot:
+                status_str = "COMPLETE"
+            elif claimed_cnt > 0:
+                status_str = "RUNNING"
+            elif blocked_cnt > 0:
+                status_str = "BLOCKED"
+            else:
+                status_str = "PENDING"
+
+            batch_info = {
+                "batch_id": bid,
+                "dispatcher": dispatcher,
+                "total": tot,
+                "done": done_cnt,
+                "pending": pending_cnt,
+                "progress": pct,
+                "status": status_str,
+                "tasks": btasks,
+            }
+            self._cached_batches.append(batch_info)
+
+            self.tree_batches.insert(
+                "",
+                "end",
+                values=(bid, dispatcher, tot, done_cnt, pending_cnt, f"{pct:.1f}%", status_str),
+            )
+
+    def _on_batch_selected(self, event):
+        sel = self.tree_batches.selection()
+        if not sel:
+            return
+        item = self.tree_batches.item(sel[0])
+        vals = item.get("values") or ()
+        if not vals:
+            return
+        bid = vals[0]
+
+        batch = next((b for b in self._cached_batches if b["batch_id"] == bid), None)
+        if not batch:
+            return
+
+        self.batch_insp_title.config(text=f"Batch: {bid}")
+        self.batch_insp_meta.config(text=f"Dispatcher: {batch['dispatcher']}  •  Status: {batch['status']}")
+        self.batch_insp_bar.configure(maximum=100, value=batch['progress'])
+        self.batch_insp_pct_lbl.config(text=f"{batch['progress']:.1f}% Complete ({batch['done']}/{batch['total']} tasks)")
+
+        self.batch_tasks_text.delete("1.0", tk.END)
+        for t in batch["tasks"]:
+            tid = t.get("id") or "-"
+            st = (t.get("status") or "pending").upper()
+            worker = t.get("owner_account") or "-"
+            stage = t.get("stage") or t.get("current_stage") or "code"
+            self.batch_tasks_text.insert(tk.END, f"• [{st}] {tid}\n  Stage: {stage} | Worker: {worker}\n")
+
+    # =========================================================================
+    # TAB 4: WINDOWS & DESKTOP ARRANGER (Win32)
     # =========================================================================
     def _build_tab_arranger(self):
         container = tk.Frame(self.tab_arranger, bg=BG_MAIN)
@@ -908,6 +1075,47 @@ class FleetControlApp(tk.Tk):
     def clear_logs(self):
         self.log_text.delete("1.0", tk.END)
 
+    def _start_daemon_log_tailer(self):
+        """Streams live worker_daemon.log events into the console in background."""
+        def _tail_worker():
+            log_path = self.state_dir / "logs" / "worker_daemon.log"
+            # Fast-forward to recent end on initial startup
+            if log_path.exists():
+                try:
+                    self._daemon_log_pos = max(0, log_path.stat().st_size - 4096)
+                except Exception:
+                    self._daemon_log_pos = 0
+
+            while not getattr(self, "_destroyed", False) and not getattr(self, "_stop_tailer", False):
+                try:
+                    if log_path.exists():
+                        cur_size = log_path.stat().st_size
+                        if cur_size < self._daemon_log_pos:
+                            self._daemon_log_pos = 0
+                        if cur_size > self._daemon_log_pos:
+                            with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+                                f.seek(self._daemon_log_pos)
+                                chunk = f.read()
+                                self._daemon_log_pos = f.tell()
+                            for line in chunk.splitlines():
+                                line_clean = line.strip()
+                                if line_clean:
+                                    lvl = "INFO"
+                                    if "[ERROR]" in line_clean or "ERR" in line_clean:
+                                        lvl = "ERROR"
+                                    elif "[WARN" in line_clean or "WARNING" in line_clean:
+                                        lvl = "WARN"
+                                    elif "marked DONE" in line_clean or "Successfully" in line_clean:
+                                        lvl = "SUCCESS"
+                                    elif "Executing" in line_clean or "claim" in line_clean.lower():
+                                        lvl = "TASK"
+                                    self.log(f"[DAEMON] {line_clean}", level=lvl)
+                except Exception:
+                    pass
+                time.sleep(1.0)
+
+        threading.Thread(target=_tail_worker, daemon=True).start()
+
     # =========================================================================
     # REFRESH & TELEMETRY ENGINE
     # =========================================================================
@@ -986,7 +1194,7 @@ class FleetControlApp(tk.Tk):
         busy_cnt = status_counts.get("busy", 0)
         cd_cnt = status_counts.get("cooldown", 0)
 
-        self.kpi_topology.config(text=f"{ready_acc} Ready  |  {idle_cnt} Idle  |  {busy_cnt} Busy  |  {cd_cnt} Cooldown")
+        self.kpi_topology.config(text=f"{busy_cnt}/{reg_acc} Active  |  {ready_acc} Ready  |  {idle_cnt} Idle  |  {cd_cnt} Cooldown")
 
         pending_tasks = len([tsk for tsk in tasks if tsk.get("status") == "pending"])
         checkpoints_cnt = t.get("completed_checkpoints", 0)
@@ -998,6 +1206,7 @@ class FleetControlApp(tk.Tk):
         # Render Tables
         self._render_workers_table()
         self._render_tasks_table()
+        self._render_batches_table()
 
     def _draw_burn_bar(self, burn_pct: float):
         self.lbl_burn_val.config(text=f"{burn_pct:.2f}%")
@@ -1062,7 +1271,10 @@ class FleetControlApp(tk.Tk):
             used_val = float(w.get("credits_used", 0.0) or 0.0)
             rem_val = float(w.get("credits_remaining", 200.0) or 0.0)
             total_lim = float(w.get("monthly_credits", 200) or 200)
-            used_str = f"{used_val:.2f} / {total_lim:.2f}"
+            ratio = min(1.0, max(0.0, used_val / total_lim)) if total_lim > 0 else 0.0
+            filled = int(round(ratio * 5))
+            micro_bar = "▓" * filled + "░" * (5 - filled)
+            used_str = f"{micro_bar} {used_val:.2f} / {total_lim:.2f}"
             rem_str = f"{rem_val:.2f}"
 
             task_str = w.get("current_task_id") or "-"
