@@ -64,6 +64,7 @@ Fleet-Orchestrator/
 │   ├── ci_self_healing_runner.py  # Self-healing test runner with flaky retries
 │   ├── fleet_watchdog.py          # Scheduled health & invariant sentinel
 │   ├── copilot_fleet.py           # Multi-account Copilot fleet controller
+│   ├── fast_intent_router.py      # Sub-50ms local intent router with LM Studio integration & fallback
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
 │   └── fleet_gui.py               # Tkinter desktop control panel
 │
@@ -75,6 +76,7 @@ Fleet-Orchestrator/
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
 │   ├── dispatch_iv_ii_tasks.py    # Autonomous task dispatcher for IV-II study packs
 │   ├── sync_drive.py              # Zero-dependency Google Drive doc sync engine
+│   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
 ├── tests/                         # Full automated pytest test suite (173+ tests)
