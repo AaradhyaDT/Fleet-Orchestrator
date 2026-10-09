@@ -96,12 +96,14 @@ cookies*.json
 # Isolated Git Worktrees for Fleet Queue Workers
 .worktrees/
 
-# Machine Learning model weights (keep in Google Drive / local storage)
+# Machine Learning model weights & harvested trajectory datasets
 models/
 *.gguf
 *.safetensors
 *.bin
 *.onnx
+dataset/trajectories/
+dataset/unified_fleet_*.jsonl
 
 # Copilot multi-account live-status telemetry & sidecars
 orchestrator-state/live-status/copilot-w*.json
