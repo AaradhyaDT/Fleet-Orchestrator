@@ -62,8 +62,9 @@ Fleet-Orchestrator/
 ├── tools/                         # CLI controllers and dashboards
 │   ├── ci_secret_scanner.py       # Standalone secret leakage audit tool
 │   ├── ci_self_healing_runner.py  # Self-healing test runner with flaky retries
-│   ├── fleet_watchdog.py          # Scheduled health & invariant sentinel
-│   ├── copilot_fleet.py           # Multi-account Copilot fleet controller
+│   ├── credit_ledger.py           # Leaf credit ledger engine with OS locking & session harvesting
+│   ├── fleet_commander.py         # Context-firebreak batch orchestrator (<=300 word manifest)
+│   ├── copilot_fleet.py           # Multi-account Copilot fleet controller (status, canary, reconcile, dashboard)
 │   ├── fast_intent_router.py      # Sub-50ms local intent router with LM Studio integration & fallback
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
 │   └── fleet_gui.py               # Modern Fleet-Orchestrator Control Center v2.0 (Tkinter High-DPI GUI)
@@ -79,7 +80,7 @@ Fleet-Orchestrator/
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (184+ tests)
+├── tests/                         # Full automated pytest test suite (195 tests)
 ├── requirements.txt               # Unified project dependencies
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
@@ -132,26 +133,33 @@ To register and activate any GitHub account in the fleet:
 ```powershell
 python tools/copilot_fleet.py status
 ```
-*Current Fleet: 27 registered accounts, 24 verified active & passing canary (4,800 AI credits / month).*
+*Current Fleet: 27 registered accounts, 27 verified active & passing canary (5,400 AI credits / month).*
 
 ### Step 3: Run Concurrent Canary Ping
 ```powershell
 python tools/copilot_fleet.py canary
 ```
-*Runs concurrent non-interactive headless smoke tasks across all active accounts with zero credit overruns.*
+*Runs concurrent non-interactive headless smoke tasks across all active accounts, updating the ledger post-run.*
 
-### Step 4: Run End-to-End Task Dispatch Smoke Test
+### Step 4: Reconcile Quota Telemetry & View Live Dashboard
 ```powershell
-python tools/e2e_dispatch_smoke.py
+python tools/copilot_fleet.py reconcile   # Harvests authentic sessions into per-worker sidecars (~26.92 credits)
+python tools/copilot_fleet.py dashboard   # Real-time quota burn rate & worker topology
 ```
-*Validates the full autonomous task lifecycle (REGISTER -> CLAIM LEASE -> EXECUTE -> CHECKPOINT -> DONE).*
+
+### Step 5: Execute Autonomous Tasks with Fleet Commander
+```powershell
+python tools/fleet_commander.py --specs "Implement feature A" "Refactor module B" --concurrency 2
+```
+*Enforces Context Firebreak Invariant (`INV-CTX-FIREBREAK`), isolates child logs, checks fleet health ratio $H$, and emits a structured $\le 300$-word manifest.*
 
 ---
 
 ## 4. Verification & Testing
 
-Fleet-Orchestrator enforces continuous deterministic verification:
+Fleet-Orchestrator enforces continuous deterministic verification across 195 test cases:
 ```powershell
+pytest tests/test_quota_reconciliation.py -v
 pytest tests/test_copilot_cli_adapter.py -v
 pytest tests/test_copilot_headless.py -v
 pytest tests/

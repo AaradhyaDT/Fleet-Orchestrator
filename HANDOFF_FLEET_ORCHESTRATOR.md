@@ -82,13 +82,34 @@
      - **Tab 4 (Swarm Console)**: Real-time monospace activity stream with colored event tags and search filters.
    - Fixed authentic Copilot CLI usage accounting in `client/adapters/copilot_cli_adapter.py`: parses `totalNanoAiu` ($10^9$ nano-AIU per credit), structured `tokenDetails`, and stdout regex fallback into 2-decimal float precision.
    - Implemented `initialize_fleet_ledgers()` ensuring all 27 accounts have live status files in `orchestrator-state/live-status/`.
-   - Created `launch_fleet_gui.bat` and updated `launch_copilot_fleet.bat` [5].
-   - **184 / 184 tests passing** (100% pass rate in `pytest`).
+   - Created `launch_fleet_gui.bat` and updated `launch_copilot_fleet.bat`.
+
+6. **Authentic Quota Reconciliation, Leaf Credit Ledger & Fleet Commander**:
+   - Resolved AI budget 100% capacity bug by building `tools/credit_ledger.py` (leaf module with OS file locks and zero repo imports).
+   - Harvested 109 authentic session event logs into per-worker sidecars (`orchestrator-state/ledger/copilot-w{N}.json`), yielding **26.92 credits** (0.50% fleet burn rate).
+   - Replaced fragile snapshot-diffs with post-task session harvests with `(file_size, mtime)` cache.
+   - Fixed adapter error classification precedence: monthly quota exhaustion phrases evaluated before transient 429 regexes.
+   - Made `get_fleet_quota_metrics()` strictly non-mutating with in-memory monthly rollover.
+   - Built `tools/fleet_commander.py` enforcing Context Firebreak Invariant (`INV-CTX-FIREBREAK`), child log redirection, health ratio $H = (N_{\text{idle}} + N_{\text{busy}}) / N_{\text{total}}$, and $\le 300$-word manifests.
+   - Untracked `copilot-w*.json` from git index while preserving 25 non-Copilot status lights.
+   - **195 / 195 tests passing** (100% pass rate in `pytest` across all 29 test suites).
 
 ---
 
-## 4. Operational Invariants & Rules
+## 4. Multi-Machine Migration Procedure
+
+When pulling updates across secondary devices with `sync.ps1` (`git pull --rebase --autostash`), run the one-time migration to avoid autostash conflicts with untracked status files:
+```powershell
+git checkout -- orchestrator-state/live-status/copilot-w*.json
+.\sync.bat -PullOnly
+python tools/copilot_fleet.py reconcile
+```
+
+---
+
+## 5. Operational Invariants & Rules
 
 - **Zero Raw Git Commands**: Never run raw `git add`, `git commit`, or `git push`. Always run `.\sync.bat` (or `.\sync.ps1`).
 - **Strictly No `--model` on Copilot Free**: Always allow GitHub's auto-routing to avoid `ModelNotAllowed` errors.
 - **Verification Gate**: Ensure `pytest` passes 100% before committing or syncing changes.
+- **Context Firebreak Invariant (`INV-CTX-FIREBREAK`)**: Batch and swarm operations must route through `FleetCommander`, redirecting child stdout to logs and emitting manifests $\le 300$ words.
