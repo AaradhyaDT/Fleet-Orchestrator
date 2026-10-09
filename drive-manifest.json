@@ -32,6 +32,13 @@
       "drive_file_name": "qwen_intent_router_q4_k_m.gguf",
       "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent & Skill Router (Q4_K_M GGUF)",
       "sha256": "68e2824405149b24"
+    },
+    "notebooks/slm_time_router_forge.ipynb": {
+      "drive_file_id": "1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh",
+      "drive_file_name": "colab_train_intent_router",
+      "description": "Colab Fine-Tuning Notebook for Qwen2.5-0.5B Intent, Skill & Time Allocation Router",
+      "colab_url": "https://colab.research.google.com/drive/1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh",
+      "sha256": "4624e5dcaab7fe13"
     }
   }
 }

@@ -38,20 +38,22 @@ Before training, audit host memory and acceleration instructions to select the o
 
 ---
 
-### Stage 2: Grounded Dataset Synthesis
-Synthesize instruction-tuning datasets grounded in real repository schemas and historical tasks:
+### Stage 2: Grounded Dataset Synthesis & Task Time Harvesting
+Synthesize instruction-tuning datasets grounded in real repository schemas, historical tasks, and empirical chat logs:
 1. Ingest lifecycle archetypes from `references/lifecycle-stages.md`.
 2. Map skills from `references/skill-matrix.md` and `.agents/skills/`.
-3. Harvest real past task prompts from `Fleet-Orchestrator/orchestrator-state/tasks/*.json`.
+3. Harvest real past task prompts and execution durations using `tools/harvest_task_time_dataset.py`:
+   - Crawls 500+ transcripts in `~/.gemini/antigravity/brain/*/transcript.jsonl`.
+   - Crawls task checkpoints in `Fleet-Orchestrator/orchestrator-state/checkpoints/*.json`.
 4. Emit formatted `(instruction, input, output)` JSONL files:
-   - `intent_routing_train.jsonl` (80% split)
-   - `intent_routing_eval.jsonl` (20% split)
+   - `dataset/task_time_train.jsonl` (80% split)
+   - `dataset/task_time_eval.jsonl` (20% split)
 
 ```json
 {
-  "instruction": "You are the high-speed Intent and Skill Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, supporting skills, and velocity profile in strict JSON format.",
+  "instruction": "You are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, supporting skills, velocity profile, and task time allocation (tier, estimated_duration_s, timeout_ceiling_s, cpm_weight, execution_route) in strict JSON format.",
   "input": "Fix the regression in test_warehouse_mem_sim.py where queue latency was calculating as zero.",
-  "output": "{\"archetype\": \"ENGINEERING_DEV\", \"tier\": \"Tier 1\", \"matrix_cell\": \"(V0, R1)\", \"policy\": \"BRANCH_GUARD\", \"primary_skill\": \"github-workflow\", \"supporting_skills\": [\"systems-concurrency-harness\"], \"velocity\": \"BALANCED\"}"
+  "output": "{\"archetype\": \"ENGINEERING_DEV\", \"tier\": \"Tier 1\", \"matrix_cell\": \"(V0, R1)\", \"policy\": \"BRANCH_GUARD\", \"primary_skill\": \"github-workflow\", \"supporting_skills\": [\"systems-concurrency-harness\"], \"velocity\": \"BALANCED\", \"time_allocation\": {\"tier\": \"T1_FAST\", \"estimated_duration_s\": 35, \"timeout_ceiling_s\": 77, \"cpm_weight\": 1.17, \"execution_route\": \"DIRECT_FAST\"}}"
 }
 ```
 

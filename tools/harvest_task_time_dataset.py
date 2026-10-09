@@ -100,7 +100,7 @@ def calculate_cpm_weight(duration_s: float) -> float:
 
 def calculate_timeout_ceiling(duration_s: float) -> int:
     """Calculates safety timeout ceiling with 30s floor and 1200s ceiling."""
-    calculated = int(math.ceil(max(30.0, duration_s * 2.2)))
+    calculated = int(math.ceil(max(30.0, round(duration_s * 2.2, 4))))
     return min(1200, calculated)
 
 

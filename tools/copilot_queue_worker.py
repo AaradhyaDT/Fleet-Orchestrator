@@ -23,6 +23,7 @@ import signal
 import stat
 import subprocess
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -671,6 +672,12 @@ class CopilotQueueWorker:
             antigravity_scope or (target_worktree and (target_worktree / "AGENTS.md").exists())
         )
 
+        # Resolve timeout: support dynamic time_allocation ceiling if available
+        timeout_val = task.get("timeout")
+        if not timeout_val and "time_allocation" in task:
+            timeout_val = task["time_allocation"].get("timeout_ceiling_s")
+        timeout_sec = float(timeout_val if timeout_val is not None else 420.0)
+
         adapter = CopilotCLIAdapter(
             worker_id=account["worker_id"],
             nickname=account["name"],
@@ -679,7 +686,7 @@ class CopilotQueueWorker:
             github_token=account.get("token") or None,
             copilot_home=account.get("state_dir") or None,
             allow_custom_instructions=has_customizations,
-            timeout=float(task.get("timeout", 420.0)),
+            timeout=timeout_sec,
         )
 
         logger.info(f"Executing {task_id} via Copilot CLI (Worker: {account['worker_id']}, Worktree: {target_worktree})...")
@@ -699,6 +706,7 @@ class CopilotQueueWorker:
         summary: str,
         branch_name: str | None = None,
         commit_sha: str | None = None,
+        actual_duration_s: float | None = None,
     ) -> None:
         """Writes checkpoint file and transitions task to done."""
         now = _now_iso()
@@ -711,6 +719,7 @@ class CopilotQueueWorker:
             "summary": summary,
             "branch_name": branch,
             "commit_sha": sha,
+            "actual_duration_s": actual_duration_s,
             "result_text": None,
             "submitted_by": account["worker_id"],
             "submitted_at": now,
@@ -797,8 +806,10 @@ class CopilotQueueWorker:
         branch_name = claimed_task.get("branch_name") or f"task/{task_id}"
         worktree_dir = await self.provision_worktree(task_id, branch_name)
 
+        exec_start = time.perf_counter()
         try:
             result = await self.execute_task(claimed_task, account, worktree_dir=worktree_dir)
+            actual_duration = round(time.perf_counter() - exec_start, 1)
 
             # Telemetry & Quota handling
             credits_used = float(result.get("credits_used", 1.0 if result.get("success") else 0.0))
@@ -827,6 +838,7 @@ class CopilotQueueWorker:
                     summary=summary,
                     branch_name=branch_name,
                     commit_sha=sha,
+                    actual_duration_s=actual_duration,
                 )
                 return True
             else:
