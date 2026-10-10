@@ -4,7 +4,7 @@ tools/build_colab_forge_notebook.py
 -----------------------------------
 Generates the authoritative, complete Google Colab A100 training notebook
 for fine-tuning both Qwen2.5-Coder-3B and Qwen2.5-Coder-7B sequentially
-using Unsloth on the unified fleet dataset (4,729 samples).
+using Unsloth on the unified fleet dataset (10,010 samples).
 """
 
 import json
@@ -93,6 +93,10 @@ add_code("""# ==========================================
 from google.colab import drive
 from datasets import load_dataset
 
+# Ensure gdown is available for Drive file retrieval
+import subprocess
+subprocess.run(["pip", "install", "-q", "gdown"], check=False)
+
 # Mount Google Drive for automatic persistence
 if not os.path.exists('/content/drive/MyDrive'):
     drive.mount('/content/drive')
@@ -112,7 +116,6 @@ for fname in [train_file, eval_file]:
             shutil.copy(drive_candidate, fname)
         else:
             print(f"Auto-fetching {fname} via Google Drive File ID...")
-            import subprocess
             fid = "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA" if "train" in fname else "1EzcECUxPHsCMZ4jkTFT6gwQ75YHq5ztU"
             if fid:
                 subprocess.run(["gdown", f"https://drive.google.com/uc?id={fid}", "-O", fname])
@@ -123,14 +126,35 @@ raw_train = load_dataset("json", data_files=train_file, split="train")
 raw_eval = load_dataset("json", data_files=eval_file, split="train") if os.path.exists(eval_file) else None
 
 def format_prompts(batch):
+    \"\"\"Handle both Alpaca (instruction/input/output) and ChatML (messages) schemas.\"\"\"
     texts = []
-    for inst, inp, out in zip(batch["instruction"], batch["input"], batch["output"]):
-        text = f"<|im_start|>system\\n{inst}<|im_end|>\\n<|im_start|>user\\n{inp}<|im_end|>\\n<|im_start|>assistant\\n{out}<|im_end|>"
+    n = len(batch[list(batch.keys())[0]])
+    for i in range(n):
+        # Check if this record uses the ChatML messages schema
+        if "messages" in batch and batch["messages"][i] is not None:
+            msgs = batch["messages"][i]
+            sys_content = ""
+            user_content = ""
+            asst_content = ""
+            for msg in msgs:
+                if msg["role"] == "system":
+                    sys_content = msg["content"]
+                elif msg["role"] == "user":
+                    user_content = msg["content"]
+                elif msg["role"] == "assistant":
+                    asst_content = msg["content"]
+            text = f"<|im_start|>system\\n{sys_content}<|im_end|>\\n<|im_start|>user\\n{user_content}<|im_end|>\\n<|im_start|>assistant\\n{asst_content}<|im_end|>"
+        else:
+            # Standard Alpaca format: instruction/input/output
+            inst = batch["instruction"][i]
+            inp = batch["input"][i]
+            out = batch["output"][i]
+            text = f"<|im_start|>system\\n{inst}<|im_end|>\\n<|im_start|>user\\n{inp}<|im_end|>\\n<|im_start|>assistant\\n{out}<|im_end|>"
         texts.append(text)
     return {"text": texts}
 
-formatted_train_dataset = raw_train.map(format_prompts, batched=True)
-formatted_eval_dataset = raw_eval.map(format_prompts, batched=True) if raw_eval else None
+formatted_train_dataset = raw_train.map(format_prompts, batched=True, remove_columns=raw_train.column_names)
+formatted_eval_dataset = raw_eval.map(format_prompts, batched=True, remove_columns=raw_eval.column_names) if raw_eval else None
 print(f"\\n[DATASET READY] {len(formatted_train_dataset)} train samples, {len(formatted_eval_dataset) if formatted_eval_dataset else 0} eval samples loaded!")""")
 
 add_code("""# ==========================================
@@ -247,12 +271,14 @@ try:
     import subprocess
     subprocess.run(["pip", "install", "-q", "optimum[openvino]"], check=True)
     merged_3b_dir = "fleet_master_brain_3b_merged"
-    model_3b.save_pretrained_merged(merged_3b_dir, tokenizer_3b, output_method="merged_16bit")
+    model_3b.save_pretrained_merged(merged_3b_dir, tokenizer_3b, save_method="merged_16bit")
     ov_out_dir = "fleet_master_brain_3b_openvino_int4"
     subprocess.run([
         "optimum-cli", "export", "openvino",
         "--model", merged_3b_dir,
-        "--weight-format", "int4_sym_gqa",
+        "--weight-format", "int4",
+        "--sym",
+        "--group-size", "128",
         "--task", "text-generation-with-past",
         ov_out_dir
     ], check=True)
