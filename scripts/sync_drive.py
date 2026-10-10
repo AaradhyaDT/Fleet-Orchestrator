@@ -140,8 +140,64 @@ def find_drive_file_by_name(access_token: str, folder_id: str, file_name: str) -
     return None
 
 
+def update_drive_file_resumable(access_token: str, file_id: str, content_bytes: bytes, mime_type: str = "text/plain") -> bool:
+    """Updates an existing Google Drive file in-place using resumable upload for large files (>5MB)."""
+    url = f"https://www.googleapis.com/upload/drive/v3/files/{file_id}?uploadType=resumable"
+    init_req = urllib.request.Request(url, method="PATCH")
+    init_req.add_header("Authorization", f"Bearer {access_token}")
+    init_req.add_header("X-Upload-Content-Type", mime_type)
+    init_req.add_header("X-Upload-Content-Length", str(len(content_bytes)))
+
+    try:
+        with urllib.request.urlopen(init_req, timeout=30) as resp:
+            location_url = resp.headers.get("Location")
+            if not location_url:
+                print("[ERROR] No Location header in resumable update init.")
+                return False
+    except Exception as e:
+        print(f"[ERROR] Resumable update session init failed: {e}")
+        return False
+
+    chunk_size = 4 * 1024 * 1024  # 4 MB chunks
+    total_size = len(content_bytes)
+    offset = 0
+    while offset < total_size:
+        chunk = content_bytes[offset:offset + chunk_size]
+        chunk_len = len(chunk)
+        end = offset + chunk_len - 1
+        chunk_req = urllib.request.Request(location_url, data=chunk, method="PUT")
+        chunk_req.add_header("Content-Length", str(chunk_len))
+        chunk_req.add_header("Content-Range", f"bytes {offset}-{end}/{total_size}")
+        chunk_req.add_header("Content-Type", mime_type)
+
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(chunk_req, timeout=120) as chunk_resp:
+                    if chunk_resp.status in (200, 201):
+                        return True
+            except urllib.error.HTTPError as e:
+                if e.code == 308:
+                    offset += chunk_len
+                    pct = (offset / total_size) * 100.0
+                    print(f"[{pct:.0f}%]", end=" ", flush=True)
+                    break
+                if attempt == 4:
+                    print(f"[ERROR] Resumable chunk upload failed ({e.code}): {e}")
+                    return False
+                time.sleep(1.0 * (attempt + 1))
+            except Exception as e:
+                if attempt == 4:
+                    print(f"[ERROR] Resumable chunk upload exception: {e}")
+                    return False
+                time.sleep(1.0 * (attempt + 1))
+    return True
+
+
 def update_drive_file(access_token: str, file_id: str, content_bytes: bytes, mime_type: str = "text/plain") -> bool:
     """Updates an existing Google Drive file in-place preserving its permanent fileId."""
+    if len(content_bytes) > 5 * 1024 * 1024:
+        return update_drive_file_resumable(access_token, file_id, content_bytes, mime_type)
+
     url = f"{DRIVE_UPLOAD_ENDPOINT}/{file_id}?uploadType=media"
     req = urllib.request.Request(url, data=content_bytes, method="PATCH")
     req.add_header("Authorization", f"Bearer {access_token}")
@@ -158,6 +214,69 @@ def update_drive_file(access_token: str, file_id: str, content_bytes: bytes, mim
         return False
 
 
+def create_drive_file_resumable(
+    access_token: str,
+    folder_id: str,
+    file_name: str,
+    content_bytes: bytes,
+    mime_type: str = "application/octet-stream"
+) -> str:
+    """Creates a new Google Drive file using resumable upload for large files."""
+    metadata = {
+        "name": file_name,
+        "parents": [folder_id],
+        "mimeType": mime_type
+    }
+    meta_bytes = json.dumps(metadata).encode("utf-8")
+    init_req = urllib.request.Request(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable",
+        data=meta_bytes,
+        method="POST"
+    )
+    init_req.add_header("Authorization", f"Bearer {access_token}")
+    init_req.add_header("Content-Type", "application/json; charset=UTF-8")
+    init_req.add_header("X-Upload-Content-Type", mime_type)
+    init_req.add_header("X-Upload-Content-Length", str(len(content_bytes)))
+
+    with urllib.request.urlopen(init_req, timeout=30) as resp:
+        location_url = resp.headers.get("Location")
+        if not location_url:
+            raise RuntimeError("No Location header in resumable create init.")
+
+    chunk_size = 4 * 1024 * 1024
+    total_size = len(content_bytes)
+    offset = 0
+    while offset < total_size:
+        chunk = content_bytes[offset:offset + chunk_size]
+        chunk_len = len(chunk)
+        end = offset + chunk_len - 1
+        chunk_req = urllib.request.Request(location_url, data=chunk, method="PUT")
+        chunk_req.add_header("Content-Length", str(chunk_len))
+        chunk_req.add_header("Content-Range", f"bytes {offset}-{end}/{total_size}")
+        chunk_req.add_header("Content-Type", mime_type)
+
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(chunk_req, timeout=120) as chunk_resp:
+                    if chunk_resp.status in (200, 201):
+                        res_body = json.loads(chunk_resp.read().decode("utf-8"))
+                        return res_body["id"]
+            except urllib.error.HTTPError as e:
+                if e.code == 308:
+                    offset += chunk_len
+                    pct = (offset / total_size) * 100.0
+                    print(f"[{pct:.0f}%]", end=" ", flush=True)
+                    break
+                if attempt == 4:
+                    raise
+                time.sleep(1.0 * (attempt + 1))
+            except Exception:
+                if attempt == 4:
+                    raise
+                time.sleep(1.0 * (attempt + 1))
+    raise RuntimeError("Resumable upload did not return completion.")
+
+
 def create_drive_file(
     access_token: str,
     folder_id: str,
@@ -169,6 +288,9 @@ def create_drive_file(
     """Creates a new file inside the specified Drive folder and returns its permanent fileId.
     Converts to Google Doc by default for native NotebookLM Drive integration.
     """
+    if len(content_bytes) > 5 * 1024 * 1024 and not convert_to_doc:
+        return create_drive_file_resumable(access_token, folder_id, file_name, content_bytes, mime_type)
+
     boundary = "-------314159265358979323846"
     metadata = {
         "name": file_name,
@@ -332,6 +454,17 @@ def sync_manifest(
                 meta["drive_file_id"] = file_id
                 manifest_modified = True
 
+        # Determine mime type and whether to convert to Google Doc
+        is_doc_candidate = (doc_name.endswith(".md") or doc_name.endswith(".txt")) and not doc_name.endswith(".jsonl")
+        if doc_name.endswith(".jsonl"):
+            file_mime = "application/jsonl"
+        elif doc_name.endswith((".ipynb", ".json")):
+            file_mime = "application/json"
+        elif doc_name.endswith((".gguf", ".zip", ".bin")):
+            file_mime = "application/octet-stream"
+        else:
+            file_mime = "text/plain"
+
         if file_id:
             if not force and last_hash == content_hash:
                 print(f"[UNCHANGED] {rel_path} (ID: {file_id})")
@@ -339,7 +472,7 @@ def sync_manifest(
                 continue
 
             print(f"[UPDATE] {rel_path} -> Drive ID: {file_id}...", end=" ", flush=True)
-            ok = update_drive_file(access_token, file_id, content_bytes)
+            ok = update_drive_file(access_token, file_id, content_bytes, mime_type=file_mime)
             if ok:
                 print("DONE (200 OK)")
                 meta["sha256"] = content_hash
@@ -351,7 +484,7 @@ def sync_manifest(
         else:
             print(f"[CREATE] {rel_path} -> {doc_name} in folder {folder_id}...", end=" ", flush=True)
             try:
-                new_id = create_drive_file(access_token, folder_id, doc_name, content_bytes, convert_to_doc=True)
+                new_id = create_drive_file(access_token, folder_id, doc_name, content_bytes, mime_type=file_mime, convert_to_doc=is_doc_candidate)
                 print(f"CREATED (ID: {new_id})")
                 meta["drive_file_id"] = new_id
                 meta["sha256"] = content_hash

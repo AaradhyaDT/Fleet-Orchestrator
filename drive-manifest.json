@@ -24,7 +24,7 @@
     "team-memory.md": {
       "drive_file_id": "1GwCvv6X_y0VFfRhxuvBU0mICtlOG62OegvVC9c9q_zs",
       "drive_file_name": "fleet-orchestrator_team-memory.md",
-      "description": "Fleet Orchestrator — Team Memory & Accumulated Knowledge Log",
+      "description": "Fleet Orchestrator \u2014 Team Memory & Accumulated Knowledge Log",
       "sha256": "2ecf40a29f94495e"
     },
     "models/qwen_intent_router_q4_k_m.gguf": {
@@ -50,13 +50,19 @@
       "drive_file_name": "fleet_master_brain_forge.ipynb",
       "description": "Colab Fine-Tuning Notebook for Qwen2.5-Coder 3B & 7B Multi-Model Forge (A100 SXM4)",
       "colab_url": "https://colab.research.google.com/drive/1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",
-      "sha256": "updated_a100_forge"
+      "sha256": "ecba509754a589bc"
     },
     "dataset/unified_fleet_train.jsonl": {
       "drive_file_id": "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA",
       "drive_file_name": "unified_fleet_train.jsonl",
-      "description": "Unified Multi-Task Training Dataset (4,729 samples across Time, Error-Recovery, and DAG Sequences)",
-      "sha256": "4729_samples_sha256"
+      "description": "Unified Multi-Task Training Dataset (8,008 samples across Time, Error-Recovery, DAG Sequences, Fellowship & IDE Transcripts)",
+      "sha256": "40812b2bbacf09ef"
+    },
+    "dataset/unified_fleet_eval.jsonl": {
+      "drive_file_id": "1EzcECUxPHsCMZ4jkTFT6gwQ75YHq5ztU",
+      "drive_file_name": "unified_fleet_eval.jsonl",
+      "description": "Unified Multi-Task Evaluation Dataset (2,002 samples across Time, Error-Recovery, DAG Sequences, Fellowship & IDE Transcripts)",
+      "sha256": "8d0b2dd6ab690f24"
     }
   }
 }

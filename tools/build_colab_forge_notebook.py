@@ -11,7 +11,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_FILE = ROOT / "notebooks" / "slm_time_router_forge.ipynb"
+OUTPUT_FILE = ROOT / "notebooks" / "fleet_master_brain_forge.ipynb"
+ALIAS_OUTPUT = ROOT / "notebooks" / "slm_time_router_forge.ipynb"
 
 nb = {
     "nbformat": 4,
@@ -100,24 +101,26 @@ DRIVE_TARGET_DIR = "/content/drive/MyDrive/Share to Aaradhya/Super-NLM/Fleet-Orc
 os.makedirs(DRIVE_TARGET_DIR, exist_ok=True)
 
 # Locate dataset: Check local directory, mounted Drive, or auto-fetch via File ID
-dataset_filename = "unified_fleet_train.jsonl"
-dataset_path = dataset_filename
+train_file = "unified_fleet_train.jsonl"
+eval_file = "unified_fleet_eval.jsonl"
 
-if not os.path.exists(dataset_path):
-    # Pathway A: Search mounted Google Drive
-    drive_candidate = os.path.join(DRIVE_TARGET_DIR, dataset_filename)
-    if os.path.exists(drive_candidate):
-        print(f"Loading {dataset_filename} directly from mounted Google Drive...")
-        shutil.copy(drive_candidate, dataset_path)
-    else:
-        # Pathway B: Zero-touch auto-download via permanent Google Drive File ID
-        print(f"Auto-fetching {dataset_filename} via Google Drive File ID...")
-        import subprocess
-        subprocess.run(["gdown", "https://drive.google.com/uc?id=1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA", "-O", dataset_path])
+for fname in [train_file, eval_file]:
+    if not os.path.exists(fname):
+        drive_candidate = os.path.join(DRIVE_TARGET_DIR, fname)
+        if os.path.exists(drive_candidate):
+            print(f"Loading {fname} directly from mounted Google Drive...")
+            shutil.copy(drive_candidate, fname)
+        else:
+            print(f"Auto-fetching {fname} via Google Drive File ID...")
+            import subprocess
+            fid = "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA" if "train" in fname else "1EzcECUxPHsCMZ4jkTFT6gwQ75YHq5ztU"
+            if fid:
+                subprocess.run(["gdown", f"https://drive.google.com/uc?id={fid}", "-O", fname])
 
-assert os.path.exists(dataset_path), f"Dataset file {dataset_filename} could not be retrieved automatically!"
+assert os.path.exists(train_file), f"Dataset file {train_file} could not be retrieved automatically!"
 
-raw_dataset = load_dataset("json", data_files=dataset_path, split="train")
+raw_train = load_dataset("json", data_files=train_file, split="train")
+raw_eval = load_dataset("json", data_files=eval_file, split="train") if os.path.exists(eval_file) else None
 
 def format_prompts(batch):
     texts = []
@@ -126,8 +129,9 @@ def format_prompts(batch):
         texts.append(text)
     return {"text": texts}
 
-formatted_dataset = raw_dataset.map(format_prompts, batched=True)
-print(f"\\n[DATASET READY] {len(formatted_dataset)} unified training samples loaded!")""")
+formatted_train_dataset = raw_train.map(format_prompts, batched=True)
+formatted_eval_dataset = raw_eval.map(format_prompts, batched=True) if raw_eval else None
+print(f"\\n[DATASET READY] {len(formatted_train_dataset)} train samples, {len(formatted_eval_dataset) if formatted_eval_dataset else 0} eval samples loaded!")""")
 
 add_code("""# ==========================================
 # CELL 3: SFT Compatibility Bridge (INV-SLM-07)
@@ -193,7 +197,8 @@ model_3b = FastLanguageModel.get_peft_model(
 trainer_3b = SFTTrainer(
     model = model_3b,
     tokenizer = tokenizer_3b,
-    train_dataset = formatted_dataset,
+    train_dataset = formatted_train_dataset,
+    eval_dataset = formatted_eval_dataset,
     dataset_text_field = "text",
     max_seq_length = max_seq_len,
     dataset_num_proc = 4,
@@ -236,6 +241,29 @@ print(f"Persisting 3B GGUF to Google Drive: {gguf_3b_dest}...")
 shutil.copy(gguf_3b_src, gguf_3b_dest)
 print(f"[SAVED] 3B GGUF size: {round(os.path.getsize(gguf_3b_dest) / (1024**2), 1)} MB")
 
+# Export OpenVINO INT4 IR Package for Intel Core Ultra NPU
+print("\\n[EXPORT] Exporting 3B model to OpenVINO INT4 IR for Meteor Lake NPU...")
+try:
+    import subprocess
+    subprocess.run(["pip", "install", "-q", "optimum[openvino]"], check=True)
+    merged_3b_dir = "fleet_master_brain_3b_merged"
+    model_3b.save_pretrained_merged(merged_3b_dir, tokenizer_3b, output_method="merged_16bit")
+    ov_out_dir = "fleet_master_brain_3b_openvino_int4"
+    subprocess.run([
+        "optimum-cli", "export", "openvino",
+        "--model", merged_3b_dir,
+        "--weight-format", "int4_sym_gqa",
+        "--task", "text-generation-with-past",
+        ov_out_dir
+    ], check=True)
+    shutil.make_archive(ov_out_dir, "zip", ov_out_dir)
+    ov_zip_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_3b_openvino_int4.zip")
+    shutil.copy(f"{ov_out_dir}.zip", ov_zip_dest)
+    print(f"[SAVED] OpenVINO INT4 IR ZIP persisted to: {ov_zip_dest}")
+    shutil.rmtree(merged_3b_dir, ignore_errors=True)
+except Exception as e:
+    print(f"[NOTE] OpenVINO export status: {e}")
+
 # Purge VRAM completely for Phase 2
 del model_3b, tokenizer_3b, trainer_3b
 gc.collect()
@@ -271,7 +299,8 @@ model_7b = FastLanguageModel.get_peft_model(
 trainer_7b = SFTTrainer(
     model = model_7b,
     tokenizer = tokenizer_7b,
-    train_dataset = formatted_dataset,
+    train_dataset = formatted_train_dataset,
+    eval_dataset = formatted_eval_dataset,
     dataset_text_field = "text",
     max_seq_length = max_seq_len,
     dataset_num_proc = 4,
@@ -361,4 +390,6 @@ if __name__ == "__main__":
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(nb, f, indent=2)
-    print(f"Successfully generated {OUTPUT_FILE} ({len(nb['cells'])} cells)")
+    with open(ALIAS_OUTPUT, "w", encoding="utf-8") as f:
+        json.dump(nb, f, indent=2)
+    print(f"Successfully generated canonical {OUTPUT_FILE.name} and alias {ALIAS_OUTPUT.name} ({len(nb['cells'])} cells)")
