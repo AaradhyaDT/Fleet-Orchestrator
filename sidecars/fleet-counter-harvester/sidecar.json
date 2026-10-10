@@ -1,0 +1,23 @@
+{
+  "builtin": "schedule",
+  "args": [
+    "CRON_TZ=Asia/Kathmandu 0 */6 * * *",
+    "agentapi",
+    "new-conversation",
+    "--",
+    "Run python tools/harvest_copilot_counter_dataset.py in F:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator. Scan completed tasks in orchestrator-state/tasks and checkpoints, harvest any new efficiency-tier mistakes, pair them with ground-truth fixes, and log an updated sample count."
+  ],
+  "restart_policy": "always",
+  "display_name": "Fleet Copilot Counter-Dataset Harvester",
+  "description": "Every 6 hours, scans Fleet-Orchestrator task history, harvests new Copilot efficiency-tier errors, and updates the counter-dataset.",
+  "agent_permissions": {
+    "workspace_uris": [
+      "file:///f:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator"
+    ],
+    "access_grants": [
+      "command(python tools/harvest_copilot_counter_dataset.py)",
+      "read_file(f:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator/orchestrator-state)",
+      "write_file(f:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator/dataset)"
+    ]
+  }
+}

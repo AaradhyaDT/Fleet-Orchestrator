@@ -84,8 +84,8 @@ When building up kernel state incrementally:
 # 1. Allocate session (Always pass -s <name>)
 colab new -s router-forge --gpu L4
 
-# 2. Install dependencies via uv inside VM
-colab install -s router-forge unsloth "xformers<0.0.29" peft bitsandbytes
+# 2. Install dependencies via uv inside VM (NEVER install xformers — uses native FlashAttention-2 / SDPA)
+colab install -s router-forge unsloth peft bitsandbytes "trl<0.9.0"
 
 # 3. Execute remote script
 colab exec -s router-forge -f train_router.py
@@ -131,3 +131,14 @@ colab url -s router-forge --open
 1. **Mandatory Teardown**: Always execute `colab stop -s <name>` or use `colab run` (which self-cleans) to prevent unattended compute unit burn.
 2. **Session Name Invariant**: Always provide explicit `-s <name>` on `colab new` to prevent ambiguous random hex session IDs.
 3. **No Interactive TTY in Headless Agents**: Never invoke `colab repl`, `colab console`, `colab auth`, or `colab drivemount` in non-interactive agent turns as they require a raw TTY.
+4. **Programmatic Notebook Auto-Teardown (`runtime.unassign()`)**: All autonomous Colab training notebooks must conclude with a dedicated final cell executing `from google.colab import runtime; runtime.unassign()` after artifacts are persisted to Google Drive. This immediately releases high-cost GPU/TPU VMs (A100, L4) and cuts compute burn to `0.00/hr` the instant training finishes.
+5. **Dynamic Cell Appending & FIFO Execution Queue Safety**: Appending, editing, or creating new cells (such as appending a teardown cell `runtime.unassign()`) while an earlier cell is actively executing has **zero effect** on in-flight training loops. The Jupyter `ipykernel` operates on an asynchronous FIFO ZeroMQ execution queue. To guarantee an appended cell executes automatically after preceding cells finish, click Run (Play button or `Shift + Enter`); Colab queues it with a pending indicator (`[*]`), ensuring hands-free teardown without interrupting active CUDA kernels or VRAM allocations.
+6. **Unsloth GGUF Export Directory Suffix (`_gguf`)**: Unsloth's `model.save_pretrained_gguf(target_dir, ...)` automatically appends `_gguf` to the specified directory name (`target_dir_gguf/`). Cloud persistence code targeting mounted Google Drive must reference `f"{target_dir}_gguf"` or use dynamic glob discovery (`glob.glob("**/*.gguf", recursive=True)`) to eliminate `FileNotFoundError` upon training completion.
+7. **Public Reader Sharing & Resumable CLI Model Retrieval (`gdown`)**: After uploading multi-gigabyte models (`.gguf`) to Google Drive, set sharing permissions to `role: reader, type: anyone` via the Drive MCP `share_file` tool. This allows zero-friction, authenticated or unauthenticated terminal downloads across local machines or worker nodes using:
+   ```powershell
+   python -m gdown --continue "https://drive.google.com/uc?id=<file_id>" -O "models/<filename>.gguf"
+   ```
+   `gdown` automatically handles Google Drive's large-file virus-scan confirmation bypass (`confirm=t`), and `--continue` guarantees resumable chunk transfer without corrupting existing downloads. Any interrupted transfer `.part` files should be purged immediately upon cancellation.
+
+
+

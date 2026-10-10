@@ -31,6 +31,7 @@ class GeminiAPIAdapter(BaseWorkerAdapter):
         api_key: str | None = None,
         model: str = "gemini-3.8-flash",
         system_instruction: str | None = None,
+        rotator: Any | None = None,
     ):
         super().__init__(
             worker_id,
@@ -42,6 +43,7 @@ class GeminiAPIAdapter(BaseWorkerAdapter):
         self.model = DEPRECATED_MODEL_MAP.get(model, model)
         self.system_instruction = system_instruction
         self._client: genai.Client | None = None
+        self.rotator = rotator
 
     def get_client(self) -> genai.Client:
         """Lazily initialize the google-genai SDK Client."""
@@ -52,7 +54,9 @@ class GeminiAPIAdapter(BaseWorkerAdapter):
         return self._client
 
     async def check_health(self) -> bool:
-        """Returns True if api_key is configured."""
+        """Returns True if api_key or rotator with healthy keys is configured."""
+        if self.rotator and self.rotator.healthy_keys > 0:
+            return True
         return bool(self.api_key)
 
     async def execute_task(
@@ -66,7 +70,7 @@ class GeminiAPIAdapter(BaseWorkerAdapter):
         Executes work specified in `spec` via Gemini API asynchronously.
         Returns dictionary with success, summary, result_text, tokens, and error.
         """
-        if not self.api_key:
+        if not self.api_key and not (self.rotator and self.rotator.healthy_keys > 0):
             return {
                 "success": False,
                 "error": "Missing GEMINI_API_KEY",
@@ -93,12 +97,25 @@ class GeminiAPIAdapter(BaseWorkerAdapter):
         )
 
         try:
-            client = self.get_client()
-            response = await client.aio.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                config=config,
-            )
+            if self.rotator:
+                async def _call_gemini(cl: genai.Client, slot: Any):
+                    res = await cl.aio.models.generate_content(
+                        model=self.model,
+                        contents=prompt,
+                        config=config,
+                    )
+                    if getattr(res, "usage_metadata", None):
+                        meta = res.usage_metadata
+                        slot.total_tokens += getattr(meta, "total_token_count", 0) or 0
+                    return res
+                response = await self.rotator.execute_with_retry(_call_gemini)
+            else:
+                client = self.get_client()
+                response = await client.aio.models.generate_content(
+                    model=self.model,
+                    contents=prompt,
+                    config=config,
+                )
 
             tokens: dict[str, int] = {}
             if getattr(response, "usage_metadata", None):

@@ -29,15 +29,26 @@ from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
 
 
 def load_env_fleet(env_path: Path | None = None) -> dict[str, str]:
-    """Parses .env.fleet file into key-value pairs."""
-    path = env_path or (PROJECT_ROOT / ".env.fleet")
-    if not path.exists():
-        # Fallback to .env.fleet in parent or current working directory
-        cwd_fleet = Path(".env.fleet")
-        if cwd_fleet.exists():
-            path = cwd_fleet
-        else:
-            return {}
+    """Parses .env.fleet.copilot or .env.fleet file into key-value pairs."""
+    candidates = []
+    if env_path:
+        candidates.append(Path(env_path))
+    else:
+        candidates.extend([
+            PROJECT_ROOT / ".env.fleet.copilot",
+            PROJECT_ROOT / ".env.fleet",
+            Path(".env.fleet.copilot"),
+            Path(".env.fleet"),
+        ])
+
+    path = None
+    for c in candidates:
+        if c.exists():
+            path = c
+            break
+
+    if not path:
+        return {}
 
     values = {}
     with open(path, "r", encoding="utf-8") as f:

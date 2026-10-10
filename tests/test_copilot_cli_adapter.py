@@ -263,3 +263,35 @@ async def test_copilot_cli_stdout_credits_fallback():
         assert res["success"] is True
         assert res["credits_used"] == 1.75
 
+
+@pytest.mark.asyncio
+async def test_copilot_cli_build_command_auto_tier():
+    adapter = CopilotCLIAdapter(
+        worker_id="copilot-cli-1",
+        nickname="Agent",
+        copilot_path="copilot.exe",
+        auto_tier="balance",
+    )
+    cmd = adapter.build_cli_command("Run balance task")
+    assert "--model" in cmd
+    assert "auto" in cmd
+    assert "--auto-tier" in cmd
+    assert "balance" in cmd
+
+
+@pytest.mark.asyncio
+async def test_copilot_cli_auto_tier_precedence():
+    # When auto_tier is specified, it should set --model auto and --auto-tier <tier>
+    adapter = CopilotCLIAdapter(
+        worker_id="copilot-cli-1",
+        nickname="Agent",
+        copilot_path="copilot.exe",
+        model="gpt-5.4",
+        auto_tier="efficiency",
+    )
+    cmd = adapter.build_cli_command("Run efficiency task")
+    assert "--auto-tier" in cmd
+    assert "efficiency" in cmd
+    assert "auto" in cmd
+    assert "gpt-5.4" not in cmd
+

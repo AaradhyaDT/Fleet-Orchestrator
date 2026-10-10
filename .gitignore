@@ -27,6 +27,10 @@ $RECYCLE.BIN/
 
 # Python bytecode/cache (mcp-servers/notebooklm-mcp/run_server.py)
 .venv/
+.venv*/
+venv/
+ENV/
+env/
 __pycache__/
 *.py[cod]
 *.pyo
@@ -39,6 +43,7 @@ __pycache__/
 .env.*
 !.env.example
 !.env.fleet.example
+!.env.fleet.*.example
 *.db
 *.sqlite
 *.sqlite3

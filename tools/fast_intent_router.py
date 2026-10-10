@@ -31,6 +31,19 @@ SYSTEM_PROMPT = (
 )
 
 
+def _resolve_copilot_tier_and_model(cell: str, policy: str, prompt: str) -> tuple[str, Optional[str]]:
+    """Maps 2D Matrix Cell to 1st-Party Copilot CLI Auto-Tier and Model Escalation."""
+    p = prompt.lower()
+    if cell in ["(V2, R1)", "(V2, R2)"] or any(k in p for k in ["architectural refactor", "deadlock", "z3", "formal proof"]):
+        return "intelligence", "gemini-3.8-flash"
+    elif cell in ["(V0, R2)", "(V1, R2)"] or policy in ["SURGICAL_LOCK", "DECOUPLED_SLICES"]:
+        return "intelligence", None
+    elif cell in ["(V0, R1)", "(V1, R1)"] or policy in ["BRANCH_GUARD", "STAR_SUBAGENTS"]:
+        return "balance", None
+    else:
+        return "efficiency", None
+
+
 def _compute_time_allocation(prompt: str, archetype: str, tier: str, policy: str) -> Dict[str, Any]:
     """Computes deterministic duration and timeout allocation bounds from prompt semantics."""
     p = prompt.lower()
@@ -55,7 +68,7 @@ def _compute_time_allocation(prompt: str, archetype: str, tier: str, policy: str
     elif word_count < 8 and policy == "DIRECT_FAST":
         duration_s = 12
         time_tier = "T0_MICRO"
-        route = "DIRECT_FAST"
+        route = "LOCAL_SLM"
     else:
         duration_s = 35
         time_tier = "T1_FAST"
@@ -140,6 +153,7 @@ def _heuristic_fallback(prompt: str) -> Dict[str, Any]:
         velo = "BALANCED"
 
     time_alloc = _compute_time_allocation(prompt, arch, tier, pol)
+    auto_tier, rec_model = _resolve_copilot_tier_and_model(cell, pol, prompt)
 
     return {
         "archetype": arch,
@@ -150,6 +164,8 @@ def _heuristic_fallback(prompt: str) -> Dict[str, Any]:
         "supporting_skills": sup,
         "velocity": velo,
         "time_allocation": time_alloc,
+        "auto_tier": auto_tier,
+        "recommended_copilot_model": rec_model,
         "source": "heuristic_fallback",
     }
 
@@ -199,6 +215,12 @@ def _call_lm_studio(prompt: str) -> Optional[Dict[str, Any]]:
                     result.get("tier", "Tier 1"),
                     result.get("policy", "DIRECT_FAST"),
                 )
+            if "auto_tier" not in result:
+                cell = result.get("matrix_cell", "(V0, R0)")
+                pol = result.get("policy", "DIRECT_FAST")
+                auto_tier, rec_model = _resolve_copilot_tier_and_model(cell, pol, prompt)
+                result["auto_tier"] = auto_tier
+                result["recommended_copilot_model"] = rec_model
             return result
     except Exception:
         return None
@@ -214,6 +236,14 @@ def route_intent(prompt: str) -> Dict[str, Any]:
     # 2. If not running, use zero-latency deterministic fallback
     if not res:
         res = _heuristic_fallback(prompt)
+
+    # 3. Resolve active hardware target
+    try:
+        from tools.npu_engine import TriHardwareEngine
+        hw = TriHardwareEngine.get_hardware_status()
+        res["hardware_target"] = hw.get("runtimes", {}).get("active_priority_target", "CPU")
+    except Exception:
+        res["hardware_target"] = "CPU"
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000.0
     res["latency_ms"] = round(elapsed_ms, 2)

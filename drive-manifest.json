@@ -33,12 +33,30 @@
       "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent, Skill & Task Time Allocation Router (Q4_K_M GGUF)",
       "sha256": "58473aca2106e275fe29636be6e078da4721a11f24dc5c8925b468454d5a5b81"
     },
-    "notebooks/slm_time_router_forge.ipynb": {
-      "drive_file_id": "1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh",
-      "drive_file_name": "colab_train_intent_router",
-      "description": "Colab Fine-Tuning Notebook for Qwen2.5-0.5B Intent, Skill & Time Allocation Router",
-      "colab_url": "https://colab.research.google.com/drive/1xlweNlXJ4maBCfUJVkReZLHMTWwKsYGh",
-      "sha256": "4624e5dcaab7fe13"
+    "models/fleet_master_brain_3b_q4km.gguf": {
+      "drive_file_id": "1kZ7hIAeVM6T0AVDwU1bruWRtIaNMLTzR",
+      "drive_file_name": "fleet_master_brain_3b_q4km.gguf",
+      "description": "Fine-Tuned Qwen2.5-Coder-3B-Instruct Fleet Master Brain Daily Driver (Q4_K_M GGUF, 1.8 GB)",
+      "sha256": "0768e459c7b44e76377eff1e2325208aa80938e7e88352a5ef361812cdfb31ea"
+    },
+    "models/fleet_master_brain_7b_q4km.gguf": {
+      "drive_file_id": "1XnqLXF6F7-ibDrJdcZzw-XGRneVQ02Rd",
+      "drive_file_name": "fleet_master_brain_7b_q4km.gguf",
+      "description": "Fine-Tuned Qwen2.5-Coder-7B-Instruct Fleet Master Brain Powerhouse (Q4_K_M GGUF, 4.36 GB)",
+      "sha256": "cloud_persisted_a100_7b"
+    },
+    "notebooks/fleet_master_brain_forge.ipynb": {
+      "drive_file_id": "1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",
+      "drive_file_name": "fleet_master_brain_forge.ipynb",
+      "description": "Colab Fine-Tuning Notebook for Qwen2.5-Coder 3B & 7B Multi-Model Forge (A100 SXM4)",
+      "colab_url": "https://colab.research.google.com/drive/1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",
+      "sha256": "updated_a100_forge"
+    },
+    "dataset/unified_fleet_train.jsonl": {
+      "drive_file_id": "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA",
+      "drive_file_name": "unified_fleet_train.jsonl",
+      "description": "Unified Multi-Task Training Dataset (4,729 samples across Time, Error-Recovery, and DAG Sequences)",
+      "sha256": "4729_samples_sha256"
     }
   }
 }

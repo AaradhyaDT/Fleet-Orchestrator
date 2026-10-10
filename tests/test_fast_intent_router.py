@@ -6,7 +6,7 @@ def test_compute_time_allocation():
     alloc_micro = _compute_time_allocation("status", "ENGINEERING_DEV", "Tier 1", "DIRECT_FAST")
     assert alloc_micro["tier"] == "T0_MICRO"
     assert alloc_micro["estimated_duration_s"] == 12
-    assert alloc_micro["execution_route"] == "DIRECT_FAST"
+    assert alloc_micro["execution_route"] == "LOCAL_SLM"
 
     alloc_fleet = _compute_time_allocation("dispatch swarm across workers", "SWARM_ORCHESTRATION", "Tier 2", "FLEET_SWARM")
     assert alloc_fleet["tier"] == "T3_LONG"
@@ -19,6 +19,9 @@ def test_route_intent_heuristic_fallback():
     assert "archetype" in result
     assert result["archetype"] == "RESEARCH_ACADEMIC"
     assert "time_allocation" in result
+    assert "auto_tier" in result
+    assert result["auto_tier"] in ["efficiency", "balance", "intelligence"]
+    assert "recommended_copilot_model" in result
     
     ta = result["time_allocation"]
     assert "tier" in ta

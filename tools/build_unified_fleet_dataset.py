@@ -24,12 +24,18 @@ train_sources = [
     DATASET_DIR / "task_time_train.jsonl",
     TRAJ_DIR / "agent_reflex_train.jsonl",
     TRAJ_DIR / "tool_speculator_train.jsonl",
+    DATASET_DIR / "copilot_counter_train.jsonl",
+    DATASET_DIR / "best_practices_train.jsonl",
+    DATASET_DIR / "cross_ide_transcripts_train.jsonl",
 ]
 
 eval_sources = [
     DATASET_DIR / "task_time_eval.jsonl",
     TRAJ_DIR / "agent_reflex_eval.jsonl",
     TRAJ_DIR / "tool_speculator_eval.jsonl",
+    DATASET_DIR / "copilot_counter_eval.jsonl",
+    DATASET_DIR / "best_practices_eval.jsonl",
+    DATASET_DIR / "cross_ide_transcripts_eval.jsonl",
 ]
 
 def merge_files(sources, out_file):

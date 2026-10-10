@@ -53,6 +53,9 @@ IGNORED_DIRS = {
 
 IGNORED_FILES = {
     ".env.fleet.example",
+    ".env.fleet.copilot.example",
+    ".env.fleet.gemini.example",
+    ".env.fleet.agy.example",
     "ci_secret_scanner.py",
 }
 

@@ -1,0 +1,70 @@
+{
+  "name": "fleet-companion",
+  "displayName": "Fleet Swarm Companion",
+  "description": "Zero-distraction in-editor Status Bar and Sidebar TreeView for Fleet-Orchestrator and Gemini API Fleet.",
+  "version": "1.0.0",
+  "publisher": "aaradhya",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fleet-swarm-container",
+          "title": "Fleet Swarm",
+          "icon": "$(zap)"
+        }
+      ]
+    },
+    "views": {
+      "fleet-swarm-container": [
+        {
+          "id": "fleet.treeView",
+          "name": "Swarm Matrix & Active Queue"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "fleet.refresh",
+        "title": "Fleet: Refresh Telemetry",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "fleet.submitTask",
+        "title": "Fleet: Submit Task",
+        "icon": "$(add)"
+      },
+      {
+        "command": "fleet.openTerminalWatch",
+        "title": "Fleet: Watch in Terminal",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "fleet.reconcile",
+        "title": "Fleet: Reconcile Quotas",
+        "icon": "$(sync)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "fleet.refresh",
+          "when": "view == fleet.treeView",
+          "group": "navigation"
+        },
+        {
+          "command": "fleet.submitTask",
+          "when": "view == fleet.treeView",
+          "group": "navigation"
+        }
+      ]
+    }
+  }
+}

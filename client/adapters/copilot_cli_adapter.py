@@ -38,6 +38,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         timeout: float = 180.0,
         max_autopilot_continues: int = 5,
         model: str | None = None,
+        auto_tier: str | None = None,
         github_token: str | None = None,
         copilot_home: str | Path | None = None,
         max_ai_credits: int | None = None,
@@ -50,6 +51,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         self.timeout = timeout
         self.max_autopilot_continues = max_autopilot_continues
         self.model = model
+        self.auto_tier = auto_tier
         self.github_token = github_token
         self.copilot_home = Path(copilot_home).resolve() if copilot_home else None
         self.max_ai_credits = max_ai_credits
@@ -113,7 +115,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         if self.max_ai_credits is not None:
             cmd.extend(["--max-ai-credits", str(self.max_ai_credits)])
 
-        if self.model:
+        if self.auto_tier:
+            cmd.extend(["--model", "auto", "--auto-tier", self.auto_tier])
+        elif self.model:
             cmd.extend(["--model", self.model])
 
         if self.worktree:

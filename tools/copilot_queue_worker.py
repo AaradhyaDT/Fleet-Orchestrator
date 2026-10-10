@@ -678,18 +678,44 @@ class CopilotQueueWorker:
             timeout_val = task["time_allocation"].get("timeout_ceiling_s")
         timeout_sec = float(timeout_val if timeout_val is not None else 420.0)
 
+        # Check if local SLM bypass is requested
+        exec_route = task.get("execution_route") or task.get("time_allocation", {}).get("execution_route")
+        if exec_route == "LOCAL_SLM":
+            logger.info(f"Task {task_id} has route LOCAL_SLM - executing via local SLM engine...")
+            try:
+                from tools.fast_intent_router import _call_lm_studio
+                local_resp = _call_lm_studio(spec)
+                if local_resp:
+                    return {
+                        "success": True,
+                        "summary": f"Executed locally via Local SLM: {task_id}",
+                        "commit_sha": None,
+                        "branch_name": f"task/{task_id}",
+                        "credits_used": 0.0,
+                        "tokens_used": 150,
+                        "model_used": "local-slm-qwen",
+                        "raw_output": str(local_resp),
+                    }
+            except Exception as e:
+                logger.warning(f"LOCAL_SLM execution failed, falling back to Copilot: {e}")
+
+        # Resolve model and auto_tier from task metadata
+        model = task.get("model") or task.get("recommended_model")
+        auto_tier = task.get("auto_tier")
+
         adapter = CopilotCLIAdapter(
             worker_id=account["worker_id"],
             nickname=account["name"],
             worktree=str(target_worktree) if target_worktree else None,
-            model=None,  # STRICT: Omits --model for provider auto-routing
+            model=model,
+            auto_tier=auto_tier,
             github_token=account.get("token") or None,
             copilot_home=account.get("state_dir") or None,
             allow_custom_instructions=has_customizations,
             timeout=timeout_sec,
         )
 
-        logger.info(f"Executing {task_id} via Copilot CLI (Worker: {account['worker_id']}, Worktree: {target_worktree})...")
+        logger.info(f"Executing {task_id} via Copilot CLI (Worker: {account['worker_id']}, Auto-Tier: {auto_tier}, Model: {model}, Worktree: {target_worktree})...")
         exec_result = await adapter.execute_task(
             task_id=task_id,
             spec=spec,
@@ -754,6 +780,35 @@ class CopilotQueueWorker:
             status="idle",
         )
         logger.info(f"Task {task_id} marked DONE. Checkpoint written to {checkpoint_file.name}")
+
+    def _record_copilot_mistake(
+        self,
+        task: dict[str, Any],
+        account: dict[str, Any],
+        result: dict[str, Any],
+        error_msg: str,
+    ) -> None:
+        """Records failed task execution trace for continuous counter-dataset training."""
+        try:
+            mistakes_dir = self.state_dir / "qa-reviews" / "copilot_mistakes"
+            mistakes_dir.mkdir(parents=True, exist_ok=True)
+            record = {
+                "task_id": task.get("id"),
+                "timestamp": _now_iso(),
+                "worker_id": account.get("worker_id"),
+                "auto_tier": task.get("auto_tier"),
+                "model": task.get("model") or task.get("recommended_model"),
+                "spec": task.get("spec", ""),
+                "error": error_msg,
+                "stdout": result.get("stdout", "")[:2000] if isinstance(result.get("stdout"), str) else "",
+                "stderr": result.get("stderr", "")[:2000] if isinstance(result.get("stderr"), str) else "",
+            }
+            out_file = mistakes_dir / f"{task.get('id')}.json"
+            with open(out_file, "w", encoding="utf-8") as f:
+                json.dump(record, f, indent=2)
+            logger.info(f"Recorded Copilot mistake trace to {out_file.name}")
+        except Exception as e:
+            logger.warning(f"Could not record Copilot mistake trace: {e}")
 
     def _mark_task_blocked(self, task_id: str, account: dict[str, Any], reason: str) -> None:
         """Transitions task to blocked state per SCHEMA.md."""
@@ -843,12 +898,14 @@ class CopilotQueueWorker:
                 return True
             else:
                 error_msg = result.get("error") or "Execution failed"
+                self._record_copilot_mistake(task=claimed_task, account=account, result=result, error_msg=error_msg)
                 self._mark_task_blocked(task_id, account, error_msg)
                 return False
 
         except Exception as e:
             logger.error(f"Execution error on task {task_id}: {e}")
             await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False)
+            self._record_copilot_mistake(task=claimed_task, account=account, result={}, error_msg=str(e))
             self._mark_task_blocked(task_id, account, str(e))
             return False
 

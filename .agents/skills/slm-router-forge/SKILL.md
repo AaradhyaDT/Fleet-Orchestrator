@@ -38,25 +38,24 @@ Before training, audit host memory and acceleration instructions to select the o
 
 ---
 
-### Stage 2: Grounded Dataset Synthesis & Empirical Time Harvesting
-Synthesize instruction-tuning datasets grounded in real repository schemas, historical tasks, and empirical chat histories:
+### Stage 2: Grounded Multi-Task Dataset Synthesis (10,010 Samples)
+Synthesize instruction-tuning datasets grounded in real repository schemas, historical tasks, empirical chat histories, and Fusemachines AI Fellowship standards:
 1. Ingest lifecycle archetypes from `references/lifecycle-stages.md`.
 2. Map skills from `references/skill-matrix.md` and `.agents/skills/`.
-3. Harvest real past task prompts and execution durations using `tools/harvest_task_time_dataset.py`:
-   - Crawls 500+ transcripts in `~/.gemini/antigravity/brain/*/transcript.jsonl` (extracting start/end timestamps and tool call counts).
-   - Crawls completed task checkpoints in `Fleet-Orchestrator/orchestrator-state/checkpoints/*.json`.
-   - Strips XML prompt tags (`<USER_REQUEST>`, `<ADDITIONAL_METADATA>`) and normalizes token lengths.
-   - Calculates time tiers (`T0_MICRO` <15s, `T1_FAST` 15-60s, `T2_MEDIUM` 60-180s, `T3_LONG` 180-480s, `T4_EPIC` >480s), timeout ceilings ($\max(30\text{s}, 2.2 \times D_{\text{est}})$), and normalized CPM weights ($D_j = \max(0.5, D_{\text{est}} / 30.0)$).
-4. Emit formatted `(instruction, input, output)` JSONL files:
-   - `dataset/task_time_train.jsonl` (80% split)
-   - `dataset/task_time_eval.jsonl` (20% split)
-   - `dataset/dataset_summary.json` (metadata distribution audit)
+3. Harvest real past task prompts and execution durations using multi-stream mining tools:
+   - `tools/harvest_cross_ide_transcripts.py`: Ingests 1,595 turns from VS Code SQLite (`Code/User/globalStorage/github.copilot-chat/session-store.db`), Claude Desktop exports, and Antigravity brain logs.
+   - `tools/generate_best_practices_dataset.py`: Synthesizes 2,500 curriculum-aligned pairs from Fusemachines AI Fellowship (Weeks 1-17: S&P 500 forecasting, Telco churn, NEU steel defect CNN, FreshTrack, CLIP zero-shot, CRF NER, Agentic SLM, Dual-Track MLOps) and repo invariants.
+   - `tools/harvest_copilot_counter_dataset.py`: Mines failure traces from `qa-reviews/copilot_mistakes/` for counter-example alignment.
+   - `tools/build_unified_fleet_dataset.py`: Merges and deduplicates into the unified multi-task dataset:
+     - `dataset/unified_fleet_train.jsonl` (8,008 samples, 80%)
+     - `dataset/unified_fleet_eval.jsonl` (2,002 samples, 20%)
+     - Total: **10,010 samples** covering intent routing, time allocation, 2D matrix policies, copilot auto-tier steering (`efficiency`, `balance`, `intelligence`), and architectural best practices.
 
 ```json
 {
-  "instruction": "You are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, supporting skills, velocity profile, and task time allocation (tier, estimated_duration_s, timeout_ceiling_s, cpm_weight, execution_route) in strict JSON format.",
+  "instruction": "You are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, supporting skills, velocity profile, auto_tier, recommended_copilot_model, and task time allocation (tier, estimated_duration_s, timeout_ceiling_s, cpm_weight, execution_route) in strict JSON format.",
   "input": "Fix the regression in test_warehouse_mem_sim.py where queue latency was calculating as zero.",
-  "output": "{\"archetype\": \"ENGINEERING_DEV\", \"tier\": \"Tier 1\", \"matrix_cell\": \"(V0, R1)\", \"policy\": \"BRANCH_GUARD\", \"primary_skill\": \"github-workflow\", \"supporting_skills\": [\"systems-concurrency-harness\"], \"velocity\": \"BALANCED\", \"time_allocation\": {\"tier\": \"T1_FAST\", \"estimated_duration_s\": 35, \"timeout_ceiling_s\": 77, \"cpm_weight\": 1.17, \"execution_route\": \"DIRECT_FAST\"}}"
+  "output": "{\"archetype\": \"ENGINEERING_DEV\", \"tier\": \"Tier 1\", \"matrix_cell\": \"(V0, R1)\", \"policy\": \"BRANCH_GUARD\", \"primary_skill\": \"github-workflow\", \"supporting_skills\": [\"systems-concurrency-harness\"], \"velocity\": \"BALANCED\", \"auto_tier\": \"balance\", \"recommended_copilot_model\": \"copilot\", \"time_allocation\": {\"tier\": \"T1_FAST\", \"estimated_duration_s\": 35, \"timeout_ceiling_s\": 77, \"cpm_weight\": 1.17, \"execution_route\": \"DIRECT_FAST\"}}"
 }
 ```
 
@@ -219,45 +218,42 @@ Execute fine-tuning on a cloud GPU (Colab Pro L4 Ada Lovelace, A100, or Free T4)
 
 ---
 
-### Stage 4: Binary Export & Dual Cloud Ingestion Pathways
+### Stage 4: Binary Export & Dual Model Packaging Pathways
+Never commit large binary model weights ($>100\text{ MB}$) to Git repositories. Choose between two verified model formats:
 
-Never commit large binary model weights ($>100\text{ MB}$) to Git repositories. Choose between two verified cloud ingestion pathways:
-
-1. **Export Quantized INT4 GGUF (`Q4_K_M`)**:
+1. **Pathway A: Quantized INT4 GGUF (`Q4_K_M`) for CPU AVX-VNNI**:
    ```python
    model.save_pretrained_gguf("qwen_intent_router_q4", tokenizer, quantization_method = "q4_k_m")
    ```
-   *(Outputs quantized GGUF weights `qwen_intent_router_q4/Qwen2.5-0.5B-Instruct.Q4_K_M.gguf` (~380 MB))*.
+   *(Outputs quantized GGUF weights `qwen_intent_router_q4_gguf/Qwen2.5-0.5B-Instruct.Q4_K_M.gguf` (~380 MB) for LM Studio and llama.cpp)*.
 
-2. **Pathway A: Direct Google Drive Mount (Zero Download Delay)**:
-   Mount Google Drive directly in Colab and copy the artifact to the designated Fleet-Orchestrator sync folder:
+2. **Pathway B: OpenVINO IR INT4 for Intel NPU / Arc iGPU Acceleration**:
+   Convert the fine-tuned checkpoint directly to OpenVINO Intermediate Representation (IR) INT4 via `optimum-intel` / `openvino-genai`:
+   ```bash
+   optimum-cli export openvino --model ./fine_tuned_checkpoint --weight-format int4 ./openvino_qwen_int4
+   ```
+   *(Outputs `openvino_model.xml`, `openvino_model.bin`, and tokenizer configs for zero-CPU Intel NPU offloading)*.
+
+3. **Cloud Persistence via Google Drive**:
+   Mount Google Drive directly in Colab and copy artifacts to the designated Fleet-Orchestrator sync folder:
    ```python
    import os, shutil
    from google.colab import drive
 
-   # 1. Mount Google Drive if not already mounted
    if not os.path.exists('/content/drive/MyDrive'):
        drive.mount('/content/drive')
 
-   # 2. Source file generated by Unsloth
-   source_file = "qwen_intent_router_q4_gguf/Qwen2.5-0.5B-Instruct.Q4_K_M.gguf"
-
-   # 3. Destination folder in Google Drive
    target_dir = "/content/drive/MyDrive/Share to Aaradhya/Super-NLM/Fleet-Orchestrator"
    os.makedirs(target_dir, exist_ok=True)
-   dest_path = os.path.join(target_dir, "qwen_intent_router_q4_k_m.gguf")
-
-   print(f"Copying {source_file} -> {dest_path}...")
-   shutil.copy(source_file, dest_path)
-   print(f"Successfully copied! File size: {os.path.getsize(dest_path) / (1024*1024):.1f} MB")
+   shutil.copy("qwen_intent_router_q4_gguf/Qwen2.5-0.5B-Instruct.Q4_K_M.gguf", os.path.join(target_dir, "qwen_intent_router_q4_k_m.gguf"))
    ```
 
-3. **Pathway B: Resumable Script Upload & Drive Manifest Registration**:
-   For local runs or headless CLI environments, upload using chunked resumable upload:
+4. **Resumable Script Upload & Drive Manifest Registration**:
+   For local runs or headless CLI environments:
    ```powershell
    python scripts/upload_large_model_to_drive.py
    ```
-   And verify permanent registration in `drive-manifest.json`:
+   Verified registration in `drive-manifest.json`:
    ```json
    "models/qwen_intent_router_q4_k_m.gguf": {
      "drive_file_id": "1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK",
@@ -269,23 +265,24 @@ Never commit large binary model weights ($>100\text{ MB}$) to Git repositories. 
 
 ---
 
-### Stage 5: Local Silicon Serving & Orchestrator Integration Gate
-Deploy the model locally for sub-50ms inference:
-1. **LM Studio Import & Load**:
+### Stage 5: Local Silicon Serving & Tri-Hardware Execution Gate
+Deploy the model locally across Meteor Lake silicon:
+1. **Level 1 (NPU - 11 TOPS)**: Run natively in `.venv-npu` via OpenVINO GenAI (`tools/npu_engine.py`). Zero host CPU utilization (~2W envelope).
+2. **Level 2 (Arc iGPU - 8 Xe)**: OpenVINO GPU device target (`GPU.0`).
+3. **Level 3 (CPU AVX-VNNI)**: LM Studio / llama.cpp server at port 1234:
    ```powershell
    lms import -c --user-repo aaradhya/qwen-intent-router -y "models/qwen_intent_router_q4_k_m.gguf"
    lms server start
    lms load qwen-intent-router --identifier qwen-intent-router -y
    ```
-2. **Client Health-Guarded Routing (`tools/fast_intent_router.py`)**:
-   - Perform a sub-millisecond socket connection check on `127.0.0.1:1234` before sending HTTP payloads.
-   - If the server is offline, fall back instantly to deterministic keyword heuristics with `<1ms` latency.
+4. **Client Health-Guarded Routing (`tools/fast_intent_router.py`)**:
+   - Performs a 4-level cascading check: NPU (`.venv-npu`) $\to$ Arc iGPU $\to$ LM Studio socket check (`127.0.0.1:1234`) $\to$ AST keyword heuristics.
    - Set request timeout to 5.0 seconds.
-3. **Queue Worker Consumption (`tools/copilot_queue_worker.py`)**:
-   - Inspects `task.get("time_allocation", {}).get("timeout_ceiling_s")`.
-   - Adopts predicted timeout directly, dynamically sizing worker lifespans and preventing thread starvation.
-   - Records `actual_duration_s` in completed checkpoints for ongoing telemetry reconciliation.
-4. **CPM DAG Scheduling (`sim/adaptive_orchestrator.py`)**:
+5. **Queue Worker Consumption (`tools/copilot_queue_worker.py`)**:
+   - Ingests `auto_tier` (`efficiency`, `balance`, `intelligence`) and `recommended_copilot_model`.
+   - Adopts dynamic `timeout_ceiling_s` from task time allocation.
+   - Records `actual_duration_s` and mistake traces in `qa-reviews/copilot_mistakes/` for counter-dataset training.
+6. **CPM DAG Scheduling (`sim/adaptive_orchestrator.py`)**:
    - `DeterministicCPMScheduler` ingests `cpm_weight` directly as task duration ($D_j$) to compute exact early/late schedules and critical path identification ($TS = 0$).
 
 ---
@@ -299,3 +296,12 @@ Deploy the model locally for sub-50ms inference:
 5. **INV-SLM-05: Dynamic Timeout Allocation**: Fleet queue workers must dynamically adopt `timeout_ceiling_s` from task time allocation whenever present rather than relying on a static 420.0s constant.
 6. **INV-SLM-06: Mathematical CPM Duration Ingestion**: Critical Path Method schedulers must resolve durations from empirical `cpm_weight` point estimates rather than ungrounded integer assumptions.
 7. **INV-SLM-07: SFT Compatibility Bridge**: Colab training pipelines using `trl < 0.9.0` with `transformers >= 4.47` must apply the `processing_class` monkeypatch to avoid `TypeError` on trainer initialization.
+8. **INV-SLM-08: FlashAttention-2 / SDPA Invariant (Zero xformers Compilation)**: Never install `xformers` via `pip install "xformers<..."` on Ampere, Ada Lovelace, or Hopper GPUs (A100, L4, H100). Modern PyTorch 2.x and Unsloth natively use pre-compiled Scaled Dot-Product Attention (SDPA) and FlashAttention-2. Installing `xformers` triggers an unneeded 10-15 minute C++/CUDA source compilation (`xformers.tar.gz`) that exhausts compute units and hangs notebook kernels.
+9. **INV-SLM-09: Integer Warmup Steps Invariant**: In modern `transformers >= 5.x`, `TrainingArguments` rejects float `warmup_ratio`. Always specify discrete integer `warmup_steps = 10` (or `max(5, int(0.05 * total_steps))`) instead of float `warmup_ratio` to prevent `TypeError: TrainingArguments.__init__() got an unexpected keyword argument 'warmup_ratio'`.
+10. **INV-SLM-10: Programmatic Colab Runtime Teardown Invariant**: All cloud training notebooks must include a final cell executing `from google.colab import runtime; runtime.unassign()` after persisting weights to Google Drive, ensuring complete compute unit conservation without requiring manual session termination.
+11. **INV-SLM-11: Dynamic Cell Queueing & In-Flight Safety Invariant**: Appending or editing notebook cells (e.g., adding an auto-teardown cell `runtime.unassign()`, drive validations, or logging blocks) while long-running training cells are in-flight is 100% safe. The Jupyter kernel executes asynchronously via a FIFO message queue; simply enqueue the newly added cell (via Play button or `Shift + Enter`) so it reflects the queued pending state `[*]`, ensuring it executes seamlessly upon phase completion without disrupting VRAM or active CUDA execution.
+12. **INV-SLM-12: Unsloth GGUF Output Directory Suffix Invariant**: Unsloth's `model.save_pretrained_gguf(target_dir, ...)` automatically appends `_gguf` to the specified directory name (e.g., `save_pretrained_gguf("fleet_model", ...)` outputs to `fleet_model_gguf/`). Downstream copy and persistence code must never hardcode `target_dir` without `_gguf`. Always target `f"{target_dir}_gguf"` or use dynamic glob discovery (`glob.glob(f"**/*{model_tag}*.gguf", recursive=True)`) to eliminate `FileNotFoundError` during cloud artifact persistence.
+13. **INV-SLM-13: Resumable Cloud Model Retrieval & Drive Sharing Invariant**: Exported multi-gigabyte models in Google Drive must be permissioned with `role: reader, type: anyone` to enable automated downstream CLI pulling via `gdown`. Remote or local worker download commands must strictly use `--continue` (`python -m gdown --continue "https://drive.google.com/uc?id=<file_id>" -O "models/<filename>.gguf"`) to ensure automated virus-scan redirect handling and chunked recovery on transient network drops. Any partial download artifacts (`*.part`) created during aborted transfers must be purged to maintain clean local cache integrity.
+
+
+

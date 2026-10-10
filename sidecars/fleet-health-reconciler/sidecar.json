@@ -1,0 +1,22 @@
+{
+  "builtin": "schedule",
+  "args": [
+    "CRON_TZ=Asia/Kathmandu 0 5 * * *",
+    "agentapi",
+    "new-conversation",
+    "--",
+    "Execute .\\fleet.bat reconcile in F:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator. Audit credit ledgers across all 27 Copilot accounts and healthy Gemini keys, clean up stale worktrees in .worktrees/, verify NPU device health, and post a concise health brief."
+  ],
+  "restart_policy": "always",
+  "display_name": "Fleet Health & Credit Reconciler",
+  "description": "Daily at 5:00 AM (Asia/Kathmandu), audits credit ledgers, flushes stale worktrees, and checks NPU health.",
+  "agent_permissions": {
+    "workspace_uris": [
+      "file:///f:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator"
+    ],
+    "access_grants": [
+      "command(cmd /c fleet.bat reconcile)",
+      "command(python tools/adaptive_engine.py flight-check)"
+    ]
+  }
+}

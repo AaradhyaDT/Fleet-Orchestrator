@@ -13,6 +13,7 @@ from server.api.routes_jobs import router as jobs_router
 from server.api.routes_tasks import router as tasks_router
 from server.api.routes_workers import router as workers_router
 from server.api.routes_memory import router as memory_router
+from server.api.routes_openai_proxy import router as openai_router
 from server.mcp_remote import mcp_server
 
 @asynccontextmanager
@@ -127,6 +128,7 @@ app.include_router(jobs_router, prefix=settings.API_V1_STR)
 app.include_router(tasks_router, prefix=settings.API_V1_STR)
 app.include_router(workers_router, prefix=settings.API_V1_STR)
 app.include_router(memory_router, prefix=settings.API_V1_STR)
+app.include_router(openai_router)
 
 # Mount the Streamable HTTP / SSE MCP Server directly into FastAPI with auth enforcement
 app.mount(settings.MCP_PATH, MCPAuthMiddleware(mcp_server.sse_app()))

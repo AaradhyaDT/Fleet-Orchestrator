@@ -1,0 +1,36 @@
+{
+  "id": "task_1791605750_implement-kalman-filter-for-radar-tracki",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Scaffold high-throughput Kalman filter in sim/kalman.py",
+  "status": "done",
+  "owner_account": "copilot-w17",
+  "branch_name": "task/task_1791605750_implement-kalman-filter-for-radar-tracki",
+  "blocked_reason": null,
+  "created_by": "adaptive-workflow",
+  "created_at": "2026-10-10T04:15:50Z",
+  "updated_at": "2026-10-10T04:18:45Z",
+  "task_id": "TASK-1791605750-implement-kalman-filter-for-radar-tracki",
+  "title": "Implement Kalman Filter for Radar Tracking",
+  "repository": "brainstorm",
+  "prompt": "Scaffold high-throughput Kalman filter in sim/kalman.py",
+  "branch": "feat/task-1791605750-implement-kalman-filter-for-radar-tracki",
+  "priority": "high",
+  "assigned_worker": null,
+  "max_retries": 3,
+  "timeout": 264.0,
+  "time_allocation": {
+    "tier": "T2_MEDIUM",
+    "estimated_duration_s": 120,
+    "timeout_ceiling_s": 264,
+    "cpm_weight": 4.0,
+    "execution_route": "SUBAGENT"
+  },
+  "routing": {
+    "archetype": "DOMAIN_HARDWARE",
+    "tier": "Tier 2",
+    "matrix_cell": "(V0, R1)",
+    "policy": "BRANCH_GUARD",
+    "primary_skill": "embedded-firmware-scaffold"
+  }
+}

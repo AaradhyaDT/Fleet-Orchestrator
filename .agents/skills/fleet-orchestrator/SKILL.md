@@ -28,13 +28,15 @@ flowchart TD
 
     Scheduler --> AdapterMesh["Multi-Provider Adapter Mesh\n(client/adapters/)"]
 
-    AdapterMesh --> CopilotCLI["27x Copilot CLI Workers\n(5,400 monthly credits)"]
+    AdapterMesh --> CopilotCLI["27x Copilot CLI Workers\n(.env.fleet.copilot)"]
+    AdapterMesh --> GeminiAPI["Gemini API Rotator\n(.env.fleet.gemini, N keys)"]
+    AdapterMesh --> AGYCLI["Antigravity CLI Fleet\n(.env.fleet.agy, M workers)"]
     AdapterMesh --> CopilotHeadless["Copilot Headless REST\n(~15 MB RAM, tool-calling loop)"]
     AdapterMesh --> ClaudeCDP["Claude Desktop CDP\n(Adversarial QA review)"]
-    AdapterMesh --> GeminiAPI["Gemini 3.8 Flash API\n(google-genai v2.25.0)"]
     AdapterMesh --> GroqOllama["Groq + Ollama Local\n(Zero-latency classification)"]
 
     CopilotCLI --> Worktrees[".worktrees/\n(Isolated Git worktrees)"]
+    AGYCLI --> Worktrees
     Worktrees --> Bridge["Antigravity Context Bridge\n(TASK_CONTEXT.md +\n.github/copilot-instructions.md)"]
     Bridge --> Commit["Atomic Commit & Checkpoint"]
     Commit --> Output["Deliverables + Drive Sync"]
@@ -52,6 +54,7 @@ flowchart TD
 | **Supervisor** | `server/core/supervisor.py` | Self-healing loop: stale heartbeat detection (>120s), expired lease reclamation, cooldown timer resets. |
 | **Credit Ledger** | `tools/credit_ledger.py` | Leaf accounting engine with OS file locks (`msvcrt`/`fcntl`), per-worker sidecar ledgers, `(file_size, mtime)` event cache, automatic month rollover. |
 | **Antigravity Bridge** | `client/antigravity_bridge.py` | Harvests live chat state, conversation transcripts, active artifacts, and Antigravity customizations; projects `TASK_CONTEXT.md` + `.github/copilot-instructions.md` into worktrees. |
+| **Fleet Env Loader** | `tools/fleet_env.py` | Zero-friction cascading loader across `.env.fleet.copilot`, `.env.fleet.gemini`, `.env.fleet.agy`, and `.env.fleet`. |
 | **Remote MCP Server** | `server/mcp_remote.py` | 23-tool Streamable HTTP/SSE MCP server: `create_task`, `list_tasks`, `acquire_task`, `claim_task`, `renew_task_lease`, `submit_checkpoint`, `submit_qa_review`, `submit_job_from_template`, `register_worker`, `worker_heartbeat`, `push_memory`, `search_memory`, `read_team_context`, and more. |
 
 ### Multi-Provider Adapter Mesh (`client/adapters/`)
@@ -63,6 +66,8 @@ flowchart TD
 | **Claude Desktop CDP** | `ClaudeDesktopCDPAdapter` | Chrome DevTools Protocol via WebSocket. DOM injection + WinPilot fallback. Model selection, thinking budget, cooldown detection. |
 | **Claude Desktop Proxy** | `ClaudeDesktopProxyAdapter` | Higher-level Claude Desktop proxy with session management. |
 | **Gemini API** | `GeminiAPIAdapter` | `google-genai` SDK v2.25.0. Gemini 3.8 Flash default. Deprecated model auto-mapping. Token usage telemetry extraction. |
+| **Gemini Rotator** | `GeminiKeyRotator` | Multi-key round-robin rotation with 2-tier cooldown (429 burst + 00:00 UTC daily reset). |
+| **AGY CLI** | `AGYCLIAdapter` | `agy.exe -p` print mode with `--dangerously-skip-permissions`, isolated `AGY_WORKER_HOME` sandboxes, and structured JSON output. |
 | **Gemini Free** | `GeminiFreeAdapter` | Backward-compatible free-tier adapter. |
 | **Groq** | `GroqAdapter` | Cloud Groq LLM API for fast formatting and classification. |
 | **Ollama Local** | `OllamaLocalAdapter` | Local open-weight models via Ollama HTTP API. |
@@ -72,10 +77,46 @@ flowchart TD
 
 ## 2. CLI Commands & Operational Workflows
 
-### Fleet Status & Account Health
+### Unified In-Terminal CLI (`fleet.bat`) & Silicon Telemetry
 ```powershell
-python tools/copilot_fleet.py status        # PAT readiness, credit headroom, per-worker status
-python tools/copilot_fleet.py canary        # Concurrent canary ping across all 27 accounts
+.\fleet.bat status                          # Live status with Silicon Topology (NPU/iGPU/CPU) & quota
+.\fleet.bat submit "Implement feature X" --auto-tier balance --priority HIGH
+.\fleet.bat submit "Quick bugfix" --auto-tier efficiency
+.\fleet.bat submit "Complex architecture" --auto-tier intelligence --model gemini-3.8-flash
+.\fleet.bat daemon --concurrency 4          # Start local background queue worker daemon
+```
+
+### Tri-Fleet Environment Configuration & Auditing
+Multi-model worker pools are configured across modular provider files with cascading fallback to legacy `.env.fleet`:
+- `.env.fleet.copilot`: 27 GitHub Copilot accounts (Fine-Grained PATs, 5,400 monthly AI credits).
+- `.env.fleet.gemini`: Google AI Studio Gemini API keys (pooled 15 RPM/1,500 RPD per GCP project).
+- `.env.fleet.agy`: Google Antigravity CLI worker pool (`agy.exe -p`, isolated `AGY_WORKER_HOME` sandboxes).
+
+```powershell
+python tools/fleet_env.py                    # Audit all 3 fleet env files and merged config
+python tools/unified_fleet_cli.py status     # Live telemetry across Copilot, Gemini, and AGY pools
+python tools/unified_fleet_cli.py watch      # In-terminal live HUD (zero popups)
+```
+
+### 1st-Party Copilot CLI Auto-Tier Steering & Escalation
+`copilot.exe` natively supports automatic model tier steering via `--auto-tier`:
+- `--auto-tier efficiency`: Lightweight models (e.g. GPT-4o-mini / Haiku class) for routine fast paths and small edits. Saves quota credits.
+- `--auto-tier balance`: Balanced reasoning and coding speed for medium-complexity implementations.
+- `--auto-tier intelligence`: Frontier reasoning models for architectural refactoring, complex algorithms, or high blast-radius files.
+- **Model Escalation**: Direct override via `--model <name>` (e.g. `--model gemini-3.8-flash`, `claude-3.7-sonnet`, `o3-mini`).
+
+### Meteor Lake Tri-Hardware Runtime (`AUTO:NPU,GPU,CPU`)
+On Intel Core Ultra 7 155H (16 cores / 22 threads, 11 TOPS NPU, 8 Xe-cores Arc iGPU), the local SLM inference engine executes across 4 cascading tiers:
+1. **Level 1 (NPU - 11 TOPS)**: OpenVINO GenAI INT4 via `.venv-npu` (Python 3.12.10). Zero host CPU utilization (~2W envelope).
+2. **Level 2 (Arc iGPU - 8 Xe)**: OpenVINO GPU device target (`GPU.0`). High-throughput batch inference.
+3. **Level 3 (CPU AVX-VNNI)**: LM Studio / llama.cpp local server at port 1234 (`Qwen2.5-0.5B-Instruct-Q4_K_M.gguf`).
+4. **Level 4 (Heuristic Fast Path)**: Zero-weight keyword & AST classifier (<1ms, 0 MB RAM).
+
+Setup & Verification:
+```powershell
+.\setup_npu_env.bat                         # Provision .venv-npu and install OpenVINO GenAI
+python tools/npu_engine.py --status         # Audit physical NPU/GPU/CPU devices and compile cache
+python tools/npu_engine.py "Prompt text"    # Execute triage across tri-hardware mesh
 ```
 
 ### Quota Reconciliation & Live Dashboard
@@ -96,7 +137,7 @@ python tools/fleet_commander.py --specs "Task" --no-antigravity          # Disab
 
 ### Autonomous Task Submission & Batch
 ```powershell
-python tools/copilot_fleet.py submit --spec "Implement X" --kind code
+python tools/copilot_fleet.py submit --spec "Implement X" --kind code --auto-tier balance
 python tools/copilot_fleet.py batch --specs "Task 1" "Task 2" --concurrency 4
 ```
 
@@ -108,26 +149,11 @@ python tools/copilot_queue_worker.py --dry-run --task-id <id>           # Simula
 python tools/copilot_queue_worker.py --no-worktree                      # Disable git worktree isolation
 ```
 
-### Claude Desktop Fleet CLI
-```powershell
-python -m tools.fleet_cli status            # Active Claude Desktop instances & CDP health
-python -m tools.fleet_cli broadcast "prompt" # Broadcast to all instances
-python -m tools.fleet_cli send --profile user1 "prompt"  # Send to specific instance
-python -m tools.fleet_cli submit --sku seo_content_batch  # Submit multi-stage job
-```
-
-### Fleet Control Center GUI v2.0
-```powershell
-.\launch_fleet_gui.bat                      # One-click launcher
-python tools/fleet_gui.py                   # Direct launch
-```
-Tabs: Fleet Army Matrix (27 workers, filter chips) → Pipeline Tasks (status filtering, spec inspector) → Desktop Arranger (Win32 Virtual Desktop tiling) → Swarm Console (live event stream).
-
 ### Fast Intent Router (<50ms)
 ```powershell
 python tools/fast_intent_router.py "dispatch swarm task across copilot fleet"
 ```
-Routes via Qwen2.5-0.5B GGUF → LM Studio HTTP → heuristic fallback. Returns structured `{archetype, tier, matrix_cell, policy, primary_skill, velocity}`.
+Routes via Meteor Lake Tri-Hardware (OpenVINO INT4 on NPU/iGPU) → LM Studio HTTP (1234) → heuristic fallback. Returns structured `{archetype, tier, matrix_cell, policy, primary_skill, velocity, auto_tier, recommended_copilot_model}`.
 
 ### SKU Task Dispatching
 ```powershell
@@ -182,6 +208,10 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
 6. **Credit Accounting**: The credit ledger (`tools/credit_ledger.py`) is a strict leaf module with zero repo imports. Uses OS file locks and `(file_size, mtime)` caching for authentic session-based accounting.
 7. **Selective CI Bypass**: Use `.\sync.bat -SkipCI` for non-code changes. `sync.ps1` automatically detects non-code staged changes and appends `[skip ci]`.
 8. **Version Control**: All commits via `.\sync.bat` — never raw `git add/commit/push`.
+9. **Tri-Fleet Isolation & Quota Multipliers**:
+   - Copilot: GitHub Fine-Grained PATs with "Copilot Requests" R/W and 90-day expiry.
+   - Gemini: Google AI Studio keys generated in separate GCP projects to multiply RPM/RPD without hitting single-project bottlenecks.
+   - AGY: Headless CLI workers require isolated `AGY_WORKER_HOME` sandboxes to prevent SQLite lock collisions on `conversation_summaries.db`, plus mandatory `--dangerously-skip-permissions`.
 
 ---
 
@@ -202,9 +232,11 @@ Fleet-Orchestrator/
 │   ├── worker_daemon.py           # Polling daemon (registers, claims, executes)
 │   ├── fleet_supervisor.py        # Multi-worker fleet supervisor with role capabilities
 │   ├── antigravity_bridge.py      # Antigravity context harvesting & worktree projection
-│   └── adapters/                  # 9 provider adapters (see §1 table)
+│   └── adapters/                  # 10 provider adapters (Copilot, Gemini, AGY, Claude, Groq, Ollama, Colab)
 │
 ├── tools/                         # CLI controllers & dashboards
+│   ├── fleet_env.py               # Cascading loader across .env.fleet.{copilot,gemini,agy}
+│   ├── unified_fleet_cli.py       # Zero-distraction in-terminal HUD (fleet status/submit/tasks/watch)
 │   ├── copilot_fleet.py           # Multi-account fleet controller (status/canary/dashboard/reconcile/submit/batch)
 │   ├── copilot_queue_worker.py    # Background queue worker with worktree isolation
 │   ├── fleet_commander.py         # Context-firebreak batch orchestrator (≤300 word manifests)
@@ -212,6 +244,7 @@ Fleet-Orchestrator/
 │   ├── fleet_gui.py               # Fleet Control Center v2.0 (Tkinter High-DPI GUI)
 │   ├── fleet_watchdog.py          # Fleet health watchdog
 │   ├── fast_intent_router.py      # Sub-50ms local Qwen GGUF intent router
+│   ├── npu_engine.py              # Intel Core Ultra NPU/iGPU/CPU multi-silicon engine
 │   ├── credit_ledger.py           # Leaf credit ledger with OS file locks
 │   ├── ci_secret_scanner.py       # Pre-commit secret leakage scanner
 │   ├── ci_self_healing_runner.py  # Self-healing test runner with flaky retries
@@ -234,9 +267,12 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Live state (tasks/, checkpoints/, ledger/, scratchpads/, memory/, live-status/)
 ├── worker-prompts/                # 6 specialized role prompts (orchestrator, researcher, writer, qa-reviewer, seo-optimizer, formatter)
 ├── models/                        # Local GGUF model weights (git-ignored)
-├── tests/                         # 195 automated pytest tests (29 test suites)
+├── tests/                         # 199 automated pytest tests (30 test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
-├── .env.fleet.example             # Multi-account token template
+├── .env.fleet.copilot.example     # 27-account GitHub Copilot PAT template
+├── .env.fleet.gemini.example      # 30-slot Google AI Studio Gemini API key template
+├── .env.fleet.agy.example         # 8-worker Antigravity CLI worker pool template
+├── .env.fleet.example             # Consolidated legacy token template
 ├── drive-manifest.json            # Google Drive sync manifest with file IDs
 ├── sync.bat / sync.ps1            # Ecosystem sync with selective CI bypass
 └── launch_fleet_gui.bat           # One-click GUI launcher

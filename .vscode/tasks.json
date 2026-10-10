@@ -1,0 +1,87 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Fleet: Status (Terminal)",
+      "type": "shell",
+      "command": ".\\fleet.bat status",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false,
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Fleet: Submit Task",
+      "type": "shell",
+      "command": ".\\fleet.bat submit --spec \"${input:taskSpec}\" --kind ${input:taskKind}",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "Fleet: Watch Live Swarm (In-Terminal HUD)",
+      "type": "shell",
+      "command": ".\\fleet.bat watch",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "Fleet: Reconcile Quotas",
+      "type": "shell",
+      "command": ".\\fleet.bat reconcile",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Fleet: Start Background Queue Daemon",
+      "type": "shell",
+      "command": "python tools/copilot_queue_worker.py --concurrency 4",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Fleet: Start Backend Server & OpenAI Proxy",
+      "type": "shell",
+      "command": "python -m uvicorn server.main:app --host 127.0.0.1 --port 8000 --reload",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "taskSpec",
+      "type": "promptString",
+      "description": "Enter task specification to dispatch to Fleet swarm:"
+    },
+    {
+      "id": "taskKind",
+      "type": "pickString",
+      "description": "Select task kind:",
+      "options": ["code", "text", "qa", "research"],
+      "default": "code"
+    }
+  ]
+}
