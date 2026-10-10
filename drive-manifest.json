@@ -50,7 +50,7 @@
       "drive_file_name": "fleet_master_brain_forge.ipynb",
       "description": "Colab Fine-Tuning Notebook for Qwen2.5-Coder 3B & 7B Multi-Model Forge (A100 SXM4)",
       "colab_url": "https://colab.research.google.com/drive/1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",
-      "sha256": "ecba509754a589bc"
+      "sha256": "fdbce9cdbb7e6dba"
     },
     "dataset/unified_fleet_train.jsonl": {
       "drive_file_id": "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA",
