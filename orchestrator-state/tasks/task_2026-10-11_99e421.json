@@ -1,0 +1,92 @@
+{
+  "id": "task_2026-10-11_99e421",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Register Fleet-Orchestrator L4 milestone on portfolio AaradhyaDT.github.io (F:\\AaradhyaDT\\AaradhyaDT.github.io) using portfolio-project-manager skill",
+  "status": "claimed",
+  "owner_account": "copilot-w17",
+  "branch_name": "task/task_2026-10-11_99e421",
+  "blocked_reason": null,
+  "created_by": "fleet_cli",
+  "created_at": "2026-10-11T14:58:56Z",
+  "updated_at": "2026-10-11T14:58:58Z",
+  "antigravity_scope": {
+    "chat_context": {
+      "conversation_id": "d8a54b15-a46d-46db-9093-61a65d4892b0",
+      "session_goal": "/adaptive-workflow my limits are going to hit, just do 1. for now and do 3. using /fleet-orchestrator",
+      "recent_user_requests": [
+        "my limits are going to hit, create 3 handoffs so that I can run them in parallel chats instead and later I will handoff the conversation to you",
+        "my limits are going to hit, just do 1. for now and do 3. using /fleet-orchestrator",
+        "/adaptive-workflow my limits are going to hit, just do 1. for now and do 3. using /fleet-orchestrator"
+      ],
+      "active_artifacts": [
+        {
+          "file": "ecosystem_state_and_roadmap.md",
+          "title": "Ecosystem State Assessment & Roadmap",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\d8a54b15-a46d-46db-9093-61a65d4892b0\\ecosystem_state_and_roadmap.md"
+        }
+      ]
+    },
+    "antigravity_customizations": {
+      "rules": [
+        "Commit Integrity: Never use synthetic or placeholder SHAs; authentic 7-40 hex git commit hashes only.",
+        "Version Control: Worktree-local commits are authorized; root repository merges/pushes must run via sync.bat.",
+        "Calm Authority Writing: Follow Anthropic Calm Authority Standard (declarative, zero hype superlatives).",
+        "Verification Gate: Local test suite and linters must pass clean before completion.",
+        "Worktree Isolation: Confine all file modifications strictly to the assigned git worktree."
+      ],
+      "active_skills": [
+        "academic-notebook-architect",
+        "agent-teams-orchestration",
+        "ai-engineering-fellowship",
+        "avionic-telecom-analyzer",
+        "bitwarden",
+        "chat-archiver",
+        "chrome-extensions",
+        "colab-cloud-accelerator",
+        "cold-storage-archiver",
+        "compliance-report-harmonizer",
+        "control-systems-sim",
+        "cp-archive-harvester",
+        "customization-state-sync",
+        "cyber-forensics",
+        "design-taste-frontend",
+        "doc-archiver",
+        "dsa-complexity-optimizer",
+        "dsp-signal-engine",
+        "electronics-circuit-synth",
+        "embedded-firmware-scaffold",
+        "feature-dev",
+        "find-skills",
+        "fleet-orchestrator",
+        "fluid-wordmark-collapse",
+        "github-workflow",
+        "google-classroom",
+        "google-stitch-integration",
+        "graphify",
+        "graphify-code-search",
+        "graphify-optimizer",
+        "latex-thesis-architect",
+        "mcp-integration",
+        "modern-web-guidance",
+        "oose-architecture-modeler",
+        "pm-workflow-orchestrator",
+        "portfolio-project-manager",
+        "pr-review-toolkit",
+        "rf-link-budget-calc",
+        "security-guidance",
+        "shadcn-context",
+        "skill-development",
+        "slm-router-forge",
+        "split-to-prs",
+        "super-nlm",
+        "super-nlm-downloads",
+        "systems-concurrency-harness",
+        "win-vault",
+        "winpilot",
+        "writing-like-claude"
+      ],
+      "repo_rules_path": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\AGENTS.md"
+    }
+  }
+}

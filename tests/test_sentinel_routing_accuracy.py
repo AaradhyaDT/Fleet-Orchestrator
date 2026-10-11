@@ -40,3 +40,27 @@ def test_sentinel_routing_accuracy_handles_exception():
     with patch("tools.retrain_pipeline.evaluate_routing_accuracy", side_effect=RuntimeError("Parsing crash")):
         ok = audit_routing_accuracy(root, min_accuracy=85.0)
         assert ok is False
+
+
+def test_sentinel_routing_accuracy_fix_triggers_pipeline():
+    root = Path(__file__).resolve().parent.parent
+    mock_report = AccuracyReport(total=25, composite_accuracy=72.0)
+    mock_pipeline_res = MagicMock(post_accuracy=91.0)
+    
+    with patch("tools.retrain_pipeline.evaluate_routing_accuracy", return_value=mock_report), \
+         patch("tools.retrain_pipeline.run_pipeline", return_value=mock_pipeline_res) as mock_run:
+        ok = audit_routing_accuracy(root, min_accuracy=85.0, fix=True)
+        assert ok is True
+        mock_run.assert_called_once_with(min_accuracy=85.0, force_retrain=True, output_format="text")
+
+
+def test_sentinel_routing_accuracy_fix_handles_incomplete_pipeline():
+    root = Path(__file__).resolve().parent.parent
+    mock_report = AccuracyReport(total=25, composite_accuracy=72.0)
+    mock_pipeline_res = MagicMock(post_accuracy=None)
+    
+    with patch("tools.retrain_pipeline.evaluate_routing_accuracy", return_value=mock_report), \
+         patch("tools.retrain_pipeline.run_pipeline", return_value=mock_pipeline_res):
+        ok = audit_routing_accuracy(root, min_accuracy=85.0, fix=True)
+        assert ok is False
+

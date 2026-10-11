@@ -332,8 +332,12 @@ def audit_capability_gaps(root_dir: Path, fix: bool = False) -> bool:
         return False
 
 
-def audit_routing_accuracy(root_dir: Path, min_accuracy: float = 85.0) -> bool:
-    """Sentinel #7: Audit SLM routing accuracy against golden test scenarios."""
+def audit_routing_accuracy(root_dir: Path, min_accuracy: float = 85.0, fix: bool = False) -> bool:
+    """Sentinel #7: Audit SLM routing accuracy against golden test scenarios.
+    
+    If accuracy falls below threshold and fix=True, automatically triggers the
+    closed-loop retrain pipeline (Phase 5 Autonomous Self-Healing).
+    """
     print("[*] Auditing SLM routing accuracy against golden scenarios...")
     try:
         from tools.retrain_pipeline import evaluate_routing_accuracy
@@ -347,8 +351,18 @@ def audit_routing_accuracy(root_dir: Path, min_accuracy: float = 85.0) -> bool:
         accuracy = report.composite_accuracy
         if accuracy < min_accuracy:
             print(f"[!] Routing accuracy {accuracy:.1f}% below threshold {min_accuracy}%!", file=sys.stderr)
-            print("    Run: python tools/retrain_pipeline.py", file=sys.stderr)
-            return False
+            if fix:
+                print("[*] [Phase 5 Self-Healing] Auto-triggering closed-loop retrain pipeline...")
+                from tools.retrain_pipeline import run_pipeline
+                res = run_pipeline(min_accuracy=min_accuracy, force_retrain=True, output_format="text")
+                if res.post_accuracy is not None:
+                    print(f"[+] Retrain pipeline executed. Post-accuracy: {res.post_accuracy:.1f}%")
+                    return res.post_accuracy >= min_accuracy
+                # If Colab training requires manual execution, return False with instructions
+                return False
+            else:
+                print("    Run: python tools/retrain_pipeline.py", file=sys.stderr)
+                return False
 
         print(f"[+] Routing accuracy verified: {accuracy:.1f}% (threshold: {min_accuracy}%)")
         return True
@@ -371,7 +385,7 @@ async def main() -> int:
     fl_ok = audit_fleet_live_status(root, fix=args.fix, stale_hours=args.stale_hours)
     tpl_ok = audit_template_integrity(root)
     cg_ok = audit_capability_gaps(root, fix=args.fix)
-    ra_ok = audit_routing_accuracy(root, min_accuracy=args.min_accuracy)
+    ra_ok = audit_routing_accuracy(root, min_accuracy=args.min_accuracy, fix=args.fix)
 
     if db_ok and wt_ok and tb_ok and fl_ok and tpl_ok and cg_ok and ra_ok:
         print("\n[+] Fleet Sentinel: All systems healthy, consistent, and hygienic.")
