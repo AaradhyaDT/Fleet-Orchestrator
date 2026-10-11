@@ -1,0 +1,57 @@
+{
+  "updated_at": "2026-10-11T04:04:20.252136+00:00",
+  "deterministic_baseline": {
+    "total_samples": 25,
+    "fast_path_accuracy": 92.0,
+    "archetype_accuracy": 56.0,
+    "matrix_cell_accuracy": 32.0,
+    "primary_skill_accuracy": 44.0,
+    "backend_accuracy": 80.0,
+    "p50_latency_ms": 0.07,
+    "max_latency_ms": 0.67
+  },
+  "banker_concurrency_rules": [
+    {
+      "avail_mb": 1800,
+      "expected_workers": 0,
+      "computed": 0,
+      "match": true
+    },
+    {
+      "avail_mb": 2048,
+      "expected_workers": 0,
+      "computed": 0,
+      "match": true
+    },
+    {
+      "avail_mb": 2304,
+      "expected_workers": 1,
+      "computed": 1,
+      "match": true
+    },
+    {
+      "avail_mb": 3072,
+      "expected_workers": 4,
+      "computed": 4,
+      "match": true
+    },
+    {
+      "avail_mb": 4096,
+      "expected_workers": 8,
+      "computed": 8,
+      "match": true
+    },
+    {
+      "avail_mb": 8192,
+      "expected_workers": 24,
+      "computed": 24,
+      "match": true
+    },
+    {
+      "avail_mb": 12288,
+      "expected_workers": 27,
+      "computed": 27,
+      "match": true
+    }
+  ]
+}
