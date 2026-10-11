@@ -1,62 +1,61 @@
-# Ecosystem Handoff: L4 Self-Upgrading Infrastructure
+# Ecosystem Handoff: Fleet Master Brain v2 Training via Google Colab A100
 
-**Session ID**: `6b639143-a42f-4ea0-b0e8-b3295fdfae98`  
-**Previous Contexts**: `50fb63b9-63c2-4e1a-bc4f-55bdebff9627`, `06d6dc1b-b612-4498-bf84-58b33e9b8dff`, `d57058d1-f684-48b1-896e-728b235ccbd2`  
-**Timestamp**: 2026-10-11T13:10:00Z  
-**Branch**: `main`  
-**Repository State**: Clean, Level 4 (Self-Upgrading Infrastructure) fully operational across all phases.
-
----
-
-## 1. Executive Summary & Accomplishments
-
-In this session, we completed **Phase 3 (Closed-Loop SLM Retraining Pipeline)**, closing the full Level 4 loop of autonomous self-upgrading infrastructure:
-
-1. **Phase 1 (Gap Detector)**: Audits capabilities across 4 dimensions (untested adapters, routing fallthroughs, stale skills, broken AST) -> Sentinel #6.
-2. **Phase 4 (Adapter Scaffolder)**: Programmatically scaffolds `BaseWorkerAdapter` implementations and comprehensive pytest suites.
-3. **Phase 3 (Closed-Loop Retraining Engine)**:
-   - Built `tools/retrain_pipeline.py`: 8-step closed-loop retraining pipeline with a lazy two-phase gate:
-     - Phase A (free, <1s, 0 tokens): Fast staleness check (<21 days) + heuristic routing accuracy benchmark.
-     - Phase B (action): Harvest fresh trajectories (`harvest_agent_trajectories.py`), rebuild unified dataset (`build_unified_fleet_dataset.py`), sync to Google Drive (`sync_drive.py`), trigger Colab A100 training (`slm_time_router_forge.ipynb` / `fleet_master_brain_forge.ipynb`), export INT4 GGUF, and post-verify accuracy.
-   - Built **Sentinel #7 (`audit_routing_accuracy`)** in `tools/fleet_watchdog.py`: Evaluates routing accuracy against `tests/fixtures/adaptive_golden_scenarios.yaml`. Threshold set to 85.0%. Currently certifying at **90.4% accuracy**.
-   - Added Group E golden scenarios (`E01`, `E02`) and Tier 0 fast-path patterns for retrain and harvest.
-   - Added 24 new unit tests across `tests/test_retrain_pipeline.py` and `tests/test_sentinel_routing_accuracy.py`.
-   - Test suite elevated from **273 → 297 passing tests (100% pass rate in 79s)**.
-   - Fleet Sentinels elevated from **6 → 7/7 green sentinels**.
+**Session ID**: `d8a54b15-a46d-46db-9093-61a65d4892b0`  
+**Previous Contexts**: `6b639143-a42f-4ea0-b0e8-b3295fdfae98`, `50fb63b9-63c2-4e1a-bc4f-55bdebff9627`, `06d6dc1b-b612-4498-bf84-58b33e9b8dff`  
+**Timestamp**: 2026-10-11T20:45:00+05:45  
+**Branch**: `main` (HEAD: `a9351a2`)  
+**Repository State**: Clean, all 7 sentinels green, Phase 5 auto-retrain self-healing wired.
 
 ---
 
-## 2. Verified Invariants & Ground Truth
+## 1. Executive Summary & Current Status
 
-- **Test Suite**: 297 passed, 0 failed in 79s (`pytest tests/`).
-- **Fleet Sentinels**: 7/7 passing (`python tools/fleet_watchdog.py --fix`):
-  1. SQLite WAL DB schema & migrations
-  2. Git worktree hygiene & isolation
-  3. Ephemeral task branches pruning
-  4. Live fleet status & worker session recovery
-  5. Declarative SKU template DAG validation
-  6. Capability gap detection (untested adapters, dead AST, stale skills)
-  7. SLM routing accuracy monitoring (90.4% verified >= 85.0%)
-- **Dry-Run Certification**: `python tools/retrain_pipeline.py --dry-run` passes cleanly in 5.7ms.
-- **Quota Model**: 21-day staleness window aligned with weekly Antigravity quotas. Phase A check burns $0.00 / 0 AI tokens.
+In this session, we completed:
+1. **Phase 5 Self-Healing**: Wired autonomous retrain pipeline triggers directly into Sentinel #7 (`audit_routing_accuracy(..., fix=True)`) in `tools/fleet_watchdog.py`. Certified with 6/6 unit tests passing. Synced to `main` at `a9351a2`.
+2. **Portfolio Onboarding Enqueued**: Submitted `task_2026-10-11_99e421` to `orchestrator-state/tasks/` via `copilot_fleet.py submit` for background worker execution.
 
 ---
 
-## 3. Operational CLI Commands
+## 2. Objective for Next Session: Goal #2 (Fleet Master Brain v2 Training Run)
 
-```powershell
-# Run all 7 Fleet Sentinels
-python tools/fleet_watchdog.py --fix
+Execute a refreshed fine-tuning run for the **Fleet Master Brain (3B / 7B)** models using Google Colab Pro A100 SXM4 GPU.
 
-# Dry-run closed-loop retraining pipeline
-python tools/retrain_pipeline.py --dry-run
+### Prerequisites & Invariants
+- **Colab Pro Compute**: Confirmed available (~164 compute units active).
+- **Notebook**: `notebooks/fleet_master_brain_forge.ipynb` (Colab URL: `https://colab.research.google.com/drive/1VdTGqTDY32NM_yDchErn01c5fnvFA_uv`).
+- **Drive Manifest**: Tracked in `drive-manifest.json` under folder `1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF`.
+- **Target Quantization**: INT4 GGUF (`fleet_master_brain_3b_q4km.gguf`, `fleet_master_brain_7b_q4km.gguf`).
+- **Safety Invariant**: Training must occur on Colab GPU, never locally (`INV-NO-LOCAL-IPYNB`).
 
-# Force full retraining pipeline (re-harvest, rebuild, sync to Drive, trigger Colab)
-python tools/retrain_pipeline.py --force-retrain
+### Execution Steps for Next Chat
+1. **Harvest & Expand Dataset**:
+   ```powershell
+   python tools/harvest_agent_trajectories.py
+   python tools/build_unified_fleet_dataset.py
+   python scripts/sync_drive.py --file dataset/unified_fleet_train.jsonl
+   python scripts/sync_drive.py --file dataset/unified_fleet_eval.jsonl
+   ```
+2. **Launch Colab Fine-Tuning**:
+   - Run pipeline with `--force-retrain --retrain-brain`:
+     ```powershell
+     python tools/retrain_pipeline.py --force-retrain --retrain-brain
+     ```
+   - Follow emitted instructions or trigger Colab A100 GPU session.
+3. **Artifact Retrieval & LM Studio Deployment**:
+   - Once training saves weights to Google Drive, pull GGUF:
+     ```powershell
+     python -m gdown --continue "https://drive.google.com/uc?id=<file_id>" -O "models/fleet_master_brain_3b_q4km.gguf"
+     ```
+   - Verify local LM Studio / llama.cpp runtime connectivity on port 1234.
 
-# Retrain both intent router and 3B/7B master brain models
-python tools/retrain_pipeline.py --force-retrain --retrain-brain
+---
 
-# Full regression test suite
-pytest tests/
+## 3. Bootstrap Prompt for Next Chat
+
+```text
+Ecosystem handoff from conversation d8a54b15-a46d-46db-9093-61a65d4892b0.
+We are on Fleet-Orchestrator 'main' (HEAD a9351a2) with all 7 Fleet Sentinels green.
+Phase 5 (Watchdog Auto-Healing Retrain) is landed.
+Proceed with Goal 2: Fleet Master Brain v2 Training Run via Google Colab Pro A100.
+/adaptive-workflow /plan
 ```
