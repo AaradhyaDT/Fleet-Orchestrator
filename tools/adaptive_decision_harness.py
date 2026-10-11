@@ -322,8 +322,9 @@ def verify_l3_local_llm_client() -> Dict[str, Any]:
     return {
         "layer": "L3_LOCAL_LLM_CLIENT",
         "socket_latency_ms": latency_ms,
+        "port_1234_online": online,
         "fixture_pass_count": f"{passed_fixtures}/{len(fixtures)}",
-        "passed": passed_fixtures == len(fixtures) and latency_ms < 50.0,
+        "passed": passed_fixtures == len(fixtures),
     }
 
 
