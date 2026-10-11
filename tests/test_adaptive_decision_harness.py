@@ -53,3 +53,14 @@ def test_l5_ram_bands_validation():
     res = verify_l5_ram_and_banker_gates()
     assert res["passed"] is True
     assert len(res["simulation_bands"]) == 7
+
+
+def test_retrain_and_harvest_fast_paths():
+    fast_retrain = AdaptiveDecisionEngine.detect_fast_path("run retrain pipeline and evaluate routing accuracy")
+    assert fast_retrain is not None
+    assert "retrain_pipeline.py" in fast_retrain["command"]
+
+    fast_harvest = AdaptiveDecisionEngine.detect_fast_path("harvest agent trajectories from transcripts")
+    assert fast_harvest is not None
+    assert "harvest_agent_trajectories.py" in fast_harvest["command"]
+

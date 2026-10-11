@@ -300,3 +300,23 @@ scenarios:
       policy: "STRICT_INTERLOCK_BLOCKED"
       requires_interlock: true
       is_fast_path: false
+
+  # ==========================================
+  # Group E: Retraining Pipeline Triggers
+  # ==========================================
+  - id: "E01"
+    prompt: "run retrain pipeline and evaluate routing accuracy"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "python tools/retrain_pipeline.py"
+      execution_tier: "Tier 0"
+
+  - id: "E02"
+    prompt: "harvest agent trajectories from transcripts"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "python tools/harvest_agent_trajectories.py"
+      execution_tier: "Tier 0"
+

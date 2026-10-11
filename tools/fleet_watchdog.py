@@ -332,10 +332,36 @@ def audit_capability_gaps(root_dir: Path, fix: bool = False) -> bool:
         return False
 
 
+def audit_routing_accuracy(root_dir: Path, min_accuracy: float = 85.0) -> bool:
+    """Sentinel #7: Audit SLM routing accuracy against golden test scenarios."""
+    print("[*] Auditing SLM routing accuracy against golden scenarios...")
+    try:
+        from tools.retrain_pipeline import evaluate_routing_accuracy
+
+        fixture_path = root_dir / "tests" / "fixtures" / "adaptive_golden_scenarios.yaml"
+        if not fixture_path.exists():
+            print("[!] Golden scenario fixture missing", file=sys.stderr)
+            return False
+
+        report = evaluate_routing_accuracy(fixture_path, decider="deterministic")
+        accuracy = report.composite_accuracy
+        if accuracy < min_accuracy:
+            print(f"[!] Routing accuracy {accuracy:.1f}% below threshold {min_accuracy}%!", file=sys.stderr)
+            print("    Run: python tools/retrain_pipeline.py", file=sys.stderr)
+            return False
+
+        print(f"[+] Routing accuracy verified: {accuracy:.1f}% (threshold: {min_accuracy}%)")
+        return True
+    except Exception as e:
+        print(f"[!] Routing accuracy audit failure: {e}", file=sys.stderr)
+        return False
+
+
 async def main() -> int:
     parser = argparse.ArgumentParser(description="Fleet Watchdog: Self-Healing Sentinel")
     parser.add_argument("--fix", "--clean", action="store_true", dest="fix", help="Automatically perform self-healing and cleanup")
     parser.add_argument("--stale-hours", type=float, default=2.0, help="Heartbeat stale threshold in hours (default: 2.0)")
+    parser.add_argument("--min-accuracy", type=float, default=85.0, help="Minimum routing accuracy threshold (default: 85.0%%)")
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parent.parent
@@ -345,8 +371,9 @@ async def main() -> int:
     fl_ok = audit_fleet_live_status(root, fix=args.fix, stale_hours=args.stale_hours)
     tpl_ok = audit_template_integrity(root)
     cg_ok = audit_capability_gaps(root, fix=args.fix)
+    ra_ok = audit_routing_accuracy(root, min_accuracy=args.min_accuracy)
 
-    if db_ok and wt_ok and tb_ok and fl_ok and tpl_ok and cg_ok:
+    if db_ok and wt_ok and tb_ok and fl_ok and tpl_ok and cg_ok and ra_ok:
         print("\n[+] Fleet Sentinel: All systems healthy, consistent, and hygienic.")
         return 0
     else:

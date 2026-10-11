@@ -64,7 +64,7 @@ class AdaptiveDecisionEngine:
     FAST_PATH_PATTERNS = [
         (r"\b(audit\s*thesis|check\s*thesis|audit\s*beamer)\b", r"python scripts/audit_latex_thesis.py .", "thesis_audit"),
         (r"\b(compile\s*thesis|compile\s*beamer|build\s*thesis)\b", r"python scripts/compile_thesis.py .", "thesis_compile"),
-        (r"\b(audit|reconcil|verify)\b", r".\audit.bat", "audit"),
+        (r"\b(audit\.bat|\.\\audit|run\s*audit|audit\s*ecosystem|reconcil\w*\.py|reconcil\w*\s*ecosystem|reconcil\w*\s*counts?|verify\s*ecosystem)\b|^\s*(audit|reconcile)\s*$", r".\audit.bat", "audit"),
         (r"\b(sync|pull|push)\b", r".\sync.bat", "sync"),
         (r"\bpytest\b", "pytest tests/", "pytest"),
         (r"\b(run\s*(\w+\s*)?tests?|unittest|test\s*suite)\b|^\s*test\b", "pytest tests/", "test"),
@@ -74,6 +74,8 @@ class AdaptiveDecisionEngine:
         (r"\b(build\s*(\w+\s*)?report|compile\s*report|report\.pdf|build_report\.bat)\b", r".\build_report.bat", "report"),
         (r"\b(hygiene|prune\s*tasks?|clean\s*worktrees?|fleet\s*watchdog)\b", r".\sync.bat -Hygiene", "hygiene"),
         (r"\b(gap\s*detect\w*|capability\s*gap\w*|capability\s*audit|self\s*upgrade\s*scan)\b", r"python tools/capability_gap_detector.py", "gap_detect"),
+        (r"\b(retrain\s*pipeline|retrain\s*slm|closed\s*loop\s*retrain|evaluate\s*routing\s*accuracy)\b", r"python tools/retrain_pipeline.py", "retrain"),
+        (r"\b(harvest\s*trajector\w*|harvest\s*agent\s*trajector\w*)\b", r"python tools/harvest_agent_trajectories.py", "harvest_trajectories"),
     ]
 
     MATRIX_POLICY = {
@@ -100,7 +102,11 @@ class AdaptiveDecisionEngine:
     @classmethod
     def detect_fast_path(cls, prompt: str) -> Optional[Dict[str, Any]]:
         desc_lower = prompt.lower().strip()
-        generative = ["write", "create", "implement", "refactor", "scaffold", "build feature", "fix bug", "add", "modify"]
+        generative = [
+            "write", "create", "implement", "refactor", "scaffold", "build feature",
+            "fix bug", "add", "modify", "format", "design", "draft", "onboard",
+            "launch", "fine-tune"
+        ]
         if any(g in desc_lower for g in generative):
             if not any(k in desc_lower for k in ["run audit", "run test", "check status", "audit.bat", "sync.bat"]):
                 return None

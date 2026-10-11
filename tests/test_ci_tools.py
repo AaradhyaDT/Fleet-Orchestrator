@@ -12,6 +12,7 @@ from tools.fleet_watchdog import (
     audit_task_branches,
     audit_fleet_live_status,
     audit_capability_gaps,
+    audit_routing_accuracy,
 )
 
 
@@ -76,6 +77,9 @@ async def test_fleet_watchdog_components():
 
     cg_ok = audit_capability_gaps(root, fix=False)
     assert cg_ok is True
+
+    ra_ok = audit_routing_accuracy(root)
+    assert ra_ok is True
 
 
 def test_fleet_watchdog_orphaned_worktree_cleanup(tmp_path: Path):
