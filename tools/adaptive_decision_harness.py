@@ -73,6 +73,7 @@ class AdaptiveDecisionEngine:
         (r"\b(run\s*(\w+\s*)?sim|sim\.bat|simulation)\b", r".\sim.bat", "sim"),
         (r"\b(build\s*(\w+\s*)?report|compile\s*report|report\.pdf|build_report\.bat)\b", r".\build_report.bat", "report"),
         (r"\b(hygiene|prune\s*tasks?|clean\s*worktrees?|fleet\s*watchdog)\b", r".\sync.bat -Hygiene", "hygiene"),
+        (r"\b(gap\s*detect\w*|capability\s*gap\w*|capability\s*audit|self\s*upgrade\s*scan)\b", r"python tools/capability_gap_detector.py", "gap_detect"),
     ]
 
     MATRIX_POLICY = {

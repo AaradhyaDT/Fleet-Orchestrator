@@ -187,6 +187,14 @@ scenarios:
       command: "python scripts/compile_thesis.py ."
       execution_tier: "Tier 0"
 
+  - id: "B07"
+    prompt: "run capability gap detection and self-upgrade scan"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "python tools/capability_gap_detector.py"
+      execution_tier: "Tier 0"
+
   # ==========================================
   # Group C: Substring & Misrouting Traps
   # (Testing F2: Disambiguating bare keywords)

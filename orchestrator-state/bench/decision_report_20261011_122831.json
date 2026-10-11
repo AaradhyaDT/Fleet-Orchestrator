@@ -1,0 +1,168 @@
+{
+  "timestamp": "2026-10-11T12:24:23.662075+00:00",
+  "host": {
+    "platform": "win32",
+    "cpu_count": 22,
+    "ram_total_mb": 16085,
+    "ram_avail_mb": 1866
+  },
+  "layers": {
+    "L0": {
+      "layer": "L0_STATIC_HYGIENE",
+      "passed": true,
+      "returncode": 0,
+      "output_summary": "269 passed, 1 warning in 74.52s (0:01:14)"
+    },
+    "L1": {
+      "layer": "L1_MODEL_ARTIFACTS",
+      "passed": true,
+      "details": {
+        "qwen_intent_router_q4_k_m.gguf": {
+          "exists": true,
+          "size_mb": 379.38,
+          "size_match": true
+        },
+        "fleet_master_brain_3b_q4km.gguf": {
+          "exists": true,
+          "size_mb": 1840.5,
+          "size_match": true
+        },
+        "fleet_master_brain_7b_q4km.gguf": {
+          "exists": true,
+          "size_mb": 4466.13,
+          "size_match": true
+        }
+      }
+    },
+    "L2": {
+      "layer": "L2_LM_STUDIO_RUNTIME",
+      "port_1234_online": true,
+      "passed": true,
+      "ps_summary": "IDENTIFIER            MODEL                 STATUS    SIZE         CONTEXT    PARALLEL    DEVICE    TTL     \nqwen-intent-router    qwen-intent-router    IDLE      397.81 MB    8192       4           Local     60m / 1h"
+    },
+    "L3": {
+      "layer": "L3_LOCAL_LLM_CLIENT",
+      "socket_latency_ms": 0.54,
+      "port_1234_online": true,
+      "fixture_pass_count": "6/6",
+      "passed": true
+    },
+    "L4": {
+      "layer": "L4_GOLDEN_SCENARIOS",
+      "passed": true,
+      "deciders": {
+        "deterministic": {
+          "total_samples": 26,
+          "fast_path_accuracy": 88.5,
+          "archetype_accuracy": 53.8,
+          "matrix_cell_accuracy": 30.8,
+          "primary_skill_accuracy": 42.3,
+          "backend_accuracy": 73.1,
+          "p50_latency_ms": 0.17,
+          "max_latency_ms": 1.72
+        },
+        "qwen-intent-router": {
+          "total_samples": 26,
+          "fast_path_accuracy": 88.5,
+          "archetype_accuracy": 23.1,
+          "matrix_cell_accuracy": 30.8,
+          "primary_skill_accuracy": 11.5,
+          "backend_accuracy": 69.2,
+          "p50_latency_ms": 2304.75,
+          "max_latency_ms": 3993.43
+        },
+        "fleet-master-3b": {
+          "total_samples": 26,
+          "fast_path_accuracy": 88.5,
+          "archetype_accuracy": 53.8,
+          "matrix_cell_accuracy": 30.8,
+          "primary_skill_accuracy": 42.3,
+          "backend_accuracy": 76.9,
+          "p50_latency_ms": 6239.06,
+          "max_latency_ms": 7190.14
+        }
+      }
+    },
+    "L5": {
+      "layer": "L5_RAM_BANKER_GATES",
+      "passed": true,
+      "live_host_avail_mb": 623,
+      "live_concurrency_capacity": 0,
+      "simulation_bands": [
+        {
+          "avail_mb": 1800,
+          "expected_workers": 0,
+          "computed": 0,
+          "match": true
+        },
+        {
+          "avail_mb": 2048,
+          "expected_workers": 0,
+          "computed": 0,
+          "match": true
+        },
+        {
+          "avail_mb": 2304,
+          "expected_workers": 1,
+          "computed": 1,
+          "match": true
+        },
+        {
+          "avail_mb": 3072,
+          "expected_workers": 4,
+          "computed": 4,
+          "match": true
+        },
+        {
+          "avail_mb": 4096,
+          "expected_workers": 8,
+          "computed": 8,
+          "match": true
+        },
+        {
+          "avail_mb": 8192,
+          "expected_workers": 24,
+          "computed": 24,
+          "match": true
+        },
+        {
+          "avail_mb": 12288,
+          "expected_workers": 27,
+          "computed": 27,
+          "match": true
+        }
+      ]
+    },
+    "L6": {
+      "layer": "L6_DISPATCH_INTEGRITY",
+      "passed": true,
+      "time_allocation": {
+        "tier": "T2_MEDIUM",
+        "estimated_duration_s": 120,
+        "timeout_ceiling_s": 264,
+        "cpm_weight": 4.0,
+        "execution_route": "SUBAGENT"
+      },
+      "policy": "DIRECT_FAST"
+    },
+    "L7": {
+      "layer": "L7_OFFLINE_FALLBACK",
+      "passed": true,
+      "fallback_latency_s": 0.0,
+      "source": "heuristic_fallback"
+    },
+    "L8": {
+      "layer": "L8_COPILOT_READINESS",
+      "passed": true,
+      "fleet_status_detected": true,
+      "canary_execution": "SKIPPED"
+    },
+    "L9": {
+      "layer": "L9_GEMINI_ROTATOR",
+      "passed": true,
+      "total_keys": 4,
+      "healthy_keys": 4,
+      "live_ping": "SKIPPED"
+    }
+  }
+}
