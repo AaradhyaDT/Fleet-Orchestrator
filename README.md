@@ -178,6 +178,16 @@ Fleet-Orchestrator maintains a continuous, bidirectional documentation pipeline 
 - **Google Drive Folder**: [`Fleet-Orchestrator`](https://drive.google.com/drive/folders/1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF) (`1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF`)
   - Subfolder of parent **Super-NLM** (`1wn330GxoGoMf956xClHxULnsJQWxohxx`) at `My Drive > Share to Aaradhya > Super-NLM`.
   - Automatically converts markdown files (`README.md`, `HANDOFF_FLEET_ORCHESTRATOR.md`, `team-context.md`, `team-memory.md`) into native Google Docs while preserving permanent file IDs.
+
+- **Cloud-Archived GGUF Model Weights & Resumable Downloads**:
+  The fine-tuned model weights reside in the Google Drive ecosystem folder and can be pulled locally using `gdown`:
+
+  | Model | Params | Quant | Size | Drive ID | Retrieval Command |
+  | :--- | :--- | :--- | :--- | :--- | :--- |
+  | **`qwen_intent_router`** | 494M | `Q4_K_M` | 398 MB | [`1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK`](https://drive.google.com/file/d/1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK/view) | `python -m gdown --continue "https://drive.google.com/uc?id=1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK" -O "models/qwen_intent_router_q4_k_m.gguf"` |
+  | **`fleet_master_brain_3b`** | 3.1B | `Q4_K_M` | 1.93 GB | [`1kZ7hIAeVM6T0AVDwU1bruWRtIaNMLTzR`](https://drive.google.com/file/d/1kZ7hIAeVM6T0AVDwU1bruWRtIaNMLTzR/view) | `python -m gdown --continue "https://drive.google.com/uc?id=1kZ7hIAeVM6T0AVDwU1bruWRtIaNMLTzR" -O "models/fleet_master_brain_3b_q4km.gguf"` |
+  | **`fleet_master_brain_7b`** | 7.6B | `Q4_K_M` | 4.68 GB | [`1XnqLXF6F7-ibDrJdcZzw-XGRneVQ02Rd`](https://drive.google.com/file/d/1XnqLXF6F7-ibDrJdcZzw-XGRneVQ02Rd/view) | `python -m gdown --continue "https://drive.google.com/uc?id=1XnqLXF6F7-ibDrJdcZzw-XGRneVQ02Rd" -O "models/fleet_master_brain_7b_q4km.gguf"` |
+
 - **Dedicated Google NotebookLM**: [`Fleet-Orchestrator`](https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6) (`6a37d992-6ceb-4d72-a909-e10e9cca32b6`)
   - Grounded directly on the Google Drive live sources.
   - Enables instant semantic search, multi-turn technical Q&A, and cross-repo synthesis across all Fleet-Orchestrator architecture and operations.

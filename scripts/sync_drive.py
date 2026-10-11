@@ -431,6 +431,12 @@ def sync_manifest(
         matched_filter = True
         local_path = repo_root / rel_path
         if not local_path.exists():
+            # If the file is a git-ignored large model weight or dataset, it lives in Google Drive cloud storage
+            # and is pulled on demand via gdown/Colab rather than existing in clean CI checkouts.
+            if rel_path.startswith("models/") or rel_path.startswith("dataset/unified_fleet_") or rel_path.endswith((".gguf", ".bin", ".safetensors")):
+                print(f"[CLOUD-ONLY] {rel_path} (ID: {meta.get('drive_file_id', 'N/A')}) — preserved in Drive, skipped in CI.")
+                success_count += 1
+                continue
             print(f"[ERROR] Local tracked file missing: {rel_path}")
             failure_count += 1
             continue
