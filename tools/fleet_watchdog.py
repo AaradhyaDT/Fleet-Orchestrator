@@ -309,6 +309,29 @@ def audit_template_integrity(root_dir: Path) -> bool:
     return True
 
 
+def audit_capability_gaps(root_dir: Path, fix: bool = False) -> bool:
+    """Sentinel #6: Scan for untested adapters, routing misses, stale skills, and dead adapters."""
+    print("[*] Auditing capability gaps & adapter coverage...")
+    try:
+        from tools.capability_gap_detector import generate_gap_report
+
+        report = generate_gap_report(root_dir, write_output=True)
+        gaps_count = report.get("total_gaps", 0)
+        crit = report.get("critical", 0)
+        high = report.get("high", 0)
+        if crit > 0:
+            print(f"[!] Capability audit found {crit} CRITICAL gap(s)!", file=sys.stderr)
+            return False
+        if gaps_count > 0:
+            print(f"    - Found {gaps_count} capability gap(s) (high: {high}). Report written to orchestrator-state/gap_report.json")
+        else:
+            print("[+] Capability gap audit complete: 0 gaps detected. All adapters and skills verified.")
+        return True
+    except Exception as e:
+        print(f"[!] Capability gap audit failure: {e}", file=sys.stderr)
+        return False
+
+
 async def main() -> int:
     parser = argparse.ArgumentParser(description="Fleet Watchdog: Self-Healing Sentinel")
     parser.add_argument("--fix", "--clean", action="store_true", dest="fix", help="Automatically perform self-healing and cleanup")
@@ -321,8 +344,9 @@ async def main() -> int:
     tb_ok = audit_task_branches(root, fix=args.fix)
     fl_ok = audit_fleet_live_status(root, fix=args.fix, stale_hours=args.stale_hours)
     tpl_ok = audit_template_integrity(root)
+    cg_ok = audit_capability_gaps(root, fix=args.fix)
 
-    if db_ok and wt_ok and tb_ok and fl_ok and tpl_ok:
+    if db_ok and wt_ok and tb_ok and fl_ok and tpl_ok and cg_ok:
         print("\n[+] Fleet Sentinel: All systems healthy, consistent, and hygienic.")
         return 0
     else:
