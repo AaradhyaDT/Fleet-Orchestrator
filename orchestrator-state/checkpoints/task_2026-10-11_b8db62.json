@@ -1,0 +1,11 @@
+{
+  "task_id": "task_2026-10-11_b8db62",
+  "kind": "code",
+  "summary": "Simulated implementation of task_2026-10-11_b8db62 (Implement unit tests for client/adapters/claude_desktop_prox...)",
+  "branch_name": "task/task_2026-10-11_b8db62",
+  "commit_sha": "dryrun0001",
+  "actual_duration_s": 0.6,
+  "result_text": null,
+  "submitted_by": "copilot-w2",
+  "submitted_at": "2026-10-11T11:04:30Z"
+}

@@ -1,0 +1,97 @@
+{
+  "id": "task_2026-10-11_b8db62",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Implement unit tests for client/adapters/claude_desktop_proxy.py covering session initialization and proxy routing",
+  "status": "done",
+  "owner_account": "copilot-w2",
+  "branch_name": "task/task_2026-10-11_b8db62",
+  "blocked_reason": null,
+  "created_by": "fleet_cli",
+  "created_at": "2026-10-11T11:04:29Z",
+  "updated_at": "2026-10-11T11:04:30Z",
+  "antigravity_scope": {
+    "chat_context": {
+      "conversation_id": "d57058d1-f684-48b1-896e-728b235ccbd2",
+      "session_goal": "/adaptive-workflow proceed with option 1",
+      "recent_user_requests": [
+        "like /adaptive-workflow run pytest?",
+        "/adaptive-workflow what next",
+        "/adaptive-workflow proceed with option 1"
+      ],
+      "active_artifacts": [
+        {
+          "file": "component_test_plan.md",
+          "title": "Adaptive-Workflow Decision Harness: Component Test + Zero-AI Baseline",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\d57058d1-f684-48b1-896e-728b235ccbd2\\component_test_plan.md"
+        },
+        {
+          "file": "walkthrough.md",
+          "title": "Adaptive-Workflow Decision Harness & Reality Gate Walkthrough",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\d57058d1-f684-48b1-896e-728b235ccbd2\\walkthrough.md"
+        }
+      ]
+    },
+    "antigravity_customizations": {
+      "rules": [
+        "Commit Integrity: Never use synthetic or placeholder SHAs; authentic 7-40 hex git commit hashes only.",
+        "Version Control: Worktree-local commits are authorized; root repository merges/pushes must run via sync.bat.",
+        "Calm Authority Writing: Follow Anthropic Calm Authority Standard (declarative, zero hype superlatives).",
+        "Verification Gate: Local test suite and linters must pass clean before completion.",
+        "Worktree Isolation: Confine all file modifications strictly to the assigned git worktree."
+      ],
+      "active_skills": [
+        "academic-notebook-architect",
+        "agent-teams-orchestration",
+        "ai-engineering-fellowship",
+        "avionic-telecom-analyzer",
+        "bitwarden",
+        "chat-archiver",
+        "chrome-extensions",
+        "colab-cloud-accelerator",
+        "cold-storage-archiver",
+        "compliance-report-harmonizer",
+        "control-systems-sim",
+        "cp-archive-harvester",
+        "customization-state-sync",
+        "cyber-forensics",
+        "design-taste-frontend",
+        "doc-archiver",
+        "dsa-complexity-optimizer",
+        "dsp-signal-engine",
+        "electronics-circuit-synth",
+        "embedded-firmware-scaffold",
+        "feature-dev",
+        "find-skills",
+        "fleet-orchestrator",
+        "fluid-wordmark-collapse",
+        "github-workflow",
+        "google-classroom",
+        "google-stitch-integration",
+        "graphify",
+        "graphify-code-search",
+        "graphify-optimizer",
+        "latex-thesis-architect",
+        "mcp-integration",
+        "modern-web-guidance",
+        "oose-architecture-modeler",
+        "pm-workflow-orchestrator",
+        "portfolio-project-manager",
+        "pr-review-toolkit",
+        "rf-link-budget-calc",
+        "security-guidance",
+        "shadcn-context",
+        "skill-development",
+        "slm-router-forge",
+        "split-to-prs",
+        "super-nlm",
+        "super-nlm-downloads",
+        "systems-concurrency-harness",
+        "win-vault",
+        "winpilot",
+        "writing-like-claude"
+      ],
+      "repo_rules_path": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\AGENTS.md"
+    }
+  }
+}
