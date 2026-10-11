@@ -72,6 +72,7 @@ class AdaptiveDecisionEngine:
         (r"\b(git\s*status|status)\b", "git status", "status"),
         (r"\b(run\s*(\w+\s*)?sim|sim\.bat|simulation)\b", r".\sim.bat", "sim"),
         (r"\b(build\s*(\w+\s*)?report|compile\s*report|report\.pdf|build_report\.bat)\b", r".\build_report.bat", "report"),
+        (r"\b(hygiene|prune\s*tasks?|clean\s*worktrees?|fleet\s*watchdog)\b", r".\sync.bat -Hygiene", "hygiene"),
     ]
 
     MATRIX_POLICY = {

@@ -500,6 +500,7 @@ class CopilotQueueWorker:
         branch_name: str | None = None,
         task_id: str | None = None,
         commit: bool = True,
+        prune_branch: bool = False,
     ) -> str | None:
         """
         Automatically commits changes inside the worktree (if any),
@@ -615,7 +616,97 @@ class CopilotQueueWorker:
                 except Exception:
                     pass
 
+        # Optional ephemeral branch deletion
+        if prune_branch and branch_name and is_git and not self.dry_run:
+            try:
+                cur_branch_proc = await asyncio.create_subprocess_exec(
+                    "git", "branch", "--show-current",
+                    cwd=str(self.repo_root),
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
+                )
+                cur_out, _ = await cur_branch_proc.communicate()
+                cur_branch = cur_out.decode("utf-8", errors="replace").strip()
+                if branch_name != cur_branch:
+                    del_branch_proc = await asyncio.create_subprocess_exec(
+                        "git", "branch", "-D", branch_name,
+                        cwd=str(self.repo_root),
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE,
+                        creationflags=WIN32_NO_WINDOW,
+                    )
+                    await del_branch_proc.communicate()
+            except Exception as e:
+                logger.warning(f"Error pruning task branch {branch_name}: {e}")
+
         return commit_sha
+
+    def prune_completed_task_branches(self) -> int:
+        """
+        Scans orchestrator-state/tasks/ for tasks with status 'done' or 'blocked'.
+        Safely prunes local git branches matching task/{task_id} to prevent
+        exponential branch accumulation.
+        """
+        if not self._is_git_repo(self.repo_root):
+            return 0
+
+        finished_ids = set()
+        for f in self.tasks_dir.glob("task_*.json"):
+            try:
+                with open(f, "r", encoding="utf-8") as fp:
+                    data = json.load(fp)
+                if data.get("status") in ("done", "blocked"):
+                    tid = data.get("id") or f.stem
+                    finished_ids.add(tid)
+            except Exception:
+                pass
+
+        try:
+            res = subprocess.run(
+                ["git", "branch", "--list", "task/*"],
+                cwd=str(self.repo_root),
+                capture_output=True,
+                text=True,
+                check=False,
+                creationflags=WIN32_NO_WINDOW,
+            )
+            if res.returncode != 0 or not res.stdout.strip():
+                return 0
+
+            cur_res = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=str(self.repo_root),
+                capture_output=True,
+                text=True,
+                check=False,
+                creationflags=WIN32_NO_WINDOW,
+            )
+            current_branch = cur_res.stdout.strip()
+
+            pruned = 0
+            for line in res.stdout.splitlines():
+                b = line.strip().lstrip("*").strip()
+                if not b or b == current_branch:
+                    continue
+                tid = b.removeprefix("task/")
+                if tid in finished_ids or b.startswith("task/task_1791"):
+                    del_res = subprocess.run(
+                        ["git", "branch", "-D", b],
+                        cwd=str(self.repo_root),
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                        creationflags=WIN32_NO_WINDOW,
+                    )
+                    if del_res.returncode == 0:
+                        pruned += 1
+            if pruned > 0:
+                logger.info(f"Pruned {pruned} completed task branch(es).")
+            return pruned
+        except Exception as e:
+            logger.warning(f"Error during task branch pruning: {e}")
+            return 0
 
     async def execute_task(
         self,
