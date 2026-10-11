@@ -61,6 +61,9 @@ def format_cli_output(decision: Dict[str, Any]) -> str:
     lines.append("  HARDWARE & RESOURCE ENVELOPE:")
     lines.append(f"  Available RAM       : {decision.get('available_ram_mb')} MB")
     lines.append(f"  Safe Concurrency    : {decision.get('workers')} workers (Banker's Floor: 2048 MB)")
+    if decision.get("workers", 0) == 0:
+        lines.append("  [!] CAUTION: RAM at Banker's safety floor. Concurrency locked to 0.")
+        lines.append("      Run '.\\sync.bat -Hygiene' or close idle processes to reclaim RAM.")
 
     ta = decision.get("time_allocation", {})
     lines.append("-" * 65)

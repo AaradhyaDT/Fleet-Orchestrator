@@ -8,6 +8,7 @@ REM   .\sync.bat                     - Safe auto-commit with secret scanning & p
 REM   .\sync.bat -m "msg"            - Custom commit message
 REM   .\sync.bat -SkipCI / -NoCI     - Fast day-to-day sync (appends [skip ci])
 REM   .\sync.bat -PullOnly           - Rebase and pull from origin without committing
+REM   .\sync.bat -Hygiene / -Clean   - Run automated branch & worktree cleanup and exit
 REM ============================================================================
 
 where pwsh >nul 2>nul

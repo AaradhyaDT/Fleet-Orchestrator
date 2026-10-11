@@ -16,7 +16,10 @@ param (
     [switch]$PullOnly,
 
     [Alias("NoCI", "SkipActions")]
-    [switch]$SkipCI
+    [switch]$SkipCI,
+
+    [Alias("Prune", "Clean")]
+    [switch]$Hygiene
 )
 
 Set-StrictMode -Version Latest
@@ -269,6 +272,76 @@ function Sync-MemoryToTeamMemory {
     Write-Status -Message "Auto-appended $($newIds.Count) orchestrator memory entr$(if ($newIds.Count -eq 1) { 'y' } else { 'ies' }) to team-memory.md." -Color ([System.ConsoleColor]::Cyan)
 }
 
+function Prune-StaleTaskBranches {
+    param([string]$RepoPath)
+
+    $currentBranch = (git branch --show-current 2>$null)
+    if ($currentBranch) { $currentBranch = $currentBranch.Trim() }
+
+    # Query all local task/* branches
+    $taskBranches = git branch --list "task/*" 2>$null
+    if (-not $taskBranches) { return }
+
+    $prunedCount = 0
+    foreach ($line in $taskBranches) {
+        $branch = $line.Trim().TrimStart('*').Trim()
+        if (-not $branch -or $branch -eq $currentBranch) { continue }
+
+        git branch -D $branch 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            $prunedCount++
+        }
+    }
+
+    if ($prunedCount -gt 0) {
+        Write-Status -Message "Auto-hygiene: Pruned $prunedCount ephemeral task branch$(if ($prunedCount -eq 1) { '' } else { 'es' })." -Color ([System.ConsoleColor]::Cyan)
+    }
+}
+
+function Clean-OrphanWorktrees {
+    param([string]$RepoPath)
+
+    # 1. Prune git internal worktree tracking
+    git worktree prune 2>$null
+
+    # 2. Check filesystem .worktrees directory
+    $wtDir = Join-Path $RepoPath ".worktrees"
+    if (-not (Test-Path $wtDir)) { return }
+
+    # Get active registered worktrees from git
+    $activeWorktrees = @()
+    $wtList = git worktree list --porcelain 2>$null
+    if ($wtList) {
+        foreach ($line in $wtList) {
+            if ($line -match '^worktree\s+(.+)$') {
+                $resolved = Resolve-Path $Matches[1].Trim() -ErrorAction SilentlyContinue
+                if ($resolved) {
+                    $activeWorktrees += $resolved.Path
+                }
+            }
+        }
+    }
+
+    $cleanedCount = 0
+    $subDirs = Get-ChildItem -Path $wtDir -Directory -ErrorAction SilentlyContinue
+    if ($subDirs) {
+        foreach ($dir in $subDirs) {
+            $fullPath = $dir.FullName
+            if ($activeWorktrees -notcontains $fullPath) {
+                try {
+                    Remove-Item -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue
+                    $cleanedCount++
+                }
+                catch {}
+            }
+        }
+    }
+
+    if ($cleanedCount -gt 0) {
+        Write-Status -Message "Auto-hygiene: Cleaned $cleanedCount orphaned worktree director$(if ($cleanedCount -eq 1) { 'y' } else { 'ies' })." -Color ([System.ConsoleColor]::Cyan)
+    }
+}
+
 $RepoPath = $PSScriptRoot
 if (-not (Test-Path (Join-Path $RepoPath '.git'))) {
     Write-Error "Not a git repo: $RepoPath"
@@ -294,14 +367,28 @@ try {
     Write-Status -Message "Current branch: $currentBranch"
 
     if ($hasOrigin) {
-        Write-Status -Message "Pulling latest from origin/$currentBranch..."
-        git pull --rebase --autostash origin $currentBranch
+        $remoteRef = git ls-remote --heads origin $currentBranch 2>$null
+        if ($remoteRef) {
+            Write-Status -Message "Pulling latest from origin/$currentBranch..."
+            git pull --rebase --autostash origin $currentBranch
+        }
+        else {
+            Write-Notice -Message "Branch '$currentBranch' does not exist on origin yet; skipping pull."
+        }
     }
     else {
         Write-Notice -Message "No 'origin' remote configured; skipping pull and push to avoid a broken sync step."
     }
 
     Sync-MemoryToTeamMemory -RepoPath $RepoPath
+
+    Prune-StaleTaskBranches -RepoPath $RepoPath
+    Clean-OrphanWorktrees -RepoPath $RepoPath
+
+    if ($Hygiene) {
+        Write-Success -Message "Hygiene routine completed cleanly."
+        exit 0
+    }
 
     if ($PullOnly) {
         Write-Success -Message "Pull complete; no commit was created because -PullOnly was set."
@@ -346,11 +433,11 @@ try {
 
         if ($hasOrigin) {
             Write-Status -Message "Pushing to origin/$currentBranch..."
-            git push origin $currentBranch
+            git push -u origin $currentBranch
             if ($LASTEXITCODE -ne 0) {
                 Write-Notice -Message "Push rejected. Re-pulling and retrying push..."
                 git pull --rebase --autostash origin $currentBranch
-                git push origin $currentBranch
+                git push -u origin $currentBranch
             }
         }
         else {

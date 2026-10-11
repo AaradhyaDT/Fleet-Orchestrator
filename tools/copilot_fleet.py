@@ -543,6 +543,21 @@ async def cmd_batch(args: argparse.Namespace) -> None:
             print(f"[{status.upper()}] {tid} - {reason}")
     print("=" * 80 + "\n")
 
+    if not getattr(args, "keep_branches", False):
+        pruned = worker.prune_completed_task_branches()
+        if pruned > 0:
+            print(f"[*] Auto-hygiene: Pruned {pruned} completed task branch(es).\n")
+
+
+async def cmd_prune(args: argparse.Namespace) -> None:
+    """Safely prunes completed task branches and cleans up worktrees."""
+    from tools.copilot_queue_worker import CopilotQueueWorker, resolve_state_dir
+
+    state_dir = resolve_state_dir(getattr(args, "state_dir", None))
+    worker = CopilotQueueWorker(state_dir=state_dir)
+    pruned = worker.prune_completed_task_branches()
+    print(f"[*] Fleet Hygiene: Pruned {pruned} completed task branch(es).")
+
 
 async def cmd_canary(args: argparse.Namespace) -> None:
     """Executes concurrent non-interactive verification across all ready accounts."""
@@ -663,6 +678,11 @@ def main() -> None:
     batch_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
     batch_parser.add_argument("--conversation-id", type=str, default=None, help="Explicit Antigravity conversation ID")
     batch_parser.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context inheritance")
+    batch_parser.add_argument("--keep-branches", action="store_true", help="Preserve local task/* git branches after batch completion")
+
+    # Prune subparser
+    prune_parser = subparsers.add_parser("prune", help="Prune completed task/* branches and orphaned worktrees")
+    prune_parser.add_argument("--state-dir", type=str, default=None, help="Path to orchestrator-state directory")
 
     raw_args = list(sys.argv[1:])
     normalized = []
@@ -675,6 +695,8 @@ def main() -> None:
             normalized.append("reconcile")
         elif arg in ("-c", "--canary", "-canary"):
             normalized.append("canary")
+        elif arg in ("-p", "--prune", "-prune"):
+            normalized.append("prune")
         else:
             normalized.append(arg)
 
@@ -691,6 +713,8 @@ def main() -> None:
         cmd_submit(args)
     elif args.command == "batch":
         asyncio.run(cmd_batch(args))
+    elif args.command == "prune":
+        asyncio.run(cmd_prune(args))
 
 
 if __name__ == "__main__":

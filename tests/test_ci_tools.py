@@ -9,6 +9,8 @@ from tools.fleet_watchdog import (
     audit_database_schema,
     audit_worktree_hygiene,
     audit_template_integrity,
+    audit_task_branches,
+    audit_fleet_live_status,
 )
 
 
@@ -64,3 +66,61 @@ async def test_fleet_watchdog_components():
 
     tpl_ok = audit_template_integrity(root)
     assert tpl_ok is True
+
+    tb_ok = audit_task_branches(root, fix=False)
+    assert tb_ok is True
+
+    fl_ok = audit_fleet_live_status(root, fix=False)
+    assert fl_ok is True
+
+
+def test_fleet_watchdog_orphaned_worktree_cleanup(tmp_path: Path):
+    import subprocess
+    # Initialize dummy git repo
+    repo_dir = tmp_path / "repo"
+    repo_dir.mkdir()
+    subprocess.run(["git", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["git", "config", "user.name", "Test Runner"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=str(repo_dir), check=True)
+    (repo_dir / "README.md").write_text("# Test Repo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+
+    # Create dummy orphaned worktree folder
+    wt_dir = repo_dir / ".worktrees" / "task_1799999999_dummy"
+    wt_dir.mkdir(parents=True)
+    (wt_dir / "dirty.txt").write_text("abandoned", encoding="utf-8")
+
+    assert wt_dir.exists()
+    ok = audit_worktree_hygiene(repo_dir, fix=True)
+    assert ok is True
+    # The orphaned folder must be pruned
+    assert not wt_dir.exists()
+
+
+def test_fleet_watchdog_live_status_stale_recovery(tmp_path: Path):
+    import json
+    live_status_dir = tmp_path / "orchestrator-state" / "live-status"
+    live_status_dir.mkdir(parents=True)
+
+    status_file = live_status_dir / "copilot-w1.json"
+    status_file.write_text(
+        json.dumps({
+            "account": "copilot-w1",
+            "status": "busy",
+            "heartbeat_at": "2026-01-01T00:00:00Z",
+            "current_task_id": "task_stale_001",
+            "cooldown_until": "2026-01-01T01:00:00Z",
+            "note": "Old stale session",
+        }),
+        encoding="utf-8",
+    )
+
+    ok = audit_fleet_live_status(tmp_path, fix=True, stale_hours=1.0)
+    assert ok is True
+
+    updated = json.loads(status_file.read_text(encoding="utf-8"))
+    assert updated["status"] == "idle"
+    assert updated["current_task_id"] is None
+    assert updated["cooldown_until"] is None
+    assert "Auto-recovered" in updated["note"]

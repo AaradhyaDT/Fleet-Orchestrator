@@ -398,3 +398,89 @@ async def test_in_process_concurrency_execution(temp_state_dir: Path):
             data = json.load(f)
         assert data["status"] == "done"
         assert data["owner_account"] in ["copilot-w1", "copilot-w2"]
+
+
+@pytest.mark.asyncio
+async def test_teardown_worktree_prune_branch(tmp_path: Path):
+    import subprocess
+    repo_dir = tmp_path / "repo"
+    repo_dir.mkdir()
+    subprocess.run(["git", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["git", "config", "user.name", "Test Runner"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=str(repo_dir), check=True)
+    (repo_dir / "README.md").write_text("# Repo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+    (state_dir / "tasks").mkdir()
+    (state_dir / "checkpoints").mkdir()
+    (state_dir / "live-status").mkdir()
+
+    worker = CopilotQueueWorker(
+        state_dir=state_dir,
+        repo_root=repo_dir,
+        worktree_root=tmp_path / ".worktrees",
+        dry_run=False,
+    )
+
+    task_id = "task_prune_test_01"
+    branch_name = f"task/{task_id}"
+
+    wt_dir = await worker.provision_worktree(task_id, branch_name)
+    assert wt_dir.exists()
+
+    # Teardown with prune_branch=True
+    sha = await worker.teardown_worktree(wt_dir, branch_name=branch_name, task_id=task_id, commit=True, prune_branch=True)
+    assert sha is not None
+    assert not wt_dir.exists()
+
+    # Verify branch was deleted
+    check_branch = subprocess.run(
+        ["git", "branch", "--list", branch_name],
+        cwd=str(repo_dir),
+        capture_output=True,
+        text=True,
+    )
+    assert check_branch.stdout.strip() == ""
+
+
+def test_prune_completed_task_branches(tmp_path: Path):
+    import subprocess
+    repo_dir = tmp_path / "repo"
+    repo_dir.mkdir()
+    subprocess.run(["git", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["git", "config", "user.name", "Test Runner"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=str(repo_dir), check=True)
+    (repo_dir / "README.md").write_text("# Repo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=str(repo_dir), check=True, stdout=subprocess.DEVNULL)
+
+    # Create dummy branch
+    branch_name = "task/task_done_test_99"
+    subprocess.run(["git", "branch", branch_name], cwd=str(repo_dir), check=True)
+
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+    tasks_dir = state_dir / "tasks"
+    tasks_dir.mkdir()
+    (state_dir / "checkpoints").mkdir()
+    (state_dir / "live-status").mkdir()
+
+    # Create completed task file
+    task_file = tasks_dir / "task_done_test_99.json"
+    task_file.write_text(json.dumps({"id": "task_done_test_99", "status": "done"}), encoding="utf-8")
+
+    worker = CopilotQueueWorker(
+        state_dir=state_dir,
+        repo_root=repo_dir,
+        worktree_root=tmp_path / ".worktrees",
+    )
+
+    pruned = worker.prune_completed_task_branches()
+    assert pruned == 1
+
+    # Verify branch no longer exists
+    check = subprocess.run(["git", "branch", "--list", branch_name], cwd=str(repo_dir), capture_output=True, text=True)
+    assert check.stdout.strip() == ""
