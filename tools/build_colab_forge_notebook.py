@@ -2,9 +2,16 @@
 """
 tools/build_colab_forge_notebook.py
 -----------------------------------
-Generates the authoritative, complete Google Colab A100 training notebook
-for fine-tuning both Qwen2.5-Coder-3B and Qwen2.5-Coder-7B sequentially
-using Unsloth on the unified fleet dataset (10,010 samples).
+Generates the authoritative Google Colab A100 training notebook for
+fine-tuning Qwen2.5-Coder-3B-Instruct (Daily Driver v2) using Unsloth
+on the unified fleet dataset. Exports versioned _v2 GGUF Q4_K_M and
+OpenVINO INT4 artifacts with evaluation loss logging.
+
+v2 Changes (tracked under #19):
+  - Deactivated Phase 2 (7B Powerhouse) to save compute units
+  - Added trainer.evaluate() for eval loss logging
+  - Versioned output artifacts with _v2 suffix
+  - Validation cell uses 3B model directly
 """
 
 import json
@@ -52,21 +59,23 @@ def add_code(code):
         "source": [line + "\n" for line in code.strip().split("\n")]
     })
 
-add_md(r"""# Autonomous Multi-Model Fleet Forge: Qwen2.5-Coder 3B & 7B (Colab A100 SXM4)
+add_md(r"""# Fleet Master Brain v2 Forge: Qwen2.5-Coder-3B Daily Driver (Colab A100 SXM4)
 
-This notebook fine-tunes **`Qwen2.5-Coder-3B-Instruct`** (Daily Driver, ~2.1 GB) and **`Qwen2.5-Coder-7B-Instruct`** (Powerhouse, ~4.5 GB) back-to-back using **Unsloth** and LoRA on an **NVIDIA A100 GPU** with **High RAM**.
+This notebook fine-tunes **`Qwen2.5-Coder-3B-Instruct`** (Daily Driver v2, ~2.1 GB GGUF) using **Unsloth** LoRA on an **NVIDIA A100 GPU** with **High RAM**.
+
+> **v2 Changes**: Eval loss logging via `trainer.evaluate()`, versioned `_v2` output artifacts, 7B Powerhouse deferred.
 
 ### Governed by Ecosystem Standards:
 * **`adaptive-workflow`**: Context firebreak, 2D matrix routing, mathematical CPM durations ($D_j$), dynamic queue worker timeouts.
 * **`slm-router-forge`**: Strict ChatML formatting, SFT compatibility bridge (`INV-SLM-07`), zero-noise INT4 GGUF quantization, and direct Google Drive export (`INV-SLM-04`).
 
-### Unified Multi-Task Ingestion (10,010 Samples):
-1. **Task Time & Intent Allocation** (1,553 samples): Discretized tiers (`T0`–`T4`), integer seconds, dynamic timeout ceiling ($\max(30, 2.2 \times D)$), and CPM duration weights.
-2. **Agent-Reflex Self-Healing Recovery** (1,828 samples): `[Tool Failure + Traceback] -> [Diagnosis + Fix]`.
-3. **Tool Speculation DAGs** (1,348 samples): Multi-step action sequences from user prompts.
+### Unified Multi-Task Ingestion:
+1. **Task Time & Intent Allocation**: Discretized tiers (`T0`–`T4`), integer seconds, dynamic timeout ceiling ($\max(30, 2.2 \times D)$), and CPM duration weights.
+2. **Agent-Reflex Self-Healing Recovery**: `[Tool Failure + Traceback] -> [Diagnosis + Fix]`.
+3. **Tool Speculation DAGs**: Multi-step action sequences from user prompts.
 4. **Copilot Mistake Counter-Dataset**: Verified corrections for low-cost auto-tier regressions and syntax bugs.
-5. **AI Fellowship & Ecosystem Invariants** (2,500 samples): 17-week golden reference standards (FastAPI, SMOTE, TimeSeriesSplit, ViT, sqlglot) + repository invariants.
-6. **Cross-IDE Developer Transcripts** (1,595 samples): Real-world multi-turn in-editor interactions from VS Code Copilot Chat, OpenCode Desktop, Claude Sonnet exports, and Brainstorm research archives.""")
+5. **AI Fellowship & Ecosystem Invariants**: 17-week golden reference standards (FastAPI, SMOTE, TimeSeriesSplit, ViT, sqlglot) + repository invariants.
+6. **Cross-IDE Developer Transcripts**: Real-world multi-turn in-editor interactions from VS Code Copilot Chat, OpenCode Desktop, Claude Sonnet exports, and Brainstorm research archives.""")
 
 add_code("""# ==========================================
 # CELL 1: Environment Setup & Hardware Audit
@@ -190,13 +199,13 @@ Trainer.__init__ = _patched_trainer_init
 print("[BRIDGE READY] SFTTrainer processing_class patch verified!")""")
 
 add_code("""# ==========================================
-# CELL 4: Phase 1 — Train Qwen2.5-Coder-3B (Daily Driver)
+# CELL 4: Phase 1 -- Train Qwen2.5-Coder-3B v2 (Daily Driver)
 # ~2.1 GB GGUF for laptop LM Studio with music/Antigravity running
 # ==========================================
 from unsloth import FastLanguageModel
 
 print("\\n" + "="*60)
-print("PHASE 1: TRAINING QWEN2.5-CODER-3B (DAILY DRIVER)")
+print("PHASE 1: TRAINING QWEN2.5-CODER-3B v2 (DAILY DRIVER)")
 print("="*60)
 
 max_seq_len = 4096
@@ -239,40 +248,61 @@ trainer_3b = SFTTrainer(
         weight_decay = 0.01,
         lr_scheduler_type = "cosine",
         seed = 3407,
-        output_dir = "outputs_3b",
+        output_dir = "outputs_3b_v2",
+        eval_strategy = "epoch",
+        save_strategy = "epoch",
     ),
 )
 
-trainer_3b.train()
+train_stats = trainer_3b.train()
+print(f"\\n[TRAIN] Training loss: {train_stats.training_loss:.4f}")
+print(f"[TRAIN] Runtime: {train_stats.metrics['train_runtime']:.1f}s")
 
-# Export INT4 GGUF
-print("\\n[EXPORT] Quantizing 3B model to Q4_K_M GGUF...")
-model_3b.save_pretrained_gguf("fleet_master_brain_3b_q4km", tokenizer_3b, quantization_method="q4_k_m")
+# Evaluation loop for v2 loss logging
+if formatted_eval_dataset:
+    eval_results = trainer_3b.evaluate()
+    print(f"\\n[EVAL] Eval loss: {eval_results['eval_loss']:.4f}")
+    print(f"[EVAL] Eval runtime: {eval_results.get('eval_runtime', 0):.1f}s")
+else:
+    print("\\n[EVAL] No eval dataset available, skipping evaluation.")
+
+# Export INT4 GGUF (versioned _v2)
+print("\\n[EXPORT] Quantizing 3B model to Q4_K_M GGUF (v2)...")
+model_3b.save_pretrained_gguf("fleet_master_brain_3b_q4km_v2", tokenizer_3b, quantization_method="q4_k_m")
 
 # Copy directly to Google Drive
-gguf_3b_src = "fleet_master_brain_3b_q4km_gguf/Qwen2.5-Coder-3B-Instruct.Q4_K_M.gguf"
+gguf_3b_src = "fleet_master_brain_3b_q4km_v2/unsloth.Q4_K_M.gguf"
 if not os.path.exists(gguf_3b_src):
     for root, dirs, files in os.walk("."):
         for f in files:
-            if f.endswith(".gguf") and "3b" in f.lower():
+            if f.endswith(".gguf") and "3b" in root.lower() and "v2" in root.lower():
                 gguf_3b_src = os.path.join(root, f)
                 break
         if os.path.exists(gguf_3b_src):
             break
+    # Fallback: find any GGUF with 3b in path
+    if not os.path.exists(gguf_3b_src):
+        for root, dirs, files in os.walk("."):
+            for f in files:
+                if f.endswith(".gguf"):
+                    gguf_3b_src = os.path.join(root, f)
+                    break
+            if os.path.exists(gguf_3b_src):
+                break
 
-gguf_3b_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_3b_q4km.gguf")
-print(f"Persisting 3B GGUF to Google Drive: {gguf_3b_dest}...")
+gguf_3b_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_3b_q4km_v2.gguf")
+print(f"Persisting 3B v2 GGUF to Google Drive: {gguf_3b_dest}...")
 shutil.copy(gguf_3b_src, gguf_3b_dest)
-print(f"[SAVED] 3B GGUF size: {round(os.path.getsize(gguf_3b_dest) / (1024**2), 1)} MB")
+print(f"[SAVED] 3B v2 GGUF size: {round(os.path.getsize(gguf_3b_dest) / (1024**2), 1)} MB")
 
-# Export OpenVINO INT4 IR Package for Intel Core Ultra NPU
-print("\\n[EXPORT] Exporting 3B model to OpenVINO INT4 IR for Meteor Lake NPU...")
+# Export OpenVINO INT4 IR Package for Intel Core Ultra NPU (versioned _v2)
+print("\\n[EXPORT] Exporting 3B model to OpenVINO INT4 IR v2 for Meteor Lake NPU...")
 try:
     import subprocess
     subprocess.run(["pip", "install", "-q", "optimum[openvino]"], check=True)
-    merged_3b_dir = "fleet_master_brain_3b_merged"
+    merged_3b_dir = "fleet_master_brain_3b_merged_v2"
     model_3b.save_pretrained_merged(merged_3b_dir, tokenizer_3b, save_method="merged_16bit")
-    ov_out_dir = "fleet_master_brain_3b_openvino_int4"
+    ov_out_dir = "fleet_master_brain_3b_openvino_int4_v2"
     subprocess.run([
         "optimum-cli", "export", "openvino",
         "--model", merged_3b_dir,
@@ -283,106 +313,28 @@ try:
         ov_out_dir
     ], check=True)
     shutil.make_archive(ov_out_dir, "zip", ov_out_dir)
-    ov_zip_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_3b_openvino_int4.zip")
+    ov_zip_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_3b_openvino_int4_v2.zip")
     shutil.copy(f"{ov_out_dir}.zip", ov_zip_dest)
-    print(f"[SAVED] OpenVINO INT4 IR ZIP persisted to: {ov_zip_dest}")
+    print(f"[SAVED] OpenVINO INT4 IR v2 ZIP persisted to: {ov_zip_dest}")
     shutil.rmtree(merged_3b_dir, ignore_errors=True)
 except Exception as e:
-    print(f"[NOTE] OpenVINO export status: {e}")
+    print(f"[NOTE] OpenVINO export status: {e}")""")
 
-# Purge VRAM completely for Phase 2
-del model_3b, tokenizer_3b, trainer_3b
-gc.collect()
-torch.cuda.empty_cache()
-print("[CLEANUP] A100 VRAM cleared successfully for 7B run!")""")
 
 add_code("""# ==========================================
-# CELL 5: Phase 2 — Train Qwen2.5-Coder-7B (Powerhouse)
-# ~4.5 GB GGUF for deep code refactoring & complex audits
-# ==========================================
-print("\\n" + "="*60)
-print("PHASE 2: TRAINING QWEN2.5-CODER-7B (POWERHOUSE)")
-print("="*60)
-
-model_7b, tokenizer_7b = FastLanguageModel.from_pretrained(
-    model_name = "unsloth/Qwen2.5-Coder-7B-Instruct-bnb-4bit",
-    max_seq_length = max_seq_len,
-    dtype = torch.bfloat16,
-    load_in_4bit = True,
-)
-
-model_7b = FastLanguageModel.get_peft_model(
-    model_7b,
-    r = 64,
-    target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    lora_alpha = 128,
-    lora_dropout = 0,
-    bias = "none",
-    use_gradient_checkpointing = "unsloth",
-    random_state = 3407,
-)
-
-trainer_7b = SFTTrainer(
-    model = model_7b,
-    tokenizer = tokenizer_7b,
-    train_dataset = formatted_train_dataset,
-    eval_dataset = formatted_eval_dataset,
-    dataset_text_field = "text",
-    max_seq_length = max_seq_len,
-    dataset_num_proc = 4,
-    packing = False,
-    args = TrainingArguments(
-        per_device_train_batch_size = 4,
-        gradient_accumulation_steps = 4,
-        warmup_steps = 10,
-        num_train_epochs = 3,
-        learning_rate = 2e-4,
-        bf16 = True,
-        logging_steps = 25,
-        optim = "adamw_8bit",
-        weight_decay = 0.01,
-        lr_scheduler_type = "cosine",
-        seed = 3407,
-        output_dir = "outputs_7b",
-    ),
-)
-
-trainer_7b.train()
-
-# Export INT4 GGUF
-print("\\n[EXPORT] Quantizing 7B model to Q4_K_M GGUF...")
-model_7b.save_pretrained_gguf("fleet_master_brain_7b_q4km", tokenizer_7b, quantization_method="q4_k_m")
-
-# Copy directly to Google Drive
-gguf_7b_src = "fleet_master_brain_7b_q4km_gguf/Qwen2.5-Coder-7B-Instruct.Q4_K_M.gguf"
-if not os.path.exists(gguf_7b_src):
-    for root, dirs, files in os.walk("."):
-        for f in files:
-            if f.endswith(".gguf") and "7b" in f.lower():
-                gguf_7b_src = os.path.join(root, f)
-                break
-        if os.path.exists(gguf_7b_src):
-            break
-
-gguf_7b_dest = os.path.join(DRIVE_TARGET_DIR, "fleet_master_brain_7b_q4km.gguf")
-print(f"Persisting 7B GGUF to Google Drive: {gguf_7b_dest}...")
-shutil.copy(gguf_7b_src, gguf_7b_dest)
-print(f"[SAVED] 7B GGUF size: {round(os.path.getsize(gguf_7b_dest) / (1024**2), 1)} MB")""")
-
-add_code("""# ==========================================
-# CELL 6: Live Validation & Local LM Studio Instructions
+# CELL 5: Live Validation & Local LM Studio Instructions
 # ==========================================
 import json
-FastLanguageModel.for_inference(model_7b)
+FastLanguageModel.for_inference(model_3b)
 
 test_prompt = "Fix the regression in test_warehouse_mem_sim.py where queue latency was calculating as zero."
 prompt_text = f"<|im_start|>system\\nYou are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, supporting skills, velocity profile, and task time allocation in strict JSON format.<|im_end|>\\n<|im_start|>user\\n{test_prompt}<|im_end|>\\n<|im_start|>assistant\\n"
 
-inputs = tokenizer_7b([prompt_text], return_tensors = "pt").to("cuda")
-outputs = model_7b.generate(**inputs, max_new_tokens = 220, use_cache = True)
-res = tokenizer_7b.batch_decode(outputs)[0].split("<|im_start|>assistant\\n")[-1].replace("<|im_end|>", "").strip()
+inputs = tokenizer_3b([prompt_text], return_tensors = "pt").to("cuda")
+outputs = model_3b.generate(**inputs, max_new_tokens = 220, use_cache = True)
+res = tokenizer_3b.batch_decode(outputs)[0].split("<|im_start|>assistant\\n")[-1].replace("<|im_end|>", "").strip()
 
-print("\\n[LIVE INFERENCE TEST OUTPUT]")
+print("\\n[LIVE INFERENCE TEST OUTPUT (3B v2)]")
 print(res)
 try:
     parsed = json.loads(res)
@@ -391,21 +343,22 @@ except Exception as e:
     print(f"\\n[VALIDATION WARNING] JSON output check: {e}")
 
 print("\\n" + "="*60)
-print("ALL COMPLETE! BOTH MODELS PERSISTED TO GOOGLE DRIVE:")
-print(f"1. {gguf_3b_dest}")
-print(f"2. {gguf_7b_dest}")
+print("COMPLETE! 3B v2 MODEL PERSISTED TO GOOGLE DRIVE:")
+print(f"  GGUF: {gguf_3b_dest}")
+if 'ov_zip_dest' in dir():
+    print(f"  OpenVINO: {ov_zip_dest}")
 print("="*60)
 print("\\nTo run locally in LM Studio on your laptop:")
-print('lms import -c --user-repo aaradhya/fleet-master-3b -y "models/fleet_master_brain_3b_q4km.gguf"')
+print('lms import -c --user-repo aaradhya/fleet-master-3b-v2 -y "models/fleet_master_brain_3b_q4km_v2.gguf"')
 print('lms server start')
-print('lms load fleet-master-3b --identifier fleet-master-3b -y')""")
+print('lms load fleet-master-3b-v2 --identifier fleet-master-3b-v2 -y')""")
 
 add_code("""# ==========================================
-# CELL 7: Auto-Disconnect Runtime & Save Compute Units (INV-SLM-10)
+# CELL 6: Auto-Disconnect Runtime & Save Compute Units (INV-SLM-10)
 # ==========================================
 import time
 
-print("[SUCCESS] All models trained and persisted to Google Drive.")
+print("[SUCCESS] Fleet Master Brain 3B v2 trained and persisted to Google Drive.")
 print("[TEARDOWN] Releasing A100 VM to stop compute unit burn...")
 time.sleep(5)
 
