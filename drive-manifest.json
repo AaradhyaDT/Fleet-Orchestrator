@@ -50,7 +50,7 @@
       "drive_file_name": "fleet_master_brain_forge.ipynb",
       "description": "Colab Fine-Tuning Notebook for Fleet Master Brain v2 (Qwen2.5-Coder-3B-Instruct) Forge (A100 SXM4)",
       "colab_url": "https://colab.research.google.com/drive/1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",
-      "sha256": "4b5a86195e355788"
+      "sha256": "a50d5a7f0ca48a2f"
     },
     "dataset/unified_fleet_train.jsonl": {
       "drive_file_id": "1Q3O5pUmJ5A4pZ2Gg5DUMoVHQEz2v-YWA",

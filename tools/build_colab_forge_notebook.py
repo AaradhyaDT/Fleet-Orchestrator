@@ -81,7 +81,7 @@ add_code("""# ==========================================
 # CELL 1: Environment Setup & Hardware Audit
 # ==========================================
 !pip install --upgrade --no-cache-dir "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
-!pip install --no-deps "trl<0.9.0" peft accelerate bitsandbytes
+!pip install --no-deps unsloth_zoo bitsandbytes accelerate peft trl triton
 
 import os, gc, shutil, json, hashlib
 import torch
@@ -167,25 +167,17 @@ formatted_eval_dataset = raw_eval.map(format_prompts, batched=True, remove_colum
 print(f"\\n[DATASET READY] {len(formatted_train_dataset)} train samples, {len(formatted_eval_dataset) if formatted_eval_dataset else 0} eval samples loaded!")""")
 
 add_code("""# ==========================================
-# CELL 3: SFT Compatibility Bridge (INV-SLM-07)
-# Enforces compatibility across transformers >= 4.47 and trl < 0.9.0
+# CELL 3: SFT Compatibility Bridge & Imports (INV-SLM-07)
+# Enforces Unsloth import precedence and trl/transformers compatibility
 # ==========================================
-from trl import SFTTrainer
+import unsloth
+from unsloth import FastLanguageModel
+
+# Import trl and transformers after unsloth to ensure all memory optimizations are applied
+from trl import SFTTrainer, SFTConfig
 from transformers import TrainingArguments, Trainer
-import unsloth.models._utils
 
-if hasattr(unsloth.models._utils, "_original_trainer_init"):
-    _orig_unsloth_init = unsloth.models._utils._original_trainer_init
-    def _patched_unsloth_init(self, *args, **kwargs):
-        if "tokenizer" in kwargs and "processing_class" not in kwargs:
-            tok = kwargs.pop("tokenizer")
-            kwargs["processing_class"] = tok
-            self.tokenizer = tok
-        elif "tokenizer" in kwargs:
-            self.tokenizer = kwargs.pop("tokenizer")
-        return _orig_unsloth_init(self, *args, **kwargs)
-    unsloth.models._utils._original_trainer_init = _patched_unsloth_init
-
+# SFT Compatibility Bridge: ensure tokenizer and processing_class interop
 _orig_trainer_init = Trainer.__init__
 def _patched_trainer_init(self, *args, **kwargs):
     if "tokenizer" in kwargs and "processing_class" not in kwargs:
@@ -196,7 +188,8 @@ def _patched_trainer_init(self, *args, **kwargs):
         self.tokenizer = kwargs.pop("tokenizer")
     return _orig_trainer_init(self, *args, **kwargs)
 Trainer.__init__ = _patched_trainer_init
-print("[BRIDGE READY] SFTTrainer processing_class patch verified!")""")
+
+print("[BRIDGE READY] Unsloth FastLanguageModel & SFTTrainer initialized successfully!")""")
 
 add_code("""# ==========================================
 # CELL 4: Phase 1 -- Train Qwen2.5-Coder-3B v2 (Daily Driver)
@@ -236,7 +229,7 @@ trainer_3b = SFTTrainer(
     max_seq_length = max_seq_len,
     dataset_num_proc = 4,
     packing = False,
-    args = TrainingArguments(
+    args = SFTConfig(
         per_device_train_batch_size = 4,
         gradient_accumulation_steps = 4,
         warmup_steps = 10,
@@ -251,6 +244,8 @@ trainer_3b = SFTTrainer(
         output_dir = "outputs_3b_v2",
         eval_strategy = "epoch",
         save_strategy = "epoch",
+        dataset_text_field = "text",
+        max_seq_length = max_seq_len,
     ),
 )
 
