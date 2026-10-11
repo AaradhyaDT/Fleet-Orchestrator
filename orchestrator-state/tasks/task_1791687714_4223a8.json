@@ -1,0 +1,114 @@
+{
+  "id": "task_1791687714_4223a8",
+  "kind": "code",
+  "spec": "Refactor local adapters and test rate limiting",
+  "repo": "Fleet-Orchestrator",
+  "status": "claimed",
+  "created_at": "2026-10-11T03:01:56Z",
+  "auto_tier": "efficiency",
+  "timeout_ceiling_s": 149,
+  "routing": {
+    "archetype": "ENGINEERING_DEV",
+    "tier": "Tier 1",
+    "matrix_cell": "(V0, R0)",
+    "policy": "DIRECT_FAST",
+    "primary_skill": "github-workflow",
+    "supporting_skills": [],
+    "velocity": "BALANCED",
+    "time_allocation": {
+      "tier": "T2_MEDIUM",
+      "estimated_duration_s": 63,
+      "timeout_ceiling_s": 149,
+      "cpm_weight": 2.1,
+      "execution_route": "SUBAGENT"
+    },
+    "source": "lm_studio_qwen-intent-router",
+    "auto_tier": "efficiency",
+    "recommended_copilot_model": null,
+    "hardware_target": "NPU",
+    "latency_ms": 2332.34
+  },
+  "antigravity_scope": {
+    "chat_context": {
+      "conversation_id": "872d39c2-391c-40cb-b8a8-7a395c05d78f",
+      "session_goal": "separate branch then PR\ninclude all, they are migration guides so keeping should help",
+      "recent_user_requests": [
+        "let's manage the downloaded models and how to use them, first analyze the state of usage for all 3 in models\\ \nand how shall they best used? and LMstudio or Ollama what is better, for my laptop as well",
+        "okay /plan",
+        "separate branch then PR\ninclude all, they are migration guides so keeping should help"
+      ],
+      "active_artifacts": [
+        {
+          "file": "local_models_plan.md",
+          "title": "Local Model Management: Wiring 3 GGUF Models into LM Studio",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\872d39c2-391c-40cb-b8a8-7a395c05d78f\\local_models_plan.md"
+        }
+      ]
+    },
+    "antigravity_customizations": {
+      "rules": [
+        "Commit Integrity: Never use synthetic or placeholder SHAs; authentic 7-40 hex git commit hashes only.",
+        "Version Control: Worktree-local commits are authorized; root repository merges/pushes must run via sync.bat.",
+        "Calm Authority Writing: Follow Anthropic Calm Authority Standard (declarative, zero hype superlatives).",
+        "Verification Gate: Local test suite and linters must pass clean before completion.",
+        "Worktree Isolation: Confine all file modifications strictly to the assigned git worktree."
+      ],
+      "active_skills": [
+        "academic-notebook-architect",
+        "adaptive-workflow",
+        "agent-teams-orchestration",
+        "ai-engineering-fellowship",
+        "avionic-telecom-analyzer",
+        "bitwarden",
+        "chat-archiver",
+        "chrome-extensions",
+        "colab-cloud-accelerator",
+        "cold-storage-archiver",
+        "compliance-report-harmonizer",
+        "control-systems-sim",
+        "cp-archive-harvester",
+        "customization-state-sync",
+        "cyber-forensics",
+        "design-taste-frontend",
+        "doc-archiver",
+        "dsa-complexity-optimizer",
+        "dsp-signal-engine",
+        "electronics-circuit-synth",
+        "embedded-firmware-scaffold",
+        "feature-dev",
+        "find-skills",
+        "fleet-orchestrator",
+        "fluid-wordmark-collapse",
+        "github-workflow",
+        "google-classroom",
+        "google-stitch-integration",
+        "graphify",
+        "graphify-code-search",
+        "graphify-optimizer",
+        "latex-thesis-architect",
+        "mcp-integration",
+        "modern-web-guidance",
+        "oose-architecture-modeler",
+        "pm-workflow-orchestrator",
+        "portfolio-project-manager",
+        "pr-review-toolkit",
+        "rf-link-budget-calc",
+        "security-guidance",
+        "shadcn-context",
+        "skill-development",
+        "slm-router-forge",
+        "split-to-prs",
+        "super-nlm",
+        "super-nlm-downloads",
+        "systems-concurrency-harness",
+        "win-vault",
+        "winpilot",
+        "writing-like-claude"
+      ],
+      "repo_rules_path": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\AGENTS.md"
+    }
+  },
+  "owner_account": "copilot-w2",
+  "branch_name": "task/task_1791687714_4223a8",
+  "updated_at": "2026-10-11T03:01:59Z"
+}

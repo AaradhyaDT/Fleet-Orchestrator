@@ -11,17 +11,22 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, Optional
-import urllib.request
-import urllib.error
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from client.local_llm import ROUTER_MODEL, chat_completion, extract_json, is_online
 
 logger = logging.getLogger(__name__)
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 GGUF_PATH = MODELS_DIR / "qwen_intent_router_q4_k_m.gguf"
-LM_STUDIO_URL = "http://localhost:1234/v1/chat/completions"
 
 SYSTEM_PROMPT = (
     "You are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. "
@@ -172,58 +177,61 @@ def _heuristic_fallback(prompt: str) -> Dict[str, Any]:
 
 def _is_lm_studio_online(host: str = "127.0.0.1", port: int = 1234, timeout: float = 0.05) -> bool:
     """Fast socket check (<1ms) to verify if LM Studio is listening before sending HTTP."""
-    import socket
-    try:
-        with socket.create_connection((host, port), timeout=timeout):
-            return True
-    except (OSError, ConnectionRefusedError):
-        return False
+    return is_online(host, port, timeout)
 
 
 def _call_lm_studio(prompt: str) -> Optional[Dict[str, Any]]:
     """Attempts inference via local LM Studio server if running."""
-    if not _is_lm_studio_online():
+    if not is_online():
+        if os.getenv("FLEET_ROUTER_DEBUG"):
+            logger.info("LM Studio socket offline, falling back to heuristic")
         return None
 
-    payload = {
-        "model": "qwen-intent-router",
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-        "temperature": 0.0,
-        "max_tokens": 220,
-    }
-    data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL,
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
+    model_name = os.getenv("FLEET_ROUTER_MODEL", ROUTER_MODEL)
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": prompt},
+    ]
+
+    raw_resp = chat_completion(
+        model=model_name,
+        messages=messages,
+        temperature=0.0,
+        max_tokens=250,
+        timeout=5.0,
     )
-    try:
-        with urllib.request.urlopen(req, timeout=5.0) as resp:
-            body = json.loads(resp.read().decode("utf-8"))
-            content = body["choices"][0]["message"]["content"]
-            result = json.loads(content.strip())
-            result["source"] = "lm_studio_qwen0.5b"
-            # Ensure time_allocation is populated
-            if "time_allocation" not in result:
-                result["time_allocation"] = _compute_time_allocation(
-                    prompt,
-                    result.get("archetype", "ENGINEERING_DEV"),
-                    result.get("tier", "Tier 1"),
-                    result.get("policy", "DIRECT_FAST"),
-                )
-            if "auto_tier" not in result:
-                cell = result.get("matrix_cell", "(V0, R0)")
-                pol = result.get("policy", "DIRECT_FAST")
-                auto_tier, rec_model = _resolve_copilot_tier_and_model(cell, pol, prompt)
-                result["auto_tier"] = auto_tier
-                result["recommended_copilot_model"] = rec_model
-            return result
-    except Exception:
+    if not raw_resp:
+        if os.getenv("FLEET_ROUTER_DEBUG"):
+            logger.warning(f"LM Studio empty or failed response for model '{model_name}'")
         return None
+
+    result = extract_json(raw_resp)
+    if not result or not isinstance(result, dict):
+        if os.getenv("FLEET_ROUTER_DEBUG"):
+            logger.warning(f"Failed to parse valid JSON from model response: {raw_resp[:120]}")
+        return None
+
+    # Enforce essential invariant keys
+    if "archetype" not in result:
+        if os.getenv("FLEET_ROUTER_DEBUG"):
+            logger.warning("Missing 'archetype' key in parsed JSON; falling back to heuristic")
+        return None
+
+    result["source"] = f"lm_studio_{model_name}"
+    if "time_allocation" not in result:
+        result["time_allocation"] = _compute_time_allocation(
+            prompt,
+            result.get("archetype", "ENGINEERING_DEV"),
+            result.get("tier", "Tier 1"),
+            result.get("policy", "DIRECT_FAST"),
+        )
+    if "auto_tier" not in result:
+        cell = result.get("matrix_cell", "(V0, R0)")
+        pol = result.get("policy", "DIRECT_FAST")
+        auto_tier, rec_model = _resolve_copilot_tier_and_model(cell, pol, prompt)
+        result["auto_tier"] = auto_tier
+        result["recommended_copilot_model"] = rec_model
+    return result
 
 
 def route_intent(prompt: str) -> Dict[str, Any]:
