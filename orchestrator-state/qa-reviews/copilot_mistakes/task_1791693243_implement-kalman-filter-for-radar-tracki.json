@@ -1,0 +1,11 @@
+{
+  "task_id": "task_1791693243_implement-kalman-filter-for-radar-tracki",
+  "timestamp": "2026-10-11T04:36:37Z",
+  "worker_id": "copilot-w7",
+  "auto_tier": "efficiency",
+  "model": null,
+  "spec": "Scaffold high-throughput Kalman filter in sim/kalman.py",
+  "error": "TIMEOUT: Exceeded 149.0s execution window",
+  "stdout": "",
+  "stderr": ""
+}
