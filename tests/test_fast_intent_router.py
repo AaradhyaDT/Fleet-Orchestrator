@@ -15,9 +15,9 @@ def test_compute_time_allocation():
 
 
 def test_route_intent_heuristic_fallback(monkeypatch):
-    # Ensure is_online is False so it tests heuristic fallback cleanly regardless of background LM Studio state
-    import client.local_llm
-    monkeypatch.setattr(client.local_llm, "is_online", lambda *args, **kwargs: False)
+    # Ensure is_online is False in fast_intent_router so it tests heuristic fallback cleanly
+    import tools.fast_intent_router
+    monkeypatch.setattr(tools.fast_intent_router, "is_online", lambda *args, **kwargs: False)
 
     result = route_intent("Scaffold IOE semester IV-II notes for CE 752 and share via super-nlm")
     assert "archetype" in result
@@ -39,15 +39,16 @@ def test_route_intent_heuristic_fallback(monkeypatch):
 
 
 def test_route_intent_lm_studio_success(monkeypatch):
-    import client.local_llm
-    monkeypatch.setattr(client.local_llm, "is_online", lambda *args, **kwargs: True)
+    import tools.fast_intent_router
+    monkeypatch.setattr(tools.fast_intent_router, "is_online", lambda *args, **kwargs: True)
     
     mock_payload = '```json\n{"archetype": "FRONTEND_PRODUCT", "matrix_cell": "(V0, R1)", "policy": "BRANCH_GUARD"}\n```'
-    monkeypatch.setattr(client.local_llm, "chat_completion", lambda *args, **kwargs: mock_payload)
+    monkeypatch.setattr(tools.fast_intent_router, "chat_completion", lambda *args, **kwargs: mock_payload)
 
     result = route_intent("Build responsive navbar with anthracite palette")
     assert result["archetype"] == "FRONTEND_PRODUCT"
     assert result["policy"] == "BRANCH_GUARD"
     assert "lm_studio_" in result["source"]
     assert "time_allocation" in result
+
 
