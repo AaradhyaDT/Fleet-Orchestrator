@@ -1,0 +1,294 @@
+# tests/fixtures/adaptive_golden_scenarios.yaml
+# Authoritative golden test scenarios for /adaptive-workflow decision harness.
+# Reviewed and curated to prevent circular heuristics.
+
+scenarios:
+  # ==========================================
+  # Group A: Canonical Skill Walkthroughs
+  # ==========================================
+  - id: "A01"
+    prompt: "Implement non-trivial multi-step feature X and follow GitHub PR workflow"
+    files: ["src/feature_x.py", "tests/test_feature_x.py"]
+    expected:
+      archetype: "ENGINEERING_DEV"
+      matrix_cell: "(V0, R1)"
+      policy: "BRANCH_GUARD"
+      primary_skill: "github-workflow"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A02"
+    prompt: "Design Butterworth bandpass IIR filter for STM32 DSP telemetry"
+    files: ["firmware/dsp_filter.c"]
+    expected:
+      archetype: "DOMAIN_HARDWARE"
+      matrix_cell: "(V0, R1)"
+      policy: "BRANCH_GUARD"
+      primary_skill: "dsp-signal-engine"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A03"
+    prompt: "Scaffold IOE semester IV-II notes for CE 752 and share via super-nlm"
+    files: ["notes/ce752/syllabus.md"]
+    expected:
+      archetype: "RESEARCH_ACADEMIC"
+      matrix_cell: "(V1, R1)"
+      policy: "STAR_SUBAGENTS"
+      primary_skill: "academic-notebook-architect"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A04"
+    prompt: "Onboard new robotics project into portfolio access.js and update project count"
+    files: ["access.js", "projects.html"]
+    expected:
+      archetype: "FRONTEND_PRODUCT"
+      matrix_cell: "(V0, R2)"
+      policy: "SURGICAL_LOCK"
+      primary_skill: "portfolio-project-manager"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A05"
+    prompt: "Fix minor typo in README.md footer"
+    files: ["README.md"]
+    expected:
+      archetype: "ENGINEERING_DEV"
+      matrix_cell: "(V0, R0)"
+      policy: "DIRECT_FAST"
+      primary_skill: "github-workflow"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A06"
+    prompt: "Generate unit test coverage across 20 modules using fleet-orchestrator swarm"
+    files:
+      - "mod1.py"
+      - "mod2.py"
+      - "mod3.py"
+      - "mod4.py"
+      - "mod5.py"
+      - "mod6.py"
+      - "mod7.py"
+      - "mod8.py"
+      - "mod9.py"
+      - "mod10.py"
+      - "mod11.py"
+      - "mod12.py"
+      - "mod13.py"
+      - "mod14.py"
+      - "mod15.py"
+      - "mod16.py"
+      - "mod17.py"
+      - "mod18.py"
+      - "mod19.py"
+      - "mod20.py"
+    expected:
+      archetype: "SWARM_ORCHESTRATION"
+      matrix_cell: "(V2, R0)"
+      policy: "FLEET_SWARM"
+      primary_skill: "fleet-orchestrator"
+      backend: "fleet-copilot"
+      is_fast_path: false
+
+  - id: "A07"
+    prompt: "Draft an engineering release dossier in the calm authority Anthropic voice"
+    files: ["docs/v2_release_dossier.md"]
+    expected:
+      archetype: "ENGINEERING_DEV"
+      matrix_cell: "(V0, R1)"
+      policy: "BRANCH_GUARD"
+      primary_skill: "writing-like-claude"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A08"
+    prompt: "Launch autonomous multi-agent swarm with Scout, Reviewer, and Writer roles"
+    files: ["team_draft.md"]
+    expected:
+      archetype: "SWARM_ORCHESTRATION"
+      matrix_cell: "(V1, R1)"
+      policy: "STAR_SUBAGENTS"
+      primary_skill: "agent-teams-orchestration"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "A09"
+    prompt: "Fine-tune Qwen 0.5B LoRA router model on Colab cloud GPU with unsloth"
+    files: ["notebooks/train_router.ipynb"]
+    expected:
+      archetype: "SWARM_ORCHESTRATION"
+      matrix_cell: "(V1, R1)"
+      policy: "STAR_SUBAGENTS"
+      primary_skill: "colab-cloud-accelerator"
+      backend: "colab"
+      is_fast_path: false
+
+  - id: "A10"
+    prompt: "Format academic engineering capstone thesis in LaTeX and compile Beamer slides"
+    files: ["thesis/main.tex", "thesis/slides.tex"]
+    expected:
+      archetype: "RESEARCH_ACADEMIC"
+      matrix_cell: "(V1, R1)"
+      policy: "STAR_SUBAGENTS"
+      primary_skill: "latex-thesis-architect"
+      backend: "in-turn"
+      is_fast_path: false
+
+  # ==========================================
+  # Group B: Zero-AI Deterministic Fast Paths
+  # ==========================================
+  - id: "B01"
+    prompt: "run pytest"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "python -m unittest"
+      execution_tier: "Tier 0"
+
+  - id: "B02"
+    prompt: "run audit.bat and verify ecosystem reconciliation"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: ".\\audit.bat"
+      execution_tier: "Tier 0"
+
+  - id: "B03"
+    prompt: "sync repo and pull latest changes"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: ".\\sync.bat"
+      execution_tier: "Tier 0"
+
+  - id: "B04"
+    prompt: "lint codebase with ruff"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "ruff check ."
+      execution_tier: "Tier 0"
+
+  - id: "B05"
+    prompt: "git status"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "git status"
+      execution_tier: "Tier 0"
+
+  - id: "B06"
+    prompt: "compile thesis and build pdf"
+    expected:
+      is_fast_path: true
+      backend: "shell"
+      command: "python scripts/compile_thesis.py ."
+      execution_tier: "Tier 0"
+
+  # ==========================================
+  # Group C: Substring & Misrouting Traps
+  # (Testing F2: Disambiguating bare keywords)
+  # ==========================================
+  - id: "C01"
+    prompt: "Improve performance of the SQL database queries in billing module"
+    files: ["billing/query.sql"]
+    expected:
+      archetype: "ENGINEERING_DEV"
+      not_skill: "embedded-firmware-scaffold"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "C02"
+    prompt: "Fix multithreaded race condition in user uploads directory"
+    files: ["server/uploads.py"]
+    expected:
+      archetype: "ENGINEERING_DEV"
+      not_skill: "cyber-forensics"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "C03"
+    prompt: "Add an analog clock widget to the user profile dashboard"
+    files: ["web/components/ClockWidget.tsx"]
+    expected:
+      archetype: "FRONTEND_PRODUCT"
+      not_skill: "win-vault"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "C04"
+    prompt: "Audit radio frequency transmitter antenna link margin with Friis equation"
+    files: ["rf/link_calc.py"]
+    expected:
+      archetype: "DOMAIN_HARDWARE"
+      primary_skill: "rf-link-budget-calc"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "C05"
+    prompt: "Inspect suspicious NTFS Alternate Data Stream hidden behind document.pdf"
+    files: ["evidence/sample.dat"]
+    expected:
+      archetype: "SYSADMIN_SECURITY"
+      primary_skill: "cyber-forensics"
+      backend: "in-turn"
+      is_fast_path: false
+
+  - id: "C06"
+    prompt: "Lock confidential financial folder with NTFS access control list using win-vault"
+    files: ["vault/config.json"]
+    expected:
+      archetype: "SYSADMIN_SECURITY"
+      primary_skill: "win-vault"
+      backend: "in-turn"
+      is_fast_path: false
+
+  # ==========================================
+  # Group D: High-Criticality & Blast-Radius Locks
+  # ==========================================
+  - id: "D01"
+    prompt: "Update root AGENTS.md rules for autonomous fleet operations"
+    files: ["AGENTS.md"]
+    expected:
+      matrix_cell: "(V0, R2)"
+      policy: "SURGICAL_LOCK"
+      auto_tier: "intelligence"
+      is_fast_path: false
+
+  - id: "D02"
+    prompt: "Reconcile schemas/ecosystem.registry.json module specifications"
+    files: ["schemas/ecosystem.registry.json"]
+    expected:
+      matrix_cell: "(V0, R2)"
+      policy: "SURGICAL_LOCK"
+      auto_tier: "intelligence"
+      is_fast_path: false
+
+  - id: "D03"
+    prompt: "Refactor core schema validation across 18 critical modules"
+    files:
+      - "schemas/mod1.json"
+      - "schemas/mod2.json"
+      - "schemas/mod3.json"
+      - "schemas/mod4.json"
+      - "schemas/mod5.json"
+      - "schemas/mod6.json"
+      - "schemas/mod7.json"
+      - "schemas/mod8.json"
+      - "schemas/mod9.json"
+      - "schemas/mod10.json"
+      - "schemas/mod11.json"
+      - "schemas/mod12.json"
+      - "schemas/mod13.json"
+      - "schemas/mod14.json"
+      - "schemas/mod15.json"
+      - "schemas/mod16.json"
+      - "schemas/mod17.json"
+      - "schemas/mod18.json"
+    expected:
+      matrix_cell: "(V2, R2)"
+      policy: "STRICT_INTERLOCK_BLOCKED"
+      requires_interlock: true
+      is_fast_path: false

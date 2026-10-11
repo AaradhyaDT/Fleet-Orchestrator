@@ -129,6 +129,16 @@ function Do-Bench {
     }
 }
 
+function Do-Verify {
+    Write-Host "`n=== [RUNNING ADAPTIVE-WORKFLOW DECISION HARNESS] ===" -ForegroundColor Cyan
+    $harnessScript = Join-Path $ScriptDir "adaptive_decision_harness.py"
+    if (Test-Path $harnessScript) {
+        & python "$harnessScript" --models deterministic,qwen-intent-router
+    } else {
+        Write-Host "Harness script $harnessScript not found." -ForegroundColor Red
+    }
+}
+
 switch ($Command) {
     "status" { Show-Status }
     "import" { Do-Import }
@@ -136,4 +146,5 @@ switch ($Command) {
     "heavy"  { Do-Heavy }
     "down"   { Do-Down }
     "bench"  { Do-Bench }
+    "verify" { Do-Verify }
 }
