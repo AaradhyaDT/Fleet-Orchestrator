@@ -59,8 +59,26 @@ function Find-StagedSecrets {
         '(?i)(api[_-]?key|secret|password|token|passwd)\s*[:=]\s*[''"][^''"\s]{8,}[''"]'
     )
 
+    $safePlaceholders = @(
+        'your_api_key_here',
+        'your_gemini_api_key_here',
+        'your_pat_here',
+        'mock_key_value',
+        'dummy_secret_value',
+        'placeholder_token'
+    )
+
     $hits = @()
     foreach ($line in $addedLines) {
+        $isSafe = $false
+        foreach ($safe in $safePlaceholders) {
+            if ($line.Contains($safe)) {
+                $isSafe = $true
+                break
+            }
+        }
+        if ($isSafe) { continue }
+
         foreach ($pattern in $secretPatterns) {
             if ($line -match $pattern) {
                 $snippet = $line.Trim()

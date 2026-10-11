@@ -262,7 +262,7 @@ def _heuristic_fallback(prompt: str) -> Dict[str, Any]:
         pskill = "portfolio-project-manager" if "project" in p or "access.js" in p else "design-taste-frontend"
         sup = ["modern-web-guidance", "github-workflow"]
         velo = "BALANCED"
-    elif any(k in p for k in ["navbar", "css", "html", "react", "widget", "frontend", "tailwind", "shadcn", "ui"]):
+    elif any(k in p for k in ["navbar", "css", "html", "react", "widget", "frontend", "tailwind", "shadcn"]) or (r"\bui\b" in p and any(k in p for k in ["component", "layout", "design", "view", "theme", "style", "page", "button", "modal", "screen"])):
         arch = "FRONTEND_PRODUCT"
         tier = "Tier 1"
         cell = "(V0, R1)"
