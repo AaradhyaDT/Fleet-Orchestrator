@@ -10,6 +10,7 @@ from client.adapters.gemini_free_adapter import GeminiFreeAdapter
 from client.adapters.gemini_api_adapter import GeminiAPIAdapter
 from client.adapters.groq_adapter import GroqAdapter
 from client.adapters.ollama_local_adapter import OllamaLocalAdapter
+from client.adapters.lmstudio_local_adapter import LMStudioLocalAdapter
 from client.adapters.claude_desktop_proxy import ClaudeDesktopProxyAdapter
 from client.adapters.claude_desktop_cdp import ClaudeDesktopCDPAdapter
 from client.adapters.base_adapter import BaseWorkerAdapter
@@ -17,7 +18,7 @@ from client.adapters.base_adapter import BaseWorkerAdapter
 ORCHESTRATOR_URL = os.getenv("ORCHESTRATOR_URL", "http://localhost:8000/api/v1")
 NODE_ID = os.getenv("NODE_ID", "local-node-01")
 WORKER_ID = os.getenv("WORKER_ID", "groq_worker_01")
-PROVIDER = os.getenv("PROVIDER", "groq")  # 'gemini_free', 'groq', 'ollama_local', 'claude_desktop', 'claude_desktop_cdp'
+PROVIDER = os.getenv("PROVIDER", "groq")  # 'gemini_free', 'groq', 'ollama_local', 'lmstudio_local', 'claude_desktop', 'claude_desktop_cdp'
 CDP_PORT = int(os.getenv("CDP_PORT") or os.getenv("CLAUDE_CDP_PORT") or "9222")
 LEASE_SECONDS = max(30, int(os.getenv("LEASE_SECONDS", "300")))
 LEASE_RENEWAL_SECONDS = max(10, int(os.getenv("LEASE_RENEWAL_SECONDS", str(LEASE_SECONDS // 3))))
@@ -92,6 +93,8 @@ def get_adapter() -> BaseWorkerAdapter:
         return GroqAdapter(worker_id=WORKER_ID, nickname="Groq Worker")
     elif PROVIDER == "ollama_local":
         return OllamaLocalAdapter(worker_id=WORKER_ID, nickname="Ollama Qwen Worker")
+    elif PROVIDER in ("lmstudio_local", "lmstudio"):
+        return LMStudioLocalAdapter(worker_id=WORKER_ID, nickname="LM Studio Local Worker")
     elif PROVIDER == "claude_desktop_cdp":
         return ClaudeDesktopCDPAdapter(worker_id=WORKER_ID, nickname="Claude Desktop CDP", cdp_port=CDP_PORT)
     else:

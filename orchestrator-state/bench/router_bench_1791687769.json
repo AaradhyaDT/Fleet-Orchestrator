@@ -1,0 +1,11 @@
+[
+  {
+    "model": "qwen-intent-router",
+    "sample_count": 5,
+    "json_valid_count": 5,
+    "json_valid_pct": 100.0,
+    "archetype_accuracy_pct": 40.0,
+    "latency_p50_ms": 1689.81,
+    "latency_p95_ms": 2923.59
+  }
+]

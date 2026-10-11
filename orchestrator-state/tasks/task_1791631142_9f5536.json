@@ -1,0 +1,111 @@
+{
+  "id": "task_1791631142_9f5536",
+  "kind": "code",
+  "spec": "Implement test suite for rate_limiter.py",
+  "repo": "Fleet-Orchestrator",
+  "status": "done",
+  "created_at": "2026-10-10T11:19:05Z",
+  "auto_tier": "balance",
+  "timeout_ceiling_s": 99.00000000000001,
+  "routing": {
+    "archetype": "ENGINEERING_DEV",
+    "tier": "Tier 1",
+    "matrix_cell": "(V0, R1)",
+    "policy": "BRANCH_GUARD",
+    "auto_tier": "balance",
+    "time_allocation": 45
+  },
+  "antigravity_scope": {
+    "chat_context": {
+      "conversation_id": "601d23cf-ad69-46d2-8099-c8daa8fc833a",
+      "session_goal": "also all other skills are missing too",
+      "recent_user_requests": [
+        "I can't find /adaptive-workflow skill though and what about all other skills?",
+        "continue",
+        "also all other skills are missing too"
+      ],
+      "active_artifacts": [
+        {
+          "file": "forge_notebook_audit.md",
+          "title": "Fleet Master Brain Forge Notebook \u2014 Debug & Verification Audit",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\601d23cf-ad69-46d2-8099-c8daa8fc833a\\forge_notebook_audit.md"
+        },
+        {
+          "file": "plan_vscode_fleet_integration.md",
+          "title": "Implementation Plan: VS Code Ecosystem Integration (Fleet Orchestrator + Local Brain + Antigravity Customizations)",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\601d23cf-ad69-46d2-8099-c8daa8fc833a\\plan_vscode_fleet_integration.md"
+        },
+        {
+          "file": "walkthrough_vscode_integration.md",
+          "title": "Walkthrough: VS Code Integration with Fleet-Orchestrator & Local Master Brain",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\601d23cf-ad69-46d2-8099-c8daa8fc833a\\walkthrough_vscode_integration.md"
+        }
+      ]
+    },
+    "antigravity_customizations": {
+      "rules": [
+        "Commit Integrity: Never use synthetic or placeholder SHAs; authentic 7-40 hex git commit hashes only.",
+        "Version Control: Worktree-local commits are authorized; root repository merges/pushes must run via sync.bat.",
+        "Calm Authority Writing: Follow Anthropic Calm Authority Standard (declarative, zero hype superlatives).",
+        "Verification Gate: Local test suite and linters must pass clean before completion.",
+        "Worktree Isolation: Confine all file modifications strictly to the assigned git worktree."
+      ],
+      "active_skills": [
+        "academic-notebook-architect",
+        "adaptive-workflow",
+        "agent-teams-orchestration",
+        "ai-engineering-fellowship",
+        "avionic-telecom-analyzer",
+        "bitwarden",
+        "chat-archiver",
+        "chrome-extensions",
+        "colab-cloud-accelerator",
+        "cold-storage-archiver",
+        "compliance-report-harmonizer",
+        "control-systems-sim",
+        "cp-archive-harvester",
+        "customization-state-sync",
+        "cyber-forensics",
+        "design-taste-frontend",
+        "doc-archiver",
+        "dsa-complexity-optimizer",
+        "dsp-signal-engine",
+        "electronics-circuit-synth",
+        "embedded-firmware-scaffold",
+        "feature-dev",
+        "find-skills",
+        "fleet-orchestrator",
+        "fluid-wordmark-collapse",
+        "github-workflow",
+        "google-classroom",
+        "google-stitch-integration",
+        "graphify",
+        "graphify-code-search",
+        "graphify-optimizer",
+        "latex-thesis-architect",
+        "mcp-integration",
+        "modern-web-guidance",
+        "oose-architecture-modeler",
+        "pm-workflow-orchestrator",
+        "portfolio-project-manager",
+        "pr-review-toolkit",
+        "rf-link-budget-calc",
+        "security-guidance",
+        "shadcn-context",
+        "skill-development",
+        "slm-router-forge",
+        "split-to-prs",
+        "super-nlm",
+        "super-nlm-downloads",
+        "systems-concurrency-harness",
+        "win-vault",
+        "winpilot",
+        "writing-like-claude"
+      ],
+      "repo_rules_path": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\AGENTS.md"
+    }
+  },
+  "owner_account": "copilot-w5",
+  "branch_name": "task/task_1791631142_9f5536",
+  "updated_at": "2026-10-10T11:21:06Z"
+}

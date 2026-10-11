@@ -22,47 +22,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from client.antigravity_bridge import harvest_chat_context, harvest_antigravity_customizations
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-logger = logging.getLogger("dispatch")
+from tools.fast_intent_router import route_intent
 
 TASKS_DIR = ROOT / "orchestrator-state" / "tasks"
-
-def query_local_brain(prompt: str) -> dict:
-    """Queries local fleet-master-3b at port 1234 for sub-50ms intent & duration routing."""
-    import urllib.request
-    try:
-        payload = {
-            "model": "fleet-master-3b",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You are the high-speed Intent, Skill, and Task Time Allocation Router for the Aaradhya development ecosystem. Classify the incoming user intent into the exact lifecycle archetype, tier, 2D matrix cell, primary skill, auto_tier, and task time allocation in strict JSON format."
-                },
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.1,
-            "max_tokens": 150
-        }
-        req = urllib.request.Request(
-            "http://127.0.0.1:1234/v1/chat/completions",
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"}
-        )
-        with urllib.request.urlopen(req, timeout=3.0) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            content = data["choices"][0]["message"]["content"]
-            return json.loads(content)
-    except Exception as e:
-        logger.warning(f"Local brain fallback (heuristic): {e}")
-        return {
-            "archetype": "ENGINEERING_DEV",
-            "tier": "Tier 1",
-            "matrix_cell": "(V0, R1)",
-            "policy": "BRANCH_GUARD",
-            "auto_tier": "balance",
-            "time_allocation": 45
-        }
 
 def main():
     parser = argparse.ArgumentParser(description="Fleet Orchestrator Quick Dispatcher")
@@ -78,10 +40,20 @@ def main():
     print(f"Spec: {args.spec}")
 
     # 1. Consult local silicon router
-    routing = query_local_brain(args.spec)
+    routing = route_intent(args.spec)
     auto_tier = args.tier or routing.get("auto_tier", "balance")
-    timeout_s = routing.get("time_allocation", 60)
-    print(f"[LOCAL BRAIN 1234] Auto-Tier: {auto_tier} | Policy: {routing.get('policy')} | Timeout: {timeout_s}s")
+    time_alloc = routing.get("time_allocation")
+    if isinstance(time_alloc, dict):
+        timeout_ceiling_s = time_alloc.get("timeout_ceiling_s", 120)
+        duration_s = time_alloc.get("estimated_duration_s", 45)
+    elif isinstance(time_alloc, (int, float)):
+        duration_s = time_alloc
+        timeout_ceiling_s = min(1200, max(30, int(time_alloc * 2.2)))
+    else:
+        duration_s = 45
+        timeout_ceiling_s = 120
+
+    print(f"[LOCAL BRAIN] Source: {routing.get('source')} | Auto-Tier: {auto_tier} | Policy: {routing.get('policy')} | Est: {duration_s}s (Ceiling: {timeout_ceiling_s}s)")
 
     # 2. Package Antigravity context & customizations
     chat_ctx = harvest_chat_context()
@@ -95,7 +67,7 @@ def main():
         "status": "pending",
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "auto_tier": auto_tier,
-        "timeout_ceiling_s": timeout_s * 2.2 if isinstance(timeout_s, (int, float)) else 120,
+        "timeout_ceiling_s": timeout_ceiling_s,
         "routing": routing,
         "antigravity_scope": {
             "chat_context": chat_ctx,

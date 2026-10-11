@@ -11,7 +11,7 @@ A production-grade, distributed multi-agent task execution and coordination plat
   - **GitHub Copilot Headless (`CopilotHeadlessAdapter`)**: Pure asynchronous HTTP client with an OpenAI-compatible autonomous tool-calling loop (`read_file`, `write_file`, `run_command`) executing at **$\sim 10\text{--}15\text{ MB RAM}$** per worker.
   - **Claude Desktop CDP Bridge (`ClaudeDesktopProxy`)**: Heavy reasoning, architecture drafting, and adversarial QA review tier running against local Chromium CDP debug ports.
   - **Gemini Free-Tier (`GeminiFreeAdapter`)**: High-rate API execution for large-context summarization and extraction.
-  - **Groq & Local Ollama**: Zero-latency local/cloud open weights for lightweight formatting and classification.
+  - **Groq, LM Studio Local & Ollama**: Zero-latency local/cloud open weights for lightweight formatting, routing, extraction, and offline code generation. Local inference runs primarily on LM Studio (`localhost:1234/v1`) using Intel Arc iGPU / Vulkan acceleration.
 
 - **Multi-Account Credit Pooling ($N \times 200$)**:
   - Dynamically pools $N$ independent GitHub accounts into a shared quota pool (e.g. 5 accounts = 1,000 monthly credits).
@@ -45,6 +45,7 @@ Fleet-Orchestrator/
 ├── client/                        # Autonomous worker daemons & adapter mesh
 │   ├── worker_daemon.py           # Polling daemon: registers worker, claims tasks
 │   ├── fleet_supervisor.py        # Supervises concurrent worker fleet pools
+│   ├── local_llm.py               # Lightweight stdlib client for LM Studio / local LLMs
 │   └── adapters/                  # Provider adapters
 │       ├── base_adapter.py        # Abstract worker interface
 │       ├── copilot_cli_adapter.py # GitHub Copilot CLI subprocess adapter
@@ -53,6 +54,7 @@ Fleet-Orchestrator/
 │       ├── gemini_api_adapter.py  # Modern google-genai v2.25.0 adapter (Gemini 3.8 Flash)
 │       ├── gemini_free_adapter.py # Backward-compatible Gemini adapter
 │       ├── groq_adapter.py        # Groq LLM adapter
+│       ├── lmstudio_local_adapter.py# LM Studio local models adapter (fleet-master-3b/7b)
 │       └── ollama_local_adapter.py# Ollama local models adapter
 │
 ├── .agents/skills/fleet-orchestrator/ # Specialized Antigravity skill for swarm control
@@ -60,6 +62,8 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Schemas, worker roles, and live status
 ├── worker-prompts/                # Specialized role system prompts (lead, scout, coder, qa)
 ├── tools/                         # CLI controllers and dashboards
+│   ├── models.ps1 / models.bat    # Local model lifecycle manager (status, up, heavy, down, bench)
+│   ├── bench_local_router.py      # Quantitative local router benchmark
 │   ├── ci_secret_scanner.py       # Standalone secret leakage audit tool
 │   ├── ci_self_healing_runner.py  # Self-healing test runner with flaky retries
 │   ├── credit_ledger.py           # Leaf credit ledger engine with OS locking & session harvesting
