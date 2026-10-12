@@ -126,6 +126,26 @@ python tools/unified_fleet_cli.py watch      # In-terminal live HUD (zero popups
 - `--auto-tier intelligence`: Frontier reasoning models for architectural refactoring, complex algorithms, or high blast-radius files.
 - **Model Escalation**: Direct override via `--model <name>` (e.g. `--model gemini-3.8-flash`, `claude-3.7-sonnet`, `o3-mini`).
 
+#### Tier-Aware Timeout Floor Escalation
+The SLM router (`fast_intent_router.py`) computes a `timeout_ceiling_s` from prompt semantics (formula: `min(1200, max(30, duration_s × 2.2))`). When the user explicitly passes `--auto-tier`, the CLI enforces a **minimum floor** to prevent the SLM's ceiling from being too tight for the selected tier:
+
+| Auto-Tier | Timeout Floor | Use Case |
+|:---|:---|:---|
+| `efficiency` | 120s | Fast edits, linting, small fixes |
+| `balance` | 300s | Medium implementations, docstrings, refactoring |
+| `intelligence` | 600s | Architectural rewrites, complex algorithms |
+
+If the SLM computes a ceiling below the tier floor, the ceiling is escalated to the floor. This prevents timeout failures when the SLM underestimates task complexity.
+
+#### Time Allocation Tiers (SLM Router Classification)
+
+| Tier | Est. Duration | Typical Tasks |
+|:---|:---|:---|
+| `T0_MICRO` | ~12s | Short prompts with `DIRECT_FAST` policy |
+| `T1_FAST` | 35–50s | General tasks, word count > 25 |
+| `T2_MEDIUM` | 63–120s | Documentation, refactoring, audits, scaffolding, ML/AI tasks |
+| `T3_LONG` | 240s | Batch, swarm, fleet, worker pool tasks |
+
 ### Meteor Lake Tri-Hardware Runtime (`AUTO:NPU,GPU,CPU`)
 On Intel Core Ultra 7 155H (16 cores / 22 threads, 11 TOPS NPU, 8 Xe-cores Arc iGPU), the local SLM inference engine executes across 4 cascading tiers:
 1. **Level 1 (NPU - 11 TOPS)**: OpenVINO GenAI INT4 via `.venv-npu` (Python 3.12.10). Zero host CPU utilization (~2W envelope).
@@ -174,7 +194,17 @@ python tools/copilot_queue_worker.py --no-worktree                      # Disabl
 ```powershell
 python tools/fast_intent_router.py "dispatch swarm task across copilot fleet"
 ```
-Routes via Meteor Lake Tri-Hardware (OpenVINO INT4 on NPU/iGPU) → LM Studio HTTP (1234) → heuristic fallback. Returns structured `{archetype, tier, matrix_cell, policy, primary_skill, velocity, auto_tier, recommended_copilot_model}`.
+Routes via Meteor Lake Tri-Hardware (OpenVINO INT4 on NPU/iGPU) → LM Studio HTTP (1234) → heuristic fallback. Returns structured `{archetype, tier, matrix_cell, policy, primary_skill, velocity, auto_tier, recommended_copilot_model, time_allocation}`.
+
+**Keyword Classification Branches** (heuristic fallback):
+- **Fleet/Swarm** (`batch`, `swarm`, `fleet`, `worker pool`) → `T3_LONG` (240s)
+- **AI/ML** (`mlops`, `text-to-sql`, `vision transformers`, `rag assistant`) → `T2_MEDIUM` (90s)
+- **Scaffolding** (`scaffold`, `pipeline`, `syllabus`) → `T2_MEDIUM` (120s)
+- **Surgical** (`refactor`, `audit`, `access.js`) → `T2_MEDIUM` (75s)
+- **Documentation** (`docstring`, `jsdoc`, `typehint`, `type annotation`, `add comments`) → `T2_MEDIUM` (90s)
+- **Medium verbosity** (word count > 25) → `T1_FAST` (50s)
+- **Micro** (word count < 8, `DIRECT_FAST`) → `T0_MICRO` (12s)
+- **Default** → `T1_FAST` (35s)
 
 ### SKU Task Dispatching
 ```powershell
@@ -233,6 +263,7 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
    - Copilot: GitHub Fine-Grained PATs with "Copilot Requests" R/W and 90-day expiry.
    - Gemini: Google AI Studio keys generated in separate GCP projects to multiply RPM/RPD without hitting single-project bottlenecks.
    - AGY: Headless CLI workers require isolated `AGY_WORKER_HOME` sandboxes to prevent SQLite lock collisions on `conversation_summaries.db`, plus mandatory `--dangerously-skip-permissions`.
+10. **Tier-Aware Timeout Floor (`INV-TIER-FLOOR`)**: The `--auto-tier` flag enforces minimum timeout floors (`efficiency`→120s, `balance`→300s, `intelligence`→600s). The SLM's computed `timeout_ceiling_s` is escalated to the tier floor when it falls below, preventing timeout kills on correctly-scoped tasks.
 
 ---
 

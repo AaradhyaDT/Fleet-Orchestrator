@@ -157,6 +157,24 @@ python tools/fleet_commander.py --specs "Implement feature A" "Refactor module B
 ```
 *Enforces Context Firebreak Invariant (`INV-CTX-FIREBREAK`), isolates child logs, checks fleet health ratio $H$, and emits a structured $\le 300$-word manifest.*
 
+### Step 6: Antigravity 2.0 Background Task Handoff
+Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with live milestone streaming in the Background Tasks pane:
+```powershell
+.\fleet.bat run-task --spec "Add docstrings to tools/credit_ledger.py" --auto-tier balance
+.\fleet.bat run-task --spec "Refactor pipeline" --auto-tier intelligence --model gemini-3.8-flash
+.\fleet.bat run-task --spec "Quick lint fix" --auto-tier efficiency
+.\fleet.bat run-task --spec "Implement validator" --target-repo "F:\Aaradhya-Dev-Tamrakar\SPARK"
+.\fleet.bat run-task --spec "Scaffold module" --dry-run
+```
+
+**Auto-Tier Timeout Floors**: The SLM router computes dynamic `timeout_ceiling_s` from prompt semantics. The CLI enforces minimum floors per tier to prevent premature kills:
+
+| `--auto-tier` | Timeout Floor | Model Class |
+|:---|:---|:---|
+| `efficiency` | 120s | GPT-4o-mini / Haiku |
+| `balance` | 300s | Default balanced |
+| `intelligence` | 600s | Frontier reasoning |
+
 ---
 
 ## 4. Verification & Testing

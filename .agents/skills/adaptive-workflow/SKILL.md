@@ -42,7 +42,7 @@ Protocols: [`references/fleet-command-architecture.md`](references/fleet-command
 | **Tier 0** | Routine: `audit.bat`, `sync.bat`, thesis compile, tests | Shell / Python | **$0.00** | **<20 ms** / **<10 MB** |
 | **Tier 1A** | Intent triage, time allocation, matrix routing | `fleet-master-3b` / `qwen-router` | **$0.00** | **30-50 ms** / **380MB–1.8GB** |
 | **Tier 1B** | Agent-Reflex self-healing & action prefetch | `fleet-master-3b` (port 1234) | **$0.00** | **<50 ms** / **~1.8 GB** |
-| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (27 workers) | **$0.00** | Cloud / **<30 MB** |
+| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (27 workers, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
 | **Tier 1D** | Deep refactoring, test fixes, invariant audits | `fleet-master-7b` ($\ge 8\text{GB}$ RAM) | **$0.00** | **300-800 ms** / **~4.36 GB** |
 | **Tier 1E** | Cloud GPU/TPU training, CUDA, remote `.ipynb` | `colab-cloud-accelerator` | Compute units | Cloud VM / **0 MB** |
 | **Tier 2** | Interactive conversational reasoning | Gemini 3.8 Flash / Lite | **<$0.001** | Sub-second / **0 MB** |
