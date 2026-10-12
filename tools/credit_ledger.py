@@ -30,12 +30,22 @@ _EVENT_FILE_CACHE: dict[str, tuple[int, float, int, str]] = {}
 
 def resolve_state_dir(orch_state: Path | str | None = None) -> Path:
     """
-    Resolves the orchestrator state directory dynamically.
-    Precedence:
-    1. Explicit path parameter if provided.
-    2. ORCHESTRATOR_STATE_DIR environment variable if set.
-    3. orchestrator-state/ relative to current directory or parent directory.
-    4. Default F:/Aaradhya-Dev-Tamrakar/Fleet-Orchestrator/orchestrator-state.
+    Resolve and create the orchestrator state directory.
+
+    The directory is selected in this order: an explicit argument, the
+    ``ORCHESTRATOR_STATE_DIR`` environment variable, an existing
+    ``orchestrator-state`` directory under the current or parent directory,
+    and finally the configured project default.
+
+    Args:
+        orch_state: Optional explicit path to the state directory.
+
+    Returns:
+        The resolved state directory path.
+
+    Raises:
+        OSError: If the selected directory cannot be created.
+        RuntimeError: If path resolution fails.
     """
     if orch_state:
         p = Path(orch_state).resolve()
@@ -62,7 +72,23 @@ def resolve_state_dir(orch_state: Path | str | None = None) -> Path:
 
 
 def parse_iso_utc(ts_val: Any) -> datetime | None:
-    """Parses an ISO timestamp string or epoch milliseconds into an aware UTC datetime."""
+    """Parse a timestamp value as an aware UTC datetime.
+
+    ISO-formatted strings and epoch milliseconds are supported. Naive
+    timestamps are interpreted as UTC; malformed or unsupported values return
+    ``None``.
+
+    Args:
+        ts_val: ISO timestamp string, epoch milliseconds, or another value to
+            parse.
+
+    Returns:
+        The timestamp normalized to UTC, or ``None`` when parsing fails.
+
+    Raises:
+        None. Conversion and parsing errors are caught and represented by
+        ``None``.
+    """
     if not ts_val:
         return None
     try:
@@ -81,7 +107,18 @@ def parse_iso_utc(ts_val: Any) -> datetime | None:
 
 
 def next_billing_reset(now: datetime | None = None) -> datetime:
-    """Computes 00:00:00 UTC on the 1st of the next calendar month."""
+    """Compute midnight UTC on the first day of the next calendar month.
+
+    Args:
+        now: Optional reference datetime. When omitted, the current UTC time
+            is used.
+
+    Returns:
+        An aware UTC datetime for the next monthly billing reset.
+
+    Raises:
+        OverflowError: If ``now`` is in December of the maximum datetime year.
+    """
     dt = now.astimezone(timezone.utc) if now else datetime.now(timezone.utc)
     if dt.month == 12:
         return datetime(dt.year + 1, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
@@ -89,13 +126,51 @@ def next_billing_reset(now: datetime | None = None) -> datetime:
 
 
 class FileLock:
-    """Cross-platform OS file lock using msvcrt (Windows) or fcntl (POSIX)."""
+    """Manage an exclusive cross-platform operating-system file lock.
+
+    Use this class as a context manager to acquire the lock on entry and
+    release it on exit. Windows uses ``msvcrt``; POSIX platforms use ``fcntl``.
+
+    Args:
+        lock_path: Filesystem path of the lock file. Its parent directory is
+            created when the lock is acquired.
+
+    Returns:
+        A ``FileLock`` context manager for the specified lock file.
+
+    Raises:
+        OSError: If opening or acquiring the lock file fails.
+    """
 
     def __init__(self, lock_path: Path):
+        """Initialize a lock manager for ``lock_path``.
+
+        Args:
+            lock_path: Path to the file used for interprocess locking.
+
+        Returns:
+            None.
+
+        Raises:
+            TypeError: If ``lock_path`` is not a valid filesystem path.
+            The file is not opened until the context manager is entered.
+        """
         self.lock_path = Path(lock_path)
         self.file_obj: Any = None
 
     def __enter__(self) -> FileLock:
+        """Open the lock file and acquire its exclusive lock.
+
+        Args:
+            None.
+
+        Returns:
+            This lock manager, allowing use in a ``with`` statement.
+
+        Raises:
+            OSError: If the lock file cannot be opened or the lock cannot be
+                acquired.
+        """
         self.lock_path.parent.mkdir(parents=True, exist_ok=True)
         self.file_obj = open(self.lock_path, "a+b")
         if sys.platform == "win32":
@@ -114,6 +189,21 @@ class FileLock:
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Release the lock and close its file handle.
+
+        Args:
+            exc_type: Exception type raised inside the context, if any.
+            exc_val: Exception value raised inside the context, if any.
+            exc_tb: Traceback for the exception raised inside the context, if
+                any.
+
+        Returns:
+            None.
+
+        Raises:
+            OSError: If closing the lock file fails. Unlock errors are
+                suppressed so the handle is still closed.
+        """
         if self.file_obj:
             try:
                 self.file_obj.seek(0)
@@ -129,7 +219,28 @@ class FileLock:
 
 
 def atomic_write_json(target_path: Path, data: dict[str, Any], max_attempts: int = 5) -> None:
-    """Atomically writes JSON using a unique tempfile and Windows-safe retry loop."""
+    """Atomically write a JSON object to a file.
+
+    The data is serialized to a unique temporary file beside the target, then
+    moved into place with ``os.replace``. Permission failures during replacement
+    are retried before a final uncaught attempt.
+
+    Args:
+        target_path: Destination path for the JSON file.
+        data: JSON-serializable mapping to write.
+        max_attempts: Number of replacement attempts before the final attempt.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: If creating or writing the temporary file fails, or if the
+            final replacement attempt fails.
+        TypeError: If ``data`` contains a value that cannot be serialized as
+            JSON.
+        ValueError: If ``data`` contains a circular reference that cannot
+            be serialized as JSON.
+    """
     target_path = Path(target_path)
     target_path.parent.mkdir(parents=True, exist_ok=True)
     tid = threading.get_ident()
@@ -155,9 +266,26 @@ def harvest_worker_sessions(
     month_prefix: str | None = None,
 ) -> dict[str, int]:
     """
-    Harvests authentic Copilot session usage from worker_home/session-state/*/events.jsonl.
-    Uses (file_size, mtime) caching to skip re-reading unchanged event files.
-    Returns: {session_id: nano_aiu} strictly for sessions matching month_prefix.
+    Collect Copilot usage totals from a worker's session event logs.
+
+    The function scans ``session-state/*/events.jsonl``, extracts the greatest
+    recorded ``totalNanoAiu`` value from shutdown events, and caches results
+    using each event file's size and modification time. Only sessions matching
+    the requested month are included.
+
+    Args:
+        worker_home: Worker home directory containing ``session-state``.
+        month_prefix: Billing month in ``YYYY-MM`` format. Defaults to the
+            current UTC month.
+
+    Returns:
+        A mapping from session ID to its usage in nano-AIU units. Missing
+        session-state directories produce an empty mapping.
+
+    Raises:
+        OSError: If the worker home path cannot be inspected. Errors reading
+            individual event files are logged and skipped.
+        TypeError: If ``worker_home`` cannot be converted to a filesystem path.
     """
     worker_home = Path(worker_home)
     s_dir = worker_home / "session-state"
@@ -233,12 +361,39 @@ def sync_worker_ledger(
     note: str | None = None,
 ) -> dict[str, Any]:
     """
-    Authoritative per-worker synchronizer.
-    1. Locks orchestrator-state/ledger/{worker_id}.lock.
-    2. Harvests fresh session metrics from account['state_dir'].
-    3. Merges sessions and provisional credits in orchestrator-state/ledger/{worker_id}.json.
-    4. Handles month rollover: zeroes usage if period differs.
-    5. Writes orchestrator-state/live-status/{worker_id}.json atomically.
+    Synchronize one worker's authoritative credit ledger and live status.
+
+    This operation locks the worker ledger, harvests session metrics, merges
+    provisional credits, resets the ledger when the billing period changes,
+    computes quota status, and atomically updates both ledger and live-status
+    files.
+
+    Args:
+        orch_state: Optional orchestrator state directory. If omitted, the
+            standard state-directory resolution rules are used.
+        account: Worker configuration. Must include ``worker_id`` and may
+            include ``state_dir``, ``monthly_credits``, ``has_token``, and
+            ``name``.
+        provisional_credits: Additional credits to record for this
+            synchronization; non-positive values are ignored.
+        current_period: Billing period in ``YYYY-MM`` format. Defaults to the
+            current UTC month.
+        force_cooldown: Whether to mark the worker as cooling down unless its
+            quota is exhausted or it already has an active task.
+        cooldown_until: Optional ISO timestamp for the cooldown expiry.
+        note: Optional status note, taking precedence over the existing note
+            and generated default.
+
+    Returns:
+        The live-status payload written for the worker, including usage,
+        remaining credits, quota state, and worker status.
+
+    Raises:
+        KeyError: If ``account`` does not contain ``worker_id``.
+        OSError: If the lock, ledger, or live-status files cannot be accessed
+            or written.
+        TypeError: If the account values or stored JSON data have incompatible
+            types.
     """
     resolved_orch = resolve_state_dir(orch_state)
     ledger_dir = resolved_orch / "ledger"
@@ -368,9 +523,30 @@ def reconcile_all_workers(
     month_prefix: str | None = None,
 ) -> dict[str, Any]:
     """
-    Reconciles all configured workers against their on-disk session logs.
-    Strictly idempotent: running it multiple times produces identical credit totals.
-    If month_prefix is a past month, runs in report-only mode without mutating live-status.
+    Reconcile usage and quota status for all configured workers.
+
+    Reconciliation is idempotent for a given set of on-disk usage data. When
+    ``month_prefix`` names a period other than the current UTC month, the
+    function reports harvested session usage without changing worker ledgers
+    or live-status files.
+
+    Args:
+        orch_state: Optional orchestrator state directory. If omitted, the
+            standard state-directory resolution rules are used.
+        accounts: Worker configurations to reconcile. Each account must
+            include ``worker_id`` and ``name``; ``state_dir`` and
+            ``monthly_credits`` are optional.
+        month_prefix: Billing period in ``YYYY-MM`` format. Defaults to the
+            current UTC month.
+
+    Returns:
+        A summary containing the target period, report-only flag, per-worker
+        results, total credits used, total monthly credits, and session count.
+
+    Raises:
+        KeyError: If a required account field is missing.
+        OSError: If state or ledger files cannot be accessed or written.
+        TypeError: If account data or persisted JSON has incompatible types.
     """
     resolved_orch = resolve_state_dir(orch_state)
     now_period = datetime.now(timezone.utc).strftime("%Y-%m")
@@ -424,7 +600,27 @@ def initialize_ledgers(
     orch_state: Path | str | None,
     accounts: list[dict[str, Any]],
 ) -> int:
-    """Ensures each account has an initialized live-status file. Idempotent."""
+    """Create live-status files for accounts that do not yet have one.
+
+    Existing status files are left untouched, making repeated calls
+    idempotent.
+
+    Args:
+        orch_state: Optional orchestrator state directory. If omitted, the
+            standard state-directory resolution rules are used.
+        accounts: Worker configurations to initialize. Each account must
+            include ``worker_id`` and any fields required by
+            :func:`sync_worker_ledger`.
+
+    Returns:
+        The number of live-status files created.
+
+    Raises:
+        KeyError: If an account is missing a required field.
+        OSError: If the state directory or a live-status file cannot be
+            accessed or written.
+        TypeError: If an account contains incompatible values.
+    """
     resolved_orch = resolve_state_dir(orch_state)
     live_status_dir = resolved_orch / "live-status"
     live_status_dir.mkdir(parents=True, exist_ok=True)
