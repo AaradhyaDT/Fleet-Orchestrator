@@ -1,0 +1,11 @@
+{
+  "task_id": "task_1791793457_cross-repo-integration-contract-check",
+  "timestamp": "2026-10-12T08:26:51Z",
+  "worker_id": "copilot-w14",
+  "auto_tier": "efficiency",
+  "model": null,
+  "spec": "Validate schema conformity across repositories",
+  "error": "TIMEOUT: Exceeded 149.0s execution window",
+  "stdout": "",
+  "stderr": ""
+}

@@ -13,6 +13,12 @@ async def verify_api_key(
     """Verify that incoming request provides a valid API token via Bearer header or X-API-Key."""
     expected_key = settings.API_AUTH_KEY
     if not expected_key:
+        if settings.ENVIRONMENT == "production" or not settings.ALLOW_ANONYMOUS_DEV:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required: server has no valid API_AUTH_KEY configured",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         return "anonymous"
 
     token = None

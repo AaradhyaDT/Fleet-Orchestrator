@@ -29,6 +29,7 @@ class Settings(BaseModel):
     
     # Security
     API_AUTH_KEY: str = os.getenv("API_AUTH_KEY", "")
+    ALLOW_ANONYMOUS_DEV: bool = os.getenv("ALLOW_ANONYMOUS_DEV", "true").lower() in ("true", "1")
     
     # Scheduler & Supervisor Settings
     HEARTBEAT_TIMEOUT_SECONDS: int = 120
@@ -43,5 +44,5 @@ settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 def validate_security_settings() -> None:
     if settings.ENVIRONMENT == "production":
-        if len(settings.API_AUTH_KEY) < 32:
+        if not settings.API_AUTH_KEY or len(settings.API_AUTH_KEY) < 32:
             raise RuntimeError("Production requires API_AUTH_KEY with at least 32 characters")

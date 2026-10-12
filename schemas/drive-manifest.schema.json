@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DriveManifest",
+  "description": "Schema for drive-manifest.json coordinating Google Drive and NotebookLM synchronization.",
+  "type": "object",
+  "required": [
+    "folder_id",
+    "folder_url",
+    "notebook_id",
+    "files"
+  ],
+  "properties": {
+    "folder_id": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Google Drive target folder ID."
+    },
+    "folder_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Direct link to the Google Drive folder."
+    },
+    "notebook_id": {
+      "type": "string",
+      "description": "Associated Google NotebookLM notebook ID."
+    },
+    "files": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "drive_file_id",
+          "drive_file_name",
+          "description",
+          "sha256"
+        ],
+        "properties": {
+          "drive_file_id": {
+            "type": "string",
+            "minLength": 5
+          },
+          "drive_file_name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "description": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 8
+          },
+          "colab_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

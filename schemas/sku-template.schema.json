@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SKUTemplate",
+  "description": "Schema for declarative SKU DAG batch job pipeline templates.",
+  "type": "object",
+  "required": [
+    "sku_id",
+    "display_name",
+    "pipeline",
+    "input_format",
+    "input_columns",
+    "output_format",
+    "output_columns",
+    "quality_rules"
+  ],
+  "properties": {
+    "sku_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "Unique identifier slug for the SKU template."
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human-readable title describing the batch production pipeline."
+    },
+    "pipeline": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Ordered execution stages for the pipeline."
+    },
+    "input_format": {
+      "type": "string",
+      "enum": ["csv", "json", "pdf_or_text", "markdown_and_pdf", "text", "markdown"],
+      "description": "Expected intake artifact or dataset format."
+    },
+    "input_columns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Expected input record keys, headers, or parameters."
+    },
+    "output_format": {
+      "type": "string",
+      "enum": ["csv", "json", "markdown", "text"],
+      "description": "Target artifact format produced by the final pipeline stage."
+    },
+    "output_columns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Keys or files produced by the pipeline."
+    },
+    "quality_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Strict qualitative and quantitative constraints evaluated during QA stages."
+    },
+    "estimated_minutes_per_record": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated processing time per record in minutes."
+    },
+    "records_per_batch": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Standard batch unit count."
+    },
+    "estimated_minutes_per_course": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated processing time per course unit in minutes."
+    },
+    "courses_per_batch": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Standard batch unit count for academic courses."
+    }
+  },
+  "additionalProperties": false
+}

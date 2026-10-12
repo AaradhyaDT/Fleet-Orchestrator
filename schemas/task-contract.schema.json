@@ -1,0 +1,641 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FleetOrchestratorContractSchemas",
+  "description": "Portable JSON Schema definitions for Fleet-Orchestrator tasks, jobs, workers, and reviews.",
+  "$defs": {
+    "TaskCreate": {
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "stage": {
+          "title": "Stage",
+          "type": "string"
+        },
+        "stage_order": {
+          "default": 1,
+          "title": "Stage Order",
+          "type": "integer"
+        },
+        "kind": {
+          "default": "text",
+          "enum": [
+            "text",
+            "code"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "spec": {
+          "title": "Spec",
+          "type": "string"
+        },
+        "priority": {
+          "default": 5,
+          "title": "Priority",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "stage",
+        "spec"
+      ],
+      "title": "TaskCreate",
+      "type": "object"
+    },
+    "TaskResponse": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Job Id"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parent Id"
+        },
+        "stage": {
+          "title": "Stage",
+          "type": "string"
+        },
+        "stage_order": {
+          "title": "Stage Order",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "code"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "spec": {
+          "title": "Spec",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "claimed",
+            "blocked",
+            "done",
+            "merged",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "integer"
+        },
+        "owner_worker_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Owner Worker Id"
+        },
+        "claimed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Claimed At"
+        },
+        "lease_expires_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lease Expires At"
+        },
+        "claim_token": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Claim Token"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Completed At"
+        },
+        "blocked_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Blocked Reason"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "job_id",
+        "parent_id",
+        "stage",
+        "stage_order",
+        "kind",
+        "spec",
+        "status",
+        "priority",
+        "owner_worker_id",
+        "claimed_at",
+        "completed_at",
+        "blocked_reason",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "TaskResponse",
+      "type": "object"
+    },
+    "JobCreate": {
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "client": {
+          "title": "Client",
+          "type": "string"
+        },
+        "input_uri": {
+          "title": "Input Uri",
+          "type": "string"
+        },
+        "pipeline": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pipeline",
+          "type": "array"
+        },
+        "quality_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quality Rules",
+          "type": "array"
+        },
+        "deadline": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deadline"
+        }
+      },
+      "required": [
+        "sku",
+        "client",
+        "input_uri"
+      ],
+      "title": "JobCreate",
+      "type": "object"
+    },
+    "JobResponse": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "client": {
+          "title": "Client",
+          "type": "string"
+        },
+        "input_uri": {
+          "title": "Input Uri",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "intake",
+            "decomposing",
+            "running",
+            "qa_hold",
+            "completed",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "pipeline": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pipeline",
+          "type": "array"
+        },
+        "quality_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quality Rules",
+          "type": "array"
+        },
+        "deadline": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Deadline"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "sku",
+        "client",
+        "input_uri",
+        "status",
+        "pipeline",
+        "quality_rules",
+        "deadline",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "JobResponse",
+      "type": "object"
+    },
+    "WorkerResponse": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "node_id": {
+          "title": "Node Id",
+          "type": "string"
+        },
+        "nickname": {
+          "title": "Nickname",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "idle",
+            "busy",
+            "cooldown",
+            "offline"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "quota_limit_per_window": {
+          "title": "Quota Limit Per Window",
+          "type": "integer"
+        },
+        "quota_used_current": {
+          "title": "Quota Used Current",
+          "type": "integer"
+        },
+        "cooldown_window_minutes": {
+          "title": "Cooldown Window Minutes",
+          "type": "integer"
+        },
+        "cooldown_until": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cooldown Until"
+        },
+        "rate_limit_headroom": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rate Limit Headroom"
+        },
+        "last_heartbeat": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Heartbeat"
+        },
+        "registered_at": {
+          "title": "Registered At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "provider",
+        "node_id",
+        "nickname",
+        "status",
+        "capabilities",
+        "quota_limit_per_window",
+        "quota_used_current",
+        "cooldown_window_minutes",
+        "cooldown_until",
+        "last_heartbeat",
+        "registered_at"
+      ],
+      "title": "WorkerResponse",
+      "type": "object"
+    },
+    "CheckpointResponse": {
+      "properties": {
+        "task_id": {
+          "title": "Task Id",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Job Id"
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "code"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "result_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Result Text"
+        },
+        "branch_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Branch Name"
+        },
+        "commit_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Commit Sha"
+        },
+        "submitted_by": {
+          "title": "Submitted By",
+          "type": "string"
+        },
+        "submitted_at": {
+          "title": "Submitted At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "job_id",
+        "kind",
+        "summary",
+        "result_text",
+        "branch_name",
+        "commit_sha",
+        "submitted_by",
+        "submitted_at"
+      ],
+      "title": "CheckpointResponse",
+      "type": "object"
+    },
+    "QAReviewResponse": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "integer"
+        },
+        "task_id": {
+          "title": "Task Id",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Job Id"
+        },
+        "reviewer_worker_id": {
+          "title": "Reviewer Worker Id",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail",
+            "revision_needed"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "rejection_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rejection Reason"
+        },
+        "checks_passed": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "title": "Checks Passed",
+          "type": "object"
+        },
+        "reviewed_at": {
+          "title": "Reviewed At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "job_id",
+        "reviewer_worker_id",
+        "verdict",
+        "rejection_reason",
+        "checks_passed",
+        "reviewed_at"
+      ],
+      "title": "QAReviewResponse",
+      "type": "object"
+    }
+  }
+}

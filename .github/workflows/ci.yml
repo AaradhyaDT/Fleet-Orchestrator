@@ -8,8 +8,10 @@ on:
       - 'server/**'
       - 'tools/**'
       - 'tests/**'
+      - 'schemas/**'
       - 'sku-templates/**'
       - 'orchestrator-state/**'
+      - 'drive-manifest.json'
       - 'requirements*.txt'
       - 'ruff.toml'
       - 'pytest.ini'
@@ -21,8 +23,10 @@ on:
       - 'server/**'
       - 'tools/**'
       - 'tests/**'
+      - 'schemas/**'
       - 'sku-templates/**'
       - 'orchestrator-state/**'
+      - 'drive-manifest.json'
       - 'requirements*.txt'
       - 'ruff.toml'
       - 'pytest.ini'
@@ -63,15 +67,10 @@ jobs:
       - name: Run Secret Leakage Audit
         run: python tools/ci_secret_scanner.py --all
 
-      - name: Validate JSON Schemas & Templates
+      - name: Validate Declarative Schemas & Templates
         run: |
-          python -c "
-          import json, glob
-          for path in glob.glob('sku-templates/*.json') + glob.glob('orchestrator-state/**/*.json', recursive=True):
-              with open(path, 'r', encoding='utf-8') as f:
-                  json.load(f)
-          print('[+] All declarative DAG templates and schemas are syntactically valid JSON.')
-          "
+          pip install jsonschema
+          python tools/validate_schemas.py --all
 
   test-matrix:
     name: 🧪 Matrix Tests (${{ matrix.os }} - Py${{ matrix.python-version }})

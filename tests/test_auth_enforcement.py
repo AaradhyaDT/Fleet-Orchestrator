@@ -73,3 +73,27 @@ async def test_auth_enforced_when_api_key_configured(monkeypatch):
         # Valid MCP header auth passes through the middleware into the SSE app (returning 400 Bad Request instead of 401)
         valid_mcp = await client.post("/mcp/messages/", headers={"X-API-Key": dummy_auth_val})
         assert valid_mcp.status_code != 401, f"Expected authenticated MCP call to pass middleware, got {valid_mcp.status_code}"
+
+
+@pytest.mark.asyncio
+async def test_auth_rejects_anonymous_in_production_even_if_no_key(monkeypatch):
+    monkeypatch.setattr(settings, "ENVIRONMENT", "production")
+    monkeypatch.setattr(settings, "API_AUTH_KEY", "")
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.get("/api/v1/jobs")
+        assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_auth_rejects_anonymous_in_dev_when_allow_anonymous_disabled(monkeypatch):
+    monkeypatch.setattr(settings, "ENVIRONMENT", "development")
+    monkeypatch.setattr(settings, "API_AUTH_KEY", "")
+    monkeypatch.setattr(settings, "ALLOW_ANONYMOUS_DEV", False)
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.get("/api/v1/jobs")
+        assert resp.status_code == 401
+
