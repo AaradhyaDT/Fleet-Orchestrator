@@ -1,7 +1,7 @@
 ---
 name: edge-ai-model-forge
 description: Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to "train edge AI model", "design TinyML architecture", "quantize model for microcontroller", "optimize TFLite Micro model", "tune asymmetric loss for edge", "profile tensor arena memory", "export C header model", "prevent quantization clipping", "calibrate decision threshold on edge", "train SPARK fall detection model", "fine-tune IMU classifier on Colab", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.
-version: 1.5.0
+version: 1.6.0
 ---
 
 # Edge AI & TinyML Model Forge (`edge-ai-model-forge`)
@@ -338,6 +338,64 @@ except Exception as e:
 ### 6.5 Dynamic Cell Queueing & In-Flight Safety Pattern
 Appending or editing notebook cells (e.g. adding the auto-teardown cell `runtime.unassign()`, drive persistence logic, or extra metrics blocks) while long-running training epochs are currently running in-flight is **100% safe**. The Jupyter kernel operates asynchronously via a FIFO message queue; simply enqueue newly appended cells (`Shift + Enter` or Play button) so they show pending execution `[*]`. They will execute seamlessly immediately upon completion of the active cell without corrupting VRAM or disrupting CUDA execution.
 
+### 6.6 Deterministic Compute & Cost Profiler (`ColabCostTracker`)
+Google Colab does not provide a live API for account credit balances, but compute unit consumption is deterministic per accelerator tier. All edge AI training notebooks should instantiate a tracker in Cell 1 and invoke `tracker.report()` before session teardown:
+
+```python
+import time, datetime
+
+class ColabCostTracker:
+    """Deterministic Colab Pro compute unit & USD cost profiler."""
+    BURN_RATES = {
+        "A100": 5.30,   # ~5.30 units/hr (~$0.53/hr)
+        "L4":   2.15,   # ~2.15 units/hr (~$0.21/hr)
+        "V100": 3.80,   # ~3.80 units/hr
+        "T4":   0.85,   # ~0.85 units/hr (~$0.085/hr)
+        "CPU":  0.10    # Standard CPU
+    }
+    UNIT_PRICE_USD = 0.10
+
+    def __init__(self):
+        self.start_time = None
+        self.gpu_name = self._detect_hardware()
+
+    def _detect_hardware(self):
+        try:
+            import subprocess
+            out = subprocess.check_output(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]).decode().strip()
+            for key in ["A100", "L4", "V100", "T4"]:
+                if key in out:
+                    return key
+            return "GPU (Generic)"
+        except Exception:
+            return "CPU"
+
+    def start(self):
+        self.start_time = time.time()
+        print(f"[*] Compute Profiler Active | Hardware: {self.gpu_name} (Burn: ~{self.BURN_RATES.get(self.gpu_name, 1.0)} units/hr)")
+
+    def report(self):
+        if not self.start_time:
+            return
+        elapsed_sec = time.time() - self.start_time
+        elapsed_hr = elapsed_sec / 3600.0
+        burn_rate = self.BURN_RATES.get(self.gpu_name, 1.0)
+        units = elapsed_hr * burn_rate
+        cost = units * self.UNIT_PRICE_USD
+        print("\n" + "=" * 55)
+        print("⚡ COLAB PRO COMPUTE & COST LEDGER")
+        print("=" * 55)
+        print(f"  • Hardware Target    : {self.gpu_name}")
+        print(f"  • Wall Time Elapsed  : {str(datetime.timedelta(seconds=int(elapsed_sec)))} ({elapsed_sec/60:.2f} mins)")
+        print(f"  • Compute Units Used : ~{units:.4f} units")
+        print(f"  • Estimated Cost     : ~${cost:.4f} USD")
+        print("=" * 55 + "\n")
+        return {"hardware": self.gpu_name, "duration_s": elapsed_sec, "units_used": units, "cost_usd": cost}
+
+tracker = ColabCostTracker()
+tracker.start()
+```
+
 ---
 
 ## 7. Verification Checklist & Invariants
@@ -354,6 +412,8 @@ Appending or editing notebook cells (e.g. adding the auto-teardown cell `runtime
 10. **`INV-CLOUD-TEARDOWN` (Programmatic Session Unassign)**: All cloud GPU training notebooks must terminate with a programmatic `runtime.unassign()` cell to immediately release GPU hardware and conserve compute units/credits upon run completion, guarded by `INV-CLOUD-AUTOSAVE`.
 11. **`INV-INFLIGHT-SAFETY` (FIFO Kernel Queue Safety)**: In-flight execution is asynchronous; editing or queueing new cells while training runs is safe via FIFO queueing without restarting the runtime.
 12. **`INV-LABEL-POLYMORPHISM` (Polymorphic Label Ingestion)**: Time-series IMU datasets (SisFall, UniMiB SHAR, MobiAct) frequently persist raw alphanumeric activity codes (e.g. `'D01'`–`'D19'` for ADL, `'F01'`–`'F15'` for falls) rather than pre-binarized `0/1` integers. Ingestion pipelines and notebooks must never assume integer dtypes or cast raw labels directly via `.astype(np.int32)` (which throws `ValueError: invalid literal for int() with base 10`). Always inspect `raw_labels.dtype.kind` and apply vectorized prefix matching (`np.where(np.char.startswith(raw_labels.astype(str), 'F'), 1, 0).astype(np.int32)`) to seamlessly accommodate both raw alphanumeric codes and pre-binarized integers.
+13. **`INV-COMPUTE-COST-TRACKER` (In-Notebook Compute & Cost Profiling)**: All cloud training notebooks must instantiate an in-notebook `ColabCostTracker` in Cell 1 to dynamically profile hardware, wall time, burned compute units, and estimated USD cost, printing the ledger before executing session teardown (`runtime.unassign()`).
+
 
 
 

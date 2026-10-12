@@ -1,7 +1,7 @@
 ---
 name: colab-cloud-accelerator
 description: Official Google Colab cloud execution and acceleration skill. Use whenever asked to "run code on Colab", "provision GPU/TPU", "fine-tune model on Colab", "use Colab MCP", "execute Colab CLI", "connect to Colab session", "offload training to cloud accelerator", or mentions Google Colab runtimes (T4, L4, A100, TPU v5e/v6e).
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Google Colab Cloud Accelerator (`colab-cloud-accelerator`)
@@ -139,6 +139,16 @@ colab url -s router-forge --open
    python -m gdown --continue "https://drive.google.com/uc?id=<file_id>" -O "models/<filename>.gguf"
    ```
    `gdown` automatically handles Google Drive's large-file virus-scan confirmation bypass (`confirm=t`), and `--continue` guarantees resumable chunk transfer without corrupting existing downloads. Any interrupted transfer `.part` files should be purged immediately upon cancellation.
+8. **In-Notebook Compute & Cost Profiler (`INV-COMPUTE-COST-TRACKER`)**:
+   While Google Colab does not expose a live REST API for account balances, Colab Pro charges a deterministic hourly compute unit burn rate:
+   - **A100-SXM4 (40GB)**: `~5.30` units/hr (~$0.53/hr)
+   - **L4 (24GB)**: `~2.15` units/hr (~$0.21/hr)
+   - **V100**: `~3.80` units/hr (~$0.38/hr)
+   - **T4 (16GB)**: `~0.85` units/hr (~$0.085/hr)
+   - **Standard CPU**: `~0.10` units/hr (~$0.01/hr)
+   
+   All long-running training notebooks must initialize a `ColabCostTracker` in Cell 1 and invoke `tracker.report()` right before teardown. This logs exact wall time, burned compute units, and estimated USD cost directly into the experiment transcript and output reports.
+
 
 
 
