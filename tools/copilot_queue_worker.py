@@ -122,12 +122,19 @@ class CopilotQueueWorker:
         self.ready_accounts = [a for a in self.accounts if a.get("has_token")]
         self._current_account_idx = 0
         self._running = False
+        self.in_flight_tasks = 0
 
         self.account_credits: dict[str, float] = {}
         self.account_cooldowns: dict[str, datetime] = {}
         self._account_file_mtimes: dict[str, float] = {}
         self._initialize_fleet_status_files()
         self._load_live_status_telemetry()
+
+    def has_active_or_pending_work(self) -> bool:
+        """Returns True if any tasks are currently in-flight or pending in the queue."""
+        if self.in_flight_tasks > 0:
+            return True
+        return len(self.find_pending_code_tasks()) > 0
 
     def _ensure_dirs(self) -> None:
         self.tasks_dir.mkdir(parents=True, exist_ok=True)
@@ -1119,73 +1126,87 @@ class CopilotQueueWorker:
 
         print(f"[CLAIMED] Worker {account['worker_id']} acquired lease for {task_id} (PID: {os.getpid()})", flush=True)
 
-        worktree_dir = await self.provision_worktree(task_id, branch_name, target_repo=target_repo)
-        print(f"[WORKTREE] Provisioned isolated worktree {worktree_dir.name} on branch {branch_name}", flush=True)
-
-        exec_start = time.perf_counter()
-        auto_tier = claimed_task.get("auto_tier", "balance")
-        model = claimed_task.get("model") or claimed_task.get("recommended_model") or "auto"
-        print(f"[EXEC] Running Copilot CLI (Model: {model}, Auto-Tier: {auto_tier})...", flush=True)
-
+        self.in_flight_tasks += 1
+        worktree_dir = None
         try:
-            result = await self.execute_task(claimed_task, account, worktree_dir=worktree_dir)
-            actual_duration = round(time.perf_counter() - exec_start, 1)
+            worktree_dir = await self.provision_worktree(task_id, branch_name, target_repo=target_repo)
+            print(f"[WORKTREE] Provisioned isolated worktree {worktree_dir.name} on branch {branch_name}", flush=True)
 
-            # Telemetry & Quota handling
-            credits_used = float(result.get("credits_used", 1.0 if result.get("success") else 0.0))
-            self.record_credit_usage(account["worker_id"], credits_used)
+            exec_start = time.perf_counter()
+            auto_tier = claimed_task.get("auto_tier", "balance")
+            model = claimed_task.get("model") or claimed_task.get("recommended_model") or "auto"
+            print(f"[EXEC] Running Copilot CLI (Model: {model}, Auto-Tier: {auto_tier})...", flush=True)
 
-            if result.get("quota_exhausted"):
-                self.mark_cooldown(account["worker_id"], until=next_billing_reset(), quota_exhausted=True, reason="Copilot CLI quota exhausted")
-            elif result.get("rate_limited_429"):
-                self.mark_cooldown(account["worker_id"], minutes=60, quota_exhausted=False, reason="Rate limited (HTTP 429)")
+            try:
+                result = await self.execute_task(claimed_task, account, worktree_dir=worktree_dir)
+                actual_duration = round(time.perf_counter() - exec_start, 1)
 
-            # Commit changes and cleanup worktree
-            commit_sha = await self.teardown_worktree(
-                worktree_dir,
-                branch_name=branch_name,
-                task_id=task_id,
-                commit=result.get("success", False),
-                repo_root=target_repo,
-            )
+                # Telemetry & Quota handling
+                credits_used = float(result.get("credits_used", 1.0 if result.get("success") else 0.0))
+                self.record_credit_usage(account["worker_id"], credits_used)
 
-            summary = result.get("summary") or f"Implemented task {task_id}"
-            sha = commit_sha or result.get("commit_sha") or "HEAD"
+                if result.get("quota_exhausted"):
+                    self.mark_cooldown(account["worker_id"], until=next_billing_reset(), quota_exhausted=True, reason="Copilot CLI quota exhausted")
+                elif result.get("rate_limited_429"):
+                    self.mark_cooldown(account["worker_id"], minutes=60, quota_exhausted=False, reason="Rate limited (HTTP 429)")
 
-            if result.get("success"):
-                print(f"[CHECKPOINT] Deliverable committed to branch {branch_name} ({sha[:7] if len(sha) >= 7 else sha})", flush=True)
-                self.submit_checkpoint_and_complete(
-                    task_id=task_id,
-                    account=account,
-                    summary=summary,
+                # Commit changes and cleanup worktree
+                commit_sha = await self.teardown_worktree(
+                    worktree_dir,
                     branch_name=branch_name,
-                    commit_sha=sha,
-                    actual_duration_s=actual_duration,
+                    task_id=task_id,
+                    commit=result.get("success", False),
+                    repo_root=target_repo,
                 )
-                print(f"[COMPLETED] Task {task_id} successfully finalized in {actual_duration}s.", flush=True)
-                return True
-            else:
-                error_msg = result.get("error") or "Execution failed"
-                print(f"[FAILED] Task {task_id} execution failed: {error_msg}", flush=True)
-                self._record_copilot_mistake(task=claimed_task, account=account, result=result, error_msg=error_msg)
-                self._mark_task_blocked(task_id, account, error_msg)
+
+                summary = result.get("summary") or f"Implemented task {task_id}"
+                sha = commit_sha or result.get("commit_sha") or "HEAD"
+
+                if result.get("success"):
+                    print(f"[CHECKPOINT] Deliverable committed to branch {branch_name} ({sha[:7] if len(sha) >= 7 else sha})", flush=True)
+                    self.submit_checkpoint_and_complete(
+                        task_id=task_id,
+                        account=account,
+                        summary=summary,
+                        branch_name=branch_name,
+                        commit_sha=sha,
+                        actual_duration_s=actual_duration,
+                    )
+                    print(f"[COMPLETED] Task {task_id} successfully finalized in {actual_duration}s.", flush=True)
+                    return True
+                else:
+                    error_msg = result.get("error") or "Execution failed"
+                    print(f"[FAILED] Task {task_id} execution failed: {error_msg}", flush=True)
+                    self._record_copilot_mistake(task=claimed_task, account=account, result=result, error_msg=error_msg)
+                    self._mark_task_blocked(task_id, account, error_msg)
+                    return False
+
+            except Exception as e:
+                logger.error(f"Execution error on task {task_id}: {e}")
+                if worktree_dir:
+                    await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False, repo_root=target_repo)
+                self._record_copilot_mistake(task=claimed_task, account=account, result={}, error_msg=str(e))
+                self._mark_task_blocked(task_id, account, str(e))
+                print(f"[ERROR] Task {task_id} encountered exception: {e}", flush=True)
                 return False
+        finally:
+            self.in_flight_tasks = max(0, self.in_flight_tasks - 1)
 
-        except Exception as e:
-            logger.error(f"Execution error on task {task_id}: {e}")
-            await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False, repo_root=target_repo)
-            self._record_copilot_mistake(task=claimed_task, account=account, result={}, error_msg=str(e))
-            self._mark_task_blocked(task_id, account, str(e))
-            print(f"[ERROR] Task {task_id} encountered exception: {e}", flush=True)
-            return False
-
-    async def run(self, once: bool = False, target_task_id: str | None = None, timeout: float = 300.0) -> None:
-        """Main queue worker loop supporting concurrent task execution and targeted one-shot polling."""
+    async def run(
+        self,
+        once: bool = False,
+        target_task_id: str | None = None,
+        timeout: float = 300.0,
+        exit_when_empty: bool = False,
+        idle_timeout: float | None = None,
+    ) -> None:
+        """Main queue worker loop supporting concurrent task execution, drain mode, and idle timeouts."""
         self._running = True
         logger.info(
             f"Copilot Queue Worker started | State Dir: {self.state_dir} | "
             f"Ready Accounts: {len(self.ready_accounts)} | Concurrency: {self.concurrency} | "
-            f"Poll Interval: {self.poll_interval}s"
+            f"Poll Interval: {self.poll_interval}s | Exit When Empty: {exit_when_empty} | "
+            f"Idle Timeout: {idle_timeout}s"
         )
 
         if target_task_id and once:
@@ -1202,23 +1223,63 @@ class CopilotQueueWorker:
             return
 
         if self.concurrency <= 1:
+            idle_start: float | None = None
             while self._running:
                 processed = await self.process_one_task(target_task_id=target_task_id)
                 if once:
                     break
                 if not processed:
+                    if exit_when_empty and not self.has_active_or_pending_work():
+                        print("[DRAIN] Task queue is empty and no active tasks in flight. Auto-exiting worker.", flush=True)
+                        break
+                    if idle_timeout is not None:
+                        if not self.has_active_or_pending_work():
+                            if idle_start is None:
+                                idle_start = time.perf_counter()
+                            elif time.perf_counter() - idle_start >= idle_timeout:
+                                print(f"[IDLE] Worker idle for {idle_timeout}s with empty queue. Auto-exiting worker.", flush=True)
+                                break
+                        else:
+                            idle_start = None
                     await asyncio.sleep(self.poll_interval)
+                else:
+                    idle_start = None
         else:
             semaphore = asyncio.Semaphore(self.concurrency)
+            idle_start: float | None = None
 
             async def _worker_loop():
+                nonlocal idle_start
                 while self._running:
+                    if exit_when_empty and not self.has_active_or_pending_work():
+                        self.stop()
+                        break
+
                     async with semaphore:
+                        if not self._running:
+                            break
                         processed = await self.process_one_task(target_task_id=target_task_id)
+
                     if once:
                         break
                     if not processed:
+                        if exit_when_empty and not self.has_active_or_pending_work():
+                            print("[DRAIN] Task queue is empty and no active tasks in flight. Auto-exiting worker.", flush=True)
+                            self.stop()
+                            break
+                        if idle_timeout is not None:
+                            if not self.has_active_or_pending_work():
+                                if idle_start is None:
+                                    idle_start = time.perf_counter()
+                                elif time.perf_counter() - idle_start >= idle_timeout:
+                                    print(f"[IDLE] Worker idle for {idle_timeout}s with empty queue. Auto-exiting worker.", flush=True)
+                                    self.stop()
+                                    break
+                            else:
+                                idle_start = None
                         await asyncio.sleep(self.poll_interval)
+                    else:
+                        idle_start = None
 
             tasks = [asyncio.create_task(_worker_loop()) for _ in range(self.concurrency)]
             try:
@@ -1241,6 +1302,19 @@ async def main() -> None:
     parser.add_argument("--worker-id", type=str, default=None, help="Bind this worker process to a specific worker ID (e.g. copilot-w1)")
     parser.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
     parser.add_argument("--once", action="store_true", help="Process at most one task and exit")
+    parser.add_argument(
+        "--drain",
+        "--exit-when-empty",
+        dest="exit_when_empty",
+        action="store_true",
+        help="Process all queued tasks and exit once the queue is empty",
+    )
+    parser.add_argument(
+        "--idle-timeout",
+        type=float,
+        default=None,
+        help="Exit after being idle with empty queue for specified seconds",
+    )
     parser.add_argument("--task-id", type=str, default=None, help="Target a specific pending task ID")
     parser.add_argument("--timeout", type=float, default=300.0, help="Timeout in seconds for targeted one-shot execution (default: 300.0)")
 
@@ -1265,7 +1339,13 @@ async def main() -> None:
             # Windows may not support add_signal_handler for all signals
             pass
 
-    await worker.run(once=args.once, target_task_id=args.task_id, timeout=args.timeout)
+    await worker.run(
+        once=args.once,
+        target_task_id=args.task_id,
+        timeout=args.timeout,
+        exit_when_empty=args.exit_when_empty,
+        idle_timeout=args.idle_timeout,
+    )
 
 
 if __name__ == "__main__":

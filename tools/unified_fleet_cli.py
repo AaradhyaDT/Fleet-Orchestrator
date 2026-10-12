@@ -192,6 +192,8 @@ def cmd_submit(args: argparse.Namespace) -> None:
     task["auto_tier"] = auto_tier or "balance"
     task["model"] = model
     task["recommended_model"] = model
+    if getattr(args, "kind", None):
+        task["stage"] = args.kind
 
     # Tier-aware timeout floor escalation (mirrors cmd_run_task)
     _TIER_FLOOR_S = {"efficiency": 120, "balance": 300, "intelligence": 600}
@@ -341,13 +343,15 @@ def cmd_daemon(args: argparse.Namespace) -> None:
 
     concurrency = getattr(args, "concurrency", 1)
     dry_run = getattr(args, "dry_run", False)
+    exit_when_empty = getattr(args, "exit_when_empty", False)
+    idle_timeout = getattr(args, "idle_timeout", None)
     worker = CopilotQueueWorker(
         state_dir=state_dir,
         concurrency=concurrency,
         dry_run=dry_run,
     )
-    print(f"[DAEMON] Starting Copilot Queue Worker (Concurrency: {concurrency}, Dry-run: {dry_run})...", flush=True)
-    asyncio.run(worker.run())
+    print(f"[DAEMON] Starting Copilot Queue Worker (Concurrency: {concurrency}, Dry-run: {dry_run}, Drain: {exit_when_empty}, IdleTimeout: {idle_timeout}s)...", flush=True)
+    asyncio.run(worker.run(exit_when_empty=exit_when_empty, idle_timeout=idle_timeout))
 
 
 def cmd_watch(args: argparse.Namespace) -> None:
@@ -407,9 +411,22 @@ def main():
     subparsers.add_parser("watch", help="Live in-terminal status monitor")
 
     # Daemon (Continuous background queue worker)
-    p_daemon = subparsers.add_parser("daemon", help="Run standing background queue worker daemon")
+    p_daemon = subparsers.add_parser("daemon", help="Run background queue worker")
     p_daemon.add_argument("--concurrency", type=int, default=1, help="Number of concurrent worker tasks (default: 1)")
     p_daemon.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
+    p_daemon.add_argument(
+        "--drain",
+        "--exit-when-empty",
+        dest="exit_when_empty",
+        action="store_true",
+        help="Process all queued tasks and exit once the queue is empty",
+    )
+    p_daemon.add_argument(
+        "--idle-timeout",
+        type=float,
+        default=None,
+        help="Exit after being idle with empty queue for specified seconds",
+    )
 
     args = parser.parse_args()
 

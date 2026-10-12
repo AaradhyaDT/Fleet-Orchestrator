@@ -266,6 +266,23 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
    - AGY: Headless CLI workers require isolated `AGY_WORKER_HOME` sandboxes to prevent SQLite lock collisions on `conversation_summaries.db`, plus mandatory `--dangerously-skip-permissions`.
 10. **Tier-Aware Timeout Floor (`INV-TIER-FLOOR`)**: The `--auto-tier` flag enforces minimum timeout floors (`efficiency`→120s, `balance`→300s, `intelligence`→600s). The SLM's computed `timeout_ceiling_s` is escalated to the tier floor when it falls below, preventing timeout kills on correctly-scoped tasks.
 11. **Persistent Circular Round-Robin (`INV-CIRCULAR-ROBIN`)**: Worker rotation across the 27 pooled accounts must persist across separate processes, CLI commands, and restarts via `orchestrator-state/round_robin_pointer.json` guarded by an OS file lock (`FileLock`). Never rely on in-memory counters for round-robin dispatch; every one-shot task must advance circularly (`w1 → w2 → ... → w27 → w1`) to prevent front-loaded credit bias on `copilot-w1`.
+12. **Task Eligibility & Kind/Stage Contract (`INV-TASK-ELIGIBILITY`)**: `copilot_queue_worker.py` determines worker task eligibility strictly via:
+    ```python
+    stage = data.get("current_stage") or data.get("stage") or (data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None)
+    is_eligible = (data.get("kind") == "code") or (stage in ["code", "draft", "research", "format", "refactor", "unit_test"])
+    ```
+    **The Trap**: Enqueuing tasks via `unified_fleet_cli.py submit --kind research` (or `--kind text`, `--kind qa`) sets `kind: "research"` while leaving `stage` unset (`None`). As a result, `is_eligible` evaluates to `False`, causing the Copilot worker pool to silently ignore the pending task indefinitely without claiming it.
+    **The Invariant**: Whenever dispatching tasks intended for Copilot queue workers, ALWAYS either:
+    - Use `--kind code` (the universal primary execution kind), OR
+    - Ensure the task JSON explicitly defines `"stage": "research"` (or `"code"`, `"draft"`, etc.) alongside `kind`. `unified_fleet_cli.py` now guarantees this by propagating `task["stage"] = args.kind`.
+13. **Daemon vs Batch Lifecycle & Drain Invariant (`INV-DAEMON-LIFECYCLE`)**:
+    `copilot_queue_worker.py` (and `fleet.bat daemon`) historically defaulted to an open-ended daemon polling indefinitely (`poll_interval=5.0s`). However, because distinct tasks have heterogeneous requirements, budgets, and credit ceilings, swarms MUST never be left running as unclosed background zombies.
+    - **Finite Swarms & Batches**: ALWAYS run with `--drain` (or `--exit-when-empty`), e.g.:
+      `python tools/copilot_queue_worker.py --concurrency 3 --drain`
+      The worker will process all queued tasks, wait for in-flight executions across all worker threads to finalize, and cleanly auto-exit the moment the queue is drained.
+    - **Idle Guardrail**: Pass `--idle-timeout <seconds>` (e.g. `--idle-timeout 15`) so the worker automatically shuts down if no work arrives within the timeout window.
+    - **Isolated Commander Batches**: Use `python tools/fleet_commander.py --specs "..."` which redirects child logs and exits immediately upon completion.
+    - **One-Shot Tasks**: Use `--once` (`python tools/copilot_queue_worker.py --once`) or `fleet.bat run-task --spec "..."`.
 
 ---
 

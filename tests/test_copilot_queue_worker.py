@@ -519,3 +519,29 @@ def test_prune_completed_task_branches(tmp_path: Path):
     # Verify branch no longer exists
     check = subprocess.run(["git", "branch", "--list", branch_name], cwd=str(repo_dir), capture_output=True, text=True)
     assert check.stdout.strip() == ""
+
+
+@pytest.mark.asyncio
+async def test_worker_drain_exit_when_empty_immediate(temp_state_dir: Path):
+    """Verifies that with empty queue and exit_when_empty=True, worker terminates promptly."""
+    worker = CopilotQueueWorker(state_dir=temp_state_dir, poll_interval=0.05)
+    await asyncio.wait_for(worker.run(exit_when_empty=True), timeout=2.0)
+    assert not worker._running or worker.in_flight_tasks == 0
+
+
+@pytest.mark.asyncio
+async def test_worker_drain_with_concurrency(temp_state_dir: Path):
+    """Verifies that concurrent workers exit cleanly when queue is drained."""
+    worker = CopilotQueueWorker(state_dir=temp_state_dir, concurrency=3, poll_interval=0.05)
+    await asyncio.wait_for(worker.run(exit_when_empty=True), timeout=2.0)
+    assert not worker._running
+
+
+@pytest.mark.asyncio
+async def test_worker_idle_timeout(temp_state_dir: Path):
+    """Verifies that worker exits automatically once idle_timeout elapses."""
+    worker = CopilotQueueWorker(state_dir=temp_state_dir, poll_interval=0.05)
+    t0 = asyncio.get_event_loop().time()
+    await asyncio.wait_for(worker.run(idle_timeout=0.15), timeout=2.0)
+    elapsed = asyncio.get_event_loop().time() - t0
+    assert elapsed >= 0.1
