@@ -395,6 +395,12 @@ try {
         exit 0
     }
 
+    # Mirror SSOT skills to global config and clean mirrors (INV-SSOT-ADAPTIVE)
+    $mirrorScript = Join-Path $RepoPath "tools\mirror_skills.py"
+    if (Test-Path $mirrorScript) {
+        python $mirrorScript
+    }
+
     Write-Status -Message "Staging all tracked and new files..."
     git add -A
 

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "last_updated": "2026-10-12T04:01:54.635999+00:00",
+  "packages": {
+    "google-genai": {
+      "latest_version": "2.29.0",
+      "import_syntax": "from google import genai",
+      "client_init": "client = genai.Client()",
+      "generate_call": "client.models.generate_content(model='gemini-2.5-flash', contents='...')",
+      "deprecated_packages": [
+        "google.generativeai",
+        "genai.GenerativeModel"
+      ],
+      "requires_python": ">=3.10",
+      "source": "pypi_api",
+      "last_verified": "2026-10-12T03:33:07Z"
+    },
+    "ruff": {
+      "package": "ruff",
+      "latest_version": "0.17.0",
+      "summary": "An extremely fast Python linter and code formatter, written in Rust.",
+      "requires_python": ">=3.7",
+      "project_url": "https://pypi.org/project/ruff/",
+      "source": "pypi_api",
+      "last_verified": "2026-10-12T03:53:44.653344+00:00"
+    }
+  },
+  "cli_tools": {
+    "copilot": {
+      "installed": true,
+      "path": "C:\\Users\\Aaradhya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\GitHub.Copilot_Microsoft.Winget.Source_8wekyb3d8bbwe\\copilot.EXE",
+      "installed_version": "1.0.95.",
+      "source": "host_binary",
+      "last_verified": "2026-10-12T03:53:38.773657+00:00",
+      "flags": {
+        "exec_prompt": "-p",
+        "allow_all": "--allow-all",
+        "yolo": "--yolo",
+        "autopilot": "--autopilot",
+        "plan": "--plan",
+        "usage_json": "--usage-output-file",
+        "win_powershell_safe": "--no-eager-powershell-resolution",
+        "unattended": "--no-ask-user"
+      },
+      "canonical_headless_exec": "copilot -p \"{prompt}\" --allow-all --no-ask-user --no-eager-powershell-resolution"
+    },
+    "gh": {
+      "installed_version": "2.102.0",
+      "authenticated_user": "AaradhyaDT",
+      "source": "host_binary",
+      "last_verified": "2026-10-12T03:33:53Z"
+    },
+    "python": {
+      "installed": true,
+      "path": "C:\\Users\\Aaradhya\\AppData\\Local\\Programs\\Python\\Python314\\python.EXE",
+      "installed_version": "3.14.7",
+      "source": "host_binary",
+      "last_verified": "2026-10-12T04:01:54.619260+00:00"
+    }
+  }
+}

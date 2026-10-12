@@ -17,7 +17,7 @@ This document records the architectural baseline lock, historical provenance, an
 
 ## 2. Invariant Registry
 
-The adaptive workflow engine guarantees deterministic execution through fifteen non-negotiable architectural invariants:
+The adaptive workflow engine guarantees deterministic execution through twenty-one non-negotiable architectural invariants:
 
 1. **`INV-FAST-PATH`**:
    Routine development mechanics (`audit.bat`, `sync.bat`, formatters, linters, unittests, simulation runs, git status) execute natively via pure Python and shell commands in <20 ms with 0 AI tokens and <10 MB RAM.
@@ -69,6 +69,24 @@ The adaptive workflow engine guarantees deterministic execution through fifteen 
 
 15. **`INV-RESOLVE-FUSE`**:
     Local-First with GitHub Remote Fallback. All AI/ML engineering code lookups inspect local repository paths (`F:\FuseAIF2026\M{X}\WK{Y}`) first for 0ms latency offline execution; if unmounted (cloud VMs, Colab), resolve to the authenticated GitHub repository link (`https://github.com/AaradhyaDT/fuseAiF_*`).
+
+16. **`INV-REALTIME-GROUNDING`**:
+    Gated live web & registry queries (PyPI JSON API, authenticated `gh api`, host CLI inspection). Discovered tool facts, flags, and SDK signatures are cached atomically into `orchestrator-state/grounding_cache.json`, strictly separated from intent routing exemplars.
+
+17. **`INV-ZERO-HELP-LOOP`**:
+    Smart CLI normalizer auto-repairs common argument variants (`-f` $\to$ `--files`, `-j` $\to$ `--json`). Agents never dump verbose `--help` screens into context; `--schema` emits machine-readable JSON in $<50$ tokens.
+
+18. **`INV-SSOT-ADAPTIVE`**:
+    `Fleet-Orchestrator` is the canonical single source of truth for `adaptive-workflow`. Changes mirror atomically to global config and conditional clean-`main` ecosystem branches via `tools/mirror_skills.py`.
+
+19. **`INV-SCALE-O1`**:
+    Context scaling overhead remains bounded ($<2,000$ tokens) regardless of whether the ecosystem manages 28 or 200 modules.
+
+20. **`INV-PROG-DISCLOSURE`**:
+    3-Tier progressive disclosure. Agents load strictly `SKILL.md` by default; $\le 1$ specialized reference on demand; diagnostic references only on explicit runtime exceptions.
+
+21. **`INV-CLI-FIRST`**:
+    Deterministic triage, CPM schedule math, and Banker's RAM ceilings execute via local Python CLI commands, never in prompt arithmetic.
 
 ---
 

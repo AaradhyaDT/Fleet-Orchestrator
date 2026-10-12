@@ -5,7 +5,7 @@ description: Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enfor
 
 # Adaptive Workflow Orchestrator (`adaptive-workflow`)
 
-Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 32 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), solves CPM DAGs mathematically, marshals 27-worker Fleet pool & Colab GPU accelerators, routes 8 domain archetypes with `ai-engineering-fellowship`, and drives Fleet Master Brain (3B/7B) with Agent-Reflex.
+Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 32 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), mathematical CPM DAGs (`INV-CPM-SOLVER`), 27-worker Fleet pool, Colab accelerators, 9 domain archetypes, real-time grounding (`INV-REALTIME-GROUNDING`) & zero-help loops (`INV-ZERO-HELP-LOOP`).
 
 ---
 
@@ -26,10 +26,10 @@ flowchart TD
 ```
 
 ### Hierarchy Responsibilities:
-1. **Lead Agent**: Triage via `adaptive_engine.py`. Tier 0 fast paths ($0). Solves CPM ($TS=0$). Ephemeral Commander (`invoke_subagent`), context $<5\text{k}$ tokens (`INV-CTX-FIREBREAK`).
+1. **Lead Agent**: Triage via `adaptive_engine.py`. Tier 0 fast paths ($0). Solves CPM ($TS=0$). Ephemeral Commander, context $<5\text{k}$ tokens (`INV-CTX-FIREBREAK`).
 2. **Domain Commanders**: Writes task JSONs to `orchestrator-state/tasks/`. Absorbs logs/retries. Returns **<300w manifest** to Lead.
 3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`).
-4. **Agent-Reflex**: Intercepts tool errors at port 1234 (`[Error] -> [Fix]`) for sub-second recovery (`INV-AGENT-REFLEX`).
+4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).
 
@@ -48,23 +48,20 @@ Protocols: [`references/fleet-command-architecture.md`](references/fleet-command
 | **Tier 2** | Interactive conversational reasoning | Gemini 3.8 Flash / Lite | **<$0.001** | Sub-second / **0 MB** |
 | **Tier 3** | Complex deadlocks after test failure | Claude Opus, Gemini Pro | Standard API | Gated on failure |
 
-Fast paths: [`references/deterministic-zero-ai-protocol.md`](references/deterministic-zero-ai-protocol.md).
-Models: [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md).
-Reflex: [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md).
+Fast paths: [`references/deterministic-zero-ai-protocol.md`](references/deterministic-zero-ai-protocol.md) | Models: [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md) | Reflex: [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md).
 
 ---
 
 ## 3. Mathematical CPM Concurrency
 
-Dates, critical paths, and slacks are solved in [`sim/adaptive_orchestrator.py`](../../sim/adaptive_orchestrator.py) with zero prompt arithmetic:
+Dates, critical paths, and slacks are solved in `tools/cpm_solver.py` with zero prompt arithmetic (`INV-CPM-SOLVER`):
 
 ```powershell
 python tools/adaptive_engine.py cpm --dag-json path/to/dag.json
 ```
 
-- **Dates**: $ES_j = \max_{i \in Pred(j)} EF_i$, $EF_j = ES_j + D_j$; $LF_i = \min_{j \in Succ(i)} LS_j$, $LS_i = LF_i - D_i$.
-- **Slacks**: $TS_i = LF_i - EF_i$; $FS_i = \min_{j \in Succ(i)} ES_j - EF_i$.
-- **Critical Path**: Tasks with $TS = 0$ (sequential). Parallel branches with $TS > 0$ dispatch concurrently.
+- **Dates**: $ES_j = \max_{i \in Pred(j)} EF_i, EF_j = ES_j + D_j$; $LF_i = \min_{j \in Succ(i)} LS_j, LS_i = LF_i - D_i$.
+- **Slacks**: $TS_i = LF_i - EF_i$; $FS_i = \min_{j \in Succ(i)} ES_j - EF_i$. Critical Path: $TS = 0$.
 
 Mechanics: [`references/cpm-concurrency-dispatch.md`](references/cpm-concurrency-dispatch.md).
 
@@ -77,7 +74,7 @@ Decouples Workload Volume ($V0 \le 2$, $V1 = 3\text{–}15$, $V2 > 15$ files) fr
 $$C = \min\left(1.0, \max\left(0.0, \frac{2|D| + |T_{\text{ind}}|}{2(N - 1)}\right)\right), \quad N = 28$$
 
 ```powershell
-python tools/adaptive_engine.py triage "refactor router" --files sim/routing_engine.py
+python tools/adaptive_engine.py triage "refactor router" -f sim/routing_engine.py -j
 ```
 
 | Cell | Policy | Mechanism | Concurrency |
@@ -99,34 +96,36 @@ Matrix reference: [`references/orthogonal-execution-matrix.md`](references/ortho
 ## 5. Memory Guard & Flight Envelope
 
 Enforces Antigravity IDE stability and Banker's safety:
-- **Reserve Floor**: $2,048\text{ MB}$ free RAM permanently reserved for Antigravity IDE.
-- **Worker Concurrency**: $\lfloor (\text{Free RAM} - 2048) / 256 \rfloor$. $[2048, 2303]\text{MB} \implies 0$; $[2304, 4096]\text{MB} \implies 1\text{–}8$.
-- **Rate Governor**: Targets $L_{\text{target}} = 1200\text{ms}$. On $\ge 2$ 429s in 60s, $M$ halved to $\max(0.25, M/2)$ (120s window). Success ramps $M$ by $+0.1$ to $1.0$.
+- **Reserve Floor**: $2,048\text{ MB}$ permanently reserved for IDE. Concurrency: $\lfloor (\text{Free RAM} - 2048) / 256 \rfloor$.
+- **Rate Governor**: Targets $L_{\text{target}} = 1200\text{ms}$. On $\ge 2$ 429s in 60s, $M$ halved to $\max(0.25, M/2)$ (120s window).
 
 Envelope reference: [`references/dynamic-flight-envelope.md`](references/dynamic-flight-envelope.md).
 
 ---
 
-## 6. Transactional Recovery & Fencing
+## 6. CLI Syntax Contract Table (`INV-ZERO-HELP-LOOP`)
 
-- **Rolling Snapshots**: `adaptive_engine.py snapshot --tag <name>` (rollback: `rollback --tag <name>`).
-- **Pre-Existing File Guard (`INV-PRE-EXIST-GUARD`)**: Backs up existing files to `<git_common_dir>/projection_backups/<task_id>/`, restoring on teardown.
-- **Fencing Tokens (`INV-FENCE-TOKEN`)**: Monotonic tokens reject split-brain writes from stale workers.
-
-Recovery reference: [`references/transactional-recovery.md`](references/transactional-recovery.md).
+| Task Goal | CLI Command | Output | Latency |
+| :--- | :--- | :--- | :--- |
+| **Triage** | `python tools/adaptive_engine.py "<prompt>" -j` | Decision JSON | <20ms |
+| **File Triage** | `python tools/adaptive_engine.py "<prompt>" -f <paths> -j` | Decision JSON | <20ms |
+| **Grounded Triage** | `python tools/adaptive_engine.py "<prompt>" -g -j` | Grounded JSON | <50ms |
+| **CPM Schedule** | `python tools/adaptive_engine.py cpm --dag-json <path>` | Schedule JSON | <30ms |
+| **Schema Contract** | `python tools/adaptive_engine.py --schema` | JSON Schema | <5ms |
 
 ---
 
 ## 7. Supporting References & Verification
 
-- [`references/skill-matrix.md`](references/skill-matrix.md): 8-archetype routing & fellowship matrix.
+- [`references/token-budget-and-scalability-governance.md`](references/token-budget-and-scalability-governance.md): Token governance, $O(1)$ scaling & live grounding.
+- [`references/skill-matrix.md`](references/skill-matrix.md): 9-archetype routing & fellowship matrix.
 - [`references/installed-work-tools-catalog.md`](references/installed-work-tools-catalog.md): Workstation software catalog.
 - [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md): Agent-Reflex & Tool-Speculator.
 - [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md): Dual-model (3B/7B), A100 training, Drive retrieval.
-- [`references/historical-provenance.md`](references/historical-provenance.md): Baseline lock ($v3.5.0 \to v3.10.0$) & 15 invariants.
+- [`references/historical-provenance.md`](references/historical-provenance.md): Baseline lock ($v3.5.0 \to v3.10.0$) & 21 invariants.
 - [`references/verification-gates.md`](references/verification-gates.md): Verification sequence (`INV-AUDIT-ORDER`).
 - [`references/worker-availability-ledger.md`](references/worker-availability-ledger.md): Worker exhaustion & state mapping table.
 - [`references/quota-velocity-acceleration.md`](references/quota-velocity-acceleration.md): Credit trading for velocity.
-- [`references/antigravity-chat-context-injection.md`](references/antigravity-chat-context-injection.md): Customization projection to workers.
+- [`references/transactional-recovery.md`](references/transactional-recovery.md): Fencing tokens & projection restore.
 - [`references/ecosystem-repos.md`](references/ecosystem-repos.md): Catalog of 28 registered tool modules.
 - [`examples/routing-scenarios.md`](examples/routing-scenarios.md): Walkthroughs across domain archetypes.

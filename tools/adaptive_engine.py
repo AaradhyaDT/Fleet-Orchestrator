@@ -8,6 +8,9 @@ Unifies:
 3. 9-Archetype Intent & Skill Routing
 4. Live Host RAM Headroom & Banker's Concurrency Guard
 5. Dynamic Delegation (in-turn, fleet-copilot, colab, shell)
+6. Real-Time Registry Grounding & Host Telemetry (INV-REALTIME-GROUNDING)
+7. Resilient Smart Argument Normalizer & Schema Contract (INV-ZERO-HELP-LOOP)
+8. Standalone Mathematical CPM DAG Scheduling (INV-CPM-SOLVER)
 """
 
 from __future__ import annotations
@@ -27,9 +30,40 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.adaptive_decision_harness import AdaptiveDecisionEngine
+from tools.cpm_solver import DeterministicCPMSolver, format_cpm_output
+from tools.web_grounder import get_grounding_summary, load_grounding_cache
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("adaptive_engine")
+
+SCHEMA_DEF = {
+    "command": "adaptive_engine.py",
+    "version": "3.10.0",
+    "usage": "adaptive_engine.py [triage] \"<prompt>\" [--files <paths>] [--json] [--execute] [--ground] [--decider <backend>] | cpm --dag-json <file>",
+    "flags": {
+        "--files": "Target file paths for Volume/Criticality triage (alias: -f, --file)",
+        "--json": "Output machine-readable JSON (alias: -j)",
+        "--execute": "Auto-execute determined route (alias: -e)",
+        "--ground": "Inject live verified package & host CLI facts (alias: -g, --live)",
+        "--decider": "Intent decider: deterministic|qwen-intent-router|fleet-master-3b (alias: -d, --model)",
+        "--schema": "Emit machine-readable JSON schema (<50 tokens)",
+    },
+    "subcommands": ["triage", "cpm"],
+}
+
+HELP_CONTRACT = """[ADAPTIVE WORKFLOW CLI CONTRACT (INV-ZERO-HELP-LOOP)]
+  Usage: python tools/adaptive_engine.py "<prompt>" [options]
+         python tools/adaptive_engine.py cpm --dag-json <path> [--json]
+
+  Options:
+    -f, --files <paths>   Target file paths (Volume/Criticality calculation)
+    -j, --json            Output machine-readable JSON format
+    -e, --execute         Execute determined route (fast-path shell / fleet)
+    -g, --ground          Inject live verified package & CLI grounding facts
+    -d, --decider <name>  Intent decider: deterministic [default], qwen-intent-router
+    --schema              Emit compact machine-readable JSON schema (<50 tokens)
+    cpm --dag-json <path> Solve topological Critical Path Method DAG schedule
+"""
 
 
 def format_cli_output(decision: Dict[str, Any]) -> str:
@@ -40,19 +74,19 @@ def format_cli_output(decision: Dict[str, Any]) -> str:
     lines.append("=" * 65)
 
     if decision.get("is_fast_path"):
-        lines.append(f"  [TIER 0 FAST PATH DETECTED]")
+        lines.append("  [TIER 0 FAST PATH DETECTED]")
         lines.append(f"  Action      : {decision.get('primary_skill')}")
         lines.append(f"  Shell Cmd   : {decision.get('command')}")
-        lines.append(f"  Execution   : Zero-AI deterministic shell (<20ms)")
-        lines.append(f"  AI Tokens   : 0 ($0.00)")
-        lines.append(f"  RAM Impact  : <10 MB")
+        lines.append("  Execution   : Zero-AI deterministic shell (<20ms)")
+        lines.append("  AI Tokens   : 0 ($0.00)")
+        lines.append("  RAM Impact  : <10 MB")
         lines.append("=" * 65)
         return "\n".join(lines)
 
     lines.append(f"  Lifecycle Archetype : {decision.get('archetype')}")
     lines.append(f"  Matrix Cell         : {decision.get('matrix_cell')}  -> Policy: {decision.get('policy')}")
     lines.append(f"  Primary Skill       : {decision.get('primary_skill')}")
-    lines.append(f"  Execution Backend   : {decision.get('backend').upper()}")
+    lines.append(f"  Execution Backend   : {decision.get('backend', '').upper()}")
     lines.append(f"  Copilot Auto-Tier   : {decision.get('auto_tier')}")
     if decision.get("recommended_copilot_model"):
         lines.append(f"  Escalation Model    : {decision.get('recommended_copilot_model')}")
@@ -71,6 +105,11 @@ def format_cli_output(decision: Dict[str, Any]) -> str:
     lines.append(f"  Est. Duration       : {ta.get('estimated_duration_s', 0)}s")
     lines.append(f"  Timeout Ceiling     : {ta.get('timeout_ceiling_s', 0)}s")
     lines.append(f"  CPM Graph Weight    : {ta.get('cpm_weight', 1.0)}")
+
+    if decision.get("grounding_summary"):
+        lines.append("-" * 65)
+        lines.append(decision["grounding_summary"])
+
     lines.append("=" * 65)
     return "\n".join(lines)
 
@@ -108,7 +147,7 @@ def execute_decision(decision: Dict[str, Any], prompt: str) -> int:
 
     # 3. Colab Cloud Acceleration
     if backend == "colab":
-        print(f"\n[EXEC] Task flagged for Cloud GPU/TPU acceleration. Launching colab CLI check...")
+        print("\n[EXEC] Task flagged for Cloud GPU/TPU acceleration. Launching colab CLI check...")
         res = subprocess.run(["colab", "status"], shell=True, cwd=str(ROOT))
         return res.returncode
 
@@ -118,17 +157,104 @@ def execute_decision(decision: Dict[str, Any], prompt: str) -> int:
     return 0
 
 
+def handle_cpm_subcommand(argv: List[str]) -> int:
+    """Handles 'cpm' subcommand delegating directly to DeterministicCPMSolver."""
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--dag-json", default=None)
+    parser.add_argument("--json", action="store_true")
+    args, unknown = parser.parse_known_args(argv)
+
+    raw_input = args.dag_json or (unknown[0] if unknown else None)
+    if not raw_input and not sys.stdin.isatty():
+        raw_input = sys.stdin.read().strip()
+
+    if not raw_input:
+        print("[ERROR] CPM subcommand requires --dag-json <file_or_json_string>", file=sys.stderr)
+        return 1
+
+    try:
+        p = Path(raw_input)
+        if p.exists() and p.is_file():
+            with open(p, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        else:
+            data = json.loads(raw_input)
+    except Exception as e:
+        print(f"[ERROR] Failed to parse CPM DAG JSON: {e}", file=sys.stderr)
+        return 1
+
+    tasks = data if isinstance(data, list) else data.get("tasks", [])
+    try:
+        result = DeterministicCPMSolver.solve(tasks)
+        if args.json:
+            print(json.dumps(result, indent=2))
+        else:
+            print(format_cpm_output(result))
+        return 0
+    except ValueError as e:
+        print(f"[ERROR] CPM Calculation Failed: {e}", file=sys.stderr)
+        return 1
+
+
+def normalize_argv(raw_argv: List[str]) -> List[str]:
+    """Token-safe argument normalizer supporting flag aliasing and subcommand tolerance."""
+    if not raw_argv:
+        return []
+
+    alias_map = {
+        "-f": "--files",
+        "--file": "--files",
+        "-j": "--json",
+        "-e": "--execute",
+        "-g": "--ground",
+        "--live": "--ground",
+        "-d": "--decider",
+        "--model": "--decider",
+    }
+
+    normalized: List[str] = []
+    for i, arg in enumerate(raw_argv):
+        if i == 0 and arg.lower() in ("triage", "route"):
+            # Strip redundant positional verb 'triage' or 'route'
+            continue
+        if arg in alias_map:
+            normalized.append(alias_map[arg])
+        else:
+            normalized.append(arg)
+    return normalized
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="One-Shot Adaptive-Workflow Orchestration Engine")
+    raw_args = sys.argv[1:]
+
+    # Early exit 1: Help contract interception (INV-ZERO-HELP-LOOP)
+    if not raw_args or "-h" in raw_args or "--help" in raw_args:
+        print(HELP_CONTRACT)
+        return 0
+
+    # Early exit 2: Schema definition (<50 tokens)
+    if "--schema" in raw_args:
+        print(json.dumps(SCHEMA_DEF, indent=2))
+        return 0
+
+    # Early exit 3: CPM subcommand delegation (INV-CPM-SOLVER)
+    if raw_args[0].lower() == "cpm":
+        return handle_cpm_subcommand(raw_args[1:])
+
+    # Normalize flags
+    normalized_args = normalize_argv(raw_args)
+
+    parser = argparse.ArgumentParser(add_help=False, description="One-Shot Adaptive-Workflow Orchestration Engine")
     parser.add_argument("prompt", nargs="?", default=None, help="Incoming task specification or query")
     parser.add_argument("--files", nargs="*", default=None, help="Target file paths involved in the task")
     parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
     parser.add_argument("--execute", action="store_true", help="Automatically execute the determined route")
+    parser.add_argument("--ground", action="store_true", help="Inject live verified package & CLI facts")
     parser.add_argument("--decider", default="deterministic", choices=["deterministic", "qwen-intent-router", "fleet-master-3b"], help="Intent decider backend")
-    args = parser.parse_args()
+    args = parser.parse_args(normalized_args)
 
     if not args.prompt:
-        parser.print_help()
+        print(HELP_CONTRACT)
         return 0
 
     decision = AdaptiveDecisionEngine.decide(
@@ -136,6 +262,12 @@ def main() -> int:
         files=args.files,
         decider=args.decider,
     )
+
+    if args.ground:
+        cache = load_grounding_cache()
+        decision["grounding_summary"] = get_grounding_summary()
+        decision["grounded_packages"] = list(cache.get("packages", {}).keys())
+        decision["grounded_cli_tools"] = list(cache.get("cli_tools", {}).keys())
 
     if args.json:
         print(json.dumps(decision, indent=2))
