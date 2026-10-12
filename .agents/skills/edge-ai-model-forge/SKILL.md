@@ -1,7 +1,7 @@
 ---
 name: edge-ai-model-forge
 description: Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to "train edge AI model", "design TinyML architecture", "quantize model for microcontroller", "optimize TFLite Micro model", "tune asymmetric loss for edge", "profile tensor arena memory", "export C header model", "prevent quantization clipping", "calibrate decision threshold on edge", "train SPARK fall detection model", "fine-tune IMU classifier on Colab", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.
-version: 1.3.0
+version: 1.4.0
 ---
 
 # Edge AI & TinyML Model Forge (`edge-ai-model-forge`)
@@ -341,5 +341,7 @@ Appending or editing notebook cells (e.g. adding the auto-teardown cell `runtime
 9. **`INV-CLOUD-AUTOSAVE` (Direct Drive Persistence)**: All cloud training notebooks must automatically save generated artifacts (`.h`, `.tflite`, evaluation reports) directly into the mounted Google Drive folder before completion, preventing data loss on browser disconnects or session teardowns.
 10. **`INV-CLOUD-TEARDOWN` (Programmatic Session Unassign)**: All cloud GPU training notebooks must terminate with a programmatic `runtime.unassign()` cell to immediately release GPU hardware and conserve compute units/credits upon run completion.
 11. **`INV-INFLIGHT-SAFETY` (FIFO Kernel Queue Safety)**: In-flight execution is asynchronous; editing or queueing new cells while training runs is safe via FIFO queueing without restarting the runtime.
+12. **`INV-LABEL-POLYMORPHISM` (Polymorphic Label Ingestion)**: Time-series IMU datasets (SisFall, UniMiB SHAR, MobiAct) frequently persist raw alphanumeric activity codes (e.g. `'D01'`–`'D19'` for ADL, `'F01'`–`'F15'` for falls) rather than pre-binarized `0/1` integers. Ingestion pipelines and notebooks must never assume integer dtypes or cast raw labels directly via `.astype(np.int32)` (which throws `ValueError: invalid literal for int() with base 10`). Always inspect `raw_labels.dtype.kind` and apply vectorized prefix matching (`np.where(np.char.startswith(raw_labels.astype(str), 'F'), 1, 0).astype(np.int32)`) to seamlessly accommodate both raw alphanumeric codes and pre-binarized integers.
+
 
 
