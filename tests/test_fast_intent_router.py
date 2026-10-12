@@ -52,3 +52,12 @@ def test_route_intent_lm_studio_success(monkeypatch):
     assert "time_allocation" in result
 
 
+def test_dynamic_skill_manifest_scanner():
+    from tools.fast_intent_router import DynamicSkillManifest
+    DynamicSkillManifest._MANIFEST_CACHE = None
+    triggers = DynamicSkillManifest.get_skill_triggers()
+    assert isinstance(triggers, dict)
+    assert DynamicSkillManifest._MANIFEST_CACHE is not None
+
+
+

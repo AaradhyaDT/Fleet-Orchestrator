@@ -181,7 +181,7 @@ Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with liv
 
 ## 4. Verification & Testing
 
-Fleet-Orchestrator enforces continuous deterministic verification across 327 test cases (100% pass rate across 55 test suites):
+Fleet-Orchestrator enforces continuous deterministic verification across 329 test cases (100% pass rate across 55 test suites):
 ```powershell
 pytest tests/test_schema_validation.py -v
 pytest tests/test_quota_reconciliation.py -v

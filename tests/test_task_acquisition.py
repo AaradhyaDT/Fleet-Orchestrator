@@ -104,3 +104,56 @@ async def test_acquire_matches_capabilities_and_leases_atomically():
             "worker_id": "writer_worker"
         })
         assert acq_empty.status_code == 204
+
+
+@pytest.mark.asyncio
+async def test_release_completed_or_done_task_rejected():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # Register worker
+        await client.post("/api/v1/workers/register", json={
+            "id": "rel_worker_1",
+            "provider": "ollama_local",
+            "node_id": "node-1",
+            "nickname": "Rel Worker",
+            "capabilities": ["code"]
+        })
+
+        # Create task
+        await client.post("/api/v1/tasks", json={
+            "id": "task_rel_test",
+            "stage": "code",
+            "kind": "code",
+            "spec": "Test task release state guard",
+            "priority": 5
+        })
+
+        # Acquire task
+        acq = await client.post("/api/v1/tasks/acquire", json={
+            "worker_id": "rel_worker_1",
+            "capabilities": ["code"],
+            "lease_seconds": 120
+        })
+        assert acq.status_code == 200
+        claim_data = acq.json()
+        token = claim_data["claim_token"]
+
+        # Submit checkpoint to finish task (marks status as 'done')
+        cp = await client.post("/api/v1/tasks/task_rel_test/checkpoint", json={
+            "task_id": "task_rel_test",
+            "kind": "code",
+            "summary": "Completed work",
+            "result_text": "Success",
+            "submitted_by": "rel_worker_1",
+            "claim_token": token
+        })
+        assert cp.status_code == 201
+
+        # Attempt to release the completed task -> must be rejected with 409 Conflict
+        rel_resp = await client.post("/api/v1/tasks/task_rel_test/release", json={
+            "worker_id": "rel_worker_1",
+            "claim_token": token
+        })
+        assert rel_resp.status_code == 409
+        assert "only 'claimed' tasks can be released" in rel_resp.json()["detail"]
+

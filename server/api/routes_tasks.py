@@ -283,6 +283,11 @@ async def release_task(task_id: str, req: TaskReleaseRequest, db: aiosqlite.Conn
     if not task:
         raise HTTPException(status_code=404, detail=f"Task '{task_id}' not found")
     
+    if task["status"] != "claimed":
+        raise HTTPException(
+            status_code=409,
+            detail=f"Cannot release task '{task_id}': status is '{task['status']}', only 'claimed' tasks can be released",
+        )
     if task["owner_worker_id"] != req.worker_id:
         raise HTTPException(status_code=403, detail=f"Task is owned by '{task['owner_worker_id']}', not '{req.worker_id}'")
     if task["claim_token"] != req.claim_token:

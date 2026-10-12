@@ -333,6 +333,8 @@ class DynamicSkillManifest:
         brainstorm_env = os.getenv("BRAINSTORM_ROOT")
         brainstorm_dir = Path(brainstorm_env) if brainstorm_env else (ROOT.parent / "brainstorm")
 
+        triggers: Dict[str, List[str]] = {}
+
         candidate_roots = [
             ROOT / ".agents" / "skills",
             brainstorm_dir / ".agents" / "skills",

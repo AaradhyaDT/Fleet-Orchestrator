@@ -114,6 +114,17 @@ def validate_task_contract_schema(root: Path = ROOT_DIR) -> Tuple[bool, List[str
     try:
         with open(schema_path, "r", encoding="utf-8") as sf:
             schema = json.load(sf)
+
+        try:
+            import jsonschema
+
+            # Validate against Draft 2020-12 meta-schema
+            jsonschema.Draft202012Validator.check_schema(schema)
+        except ImportError:
+            pass
+        except Exception as e:
+            errors.append(f"[task-contract.schema.json] Draft 2020-12 meta-schema check failed: {e}")
+
         defs = schema.get("$defs", {})
         expected_models = ["TaskCreate", "TaskResponse", "JobCreate", "JobResponse", "WorkerResponse"]
         for m in expected_models:
