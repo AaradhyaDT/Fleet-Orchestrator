@@ -1,0 +1,105 @@
+{
+  "id": "task_2026-10-12_67f611",
+  "parent_id": null,
+  "kind": "code",
+  "spec": "Add Google-style docstrings and explicit type hints to functions in tools/mirror_skills.py without changing any file copying or hashing logic",
+  "status": "done",
+  "owner_account": "copilot-w6",
+  "branch_name": "task/task_2026-10-12_67f611",
+  "blocked_reason": null,
+  "created_by": "fleet_cli",
+  "created_at": "2026-10-12T05:39:13Z",
+  "updated_at": "2026-10-12T05:42:27Z",
+  "antigravity_scope": {
+    "chat_context": {
+      "conversation_id": "054dc930-99ce-4044-82e8-f5ccd18ec557",
+      "session_goal": "now test it actually giving a task",
+      "recent_user_requests": [
+        "all 4",
+        "Hey, I wanted circular round robin for fleet itself. but it is always querying w1 AaradhyaDT account first. see it has spent so many credits compared to others too",
+        "now test it actually giving a task"
+      ],
+      "active_artifacts": [
+        {
+          "file": "smoke_test_report.md",
+          "title": "Fleet Smoke Test Report \u2014 2026-10-12",
+          "path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\brain\\054dc930-99ce-4044-82e8-f5ccd18ec557\\smoke_test_report.md"
+        }
+      ]
+    },
+    "antigravity_customizations": {
+      "rules": [
+        "Commit Integrity: Never use synthetic or placeholder SHAs; authentic 7-40 hex git commit hashes only.",
+        "Version Control: Worktree-local commits are authorized; root repository merges/pushes must run via sync.bat.",
+        "Calm Authority Writing: Follow Anthropic Calm Authority Standard (declarative, zero hype superlatives).",
+        "Verification Gate: Local test suite and linters must pass clean before completion.",
+        "Worktree Isolation: Confine all file modifications strictly to the assigned git worktree."
+      ],
+      "active_skills": [
+        "academic-notebook-architect",
+        "adaptive-workflow",
+        "agent-teams-orchestration",
+        "ai-engineering-fellowship",
+        "avionic-telecom-analyzer",
+        "bitwarden",
+        "chat-archiver",
+        "chrome-extensions",
+        "colab-cloud-accelerator",
+        "cold-storage-archiver",
+        "compliance-report-harmonizer",
+        "control-systems-sim",
+        "cp-archive-harvester",
+        "customization-state-sync",
+        "cyber-forensics",
+        "design-taste-frontend",
+        "doc-archiver",
+        "dsa-complexity-optimizer",
+        "dsp-signal-engine",
+        "electronics-circuit-synth",
+        "embedded-firmware-scaffold",
+        "feature-dev",
+        "find-skills",
+        "fleet-orchestrator",
+        "fluid-wordmark-collapse",
+        "github-workflow",
+        "google-classroom",
+        "google-stitch-integration",
+        "graphify",
+        "graphify-code-search",
+        "graphify-optimizer",
+        "latex-thesis-architect",
+        "mcp-integration",
+        "modern-web-guidance",
+        "oose-architecture-modeler",
+        "pm-workflow-orchestrator",
+        "portfolio-project-manager",
+        "pr-review-toolkit",
+        "rf-link-budget-calc",
+        "security-guidance",
+        "shadcn-context",
+        "skill-development",
+        "slm-router-forge",
+        "split-to-prs",
+        "super-nlm",
+        "super-nlm-downloads",
+        "systems-concurrency-harness",
+        "win-vault",
+        "winpilot",
+        "writing-like-claude"
+      ],
+      "repo_rules_path": "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\AGENTS.md"
+    }
+  },
+  "time_allocation": {
+    "tier": "T2_MEDIUM",
+    "estimated_duration_s": 63,
+    "timeout_ceiling_s": 300,
+    "cpm_weight": 2.1,
+    "execution_route": "SUBAGENT"
+  },
+  "execution_route": "SUBAGENT",
+  "auto_tier": "balance",
+  "model": null,
+  "recommended_model": null,
+  "owner_pid": 2936
+}

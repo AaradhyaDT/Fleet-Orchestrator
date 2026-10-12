@@ -24,7 +24,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 SSOT_DIR = ROOT / ".agents" / "skills" / "adaptive-workflow"
@@ -38,7 +38,16 @@ TEXT_EXTENSIONS = {".md", ".json", ".yaml", ".yml", ".txt", ".py", ".ps1", ".bat
 
 
 def normalize_and_hash_file(file_path: Path) -> str:
-    """Computes SHA-256 of file, normalizing text files to standard \\n line endings."""
+    """Compute a normalized SHA-256 hash for a file.
+
+    Text files are normalized to standard ``\\n`` line endings before hashing.
+
+    Args:
+        file_path: Path to the file to hash.
+
+    Returns:
+        The SHA-256 digest as a hexadecimal string.
+    """
     if file_path.suffix.lower() in TEXT_EXTENSIONS:
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
@@ -57,7 +66,14 @@ def normalize_and_hash_file(file_path: Path) -> str:
 
 
 def compute_tree_hashes(base_dir: Path) -> Dict[str, str]:
-    """Computes mapping of relative_path -> normalized_sha256 for directory tree."""
+    """Compute normalized SHA-256 hashes for files in a directory tree.
+
+    Args:
+        base_dir: Root directory whose files should be hashed.
+
+    Returns:
+        A mapping from relative POSIX file paths to their SHA-256 digests.
+    """
     tree: Dict[str, str] = {}
     if not base_dir.exists():
         return tree
@@ -71,7 +87,16 @@ def compute_tree_hashes(base_dir: Path) -> Dict[str, str]:
 
 
 def compare_trees(ssot: Dict[str, str], mirror: Dict[str, str]) -> Dict[str, Any]:
-    """Compares two tree hash dictionaries."""
+    """Compare the hashes in an SSOT tree and its mirror.
+
+    Args:
+        ssot: Relative file paths and hashes from the authoritative tree.
+        mirror: Relative file paths and hashes from the mirror tree.
+
+    Returns:
+        A report containing synchronization status and missing, extra, and
+        modified file paths.
+    """
     ssot_keys = set(ssot.keys())
     mirror_keys = set(mirror.keys())
 
@@ -89,7 +114,15 @@ def compare_trees(ssot: Dict[str, str], mirror: Dict[str, str]) -> Dict[str, Any
 
 
 def copy_tree(src: Path, dst: Path) -> int:
-    """Safely mirrors src tree to dst tree, removing obsolete files."""
+    """Mirror a source tree to a destination, removing obsolete files.
+
+    Args:
+        src: Source directory to mirror.
+        dst: Destination directory to update.
+
+    Returns:
+        The number of files copied to the destination.
+    """
     copied = 0
     dst.mkdir(parents=True, exist_ok=True)
 
@@ -115,7 +148,15 @@ def copy_tree(src: Path, dst: Path) -> int:
 
 
 def is_brainstorm_git_clean(brainstorm_root: Path) -> Tuple[bool, str]:
-    """Verifies that brainstorm repository is clean and on an authorized branch."""
+    """Check whether the brainstorm repository is clean.
+
+    Args:
+        brainstorm_root: Path to the brainstorm Git repository.
+
+    Returns:
+        A tuple containing whether the repository is clean and the branch name
+        or reason it could not be verified.
+    """
     if not brainstorm_root.exists():
         return False, "Brainstorm repo directory not found"
 
@@ -147,6 +188,11 @@ def is_brainstorm_git_clean(brainstorm_root: Path) -> Tuple[bool, str]:
 
 
 def main() -> int:
+    """Run the skill-mirroring command-line interface.
+
+    Returns:
+        The process exit code, where zero indicates success.
+    """
     parser = argparse.ArgumentParser(description="SSOT Skill Mirroring Engine for adaptive-workflow")
     parser.add_argument("--check", action="store_true", help="Audit drift without copying files")
     parser.add_argument("--fix", action="store_true", help="Mirror SSOT to mirrors")
