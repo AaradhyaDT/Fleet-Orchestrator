@@ -86,6 +86,27 @@ flowchart TD
 .\fleet.bat daemon --concurrency 4          # Start local background queue worker daemon
 ```
 
+### Antigravity 2.0 Background Task Handoff Protocol
+When delegating work from Antigravity, handoff tasks directly as native **Background Tasks** via `run_command` with low `WaitMsBeforeAsync` (2000ms). This renders execution live inside Antigravity 2.0's HTML Auxiliary Pane (**Background Tasks** tab), preserves the Context Firebreak (`INV-CTX-FIREBREAK`), costs **$0.00** LLM polling tokens, and reactively wakes the agent upon completion:
+
+```powershell
+# Atomic one-shot handoff (Submits task, pre-flights, and executes unbuffered worker)
+.\fleet.bat run-task --spec "Implement edge sensor calibration" --auto-tier balance --conversation-id <uuid>
+
+# Cross-repository handoff (Routes worktree to external repository, e.g. SPARK)
+.\fleet.bat run-task --spec "Refactor telemetry pipeline" --target-repo "F:\Aaradhya-Dev-Tamrakar\SPARK"
+
+# Dry-run handoff (Zero-credit simulation)
+.\fleet.bat run-task --spec "Scaffold schema validator" --dry-run
+```
+
+**Agent Handoff Lifecycle**:
+1. **Dispatch**: Agent calls `run_command` with `CommandLine: ".\fleet.bat run-task --spec \"...\" --conversation-id <uuid>"`, `WaitMsBeforeAsync: 2000`, `IsDaemon: false`.
+2. **Immediate Receipt**: Antigravity registers `task-<id>` in the Background Tasks pane. Agent returns a brief receipt to the user and yields turn control.
+3. **Live Stream**: User watches real-time milestones (`[CLAIMED]`, `[WORKTREE]`, `[EXEC]`, `[PROGRESS]`, `[CHECKPOINT]`, `[COMPLETED]`) in the Auxiliary Pane.
+4. **Reactive Wakeup**: On process exit, Antigravity reactively delivers the bounded manifest ($\le 300$ words).
+5. **Delivery Gate**: Agent inspects `orchestrator-state/checkpoints/<task_id>.json`, verifies tests, and proposes the merge into the active branch via `git merge task/<task_id>` + `.\sync.bat`.
+
 ### Tri-Fleet Environment Configuration & Auditing
 Multi-model worker pools are configured across modular provider files with cascading fallback to legacy `.env.fleet`:
 - `.env.fleet.copilot`: 27 GitHub Copilot accounts (Fine-Grained PATs, 5,400 monthly AI credits).

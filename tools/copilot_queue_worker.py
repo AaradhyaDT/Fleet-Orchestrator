@@ -61,6 +61,33 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def is_pid_alive(pid: int | None) -> bool:
+    """Checks whether an OS process ID is currently running."""
+    if not pid or pid <= 0:
+        return False
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+            handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+            if handle:
+                exit_code = ctypes.c_ulong()
+                kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code))
+                kernel32.CloseHandle(handle)
+                STILL_ACTIVE = 259
+                return exit_code.value == STILL_ACTIVE
+            return False
+        except Exception:
+            return False
+    else:
+        try:
+            os.kill(pid, 0)
+            return True
+        except (OSError, ProcessLookupError):
+            return False
+
+
 class CopilotQueueWorker:
     def __init__(
         self,
@@ -290,8 +317,23 @@ class CopilotQueueWorker:
                     stage = data.get("current_stage") or data.get("stage") or (data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None)
                     is_eligible = (data.get("kind") == "code") or (stage in ["code", "draft", "research", "format", "refactor", "unit_test"])
 
-                    if is_eligible and data.get("status") == "pending":
-                        pending_tasks.append(data)
+                    if is_eligible:
+                        status = data.get("status")
+                        if status == "pending":
+                            pending_tasks.append(data)
+                        elif status == "claimed":
+                            owner_pid = data.get("owner_pid")
+                            if owner_pid and not is_pid_alive(owner_pid):
+                                logger.info(f"Reclaiming zombie task {data.get('id')} from dead PID {owner_pid}")
+                                data["status"] = "pending"
+                                data["owner_account"] = None
+                                data["owner_pid"] = None
+                                try:
+                                    with open(task_file, "w", encoding="utf-8") as f:
+                                        json.dump(data, f, indent=2)
+                                    pending_tasks.append(data)
+                                except Exception:
+                                    pass
             except Exception as e:
                 logger.warning(f"Error reading task file {task_file.name}: {e}")
 
@@ -327,6 +369,7 @@ class CopilotQueueWorker:
             now = _now_iso()
             task["status"] = "claimed"
             task["owner_account"] = account["worker_id"]
+            task["owner_pid"] = os.getpid()
             task["branch_name"] = f"task/{task_id}"
             task["updated_at"] = now
 
@@ -416,6 +459,7 @@ class CopilotQueueWorker:
             "quota_exhausted": is_quota_ex,
             "cooldown_until": cd_iso,
             "heartbeat_at": _now_iso(),
+            "pid": os.getpid(),
             "note": note,
         }
         try:
@@ -444,26 +488,85 @@ class CopilotQueueWorker:
         except Exception:
             return False
 
-    async def provision_worktree(self, task_id: str, branch_name: str) -> Path:
+    async def provision_worktree(
+        self,
+        task_id: str,
+        branch_name: str,
+        target_repo: str | Path | None = None,
+    ) -> Path:
         """
         Auto-provisions an isolated Git worktree:
         `git worktree add -b task/<task_id> <worktree_dir> HEAD`
-        Falls back to creating an isolated directory if not in a git repository or during dry-run.
+        Supports target_repo cross-repository routing and pre-flight worktree self-healing.
         """
-        worktree_dir = self.worktree_root / task_id
-        if self.dry_run or not self.auto_worktrees or not self._is_git_repo(self.repo_root):
+        root = Path(target_repo).resolve() if target_repo else self.repo_root
+        wt_root = (root / ".worktrees") if target_repo else self.worktree_root
+        worktree_dir = wt_root / task_id
+
+        if self.dry_run or not self.auto_worktrees or not self._is_git_repo(root):
             worktree_dir.mkdir(parents=True, exist_ok=True)
             return worktree_dir
 
-        self.worktree_root.mkdir(parents=True, exist_ok=True)
+        wt_root.mkdir(parents=True, exist_ok=True)
 
+        # 1. Pre-flight Git self-healing: prune stale worktree registrations
+        try:
+            prune_proc = await asyncio.create_subprocess_exec(
+                "git", "worktree", "prune",
+                cwd=str(root),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                creationflags=WIN32_NO_WINDOW,
+            )
+            await prune_proc.communicate()
+        except Exception:
+            pass
+
+        # 2. Check if branch is locked to an existing worktree via git worktree list
+        try:
+            list_proc = await asyncio.create_subprocess_exec(
+                "git", "worktree", "list", "--porcelain",
+                cwd=str(root),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                creationflags=WIN32_NO_WINDOW,
+            )
+            list_out, _ = await list_proc.communicate()
+            list_text = list_out.decode("utf-8", errors="replace")
+            if f"branch refs/heads/{branch_name}" in list_text:
+                for block in list_text.split("\n\n"):
+                    if f"branch refs/heads/{branch_name}" in block:
+                        for line in block.splitlines():
+                            if line.startswith("worktree "):
+                                stale_wt = Path(line.replace("worktree ", "").strip())
+                                if stale_wt != root and stale_wt.exists():
+                                    rm_proc = await asyncio.create_subprocess_exec(
+                                        "git", "worktree", "remove", "--force", str(stale_wt),
+                                        cwd=str(root),
+                                        stdout=asyncio.subprocess.PIPE,
+                                        stderr=asyncio.subprocess.PIPE,
+                                        creationflags=WIN32_NO_WINDOW,
+                                    )
+                                    await rm_proc.communicate()
+                prune_proc = await asyncio.create_subprocess_exec(
+                    "git", "worktree", "prune",
+                    cwd=str(root),
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    creationflags=WIN32_NO_WINDOW,
+                )
+                await prune_proc.communicate()
+        except Exception as e:
+            logger.debug(f"Pre-flight worktree self-healing notice: {e}")
+
+        # 3. Clean up directory on disk if it still exists
         if worktree_dir.exists():
-            await self.teardown_worktree(worktree_dir, branch_name=None, commit=False)
+            await self.teardown_worktree(worktree_dir, branch_name=None, commit=False, repo_root=root)
 
-        # Check if branch already exists
+        # 4. Check if branch already exists
         check_proc = await asyncio.create_subprocess_exec(
             "git", "branch", "--list", branch_name,
-            cwd=str(self.repo_root),
+            cwd=str(root),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             creationflags=WIN32_NO_WINDOW,
@@ -479,7 +582,7 @@ class CopilotQueueWorker:
 
         proc = await asyncio.create_subprocess_exec(
             *cmd,
-            cwd=str(self.repo_root),
+            cwd=str(root),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             creationflags=WIN32_NO_WINDOW,
@@ -501,6 +604,7 @@ class CopilotQueueWorker:
         task_id: str | None = None,
         commit: bool = True,
         prune_branch: bool = False,
+        repo_root: Path | str | None = None,
     ) -> str | None:
         """
         Automatically commits changes inside the worktree (if any),
@@ -510,6 +614,7 @@ class CopilotQueueWorker:
         if not worktree_dir.exists():
             return None
 
+        root = Path(repo_root).resolve() if repo_root else self.repo_root
         is_git = self._is_git_repo(worktree_dir)
 
         if commit and is_git and not self.dry_run:
@@ -569,7 +674,7 @@ class CopilotQueueWorker:
             try:
                 rm_proc = await asyncio.create_subprocess_exec(
                     "git", "worktree", "remove", "--force", str(worktree_dir),
-                    cwd=str(self.repo_root),
+                    cwd=str(root),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
                     creationflags=WIN32_NO_WINDOW,
@@ -578,7 +683,7 @@ class CopilotQueueWorker:
 
                 prune_proc = await asyncio.create_subprocess_exec(
                     "git", "worktree", "prune",
-                    cwd=str(self.repo_root),
+                    cwd=str(root),
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
                     creationflags=WIN32_NO_WINDOW,
@@ -950,9 +1055,18 @@ class CopilotQueueWorker:
 
         task_id = claimed_task["id"]
         branch_name = claimed_task.get("branch_name") or f"task/{task_id}"
-        worktree_dir = await self.provision_worktree(task_id, branch_name)
+        target_repo = claimed_task.get("target_repo")
+
+        print(f"[CLAIMED] Worker {account['worker_id']} acquired lease for {task_id} (PID: {os.getpid()})", flush=True)
+
+        worktree_dir = await self.provision_worktree(task_id, branch_name, target_repo=target_repo)
+        print(f"[WORKTREE] Provisioned isolated worktree {worktree_dir.name} on branch {branch_name}", flush=True)
 
         exec_start = time.perf_counter()
+        auto_tier = claimed_task.get("auto_tier", "balance")
+        model = claimed_task.get("model") or claimed_task.get("recommended_model") or "auto"
+        print(f"[EXEC] Running Copilot CLI (Model: {model}, Auto-Tier: {auto_tier})...", flush=True)
+
         try:
             result = await self.execute_task(claimed_task, account, worktree_dir=worktree_dir)
             actual_duration = round(time.perf_counter() - exec_start, 1)
@@ -972,12 +1086,14 @@ class CopilotQueueWorker:
                 branch_name=branch_name,
                 task_id=task_id,
                 commit=result.get("success", False),
+                repo_root=target_repo,
             )
 
             summary = result.get("summary") or f"Implemented task {task_id}"
             sha = commit_sha or result.get("commit_sha") or "HEAD"
 
             if result.get("success"):
+                print(f"[CHECKPOINT] Deliverable committed to branch {branch_name} ({sha[:7] if len(sha) >= 7 else sha})", flush=True)
                 self.submit_checkpoint_and_complete(
                     task_id=task_id,
                     account=account,
@@ -986,28 +1102,44 @@ class CopilotQueueWorker:
                     commit_sha=sha,
                     actual_duration_s=actual_duration,
                 )
+                print(f"[COMPLETED] Task {task_id} successfully finalized in {actual_duration}s.", flush=True)
                 return True
             else:
                 error_msg = result.get("error") or "Execution failed"
+                print(f"[FAILED] Task {task_id} execution failed: {error_msg}", flush=True)
                 self._record_copilot_mistake(task=claimed_task, account=account, result=result, error_msg=error_msg)
                 self._mark_task_blocked(task_id, account, error_msg)
                 return False
 
         except Exception as e:
             logger.error(f"Execution error on task {task_id}: {e}")
-            await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False)
+            await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False, repo_root=target_repo)
             self._record_copilot_mistake(task=claimed_task, account=account, result={}, error_msg=str(e))
             self._mark_task_blocked(task_id, account, str(e))
+            print(f"[ERROR] Task {task_id} encountered exception: {e}", flush=True)
             return False
 
-    async def run(self, once: bool = False, target_task_id: str | None = None) -> None:
-        """Main queue worker loop supporting concurrent task execution."""
+    async def run(self, once: bool = False, target_task_id: str | None = None, timeout: float = 300.0) -> None:
+        """Main queue worker loop supporting concurrent task execution and targeted one-shot polling."""
         self._running = True
         logger.info(
             f"Copilot Queue Worker started | State Dir: {self.state_dir} | "
             f"Ready Accounts: {len(self.ready_accounts)} | Concurrency: {self.concurrency} | "
             f"Poll Interval: {self.poll_interval}s"
         )
+
+        if target_task_id and once:
+            print(f"[DISPATCH] Monitoring targeted task: {target_task_id}", flush=True)
+            start_t = time.perf_counter()
+            while self._running:
+                processed = await self.process_one_task(target_task_id=target_task_id)
+                if processed:
+                    break
+                if time.perf_counter() - start_t > timeout:
+                    print(f"[TIMEOUT] Targeted task {target_task_id} was not processed within {timeout}s.", flush=True)
+                    break
+                await asyncio.sleep(1.0)
+            return
 
         if self.concurrency <= 1:
             while self._running:
@@ -1050,6 +1182,7 @@ async def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
     parser.add_argument("--once", action="store_true", help="Process at most one task and exit")
     parser.add_argument("--task-id", type=str, default=None, help="Target a specific pending task ID")
+    parser.add_argument("--timeout", type=float, default=300.0, help="Timeout in seconds for targeted one-shot execution (default: 300.0)")
 
     args = parser.parse_args()
 
@@ -1072,7 +1205,7 @@ async def main() -> None:
             # Windows may not support add_signal_handler for all signals
             pass
 
-    await worker.run(once=args.once, target_task_id=args.task_id)
+    await worker.run(once=args.once, target_task_id=args.task_id, timeout=args.timeout)
 
 
 if __name__ == "__main__":

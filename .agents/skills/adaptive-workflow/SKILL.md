@@ -28,7 +28,7 @@ flowchart TD
 ### Hierarchy Responsibilities:
 1. **Lead Agent**: Triage via `adaptive_engine.py`. Tier 0 fast paths ($0). Solves CPM ($TS=0$). Ephemeral Commander, context $<5\text{k}$ tokens (`INV-CTX-FIREBREAK`).
 2. **Domain Commanders**: Writes task JSONs to `orchestrator-state/tasks/`. Absorbs logs/retries. Returns **<300w manifest** to Lead.
-3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`).
+3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live milestone telemetry and reactive wakeups.
 4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).

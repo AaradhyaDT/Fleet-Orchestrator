@@ -13,10 +13,12 @@ Commands:
 from __future__ import annotations
 
 import argparse
+import asyncio
 from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import shutil
 import sys
 import time
 from typing import Any
@@ -34,14 +36,13 @@ from tools.copilot_fleet import (
 )
 from tools.copilot_queue_worker import resolve_state_dir
 
-if sys.platform == "win32":
-    try:
-        if hasattr(sys.stdout, "reconfigure"):
-            sys.stdout.reconfigure(encoding="utf-8")
-        if hasattr(sys.stderr, "reconfigure"):
-            sys.stderr.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", line_buffering=True)
+except Exception:
+    pass
 
 
 def get_full_status_dict(state_dir: Path | None = None) -> dict[str, Any]:
@@ -192,6 +193,9 @@ def cmd_submit(args: argparse.Namespace) -> None:
     task["model"] = model
     task["recommended_model"] = model
 
+    if getattr(args, "target_repo", None):
+        task["target_repo"] = str(Path(args.target_repo).resolve())
+
     tid = task["id"]
     task_path = tasks_dir / f"{tid}.json"
     with open(task_path, "w", encoding="utf-8") as f:
@@ -199,7 +203,85 @@ def cmd_submit(args: argparse.Namespace) -> None:
 
     print(f"[OK] Dispatched task {tid} ({args.kind}) | Auto-Tier: {task['auto_tier']} | Model: {task.get('model') or 'auto'}")
     print(f"     Spec: {args.spec}")
+    if task.get("target_repo"):
+        print(f"     Target Repo: {task['target_repo']}")
     print(f"     Queue: {task_path}")
+
+
+def cmd_run_task(args: argparse.Namespace) -> None:
+    """Atomic task submit & immediate unbuffered worker execution for Antigravity 2.0 background tasks."""
+    state_dir = resolve_state_dir(args.state_dir)
+    tasks_dir = state_dir / "tasks"
+    tasks_dir.mkdir(parents=True, exist_ok=True)
+
+    # Fast synchronous pre-flight canary (<200ms)
+    if not args.dry_run:
+        from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+        copilot_bin = CopilotCLIAdapter._resolve_copilot_binary()
+        if not shutil.which(copilot_bin) and not Path(copilot_bin).exists():
+            print(f"[!] Pre-flight Error: copilot binary not found ({copilot_bin}). Install GitHub Copilot CLI or use --dry-run.", file=sys.stderr)
+            sys.exit(1)
+
+        env_vars = load_env_fleet()
+        accounts = discover_accounts(env_vars)
+        ready = [a for a in accounts if a.get("has_token")]
+        if not ready:
+            print("[!] Pre-flight Error: No ready accounts with COPILOT_GITHUB_TOKEN found in .env.fleet.copilot. Run: python tools/copilot_fleet.py canary", file=sys.stderr)
+            sys.exit(1)
+
+    antigravity_scope = None
+    if not getattr(args, "no_antigravity", False):
+        try:
+            from client.antigravity_bridge import build_antigravity_scope
+            repo_root_target = Path(args.target_repo).resolve() if getattr(args, "target_repo", None) else None
+            antigravity_scope = build_antigravity_scope(
+                conversation_id=getattr(args, "conversation_id", None),
+                repo_root=repo_root_target,
+            )
+        except Exception:
+            pass
+
+    task = create_task_payload(spec=args.spec, kind=args.kind, antigravity_scope=antigravity_scope)
+
+    if getattr(args, "target_repo", None):
+        task["target_repo"] = str(Path(args.target_repo).resolve())
+
+    auto_tier = getattr(args, "auto_tier", None)
+    model = getattr(args, "model", None)
+    try:
+        from tools.fast_intent_router import route_intent
+        r_info = route_intent(args.spec)
+        if not auto_tier:
+            auto_tier = r_info.get("auto_tier", "balance")
+        if not model:
+            model = r_info.get("recommended_copilot_model")
+        task["time_allocation"] = r_info.get("time_allocation", {})
+        task["execution_route"] = r_info.get("time_allocation", {}).get("execution_route")
+    except Exception:
+        pass
+
+    task["auto_tier"] = auto_tier or "balance"
+    task["model"] = model
+    task["recommended_model"] = model
+
+    tid = task["id"]
+    task_path = tasks_dir / f"{tid}.json"
+    with open(task_path, "w", encoding="utf-8") as f:
+        json.dump(task, f, indent=2)
+
+    print(f"[DISPATCH] Task {tid} ({args.kind}) enqueued. Auto-Tier: {task['auto_tier']} | Model: {task.get('model') or 'auto'}", flush=True)
+    if task.get("target_repo"):
+        print(f"           Target Repo: {task['target_repo']}", flush=True)
+
+    # Launch queue worker for targeted task
+    from tools.copilot_queue_worker import CopilotQueueWorker
+    worker = CopilotQueueWorker(
+        state_dir=state_dir,
+        dry_run=args.dry_run,
+        repo_root=task.get("target_repo"),
+    )
+    timeout_sec = getattr(args, "timeout", 300.0)
+    asyncio.run(worker.run(once=True, target_task_id=tid, timeout=timeout_sec))
 
 
 def cmd_tasks(args: argparse.Namespace) -> None:
@@ -259,10 +341,23 @@ def main():
     p_submit = subparsers.add_parser("submit", help="Submit task to swarm queue")
     p_submit.add_argument("--spec", type=str, required=True, help="Task specification")
     p_submit.add_argument("--kind", type=str, default="code", choices=["code", "text", "qa", "research"], help="Task kind")
+    p_submit.add_argument("--target-repo", type=str, default=None, help="Root path of target repository for worktree")
     p_submit.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context harvest")
     p_submit.add_argument("--conversation-id", type=str, default=None, help="Target Antigravity conversation ID")
     p_submit.add_argument("--model", type=str, default=None, help="Explicit Copilot model (e.g. gemini-3.8-flash)")
     p_submit.add_argument("--auto-tier", type=str, default=None, choices=["efficiency", "balance", "intelligence"], help="Copilot auto-tier preference")
+
+    # Run-Task (Atomic Dispatch & Immediate Worker Execution)
+    p_run = subparsers.add_parser("run-task", help="Atomic task submit & immediate unbuffered background worker execution")
+    p_run.add_argument("--spec", type=str, required=True, help="Task specification")
+    p_run.add_argument("--kind", type=str, default="code", choices=["code", "text", "qa", "research"], help="Task kind")
+    p_run.add_argument("--target-repo", type=str, default=None, help="Root path of target repository for worktree")
+    p_run.add_argument("--no-antigravity", action="store_true", help="Disable Antigravity context harvest")
+    p_run.add_argument("--conversation-id", type=str, default=None, help="Target Antigravity conversation ID")
+    p_run.add_argument("--model", type=str, default=None, help="Explicit Copilot model (e.g. gemini-3.8-flash)")
+    p_run.add_argument("--auto-tier", type=str, default=None, choices=["efficiency", "balance", "intelligence"], help="Copilot auto-tier preference")
+    p_run.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
+    p_run.add_argument("--timeout", type=float, default=300.0, help="Timeout in seconds for execution")
 
     # Tasks
     p_tasks = subparsers.add_parser("tasks", help="List recent tasks in queue")
@@ -284,6 +379,8 @@ def main():
             render_ascii_status(status_data)
     elif args.command == "submit":
         cmd_submit(args)
+    elif args.command == "run-task":
+        cmd_run_task(args)
     elif args.command == "tasks":
         cmd_tasks(args)
     elif args.command == "reconcile":

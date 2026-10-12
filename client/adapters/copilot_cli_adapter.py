@@ -7,6 +7,7 @@ workspace isolation, and JSON usage metrics telemetry.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import os
 import re
@@ -14,6 +15,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -198,10 +200,25 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 startupinfo=startupinfo,
             )
 
-            stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                proc.communicate(),
-                timeout=self.timeout,
-            )
+            start_exec_t = time.perf_counter()
+
+            async def _ticker():
+                interval = 15.0
+                while True:
+                    await asyncio.sleep(interval)
+                    elapsed = int(time.perf_counter() - start_exec_t)
+                    print(f"[PROGRESS {elapsed}s] Copilot worker active in worktree... (Phase: executing autopilot)", flush=True)
+
+            ticker_task = asyncio.create_task(_ticker())
+            try:
+                stdout_bytes, stderr_bytes = await asyncio.wait_for(
+                    proc.communicate(),
+                    timeout=self.timeout,
+                )
+            finally:
+                ticker_task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await ticker_task
 
             stdout_str = stdout_bytes.decode("utf-8", errors="replace").strip()
             stderr_str = stderr_bytes.decode("utf-8", errors="replace").strip()

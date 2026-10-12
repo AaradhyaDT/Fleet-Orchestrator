@@ -6,7 +6,9 @@ This document specifies the operational protocols for Domain Commanders marshali
 
 ## 1. The Commander-to-Fleet Marshalling Model (`INV-CTX-FIREBREAK`)
 
-In the Lead-Commander-Worker command hierarchy, the Lead Agent delegates execution-heavy tasks to ephemeral Domain Commanders (`invoke_subagent`). Domain Commanders marshal the headless Copilot worker pool rather than executing hundreds of repetitive steps in-turn. The subagent absorbs all queue polling, worktree logs, and retries, returning **only a <300 word executive manifest** back to the primary chat (`INV-CTX-FIREBREAK`).
+In the Lead-Commander-Worker command hierarchy:
+1. **Cognitive Domain Planning (`invoke_subagent`)**: High-level task partitioning, requirement decomposition, and adversarial QA review are delegated to specialized subagents. These appear in the **Subagents** tab of Antigravity 2.0's HTML Auxiliary Pane and consume LLM tokens.
+2. **Deterministic CLI Execution (`run_command` Background Tasks)**: Spawning headless worker daemons or targeted one-shot workers (`.\fleet.bat run-task`) is executed natively as an Antigravity 2.0 **Background Task** (`WaitMsBeforeAsync: 2000`). This surfaces live streaming execution directly in the **Background Tasks** tab, costs **$0.00** LLM tokens during execution, and reactively awakens the Lead Agent with a bounded manifest $\le 300$ words (`INV-CTX-FIREBREAK`).
 
 ```mermaid
 flowchart TD

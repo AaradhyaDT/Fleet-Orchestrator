@@ -2,6 +2,7 @@
 REM Fleet-Orchestrator Zero-Distraction CLI Wrapper
 REM Usage:
 REM   .\fleet.bat status
+REM   .\fleet.bat run-task --spec "..."
 REM   .\fleet.bat submit --spec "..."
 REM   .\fleet.bat tasks
 REM   .\fleet.bat reconcile
@@ -16,4 +17,4 @@ if exist "%~dp0.venv\Scripts\python.exe" (
     set "PY_CMD=python"
 )
 
-"%PY_CMD%" "%~dp0tools\unified_fleet_cli.py" %*
+"%PY_CMD%" -u "%~dp0tools\unified_fleet_cli.py" %*
