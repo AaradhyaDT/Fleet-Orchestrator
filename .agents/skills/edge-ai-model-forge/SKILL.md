@@ -1,7 +1,7 @@
 ---
 name: edge-ai-model-forge
 description: Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to "train edge AI model", "design TinyML architecture", "quantize model for microcontroller", "optimize TFLite Micro model", "tune asymmetric loss for edge", "profile tensor arena memory", "export C header model", "prevent quantization clipping", "calibrate decision threshold on edge", "train SPARK fall detection model", "fine-tune IMU classifier on Colab", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Edge AI & TinyML Model Forge (`edge-ai-model-forge`)
@@ -237,7 +237,47 @@ const unsigned int {model_name}_model_len = {len(tflite_bytes)};
 
 ---
 
-## 6. Verification Checklist & Invariants
+## 6. Cloud Acceleration & Google Drive Asset Delivery
+
+When offloading edge AI model training, Bayesian tuning, or INT8 quantization sweeps to Cloud GPUs (e.g., Google Colab Pro L4 / A100):
+
+### 6.1 Dual-Format Cloud Asset Staging Pattern
+Never upload *only* a consolidated `.zip` archive to Google Drive. A zip archive prevents direct 1-click execution in Google Colab and forces manual local downloads.
+Always stage assets in **dual format**:
+1. **Uncompressed Executable Artifacts**:
+   - Self-contained Colab notebook (`.ipynb`) uploaded uncompressed directly into the Google Drive folder.
+   - Core Python scripts (`train_cnn.py`, `quantize_model.py`) uploaded uncompressed for inspection or direct module import.
+   - Baseline compiled targets (`.tflite`, `.h`) for quick baseline comparison.
+2. **Consolidated Data Bundle (`.zip`)**:
+   - Pack high-volume multi-array dataset files (`windows.npy`, `labels.npy`, `meta.csv`) into a single `.zip` archive.
+   - Enables fast 1-step runtime extraction in Colab via `!unzip -q`.
+
+### 6.2 Standard Google Colab Ingestion Boilerplate
+Every edge AI Colab notebook must include an automated Drive mounting and archive extraction cell:
+
+```python
+from google.colab import drive
+import os, zipfile
+
+# 1. Mount user's Google Drive
+drive.mount('/content/drive')
+
+# 2. Extract dataset bundle directly into Colab local disk (/content) for maximum I/O throughput
+drive_zip_path = '/content/drive/MyDrive/<FOLDER_PATH>/<DATASET_BUNDLE>.zip'
+local_workspace = '/content/workspace'
+
+if os.path.exists(drive_zip_path):
+    print(f"[*] Extracting dataset from {drive_zip_path}...")
+    with zipfile.ZipFile(drive_zip_path, 'r') as zip_ref:
+        zip_ref.extractall(local_workspace)
+    print(f"[+] Dataset extracted to {local_workspace}!")
+else:
+    print(f"[!] Warning: Zip archive not found at {drive_zip_path}. Check Drive path.")
+```
+
+---
+
+## 7. Verification Checklist & Invariants
 
 1. **`INV-FLASH-BUDGET`**: Quantized `.tflite` model size must be $\le 120\text{ KB}$ flash.
 2. **`INV-SRAM-ARENA`**: Tensor arena requirement + `esp-nn` scratch buffer verified $\le 36.2\text{ KiB}$ internal SRAM.
@@ -246,3 +286,5 @@ const unsigned int {model_name}_model_len = {len(tflite_bytes)};
 5. **`INV-THRESHOLD-TUNED`**: Operating cutoff is explicitly recorded in `model_config.json` via Youden's $J$, not hardcoded to $0.50$.
 6. **`INV-FIRMWARE-ALIGNMENT`**: Exported C header contains `alignas(16)` and matches the C++ struct definition in `firmware/main/models/`.
 7. **`INV-IO-CONTRACT`**: Input dimensions `(T, C)` and output shape `(K)` must match the microcontroller driver circular buffer verbatim.
+8. **`INV-CLOUD-DELIVERY` (Dual-Format Cloud Staging)**: When uploading models and training artifacts to Google Drive for cloud acceleration, never upload only a `.zip` archive. Upload the self-contained `.ipynb` notebook and execution scripts uncompressed directly to the Drive folder so they can be opened immediately via "Open with Google Colaboratory", alongside the `.zip` dataset bundle for fast runtime decompression.
+

@@ -1,7 +1,7 @@
 ---
 name: slm-router-forge
 description: Autonomous end-to-end Small Language Model (SLM) forge, local routing engine, and task time allocation synthesizer. Use whenever asked to "tune an intent router", "train a local classifier", "fine-tune Qwen on Colab", "export GGUF for local inference", "harvest task time dataset", "allocate task execution timeout", "upload model to Google Drive", "run model in LM Studio", or mentions training sub-1B parameter models (e.g., Qwen 0.5B/0.8B LoRA via Unsloth) for low-latency (<50ms) intent discovery, skill routing, and empirical duration budgeting.
-version: 1.3.0
+version: 1.4.0
 ---
 
 # SLM Router & Time Allocation Forge (`slm-router-forge`)
@@ -303,6 +303,8 @@ Deploy the model locally across Meteor Lake silicon:
 12. **INV-SLM-12: Unsloth GGUF Output Directory Suffix Invariant**: Unsloth's `model.save_pretrained_gguf(target_dir, ...)` automatically appends `_gguf` to the specified directory name (e.g., `save_pretrained_gguf("fleet_model", ...)` outputs to `fleet_model_gguf/`). Downstream copy and persistence code must never hardcode `target_dir` without `_gguf`. Always target `f"{target_dir}_gguf"` or use dynamic glob discovery (`glob.glob(f"**/*{model_tag}*.gguf", recursive=True)`) to eliminate `FileNotFoundError` during cloud artifact persistence.
 13. **INV-SLM-13: Resumable Cloud Model Retrieval & Drive Sharing Invariant**: Exported multi-gigabyte models in Google Drive must be permissioned with `role: reader, type: anyone` to enable automated downstream CLI pulling via `gdown`. Remote or local worker download commands must strictly use `--continue` (`python -m gdown --continue "https://drive.google.com/uc?id=<file_id>" -O "models/<filename>.gguf"`) to ensure automated virus-scan redirect handling and chunked recovery on transient network drops. Any partial download artifacts (`*.part`) created during aborted transfers must be purged to maintain clean local cache integrity.
 14. **INV-SLM-14: Tier-Aware Timeout Floor Escalation**: The unified fleet CLI (`unified_fleet_cli.py`) must enforce minimum timeout floors per auto-tier (`efficiency`→120s, `balance`→300s, `intelligence`→600s) after SLM routing. If the SLM's computed `timeout_ceiling_s` falls below the tier floor, the ceiling must be escalated to the floor. This prevents timeout kills on correctly-scoped tasks when the SLM underestimates complexity (e.g., documentation tasks classified as T1_FAST but requiring >149s of Copilot CLI execution). The heuristic fallback must also include keyword-driven classification for documentation tasks (`docstring`, `jsdoc`, `typehint`, `type annotation`, `add comments`) to avoid misclassification.
+15. **INV-SLM-15: Dual Cloud Delivery Pattern**: Whenever staging machine learning pipelines, fine-tuning scripts, and datasets to Google Drive for cloud training (Colab Pro), never upload solely a consolidated `.zip` archive. Upload standalone training notebooks (`.ipynb`), execution scripts, and baseline configs uncompressed directly to the designated Google Drive folder to support instant browser inspection and 1-click "Open with Google Colaboratory", while uploading multi-file datasets as `.zip` packages for single-command `!unzip` extraction in the runtime.
+
 
 
 
