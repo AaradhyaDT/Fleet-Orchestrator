@@ -354,11 +354,19 @@ async def submit_checkpoint(task_id: str, cp: CheckpointSubmit, db: aiosqlite.Co
     if task["claim_token"] != cp.claim_token:
         raise HTTPException(status_code=403, detail=f"Invalid or expired claim token for task '{task_id}'")
 
-    # Insert or replace checkpoint
+    # Insert or update checkpoint safely without deleting row
     await db.execute(
         """
-        INSERT OR REPLACE INTO checkpoints (task_id, job_id, kind, summary, result_text, branch_name, commit_sha, submitted_by, submitted_at)
+        INSERT INTO checkpoints (task_id, job_id, kind, summary, result_text, branch_name, commit_sha, submitted_by, submitted_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(task_id) DO UPDATE SET
+            kind = excluded.kind,
+            summary = excluded.summary,
+            result_text = excluded.result_text,
+            branch_name = excluded.branch_name,
+            commit_sha = excluded.commit_sha,
+            submitted_by = excluded.submitted_by,
+            submitted_at = excluded.submitted_at
         """,
         (task_id, task["job_id"], cp.kind, cp.summary, cp.result_text, cp.branch_name, cp.commit_sha, cp.submitted_by, now)
     )
@@ -381,8 +389,9 @@ async def submit_checkpoint(task_id: str, cp: CheckpointSubmit, db: aiosqlite.Co
         (now, cp.submitted_by)
     )
 
-    # Automatically advance task to next stage in pipeline (within same atomic transaction)
-    if task["job_id"]:
+    # Automatically advance task to next stage in pipeline only if not a QA review stage
+    # (QA stages advance upon verified QA review PASS)
+    if task["job_id"] and task["stage"] not in ("qa", "review", "qa_review"):
         next_task_id = await pipeline_engine.advance_task_to_next_stage(task_id, db, auto_commit=False)
         if not next_task_id:
             # If final stage or waiting on siblings, check if entire job can be finalized
@@ -465,10 +474,21 @@ async def submit_qa_review(task_id: str, qa: QAReviewSubmit, db: aiosqlite.Conne
 
     # Handle verdict impact on task and metrics
     if qa.verdict in ("fail", "revision_needed"):
-        # Requeue or mark revision
+        # Requeue or mark revision on this task
         await db.execute(
             "UPDATE tasks SET status = 'pending', owner_worker_id = NULL, claimed_at = NULL, lease_expires_at = NULL, claim_token = NULL, updated_at = ? WHERE id = ?",
             (now, task_id)
+        )
+        # If this QA task was reviewing a parent task deliverable, reopen parent task for revision
+        if task["parent_id"]:
+            await db.execute(
+                "UPDATE tasks SET status = 'pending', owner_worker_id = NULL, claimed_at = NULL, lease_expires_at = NULL, claim_token = NULL, updated_at = ? WHERE id = ?",
+                (now, task["parent_id"])
+            )
+        # Purge any downstream child tasks spawned from this task that are still pending
+        await db.execute(
+            "DELETE FROM tasks WHERE parent_id = ? AND status = 'pending'",
+            (task_id,)
         )
         if task["job_id"]:
             await db.execute(
@@ -482,8 +502,14 @@ async def submit_qa_review(task_id: str, qa: QAReviewSubmit, db: aiosqlite.Conne
         result_text = qa.result_text or f"QA review passed by {qa.reviewer_worker_id}"
         await db.execute(
             """
-            INSERT OR REPLACE INTO checkpoints (task_id, job_id, kind, summary, result_text, submitted_by, submitted_at)
+            INSERT INTO checkpoints (task_id, job_id, kind, summary, result_text, submitted_by, submitted_at)
             VALUES (?, ?, 'text', ?, ?, ?, ?)
+            ON CONFLICT(task_id) DO UPDATE SET
+                kind = excluded.kind,
+                summary = excluded.summary,
+                result_text = excluded.result_text,
+                submitted_by = excluded.submitted_by,
+                submitted_at = excluded.submitted_at
             """,
             (task_id, task["job_id"], summary, result_text, qa.reviewer_worker_id, now)
         )

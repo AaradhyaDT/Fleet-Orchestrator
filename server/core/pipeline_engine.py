@@ -59,8 +59,12 @@ class PipelineEngine:
 
             await db.execute(
                 """
-                INSERT OR REPLACE INTO tasks (id, job_id, stage, stage_order, kind, spec, status, priority, created_at, updated_at)
+                INSERT INTO tasks (id, job_id, stage, stage_order, kind, spec, status, priority, created_at, updated_at)
                 VALUES (?, ?, ?, 1, 'text', ?, 'pending', 5, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    spec = excluded.spec,
+                    updated_at = excluded.updated_at
+                WHERE tasks.status IN ('pending', 'failed')
                 """,
                 (task_id, job_id, first_stage, spec, now, now)
             )
@@ -113,6 +117,15 @@ class PipelineEngine:
             cp = await parent_cursor.fetchone()
         prior_output = cp["result_text"] if cp else ""
 
+        # Idempotency check: if next stage task already exists for this parent, return existing task
+        existing_cursor = await db.execute(
+            "SELECT id FROM tasks WHERE parent_id = ? AND stage = ?",
+            (completed_task_id, next_stage)
+        )
+        existing_task = await existing_cursor.fetchone()
+        if existing_task:
+            return existing_task["id"]
+
         now = _now_iso()
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         next_task_id = f"task_{today}_{job_id}_{next_stage}_{completed_task_id.split('_')[-1]}"
@@ -125,8 +138,12 @@ class PipelineEngine:
 
         await db.execute(
             """
-            INSERT OR REPLACE INTO tasks (id, job_id, parent_id, stage, stage_order, kind, spec, status, priority, created_at, updated_at)
+            INSERT INTO tasks (id, job_id, parent_id, stage, stage_order, kind, spec, status, priority, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, 'text', ?, 'pending', 5, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET
+                spec = excluded.spec,
+                updated_at = excluded.updated_at
+            WHERE tasks.status IN ('pending', 'failed')
             """,
             (next_task_id, job_id, completed_task_id, next_stage, next_stage_order, next_spec, now, now)
         )

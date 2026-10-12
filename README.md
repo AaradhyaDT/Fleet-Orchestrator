@@ -86,7 +86,7 @@ Fleet-Orchestrator/
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (320 tests across 54 suites)
+├── tests/                         # Full automated pytest test suite (332 tests across 55 suites)
 ├── requirements.txt               # Unified project dependencies
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
@@ -181,7 +181,7 @@ Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with liv
 
 ## 4. Verification & Testing
 
-Fleet-Orchestrator enforces continuous deterministic verification across 329 test cases (100% pass rate across 55 test suites):
+Fleet-Orchestrator enforces continuous deterministic verification across 332 test cases (100% pass rate across 55 test suites):
 ```powershell
 pytest tests/test_schema_validation.py -v
 pytest tests/test_quota_reconciliation.py -v

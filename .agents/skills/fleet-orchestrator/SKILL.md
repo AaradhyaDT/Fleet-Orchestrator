@@ -14,7 +14,7 @@ version: 2.0.0
 
 # Fleet-Orchestrator Swarm Control Skill
 
-Operational commands, architectural guidelines, and execution workflows for **Fleet-Orchestrator** (`F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator`), a production-grade autonomous multi-model agent fleet and swarm platform that pools heterogeneous AI compute models into a unified, high-concurrency autonomous swarm. **195 tests, 100% pass rate.**
+Operational commands, architectural guidelines, and execution workflows for **Fleet-Orchestrator** (`F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator`), a production-grade autonomous multi-model agent fleet and swarm platform that pools heterogeneous AI compute models into a unified, high-concurrency autonomous swarm. **332 tests, 100% pass rate across 55 test suites.**
 
 ---
 
@@ -321,7 +321,7 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Live state (tasks/, checkpoints/, ledger/, scratchpads/, memory/, live-status/)
 ├── worker-prompts/                # 6 specialized role prompts (orchestrator, researcher, writer, qa-reviewer, seo-optimizer, formatter)
 ├── models/                        # Local GGUF model weights (git-ignored)
-├── tests/                         # 199 automated pytest tests (30 test suites)
+├── tests/                         # 332 automated pytest tests (55 test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
 ├── .env.fleet.copilot.example     # 27-account GitHub Copilot PAT template
 ├── .env.fleet.gemini.example      # 30-slot Google AI Studio Gemini API key template
