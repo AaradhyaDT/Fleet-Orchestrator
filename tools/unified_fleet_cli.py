@@ -193,6 +193,16 @@ def cmd_submit(args: argparse.Namespace) -> None:
     task["model"] = model
     task["recommended_model"] = model
 
+    # Tier-aware timeout floor escalation (mirrors cmd_run_task)
+    _TIER_FLOOR_S = {"efficiency": 120, "balance": 300, "intelligence": 600}
+    effective_tier = task["auto_tier"]
+    ta = task.get("time_allocation", {})
+    current_ceiling = ta.get("timeout_ceiling_s", 0)
+    floor = _TIER_FLOOR_S.get(effective_tier, 120)
+    if current_ceiling < floor:
+        ta["timeout_ceiling_s"] = floor
+        task["time_allocation"] = ta
+
     if getattr(args, "target_repo", None):
         task["target_repo"] = str(Path(args.target_repo).resolve())
 
@@ -263,6 +273,17 @@ def cmd_run_task(args: argparse.Namespace) -> None:
     task["auto_tier"] = auto_tier or "balance"
     task["model"] = model
     task["recommended_model"] = model
+
+    # Tier-aware timeout floor escalation: when the user explicitly overrides
+    # auto-tier via CLI, ensure the SLM's computed ceiling is escalated to match.
+    _TIER_FLOOR_S = {"efficiency": 120, "balance": 300, "intelligence": 600}
+    effective_tier = task["auto_tier"]
+    ta = task.get("time_allocation", {})
+    current_ceiling = ta.get("timeout_ceiling_s", 0)
+    floor = _TIER_FLOOR_S.get(effective_tier, 120)
+    if current_ceiling < floor:
+        ta["timeout_ceiling_s"] = floor
+        task["time_allocation"] = ta
 
     tid = task["id"]
     task_path = tasks_dir / f"{tid}.json"

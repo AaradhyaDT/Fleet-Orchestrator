@@ -119,6 +119,10 @@ def _compute_time_allocation(prompt: str, archetype: str, tier: str, policy: str
         duration_s = 75
         time_tier = "T2_MEDIUM"
         route = "SUBAGENT"
+    elif any(k in p for k in ["docstring", "jsdoc", "typehint", "type hint", "type annotation", "add comments"]):
+        duration_s = 90
+        time_tier = "T2_MEDIUM"
+        route = "SUBAGENT"
     elif tier == "Tier 2" or word_count > 25:
         duration_s = 50
         time_tier = "T1_FAST"
