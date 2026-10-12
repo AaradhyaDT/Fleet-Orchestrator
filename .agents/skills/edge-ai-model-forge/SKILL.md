@@ -1,7 +1,7 @@
 ---
 name: edge-ai-model-forge
 description: Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to "train edge AI model", "design TinyML architecture", "quantize model for microcontroller", "optimize TFLite Micro model", "tune asymmetric loss for edge", "profile tensor arena memory", "export C header model", "prevent quantization clipping", "calibrate decision threshold on edge", "train SPARK fall detection model", "fine-tune IMU classifier on Colab", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Edge AI & TinyML Model Forge (`edge-ai-model-forge`)
@@ -275,6 +275,42 @@ else:
     print(f"[!] Warning: Zip archive not found at {drive_zip_path}. Check Drive path.")
 ```
 
+### 6.3 Automated Persistence Back to Google Drive
+Never rely on manual browser downloads from the ephemeral Colab file browser (`/content/`). Transient browser disconnections or tab crashes discard generated weights.
+Every training and quantization notebook must automatically locate the mounted Google Drive project folder and save output artifacts directly to Drive:
+
+```python
+import shutil, glob
+from pathlib import Path
+
+# Discover target Drive project folder
+drive_save_candidates = glob.glob('/content/drive/MyDrive/**/<PROJECT_FOLDER_NAME>*', recursive=True)
+if drive_save_candidates:
+    save_target = Path(drive_save_candidates[0])
+    # Persist exported C header and quantized TFLite binary directly to Google Drive
+    shutil.copy('spark_cnn_int8.h', save_target / 'spark_cnn_int8_upgraded.h')
+    with open(save_target / 'spark_cnn_int8_upgraded.tflite', 'wb') as f:
+        f.write(tflite_quant_model)
+    print(f"[+] Successfully saved upgraded models directly back to Google Drive: {save_target}")
+```
+
+### 6.4 Programmatic Compute Unit Conservation & Auto-Teardown (`runtime.unassign()`)
+To prevent burning expensive Colab Pro compute units/credits while the VM sits idle after training finishes, the final cell must always execute a programmatic teardown:
+
+```python
+print("[+] All training, quantization, and Drive exports completed successfully!")
+print("[*] Programmatically unassigning runtime to conserve Colab compute credits...")
+
+try:
+    from google.colab import runtime
+    runtime.unassign()
+except Exception as e:
+    print(f"[*] Note: runtime.unassign() called: {e}")
+```
+
+### 6.5 Dynamic Cell Queueing & In-Flight Safety Pattern
+Appending or editing notebook cells (e.g. adding the auto-teardown cell `runtime.unassign()`, drive persistence logic, or extra metrics blocks) while long-running training epochs are currently running in-flight is **100% safe**. The Jupyter kernel operates asynchronously via a FIFO message queue; simply enqueue newly appended cells (`Shift + Enter` or Play button) so they show pending execution `[*]`. They will execute seamlessly immediately upon completion of the active cell without corrupting VRAM or disrupting CUDA execution.
+
 ---
 
 ## 7. Verification Checklist & Invariants
@@ -287,4 +323,8 @@ else:
 6. **`INV-FIRMWARE-ALIGNMENT`**: Exported C header contains `alignas(16)` and matches the C++ struct definition in `firmware/main/models/`.
 7. **`INV-IO-CONTRACT`**: Input dimensions `(T, C)` and output shape `(K)` must match the microcontroller driver circular buffer verbatim.
 8. **`INV-CLOUD-DELIVERY` (Dual-Format Cloud Staging)**: When uploading models and training artifacts to Google Drive for cloud acceleration, never upload only a `.zip` archive. Upload the self-contained `.ipynb` notebook and execution scripts uncompressed directly to the Drive folder so they can be opened immediately via "Open with Google Colaboratory", alongside the `.zip` dataset bundle for fast runtime decompression.
+9. **`INV-CLOUD-AUTOSAVE` (Direct Drive Persistence)**: All cloud training notebooks must automatically save generated artifacts (`.h`, `.tflite`, evaluation reports) directly into the mounted Google Drive folder before completion, preventing data loss on browser disconnects or session teardowns.
+10. **`INV-CLOUD-TEARDOWN` (Programmatic Session Unassign)**: All cloud GPU training notebooks must terminate with a programmatic `runtime.unassign()` cell to immediately release GPU hardware and conserve compute units/credits upon run completion.
+11. **`INV-INFLIGHT-SAFETY` (FIFO Kernel Queue Safety)**: In-flight execution is asynchronous; editing or queueing new cells while training runs is safe via FIFO queueing without restarting the runtime.
+
 
