@@ -244,6 +244,7 @@ pytest tests/test_copilot_headless.py -v                # Headless adapter tests
 pytest tests/test_quota_reconciliation.py -v            # Credit ledger invariants
 pytest tests/test_antigravity_bridge.py -v              # Context bridge tests
 pytest tests/test_concurrency_stress.py -v              # Multi-worker race-freedom
+pytest tests/test_copilot_queue_worker.py -v            # Persistent circular round-robin tests
 pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipeline
 ```
 
@@ -264,6 +265,7 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
    - Gemini: Google AI Studio keys generated in separate GCP projects to multiply RPM/RPD without hitting single-project bottlenecks.
    - AGY: Headless CLI workers require isolated `AGY_WORKER_HOME` sandboxes to prevent SQLite lock collisions on `conversation_summaries.db`, plus mandatory `--dangerously-skip-permissions`.
 10. **Tier-Aware Timeout Floor (`INV-TIER-FLOOR`)**: The `--auto-tier` flag enforces minimum timeout floors (`efficiency`→120s, `balance`→300s, `intelligence`→600s). The SLM's computed `timeout_ceiling_s` is escalated to the tier floor when it falls below, preventing timeout kills on correctly-scoped tasks.
+11. **Persistent Circular Round-Robin (`INV-CIRCULAR-ROBIN`)**: Worker rotation across the 27 pooled accounts must persist across separate processes, CLI commands, and restarts via `orchestrator-state/round_robin_pointer.json` guarded by an OS file lock (`FileLock`). Never rely on in-memory counters for round-robin dispatch; every one-shot task must advance circularly (`w1 → w2 → ... → w27 → w1`) to prevent front-loaded credit bias on `copilot-w1`.
 
 ---
 

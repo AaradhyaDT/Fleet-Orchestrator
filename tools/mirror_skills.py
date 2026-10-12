@@ -28,8 +28,8 @@ from typing import Any, Dict, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 SSOT_DIR = ROOT / ".agents" / "skills" / "adaptive-workflow"
-GLOBAL_MIRROR = Path.home() / ".gemini" / "config" / "skills" / "adaptive-workflow"
-BRAINSTORM_MIRROR = Path(r"F:\Aaradhya-Dev-Tamrakar\brainstorm\.agents\skills\adaptive-workflow")
+GLOBAL_MIRROR = Path(os.environ.get("GLOBAL_SKILLS_MIRROR") or (Path.home() / ".gemini" / "config" / "skills" / "adaptive-workflow"))
+BRAINSTORM_MIRROR = Path(os.environ.get("BRAINSTORM_SKILLS_MIRROR") or r"F:\Aaradhya-Dev-Tamrakar\brainstorm\.agents\skills\adaptive-workflow")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("mirror_skills")
