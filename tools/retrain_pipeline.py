@@ -256,7 +256,7 @@ def check_dataset_staleness(dataset_dir: Path) -> float:
             generated_at = summary.get("generated_at")
             if generated_at:
                 ts = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
-                return (now - ts).total_seconds() / 86400.0
+                return max(0.0, (now - ts).total_seconds() / 86400.0)
         except Exception:
             pass
 
@@ -264,7 +264,7 @@ def check_dataset_staleness(dataset_dir: Path) -> float:
     train_path = dataset_dir / "unified_fleet_train.jsonl"
     if train_path.exists():
         mtime = datetime.fromtimestamp(train_path.stat().st_mtime, tz=timezone.utc)
-        return (now - mtime).total_seconds() / 86400.0
+        return max(0.0, (now - mtime).total_seconds() / 86400.0)
 
     return float("inf")
 
