@@ -334,6 +334,22 @@ def cmd_tasks(args: argparse.Namespace) -> None:
     print("=" * 80 + "\n")
 
 
+def cmd_daemon(args: argparse.Namespace) -> None:
+    """Runs standing background queue worker daemon."""
+    state_dir = resolve_state_dir(args.state_dir)
+    from tools.copilot_queue_worker import CopilotQueueWorker
+
+    concurrency = getattr(args, "concurrency", 1)
+    dry_run = getattr(args, "dry_run", False)
+    worker = CopilotQueueWorker(
+        state_dir=state_dir,
+        concurrency=concurrency,
+        dry_run=dry_run,
+    )
+    print(f"[DAEMON] Starting Copilot Queue Worker (Concurrency: {concurrency}, Dry-run: {dry_run})...", flush=True)
+    asyncio.run(worker.run())
+
+
 def cmd_watch(args: argparse.Namespace) -> None:
     """Live updating terminal HUD without external windows."""
     print("Starting Fleet Swarm live monitor (Press Ctrl+C to stop)...")
@@ -390,6 +406,11 @@ def main():
     # Watch
     subparsers.add_parser("watch", help="Live in-terminal status monitor")
 
+    # Daemon (Continuous background queue worker)
+    p_daemon = subparsers.add_parser("daemon", help="Run standing background queue worker daemon")
+    p_daemon.add_argument("--concurrency", type=int, default=1, help="Number of concurrent worker tasks (default: 1)")
+    p_daemon.add_argument("--dry-run", action="store_true", help="Simulate execution without spawning copilot.exe")
+
     args = parser.parse_args()
 
     if not args.command or args.command == "status":
@@ -409,6 +430,8 @@ def main():
         print(f"[OK] Reconciled {count} worker ledgers successfully.")
     elif args.command == "watch":
         cmd_watch(args)
+    elif args.command == "daemon":
+        cmd_daemon(args)
 
 
 if __name__ == "__main__":
