@@ -330,9 +330,12 @@ class DynamicSkillManifest:
         if cls._MANIFEST_CACHE is not None:
             return cls._MANIFEST_CACHE
 
-        triggers: Dict[str, List[str]] = {}
+        brainstorm_env = os.getenv("BRAINSTORM_ROOT")
+        brainstorm_dir = Path(brainstorm_env) if brainstorm_env else (ROOT.parent / "brainstorm")
+
         candidate_roots = [
             ROOT / ".agents" / "skills",
+            brainstorm_dir / ".agents" / "skills",
             Path(r"F:\Aaradhya-Dev-Tamrakar\brainstorm\.agents\skills"),
             Path(os.path.expanduser(r"~/.gemini/config/skills")),
         ]

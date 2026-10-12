@@ -14,7 +14,8 @@ A production-grade, distributed multi-agent task execution and coordination plat
   - **Groq, LM Studio Local & Ollama**: Zero-latency local/cloud open weights for lightweight formatting, routing, extraction, and offline code generation. Local inference runs primarily on LM Studio (`localhost:1234/v1`) using Intel Arc iGPU / Vulkan acceleration.
 
 - **Multi-Account Credit Pooling ($N \times 200$) & Persistent Circular Round-Robin**:
-  - Dynamically pools $N$ independent GitHub accounts into a shared quota pool (27 accounts = 5,400 monthly credits).
+  - Dynamically pools $N$ independent worker profiles into a shared execution mesh (e.g. 27 worker accounts = 5,400 monthly credits).
+  - *Governance & Terms-Compliance Invariant*: Production deployments must use authorized organizational machine accounts, dedicated enterprise service principals, or documented provider API keys. Sharing personal consumer tokens to circumvent plan rate limits is prohibited by terms of service.
   - Eliminates browser 2FA challenges and Windows Credential Manager collisions via subprocess environment token injection.
   - Enforces persistent cross-process circular round-robin rotation (`w1 → w2 → ... → w27 → w1`) backed by atomic OS file locks (`FileLock`), preventing single-worker credit concentration across CLI commands.
 
@@ -85,7 +86,7 @@ Fleet-Orchestrator/
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (195 tests)
+├── tests/                         # Full automated pytest test suite (320 tests across 54 suites)
 ├── requirements.txt               # Unified project dependencies
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
@@ -180,7 +181,7 @@ Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with liv
 
 ## 4. Verification & Testing
 
-Fleet-Orchestrator enforces continuous deterministic verification across 195 test cases:
+Fleet-Orchestrator enforces continuous deterministic verification across 320 test cases (100% pass rate across 54 test suites):
 ```powershell
 pytest tests/test_quota_reconciliation.py -v
 pytest tests/test_copilot_cli_adapter.py -v
