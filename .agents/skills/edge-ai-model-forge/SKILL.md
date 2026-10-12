@@ -253,26 +253,41 @@ Always stage assets in **dual format**:
    - Enables fast 1-step runtime extraction in Colab via `!unzip -q`.
 
 ### 6.2 Standard Google Colab Ingestion Boilerplate
-Every edge AI Colab notebook must include an automated Drive mounting and archive extraction cell:
+Every edge AI Colab notebook must include an automated Drive mounting, resilient dataset path resolution, and archive extraction cell:
 
 ```python
 from google.colab import drive
-import os, zipfile
+import os, zipfile, glob
+from pathlib import Path
 
 # 1. Mount user's Google Drive
 drive.mount('/content/drive')
 
-# 2. Extract dataset bundle directly into Colab local disk (/content) for maximum I/O throughput
-drive_zip_path = '/content/drive/MyDrive/<FOLDER_PATH>/<DATASET_BUNDLE>.zip'
-local_workspace = '/content/workspace'
+# 2. Resilient dataset resolution (checks both uncompressed Drive uploads and zip bundles)
+LOCAL_DATA_DIR = Path('/content/spark_data')
+LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-if os.path.exists(drive_zip_path):
-    print(f"[*] Extracting dataset from {drive_zip_path}...")
-    with zipfile.ZipFile(drive_zip_path, 'r') as zip_ref:
-        zip_ref.extractall(local_workspace)
-    print(f"[+] Dataset extracted to {local_workspace}!")
+# Check if uncompressed dataset files (.npy / .csv) are already mounted in Google Drive
+drive_npy_matches = glob.glob('/content/drive/MyDrive/**/windows.npy', recursive=True)
+
+if drive_npy_matches:
+    found_dir = Path(drive_npy_matches[0]).parent
+    print(f"[+] Detected uncompressed dataset files in Drive: {found_dir}")
+    DATA_DIR = found_dir
 else:
-    print(f"[!] Warning: Zip archive not found at {drive_zip_path}. Check Drive path.")
+    # If not found uncompressed, search for the zip bundle and extract to high-speed NVMe local disk
+    zip_matches = glob.glob('/content/drive/MyDrive/**/<DATASET_BUNDLE>.zip', recursive=True)
+    if zip_matches:
+        zip_path = zip_matches[0]
+        print(f"[*] Extracting dataset from zip: {zip_path} -> {LOCAL_DATA_DIR}")
+        with zipfile.ZipFile(zip_path, 'r') as zf:
+            zf.extractall(LOCAL_DATA_DIR)
+        DATA_DIR = LOCAL_DATA_DIR / 'data' if (LOCAL_DATA_DIR / 'data' / 'windows.npy').exists() else LOCAL_DATA_DIR
+    else:
+        raise FileNotFoundError("Dataset files (windows.npy or zip bundle) not found in Google Drive.")
+
+print(f"[+] Verified DATA_DIR: {DATA_DIR}")
+assert (DATA_DIR / 'windows.npy').exists()
 ```
 
 ### 6.3 Automated Persistence Back to Google Drive
