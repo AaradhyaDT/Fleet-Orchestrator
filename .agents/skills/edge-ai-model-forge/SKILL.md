@@ -1,7 +1,7 @@
 ---
 name: edge-ai-model-forge
 description: Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to "train edge AI model", "design TinyML architecture", "quantize model for microcontroller", "optimize TFLite Micro model", "tune asymmetric loss for edge", "profile tensor arena memory", "export C header model", "prevent quantization clipping", "calibrate decision threshold on edge", "train SPARK fall detection model", "fine-tune IMU classifier on Colab", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.
-version: 1.4.0
+version: 1.5.0
 ---
 
 # Edge AI & TinyML Model Forge (`edge-ai-model-forge`)
@@ -290,27 +290,39 @@ print(f"[+] Verified DATA_DIR: {DATA_DIR}")
 assert (DATA_DIR / 'windows.npy').exists()
 ```
 
-### 6.3 Automated Persistence Back to Google Drive
-Never rely on manual browser downloads from the ephemeral Colab file browser (`/content/`). Transient browser disconnections or tab crashes discard generated weights.
-Every training and quantization notebook must automatically locate the mounted Google Drive project folder and save output artifacts directly to Drive:
+### 6.3 Automated Persistence Back to Google Drive (Folder ID vs. Path Resolution)
+Never rely on manual browser downloads from the ephemeral Colab file browser (`/content/`). Transient browser disconnections, tab crashes, or immediate programmatic teardowns (`runtime.unassign()`) permanently destroy unsaved weights.
+Every training and quantization notebook must automatically locate the mounted Google Drive project folder and save output artifacts directly to Drive before teardown:
+
+> **CRITICAL PITFALL (Folder ID vs. Mounted Folder Name):**
+> Google Drive mounts into `/content/drive/MyDrive/` using human-readable folder names (e.g. `/content/drive/MyDrive/Share to Aaradhya/Super-NLM/SPARK`), **not** alphanumeric Folder IDs (such as `1_A54IjeWyIP6fVuXAUQtyoxYZd5U1RpD`).
+> Attempting `glob.glob('**/<FOLDER_ID>*')` fails silently and returns an empty list, causing save routines to fall back to the ephemeral disk.
+> **Rule:** Always reuse the detected dataset path `DATA_DIR` (or explicit folder path) as the persistence target, or search by dataset file ancestry (`Path(drive_npy_matches[0]).parent`). Never search the filesystem for Google Drive Folder IDs!
 
 ```python
 import shutil, glob
 from pathlib import Path
 
-# Discover target Drive project folder
-drive_save_candidates = glob.glob('/content/drive/MyDrive/**/<PROJECT_FOLDER_NAME>*', recursive=True)
-if drive_save_candidates:
-    save_target = Path(drive_save_candidates[0])
-    # Persist exported C header and quantized TFLite binary directly to Google Drive
+# 1. Resolve save target directly from the mounted dataset location or Drive path
+save_target = Path('/content/drive/MyDrive/Share to Aaradhya/Super-NLM/SPARK')
+if not save_target.exists():
+    save_target = DATA_DIR if (DATA_DIR and DATA_DIR.exists()) else Path('/content')
+
+# 2. Persist exported C header, quantized TFLite binary, and Keras checkpoint directly to Google Drive
+try:
     shutil.copy('spark_cnn_int8.h', save_target / 'spark_cnn_int8_upgraded.h')
-    with open(save_target / 'spark_cnn_int8_upgraded.tflite', 'wb') as f:
-        f.write(tflite_quant_model)
-    print(f"[+] Successfully saved upgraded models directly back to Google Drive: {save_target}")
+    shutil.copy('spark_cnn_int8.tflite', save_target / 'spark_cnn_int8_upgraded.tflite')
+    model.save(save_target / 'spark_cnn_upgraded.keras')
+    print(f"[+] Successfully saved upgraded models directly to Google Drive: {save_target}")
+    # Enforce hard verification before proceeding to session teardown!
+    assert (save_target / 'spark_cnn_int8_upgraded.h').exists(), "Persistence verification failed!"
+except Exception as e:
+    print(f"[!] Drive persistence warning: {e}")
 ```
 
 ### 6.4 Programmatic Compute Unit Conservation & Auto-Teardown (`runtime.unassign()`)
-To prevent burning expensive Colab Pro compute units/credits while the VM sits idle after training finishes, the final cell must always execute a programmatic teardown:
+To prevent burning expensive Colab Pro compute units/credits while the VM sits idle after training finishes, the final cell must always execute a programmatic teardown.
+**Teardown Pre-Condition:** `runtime.unassign()` must ONLY execute after `INV-CLOUD-AUTOSAVE` confirms that exported model files physically exist in Google Drive, preventing unassigning the runtime before artifacts are safely stored.
 
 ```python
 print("[+] All training, quantization, and Drive exports completed successfully!")
@@ -338,8 +350,8 @@ Appending or editing notebook cells (e.g. adding the auto-teardown cell `runtime
 6. **`INV-FIRMWARE-ALIGNMENT`**: Exported C header contains `alignas(16)` and matches the C++ struct definition in `firmware/main/models/`.
 7. **`INV-IO-CONTRACT`**: Input dimensions `(T, C)` and output shape `(K)` must match the microcontroller driver circular buffer verbatim.
 8. **`INV-CLOUD-DELIVERY` (Dual-Format Cloud Staging)**: When uploading models and training artifacts to Google Drive for cloud acceleration, never upload only a `.zip` archive. Upload the self-contained `.ipynb` notebook and execution scripts uncompressed directly to the Drive folder so they can be opened immediately via "Open with Google Colaboratory", alongside the `.zip` dataset bundle for fast runtime decompression.
-9. **`INV-CLOUD-AUTOSAVE` (Direct Drive Persistence)**: All cloud training notebooks must automatically save generated artifacts (`.h`, `.tflite`, evaluation reports) directly into the mounted Google Drive folder before completion, preventing data loss on browser disconnects or session teardowns.
-10. **`INV-CLOUD-TEARDOWN` (Programmatic Session Unassign)**: All cloud GPU training notebooks must terminate with a programmatic `runtime.unassign()` cell to immediately release GPU hardware and conserve compute units/credits upon run completion.
+9. **`INV-CLOUD-AUTOSAVE` (Drive Persistence Before Teardown)**: All cloud training notebooks must automatically save generated artifacts (`.h`, `.tflite`, evaluation reports) directly into the mounted Google Drive folder before completion. Never glob or search the filesystem for alphanumeric Google Drive Folder IDs (Drive mounts folders by human-readable names); always resolve targets via `DATA_DIR` or dataset parent ancestry. The notebook must assert artifact presence in Drive *before* executing `runtime.unassign()`.
+10. **`INV-CLOUD-TEARDOWN` (Programmatic Session Unassign)**: All cloud GPU training notebooks must terminate with a programmatic `runtime.unassign()` cell to immediately release GPU hardware and conserve compute units/credits upon run completion, guarded by `INV-CLOUD-AUTOSAVE`.
 11. **`INV-INFLIGHT-SAFETY` (FIFO Kernel Queue Safety)**: In-flight execution is asynchronous; editing or queueing new cells while training runs is safe via FIFO queueing without restarting the runtime.
 12. **`INV-LABEL-POLYMORPHISM` (Polymorphic Label Ingestion)**: Time-series IMU datasets (SisFall, UniMiB SHAR, MobiAct) frequently persist raw alphanumeric activity codes (e.g. `'D01'`–`'D19'` for ADL, `'F01'`–`'F15'` for falls) rather than pre-binarized `0/1` integers. Ingestion pipelines and notebooks must never assume integer dtypes or cast raw labels directly via `.astype(np.int32)` (which throws `ValueError: invalid literal for int() with base 10`). Always inspect `raw_labels.dtype.kind` and apply vectorized prefix matching (`np.where(np.char.startswith(raw_labels.astype(str), 'F'), 1, 0).astype(np.int32)`) to seamlessly accommodate both raw alphanumeric codes and pre-binarized integers.
 
