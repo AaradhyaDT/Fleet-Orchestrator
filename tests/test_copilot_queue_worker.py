@@ -39,6 +39,41 @@ def test_round_robin_account_selection(temp_state_dir: Path):
     assert acc3["worker_id"] == "copilot-w1"
 
 
+def test_persistent_round_robin_across_worker_instances(temp_state_dir: Path):
+    """Verifies that separate worker processes/invocations maintain circular round-robin rotation."""
+    accounts = [
+        {"worker_id": "copilot-w1", "name": "acc1", "token": "tok1", "has_token": True},
+        {"worker_id": "copilot-w2", "name": "acc2", "token": "tok2", "has_token": True},
+        {"worker_id": "copilot-w3", "name": "acc3", "token": "tok3", "has_token": True},
+    ]
+
+    # Process 1
+    w1 = CopilotQueueWorker(state_dir=temp_state_dir)
+    w1.ready_accounts = accounts
+    acc1 = w1.get_next_account()
+
+    # Process 2 (separate instance simulating separate CLI run)
+    w2 = CopilotQueueWorker(state_dir=temp_state_dir)
+    w2.ready_accounts = accounts
+    acc2 = w2.get_next_account()
+
+    # Process 3
+    w3 = CopilotQueueWorker(state_dir=temp_state_dir)
+    w3.ready_accounts = accounts
+    acc3 = w3.get_next_account()
+
+    # Process 4 (wrap around circularly)
+    w4 = CopilotQueueWorker(state_dir=temp_state_dir)
+    w4.ready_accounts = accounts
+    acc4 = w4.get_next_account()
+
+    assert acc1["worker_id"] == "copilot-w1"
+    assert acc2["worker_id"] == "copilot-w2"
+    assert acc3["worker_id"] == "copilot-w3"
+    assert acc4["worker_id"] == "copilot-w1"
+
+
+
 def test_find_pending_code_tasks(temp_state_dir: Path):
     worker = CopilotQueueWorker(state_dir=temp_state_dir)
 

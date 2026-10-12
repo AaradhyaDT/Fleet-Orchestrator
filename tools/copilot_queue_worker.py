@@ -41,6 +41,7 @@ from tools.credit_ledger import (
     parse_iso_utc,
     atomic_write_json,
     initialize_ledgers,
+    FileLock,
 )
 
 logging.basicConfig(
@@ -271,7 +272,12 @@ class CopilotQueueWorker:
         return current
 
     def get_next_account(self) -> dict[str, Any] | None:
-        """Round-robin selection across ready Copilot accounts, bypassing accounts in cooldown."""
+        """Round-robin selection across ready Copilot accounts, bypassing accounts in cooldown.
+        
+        Persists circular selection state across processes and CLI invocations to
+        guarantee true circular rotation across all pooled accounts rather than
+        restarting at worker 1 on every one-shot task execution.
+        """
         if not self.ready_accounts:
             # Fallback to default local worker if no tokens configured
             return {
@@ -289,9 +295,63 @@ class CopilotQueueWorker:
             logger.warning("All ready Copilot accounts are currently in cooldown.")
             return None
 
-        acc = eligible[self._current_account_idx % len(eligible)]
-        self._current_account_idx += 1
-        return acc
+        pointer_file = self.state_dir / "round_robin_pointer.json"
+        lock_file = self.state_dir / "round_robin_pointer.lock"
+
+        # Synchronize across concurrent processes via cross-platform OS file lock
+        try:
+            with FileLock(lock_file):
+                last_worker_id = None
+                if pointer_file.exists():
+                    try:
+                        with open(pointer_file, "r", encoding="utf-8") as f:
+                            p_data = json.load(f)
+                            if isinstance(p_data, dict):
+                                last_worker_id = p_data.get("last_worker_id")
+                    except Exception:
+                        pass
+
+                eligible_ids = [a["worker_id"] for a in eligible]
+                if last_worker_id and last_worker_id in eligible_ids:
+                    next_idx = (eligible_ids.index(last_worker_id) + 1) % len(eligible)
+                elif last_worker_id:
+                    # If last worker is now in cooldown, find next available eligible worker
+                    # following ready_accounts circular ordering
+                    ready_ids = [a["worker_id"] for a in self.ready_accounts]
+                    if last_worker_id in ready_ids:
+                        last_ready_idx = ready_ids.index(last_worker_id)
+                        next_idx = 0
+                        for offset in range(1, len(ready_ids) + 1):
+                            cand_id = ready_ids[(last_ready_idx + offset) % len(ready_ids)]
+                            if cand_id in eligible_ids:
+                                next_idx = eligible_ids.index(cand_id)
+                                break
+                    else:
+                        next_idx = self._current_account_idx % len(eligible)
+                else:
+                    next_idx = self._current_account_idx % len(eligible)
+
+                acc = eligible[next_idx]
+                self._current_account_idx = next_idx + 1
+
+                # Persist chosen account pointer atomically
+                try:
+                    atomic_write_json(
+                        pointer_file,
+                        {
+                            "last_worker_id": acc["worker_id"],
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                        },
+                    )
+                except Exception as e:
+                    logger.warning(f"Could not persist round-robin pointer to {pointer_file}: {e}")
+
+                return acc
+        except Exception as e:
+            logger.warning(f"Lock acquisition or pointer persistence failed, falling back to in-memory rotation: {e}")
+            acc = eligible[self._current_account_idx % len(eligible)]
+            self._current_account_idx += 1
+            return acc
 
     def find_pending_code_tasks(self) -> list[dict[str, Any]]:
         """Scans orchestrator-state/tasks for pending code tasks."""
