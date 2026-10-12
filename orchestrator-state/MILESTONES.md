@@ -12,8 +12,8 @@ This document serves as the ground-truth milestone ledger for the **Fleet-Orches
 | **v0.2.0** | Dynamic Swarm Runtime & Ecosystem CI | 2026-10-08 | `b75ec73` $\rightarrow$ `ee79e7c` | [#1](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/1), [#3](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/3), [#5](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/5) | `CLOSED` |
 | **v0.3.0** | Control Center GUI & Intelligent Intent Routing | 2026-10-09 | `4476946` $\rightarrow$ `8e2f1ef` | [#23](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/23), [#24](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/24), [#25](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/25) | `CLOSED` |
 | **v0.4.0** | Local Runtime Mesh & Tri-Hardware Acceleration | 2026-10-10 | `95de5b2` $\rightarrow$ `fb847f6` | [#7](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/7) | `CLOSED` |
-| **v0.5.0** | Adaptive Meta-Engine & Autonomous Self-Healing | 2026-10-11 | `f6c2221` $\rightarrow$ `ccf2ed5` | [#9](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/9), [#11](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/11), [#13](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/13), [#15](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/15), [#17](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/17) | `CLOSED` |
-| **v0.6.0** | Fleet Master Brain v2 (3B) Retraining & Active Orchestration | 2026-10-11 $\rightarrow$ Pres. | `a9351a2` $\rightarrow$ `HEAD` | [#19](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/19), [#20](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/20) | `OPEN` |
+| **v0.6.0** | Antigravity 2.0 Engine, Circular Swarm & Invariant Hardening | 2026-10-11 $\rightarrow$ 2026-10-12 | `a9351a2` $\rightarrow$ `516ab1b` | [#19](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/19), [#20](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/20) | `CLOSED` |
+| **v1.0.0** | Declarative DAG Engine & Autonomous Sentinel PR Loop | 2026-10-12 $\rightarrow$ Pres. | `HEAD` $\rightarrow$ Target | [#26](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/26), [#28](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/28)–[#39](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/39) | `OPEN` |
 
 ---
 
@@ -94,13 +94,32 @@ This document serves as the ground-truth milestone ledger for the **Fleet-Orches
 
 ---
 
-### Milestone 6: `v0.6.0: Fleet Master Brain v2 (3B) Retraining & Active Orchestration`
-* **Status**: `OPEN` (Active Development)
-* **Commit Range**: `a9351a2` to `HEAD` (In Progress)
+### Milestone 6: `v0.6.0: Antigravity 2.0 Engine, Circular Swarm & Invariant Hardening`
+* **Status**: `CLOSED` (Completed 2026-10-12)
+* **Commit Range**: `a9351a2` to `516ab1b` (12 commits)
 * **Linked Issues**:
   - [#19](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/19): [Feature] Fleet Master Brain v2 (3B) Colab Retraining & Unified Dataset Refresh
   - [#20](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/20): [Task] Refactor Headless Colab CLI Autonomous Training Pipeline
-* **Active Deliverables**:
-  - Interactive Google Colab Pro A100 training pipeline for Qwen2.5-Coder-3B-Instruct.
-  - OpenVINO INT4 export for Meteor Lake NPU.
-  - Versioned `_v2` model artifacts, evaluation loss tracking, and golden scenario benchmarks.
+* **Key Capabilities Delivered**:
+  - Native Antigravity 2.0 Background Task integration streaming milestones into IDE Auxiliary Pane.
+  - Persistent cross-process circular round-robin rotation (`w1 → ... → w27 → w1`) via atomic OS file locking.
+  - Tier-aware timeout floor escalation (`efficiency`: 120s, `balance`: 300s, `intelligence`: 600s).
+  - Cross-repository worktree federation (`--target-repo`) validated against SPARK.
+  - Priority 0 QA-gated pipeline advancement eliminating race conditions in `routes_tasks.py`.
+  - SQLite conflict-safe upsert (`ON CONFLICT DO UPDATE`) eliminating cascading deletion risks.
+  - Deterministic dependency lockfile generation (`requirements.lock`, `requirements-dev.lock`).
+  - Authoritative test suite pass: 332 tests across 55 test suites (100% pass rate).
+
+---
+
+### Milestone 7: `v1.0.0: Declarative DAG Engine & Autonomous Sentinel PR Loop`
+* **Status**: `OPEN` (Active Development)
+* **Commit Range**: `HEAD` to Target Release
+* **Linked Issues**:
+  - [#26](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/26): [RFC-001] 31-Node Homogeneous Tri-Modal Swarm Mesh — Double Round-Robin Quota Cycling
+  - [#28](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/28)–[#34](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/34): Declarative DAG planner, SKU template expansion, dependency gating, and cancellation
+  - [#35](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/35)–[#39](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/39): Autonomous Sentinel GitHub issue polling, failure-mode handling, and automated PR dispatch loop
+* **Target Deliverables**:
+  - Complete end-to-end autonomous lifecycle (Issue $\to$ DAG plan $\to$ Worktree swarm execution $\to$ PR dispatch $\to$ Watchdog self-healing).
+  - Live non-simulated multi-provider canary reliability benchmark report.
+  - Formal Production Release Tag `v1.0.0`.
