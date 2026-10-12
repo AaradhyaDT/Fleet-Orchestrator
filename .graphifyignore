@@ -1,0 +1,32 @@
+# Graphify Ingestion Exclusion - Fleet-Orchestrator Knowledge Graph
+# Layer 0 Ephemeral IDE Mirrors & Mirrored Skills
+.agents/
+.github/prompts/
+scratch/
+
+# Runtime State & Ephemeral Task Records (Prevents dynamic run logs from polluting architecture)
+orchestrator-state/
+orchestrator-state/*
+
+# Large Training Datasets & Binary Model Checkpoints
+dataset/
+dataset/*
+models/
+models/*
+
+# Epistemic Layer 0 Append-Only Memory Log
+team-memory.md
+
+# Virtual Environments, Cache & Worktrees
+.venv-npu/
+.pytest_cache/
+.ruff_cache/
+.worktrees/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git & IDE Metadata
+.git/
+.vscode/

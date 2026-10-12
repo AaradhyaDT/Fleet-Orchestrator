@@ -5,7 +5,7 @@ description: Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enfor
 
 # Adaptive Workflow Orchestrator (`adaptive-workflow`)
 
-Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 32 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), mathematical CPM DAGs (`INV-CPM-SOLVER`), 27-worker Fleet pool, Colab accelerators, 9 domain archetypes, real-time grounding (`INV-REALTIME-GROUNDING`) & zero-help loops (`INV-ZERO-HELP-LOOP`).
+Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 32 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 27-worker Fleet pool, Colab accelerators, 9 archetypes, real-time grounding & zero-help loops.
 
 ---
 
@@ -28,7 +28,7 @@ flowchart TD
 ### Hierarchy Responsibilities:
 1. **Lead Agent**: Triage via `adaptive_engine.py`. Tier 0 fast paths ($0). Solves CPM ($TS=0$). Ephemeral Commander, context $<5\text{k}$ tokens (`INV-CTX-FIREBREAK`).
 2. **Domain Commanders**: Writes task JSONs to `orchestrator-state/tasks/`. Absorbs logs/retries. Returns **<300w manifest** to Lead.
-3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live milestone telemetry and reactive wakeups.
+3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live telemetry.
 4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).
