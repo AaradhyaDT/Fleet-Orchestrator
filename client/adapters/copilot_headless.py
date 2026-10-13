@@ -1,7 +1,7 @@
 """
 Copilot Headless Adapter: Pure asynchronous HTTP adapter for GitHub Copilot accounts.
 Enables running multiple Copilot worker instances concurrently without opening VS Code or Electron GUI (~10-15 MB RAM per instance).
-Supports Phase 2 / M6 iterative autonomous tool-calling loop (read_file, write_file, run_command).
+Supports Phase 2 / M6 iterative tool-calling loop with workspace-confined file tools and unrestricted trusted shell execution.
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ class CopilotHeadlessAdapter(BaseWorkerAdapter):
     Automates GitHub Copilot via direct REST API without requiring VS Code.
     Exchanges GitHub token for internal Copilot session tokens with auto-refresh,
     supports free tier auto-model detection, logs model telemetry, and executes
-    iterative local sandboxed tool loops (M6).
+    iterative tool loops (M6); file tools are workspace-confined, while run_command is unrestricted trusted shell execution.
     """
 
     COPILOT_TOKEN_URL = "https://api.github.com/copilot_internal/v2/token"
@@ -66,7 +66,7 @@ class CopilotHeadlessAdapter(BaseWorkerAdapter):
             "type": "function",
             "function": {
                 "name": "run_command",
-                "description": "Execute a safe shell command with a timeout within workspace",
+                "description": "Execute unrestricted trusted shell command with a timeout; cwd is not a sandbox",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -161,17 +161,20 @@ class CopilotHeadlessAdapter(BaseWorkerAdapter):
             return self._session_token or ""
 
     def _resolve_safe_path(self, raw_path: str) -> Path:
-        """Resolves path safely against workspace_root or cwd."""
+        """Resolve a path and require its target to remain inside the workspace."""
+        base = (self.workspace_root or Path.cwd()).resolve()
         p = Path(raw_path)
         if not p.is_absolute():
-            base = self.workspace_root or Path.cwd()
-            p = (base / p).resolve()
-        else:
-            p = p.resolve()
+            p = base / p
+        p = p.resolve()
+        try:
+            p.relative_to(base)
+        except ValueError:
+            raise ValueError("Path is outside the workspace") from None
         return p
 
     async def _execute_tool(self, name: str, args: dict[str, Any]) -> dict[str, Any]:
-        """Executes a local tool inside workspace sandbox."""
+        """Execute workspace-confined file tools or unrestricted trusted shell commands."""
         try:
             if name == "read_file":
                 path_str = args.get("path", "")

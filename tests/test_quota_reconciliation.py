@@ -22,10 +22,29 @@ from tools.credit_ledger import (
     reconcile_all_workers,
     initialize_ledgers,
 )
+import tools.copilot_fleet as copilot_fleet
 from tools.copilot_fleet import get_fleet_quota_metrics
 from tools.copilot_queue_worker import CopilotQueueWorker
 from tools.fleet_commander import FleetCommander
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+
+
+@pytest.fixture(autouse=True)
+def mock_fleet_configuration(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(copilot_fleet, "load_env_fleet", lambda: {})
+    monkeypatch.setattr(
+        copilot_fleet,
+        "discover_accounts",
+        lambda _: [{
+            "index": 1,
+            "worker_id": "copilot-w1",
+            "name": "worker1",
+            "token": "",
+            "has_token": False,
+            "monthly_credits": 200,
+            "state_dir": Path("unused"),
+        }],
+    )
 
 
 @pytest.fixture
@@ -92,11 +111,12 @@ def test_reconcile_idempotency(temp_orch_state: Path, tmp_path: Path):
 
 def test_read_path_in_memory_rollover(temp_orch_state: Path):
     """
-    Test 2: Verify get_fleet_quota_metrics with an expired period (e.g., 2026-09)
-    reports 0.0 credits used in-memory without modifying the file on disk.
+    Test 2: Verify an expired billing period rolls usage over in-memory without
+    modifying the file on disk.
     """
     live_status_dir = temp_orch_state / "live-status"
     status_file = live_status_dir / "copilot-w1.json"
+    old_period = (datetime.now(timezone.utc).replace(day=1) - timedelta(days=1)).strftime("%Y-%m")
 
     # Write old period status
     status_file.write_text(
@@ -104,7 +124,7 @@ def test_read_path_in_memory_rollover(temp_orch_state: Path):
             "account": "copilot-w1",
             "name": "worker1",
             "status": "cooldown",
-            "period": "2026-09",
+            "period": old_period,
             "credits_used": 150.0,
             "credits_remaining": 50.0,
             "monthly_credits": 200,
@@ -123,7 +143,7 @@ def test_read_path_in_memory_rollover(temp_orch_state: Path):
     # In-memory rollover must report 0.0 credits used and idle status
     assert w1["credits_used"] == 0.0
     assert w1["credits_remaining"] == 200.0
-    assert w1["status"] in ("idle", "offline")
+    assert w1["status"] == "offline"
     assert w1["cooldown_until"] is None
 
     # Verify file on disk was NOT mutated (pure read path)
@@ -132,8 +152,42 @@ def test_read_path_in_memory_rollover(temp_orch_state: Path):
 
     with open(status_file, "r", encoding="utf-8") as f:
         disk_data = json.load(f)
-    assert disk_data["period"] == "2026-09"
+    assert disk_data["period"] == old_period
     assert disk_data["credits_used"] == 150.0
+
+
+def test_stale_worker_usage_is_preserved_until_period_rollover(temp_orch_state: Path):
+    status_file = temp_orch_state / "live-status" / "copilot-w1.json"
+    status_file.write_text(
+        json.dumps({
+            "status": "busy",
+            "current_task_id": "task-stale",
+            "heartbeat_at": "2000-01-01T00:00:00Z",
+            "period": datetime.now(timezone.utc).strftime("%Y-%m"),
+            "credits_used": 123.45,
+            "monthly_credits": 200,
+        }),
+        encoding="utf-8",
+    )
+    original_contents = status_file.read_bytes()
+    account = {
+        "index": 1,
+        "worker_id": "copilot-w1",
+        "name": "worker1",
+        "token": "",
+        "has_token": False,
+        "monthly_credits": 200,
+        "state_dir": Path("unused"),
+    }
+
+    with patch("tools.copilot_fleet.discover_accounts", return_value=[account]):
+        metrics = get_fleet_quota_metrics(temp_orch_state)
+
+    worker = metrics["workers"][0]
+    assert worker["status"] == "offline"
+    assert worker["online"] is False
+    assert worker["credits_used"] == 123.45
+    assert status_file.read_bytes() == original_contents
 
 
 def test_classification_exhaustion_over_429():

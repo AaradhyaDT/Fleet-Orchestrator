@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import threading
 import pytest
 
 from tools.copilot_queue_worker import CopilotQueueWorker, resolve_state_dir
@@ -138,6 +142,7 @@ def test_claim_task_optimistic_locking(temp_state_dir: Path):
     assert claimed is not None
     assert claimed["status"] == "claimed"
     assert claimed["owner_account"] == "copilot-w5"
+    assert claimed["claim_token"]
     assert claimed["branch_name"] == "task/task_2026-10-08_005"
 
     # Verify disk state
@@ -157,6 +162,226 @@ def test_claim_task_optimistic_locking(temp_state_dir: Path):
     another_account = {"worker_id": "copilot-w6", "name": "worker6"}
     re_claimed = worker.claim_task("task_2026-10-08_005", another_account)
     assert re_claimed is None
+
+
+@pytest.mark.parametrize("pid_field", ["missing", "null"])
+def test_legacy_claim_without_pid_waits_for_timeout_and_grace(temp_state_dir: Path, pid_field: str):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = f"task_legacy_pid_{pid_field}"
+    task = {
+        "id": task_id,
+        "kind": "code",
+        "spec": "Recover old legacy claim",
+        "status": "claimed",
+        "owner_account": "copilot-w1",
+        "timeout": 30,
+        "updated_at": (datetime.now(timezone.utc) - timedelta(seconds=149)).isoformat(),
+    }
+    if pid_field == "null":
+        task["owner_pid"] = None
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+
+    assert worker.find_pending_code_tasks() == []
+
+    task["updated_at"] = (datetime.now(timezone.utc) - timedelta(seconds=151)).isoformat()
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+    pending = worker.find_pending_code_tasks()
+
+    assert [item["id"] for item in pending] == [task_id]
+    assert pending[0]["owner_account"] is None
+    assert pending[0]["owner_pid"] is None
+
+
+def test_legacy_claim_without_timestamp_uses_file_mtime(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_mtime"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w1",
+            "owner_pid": None,
+            "timeout": 30,
+        }),
+        encoding="utf-8",
+    )
+
+    os.utime(task_file, (datetime.now().timestamp() - 151, datetime.now().timestamp() - 151))
+    pending = worker.find_pending_code_tasks()
+
+    assert [item["id"] for item in pending] == [task_id]
+
+
+def test_legacy_claim_uses_claimed_at_when_updated_at_is_missing(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_claimed_at"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w1",
+            "owner_pid": None,
+            "timeout": 30,
+            "claimed_at": (datetime.now(timezone.utc) - timedelta(seconds=151)).isoformat(),
+        }),
+        encoding="utf-8",
+    )
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+
+
+def test_legacy_claim_without_timeout_uses_600_second_default(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_default_timeout"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task = {
+        "id": task_id,
+        "kind": "code",
+        "status": "claimed",
+        "owner_account": "copilot-w1",
+        "owner_pid": None,
+    }
+    task["updated_at"] = (datetime.now(timezone.utc) - timedelta(seconds=719)).isoformat()
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+
+    assert worker.find_pending_code_tasks() == []
+
+    task["updated_at"] = (datetime.now(timezone.utc) - timedelta(seconds=721)).isoformat()
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+
+
+def test_intelligence_timeout_floor_applies_to_legacy_claim(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_intelligence_floor"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task = {
+        "id": task_id,
+        "kind": "code",
+        "status": "claimed",
+        "owner_account": "copilot-w1",
+        "owner_pid": None,
+        "timeout": 30,
+        "auto_tier": "intelligence",
+    }
+    task["updated_at"] = (datetime.now(timezone.utc) - timedelta(seconds=719)).isoformat()
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+
+    assert worker.find_pending_code_tasks() == []
+
+    task["updated_at"] = (datetime.now(timezone.utc) - timedelta(seconds=721)).isoformat()
+    task_file.write_text(json.dumps(task), encoding="utf-8")
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+
+
+def test_claim_token_fences_old_completion_and_failure(temp_state_dir: Path, monkeypatch):
+    import tools.copilot_queue_worker as queue_worker_module
+
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_stale_claim_fence"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "spec": "Do not overwrite a newer claim",
+            "status": "pending",
+            "owner_account": None,
+        }),
+        encoding="utf-8",
+    )
+    first_account = {"worker_id": "copilot-w1", "name": "worker1"}
+
+    old_claim = worker.claim_task(task_id, first_account)
+    assert old_claim is not None
+    old_token = old_claim["claim_token"]
+    old_claim["owner_pid"] = 99999999
+    task_file.write_text(json.dumps(old_claim), encoding="utf-8")
+    monkeypatch.setattr(queue_worker_module, "is_pid_alive", lambda _pid: False)
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+    new_claim = worker.claim_task(task_id, first_account)
+    assert new_claim is not None
+    assert new_claim["claim_token"] != old_token
+
+    assert not worker.submit_checkpoint_and_complete(
+        task_id=task_id,
+        account=first_account,
+        summary="Late checkpoint",
+        claim_token=old_token,
+    )
+    worker._mark_task_blocked(task_id, first_account, "Late failure", claim_token=old_token)
+
+    current = json.loads(task_file.read_text(encoding="utf-8"))
+    assert current["status"] == "claimed"
+    assert current["owner_account"] == "copilot-w1"
+    assert current["claim_token"] == new_claim["claim_token"]
+    assert not (temp_state_dir / "checkpoints" / f"{task_id}.json").exists()
+    second_status = json.loads(
+        (temp_state_dir / "live-status" / "copilot-w1.json").read_text(encoding="utf-8")
+    )
+    assert second_status["current_task_id"] == task_id
+
+
+def test_stale_claim_sentinel_does_not_prevent_claim(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_stale_claim_sentinel"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({"id": task_id, "kind": "code", "status": "pending", "owner_account": None}),
+        encoding="utf-8",
+    )
+    task_file.with_suffix(f".claim_{task_id}").touch()
+
+    claimed = worker.claim_task(task_id, {"worker_id": "copilot-w1", "name": "worker1"})
+
+    assert claimed is not None
+
+
+def test_concurrent_claim_recovery_returns_single_new_claim(temp_state_dir: Path, monkeypatch):
+    import tools.copilot_queue_worker as queue_worker_module
+
+    worker1 = CopilotQueueWorker(state_dir=temp_state_dir)
+    worker2 = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_concurrent_reclaim"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w-old",
+            "owner_pid": 99999999,
+        }),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(queue_worker_module, "is_pid_alive", lambda _pid: False)
+    both_scans_complete = threading.Barrier(2)
+
+    def recover_and_claim(worker, worker_id):
+        candidates = worker.find_pending_code_tasks()
+        both_scans_complete.wait()
+        if not candidates:
+            return None
+        return worker.claim_task(task_id, {"worker_id": worker_id, "name": worker_id})
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        claims = list(pool.map(
+            lambda args: recover_and_claim(*args),
+            [(worker1, "copilot-w1"), (worker2, "copilot-w2")],
+        ))
+
+    successful = [claim for claim in claims if claim is not None]
+    assert len(successful) == 1
+    assert successful[0]["claim_token"]
+    on_disk = json.loads(task_file.read_text(encoding="utf-8"))
+    assert on_disk["claim_token"] == successful[0]["claim_token"]
+    assert on_disk["owner_account"] == successful[0]["owner_account"]
 
 
 def test_submit_checkpoint_and_complete(temp_state_dir: Path):
@@ -545,3 +770,63 @@ async def test_worker_idle_timeout(temp_state_dir: Path):
     await asyncio.wait_for(worker.run(idle_timeout=0.15), timeout=2.0)
     elapsed = asyncio.get_event_loop().time() - t0
     assert elapsed >= 0.1
+
+
+def test_legacy_claim_with_non_finite_timeout_uses_default(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_non_finite_timeout"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w1",
+            "owner_pid": None,
+            "timeout": "Infinity",
+            "updated_at": (datetime.now(timezone.utc) - timedelta(seconds=721)).isoformat(),
+        }),
+        encoding="utf-8",
+    )
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+
+
+def test_stale_claim_id_cannot_escape_tasks_directory(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "../../escaped-lock"
+    task_file = temp_state_dir / "tasks" / "task_traversal.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w-old",
+            "owner_pid": 99999999,
+        }),
+        encoding="utf-8",
+    )
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+    assert not (temp_state_dir.parent / "escaped-lock.lock").exists()
+
+
+def test_task_claim_refuses_symlinked_lock_file(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_symlink_lock"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({"id": task_id, "kind": "code", "status": "pending", "owner_account": None}),
+        encoding="utf-8",
+    )
+    outside_target = temp_state_dir.parent / "outside-lock-target"
+    try:
+        os.symlink(outside_target, worker._task_lock_path(task_id))
+    except (OSError, NotImplementedError) as exc:
+        pytest.skip(f"file symlinks unavailable: {exc}")
+
+    claimed = worker.claim_task(task_id, {"worker_id": "copilot-w1", "name": "worker1"})
+
+    assert claimed is None
+    assert not outside_target.exists()
+    assert json.loads(task_file.read_text(encoding="utf-8"))["status"] == "pending"
