@@ -92,6 +92,33 @@ def test_create_adapter_unknown_provider():
     with pytest.raises(ValueError, match="Unknown provider"):
         create_adapter({"Account": "x", "Provider": "magic_unicorn"})
 
+def test_create_adapter_opencode_cli():
+    """create_adapter passes OpenCode-specific options without reusing Claude defaults."""
+    adapter = create_adapter(
+        {
+            "Account": "opencode-w1",
+            "Nickname": "OpenCode Worker",
+            "Provider": "opencode_cli",
+            "Workspace": "C:/worktrees/opencode-task",
+            "OpenCodePath": "opencode-test",
+            "OpenCodeModel": "openai/gpt-5",
+            "OpenCodeVariant": "high",
+            "OpenCodeAuto": False,
+            "Timeout": 42,
+        }
+    )
+
+    from client.adapters.opencode_cli_adapter import OpenCodeCLIAdapter
+
+    assert isinstance(adapter, OpenCodeCLIAdapter)
+    assert adapter.worker_id == "opencode-w1"
+    assert adapter.opencode_path == "opencode-test"
+    assert adapter.workspace_dir.as_posix().endswith("worktrees/opencode-task")
+    assert adapter.model == "openai/gpt-5"
+    assert adapter.variant == "high"
+    assert adapter.auto_approve is False
+    assert adapter.timeout == 42
+
 @pytest.mark.asyncio
 async def test_fleet_lease_renewal_periodically():
     """Verify fleet supervisor issues periodic lease renewals until stopped."""
@@ -159,5 +186,38 @@ async def test_worker_loop_copilot_headless_bool_health():
     # Health check must have been called without throwing AttributeError
     mock_adapter.check_health.assert_awaited_once()
     assert mock_client.post.call_count >= 1
+
+
+@pytest.mark.asyncio
+async def test_worker_loop_opencode_cli_readiness_probe():
+    """The OpenCode provider is included in the local CLI readiness probe."""
+    mock_client = AsyncMock()
+    registration = MagicMock()
+    registration.status_code = 201
+    mock_client.post.return_value = registration
+    task_response = MagicMock()
+    task_response.status_code = 200
+    task_response.json.return_value = []
+    mock_client.get.return_value = task_response
+    stop_event = asyncio.Event()
+    adapter = AsyncMock()
+    adapter.check_health.return_value = True
+
+    task = asyncio.create_task(
+        run_worker_loop(
+            worker_id="opencode-test",
+            nickname="OpenCode",
+            role="researcher",
+            provider="opencode_cli",
+            adapter=adapter,
+            client=mock_client,
+            stop_event=stop_event,
+        )
+    )
+    await asyncio.sleep(0.05)
+    stop_event.set()
+    await asyncio.wait_for(task, timeout=1.0)
+
+    adapter.check_health.assert_awaited_once()
 
 

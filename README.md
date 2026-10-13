@@ -6,6 +6,8 @@ A production-grade, distributed multi-agent task execution and coordination plat
 
 ## 1. Architectural Highlights
 
+CLI account enrollment, isolated Codex/OpenCode pools, AGY limitations, and Windows diagnostics: [CLI account pools](docs/CLI_ACCOUNT_POOLS.md).
+
 - **Multi-Provider Adapter Mesh (`client/adapters/`)**:
   - **GitHub Copilot CLI (`CopilotCLIAdapter`)**: Drives local `copilot.exe` in non-interactive `--autopilot` mode with sub-process environment isolation (`COPILOT_GITHUB_TOKEN`, `COPILOT_HOME`), workspace sandboxing (`--worktree`), and per-task credit budgeting (`--max-ai-credits`).
   - **GitHub Copilot Headless (`CopilotHeadlessAdapter`)**: Pure asynchronous HTTP client with an OpenAI-compatible autonomous tool-calling loop (`read_file`, `write_file`, `run_command`) executing at **$\sim 10\text{--}15\text{ MB RAM}$** per worker.
@@ -50,6 +52,9 @@ Fleet-Orchestrator/
 │   ├── local_llm.py               # Lightweight stdlib client for LM Studio / local LLMs
 │   └── adapters/                  # Provider adapters
 │       ├── base_adapter.py        # Abstract worker interface
+│       ├── agy_adapter.py         # Google Antigravity headless CLI adapter
+│       ├── codex_cli_adapter.py   # OpenAI Codex exec JSONL adapter
+│       ├── opencode_cli_adapter.py# OpenCode run JSON-event adapter
 │       ├── copilot_cli_adapter.py # GitHub Copilot CLI subprocess adapter
 │       ├── copilot_headless.py    # Asynchronous Copilot REST + tool loop
 │       ├── claude_desktop_proxy.py# Claude Desktop UI/CDP bridge
@@ -176,6 +181,63 @@ Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with liv
 | `efficiency` | 120s | GPT-4o-mini / Haiku |
 | `balance` | 300s | Default balanced |
 | `intelligence` | 600s | Frontier reasoning |
+
+### CLI workers in `active_fleet.json`
+
+The supervisor accepts `Provider` values `agy_cli` (or `agy`), `codex_cli`, and
+`opencode_cli`. Set
+`Workspace` or `Worktree` to the task's isolated checkout. AGY workers can set
+`AgyPath`, `AgyHome`, `PreferredModel`, `Effort`, `Timeout`, and
+`DangerouslySkipPermissions`. Codex workers can set `CodexPath`, `CodexHome`,
+`PreferredModel`, `ReasoningEffort`, `Timeout`, `Sandbox`, and `ApprovalPolicy`.
+Use a separate, pre-authenticated home per concurrent worker (`AgyHome` or
+`CodexHome`) when profile isolation is needed. Codex defaults to the
+`workspace-write` sandbox; AGY permission skipping is configurable and defaults
+to enabled for unattended task execution.
+
+OpenCode workers can set `OpenCodePath` (or `OPENCODE_CLI_BINARY`),
+`OpenCodeModel` (`provider/model`),
+`OpenCodeVariant`, `Timeout`, and `OpenCodeAuto` (defaults to `true`). OpenCode
+uses its own saved provider sign-in; Fleet does not read or copy credentials.
+Auto mode approves permission requests unless explicitly denied, so configure
+OpenCode permission rules and use an isolated worktree. `--dir` selects the
+working directory; it is not an operating-system sandbox. See the
+[CLI provider compatibility map](docs/CLI_PROVIDER_COMPATIBILITY.md) for
+account fit and other candidates from the supplied research notes.
+
+```json
+[
+  {
+    "Account": "codex-w1",
+    "Nickname": "Codex Worker",
+    "Role": "writer",
+    "Provider": "codex_cli",
+    "Workspace": "C:/worktrees/task-001",
+    "CodexHome": "C:/fleet/codex/w1",
+    "Timeout": 600
+  },
+  {
+    "Account": "agy-w1",
+    "Nickname": "AGY Worker",
+    "Role": "researcher",
+    "Provider": "agy_cli",
+    "Workspace": "C:/worktrees/task-002",
+    "AgyHome": "C:/fleet/agy/w1",
+    "Timeout": 300
+  },
+  {
+    "Account": "opencode-w1",
+    "Nickname": "OpenCode Worker",
+    "Role": "writer",
+    "Provider": "opencode_cli",
+    "Workspace": "C:/worktrees/task-003",
+    "OpenCodeModel": "openai/gpt-5",
+    "OpenCodeVariant": "high",
+    "OpenCodeAuto": true,
+    "Timeout": 600
+  }
+]
+```
 
 ---
 

@@ -87,6 +87,33 @@ def test_fast_zombie_lease_recovery(temp_env):
     assert pending[0]["owner_account"] is None
 
 
+def test_live_pid_with_reused_process_identity_is_recovered(temp_env, monkeypatch):
+    import tools.copilot_queue_worker as queue_worker_module
+
+    state_dir = temp_env["state_dir"]
+    tasks_dir = state_dir / "tasks"
+    worker = CopilotQueueWorker(state_dir=state_dir, dry_run=True)
+    monkeypatch.setattr(queue_worker_module, "_process_identity", lambda _pid: "current-process-identity")
+    task_id = "task_reused_pid_001"
+    (tasks_dir / f"{task_id}.json").write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "spec": "Recover lease from prior process instance",
+            "status": "claimed",
+            "owner_account": "copilot-w1",
+            "owner_pid": os.getpid(),
+            "owner_process_identity": "prior-process-creation-identity",
+        }),
+        encoding="utf-8",
+    )
+
+    pending = worker.find_pending_code_tasks()
+
+    assert [task["id"] for task in pending] == [task_id]
+    assert pending[0]["owner_account"] is None
+
+
 @pytest.mark.asyncio
 async def test_targeted_task_polling_wait(temp_env):
     """Verifies run() with target_task_id waits for task arrival and executes cleanly."""

@@ -1,10 +1,22 @@
 {
-  "generated_at": "2026-10-12T17:00:43.377842+00:00",
-  "total_gaps": 0,
+  "generated_at": "2026-10-13T15:05:37.626231+00:00",
+  "total_gaps": 1,
   "critical": 0,
-  "high": 0,
+  "high": 1,
   "medium": 0,
   "low": 0,
-  "auto_fixable_count": 0,
-  "gaps": []
+  "auto_fixable_count": 1,
+  "gaps": [
+    {
+      "category": "untested_adapter",
+      "severity": "HIGH",
+      "summary": "Adapter 'codex_cli_adapter.py' lacks test coverage",
+      "details": {
+        "adapter": "codex_cli_adapter.py",
+        "expected_test": "test_codex_cli_adapter.py",
+        "path": "client\\adapters\\codex_cli_adapter.py"
+      },
+      "auto_fixable": true
+    }
+  ]
 }

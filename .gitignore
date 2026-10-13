@@ -114,6 +114,7 @@ dataset/unified_fleet_*.jsonl
 orchestrator-state/live-status/copilot-w*.json
 orchestrator-state/ledger/
 orchestrator-state/logs/
+orchestrator-state/jobs/
 *.lock
 !requirements.lock
 !requirements-dev.lock
@@ -128,4 +129,3 @@ orchestrator-state/qa-reviews/copilot_mistakes/task_*.json
 !orchestrator-state/checkpoints/.gitkeep
 
 /graphify-out
-

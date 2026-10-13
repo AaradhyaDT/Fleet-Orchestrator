@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import asyncio
 import os
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 import httpx
+from client.process_runtime import run_background
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUTS_DIR = REPO_ROOT / "outputs" / "runs"
@@ -34,7 +34,7 @@ def show_windows_toast(title: str, message: str) -> None:
     $notifier.Show($toast)
     """
     try:
-        subprocess.run(["pwsh", "-NoProfile", "-Command", ps_cmd], capture_output=True, timeout=5)
+        run_background(["pwsh", "-NoProfile", "-Command", ps_cmd], capture_output=True, timeout=5)
     except Exception:
         pass
 

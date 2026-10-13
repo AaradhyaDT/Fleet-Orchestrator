@@ -12,6 +12,7 @@ import argparse
 import asyncio
 import json
 import logging
+import math
 import os
 import sys
 from datetime import datetime, timezone
@@ -26,6 +27,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 logger = logging.getLogger("copilot_fleet")
 
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+
+HEARTBEAT_MAX_AGE_SECONDS = 120
 
 
 def load_env_fleet(env_path: Path | None = None) -> dict[str, str]:
@@ -114,6 +117,9 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     Computes real-time fleet quota capacity, monthly credit burn rate, and worker states.
     STRICTLY NON-MUTATING: Pure read-only path that performs in-memory synthesis and rollover
     without writing any files to disk.
+    ``configured_accounts`` counts accounts with a non-placeholder token, and
+    ``ready_accounts`` remains its backward-compatible alias. Token presence is
+    not credential verification or runtime liveness.
     """
     from tools.credit_ledger import resolve_state_dir
 
@@ -126,7 +132,8 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     accounts = discover_accounts(env_vars)
 
     total_registered = len(accounts)
-    ready_workers = 0
+    configured_accounts = sum(1 for acc in accounts if acc["has_token"])
+    online_workers = 0
     total_monthly_credits = 0
     total_credits_used = 0.0
 
@@ -141,15 +148,15 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
         limit = acc["monthly_credits"]
         total_monthly_credits += limit
         has_token = acc["has_token"]
-        if has_token:
-            ready_workers += 1
 
         used = 0.0
         current_task = None
-        note = "Ready" if has_token else "No Token"
+        note = "No Token" if not has_token else ""
         heartbeat = None
+        heartbeat_age = None
+        is_online = False
         cooldown_until = None
-        worker_status = "idle" if has_token else "offline"
+        worker_status = "offline"
 
         status_file = live_status_dir / f"{wid}.json"
         if status_file.exists():
@@ -157,37 +164,66 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
                 with open(status_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
 
-                stored_period = data.get("period")
-                # In-memory rollover if stored period differs from current UTC period
-                if stored_period and stored_period != current_utc_period:
-                    used = 0.0
-                    current_task = None
-                    note = "New billing period (Rollover)"
+                if isinstance(data, dict):
+                    stored_period = data.get("period")
                     heartbeat = data.get("heartbeat_at")
-                    cooldown_until = None
-                    worker_status = "idle" if has_token else "offline"
-                else:
-                    raw_used = data.get("credits_used", 0.0)
-                    used = round(float(raw_used), 2)
-                    current_task = data.get("current_task_id")
-                    note = data.get("note", "")
-                    heartbeat = data.get("heartbeat_at")
-                    cooldown_until = data.get("cooldown_until")
+                    if isinstance(heartbeat, str):
+                        try:
+                            parsed_heartbeat = datetime.fromisoformat(
+                                heartbeat.replace("Z", "+00:00")
+                            )
+                            if parsed_heartbeat.tzinfo is not None:
+                                heartbeat_age = (
+                                    now_dt - parsed_heartbeat.astimezone(timezone.utc)
+                                ).total_seconds()
+                                is_online = 0 <= heartbeat_age <= HEARTBEAT_MAX_AGE_SECONDS
+                        except ValueError:
+                            pass
+
+                    rolled_over = bool(stored_period and stored_period != current_utc_period)
+                    if rolled_over:
+                        note = "New billing period (Rollover)"
+                    else:
+                        try:
+                            parsed_used = float(data.get("credits_used", 0.0))
+                            if math.isfinite(parsed_used) and parsed_used >= 0:
+                                used = round(parsed_used, 2)
+                        except (TypeError, ValueError):
+                            used = 0.0
+                        note = data.get("note", "") or note
+
+                    if not rolled_over:
+                        current_task = data.get("current_task_id")
+
+                    raw_cooldown = data.get("cooldown_until")
+                    if not rolled_over and isinstance(raw_cooldown, str):
+                        try:
+                            expiry = datetime.fromisoformat(raw_cooldown.replace("Z", "+00:00"))
+                            if expiry.tzinfo is not None and now_dt < expiry.astimezone(timezone.utc):
+                                cooldown_until = raw_cooldown
+                        except ValueError:
+                            pass
+
+                    if not is_online:
+                        current_task = None
 
                     if cooldown_until:
-                        exp = datetime.fromisoformat(cooldown_until.replace("Z", "+00:00"))
-                        if now_dt < exp:
-                            worker_status = "cooldown"
-                        elif current_task:
-                            worker_status = "busy"
-                        elif has_token:
-                            worker_status = "idle"
-                    elif current_task:
+                        worker_status = "cooldown"
+                    elif not is_online:
+                        worker_status = "offline"
+                    elif rolled_over:
+                        worker_status = "idle"
+                    elif current_task or data.get("status") == "busy":
                         worker_status = "busy"
-                    elif has_token:
-                        worker_status = data.get("status", "idle")
-            except Exception:
+                    elif data.get("status") == "cooldown":
+                        worker_status = "cooldown"
+                    else:
+                        worker_status = "idle"
+            except (OSError, json.JSONDecodeError):
                 pass
+
+        if is_online:
+            online_workers += 1
 
         total_credits_used = round(total_credits_used + used, 2)
         status_counts[worker_status] = status_counts.get(worker_status, 0) + 1
@@ -198,6 +234,8 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             "worker_id": wid,
             "name": acc["name"],
             "has_token": has_token,
+            "credential_verification": "unknown",
+            "online": is_online,
             "status": worker_status,
             "monthly_credits": limit,
             "credits_used": used,
@@ -205,6 +243,7 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
             "current_task_id": current_task,
             "cooldown_until": cooldown_until,
             "heartbeat_at": heartbeat,
+            "heartbeat_age_seconds": heartbeat_age,
             "note": note,
         })
 
@@ -217,7 +256,10 @@ def get_fleet_quota_metrics(state_dir: Path | str | None = None) -> dict[str, An
     return {
         "fleet": {
             "total_registered_accounts": total_registered,
-            "ready_accounts": ready_workers,
+            "configured_accounts": configured_accounts,
+            "ready_accounts": configured_accounts,
+            "online_accounts": online_workers,
+            "credential_verification": "unknown",
             "total_monthly_credits": total_monthly_credits,
             "total_credits_used": total_credits_used,
             "total_credits_remaining": total_remaining,
@@ -348,7 +390,8 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     print(f" Remaining Quota:         {f['total_credits_remaining']:,.2f} credits")
     print(f" Monthly Burn Bar:        [{bar}] {f['burn_rate_pct']:.2f}%")
     print(
-        f" Fleet Worker Topology:   {f['ready_accounts']} Ready | {f['status_counts'].get('idle', 0)} Idle | "
+        f" Fleet Worker Topology:   {f['configured_accounts']} Configured | {f['online_accounts']} Online | "
+        f"{f['status_counts'].get('idle', 0)} Idle | "
         f"{f['status_counts'].get('busy', 0)} Busy | {f['status_counts'].get('cooldown', 0)} Cooldown | "
         f"{f['status_counts'].get('offline', 0)} Offline"
     )
