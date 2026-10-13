@@ -1,14 +1,6 @@
-name: Continuous Google Drive Documentation Sync
+name: Manual Google Drive Documentation Sync
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.md'
-      - 'drive-manifest.json'
-      - 'scripts/sync_drive.py'
-      - '.github/workflows/sync-drive.yml'
   workflow_dispatch:
 
 concurrency:
