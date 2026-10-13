@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from tools import fleet_jobs as jobs
+from client.process_runtime import run_background, spawn_background
 
 LOG_SECRETS: list[str] = []
 
@@ -209,7 +210,7 @@ async def _run_test_command(
     if deadline_monotonic is None:
         deadline_monotonic = time.monotonic() + max(0, spec["overall_deadline"] - time.time())
     env = _sanitized_environment("")
-    proc = await asyncio.create_subprocess_exec(
+    proc = await spawn_background(
         *command, cwd=worktree, env=env,
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
     )
@@ -316,7 +317,7 @@ async def _run(job_id: str, root: Path) -> int:
             branch = f"codex/{job_id}"
             worktree.parent.mkdir(parents=True, exist_ok=True)
             try:
-                created = subprocess.run(
+                created = run_background(
                     ["git", "worktree", "add", "-b", branch, str(worktree), "HEAD"],
                     cwd=repo, capture_output=True, text=True, check=False,
                     timeout=max(0.1, deadline_monotonic - time.monotonic()),

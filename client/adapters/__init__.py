@@ -5,6 +5,8 @@ from client.adapters.gemini_api_adapter import GeminiAPIAdapter, DEPRECATED_MODE
 from client.adapters.gemini_free_adapter import GeminiFreeAdapter
 from client.adapters.agy_adapter import AGYCLIAdapter
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+from client.adapters.codex_cli_adapter import CodexCLIAdapter
+from client.adapters.opencode_cli_adapter import OpenCodeCLIAdapter
 
 __all__ = [
     "BaseWorkerAdapter",
@@ -12,5 +14,7 @@ __all__ = [
     "GeminiFreeAdapter",
     "AGYCLIAdapter",
     "CopilotCLIAdapter",
+    "CodexCLIAdapter",
+    "OpenCodeCLIAdapter",
     "DEPRECATED_MODEL_MAP",
 ]

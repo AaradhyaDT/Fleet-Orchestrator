@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 
 from client.adapters.base_adapter import BaseWorkerAdapter
+from client.process_runtime import spawn_background, communicate_background
+from client.cli_accounts import reported_retry_after
 
 logger = logging.getLogger(__name__)
 
@@ -85,12 +87,14 @@ class AGYCLIAdapter(BaseWorkerAdapter):
         """Checks if agy binary exists and runs --help or version check."""
         try:
             cmd = [self.agy_path, "--help"]
-            proc = await asyncio.create_subprocess_exec(
+            proc = await spawn_background(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=self._prepare_environment(),
+                stdin=asyncio.subprocess.DEVNULL,
             )
-            stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10.0)
+            stdout, _ = await communicate_background(proc, timeout=10.0)
             return proc.returncode == 0 or b"Usage of agy" in stdout
         except Exception as e:
             logger.debug(f"[{self.worker_id}] AGY health check failed: {e}")
@@ -121,6 +125,7 @@ class AGYCLIAdapter(BaseWorkerAdapter):
             cmd.extend(["--effort", self.effort])
 
         cmd.extend(["--output-format", "json"])
+        cmd.extend(["--print-timeout", f"{max(1, int(self.timeout))}s"])
 
         if self.workspace_dir and self.workspace_dir.exists():
             cmd.extend(["--add-dir", str(self.workspace_dir)])
@@ -148,22 +153,23 @@ class AGYCLIAdapter(BaseWorkerAdapter):
         env = self._prepare_environment()
         cwd = str(self.workspace_dir) if self.workspace_dir else str(Path.cwd())
 
+        retry_after = None
+        proc = None
         try:
-            proc = await asyncio.create_subprocess_exec(
+            proc = await spawn_background(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
                 cwd=cwd,
                 env=env,
+                stdin=asyncio.subprocess.DEVNULL,
             )
 
-            stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                proc.communicate(),
-                timeout=self.timeout,
-            )
+            stdout_bytes, stderr_bytes = await communicate_background(proc, timeout=self.timeout)
 
             stdout_text = stdout_bytes.decode("utf-8", errors="replace")
             stderr_text = stderr_bytes.decode("utf-8", errors="replace")
+            retry_after = reported_retry_after(stdout_text)
 
             if proc.returncode != 0:
                 return {
@@ -172,14 +178,27 @@ class AGYCLIAdapter(BaseWorkerAdapter):
                     "summary": "",
                     "result_text": stdout_text,
                     "task_id": task_id,
+                    "execution_started": proc is not None,
+                    "retry_after_seconds": retry_after,
                 }
 
-            # Attempt JSON parsing of output
+            # AGY JSON mode returns an envelope with a terminal status and response.
             parsed_result = stdout_text
             try:
                 data = json.loads(stdout_text)
                 if isinstance(data, dict):
-                    parsed_result = data.get("content") or data.get("response") or stdout_text
+                    parsed_result = data.get("response") or data.get("content") or stdout_text
+                    status = str(data.get("status", "")).upper()
+                    if status and status != "SUCCESS":
+                        return {
+                            "success": False,
+                            "error": data.get("error") or f"AGY run ended with status {status}",
+                            "summary": "",
+                            "result_text": parsed_result,
+                            "task_id": task_id,
+                    "execution_started": proc is not None,
+                    "retry_after_seconds": retry_after,
+                        }
             except Exception:
                 pass
 
@@ -189,6 +208,8 @@ class AGYCLIAdapter(BaseWorkerAdapter):
                 "result_text": parsed_result,
                 "error": None,
                 "task_id": task_id,
+                    "execution_started": proc is not None,
+                    "retry_after_seconds": retry_after,
             }
 
         except asyncio.TimeoutError:
@@ -198,6 +219,8 @@ class AGYCLIAdapter(BaseWorkerAdapter):
                 "summary": "",
                 "result_text": "",
                 "task_id": task_id,
+                    "execution_started": proc is not None,
+                    "retry_after_seconds": retry_after,
             }
         except Exception as e:
             return {
@@ -206,4 +229,6 @@ class AGYCLIAdapter(BaseWorkerAdapter):
                 "summary": "",
                 "result_text": "",
                 "task_id": task_id,
+                    "execution_started": proc is not None,
+                    "retry_after_seconds": retry_after,
             }

@@ -18,6 +18,7 @@ if exist "%~dp0.venv\Scripts\python.exe" (
 )
 
 if /I "%~1"=="job" goto :fleet_job
+if /I "%~1"=="accounts" goto :fleet_accounts
 
 "%PY_CMD%" -u "%~dp0tools\unified_fleet_cli.py" %*
 goto :eof
@@ -25,3 +26,7 @@ goto :eof
 :fleet_job
 "%PY_CMD%" -u "%~dp0tools\fleet_jobs.py" %2 %3 %4 %5 %6 %7 %8 %9
 goto :eof
+
+:fleet_accounts
+"%PY_CMD%" -u "%~dp0tools\fleet_accounts.py" %*
+exit /b %errorlevel%

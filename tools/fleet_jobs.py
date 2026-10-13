@@ -20,6 +20,7 @@ from typing import Any, Iterator
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+from client.process_runtime import run_background, popen_background
 STATE_ROOT = PROJECT_ROOT / "orchestrator-state" / "jobs"
 WORKTREE_ROOT = PROJECT_ROOT / ".worktrees"
 JOB_ID_RE = re.compile(r"^job-[0-9a-f]{32}$")
@@ -207,7 +208,7 @@ def validate_spec(spec: dict[str, Any], now: float | None = None) -> dict[str, A
     repo = Path(repo_path).resolve()
     if not repo.is_dir():
         raise JobError("repo_path must be an existing directory")
-    check = subprocess.run(
+    check = run_background(
         ["git", "rev-parse", "--show-toplevel"], cwd=repo,
         capture_output=True, text=True, check=False,
     )
@@ -457,7 +458,7 @@ def _git_inspection(repo: Path, args: list[str]) -> subprocess.CompletedProcess[
     detail = "Git query failed"
     for attempt in range(3):
         try:
-            proc = subprocess.run(
+            proc = run_background(
                 ["git", *args], cwd=repo, stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE, check=False, timeout=10,
             )
@@ -541,7 +542,7 @@ def _capture_patch(worktree: Path, directory: Path, base_commit: str | None = No
 
 
 def _is_tracked(repo: Path, path: str) -> bool:
-    return subprocess.run(
+    return run_background(
         ["git", "ls-files", "--error-unmatch", "--", path],
         cwd=repo, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     ).returncode == 0
@@ -706,7 +707,7 @@ def _launch_supervisor(job_id: str, state_root: Path) -> str:
     kwargs["env"] = env
     if os.name != "nt":
         kwargs["start_new_session"] = True
-    proc = subprocess.Popen(args, **kwargs)
+    proc = popen_background(args, **kwargs)
     identity = _process_identity(proc.pid, job_id)
     with state_lock(job_id, state_root):
         state = read_state(job_id, state_root)

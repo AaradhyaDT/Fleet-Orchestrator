@@ -120,11 +120,18 @@ def get_system_telemetry() -> dict[str, Any]:
 
 # ── Provider-based adapter factory ──────────────────────────────────
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+from client.adapters.agy_adapter import AGYCLIAdapter
+from client.adapters.codex_cli_adapter import CodexCLIAdapter
+from client.adapters.opencode_cli_adapter import OpenCodeCLIAdapter
 
 _PROVIDER_REGISTRY: dict[str, type] = {
     "claude_desktop_cdp": ClaudeDesktopCDPAdapter,
     "copilot_headless": CopilotHeadlessAdapter,
     "copilot_cli": CopilotCLIAdapter,
+    "agy_cli": AGYCLIAdapter,
+    "agy": AGYCLIAdapter,
+    "codex_cli": CodexCLIAdapter,
+    "opencode_cli": OpenCodeCLIAdapter,
 }
 
 
@@ -135,10 +142,44 @@ def create_adapter(inst: dict[str, Any]) -> BaseWorkerAdapter:
       - claude_desktop_cdp  → ClaudeDesktopCDPAdapter (CDP/WebSocket)
       - copilot_headless    → CopilotHeadlessAdapter  (REST API, zero-GUI)
       - copilot_cli         → CopilotCLIAdapter       (Subprocess CLI, autopilot)
+      - agy_cli / agy        → AGYCLIAdapter            (Antigravity headless CLI)
+      - codex_cli           → CodexCLIAdapter          (Codex exec JSONL CLI)
+      - opencode_cli        → OpenCodeCLIAdapter       (OpenCode run JSON events)
     """
     provider = inst.get("Provider", "claude_desktop_cdp")
     worker_id = inst.get("Account", "unknown")
     nickname = inst.get("Nickname", worker_id)
+    profile_id, pool = inst.get("AuthProfile"), inst.get("AccountPool")
+    if profile_id and pool:
+        raise ValueError("AuthProfile and AccountPool are mutually exclusive")
+    if profile_id or pool:
+        from client.cli_accounts import AccountStore, profile_environment, valid_id
+        from client.adapters.account_pool_adapter import AccountPoolAdapter
+        if provider not in ("agy", "agy_cli", "codex_cli", "opencode_cli"):
+            raise ValueError("AuthProfile/AccountPool require an AGY, Codex or OpenCode provider")
+        provider = "agy_cli" if provider == "agy" else provider
+        store = AccountStore()
+        profile_id = valid_id(profile_id) if profile_id else None
+        pool = valid_id(pool) if pool else None
+        if profile_id and store.get(profile_id)["provider"] != provider:
+            raise ValueError("AuthProfile provider does not match the worker provider")
+        if any(inst.get(key) for key in ("AgyHome", "CodexHome")):
+            raise ValueError("Use AuthProfile/AccountPool or legacy home settings, not both")
+
+        def bind(profile: dict[str, Any]) -> BaseWorkerAdapter:
+            from tools.fleet_accounts import binary_for
+            entry = {k: v for k, v in inst.items() if k not in ("AuthProfile", "AccountPool")}
+            entry["Provider"] = provider
+            if provider == "codex_cli":
+                entry["CodexHome"] = profile["credential_dir"]
+                entry["CodexPath"] = binary_for(profile)
+            elif provider == "opencode_cli":
+                entry["OpenCodePath"] = binary_for(profile)
+            adapter = create_adapter(entry)
+            adapter.process_env = profile_environment(profile)
+            return adapter
+
+        return AccountPoolAdapter(worker_id, nickname, provider, bind, profile_id=profile_id, pool=pool, store=store)
     model = inst.get("PreferredModel", "claude-3-5-sonnet")
     budget = int(inst.get("ThinkingBudget", 0))
 
@@ -186,6 +227,51 @@ def create_adapter(inst: dict[str, Any]) -> BaseWorkerAdapter:
             max_ai_credits=max_credits,
         )
 
+    if provider in ("agy_cli", "agy"):
+        agy_model = inst.get("PreferredModel")
+        if agy_model == "claude-3-5-sonnet":
+            agy_model = None
+        return AGYCLIAdapter(
+            worker_id=worker_id,
+            nickname=nickname,
+            agy_path=inst.get("AgyPath"),
+            worker_home=inst.get("AgyHome"),
+            workspace_dir=inst.get("Workspace") or inst.get("Worktree"),
+            model=agy_model or os.getenv("AGY_DEFAULT_MODEL", "gemini-3.8-flash"),
+            effort=inst.get("Effort", os.getenv("AGY_DEFAULT_EFFORT", "high")),
+            timeout=float(inst.get("Timeout", os.getenv("AGY_TASK_TIMEOUT_SECONDS", "300"))),
+            dangerously_skip_permissions=bool(inst.get("DangerouslySkipPermissions", True)),
+        )
+
+    if provider == "codex_cli":
+        codex_model = inst.get("PreferredModel")
+        if codex_model == "claude-3-5-sonnet":
+            codex_model = None
+        return CodexCLIAdapter(
+            worker_id=worker_id,
+            nickname=nickname,
+            codex_path=inst.get("CodexPath"),
+            codex_home=inst.get("CodexHome"),
+            workspace_dir=inst.get("Workspace") or inst.get("Worktree"),
+            model=codex_model,
+            reasoning_effort=inst.get("ReasoningEffort"),
+            timeout=float(inst.get("Timeout", 600.0)),
+            sandbox=inst.get("Sandbox", "workspace-write"),
+            approval_policy=inst.get("ApprovalPolicy", "never"),
+        )
+
+    if provider == "opencode_cli":
+        return OpenCodeCLIAdapter(
+            worker_id=worker_id,
+            nickname=nickname,
+            opencode_path=inst.get("OpenCodePath"),
+            workspace_dir=inst.get("Workspace") or inst.get("Worktree"),
+            model=inst.get("OpenCodeModel"),
+            variant=inst.get("OpenCodeVariant"),
+            timeout=float(inst.get("Timeout", 600.0)),
+            auto_approve=bool(inst.get("OpenCodeAuto", True)),
+        )
+
     raise ValueError(f"Unknown provider '{provider}' for worker '{worker_id}'")
 
 
@@ -211,7 +297,7 @@ async def run_worker_loop(
             print(f"[!] [{worker_id}] Warning: CDP port {cdp_port} did not report ready. Retrying in background...")
         else:
             print(f"[+] [{worker_id}] CDP on port {cdp_port} is READY.")
-    elif provider in ("copilot_headless", "copilot_cli"):
+    elif provider in ("copilot_headless", "copilot_cli", "agy_cli", "agy", "codex_cli", "opencode_cli"):
         health = await adapter.check_health()
         is_ready = health if isinstance(health, bool) else bool(health.get("ok", False))
         tag = "READY" if is_ready else "DEGRADED"
@@ -305,7 +391,7 @@ async def run_worker_loop(
                                     "verdict": verdict,
                                     "rejection_reason": reason,
                                     "checks_passed": {"evaluated": True, "score": 90 if verdict == "pass" else 50},
-                                    "summary": f"QA review: {verdict.upper()}",
+                                    "summary": f"QA review: {verdict.upper()}" + (f" [AuthProfile: {exec_res['auth_profile']}]" if exec_res.get("auth_profile") else ""),
                                     "result_text": result_text,
                                 }
                                 await client.post(
@@ -329,6 +415,24 @@ async def run_worker_loop(
                                 )
                                 print(f"[+] [{worker_id}] Task {task_id} checkpoint submitted.")
 
+                        elif provider in ("agy", "agy_cli", "codex_cli", "opencode_cli"):
+                            from client.cli_accounts import save_failed_attempt, classify_failure
+                            kind = classify_failure(exec_res)
+                            if exec_res.get("execution_started", True):
+                                checkpoint = save_failed_attempt(worker_id, task_id, exec_res)
+                                response = await client.post(
+                                    f"{ORCHESTRATOR_URL}/tasks/{task_id}/block",
+                                    json={"worker_id": worker_id, "claim_token": claim_token,
+                                          "reason": f"CLI {kind}; recovery required. Attempt checkpoint: {checkpoint}"},
+                                )
+                                if response.status_code != 200:
+                                    raise RuntimeError(f"Unable to block failed CLI task: HTTP {response.status_code}")
+                                print(f"[!] [{worker_id}] Task blocked for recovery ({kind}); checkpoint: {checkpoint}")
+                            else:
+                                await client.post(
+                                    f"{ORCHESTRATOR_URL}/tasks/{task_id}/release",
+                                    json={"worker_id": worker_id, "claim_token": claim_token},
+                                )
                         elif exec_res.get("error") == "RATE_LIMIT_429":
                             print(f"[!] [{worker_id}] Rate limit detected in Claude UI! Entering 5h cooldown.")
                             await client.post(
@@ -346,6 +450,20 @@ async def run_worker_loop(
                                 f"{ORCHESTRATOR_URL}/tasks/{task_id}/release",
                                 json={"worker_id": worker_id, "claim_token": claim_token},
                             )
+                    except asyncio.CancelledError:
+                        if provider in ("agy", "agy_cli", "codex_cli", "opencode_cli"):
+                            from client.cli_accounts import save_failed_attempt
+                            checkpoint = save_failed_attempt(worker_id, task_id, {
+                                "error_kind": "cancelled", "error": "Worker interrupted; review workspace before resuming",
+                                "auth_profile": getattr(adapter, "last_profile", None),
+                                "workspace": str(getattr(adapter, "workspace_dir", "")),
+                            })
+                            await asyncio.shield(client.post(
+                                f"{ORCHESTRATOR_URL}/tasks/{task_id}/block",
+                                json={"worker_id": worker_id, "claim_token": claim_token,
+                                      "reason": f"CLI interrupted; recovery required. Attempt checkpoint: {checkpoint}"},
+                            ))
+                        raise
                     finally:
                         lease_stop.set()
                         await lease_task

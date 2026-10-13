@@ -39,6 +39,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from tools.copilot_fleet import discover_accounts, get_fleet_quota_metrics, initialize_fleet_ledgers, load_env_fleet
 from tools.copilot_queue_worker import resolve_state_dir
+from client.process_runtime import run_background
 
 # Configuration & Paths
 FLEET_JSON = REPO_ROOT / "orchestrator-state" / "live-status" / "active_fleet.json"
@@ -1343,17 +1344,17 @@ class FleetControlApp(tk.Tk):
         def _worker():
             if VD_EXE.exists():
                 flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-                out = subprocess.run([str(VD_EXE), "/Count"], capture_output=True, text=True, creationflags=flags).stdout
+                out = run_background([str(VD_EXE), "/Count"], capture_output=True, text=True, creationflags=flags).stdout
                 m = re.search(r"(\d+)", out)
                 current_count = int(m.group(1)) if m else 1
                 target_req = desk_num + 1
                 if current_count < target_req:
                     self.log(f"Creating Desktop {target_req}...")
                     while current_count < target_req:
-                        subprocess.run([str(VD_EXE), "/Quiet", "/New"], capture_output=True, creationflags=flags)
+                        run_background([str(VD_EXE), "/Quiet", "/New"], capture_output=True, creationflags=flags)
                         current_count += 1
                 self.log(f"Switching to Desktop {desk_num + 1}...")
-                subprocess.run([str(VD_EXE), f"/Switch:{desk_num}"], capture_output=True, creationflags=flags)
+                run_background([str(VD_EXE), f"/Switch:{desk_num}"], capture_output=True, creationflags=flags)
                 self.log(f"[SUCCESS] Switched to Desktop {desk_num + 1}.")
             else:
                 self.log(f"[!] VirtualDesktop.exe not found at {VD_EXE}")
@@ -1492,7 +1493,7 @@ class FleetControlApp(tk.Tk):
             cmd = [sys.executable, str(REPO_ROOT / "tools" / "copilot_fleet.py"), "canary"]
             try:
                 flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-                proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
+                proc = run_background(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
                 for line in proc.stdout.splitlines():
                     if line.strip():
                         self.log(line)
@@ -1509,7 +1510,7 @@ class FleetControlApp(tk.Tk):
             cmd = [sys.executable, str(REPO_ROOT / "tools" / "copilot_queue_worker.py"), "--once"]
             try:
                 flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-                proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
+                proc = run_background(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
                 for line in proc.stdout.splitlines():
                     if line.strip():
                         self.log(line)

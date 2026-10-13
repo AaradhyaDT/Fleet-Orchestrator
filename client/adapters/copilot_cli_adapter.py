@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from client.adapters.base_adapter import BaseWorkerAdapter
+from client.process_runtime import spawn_background
 
 
 class CopilotCLIAdapter(BaseWorkerAdapter):
@@ -82,7 +83,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         """Health check returns True if copilot executable is present and returns version code 0."""
         try:
             flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-            proc = await asyncio.create_subprocess_exec(
+            proc = await spawn_background(
                 self.copilot_path,
                 "--version",
                 stdout=asyncio.subprocess.PIPE,
@@ -190,7 +191,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
                 startupinfo.wShowWindow = subprocess.SW_HIDE
 
-            proc = await asyncio.create_subprocess_exec(
+            proc = await spawn_background(
                 *cmd,
                 cwd=cwd,
                 env=child_env,

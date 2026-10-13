@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import math
 import logging
 import math
 import os
@@ -38,6 +39,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
+from client.process_runtime import run_background, spawn_background
 from tools.copilot_fleet import discover_accounts, load_env_fleet
 from tools.credit_ledger import (
     resolve_state_dir,
@@ -693,7 +695,7 @@ class CopilotQueueWorker:
         if git_entry.exists():
             return True
         try:
-            res = subprocess.run(
+            res = run_background(
                 ["git", "rev-parse", "--is-inside-work-tree"],
                 cwd=str(path),
                 stdout=subprocess.PIPE,
@@ -729,7 +731,7 @@ class CopilotQueueWorker:
 
         # 1. Pre-flight Git self-healing: prune stale worktree registrations
         try:
-            prune_proc = await asyncio.create_subprocess_exec(
+            prune_proc = await spawn_background(
                 "git", "worktree", "prune",
                 cwd=str(root),
                 stdout=asyncio.subprocess.PIPE,
@@ -742,7 +744,7 @@ class CopilotQueueWorker:
 
         # 2. Check if branch is locked to an existing worktree via git worktree list
         try:
-            list_proc = await asyncio.create_subprocess_exec(
+            list_proc = await spawn_background(
                 "git", "worktree", "list", "--porcelain",
                 cwd=str(root),
                 stdout=asyncio.subprocess.PIPE,
@@ -758,7 +760,7 @@ class CopilotQueueWorker:
                             if line.startswith("worktree "):
                                 stale_wt = Path(line.replace("worktree ", "").strip())
                                 if stale_wt != root and stale_wt.exists():
-                                    rm_proc = await asyncio.create_subprocess_exec(
+                                    rm_proc = await spawn_background(
                                         "git", "worktree", "remove", "--force", str(stale_wt),
                                         cwd=str(root),
                                         stdout=asyncio.subprocess.PIPE,
@@ -766,7 +768,7 @@ class CopilotQueueWorker:
                                         creationflags=WIN32_NO_WINDOW,
                                     )
                                     await rm_proc.communicate()
-                prune_proc = await asyncio.create_subprocess_exec(
+                prune_proc = await spawn_background(
                     "git", "worktree", "prune",
                     cwd=str(root),
                     stdout=asyncio.subprocess.PIPE,
@@ -782,7 +784,7 @@ class CopilotQueueWorker:
             await self.teardown_worktree(worktree_dir, branch_name=None, commit=False, repo_root=root)
 
         # 4. Check if branch already exists
-        check_proc = await asyncio.create_subprocess_exec(
+        check_proc = await spawn_background(
             "git", "branch", "--list", branch_name,
             cwd=str(root),
             stdout=asyncio.subprocess.PIPE,
@@ -798,7 +800,7 @@ class CopilotQueueWorker:
         else:
             cmd.extend(["-b", branch_name, str(worktree_dir), "HEAD"])
 
-        proc = await asyncio.create_subprocess_exec(
+        proc = await spawn_background(
             *cmd,
             cwd=str(root),
             stdout=asyncio.subprocess.PIPE,
@@ -844,7 +846,7 @@ class CopilotQueueWorker:
                 except Exception as e:
                     logger.debug(f"Context cleanup notice: {e}")
 
-                status_proc = await asyncio.create_subprocess_exec(
+                status_proc = await spawn_background(
                     "git", "status", "--porcelain",
                     cwd=str(worktree_dir),
                     stdout=asyncio.subprocess.PIPE,
@@ -855,7 +857,7 @@ class CopilotQueueWorker:
                 has_changes = bool(status_out.strip())
 
                 if has_changes:
-                    add_proc = await asyncio.create_subprocess_exec(
+                    add_proc = await spawn_background(
                         "git", "add", "-A",
                         cwd=str(worktree_dir),
                         stdout=asyncio.subprocess.PIPE,
@@ -865,7 +867,7 @@ class CopilotQueueWorker:
                     await add_proc.communicate()
 
                     msg = f"feat({task_id or 'copilot'}): automated implementation"
-                    commit_proc = await asyncio.create_subprocess_exec(
+                    commit_proc = await spawn_background(
                         "git", "commit", "-m", msg,
                         cwd=str(worktree_dir),
                         stdout=asyncio.subprocess.PIPE,
@@ -874,7 +876,7 @@ class CopilotQueueWorker:
                     )
                     await commit_proc.communicate()
 
-                sha_proc = await asyncio.create_subprocess_exec(
+                sha_proc = await spawn_background(
                     "git", "rev-parse", "HEAD",
                     cwd=str(worktree_dir),
                     stdout=asyncio.subprocess.PIPE,
@@ -890,7 +892,7 @@ class CopilotQueueWorker:
         # Remove git worktree
         if is_git and not self.dry_run:
             try:
-                rm_proc = await asyncio.create_subprocess_exec(
+                rm_proc = await spawn_background(
                     "git", "worktree", "remove", "--force", str(worktree_dir),
                     cwd=str(root),
                     stdout=asyncio.subprocess.PIPE,
@@ -899,7 +901,7 @@ class CopilotQueueWorker:
                 )
                 await rm_proc.communicate()
 
-                prune_proc = await asyncio.create_subprocess_exec(
+                prune_proc = await spawn_background(
                     "git", "worktree", "prune",
                     cwd=str(root),
                     stdout=asyncio.subprocess.PIPE,
@@ -929,7 +931,7 @@ class CopilotQueueWorker:
 
             if worktree_dir.exists() and sys.platform == "win32":
                 try:
-                    p = await asyncio.create_subprocess_exec(
+                    p = await spawn_background(
                         "cmd.exe", "/c", "rmdir", "/s", "/q", str(worktree_dir),
                         stdout=asyncio.subprocess.DEVNULL,
                         stderr=asyncio.subprocess.DEVNULL,
@@ -942,7 +944,7 @@ class CopilotQueueWorker:
         # Optional ephemeral branch deletion
         if prune_branch and branch_name and is_git and not self.dry_run:
             try:
-                cur_branch_proc = await asyncio.create_subprocess_exec(
+                cur_branch_proc = await spawn_background(
                     "git", "branch", "--show-current",
                     cwd=str(self.repo_root),
                     stdout=asyncio.subprocess.PIPE,
@@ -952,7 +954,7 @@ class CopilotQueueWorker:
                 cur_out, _ = await cur_branch_proc.communicate()
                 cur_branch = cur_out.decode("utf-8", errors="replace").strip()
                 if branch_name != cur_branch:
-                    del_branch_proc = await asyncio.create_subprocess_exec(
+                    del_branch_proc = await spawn_background(
                         "git", "branch", "-D", branch_name,
                         cwd=str(self.repo_root),
                         stdout=asyncio.subprocess.PIPE,
@@ -986,7 +988,7 @@ class CopilotQueueWorker:
                 pass
 
         try:
-            res = subprocess.run(
+            res = run_background(
                 ["git", "branch", "--list", "task/*"],
                 cwd=str(self.repo_root),
                 capture_output=True,
@@ -997,7 +999,7 @@ class CopilotQueueWorker:
             if res.returncode != 0 or not res.stdout.strip():
                 return 0
 
-            cur_res = subprocess.run(
+            cur_res = run_background(
                 ["git", "branch", "--show-current"],
                 cwd=str(self.repo_root),
                 capture_output=True,
@@ -1014,7 +1016,7 @@ class CopilotQueueWorker:
                     continue
                 tid = b.removeprefix("task/")
                 if tid in finished_ids or b.startswith("task/task_1791"):
-                    del_res = subprocess.run(
+                    del_res = run_background(
                         ["git", "branch", "-D", b],
                         cwd=str(self.repo_root),
                         capture_output=True,
