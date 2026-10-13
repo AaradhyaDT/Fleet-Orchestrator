@@ -830,3 +830,63 @@ async def test_worker_idle_timeout(temp_state_dir: Path):
     await asyncio.wait_for(worker.run(idle_timeout=0.15), timeout=2.0)
     elapsed = asyncio.get_event_loop().time() - t0
     assert elapsed >= 0.1
+
+
+def test_legacy_claim_with_non_finite_timeout_uses_default(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_legacy_non_finite_timeout"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w1",
+            "owner_pid": None,
+            "timeout": "Infinity",
+            "updated_at": (datetime.now(timezone.utc) - timedelta(seconds=721)).isoformat(),
+        }),
+        encoding="utf-8",
+    )
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+
+
+def test_stale_claim_id_cannot_escape_tasks_directory(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "../../escaped-lock"
+    task_file = temp_state_dir / "tasks" / "task_traversal.json"
+    task_file.write_text(
+        json.dumps({
+            "id": task_id,
+            "kind": "code",
+            "status": "claimed",
+            "owner_account": "copilot-w-old",
+            "owner_pid": 99999999,
+        }),
+        encoding="utf-8",
+    )
+
+    assert [item["id"] for item in worker.find_pending_code_tasks()] == [task_id]
+    assert not (temp_state_dir.parent / "escaped-lock.lock").exists()
+
+
+def test_task_claim_refuses_symlinked_lock_file(temp_state_dir: Path):
+    worker = CopilotQueueWorker(state_dir=temp_state_dir)
+    task_id = "task_symlink_lock"
+    task_file = temp_state_dir / "tasks" / f"{task_id}.json"
+    task_file.write_text(
+        json.dumps({"id": task_id, "kind": "code", "status": "pending", "owner_account": None}),
+        encoding="utf-8",
+    )
+    outside_target = temp_state_dir.parent / "outside-lock-target"
+    try:
+        os.symlink(outside_target, worker._task_lock_path(task_id))
+    except (OSError, NotImplementedError) as exc:
+        pytest.skip(f"file symlinks unavailable: {exc}")
+
+    claimed = worker.claim_task(task_id, {"worker_id": "copilot-w1", "name": "worker1"})
+
+    assert claimed is None
+    assert not outside_target.exists()
+    assert json.loads(task_file.read_text(encoding="utf-8"))["status"] == "pending"

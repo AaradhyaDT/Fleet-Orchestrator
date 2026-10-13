@@ -14,6 +14,7 @@ This document serves as the ground-truth milestone ledger for the **Fleet-Orches
 | **v0.4.0** | Local Runtime Mesh & Tri-Hardware Acceleration | 2026-10-10 | `95de5b2` $\rightarrow$ `fb847f6` | [#7](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/7) | `CLOSED` |
 | **v0.6.0** | Antigravity 2.0 Engine, Circular Swarm & Invariant Hardening | 2026-10-11 $\rightarrow$ 2026-10-12 | `a9351a2` $\rightarrow$ `516ab1b` | [#19](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/19), [#20](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/20) | `CLOSED` |
 | **v1.0.0** | Declarative DAG Engine & Autonomous Sentinel PR Loop | 2026-10-12 $\rightarrow$ Pres. | `HEAD` $\rightarrow$ Target | [#26](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/26), [#28](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/28)–[#39](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/39) | `OPEN` |
+| **v2.3** | Local Background Jobs & Secure Fleet Runtime | 2026-10-13 | `5381bbc` | [#40](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/40), [PR #41](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/41) | `OPEN` (delivery merged; GitHub milestone remains open) |
 
 ---
 
@@ -123,3 +124,16 @@ This document serves as the ground-truth milestone ledger for the **Fleet-Orches
   - Complete end-to-end autonomous lifecycle (Issue $\to$ DAG plan $\to$ Worktree swarm execution $\to$ PR dispatch $\to$ Watchdog self-healing).
   - Live non-simulated multi-provider canary reliability benchmark report.
   - Formal Production Release Tag `v1.0.0`.
+
+---
+
+### Milestone 8: `v2.3: Local Background Jobs & Secure Fleet Runtime`
+* **Status**: `OPEN` in GitHub (the bridge delivery is merged; the milestone itself has not been closed)
+* **Delivery**: PR [#41](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/41), squash merge `5381bbc09f6aaf775144c6b94eafd32f518915be` to `main` on 2026-10-13.
+* **Linked issue**: [#40](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/40) (closed by merge).
+* **Capabilities delivered**:
+  - Added `fleet.bat job` for durable local start, status, list, cancel, result, and explicit resume operations.
+  - Preserved job state, worktrees, patches, test evidence, and manifests; separated lifecycle state from verification.
+  - Hardened workspace containment, REST/MCP authentication, worker telemetry, and claim/checkpoint recovery fencing.
+  - Added regression coverage and operator documentation. Verification on PR #41 passed 415 tests, Ruff, schema suites, security checks, container build, and Linux/Windows CI across Python 3.11–3.13.
+  - Documented trusted-execution limits and removed automatic push-triggered Drive sync; external documentation sync is now manual dispatch only.

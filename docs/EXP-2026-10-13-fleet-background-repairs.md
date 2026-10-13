@@ -1,5 +1,9 @@
 # Fleet background bridge and self-repair experiment
 
+Tracking: [Issue #40](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/40) · [Milestone v2.3](https://github.com/AaradhyaDT/Fleet-Orchestrator/milestone/11).
+Delivered in [PR #41](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/41),
+merged to `main` as `5381bbc` on 2026-10-13. The repository remains private.
+
 Related: [[Fleet-Orchestrator]], [[Worker Session Runtime]], [[Background Jobs]].
 
 ## Scope and execution
@@ -7,9 +11,10 @@ Related: [[Fleet-Orchestrator]], [[Worker Session Runtime]], [[Background Jobs]]
 EMPIRICALLY_VERIFIED: Fleet Copilot CLI workers implemented the local background
 bridge, four repairs, and independent review refinements. Codex supplied bounded
 specifications, reviewed and integrated patches, updated the obsolete locking
-fixture, and made small bridge configuration/finalization follow-ups. No commits,
-pushes, merges, synchronization, hosting, or separate artifact uploads occurred.
-Repository privacy was accepted from the maintainer's confirmation.
+fixture, and made small bridge configuration/finalization follow-ups. The
+initial implementation and verification remained local until maintainership
+authorization to open PR #41 and merge it to the private repository. No external
+hosting or separate artifact uploads were used by the bridge workflow.
 
 The resumed run started at 2026-10-13 14:04:27 UTC with a hard deadline of
 15:34:27 UTC. Four isolated implementation jobs and four independent review jobs
@@ -48,14 +53,18 @@ added reproducing authentication, quota, and claim edge-case tests. Receipts are
 in `fleet-review-workspace.md`, `fleet-review-authentication.md`,
 `fleet-review-telemetry.md`, and `fleet-review-claim-recovery.md`.
 
-Final combined validation in `.worktrees/fleet-validation` passed **425 tests**
-in 73.97 seconds, Ruff, all three schema validation suites, and `git diff --check`.
-The complete snapshot included concurrent local provider changes; those changes
-were not authored by this repair run. A subsequent redaction-fixture expression
-change preserves its synthetic credential behavior and was checked separately.
-Secret scanning covers tracked and new source/document files with credential
-snippets suppressed. Tracked caches changed by isolated tests are restored within
-the validation checkout; concurrent root cache changes are preserved.
+The earlier integrated workspace snapshot passed **425 tests**, Ruff, all three
+schema suites, and `git diff --check`; it also contained concurrent local
+provider work not authored by this repair. The isolated PR branch, reconstructed
+from clean `main` with only this bridge and its four repairs, passed **415 tests**
+in 71.90 seconds. Ruff and all three schema suites passed on that branch. PR #41
+then passed the repository's Linux and Windows Python 3.11–3.13 matrix, security
+and lint audit, container build, and aggregate CI verdict before merge.
+A subsequent redaction-fixture expression change preserves its synthetic
+credential behavior and was checked separately. Secret scanning covers tracked
+and new source/document files with credential snippets suppressed. Tracked caches
+changed by isolated tests are restored within the validation checkout; concurrent
+root cache changes are preserved.
 
 Two bounded live jobs completed with verification passed and retained patches:
 `job-c82e656611a948c1b2bd037752042d5f` and
