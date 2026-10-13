@@ -148,15 +148,148 @@ async def test_copilot_headless_sandboxed_tools(tmp_path):
     )
 
     # Test write_file
-    res_write = await adapter._execute_tool("write_file", {"path": "hello.txt", "content": "Hello World!\nSecond line"})
+    nested_path = str(Path("nested") / "hello.txt")
+    res_write = await adapter._execute_tool("write_file", {"path": nested_path, "content": "Hello World!\nSecond line"})
     assert res_write["success"] is True
-    assert (tmp_path / "hello.txt").exists()
+    assert (tmp_path / nested_path).exists()
 
     # Test read_file
-    res_read = await adapter._execute_tool("read_file", {"path": "hello.txt", "offset": 1, "limit": 2})
+    res_read = await adapter._execute_tool(
+        "read_file",
+        {"path": str(tmp_path / nested_path), "offset": 1, "limit": 2},
+    )
     assert res_read["success"] is True
     assert "Hello World!" in res_read["content"]
     assert res_read["total_lines"] == 2
+
+
+def test_copilot_headless_run_command_is_explicitly_trusted():
+    run_command_tool = next(
+        tool for tool in CopilotHeadlessAdapter.AVAILABLE_TOOLS
+        if tool["function"]["name"] == "run_command"
+    )
+    description = run_command_tool["function"]["description"].lower()
+    assert "unrestricted trusted shell" in description
+    assert "cwd is not a sandbox" in description
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["read_file", "write_file"])
+async def test_copilot_headless_rejects_parent_traversal(tmp_path, operation):
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    outside_file = tmp_path / "outside.txt"
+    outside_file.write_text("outside", encoding="utf-8")
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok", workspace_root=workspace)
+    args = {"path": str(Path("..") / "outside.txt"), "content": "changed"}
+
+    result = await adapter._execute_tool(operation, args)
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert outside_file.read_text(encoding="utf-8") == "outside"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["read_file", "write_file"])
+async def test_copilot_headless_rejects_absolute_outside_path(tmp_path, operation):
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    outside_file = tmp_path / "outside.txt"
+    outside_file.write_text("outside", encoding="utf-8")
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok", workspace_root=workspace)
+    args = {"path": str(outside_file), "content": "changed"}
+
+    result = await adapter._execute_tool(operation, args)
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert outside_file.read_text(encoding="utf-8") == "outside"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["read_file", "write_file"])
+async def test_copilot_headless_rejects_sibling_prefix_path(tmp_path, operation):
+    workspace = tmp_path / "workspace"
+    sibling = tmp_path / "workspace-escape"
+    workspace.mkdir()
+    sibling.mkdir()
+    outside_file = sibling / "outside.txt"
+    outside_file.write_text("outside", encoding="utf-8")
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok", workspace_root=workspace)
+    args = {"path": str(outside_file), "content": "changed"}
+
+    result = await adapter._execute_tool(operation, args)
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert outside_file.read_text(encoding="utf-8") == "outside"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["read_file", "write_file"])
+async def test_copilot_headless_rejects_outside_symlink_path(tmp_path, operation):
+    workspace = tmp_path / "workspace"
+    outside = tmp_path / "outside"
+    workspace.mkdir()
+    outside.mkdir()
+    outside_file = outside / "existing.txt"
+    outside_file.write_text("outside", encoding="utf-8")
+    link = workspace / "linked"
+    try:
+        link.symlink_to(outside, target_is_directory=True)
+    except OSError as exc:
+        pytest.skip(f"directory symlinks are unavailable: {exc}")
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok", workspace_root=workspace)
+    args = {"path": str(Path("linked") / "existing.txt"), "content": "changed"}
+
+    result = await adapter._execute_tool(operation, args)
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert outside_file.read_text(encoding="utf-8") == "outside"
+
+
+@pytest.mark.asyncio
+async def test_copilot_headless_rejects_missing_target_under_outside_symlink(tmp_path):
+    workspace = tmp_path / "workspace"
+    outside = tmp_path / "outside"
+    workspace.mkdir()
+    outside.mkdir()
+    link = workspace / "linked"
+    try:
+        link.symlink_to(outside, target_is_directory=True)
+    except OSError as exc:
+        pytest.skip(f"directory symlinks are unavailable: {exc}")
+    target = outside / "new.txt"
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok", workspace_root=workspace)
+
+    result = await adapter._execute_tool(
+        "write_file",
+        {"path": str(Path("linked") / "new.txt"), "content": "outside"},
+    )
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert not target.exists()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["read_file", "write_file"])
+async def test_copilot_headless_uses_cwd_as_path_boundary_without_workspace(tmp_path, monkeypatch, operation):
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    outside_file = tmp_path / "outside.txt"
+    outside_file.write_text("outside", encoding="utf-8")
+    monkeypatch.chdir(workspace)
+    adapter = CopilotHeadlessAdapter("copilot-1", "Worker", "tok")
+    args = {"path": str(Path("..") / "outside.txt"), "content": "changed"}
+
+    result = await adapter._execute_tool(operation, args)
+
+    assert result["success"] is False
+    assert "outside" in result["error"].lower()
+    assert outside_file.read_text(encoding="utf-8") == "outside"
 
 
 @pytest.mark.asyncio

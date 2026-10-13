@@ -6,7 +6,7 @@ from httpx import AsyncClient, ASGITransport
 
 from server.core.config import settings
 from server.core.database import init_db
-from server.main import app
+from server.main import MCPAuthMiddleware, app
 
 @pytest_asyncio.fixture(autouse=True)
 async def setup_test_db(tmp_path, monkeypatch):
@@ -20,6 +20,7 @@ async def setup_test_db(tmp_path, monkeypatch):
 async def test_auth_allowed_in_dev_mode_when_no_key_configured(monkeypatch):
     monkeypatch.setattr(settings, "ENVIRONMENT", "development")
     monkeypatch.setattr(settings, "API_AUTH_KEY", "")
+    monkeypatch.setattr(settings, "ALLOW_ANONYMOUS_DEV", True)
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
@@ -54,9 +55,22 @@ async def test_auth_enforced_when_api_key_configured(monkeypatch):
         # Invalid token MUST return 401
         invalid = await client.get("/api/v1/jobs", headers={"Authorization": "Bearer invalid-bearer-value"})
         assert invalid.status_code == 401
+        conflicting_api = await client.get(
+            "/api/v1/jobs",
+            headers={"Authorization": "Bearer wrong_key", "X-API-Key": dummy_auth_val},
+        )
+        assert conflicting_api.status_code == 401
 
         invalid_mcp = await client.get("/mcp/", headers={"X-API-Key": "wrong_key"})
         assert invalid_mcp.status_code == 401
+        invalid_mcp_bearer = await client.get("/mcp/", headers={"Authorization": "Bearer wrong_key"})
+        assert invalid_mcp_bearer.status_code == 401
+        assert "wrong_key" not in invalid_mcp_bearer.text
+        conflicting_mcp = await client.get(
+            "/mcp/",
+            headers={"Authorization": "Bearer wrong_key", "X-API-Key": dummy_auth_val},
+        )
+        assert conflicting_mcp.status_code == 401
 
         # Valid Bearer token MUST succeed
         valid_bearer = await client.get("/api/v1/jobs", headers={"Authorization": f"Bearer {dummy_auth_val}"})
@@ -73,6 +87,11 @@ async def test_auth_enforced_when_api_key_configured(monkeypatch):
         # Valid MCP header auth passes through the middleware into the SSE app (returning 400 Bad Request instead of 401)
         valid_mcp = await client.post("/mcp/messages/", headers={"X-API-Key": dummy_auth_val})
         assert valid_mcp.status_code != 401, f"Expected authenticated MCP call to pass middleware, got {valid_mcp.status_code}"
+        valid_mcp_bearer = await client.post(
+            "/mcp/messages/",
+            headers={"Authorization": "Bearer " + dummy_auth_val},
+        )
+        assert valid_mcp_bearer.status_code != 401
 
 
 @pytest.mark.asyncio
@@ -97,3 +116,55 @@ async def test_auth_rejects_anonymous_in_dev_when_allow_anonymous_disabled(monke
         resp = await client.get("/api/v1/jobs")
         assert resp.status_code == 401
 
+
+@pytest.mark.parametrize(
+    ("environment", "allow_anonymous", "expected_status"),
+    [
+        ("production", True, 401),
+        ("development", False, 401),
+        ("development", True, 204),
+    ],
+)
+@pytest.mark.asyncio
+async def test_mcp_asgi_middleware_applies_empty_key_policy(
+    monkeypatch, environment, allow_anonymous, expected_status
+):
+    monkeypatch.setattr(settings, "ENVIRONMENT", environment)
+    monkeypatch.setattr(settings, "API_AUTH_KEY", "")
+    monkeypatch.setattr(settings, "ALLOW_ANONYMOUS_DEV", allow_anonymous)
+
+    async def downstream_app(scope, receive, send):
+        from starlette.responses import Response
+
+        await Response(status_code=204)(scope, receive, send)
+
+    transport = ASGITransport(app=MCPAuthMiddleware(downstream_app))
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/mcp/")
+
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    ("header_name", "header_values", "expected_rejection"),
+    [
+        ("Authorization", ("Bearer " + "x" * 32, "Bearer invalid"), False),
+        ("Authorization", ("Bearer invalid", "Bearer " + "x" * 32), True),
+        ("X-API-Key", ("x" * 32, "invalid"), False),
+        ("X-API-Key", ("invalid", "x" * 32), True),
+    ],
+)
+@pytest.mark.asyncio
+async def test_duplicate_auth_headers_have_consistent_rest_and_mcp_policy(
+    monkeypatch, header_name, header_values, expected_rejection
+):
+    monkeypatch.setattr(settings, "API_AUTH_KEY", "x" * 32)
+    headers = [(header_name, value) for value in header_values]
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        rest_response = await client.get("/api/v1/jobs", headers=headers)
+        mcp_response = await client.post("/mcp/messages/", headers=headers)
+
+    assert (rest_response.status_code == 401) is expected_rejection
+    assert (mcp_response.status_code == 401) is expected_rejection

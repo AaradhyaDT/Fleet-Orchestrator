@@ -23,3 +23,11 @@ def test_production_accepts_strong_auth_key(monkeypatch):
     monkeypatch.setattr(settings, "API_AUTH_KEY", "x" * 32)
 
     validate_security_settings()
+
+
+def test_production_rejects_short_auth_key(monkeypatch):
+    monkeypatch.setattr(settings, "ENVIRONMENT", "production")
+    monkeypatch.setattr(settings, "API_AUTH_KEY", "x" * 31)
+
+    with pytest.raises(RuntimeError, match="at least 32 characters"):
+        validate_security_settings()

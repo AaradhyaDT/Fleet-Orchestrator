@@ -15,15 +15,20 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import hashlib
 import json
 import logging
+import math
 import os
 import shutil
 import signal
 import stat
 import subprocess
 import sys
+import threading
 import time
+import uuid
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -50,6 +55,8 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger("copilot_queue_worker")
+_TASK_LOCKS: dict[str, tuple[threading.Lock, int]] = {}
+_TASK_LOCKS_GUARD = threading.Lock()
 
 WIN32_NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
@@ -87,6 +94,54 @@ def is_pid_alive(pid: int | None) -> bool:
             return True
         except (OSError, ProcessLookupError):
             return False
+
+
+def _process_identity(pid: int | None) -> str | None:
+    """Returns a process creation identity that distinguishes a reused PID."""
+    if not pid or pid <= 0:
+        return None
+    try:
+        if sys.platform == "win32":
+            import ctypes
+            from ctypes import wintypes
+
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+            kernel32.OpenProcess.restype = wintypes.HANDLE
+            kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+            kernel32.GetProcessTimes.argtypes = [
+                wintypes.HANDLE,
+                ctypes.POINTER(wintypes.FILETIME),
+                ctypes.POINTER(wintypes.FILETIME),
+                ctypes.POINTER(wintypes.FILETIME),
+                ctypes.POINTER(wintypes.FILETIME),
+            ]
+            kernel32.GetProcessTimes.restype = wintypes.BOOL
+            handle = kernel32.OpenProcess(0x1000, False, pid)
+            if not handle:
+                return None
+            try:
+                creation_time = wintypes.FILETIME()
+                exit_time = wintypes.FILETIME()
+                kernel_time = wintypes.FILETIME()
+                user_time = wintypes.FILETIME()
+                if not kernel32.GetProcessTimes(
+                    handle,
+                    ctypes.byref(creation_time),
+                    ctypes.byref(exit_time),
+                    ctypes.byref(kernel_time),
+                    ctypes.byref(user_time),
+                ):
+                    return None
+                return f"{creation_time.dwHighDateTime:08x}{creation_time.dwLowDateTime:08x}"
+            finally:
+                kernel32.CloseHandle(handle)
+
+        stat_text = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+        fields = stat_text.rpartition(")")[2].split()
+        return fields[19]
+    except (OSError, IndexError, ValueError):
+        return None
 
 
 class CopilotQueueWorker:
@@ -140,6 +195,103 @@ class CopilotQueueWorker:
         self.tasks_dir.mkdir(parents=True, exist_ok=True)
         self.checkpoints_dir.mkdir(parents=True, exist_ok=True)
         self.live_status_dir.mkdir(parents=True, exist_ok=True)
+
+    def _task_lock_path(self, task_id: str) -> Path:
+        lock_name = hashlib.sha256(task_id.encode("utf-8")).hexdigest()
+        return self.tasks_dir / f"{lock_name}.lock"
+
+    @contextmanager
+    def _task_lock(self, task_id: str):
+        path = self._task_lock_path(task_id)
+        key = str(path.resolve())
+        with _TASK_LOCKS_GUARD:
+            entry = _TASK_LOCKS.get(key)
+            local_lock, users = entry if entry is not None else (threading.Lock(), 0)
+            _TASK_LOCKS[key] = (local_lock, users + 1)
+        try:
+            with local_lock:
+                if path.is_symlink():
+                    raise OSError(f"Refusing symlinked task lock: {path}")
+                with FileLock(path):
+                    yield
+        finally:
+            with _TASK_LOCKS_GUARD:
+                current_lock, users = _TASK_LOCKS[key]
+                if users == 1:
+                    del _TASK_LOCKS[key]
+                else:
+                    _TASK_LOCKS[key] = (current_lock, users - 1)
+
+    @staticmethod
+    def _task_is_eligible(data: dict[str, Any]) -> bool:
+        stage = data.get("current_stage") or data.get("stage") or (
+            data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None
+        )
+        return data.get("kind") == "code" or stage in [
+            "code", "draft", "research", "format", "refactor", "unit_test"
+        ]
+
+    @staticmethod
+    def _claim_timeout_with_grace(data: dict[str, Any]) -> float:
+        timeout = data.get("timeout")
+        if timeout is None and isinstance(data.get("time_allocation"), dict):
+            timeout = data["time_allocation"].get("timeout_ceiling_s")
+        try:
+            timeout_seconds = float(timeout) if timeout is not None else 600.0
+            if not math.isfinite(timeout_seconds):
+                timeout_seconds = 600.0
+            timeout_seconds = max(0.0, timeout_seconds)
+        except (OverflowError, TypeError, ValueError):
+            timeout_seconds = 600.0
+
+        tier = str(data.get("auto_tier") or "").lower()
+        timeout_floors = {"efficiency": 120.0, "balance": 300.0, "intelligence": 600.0}
+        return max(timeout_seconds, timeout_floors.get(tier, 0.0)) + 120.0
+
+    @classmethod
+    def _legacy_claim_expired(cls, data: dict[str, Any], task_file: Path) -> bool:
+        now = datetime.now(timezone.utc)
+        timestamp = None
+        for field in ("updated_at", "claimed_at"):
+            value = data.get(field)
+            if isinstance(value, str) and value:
+                try:
+                    timestamp = parse_iso_utc(value)
+                except (TypeError, ValueError):
+                    timestamp = None
+                if timestamp:
+                    if timestamp.tzinfo is None:
+                        timestamp = timestamp.replace(tzinfo=timezone.utc)
+                    break
+        if timestamp is None:
+            timestamp = datetime.fromtimestamp(task_file.stat().st_mtime, tz=timezone.utc)
+        return (now - timestamp).total_seconds() > cls._claim_timeout_with_grace(data)
+
+    @staticmethod
+    def _claim_is_stale(data: dict[str, Any], task_file: Path) -> bool:
+        owner_pid = data.get("owner_pid")
+        try:
+            owner_pid = int(owner_pid) if owner_pid is not None else None
+        except (TypeError, ValueError):
+            owner_pid = None
+        if owner_pid:
+            if not is_pid_alive(owner_pid):
+                return True
+            recorded_identity = data.get("owner_process_identity")
+            if recorded_identity:
+                current_identity = _process_identity(owner_pid)
+                return current_identity is not None and current_identity != recorded_identity
+            return False
+        return CopilotQueueWorker._legacy_claim_expired(data, task_file)
+
+    @staticmethod
+    def _claim_matches(task: dict[str, Any], account: dict[str, Any], claim_token: str | None) -> bool:
+        if task.get("status") != "claimed" or task.get("owner_account") != account.get("worker_id"):
+            return False
+        current_token = task.get("claim_token")
+        if current_token:
+            return claim_token == current_token
+        return claim_token is None
 
     def _initialize_fleet_status_files(self) -> None:
         """Ensures all accounts have an initialized live-status file in orchestrator-state."""
@@ -381,26 +533,39 @@ class CopilotQueueWorker:
                     if "kind" not in data:
                         data["kind"] = "code"
 
-                    stage = data.get("current_stage") or data.get("stage") or (data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None)
-                    is_eligible = (data.get("kind") == "code") or (stage in ["code", "draft", "research", "format", "refactor", "unit_test"])
-
-                    if is_eligible:
-                        status = data.get("status")
-                        if status == "pending":
-                            pending_tasks.append(data)
-                        elif status == "claimed":
-                            owner_pid = data.get("owner_pid")
-                            if owner_pid and not is_pid_alive(owner_pid):
-                                logger.info(f"Reclaiming zombie task {data.get('id')} from dead PID {owner_pid}")
-                                data["status"] = "pending"
-                                data["owner_account"] = None
-                                data["owner_pid"] = None
-                                try:
-                                    with open(task_file, "w", encoding="utf-8") as f:
-                                        json.dump(data, f, indent=2)
-                                    pending_tasks.append(data)
-                                except Exception:
-                                    pass
+                    if not self._task_is_eligible(data):
+                        continue
+                    if data.get("status") == "pending":
+                        pending_tasks.append(data)
+                    elif data.get("status") == "claimed":
+                        task_id = str(data.get("id") or task_file.stem)
+                        with self._task_lock(task_id):
+                            with open(task_file, "r", encoding="utf-8") as f:
+                                current = json.load(f)
+                            if not isinstance(current, dict):
+                                continue
+                            if "id" not in current:
+                                current["id"] = current.get("task_id", task_id)
+                            if "kind" not in current:
+                                current["kind"] = "code"
+                            if current.get("status") == "pending":
+                                if self._task_is_eligible(current):
+                                    pending_tasks.append(current)
+                            elif (
+                                current.get("status") == "claimed"
+                                and self._task_is_eligible(current)
+                                and self._claim_is_stale(current, task_file)
+                            ):
+                                owner_pid = current.get("owner_pid")
+                                logger.info(f"Reclaiming stale task {current.get('id')} from PID {owner_pid}")
+                                current["status"] = "pending"
+                                current["owner_account"] = None
+                                current["owner_pid"] = None
+                                current["owner_process_identity"] = None
+                                current.pop("claim_token", None)
+                                current["updated_at"] = _now_iso()
+                                atomic_write_json(task_file, current)
+                                pending_tasks.append(current)
             except Exception as e:
                 logger.warning(f"Error reading task file {task_file.name}: {e}")
 
@@ -408,63 +573,49 @@ class CopilotQueueWorker:
 
     def claim_task(self, task_id: str, account: dict[str, Any]) -> dict[str, Any] | None:
         """
-        Optimistically claims a task according to SCHEMA.md contract.
-        Uses kernel atomic O_CREAT | O_EXCL claim token plus atomic file replacement
-        to guarantee zero double-claims across concurrent OS processes.
+        Claims a pending task under its cross-process OS-backed task lock.
         """
         task_path = self.tasks_dir / f"{task_id}.json"
         if not task_path.exists():
             return None
 
-        # Cross-process atomic claim gate
-        lock_path = task_path.with_suffix(f".claim_{task_id}")
         try:
-            fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-            os.close(fd)
-        except (FileExistsError, OSError):
-            # Another worker process is concurrently claiming this task
-            return None
+            with self._task_lock(task_id):
+                if not task_path.exists():
+                    return None
+                with open(task_path, "r", encoding="utf-8") as f:
+                    task = json.load(f)
+                if (
+                    not isinstance(task, dict)
+                    or task.get("status") != "pending"
+                    or task.get("owner_account") is not None
+                ):
+                    logger.info(f"Task {task_id} was already claimed or is no longer pending.")
+                    return None
 
-        try:
-            with open(task_path, "r", encoding="utf-8") as f:
-                task = json.load(f)
+                now = _now_iso()
+                task["status"] = "claimed"
+                task["owner_account"] = account["worker_id"]
+                task["owner_pid"] = os.getpid()
+                task["owner_process_identity"] = _process_identity(os.getpid())
+                task["claim_token"] = uuid.uuid4().hex
+                task["claimed_at"] = now
+                task["branch_name"] = f"task/{task_id}"
+                task["updated_at"] = now
+                atomic_write_json(task_path, task)
 
-            if task.get("status") != "pending" or task.get("owner_account") is not None:
-                logger.info(f"Task {task_id} was already claimed or is no longer pending.")
-                return None
+                self._update_live_status(
+                    account=account["worker_id"],
+                    current_task_id=task_id,
+                    note=f"Executing code task {task_id}",
+                    status="busy",
+                )
 
-            now = _now_iso()
-            task["status"] = "claimed"
-            task["owner_account"] = account["worker_id"]
-            task["owner_pid"] = os.getpid()
-            task["branch_name"] = f"task/{task_id}"
-            task["updated_at"] = now
-
-            # Atomic write to avoid partial reads by concurrent processes
-            tmp_path = task_path.with_suffix(f".tmp.{os.getpid()}.{task_id}")
-            with open(tmp_path, "w", encoding="utf-8") as f:
-                json.dump(task, f, indent=2)
-            os.replace(tmp_path, task_path)
-
-            # Update live-status for the account
-            self._update_live_status(
-                account=account["worker_id"],
-                current_task_id=task_id,
-                note=f"Executing code task {task_id}",
-                status="busy",
-            )
-
-            logger.info(f"Successfully claimed {task_id} for worker {account['worker_id']} ({account['name']})")
-            return task
+                logger.info(f"Successfully claimed {task_id} for worker {account['worker_id']} ({account['name']})")
+                return task
         except Exception as e:
             logger.error(f"Failed to claim task {task_id}: {e}")
             return None
-        finally:
-            if lock_path.exists():
-                try:
-                    lock_path.unlink()
-                except Exception:
-                    pass
 
     def _update_live_status(
         self,
@@ -996,7 +1147,8 @@ class CopilotQueueWorker:
         branch_name: str | None = None,
         commit_sha: str | None = None,
         actual_duration_s: float | None = None,
-    ) -> None:
+        claim_token: str | None = None,
+    ) -> bool:
         """Writes checkpoint file and transitions task to done."""
         now = _now_iso()
         branch = branch_name or f"task/{task_id}"
@@ -1014,35 +1166,34 @@ class CopilotQueueWorker:
             "submitted_at": now,
         }
 
-        checkpoint_file = self.checkpoints_dir / f"{task_id}.json"
-        tmp_cp = checkpoint_file.with_suffix(f".tmp.{os.getpid()}")
-        with open(tmp_cp, "w", encoding="utf-8") as f:
-            json.dump(checkpoint, f, indent=2)
-        os.replace(tmp_cp, checkpoint_file)
-
-        # Update task file to status: "done"
         task_path = self.tasks_dir / f"{task_id}.json"
-        if task_path.exists():
-            try:
+        checkpoint_file = self.checkpoints_dir / f"{task_id}.json"
+        try:
+            with self._task_lock(task_id):
+                if not task_path.exists():
+                    return False
                 with open(task_path, "r", encoding="utf-8") as f:
                     task = json.load(f)
+                if not isinstance(task, dict) or not self._claim_matches(task, account, claim_token):
+                    logger.warning(f"Rejected stale or mismatched completion for task {task_id}")
+                    return False
+
+                atomic_write_json(checkpoint_file, checkpoint)
                 task["status"] = "done"
                 task["updated_at"] = now
-                tmp_task = task_path.with_suffix(f".tmp.{os.getpid()}")
-                with open(tmp_task, "w", encoding="utf-8") as f:
-                    json.dump(task, f, indent=2)
-                os.replace(tmp_task, task_path)
-            except Exception as e:
-                logger.error(f"Error updating task {task_id} to done: {e}")
+                atomic_write_json(task_path, task)
+                self._update_live_status(
+                    account=account["worker_id"],
+                    current_task_id=None,
+                    note="Idle - completed task",
+                    status="idle",
+                )
+        except Exception as e:
+            logger.error(f"Error updating task {task_id} to done: {e}")
+            return False
 
-        # Clear live-status
-        self._update_live_status(
-            account=account["worker_id"],
-            current_task_id=None,
-            note="Idle - completed task",
-            status="idle",
-        )
         logger.info(f"Task {task_id} marked DONE. Checkpoint written to {checkpoint_file.name}")
+        return True
 
     def _record_copilot_mistake(
         self,
@@ -1073,29 +1224,36 @@ class CopilotQueueWorker:
         except Exception as e:
             logger.warning(f"Could not record Copilot mistake trace: {e}")
 
-    def _mark_task_blocked(self, task_id: str, account: dict[str, Any], reason: str) -> None:
+    def _mark_task_blocked(
+        self,
+        task_id: str,
+        account: dict[str, Any],
+        reason: str,
+        claim_token: str | None = None,
+    ) -> None:
         """Transitions task to blocked state per SCHEMA.md."""
         task_path = self.tasks_dir / f"{task_id}.json"
-        if task_path.exists():
-            try:
+        try:
+            with self._task_lock(task_id):
+                if not task_path.exists():
+                    return
                 with open(task_path, "r", encoding="utf-8") as f:
                     task = json.load(f)
+                if not isinstance(task, dict) or not self._claim_matches(task, account, claim_token):
+                    logger.warning(f"Rejected stale or mismatched failure transition for task {task_id}")
+                    return
                 task["status"] = "blocked"
                 task["blocked_reason"] = reason
                 task["updated_at"] = _now_iso()
-                tmp_path = task_path.with_suffix(f".tmp.{os.getpid()}.{task_id}")
-                with open(tmp_path, "w", encoding="utf-8") as f:
-                    json.dump(task, f, indent=2)
-                os.replace(tmp_path, task_path)
-            except Exception as e:
-                logger.error(f"Error marking task {task_id} blocked: {e}")
-
-        self._update_live_status(
-            account=account["worker_id"],
-            current_task_id=None,
-            note=f"Blocked on {task_id}: {reason}",
-            status="idle",
-        )
+                atomic_write_json(task_path, task)
+                self._update_live_status(
+                    account=account["worker_id"],
+                    current_task_id=None,
+                    note=f"Blocked on {task_id}: {reason}",
+                    status="idle",
+                )
+        except Exception as e:
+            logger.error(f"Error marking task {task_id} blocked: {e}")
 
     async def process_one_task(self, target_task_id: str | None = None) -> bool:
         """Picks up, claims, and executes a single pending code task. Returns True if a task was processed."""
@@ -1121,6 +1279,7 @@ class CopilotQueueWorker:
             return False
 
         task_id = claimed_task["id"]
+        claim_token = claimed_task["claim_token"]
         branch_name = claimed_task.get("branch_name") or f"task/{task_id}"
         target_repo = claimed_task.get("target_repo")
 
@@ -1164,21 +1323,24 @@ class CopilotQueueWorker:
 
                 if result.get("success"):
                     print(f"[CHECKPOINT] Deliverable committed to branch {branch_name} ({sha[:7] if len(sha) >= 7 else sha})", flush=True)
-                    self.submit_checkpoint_and_complete(
+                    completed = self.submit_checkpoint_and_complete(
                         task_id=task_id,
                         account=account,
                         summary=summary,
                         branch_name=branch_name,
                         commit_sha=sha,
                         actual_duration_s=actual_duration,
+                        claim_token=claim_token,
                     )
+                    if not completed:
+                        return False
                     print(f"[COMPLETED] Task {task_id} successfully finalized in {actual_duration}s.", flush=True)
                     return True
                 else:
                     error_msg = result.get("error") or "Execution failed"
                     print(f"[FAILED] Task {task_id} execution failed: {error_msg}", flush=True)
                     self._record_copilot_mistake(task=claimed_task, account=account, result=result, error_msg=error_msg)
-                    self._mark_task_blocked(task_id, account, error_msg)
+                    self._mark_task_blocked(task_id, account, error_msg, claim_token=claim_token)
                     return False
 
             except Exception as e:
@@ -1186,7 +1348,7 @@ class CopilotQueueWorker:
                 if worktree_dir:
                     await self.teardown_worktree(worktree_dir, branch_name=branch_name, task_id=task_id, commit=False, repo_root=target_repo)
                 self._record_copilot_mistake(task=claimed_task, account=account, result={}, error_msg=str(e))
-                self._mark_task_blocked(task_id, account, str(e))
+                self._mark_task_blocked(task_id, account, str(e), claim_token=claim_token)
                 print(f"[ERROR] Task {task_id} encountered exception: {e}", flush=True)
                 return False
         finally:

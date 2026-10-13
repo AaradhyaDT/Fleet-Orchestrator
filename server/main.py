@@ -5,7 +5,9 @@ from contextlib import asynccontextmanager
 from time import perf_counter
 from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
+from server.core.auth import authenticate_api_key
 from server.core.config import settings, validate_security_settings
 from server.core.database import init_db, get_db_conn
 from server.core.observability import log_request, metrics_text, record_request, request_id
@@ -62,33 +64,30 @@ class MCPAuthMiddleware:
 
     async def __call__(self, scope, receive, send):
         if scope["type"] == "http":
-            expected_key = settings.API_AUTH_KEY
-            if expected_key:
-                headers = dict(scope.get("headers", []))
-                x_api_key = headers.get(b"x-api-key", b"").decode("utf-8", errors="ignore")
-                auth_header = headers.get(b"authorization", b"").decode("utf-8", errors="ignore")
+            headers = scope.get("headers", [])
+            x_api_key = next(
+                (value for name, value in headers if name.lower() == b"x-api-key"),
+                b"",
+            ).decode("utf-8", errors="ignore")
+            auth_header = next(
+                (value for name, value in headers if name.lower() == b"authorization"),
+                b"",
+            ).decode("utf-8", errors="ignore")
+            bearer_token = ""
+            if auth_header.lower().startswith("bearer "):
+                bearer_token = auth_header[7:].strip()
 
-                bearer_token = ""
-                if auth_header.lower().startswith("bearer "):
-                    bearer_token = auth_header[7:].strip()
-
-                provided_token = x_api_key or bearer_token
-                if not provided_token or provided_token != expected_key:
-                    response_body = b'{"detail": "Invalid or missing authentication credentials"}'
-                    await send({
-                        "type": "http.response.start",
-                        "status": 401,
-                        "headers": [
-                            (b"content-type", b"application/json"),
-                            (b"www-authenticate", b"Bearer"),
-                            (b"content-length", str(len(response_body)).encode("utf-8")),
-                        ],
-                    })
-                    await send({
-                        "type": "http.response.body",
-                        "body": response_body,
-                    })
-                    return
+            provided_token = bearer_token or x_api_key
+            try:
+                authenticate_api_key(provided_token)
+            except HTTPException as exc:
+                response = JSONResponse(
+                    status_code=exc.status_code,
+                    content={"detail": exc.detail},
+                    headers=exc.headers,
+                )
+                await response(scope, receive, send)
+                return
 
         await self.app(scope, receive, send)
 
