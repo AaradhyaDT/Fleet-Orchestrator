@@ -1,7 +1,9 @@
 # Local/private background jobs
 
 `fleet.bat job` (or `python -m tools.fleet_jobs`) starts an explicitly requested
-local Copilot CLI job without placing it in the shared Fleet queue:
+local Copilot CLI job with durable state, separately from the shared Fleet queue.
+The bridge currently supports automatic intelligence-tier selection only; model
+selection is left to the installed CLI and account configuration:
 
 ```powershell
 .\fleet.bat job start --spec-file .\job-spec.json --auto-tier intelligence
@@ -19,9 +21,10 @@ When invoking the module directly, omit the `job` word, for example:
 timed-out, or interrupted attempt, but never after completion or cancellation.
 It verifies the immutable spec and original deadline, and refuses to proceed
 while any recorded supervisor, worker, or verified descendant remains alive.
-The retry preserves the original scope, deadline, and worktree and includes
-the prior failure as feedback. `status` and `list` are read-only: they never
-restart or resubmit a job. A supervisor restart is not automatic.
+The retry preserves the original scope, deadline, and worktree and includes the
+prior failure as feedback. `status` and `list` are read-only: they never restart
+or resubmit a job. A controller restart does not duplicate or automatically
+resume execution.
 
 ## Spec format
 
@@ -70,12 +73,11 @@ and redacts all configured account tokens from output. As inherent to Copilot
 use, the selected inference provider receives the prompt and relevant code.
 The bridge performs no separate sharing, upload, or export of job contents.
 
-By default, three OS-locked active slots bound concurrent execution; additional jobs wait
-in the queue. Set `FLEET_JOB_MAX_WORKERS` consistently for all controllers and
-supervisors to an integer from 1 to 27 to change the local limit. This repair
-run uses four slots for four disjoint implementation tasks. Account locks
-remain exclusive and each job retains its own execution budget. Additional jobs wait
-in `queued`. Heartbeats are written every 15 seconds, and stale heartbeats
+By default, three OS-locked active slots bound concurrent execution; additional
+jobs wait in the queue. Set `FLEET_JOB_MAX_WORKERS` consistently for all
+controllers and supervisors to an integer from 1 to 27 to change the local
+limit. Account locks remain exclusive and each job retains its own execution
+budget. Heartbeats are written every 15 seconds, and stale heartbeats
 older than 120 seconds are reported as unresponsive only while the recorded
 supervisor identity is still live. Status includes the execution phase,
 heartbeat age, and artifact paths. PID, process creation time, exact command,
@@ -93,8 +95,10 @@ values remain `null`. The bridge does not infer account entitlements or credits.
 This is local orchestration, not an OS sandbox. The worker can execute local
 commands with the current user's permissions inside its worktree and may read
 other accessible local files; secret-bearing environment variables are
-stripped. Use trusted specs/repositories and inspect the preserved patch and
-test evidence before applying changes elsewhere.
+stripped. Prompts and relevant repository source are sent to the configured
+inference provider. Fleet does not separately upload or export job specs,
+patches, logs, or test evidence. Use trusted specs/repositories and inspect the
+preserved patch and test evidence before applying changes elsewhere.
 
 ## Verification manifest
 

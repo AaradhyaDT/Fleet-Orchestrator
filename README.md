@@ -2,6 +2,8 @@
 
 A production-grade, distributed multi-agent task execution and coordination platform designed to pool heterogeneous AI compute models (GitHub Copilot CLI, Claude Desktop CDP, Google Gemini Free, Groq, and Ollama) into a unified, high-concurrency autonomous swarm.
 
+For the local/private background-job bridge, start with [Background jobs](docs/background-jobs.md). Jobs are started explicitly, run in preserved worktrees, and are reviewed before their patches are applied.
+
 ---
 
 ## 1. Architectural Highlights
@@ -86,7 +88,7 @@ Fleet-Orchestrator/
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
 │   └── test_hybrid_copilot_fleet.py # Multi-tier concurrent pipeline benchmark
 │
-├── tests/                         # Full automated pytest test suite (332 tests across 55 suites)
+├── tests/                         # Automated pytest suite
 ├── requirements.txt               # Unified project dependencies
 ├── requirements-dev.txt           # CI/CD and linting dependencies
 ├── ruff.toml                      # Linter configuration
@@ -177,11 +179,39 @@ Dispatch one-shot tasks directly from the Antigravity IDE to the fleet, with liv
 | `balance` | 300s | Default balanced |
 | `intelligence` | 600s | Frontier reasoning |
 
+### Local background jobs
+
+For a durable local job that runs outside the shared queue, prepare a JSON spec
+with an exact allowed-file list, then start it explicitly:
+
+```powershell
+.\fleet.bat job start --spec-file .\job-spec.json --auto-tier intelligence
+.\fleet.bat job list --json
+.\fleet.bat job status job-<id> --json
+.\fleet.bat job result job-<id> --json
+.\fleet.bat job cancel job-<id>
+.\fleet.bat job resume job-<id>
+```
+
+The bridge currently accepts the `intelligence` auto-tier and uses the
+configured Copilot CLI adapter. It does not select a model manually or infer
+account entitlements. Three jobs may execute concurrently by default; further
+jobs wait in the local queue. Status and patch/test evidence are stored under
+ignored `orchestrator-state/jobs/`, and each job's worktree is retained under
+`.worktrees/`. Worker success does not mean the patch is accepted: inspect the
+result and verification status, then review and apply the patch yourself.
+
+Job execution is trusted local code execution, not an operating-system
+sandbox. Prompts and relevant source are sent to the configured inference
+provider. Fleet does not separately export job artifacts. See
+[the operator guide](docs/background-jobs.md) for specification fields,
+cancellation, retries, artifacts, and the security boundary.
+
 ---
 
 ## 4. Verification & Testing
 
-Fleet-Orchestrator enforces continuous deterministic verification across 332 test cases (100% pass rate across 55 test suites):
+Run the focused suites or the full pytest suite from the repository root:
 ```powershell
 pytest tests/test_schema_validation.py -v
 pytest tests/test_quota_reconciliation.py -v
@@ -192,9 +222,9 @@ pytest tests/
 
 ---
 
-## 5. Living Documentation & NotebookLM Knowledge Base
+## 5. Personal Knowledge Integrations
 
-Fleet-Orchestrator maintains a continuous, bidirectional documentation pipeline that synchronizes living repository documents into Google Drive and anchors them into a dedicated Google NotebookLM knowledge base:
+This repository contains optional personal Google Drive and NotebookLM integrations. They are separate from the local job bridge. The Drive workflow can upload Markdown and update its manifest only when manually dispatched; pushes to `main` do not start that workflow. Dispatch it only when you intend to sync the selected repository documents to your personal Drive.
 
 - **Google Drive Folder**: [`Fleet-Orchestrator`](https://drive.google.com/drive/folders/1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF) (`1wGq53okV7ZaFGSw2fWilEfxL4FEIVeIF`)
   - Subfolder of parent **Super-NLM** (`1wn330GxoGoMf956xClHxULnsJQWxohxx`) at `My Drive > Share to Aaradhya > Super-NLM`.
@@ -212,8 +242,8 @@ Fleet-Orchestrator maintains a continuous, bidirectional documentation pipeline 
 - **Dedicated Google NotebookLM**: [`Fleet-Orchestrator`](https://notebook.google.com/notebook/6a37d992-6ceb-4d72-a909-e10e9cca32b6) (`6a37d992-6ceb-4d72-a909-e10e9cca32b6`)
   - Grounded directly on the Google Drive live sources.
   - Enables instant semantic search, multi-turn technical Q&A, and cross-repo synthesis across all Fleet-Orchestrator architecture and operations.
-- **Automated Sync Engine (`scripts/sync_drive.py` & `.github/workflows/sync-drive.yml`)**:
-  - Triggers on every push to `main` touching repository documentation or manifests.
+- **Manual Sync Engine (`scripts/sync_drive.py` & `.github/workflows/sync-drive.yml`)**:
+  - Available through explicit GitHub Actions `workflow_dispatch`; there is no push trigger.
   - Zero third-party dependencies (pure standard library `urllib` with exponential backoff and jitter).
   - Tracked via [`drive-manifest.json`](drive-manifest.json) using SHA-256 change detection.
 
