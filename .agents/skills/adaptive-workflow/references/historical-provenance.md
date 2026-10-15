@@ -8,7 +8,8 @@ This document records the architectural baseline lock, historical provenance, an
 
 - **Origin Baseline**: `v3.5.0-adaptive-workflow` (Initial meta-orchestrator specification).
 - **Prior Calibration**: `v3.9.0-calibrated` (Fleet Master Brain 3B/7B Dual-Model Hierarchy, Antigravity 504-Conversation Trajectory Harvester, Agent-Reflex Autonomous Self-Healing, and Tool-Speculator Prefetching).
-- **Current Calibration**: `v3.10.0-calibrated` (AI Engineering Fellowship SOTA Reference Integration, 8-Archetype Matrix, and `INV-RESOLVE-FUSE` Local-First / GitHub Fallback Gateway).
+- **Recent Calibration**: `v3.10.0-calibrated` (AI Engineering Fellowship SOTA Reference Integration, 8-Archetype Matrix, and `INV-RESOLVE-FUSE` Local-First / GitHub Fallback Gateway).
+- **Current Calibration**: `v3.11.0-calibrated` (Dual-Remote Token-Zero Fork Mirroring, Resilient CI Secret Gating, and Scheduled Cloud Fork Synchronization `INV-FORK-MIRROR`).
 - **Date of Inception**: 2026-10-09 (Official Day of Creation of the Adaptive Workflow meta-orchestrator).
 - **Architectural Scope**: Central meta-orchestration root for Aaradhya's personal ecosystem across **28 tool modules** (24 computational engines and 4 presentation hubs) across **32 Git tracking branches**.
 - **Execution Fleet**: $W = 27$ pooled GitHub Copilot worker accounts, Copilot Headless REST, Claude CDP, Colab Cloud GPU/TPU Accelerator (A100/L4), Fleet Master Brain (3B & 7B GGUF), and AI Engineering Fellowship reference cluster managed via `Fleet-Orchestrator`.
@@ -17,7 +18,7 @@ This document records the architectural baseline lock, historical provenance, an
 
 ## 2. Invariant Registry
 
-The adaptive workflow engine guarantees deterministic execution through twenty-one non-negotiable architectural invariants:
+The adaptive workflow engine guarantees deterministic execution through twenty-two non-negotiable architectural invariants:
 
 1. **`INV-FAST-PATH`**:
    Routine development mechanics (`audit.bat`, `sync.bat`, formatters, linters, unittests, simulation runs, git status) execute natively via pure Python and shell commands in <20 ms with 0 AI tokens and <10 MB RAM.
@@ -87,6 +88,9 @@ The adaptive workflow engine guarantees deterministic execution through twenty-o
 
 21. **`INV-CLI-FIRST`**:
     Deterministic triage, CPM schedule math, and Banker's RAM ceilings execute via local Python CLI commands, never in prompt arithmetic.
+
+22. **`INV-FORK-MIRROR`**:
+    Dual-remote token-zero synchronization. Version control pushes in `sync.ps1` execute against `origin` and immediately mirror to `fork` (`https://github.com/AaradhyaDT/brainstorm.git`). In the cloud, `.github/workflows/sync-fork.yml` executes on schedule to fast-forward the fork cleanly via GitHub's `merge-upstream` REST API, while CI workflows gate external cloud secrets gracefully to eliminate unauthenticated runner failures.
 
 ---
 

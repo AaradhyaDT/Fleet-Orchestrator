@@ -147,3 +147,15 @@ To prevent unnecessary GitHub Actions runner consumption on doc, research, and n
   .\sync.bat -SkipCI -m "docs(notes): update research log"
   ```
 - Make sure workflows define explicit `paths:` triggers and concurrency groups (`cancel-in-progress: true`).
+
+---
+
+## 6. Fork Synchronization & CI Secret Gating (`INV-FORK-MIRROR`)
+
+When managing ecosystem repositories with public or personal forks:
+1. **Secret Presence Gating**: External cloud workflows (e.g. `sync-drive.yml`) must check for secret presence before attempting live execution:
+   ```bash
+   if [ -z "$GDRIVE_CLIENT_ID" ]; then echo "Secrets absent, skipping cleanly."; exit 0; fi
+   ```
+2. **Dual-Remote Push in `sync.ps1`**: Pushes to `origin` automatically mirror to configured `fork` remotes with zero friction.
+3. **Scheduled Cloud Action**: `.github/workflows/sync-fork.yml` fast-forwards the fork's `main` branch via GitHub's `merge-upstream` REST API and mirrors ecosystem tool branches on a 6-hour cron.

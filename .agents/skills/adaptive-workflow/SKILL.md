@@ -122,7 +122,7 @@ Envelope reference: [`references/dynamic-flight-envelope.md`](references/dynamic
 - [`references/installed-work-tools-catalog.md`](references/installed-work-tools-catalog.md): Workstation tools catalog.
 - [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md): Agent-Reflex & Tool-Speculator.
 - [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md): Dual-model (3B/7B), A100 training.
-- [`references/historical-provenance.md`](references/historical-provenance.md): Baseline lock ($v3.5.0 \to v3.10.0$) & 21 invariants.
+- [`references/historical-provenance.md`](references/historical-provenance.md): Baseline lock ($v3.5.0 \to v3.11.0$) & 22 invariants.
 - [`references/verification-gates.md`](references/verification-gates.md): Verification sequence (`INV-AUDIT-ORDER`).
 - [`references/worker-availability-ledger.md`](references/worker-availability-ledger.md): Worker exhaustion & state table.
 - [`references/quota-velocity-acceleration.md`](references/quota-velocity-acceleration.md): Credit trading for velocity.
