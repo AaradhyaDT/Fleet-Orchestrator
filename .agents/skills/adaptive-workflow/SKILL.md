@@ -39,7 +39,7 @@ Protocols: [`references/fleet-command-architecture.md`](references/fleet-command
 
 | Tier | Workload | Backend | Cost | Latency / RAM |
 | :--- | :--- | :--- | :--- | :--- |
-| **Tier 0** | Routine: `audit.bat`, `sync.bat`, CP solver (`deterministic_solver_engine.py`), thesis compile, tests | Shell / Python | **$0.00** | **<20 ms** / **<10 MB** |
+| **Tier 0** | Routine: `audit.bat`, `sync.bat`, CP solver/replica (`cp-archive-harvester`), thesis, tests | Shell / Python | **$0.00** | **<20 ms** / **<10 MB** |
 | **Tier 1A** | Intent triage, time allocation, matrix routing | `fleet-master-3b` / `qwen-router` | **$0.00** | **30-50 ms** / **380MB–1.8GB** |
 | **Tier 1B** | Agent-Reflex self-healing & action prefetch | `fleet-master-3b` (port 1234) | **$0.00** | **<50 ms** / **~1.8 GB** |
 | **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (27 workers, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
