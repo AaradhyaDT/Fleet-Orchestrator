@@ -231,9 +231,11 @@ class WolframEngineDriver(SymbolicEngine):
 
         # Standard Windows install locations
         win_candidates = [
+            r"C:\Program Files\Wolfram Research\Wolfram Engine\15.0\wolframscript.exe",
             r"C:\Program Files\Wolfram Research\Wolfram Engine\wolframscript.exe",
             r"C:\Program Files\Wolfram Research\Wolfram Engine\14.0\wolframscript.exe",
             r"C:\Program Files\Wolfram Research\Wolfram Engine\13.3\wolframscript.exe",
+            r"C:\Program Files\Wolfram Research\Mathematica\15.0\wolframscript.exe",
             r"C:\Program Files\Wolfram Research\Mathematica\14.0\wolframscript.exe",
             r"C:\Program Files\Wolfram Research\Mathematica\13.3\wolframscript.exe",
         ]
