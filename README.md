@@ -15,6 +15,7 @@ For the local/private background-job bridge, start with [Background jobs](docs/b
   - **Claude Desktop CDP Bridge (`ClaudeDesktopProxy`)**: Heavy reasoning, architecture drafting, and adversarial QA review tier running against local Chromium CDP debug ports.
   - **Gemini Free-Tier (`GeminiFreeAdapter`)**: High-rate API execution for large-context summarization and extraction.
   - **Groq, LM Studio Local & Ollama**: Zero-latency local/cloud open weights for lightweight formatting, routing, extraction, and offline code generation. Local inference runs primarily on LM Studio (`localhost:1234/v1`) using Intel Arc iGPU / Vulkan acceleration.
+  - **Tiered Deterministic Symbolic Math Adapter (`SymbolicWorkerAdapter`, `symbolic_math_adapter.py`)**: Anti-fragile hybrid symbolic mathematics engine for robotics, control systems, and scientific workflows. Evaluates in-process via **SymPy** (Tier 1, ~60–350 ms) with automatic fallback escalation to **Wolfram Engine 15.0** (Tier 2, ~1.8–2.9 s) for nonlinear ODEs (KdV, Chazy), multi-loop Feynman integrals, and Cylindrical Algebraic Decomposition (CAD) quantifier elimination. Runs 100% on-device CPU at **$0.00 token cost**. See [Tiered Symbolic Math Guide](docs/TIERED_SYMBOLIC_MATH_ADAPTER.md).
 
 - **Multi-Account Credit Pooling ($N \times 200$) & Persistent Circular Round-Robin**:
   - Dynamically pools $N$ independent worker profiles into a shared execution mesh (e.g. 27 worker accounts = 5,400 monthly credits).
@@ -60,13 +61,18 @@ Fleet-Orchestrator/
 │       ├── gemini_free_adapter.py # Backward-compatible Gemini adapter
 │       ├── groq_adapter.py        # Groq LLM adapter
 │       ├── lmstudio_local_adapter.py# LM Studio local models adapter (fleet-master-3b/7b)
-│       └── ollama_local_adapter.py# Ollama local models adapter
+│       ├── ollama_local_adapter.py# Ollama local models adapter
+│       └── symbolic_adapter.py    # Deterministic Symbolic Math worker adapter (SymPy + Wolfram)
 │
 ├── .agents/skills/fleet-orchestrator/ # Specialized Antigravity skill for swarm control
 ├── sku-templates/                 # Declarative DAG job expansion templates (including iv_ii_course_study_pack.json)
 ├── orchestrator-state/            # Schemas, worker roles, and live status
 ├── worker-prompts/                # Specialized role system prompts (lead, scout, coder, qa)
 ├── tools/                         # CLI controllers and dashboards
+│   ├── symbolic_math_adapter.py   # Tiered Symbolic Math engine (SymPy Tier 1 + Wolfram Tier 2)
+│   ├── adversarial_math_battle.py # 6-Round adversarial baseline competition
+│   ├── grandmaster_math_gauntlet.py # 6-Challenge Ph.D.-tier adversarial gauntlet
+│   ├── end_of_the_world_battle.py # 6-Boss frontier symbolic gauntlet (Kerr, QFT, Chazy, ABC)
 │   ├── models.ps1 / models.bat    # Local model lifecycle manager (status, up, heavy, down, bench)
 │   ├── bench_local_router.py      # Quantitative local router benchmark
 │   ├── ci_secret_scanner.py       # Standalone secret leakage audit tool
