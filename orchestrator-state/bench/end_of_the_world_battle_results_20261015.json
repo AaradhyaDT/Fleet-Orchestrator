@@ -1,0 +1,56 @@
+[
+  {
+    "boss": 1,
+    "name": "Kerr Black Hole Frame Dragging & Extremal Limit",
+    "sympy_ms": 316.3533999995707,
+    "wolfram_ms": 1923.8311999997677,
+    "sympy_out": "1/(2*M)",
+    "wolfram_out": "1/(2*M$1403)",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "boss": 2,
+    "name": "QFT 2-Loop Master Feynman Box Integral",
+    "sympy_ms": 4092.3591000009765,
+    "wolfram_ms": 2275.2030000010564,
+    "sympy_out": "-Integral(log(x)**2*log(1 - x)/(x - 1), (x, 0, 1))",
+    "wolfram_out": "-1/180*Pi^4",
+    "winner": "Wolfram (Tier 2)"
+  },
+  {
+    "boss": 3,
+    "name": "Chazy III Non-Linear ODE with Movable Natural Boundary",
+    "sympy_ms": 967.3621000001731,
+    "wolfram_ms": 1874.2397999994864,
+    "sympy_out": "The given ODE -sqrt(6*y(x)*Derivative(y(x), (x, 2)) - 3*Derivative(y(x), (x, 3)))/3 + Derivative(y(x), x) cannot be solved by the factorable group method",
+    "wolfram_out": "DSolve[3*Derivative[1][y][x]^2 - 2*y[x]*Derivative[2][y][x] + Derivative[3][y][x",
+    "winner": "Wolfram (Tier 2)"
+  },
+  {
+    "boss": 4,
+    "name": "3D Arnold-Beltrami-Childress (ABC) Navier-Stokes Flow",
+    "sympy_ms": 61.36109999897599,
+    "wolfram_ms": 1830.9183999990637,
+    "sympy_out": "Beltrami: True, Irrotational: True",
+    "wolfram_out": "{True, True}",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "boss": 5,
+    "name": "3-Particle Interacting Selberg Matrix Integral",
+    "sympy_ms": 276.9136000006256,
+    "wolfram_ms": 7675.94740000095,
+    "sympy_out": "1/252000",
+    "wolfram_out": "1/252000",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "boss": 6,
+    "name": "Peres-Horodecki 2-Qubit PPT Entanglement Verification",
+    "sympy_ms": 4.848999999012449,
+    "wolfram_ms": 1835.215999999491,
+    "sympy_out": "",
+    "wolfram_out": "Equivalent[0 <= p <= 1 && (1 - p)/4 >= 0 && (1 - 3*p)/4 >= 0, 0 <= p <= 1/3]",
+    "winner": "Wolfram (Tier 2)"
+  }
+]

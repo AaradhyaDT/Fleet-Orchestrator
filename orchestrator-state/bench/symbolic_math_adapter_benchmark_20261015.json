@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-10-15T09:15:30+05:45",
+  "issue_anchor": "#172",
+  "pr_anchor": "#173",
+  "component": "tools/symbolic_math_adapter.py & client/adapters/symbolic_adapter.py",
+  "governance_tier": "EMPIRICALLY_VERIFIED",
+  "protocol": "ARCH-RFC-001 / adaptive-workflow",
+  "metrics": {
+    "total_token_cost": 0,
+    "total_credit_cost": 0.0,
+    "ram_footprint_mb": 12.4,
+    "test_suite_pass_rate": "100% (19/19 passed)",
+    "regression_suite_pass_rate": "100% (32/32 passed)"
+  },
+  "benchmarks": [
+    {
+      "test_name": "SPARK EKF Jacobian",
+      "operation": "jacobian",
+      "tier": "SymPy (Tier 1)",
+      "dimension": "5x6",
+      "variables": ["x", "y", "theta", "v", "b_ax", "b_ay"],
+      "latency_ms": 61.20,
+      "exact_derivation": "[['0', '0', '-v*sin(theta)', 'cos(theta)', '0', '0'], ['0', '0', 'v*cos(theta)', 'sin(theta)', '0', '0'], ['0', '0', '0', '0', '0', '0'], ['0', '0', '0', '0', '-1', '0'], ['0', '0', '0', '0', '0', '-1']]",
+      "status": "PASS"
+    },
+    {
+      "test_name": "Control Systems 2nd Order Laplace",
+      "operation": "laplace",
+      "tier": "SymPy (Tier 1)",
+      "input_domain": "exp(-zeta*omega_n*t)*sin(omega_d*t)",
+      "latency_ms": 176.87,
+      "output_h_s": "omega_d/(omega_d**2 + (omega_n*zeta + s)**2)",
+      "latex": "\\frac{\\omega_{d}}{\\omega_{d}^{2} + \\left(\\omega_{n} \\zeta + s\\right)^{2}}",
+      "status": "PASS"
+    },
+    {
+      "test_name": "ESP32 Firmware C-Code Kernel",
+      "operation": "c_code",
+      "tier": "SymPy (Tier 1)",
+      "expression": "0.5 * m * (vx**2 + vy**2 + vz**2) + m * g * z",
+      "latency_ms": 9.54,
+      "c_signature": "double kernel_eval(double g, double m, double vx, double vy, double vz, double z)",
+      "status": "PASS"
+    },
+    {
+      "test_name": "Fleet Worker Task A (Quotient Rule)",
+      "operation": "diff",
+      "tier": "SymPy (Tier 1)",
+      "worker": "SymbolicWorkerAdapter",
+      "latency_ms": 58.77,
+      "output": "2*x/((x + 1)*(x**2 + 1)) - log(x**2 + 1)/(x + 1)**2",
+      "status": "PASS"
+    },
+    {
+      "test_name": "Fleet Worker Task B (Linear System)",
+      "operation": "solve",
+      "tier": "SymPy (Tier 1)",
+      "worker": "SymbolicWorkerAdapter",
+      "latency_ms": 5.24,
+      "output": "[{x: 1, y: 1}]",
+      "status": "PASS"
+    },
+    {
+      "test_name": "Dynamic Fallback Escalation to Tier 2",
+      "operation": "diff",
+      "tier": "Wolfram (Tier 2)",
+      "fallback_triggered": true,
+      "escalation_reason": "Tier 1 timeout or unreduced transcendental term",
+      "output": "BesselJ[1, x] + x*BesselJ[0, x]",
+      "status": "PASS"
+    }
+  ]
+}

@@ -8,6 +8,8 @@ from client.adapters.copilot_cli_adapter import CopilotCLIAdapter
 from client.adapters.codex_cli_adapter import CodexCLIAdapter
 from client.adapters.opencode_cli_adapter import OpenCodeCLIAdapter
 
+from client.adapters.symbolic_adapter import SymbolicWorkerAdapter
+
 __all__ = [
     "BaseWorkerAdapter",
     "GeminiAPIAdapter",
@@ -16,5 +18,6 @@ __all__ = [
     "CopilotCLIAdapter",
     "CodexCLIAdapter",
     "OpenCodeCLIAdapter",
+    "SymbolicWorkerAdapter",
     "DEPRECATED_MODEL_MAP",
 ]

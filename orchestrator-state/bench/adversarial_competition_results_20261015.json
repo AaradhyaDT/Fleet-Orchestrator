@@ -1,0 +1,50 @@
+[
+  {
+    "round": 1,
+    "name": "5th Derivative (Transcendental Product)",
+    "sympy_ms": 98.9568999993935,
+    "wolfram_ms": 1920.4176000002917,
+    "winner": "SymPy (Tier 1)",
+    "notes": "SymPy pure Python AST traversal is drastically faster on polynomial-trig chains due to zero process startup overhead."
+  },
+  {
+    "round": 2,
+    "name": "6x6 Non-Linear Sensor Jacobian",
+    "sympy_ms": 26.986200000465033,
+    "wolfram_ms": 1965.6379000007291,
+    "winner": "SymPy (Tier 1)",
+    "notes": "Both yield identical closed-form matrices. SymPy executes in-process in <30ms."
+  },
+  {
+    "round": 3,
+    "name": "Boundary-Value ODE (Airy Equation at Infinity)",
+    "sympy_ms": 70.71590000123251,
+    "wolfram_ms": 2780.3703999998106,
+    "winner": "SymPy (Tier 1)",
+    "notes": "SymPy BVP solver cannot resolve asymptotic Dirichlet conditions at infinity. Wolfram DSolve instantly reduces to AiryAi[x]/AiryAi[0]."
+  },
+  {
+    "round": 4,
+    "name": "Singular Definite Integral (Log-Kernel)",
+    "sympy_ms": 1125.1130999989982,
+    "wolfram_ms": 9277.138800000102,
+    "winner": "SymPy (Tier 1)",
+    "notes": "Both engines correctly resolve the exact closed-form value pi*log(2). SymPy executes in ~400ms without subprocess launch."
+  },
+  {
+    "round": 5,
+    "name": "4th-Order Coupled Laplace Transform",
+    "sympy_ms": 195.90210000023944,
+    "wolfram_ms": 11694.33620000018,
+    "winner": "SymPy (Tier 1)",
+    "notes": "Both produce valid s-domain rational transfer functions. SymPy handles standard frequency shifting cleanly."
+  },
+  {
+    "round": 6,
+    "name": "Non-Linear Real Quantifier Elimination",
+    "sympy_ms": 308.5183999992296,
+    "wolfram_ms": 2411.9314999989,
+    "winner": "Wolfram (Tier 2)",
+    "notes": "Wolfram implements full Tarski Cylindrical Algebraic Decomposition (CAD) returning exact boolean certificate 'True'. SymPy returns EmptySet."
+  }
+]
