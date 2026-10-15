@@ -1,0 +1,56 @@
+[
+  {
+    "challenge": 1,
+    "name": "General Relativity: Schwarzschild Ricci Invariant",
+    "sympy_ms": 383.5942999994586,
+    "wolfram_ms": 1920.7674999997835,
+    "sympy_out": "0",
+    "wolfram_out": "0",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "challenge": 2,
+    "name": "Motzkin Polynomial Non-Negativity (Hilbert's 17th)",
+    "sympy_ms": 82.81060000081197,
+    "wolfram_ms": 1942.038599998341,
+    "sympy_out": "True",
+    "wolfram_out": "True",
+    "winner": "Wolfram (Tier 2)"
+  },
+  {
+    "challenge": 3,
+    "name": "Stiff 4x4 Symbolic Matrix Exponential exp(A*t)",
+    "sympy_ms": 148.3355999989726,
+    "wolfram_ms": 2251.6501000009157,
+    "sympy_out": "Matrix([[1, t, -sqrt(g)*l*m*sqrt(M + m)*exp(sqrt(g)*t*sqrt(M + m)/(sqrt(M)*sqrt(",
+    "wolfram_out": "{{1, t, -1/2*((-1 + E^((Sqrt[g]*Sqrt[m + M]*t)/(Sqrt[l]*Sqrt[M])))^2*l*m)/(E^((S",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "challenge": 4,
+    "name": "Parametric Multi-Branch Contour Integral",
+    "sympy_ms": 88.94269999836979,
+    "wolfram_ms": 4748.649300001489,
+    "sympy_out": "Piecewise((pi/(b*sin(pi*a/b)), a/b < 1), (Integral(x**(a - 1)/(x**b + 1), (x, 0,",
+    "wolfram_out": "(Pi*Csc[(a*Pi)/b])/b",
+    "winner": "SymPy (Tier 1)"
+  },
+  {
+    "challenge": 5,
+    "name": "KdV Soliton Non-Linear Differential Equation",
+    "sympy_ms": 189.67089999932796,
+    "wolfram_ms": 2939.5344000004116,
+    "sympy_out": "The given ODE Derivative(u(xi), xi) - Derivative(u(xi), (xi, 3))/(c - 6*u(xi)) cannot be solved by the factorable group method",
+    "wolfram_out": "Solve[(4*EllipticF[ArcSin[Sqrt[(Root[-C[2] - 2*C[1]*#1 - c*#1^2 + 2*#1^3 & , 3] ",
+    "winner": "Wolfram (Tier 2)"
+  },
+  {
+    "challenge": 6,
+    "name": "Asymptotic Transseries at Irregular Singularity",
+    "sympy_ms": 72.09340000008524,
+    "wolfram_ms": 2067.484199998944,
+    "sympy_out": "O(x**6)",
+    "wolfram_out": "E^SeriesData[x, 0, {-1, -1}, -2, 7, 1]*SeriesData[x, 0, {Sqrt[Pi/2]*Sqrt[x^(-1)]",
+    "winner": "SymPy (Tier 1)"
+  }
+]
