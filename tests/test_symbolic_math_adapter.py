@@ -111,6 +111,14 @@ def test_wolfram_driver_availability() -> None:
     assert driver.is_available() is False
 
 
+def test_wolfram_driver_live_execution() -> None:
+    driver = WolframEngineDriver()
+    if not driver.is_available():
+        pytest.skip("Wolfram Engine is not installed.")
+    res, latex = driver.differentiate("x^3", "x", 1, 15.0)
+    assert "3*x^2" in res
+
+
 def test_wolfram_driver_execution_mocked() -> None:
     driver = WolframEngineDriver(binary_path="mock_wolfram.exe")
     with patch.object(driver, "is_available", return_value=True):
