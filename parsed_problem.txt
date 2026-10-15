@@ -1,0 +1,31 @@
+The Wizard's Magical Calculator 🧙‍♂️
+In the magical kingdom of Numberia, a young wizard named Alex has discovered an ancient calculator that can perform only one spell:
+adding two big numbers
+.
+One day, the kingdom's royal mathematician gives Alex several number puzzles to solve. For every puzzle, Alex receives two integers, and the calculator reveals their sum.
+However, the wizard is still learning programming and needs your help!
+Your task is to write a program that reads the number of test cases
+T
+. For each test case, you are given two integers
+A
+and
+B
+. Calculate and print their sum.
+Help Alex complete all the puzzles and become the greatest number wizard in Numberia!
+Example
+If the given numbers are 5 and 7, their sum is 12.
+Hmm, what's different in this problem? Hint: Look constraints and datatype you can store.
+Input Format
+The first line contains an integer
+T
+, the number of test cases.
+Each of the next
+T
+lines contains two space-separated integers
+A
+and
+B
+.
+Constraints
+Output Format
+For each test case, print a single integer representing the sum of A and B on a new line.

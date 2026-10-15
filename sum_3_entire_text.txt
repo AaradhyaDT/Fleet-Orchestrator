@@ -1,0 +1,66 @@
+|
+Prepare
+Certify
+Compete
+|
+Switch to..
+All ContestsXtreme Shadows 2026Sum of 2 Numbers 3
+Sum of 2 Numbers 3
+CONTEST ENDS IN
+05:29:28
+Problem
+Submissions
+Leaderboard
+Discussions
+
+You know the deal, but there's a twist again.
+
+Input Format
+
+The first line contains an integer T, the number of test cases.
+Each of the next T lines contains two space-separated numbers A and B.
+
+Constraints
+
+A and B have at most  digits
+
+Output Format
+
+print each sum without leading zeros, one per line.
+
+Change Theme
+Language
+Python 3
+More
+1
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+Line: 1 Col: 70
+Submit Code
+Run Code
+Upload Code as File
+Test against custom input
+
+Author
+
+clerisy47
+
+Max Score
+
+30
+
+Submitted By
+
+21
+NEED HELP?
+View discussions
+View top submissions
+
+RATE THIS CHALLENGE
+
+MORE DETAILS
+Download problem statement
+Download sample test cases
+Suggest Edits
+Share on X
+Share on LinkedIn
+BlogScoringEnvironmentFAQAbout UsHelpdeskCareersTerms Of ServicePrivacy Policy

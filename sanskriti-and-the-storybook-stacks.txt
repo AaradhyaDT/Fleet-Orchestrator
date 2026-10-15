@@ -1,0 +1,33 @@
+Sanskriti has arranged three stacks of storybooks in a row on her reading desk. The first stack has a books, the second has b books, and the third has c books, with a < b < c.
+
+She wants to take some books from the third stack (at least one, but no more than c) and place each taken book on top of either the first or the second stack. All the taken books may go onto the same stack.
+
+Determine whether Sanskriti can make all three stacks contain the same number of books using this operation.
+
+Input Format
+
+The first line contains a single integer t, the number of test cases. Each of the next t lines contains three integers a, b and c, the number of books in the first, second and third stack.
+
+Constraints
+
+1 ≤ t ≤ 10^4 1 ≤ a, b, c ≤ 10^8 a < b < c
+
+Output Format
+
+For each test case, print YES if Sanskriti can make all three stacks equal, otherwise print NO.
+
+Sample Input 0
+
+4
+3 5 10
+12 20 30
+3 5 7
+1 5 6
+
+
+Sample Output 0
+
+YES
+NO
+YES
+NO

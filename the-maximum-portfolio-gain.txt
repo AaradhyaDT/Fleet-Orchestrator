@@ -1,0 +1,45 @@
+You are a Binod Chaudhari tracking the daily percentage change of a specific stock over a period of  days. A positive value indicates a profit on that day, while a negative value indicates a loss.Your goal is to identify the contiguous sequence of days that resulted in the highest possible cumulative gain.
+
+Input Format
+
+The first line contains an integer .The second line contains  space-separated integers representing the array .
+
+Constraints
+
+ 
+
+Output Format
+
+Print a single integer: the maximum subarray sum.
+
+Sample Input 0
+
+1
+5
+
+
+Sample Output 0
+
+5
+
+
+Sample Input 1
+
+1
+-7
+
+
+Sample Output 1
+
+-7
+
+
+Sample Input 2
+
+9
+-2 1 -3 4 -1 2 1 -5 4
+
+
+Sample Output 2
+
+6

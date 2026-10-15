@@ -77,6 +77,7 @@ class AdaptiveDecisionEngine:
         (r"\b(gap\s*detect\w*|capability\s*gap\w*|capability\s*audit|self\s*upgrade\s*scan)\b", r"python tools/capability_gap_detector.py", "gap_detect"),
         (r"\b(retrain\s*pipeline|retrain\s*slm|closed\s*loop\s*retrain|evaluate\s*routing\s*accuracy)\b", r"python tools/retrain_pipeline.py", "retrain"),
         (r"\b(harvest\s*trajector\w*|harvest\s*agent\s*trajector\w*)\b", r"python tools/harvest_agent_trajectories.py", "harvest_trajectories"),
+        (r"\b(cp\s*engine|solve\s*cp|deterministic\s*solver|cp\s*solver|xtreme\s*solver)\b", r"python F:\Aaradhya-Dev-Tamrakar\Competitive-Programming\scripts\deterministic_solver_engine.py", "cp_solver"),
     ]
 
     MATRIX_POLICY = {

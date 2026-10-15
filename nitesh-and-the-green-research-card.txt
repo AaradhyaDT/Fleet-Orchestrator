@@ -1,0 +1,41 @@
+Nitesh, a researcher, plays a game against his rival Bob with a deck of  white cards and one green card. The green card is initially at position  from the top and has the number  written on it. Both players know its position.
+
+Nitesh moves first, and they alternate turns. In each turn, the player:
+
+Takes  cards from the top (all of them if fewer than  remain), discards  or  of them, and puts the rest at the bottom in any order. If Bob discards the green card, the game ends with score . If Nitesh discards it, the game ends with a score equal to the number on it. If Nitesh takes the green card and returns it to the deck, he announces its new position and increases its number by .
+
+Nitesh maximizes the score and Bob minimizes it. Find the final score if both play optimally.
+
+Input Format
+
+The first line contains an integer , the number of test cases.
+
+Each of the next  lines contains three integers ,  and .
+
+Constraints
+
+  
+
+Output Format
+
+For each test case, if the game never ends, print Infinity. Otherwise, print a single integer, the final score.
+
+Sample Input 0
+
+6
+3 2 1
+5 3 4
+10 3 1
+7 3 7
+817247666 7237 327476688
+610723117 332458760 292738094
+
+
+Sample Output 0
+
+2
+0
+2
+4
+3470
+278264358

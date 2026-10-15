@@ -1,0 +1,44 @@
+Swikrit is busy delivering halloumi cheese all over the world. He has stored the halloumis in  boxes, and the -th box has a number  written on it.
+
+He wants to arrange the boxes in non-decreasing order of their numbers. However, his machine works strangely: it can only reverse a subarray of boxes of length at most .
+
+Reversing a subarray means choosing indices  and changing the array to . The length of this subarray is .
+
+Determine whether it is possible to sort the boxes using any number of reverses.
+
+Input Format
+
+The first line contains an integer , the number of test cases.
+
+Each test case consists of two lines:
+
+The first line contains two integers  and . The second line contains  integers .
+
+Constraints
+
+Output Format
+
+For each test case, print YES if the array can be sorted in non-decreasing order, or NO otherwise.
+
+Sample Input 0
+
+5
+3 2
+1 2 3
+3 1
+9 9 9
+4 4
+6 4 2 1
+4 3
+10 3 830 14
+2 1
+3 1
+
+
+Sample Output 0
+
+YES
+YES
+YES
+YES
+NO

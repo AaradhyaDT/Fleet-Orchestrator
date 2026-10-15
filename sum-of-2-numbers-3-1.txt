@@ -1,0 +1,14 @@
+You know the deal, but there's a twist again.
+
+Input Format
+
+The first line contains an integer T, the number of test cases.
+Each of the next T lines contains two space-separated numbers A and B.
+
+Constraints
+
+A and B have at most  digits
+
+Output Format
+
+print each sum without leading zeros, one per line.

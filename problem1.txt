@@ -1,6 +1,6 @@
 The Wizard's Magical Calculator 🧙‍♂️
 
-In the magical kingdom of Numberia, a young wizard named Alex has discovered an ancient calculator that can perform only one spell: adding two numbers.
+In the magical kingdom of Numberia, a young wizard named Alex has discovered an ancient calculator that can perform only one spell: adding two big numbers.
 
 One day, the kingdom's royal mathematician gives Alex several number puzzles to solve. For every puzzle, Alex receives two integers, and the calculator reveals their sum.
 
@@ -14,6 +14,8 @@ Example
 
 If the given numbers are 5 and 7, their sum is 12.
 
+Hmm, what's different in this problem? Hint: Look constraints and datatype you can store.
+
 Input Format
 
 The first line contains an integer T, the number of test cases.
@@ -24,24 +26,3 @@ Constraints
 Output Format
 
 For each test case, print a single integer representing the sum of A and B on a new line.
-
-Sample Input 0
-
-1
-5 7
-
-
-Sample Output 0
-
-12
-
-
-Sample Input 1
-
-1
-0 0
-
-
-Sample Output 1
-
-0
