@@ -63,10 +63,23 @@ async def post_submission(contest_slug: str, challenge_slug: str, code: str, lan
         return await resp.text();
     }})()
     """
-    res_text = await evaluate_js(expr)
-    res_json = json.loads(res_text)
-    sub_id = res_json['model']['id']
-    print(f"Submitted {challenge_slug} ({language}). Submission ID: {sub_id}")
+    for post_attempt in range(5):
+        res_text = await evaluate_js(expr)
+        try:
+            res_json = json.loads(res_text)
+            if isinstance(res_json, dict) and 'model' in res_json and isinstance(res_json['model'], dict):
+                sub_id = res_json['model']['id']
+                print(f"Submitted {challenge_slug} ({language}). Submission ID: {sub_id}")
+                break
+            else:
+                print(f"Submission not accepted (attempt {post_attempt+1}): {res_json}. Waiting 20s...")
+                await asyncio.sleep(20)
+        except Exception as e:
+            print(f"Error parsing response: {e}. Waiting 20s...")
+            await asyncio.sleep(20)
+    else:
+        print("All submission attempts failed.")
+        return {}
     
     # Poll for result
     for attempt in range(25):
@@ -76,6 +89,6 @@ async def post_submission(contest_slug: str, challenge_slug: str, code: str, lan
         status = m.get('status')
         score = m.get('score')
         print(f"[{attempt+1}] Status: {status} | Score: {score}")
-        if status != 'Processing':
+        if status not in ['Processing', 'Queued']:
             return m
     return m

@@ -83,6 +83,7 @@ secrets/
 *credentials*.json
 *token*.json
 *secret*.json
+candidate_profile*.json
 *.pem
 *.key
 *.pfx
