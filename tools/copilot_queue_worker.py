@@ -1479,10 +1479,31 @@ async def main() -> None:
         default=None,
         help="Exit after being idle with empty queue for specified seconds",
     )
+    parser.add_argument(
+        "--idle-timeout-minutes",
+        type=float,
+        default=10.0,
+        help="Exit after being idle with empty queue for specified minutes (default: 10.0)",
+    )
+    parser.add_argument(
+        "--no-idle-timeout",
+        action="store_true",
+        help="Disable auto-exit on idle (run indefinitely)",
+    )
     parser.add_argument("--task-id", type=str, default=None, help="Target a specific pending task ID")
     parser.add_argument("--timeout", type=float, default=300.0, help="Timeout in seconds for targeted one-shot execution (default: 300.0)")
 
     args = parser.parse_args()
+
+    # Determine resolved idle timeout: explicit --idle-timeout overrides, --no-idle-timeout disables
+    if args.no_idle_timeout:
+        resolved_idle_timeout: float | None = None
+    elif args.idle_timeout is not None:
+        resolved_idle_timeout = args.idle_timeout
+    elif args.idle_timeout_minutes is not None:
+        resolved_idle_timeout = args.idle_timeout_minutes * 60.0
+    else:
+        resolved_idle_timeout = None
 
     worker = CopilotQueueWorker(
         state_dir=args.state_dir,
@@ -1508,8 +1529,9 @@ async def main() -> None:
         target_task_id=args.task_id,
         timeout=args.timeout,
         exit_when_empty=args.exit_when_empty,
-        idle_timeout=args.idle_timeout,
+        idle_timeout=resolved_idle_timeout,
     )
+
 
 
 if __name__ == "__main__":

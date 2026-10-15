@@ -34,15 +34,145 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # Root directory anchoring
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
 STATE_DIR = ROOT / "orchestrator-state"
 RUN_LOG = STATE_DIR / "azmuth_run.json"
 PAUSE_FILE = STATE_DIR / "azmuth.pause"
+LOCK_FILE = STATE_DIR / "azmuth.pid.lock"
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] [Azmuth] %(message)s",
 )
 logger = logging.getLogger("azmuth_daemon")
+
+
+# --- Process Liveness & Singleton Lock ---
+
+def is_pid_alive(pid: int | None) -> bool:
+    """Checks whether an OS process ID is currently running."""
+    if not pid or pid <= 0:
+        return False
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+            handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+            if handle:
+                exit_code = ctypes.c_ulong()
+                kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code))
+                kernel32.CloseHandle(handle)
+                STILL_ACTIVE = 259
+                return exit_code.value == STILL_ACTIVE
+            return False
+        except Exception:
+            return False
+    else:
+        try:
+            os.kill(pid, 0)
+            return True
+        except (OSError, ProcessLookupError):
+            return False
+
+
+class AzmuthSingletonLock:
+    """Singleton process lock for Azmuth Daemon using atomic file descriptors."""
+
+    def __init__(self, lock_path: Path = LOCK_FILE):
+        self.lock_path = lock_path
+        self._fd: int | None = None
+
+    def acquire(self) -> bool:
+        """Attempt to acquire exclusive singleton lock. Returns True if acquired, False if another instance is active."""
+        self.lock_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if self.lock_path.exists():
+            try:
+                content = self.lock_path.read_text(encoding="utf-8").strip()
+                if content:
+                    existing_pid = int(content)
+                    if existing_pid != os.getpid() and is_pid_alive(existing_pid):
+                        logger.warning(
+                            f"Another active Azmuth Daemon instance (PID {existing_pid}) is already running. "
+                            "Aborting spawn to prevent CPU contention."
+                        )
+                        return False
+            except Exception as e:
+                logger.debug(f"Could not inspect existing lockfile: {e}")
+
+        try:
+            if sys.platform == "win32":
+                import msvcrt
+                self._file_obj = open(self.lock_path, "a+b")
+                self._file_obj.seek(0)
+                try:
+                    # Lock first byte non-blocking
+                    msvcrt.locking(self._file_obj.fileno(), msvcrt.LK_NBLCK, 1)
+                except OSError:
+                    self._file_obj.close()
+                    self._file_obj = None
+                    return False
+                self._file_obj.seek(0)
+                self._file_obj.truncate()
+                self._file_obj.write(f"{os.getpid()}\n".encode("utf-8"))
+                self._file_obj.flush()
+                return True
+            else:
+                import fcntl
+                self._file_obj = open(self.lock_path, "a+")
+                fcntl.flock(self._file_obj.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                self._file_obj.seek(0)
+                self._file_obj.truncate()
+                self._file_obj.write(f"{os.getpid()}\n")
+                self._file_obj.flush()
+                return True
+        except Exception as e:
+            logger.debug(f"Lock acquisition failed: {e}")
+            if hasattr(self, "_file_obj") and self._file_obj:
+                try:
+                    self._file_obj.close()
+                except Exception:
+                    pass
+                self._file_obj = None
+            return False
+
+    def get_locked_pid(self) -> int | None:
+        """Returns the PID recorded by this lock instance."""
+        return os.getpid() if hasattr(self, "_file_obj") and self._file_obj else None
+
+    def release(self) -> None:
+        """Release singleton lock."""
+        if hasattr(self, "_file_obj") and self._file_obj:
+            try:
+                if sys.platform == "win32":
+                    import msvcrt
+                    self._file_obj.seek(0)
+                    msvcrt.locking(self._file_obj.fileno(), msvcrt.LK_UNLCK, 1)
+                else:
+                    import fcntl
+                    fcntl.flock(self._file_obj.fileno(), fcntl.LOCK_UN)
+                self._file_obj.close()
+            except Exception:
+                pass
+            self._file_obj = None
+
+        if self.lock_path.exists():
+            try:
+                self.lock_path.unlink(missing_ok=True)
+            except Exception:
+                pass
+
+
+    def __enter__(self) -> AzmuthSingletonLock:
+        if not self.acquire():
+            raise RuntimeError("Another Azmuth Daemon instance is already active.")
+        return self
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        self.release()
+
 
 
 # --- Windows Idle Perception (Zero-Dependency Win32 API) ---
@@ -358,15 +488,20 @@ def run_daemon_loop(
     use_ai: bool = True,
 ) -> None:
     """Run Azmuth in continuous low-resource background mode with pause support and idle burst stealing."""
-    logger.info(f"Azmuth Daemon started in persistent background mode (interval: {interval_hours}h).")
-    logger.info(f"Idle Burst Stealing enabled (triggers when user idle >= {burst_idle_minutes}m).")
-
-    last_cycle_time = 0.0
-    last_burst_time = 0.0
-    cycle_interval_sec = interval_hours * 3600.0
-    burst_cooldown_sec = 1800.0  # Min 30m between opportunistic idle bursts
+    lock = AzmuthSingletonLock()
+    if not lock.acquire():
+        logger.warning("Existing active Azmuth Daemon instance detected. Exiting singleton run.")
+        return
 
     try:
+        logger.info(f"Azmuth Daemon started in persistent background mode (interval: {interval_hours}h, PID {os.getpid()}).")
+        logger.info(f"Idle Burst Stealing enabled (triggers when user idle >= {burst_idle_minutes}m).")
+
+        last_cycle_time = 0.0
+        last_burst_time = 0.0
+        cycle_interval_sec = interval_hours * 3600.0
+        burst_cooldown_sec = 1800.0  # Min 30m between opportunistic idle bursts
+
         while True:
             # Check pause
             if is_paused():
@@ -391,6 +526,9 @@ def run_daemon_loop(
 
     except KeyboardInterrupt:
         logger.info("Azmuth Daemon stopped cleanly by user interrupt.")
+    finally:
+        lock.release()
+
 
 
 def main() -> int:

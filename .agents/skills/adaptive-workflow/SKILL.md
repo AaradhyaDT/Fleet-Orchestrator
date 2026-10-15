@@ -117,15 +117,15 @@ Envelope reference: [`references/dynamic-flight-envelope.md`](references/dynamic
 
 ## 7. Supporting References & Verification
 
-- [`references/token-budget-and-scalability-governance.md`](references/token-budget-and-scalability-governance.md): Token governance, $O(1)$ scaling & live grounding.
-- [`references/skill-matrix.md`](references/skill-matrix.md): 9-archetype routing & fellowship matrix.
-- [`references/installed-work-tools-catalog.md`](references/installed-work-tools-catalog.md): Workstation software catalog.
+- [`references/token-budget-and-scalability-governance.md`](references/token-budget-and-scalability-governance.md): Token governance & $O(1)$ scaling.
+- [`references/skill-matrix.md`](references/skill-matrix.md): 9-archetype routing matrix.
+- [`references/installed-work-tools-catalog.md`](references/installed-work-tools-catalog.md): Workstation tools catalog.
 - [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md): Agent-Reflex & Tool-Speculator.
-- [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md): Dual-model (3B/7B), A100 training, Drive retrieval.
+- [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md): Dual-model (3B/7B), A100 training.
 - [`references/historical-provenance.md`](references/historical-provenance.md): Baseline lock ($v3.5.0 \to v3.10.0$) & 21 invariants.
 - [`references/verification-gates.md`](references/verification-gates.md): Verification sequence (`INV-AUDIT-ORDER`).
-- [`references/worker-availability-ledger.md`](references/worker-availability-ledger.md): Worker exhaustion & state mapping table.
+- [`references/worker-availability-ledger.md`](references/worker-availability-ledger.md): Worker exhaustion & state table.
 - [`references/quota-velocity-acceleration.md`](references/quota-velocity-acceleration.md): Credit trading for velocity.
 - [`references/transactional-recovery.md`](references/transactional-recovery.md): Fencing tokens & projection restore.
-- [`references/ecosystem-repos.md`](references/ecosystem-repos.md): Catalog of 28 registered tool modules.
+- [`references/ecosystem-repos.md`](references/ecosystem-repos.md): Catalog of 28 registered tools.
 - [`examples/routing-scenarios.md`](examples/routing-scenarios.md): Walkthroughs across domain archetypes.
