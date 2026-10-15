@@ -11,3 +11,4 @@ google-genai>=2.25.0
 psutil>=5.9.0
 python-dotenv>=1.0.0
 websockets>=12.0
+sympy>=1.12.0
