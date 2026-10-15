@@ -37,3 +37,39 @@ def test_cli_execution_via_subprocess():
     ], capture_output=True, text=True, cwd=str(ROOT))
     assert res.returncode == 0
     assert '"is_fast_path": true' in res.stdout
+
+
+def test_cli_explain_flag():
+    res = subprocess.run([
+        sys.executable,
+        str(ROOT / "tools" / "adaptive_engine.py"),
+        "Scaffold IOE notes for digital signal processing",
+        "--explain",
+    ], capture_output=True, text=True, cwd=str(ROOT))
+    assert res.returncode == 0
+    assert "EXPLAINABLE ROUTING TRACE" in res.stdout
+    assert "Prompt Intent" in res.stdout
+    assert "Classification" in res.stdout
+
+    # Verify decision was logged
+    log_file = ROOT / "orchestrator-state" / "routing_decisions.jsonl"
+    assert log_file.exists()
+    with open(log_file, "r", encoding="utf-8") as f:
+        lines = [line.strip() for line in f if line.strip()]
+    assert len(lines) > 0
+
+
+def test_cli_json_explain():
+    import json
+    res = subprocess.run([
+        sys.executable,
+        str(ROOT / "tools" / "adaptive_engine.py"),
+        "Design PCB in KiCAD with impedance matching",
+        "--json",
+        "--explain",
+    ], capture_output=True, text=True, cwd=str(ROOT))
+    assert res.returncode == 0
+    data = json.loads(res.stdout)
+    assert "reasoning_trace" in data
+    assert "EXPLAINABLE ROUTING TRACE" in data["reasoning_trace"]
+

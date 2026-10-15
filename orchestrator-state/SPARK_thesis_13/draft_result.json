@@ -1,0 +1,152 @@
+{
+  "success": true,
+  "summary": "Completed draft via Copilot CLI (autopilot)",
+  "result_text": "\u25cf skill(edge-ai-model-forge)\n\n\u25cf List directory .\n  \u2514 17 files found\n\n\u25cf Read delta_review.md\n  \u2514 20 lines read\n\n\u25cf Read review.md\n  \u2514 43 lines read\n\n\u25cf Read scout_implementation_frozen.md\n  \u2514 102 lines read\n\n\u25cf Read scout_tracker_frozen.md\n  \u2514 41 lines read\n\n\u25cf Edit\n  \u2514 Create draft.md\n\n\u25cf Read draft.md\n  \u2514 65 lines read\n\n\u2717 Verify draft length and links (shell)\n  \u2502 $p='F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\orchestrator-state\\SPARK_thesis_13\\draft.md';\n  \u2502 $t=Get-Content -Raw -LiteralPath $p; [pscustomobject]@{Path=$p;\n  \u2502 Words=([regex]::Matches($t,'\\b[\\w\u2019.-]+\\b')).Count; Bytes=(Get-Item -LiteralPath $p).Length;\n  \u2502 GroundedLinks=($t.Contains('[[SPARK]]') -and $t.Contains('[[Human fall detection]]'))} |\n  \u2502 Format-List\n  \u2514 ParserError:\n    Line |\n    2 |  . scustomobject]@{Path=$p; Words=([regex]::Matches($t,'\\b[\\w'.-]+\\b')). .\n    |                                                                 ~\n    | Missing expression after unary operator '-'.\n    Failed with exit code 1\n\n\u25cf Verify draft word limit and required links (shell)\n  \u2502 $p='F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\orchestrator-state\\SPARK_thesis_13\\draft.md';\n  \u2502 $t=Get-Content -Raw -LiteralPath $p; $w=($t -split '\\s+' | Where-Object { $_ }).Count; if\n  \u2502 (-not (Test-Path -LiteralPath $p)) { throw 'Draft not found' }; if ($w -gt 3000) { throw\n  \u2502 \"Draft exceeds 3000 words ($w)\" }; Write-Output \"Draft verified: $w whitespace-delimited\n  \u2502 words, $((Get-Item -LiteralPath $p).Length) bytes\"; if ($t.Contains('[[SPARK]]') -and \u2026\n  \u2514 4 lines\u2026",
+  "model_used": "gpt-6-luna",
+  "tokens_used": 248190,
+  "credits_used": 0.96,
+  "usage_data": {
+    "totalPremiumRequestCost": 1,
+    "totalUserRequests": 1,
+    "totalNanoAiu": 960555000,
+    "aiCreditsStatus": "complete",
+    "tokenDetails": {
+      "input": {
+        "tokenCount": 27
+      },
+      "cache_read": {
+        "tokenCount": 242260
+      },
+      "cache_write": {
+        "tokenCount": 33830
+      },
+      "output": {
+        "tokenCount": 5903
+      }
+    },
+    "totalApiDurationMs": 62477,
+    "sessionStartTime": "2026-10-14T03:06:01.249Z",
+    "codeChanges": {
+      "linesAdded": 66,
+      "linesRemoved": 0,
+      "filesModifiedCount": 1,
+      "filesModified": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\orchestrator-state\\SPARK_thesis_13\\draft.md"
+      ]
+    },
+    "modelMetrics": {
+      "gpt-6-luna": {
+        "requests": {
+          "count": 9,
+          "cost": 1
+        },
+        "usage": {
+          "inputTokens": 276117,
+          "outputTokens": 5903,
+          "cacheReadTokens": 242260,
+          "cacheWriteTokens": 33830,
+          "reasoningTokens": 1555
+        },
+        "cacheExpiresAt": "2026-10-14T03:37:12.459Z",
+        "totalNanoAiu": 960555000,
+        "aiCreditsStatus": "complete",
+        "tokenDetails": {
+          "input": {
+            "tokenCount": 27
+          },
+          "cache_read": {
+            "tokenCount": 242260
+          },
+          "cache_write": {
+            "tokenCount": 33830
+          },
+          "output": {
+            "tokenCount": 5903
+          }
+        }
+      }
+    },
+    "agentMetrics": {
+      "main": {
+        "totalApiDurationMs": 62477,
+        "totalNanoAiu": 960555000,
+        "modelMetrics": {
+          "gpt-6-luna": {
+            "requests": {
+              "count": 9,
+              "cost": 1
+            },
+            "usage": {
+              "inputTokens": 276117,
+              "outputTokens": 5903,
+              "cacheReadTokens": 242260,
+              "cacheWriteTokens": 33830,
+              "reasoningTokens": 1555
+            },
+            "totalNanoAiu": 960555000,
+            "tokenDetails": {
+              "input": {
+                "tokenCount": 27
+              },
+              "cache_read": {
+                "tokenCount": 242260
+              },
+              "cache_write": {
+                "tokenCount": 33830
+              },
+              "output": {
+                "tokenCount": 5903
+              }
+            }
+          }
+        }
+      }
+    },
+    "providerModelMetrics": [
+      {
+        "provider": {
+          "id": "copilot",
+          "label": "GitHub Copilot",
+          "kind": "copilot"
+        },
+        "modelId": "gpt-6-luna",
+        "metrics": {
+          "requests": {
+            "count": 9,
+            "cost": 1
+          },
+          "usage": {
+            "inputTokens": 276117,
+            "outputTokens": 5903,
+            "cacheReadTokens": 242260,
+            "cacheWriteTokens": 33830,
+            "reasoningTokens": 1555
+          },
+          "totalNanoAiu": 960555000,
+          "aiCreditsStatus": "complete",
+          "tokenDetails": {
+            "input": {
+              "tokenCount": 27
+            },
+            "cache_read": {
+              "tokenCount": 242260
+            },
+            "cache_write": {
+              "tokenCount": 33830
+            },
+            "output": {
+              "tokenCount": 5903
+            }
+          }
+        },
+        "modelDisplayName": "GPT-6 Luna"
+      }
+    ],
+    "currentModel": "gpt-6-luna",
+    "lastCallInputTokens": 43415,
+    "lastCallOutputTokens": 109
+  },
+  "quota_exhausted": false,
+  "rate_limited_429": false,
+  "error": null
+}

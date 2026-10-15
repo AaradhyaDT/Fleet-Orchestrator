@@ -1,0 +1,152 @@
+{
+  "success": true,
+  "summary": "Completed format via Copilot CLI (autopilot)",
+  "result_text": "\u25cf List directory .\n  \u2514 23 files found\n\n\u25cf Read identity_review.md\n  \u2514 L1:250 (7 lines read)\n\n\u25cf Read draft.md\n  \u2514 L1:250 (65 lines read)\n\n\u25cf Read review.md\n  \u2514 L1:250 (43 lines read)\n\n\u25cf Create formatted_snippets.tex +29",
+  "model_used": "mai-code-1.1-flash",
+  "tokens_used": 68934,
+  "credits_used": 1.23,
+  "usage_data": {
+    "totalPremiumRequestCost": 1,
+    "totalUserRequests": 1,
+    "totalNanoAiu": 1233436000,
+    "aiCreditsStatus": "complete",
+    "tokenDetails": {
+      "input": {
+        "tokenCount": 23413
+      },
+      "cache_read": {
+        "tokenCount": 39808
+      },
+      "cache_write": {
+        "tokenCount": 0
+      },
+      "output": {
+        "tokenCount": 5713
+      }
+    },
+    "totalApiDurationMs": 27494,
+    "sessionStartTime": "2026-10-14T03:08:13.882Z",
+    "codeChanges": {
+      "linesAdded": 29,
+      "linesRemoved": 0,
+      "filesModifiedCount": 1,
+      "filesModified": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\orchestrator-state\\SPARK_thesis_13\\formatted_snippets.tex"
+      ]
+    },
+    "modelMetrics": {
+      "mai-code-1.1-flash": {
+        "requests": {
+          "count": 3,
+          "cost": 1
+        },
+        "usage": {
+          "inputTokens": 63221,
+          "outputTokens": 5713,
+          "cacheReadTokens": 39808,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 3584
+        },
+        "cacheExpiresAt": "2026-10-14T03:38:44.919Z",
+        "totalNanoAiu": 1233436000,
+        "aiCreditsStatus": "complete",
+        "tokenDetails": {
+          "input": {
+            "tokenCount": 23413
+          },
+          "cache_read": {
+            "tokenCount": 39808
+          },
+          "cache_write": {
+            "tokenCount": 0
+          },
+          "output": {
+            "tokenCount": 5713
+          }
+        }
+      }
+    },
+    "agentMetrics": {
+      "main": {
+        "totalApiDurationMs": 27494,
+        "totalNanoAiu": 1233436000,
+        "modelMetrics": {
+          "mai-code-1.1-flash": {
+            "requests": {
+              "count": 3,
+              "cost": 1
+            },
+            "usage": {
+              "inputTokens": 63221,
+              "outputTokens": 5713,
+              "cacheReadTokens": 39808,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 3584
+            },
+            "totalNanoAiu": 1233436000,
+            "tokenDetails": {
+              "input": {
+                "tokenCount": 23413
+              },
+              "cache_read": {
+                "tokenCount": 39808
+              },
+              "cache_write": {
+                "tokenCount": 0
+              },
+              "output": {
+                "tokenCount": 5713
+              }
+            }
+          }
+        }
+      }
+    },
+    "providerModelMetrics": [
+      {
+        "provider": {
+          "id": "copilot",
+          "label": "GitHub Copilot",
+          "kind": "copilot"
+        },
+        "modelId": "mai-code-1.1-flash",
+        "metrics": {
+          "requests": {
+            "count": 3,
+            "cost": 1
+          },
+          "usage": {
+            "inputTokens": 63221,
+            "outputTokens": 5713,
+            "cacheReadTokens": 39808,
+            "cacheWriteTokens": 0,
+            "reasoningTokens": 3584
+          },
+          "totalNanoAiu": 1233436000,
+          "aiCreditsStatus": "complete",
+          "tokenDetails": {
+            "input": {
+              "tokenCount": 23413
+            },
+            "cache_read": {
+              "tokenCount": 39808
+            },
+            "cache_write": {
+              "tokenCount": 0
+            },
+            "output": {
+              "tokenCount": 5713
+            }
+          }
+        },
+        "modelDisplayName": "MAI-Code-1.1-Flash"
+      }
+    ],
+    "currentModel": "mai-code-1.1-flash",
+    "lastCallInputTokens": 24620,
+    "lastCallOutputTokens": 322
+  },
+  "quota_exhausted": false,
+  "rate_limited_429": false,
+  "error": null
+}

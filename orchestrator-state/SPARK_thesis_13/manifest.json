@@ -1,0 +1,56 @@
+{
+  "target_repository": "SPARK",
+  "expected_branch": "docs/next-semester-thesis-roadmap-#13",
+  "dispatch": "Direct Fleet CopilotCLIAdapter (standard Commander unsafe auto-commit/incorrect target routing)",
+  "max_concurrency": 2,
+  "no_antigravity": true,
+  "custom_instructions": false,
+  "git_mutations": false,
+  "stage_sequence": "Scout frozen evidence -> Reviewer + delta approval -> Writer -> efficiency Formatter -> Lead integration",
+  "stages": [
+    {
+      "stage": "scout_implementation",
+      "success": true,
+      "credits": 5.96,
+      "model": "mai-code-1.1-flash"
+    },
+    {
+      "stage": "scout_tracker",
+      "success": true,
+      "credits": 6.58,
+      "model": "gpt-6-luna"
+    },
+    {
+      "stage": "review",
+      "success": true,
+      "credits": 3.15,
+      "model": "gpt-6-luna"
+    },
+    {
+      "stage": "delta_review",
+      "success": true,
+      "credits": 1.27,
+      "model": "gpt-6-luna"
+    },
+    {
+      "stage": "identity_review",
+      "success": true,
+      "credits": 0.46,
+      "model": "gpt-6-luna"
+    },
+    {
+      "stage": "draft",
+      "success": true,
+      "credits": 0.96,
+      "model": "gpt-6-luna"
+    },
+    {
+      "stage": "format",
+      "success": true,
+      "credits": 1.23,
+      "model": "mai-code-1.1-flash"
+    }
+  ],
+  "total_credits": 19.61,
+  "completion": "All seven bounded Fleet tasks succeeded; evidence identity correction supersedes delta-review missing-file claim. No model/hardware/cohort/robotics execution."
+}

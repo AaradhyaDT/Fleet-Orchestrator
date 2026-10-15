@@ -250,6 +250,16 @@ def main() -> int:
         print(f"  Brainstorm Mirror: {'SYNCED' if diff_brainstorm['is_synced'] else 'DRIFT DETECTED'}")
         if not diff_brainstorm["is_synced"]:
             print(f"    Missing: {len(diff_brainstorm['missing'])} | Modified: {len(diff_brainstorm['modified'])} | Extra: {len(diff_brainstorm['extra'])}")
+        registry_file = ROOT / "tools" / "skills_registry.json"
+        reg_status = "NOT FOUND (run build_skills_registry.py)"
+        if registry_file.exists():
+            try:
+                with open(registry_file, "r", encoding="utf-8") as rf:
+                    reg_json = json.load(rf)
+                reg_status = f"PRESENT ({reg_json.get('total_distinct_skills', 0)} distinct skills)"
+            except Exception:
+                reg_status = "INVALID JSON"
+        print(f"  Skills Registry  : {reg_status}")
         print("=" * 65)
         return 0 if overall_synced else 1
 

@@ -39,14 +39,15 @@ logger = logging.getLogger("adaptive_engine")
 SCHEMA_DEF = {
     "command": "adaptive_engine.py",
     "version": "3.10.0",
-    "usage": "adaptive_engine.py [triage] \"<prompt>\" [--files <paths>] [--json] [--execute] [--ground] [--decider <backend>] | cpm --dag-json <file>",
+    "usage": "adaptive_engine.py \"<prompt>\" [-f <files>] [-j] [-x] [-e] [-g] [-d <decider>] | cpm --dag-json <path>",
     "flags": {
-        "--files": "Target file paths for Volume/Criticality triage (alias: -f, --file)",
-        "--json": "Output machine-readable JSON (alias: -j)",
-        "--execute": "Auto-execute determined route (alias: -e)",
-        "--ground": "Inject live verified package & host CLI facts (alias: -g, --live)",
-        "--decider": "Intent decider: deterministic|qwen-intent-router|fleet-master-3b (alias: -d, --model)",
-        "--schema": "Emit machine-readable JSON schema (<50 tokens)",
+        "--files": "Target file paths (alias: -f)",
+        "--json": "Output JSON (alias: -j)",
+        "--explain": "Emit reasoning trace (alias: -x)",
+        "--execute": "Auto-execute route (alias: -e)",
+        "--ground": "Inject live CLI/package facts (alias: -g)",
+        "--decider": "Backend: deterministic|qwen-intent-router (alias: -d)",
+        "--schema": "Emit compact schema (<50 tokens)",
     },
     "subcommands": ["triage", "cpm"],
 }
@@ -58,6 +59,7 @@ HELP_CONTRACT = """[ADAPTIVE WORKFLOW CLI CONTRACT (INV-ZERO-HELP-LOOP)]
   Options:
     -f, --files <paths>   Target file paths (Volume/Criticality calculation)
     -j, --json            Output machine-readable JSON format
+    -x, --explain         Emit detailed reasoning trace and audit record
     -e, --execute         Execute determined route (fast-path shell / fleet)
     -g, --ground          Inject live verified package & CLI grounding facts
     -d, --decider <name>  Intent decider: deterministic [default], qwen-intent-router
@@ -112,6 +114,46 @@ def format_cli_output(decision: Dict[str, Any]) -> str:
 
     lines.append("=" * 65)
     return "\n".join(lines)
+
+
+def format_decision_explanation(decision: Dict[str, Any], prompt: str) -> str:
+    """Formats explainable reasoning trace justifying the routing decision."""
+    lines = [
+        "-" * 65,
+        "  EXPLAINABLE ROUTING TRACE (INV-EXPLAINABLE-ROUTING):",
+        f"  1. Prompt Intent    : \"{prompt[:60]}...\"" if len(prompt) > 60 else f"  1. Prompt Intent    : \"{prompt}\"",
+        f"  2. Classification   : Archetype '{decision.get('archetype')}' matched via {decision.get('source', 'deterministic rules')}.",
+        f"  3. Matrix Cell      : {decision.get('matrix_cell')} with policy '{decision.get('policy')}'.",
+        f"  4. Selected Skill   : {decision.get('primary_skill')} (supporting: {', '.join(decision.get('supporting_skills', [])) or 'none'}).",
+        f"  5. Gating Envelope  : RAM headroom {decision.get('available_ram_mb')} MB allows {decision.get('workers')} worker slot(s).",
+        f"  6. Execution Route  : {decision.get('backend', '').upper()} chosen based on 2D volume, risk, and hardware headroom.",
+        "-" * 65,
+    ]
+    return "\n".join(lines)
+
+
+def log_routing_decision(decision: Dict[str, Any], prompt: str) -> None:
+    """Appends an auditable, machine-readable routing decision record to orchestrator-state/routing_decisions.jsonl."""
+    log_file = ROOT / "orchestrator-state" / "routing_decisions.jsonl"
+    try:
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        record = {
+            "timestamp_epoch": time.time(),
+            "timestamp_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "prompt": prompt,
+            "archetype": decision.get("archetype"),
+            "matrix_cell": decision.get("matrix_cell"),
+            "policy": decision.get("policy"),
+            "primary_skill": decision.get("primary_skill"),
+            "backend": decision.get("backend"),
+            "safe_workers": decision.get("workers"),
+            "is_fast_path": decision.get("is_fast_path", False),
+        }
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+    except Exception as e:
+        logger.debug(f"Failed to log routing decision: {e}")
+
 
 
 def execute_decision(decision: Dict[str, Any], prompt: str) -> int:
@@ -205,6 +247,7 @@ def normalize_argv(raw_argv: List[str]) -> List[str]:
         "-f": "--files",
         "--file": "--files",
         "-j": "--json",
+        "-x": "--explain",
         "-e": "--execute",
         "-g": "--ground",
         "--live": "--ground",
@@ -248,6 +291,7 @@ def main() -> int:
     parser.add_argument("prompt", nargs="?", default=None, help="Incoming task specification or query")
     parser.add_argument("--files", nargs="*", default=None, help="Target file paths involved in the task")
     parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
+    parser.add_argument("--explain", action="store_true", help="Emit detailed reasoning trace and audit record")
     parser.add_argument("--execute", action="store_true", help="Automatically execute the determined route")
     parser.add_argument("--ground", action="store_true", help="Inject live verified package & CLI facts")
     parser.add_argument("--decider", default="deterministic", choices=["deterministic", "qwen-intent-router", "fleet-master-3b"], help="Intent decider backend")
@@ -263,6 +307,9 @@ def main() -> int:
         decider=args.decider,
     )
 
+    # Log auditable routing decision record
+    log_routing_decision(decision, args.prompt)
+
     if args.ground:
         cache = load_grounding_cache()
         decision["grounding_summary"] = get_grounding_summary()
@@ -270,9 +317,14 @@ def main() -> int:
         decision["grounded_cli_tools"] = list(cache.get("cli_tools", {}).keys())
 
     if args.json:
+        if args.explain:
+            decision["reasoning_trace"] = format_decision_explanation(decision, args.prompt)
         print(json.dumps(decision, indent=2))
     else:
-        print(format_cli_output(decision))
+        out = format_cli_output(decision)
+        if args.explain:
+            out += "\n" + format_decision_explanation(decision, args.prompt)
+        print(out)
 
     if args.execute:
         return execute_decision(decision, args.prompt)

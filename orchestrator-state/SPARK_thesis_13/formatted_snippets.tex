@@ -1,0 +1,29 @@
+% SPARK thesis formatting snippets
+% All claims below are grounded in the reviewed artifacts and saved reports; values are reported artifact measurements, not independently reproduced in this task.
+
+\noindent\textbf{Artifact identity and thesis scope.}
+The corrected upgraded model artifact is \texttt{data/processed\_sisfall/model/spark\_cnn\_int8\_upgraded.tflite}. The identity review reports an exact byte-for-byte match between the decoded \texttt{spark\_cnn\_model} embedded in \texttt{firmware/main/models/spark\_cnn\_int8.h} and the artifact, with 18,912 bytes and SHA-256 \texttt{dd0e8e3d6b201acba2b524a1f911958f70bf15a52bc6592eb5cec97e78d5a2ea}. This confirms artifact identity for the SPARK Human fall detection implementation but does not establish score provenance, performance, or on-device validation. Human fall detection remains the primary scope; robotics is exploratory future work. \textit{Sources: identity\_review.md; README.md:5; docs/SPARK\_Proposal/Chapters/chapter6\_expected\_output.tex:50--55.}
+
+\noindent\textbf{Offline SisFall implementation and input contract.}
+The evaluated implementation is an offline human-fall classification workflow based on SisFall IMU windows. The preprocessing pipeline resamples 200 Hz recordings to 100 Hz and constructs 200-sample (2 s) windows with six channels, yielding the model input shape $(N, 200, 6)$. The training code uses subject-grouped, disjoint train/validation/test holdout assignment, which is a single subject-grouped holdout rather than cross-validation. \textit{Sources: training/data\_prep/prepare\_sisfall.py:8--14, 26--32, 56--57, 95--107, 116--125; training/train\_cnn.py:65--68, 87--114.}
+
+\noindent\textbf{Reported artifact result, with limitation.}
+The archived held-out SisFall report records 6,712 test windows (1,575 FALL and 5,137 NON\_FALL) from eight subjects and reports sensitivity 0.8781, specificity 0.7818, and AUC 0.9185 at the validation-selected Youden threshold 0.3919. The separate INT8 report records sensitivity 0.8743, specificity 0.7014, and AUC 0.8717 for the same stated test-set size with a model size of 18,904 bytes and input/output shapes \([1,200,6]\) and \([1,2]\). These are saved artifact results, not measurements reproduced for this draft; the reported sensitivity remains below the stated 90\% target. \textit{Sources: data/processed\_sisfall/model/test\_report.txt:3--12; data/processed\_sisfall/model/quantization\_report.txt:4--33.}
+
+\noindent\textbf{Provenance and threshold conflict to handle carefully.}
+The later Colab log reports a different partition (31,714/3,005/3,707), threshold 0.4236, sensitivity 0.8981, specificity 0.7621, and AUC 0.9272. The checked-in configuration and model header instead use threshold 0.4065, while the archived report uses 0.3919. These values cannot be merged as a single result without reconciling run identity, model binary, split provenance, and threshold selection. \textit{Sources: training/colab\_run\_output.txt:39--45, 145--159; data/processed\_sisfall/model/model\_config.json:3, 22--26; firmware/main/models/spark\_cnn\_int8.h:2--3, 1587.}
+
+\noindent\textbf{Sampling, windowing, and hardware status.}
+The executable preprocessing contract is 100 Hz and 200-sample windows, whereas some project prose mentions a planned 200 Hz logger and/or a three-second window. A three-second 200 Hz window would contain 600 samples, not the model's 200; therefore, the 200 Hz logger must be treated as a separate acquisition path, not the evaluated model input. The firmware evidence remains non-deploying: the MPU6050 driver returns a zeroed sample, inference probabilities are fixed at 0.5/0.5, and the app path does not demonstrate continuous sensing or a live TFLite Micro execution. Hardware bring-up, cohort collection, and institutional approval remain planned gates. \textit{Sources: training/data\_prep/prepare\_sisfall.py:8--14, 26--32, 56--57, 116--125; AGENT.md:11; docs/SPARK\_Proposal/Chapters/chapter5\_methodology.tex:198; firmware/main/drivers/mpu6050.cpp:1--31; firmware/main/tflite/inference.cpp:1--38; firmware/main/app\_main.cpp:25--45, 60--75; README.md:59, 72, 159--161; docs/SPARK\_POST\_BOARDS\_MASTER\_PLAN.md:58--78, 82--89, 96--100, 102--123, 127--143.}
+
+\noindent\textbf{Suggested thesis table.}
+\begin{tabular}{p{0.20\linewidth}p{0.26\linewidth}p{0.54\linewidth}}
+\textbf{Item} & \textbf{Classification} & \textbf{Wording / evidence} \\
+\hline
+SisFall model input & Artifact/code-supported contract & 200 samples, 6 channels, 100 Hz, input shape $(N,200,6)$; preprocessing resamples 200 Hz data to 100 Hz and constructs 2 s windows. \\
+Held-out FP32 result & Stored artifact result & Sensitivity 0.8781, specificity 0.7818, AUC 0.9185 at threshold 0.3919 over 6,712 windows from eight subjects. \\
+INT8 quantized model & Stored artifact result & Sensitivity 0.8743, specificity 0.7014, AUC 0.8717 with 18,904-byte model, input \([1,200,6]\), output \([1,2]\). \\
+Colab run & Historical report, not reconciled & 31,714/3,005/3,707 split, threshold 0.4236, sensitivity 0.8981, AUC 0.9272; does not match the archived report or config/header thresholds. \\
+Hardware and cohort work & Planned, not completed & Procurement, logger validation, institutional approval, and Nepal cohort collection remain future gates; robotics is exploratory future work. \\
+\end{tabular}
+\textit{Sources: training/data\_prep/prepare\_sisfall.py:8--14, 26--32, 56--57, 95--107, 116--125; training/train\_cnn.py:65--68, 87--114; data/processed\_sisfall/model/test\_report.txt:3--12; data/processed\_sisfall/model/quantization\_report.txt:4--33; training/colab\_run\_output.txt:39--45, 145--159; README.md:5, 59, 72, 159--161; docs/SPARK\_Proposal/Chapters/chapter6\_expected\_output.tex:50--55; docs/SPARK\_POST\_BOARDS\_MASTER\_PLAN.md:58--78, 82--89, 96--100, 102--123, 127--143.}

@@ -330,16 +330,31 @@ class DynamicSkillManifest:
         if cls._MANIFEST_CACHE is not None:
             return cls._MANIFEST_CACHE
 
+        registry_path = ROOT / "tools" / "skills_registry.json"
+        triggers: Dict[str, List[str]] = {}
+
+        if registry_path.exists():
+            try:
+                with open(registry_path, "r", encoding="utf-8") as f:
+                    reg_data = json.load(f)
+                for s_name, s_meta in reg_data.get("skills", {}).items():
+                    if s_meta.get("triggers"):
+                        triggers[s_name] = list(s_meta["triggers"])
+                if triggers:
+                    cls._MANIFEST_CACHE = triggers
+                    return triggers
+            except Exception:
+                pass
+
         brainstorm_env = os.getenv("BRAINSTORM_ROOT")
         brainstorm_dir = Path(brainstorm_env) if brainstorm_env else (ROOT.parent / "brainstorm")
-
-        triggers: Dict[str, List[str]] = {}
 
         candidate_roots = [
             ROOT / ".agents" / "skills",
             brainstorm_dir / ".agents" / "skills",
             Path(r"F:\Aaradhya-Dev-Tamrakar\brainstorm\.agents\skills"),
             Path(os.path.expanduser(r"~/.gemini/config/skills")),
+            Path(os.path.expanduser(r"~/.agents/skills")),
         ]
 
         for c_root in candidate_roots:
@@ -366,6 +381,7 @@ class DynamicSkillManifest:
 
         cls._MANIFEST_CACHE = triggers
         return triggers
+
 
 
 # ============================================================================

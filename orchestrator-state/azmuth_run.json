@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-10-15T06:24:02.981727+00:00",
+  "status": "ALL_HEALTHY_ZERO_TOKENS",
+  "tokens_spent": 0,
+  "gaps_detected": 0,
+  "actions_taken": [
+    "reconcile_registry_success=True"
+  ],
+  "smoke_suite_passed": true
+}

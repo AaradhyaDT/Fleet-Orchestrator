@@ -1,0 +1,1972 @@
+{
+  "version": "1.0.0",
+  "total_distinct_skills": 98,
+  "total_skill_instances": 166,
+  "domain_counts": {
+    "AI_ENGINEERING_ML": 12,
+    "SWARM_ORCHESTRATION": 4,
+    "ENGINEERING_DEV": 16,
+    "DOMAIN_HARDWARE": 6,
+    "SYSADMIN_SECURITY": 3,
+    "RESEARCH_ACADEMIC": 6,
+    "FRONTEND_PRODUCT": 14,
+    "PLATFORM_INTERNAL": 9,
+    "CLOUD_ENTERPRISE": 28
+  },
+  "tier_counts": {
+    "INSTALLED": 61,
+    "VERIFIED": 10,
+    "ACCESSIBLE": 27
+  },
+  "skills": {
+    "academic-notebook-architect": {
+      "name": "academic-notebook-architect",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks to \"prepare semester notebooks\", \"scaffold subject notes folder\", \"organize academic course notes\", \"extract syllabus into NotebookLM\", \"batch create course notebooks\", or mentions setting up curriculum folders for engineering/university semesters (such as IOE BEI/BCT semesters like IV-I, IV-II) with Super-NLM fleet provisioning and Fleet-Orchestrator task delegation.",
+      "triggers": [
+        "prepare semester notebooks",
+        "scaffold subject notes folder",
+        "organize academic course notes",
+        "extract syllabus into NotebookLM",
+        "batch create course notebooks"
+      ],
+      "dependencies": [],
+      "byte_size": 6717,
+      "line_count": 100,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\academic-notebook-architect",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\academic-notebook-architect",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\academic-notebook-architect"
+      ],
+      "mirror_count": 2
+    },
+    "adaptive-workflow": {
+      "name": "adaptive-workflow",
+      "domain": "SWARM_ORCHESTRATION",
+      "availability_tier": "VERIFIED",
+      "description": "Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, routes tasks across a 2D matrix, executes zero-AI fast paths, solves CPM DAGs mathematically, marshals 27 pooled Copilot workers, and drives Fleet Master Brain (3B/7B), Agent-Reflex self-healing, and Colab GPU accelerators.",
+      "triggers": [
+        "adaptive-workflow"
+      ],
+      "dependencies": [
+        "tools/adaptive_engine.py"
+      ],
+      "byte_size": 8149,
+      "line_count": 131,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\adaptive-workflow",
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\adaptive-workflow",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\adaptive-workflow"
+      ],
+      "mirror_count": 3
+    },
+    "agent-teams-orchestration": {
+      "name": "agent-teams-orchestration",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Autonomous multi-agent team orchestration skill based on the Claude Code Agent Teams and bounded overnight execution pattern. Coordinates specialized subagents (Scout, Reviewer, Writer, Lead), enforces concurrency isolation across separate working files/branches, bounds execution stopping criteria, and compiles vetted outputs into Obsidian knowledge graphs.",
+      "triggers": [
+        "agent-teams-orchestration"
+      ],
+      "dependencies": [],
+      "byte_size": 7355,
+      "line_count": 142,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\agent-teams-orchestration",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\agent-teams-orchestration"
+      ],
+      "mirror_count": 1
+    },
+    "agy-customizations": {
+      "name": "agy-customizations",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- Comprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.",
+      "triggers": [
+        "agy-customizations"
+      ],
+      "dependencies": [],
+      "byte_size": 5465,
+      "line_count": 106,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\agy-customizations",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "ai-engineering-fellowship": {
+      "name": "ai-engineering-fellowship",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks about \"Fusemachines syllabus\", \"AI fellowship coursework\", \"check week N assignment\", \"review fellowship quiz\", \"text-to-sql architecture\", \"telco churn pipeline\", \"tree ensembles with SHAP\", \"forecasting ensemble S&P 500\", \"NEU steel defect CNN\", \"OpenCV FreshTrack pipeline\", \"Vision Transformers CLIP zero-shot\", \"customer support NER CRF\", \"agentic routing SLM\", \"production RAG assistant\", \"agentic eval harness\", \"dual-track MLOps Airflow MLflow\", \"BiasAperture vision audit\", or when /adaptive-workflow requires an instructor-grade reference architecture, mentor-rated benchmark, or SOTA best practice across machine learning, computer vision, NLP, and agentic AI systems.",
+      "triggers": [
+        "Fusemachines syllabus",
+        "AI fellowship coursework",
+        "check week N assignment",
+        "review fellowship quiz",
+        "text-to-sql architecture",
+        "telco churn pipeline",
+        "tree ensembles with SHAP",
+        "forecasting ensemble S&P 500",
+        "NEU steel defect CNN",
+        "OpenCV FreshTrack pipeline",
+        "Vision Transformers CLIP zero-shot",
+        "customer support NER CRF",
+        "agentic routing SLM",
+        "production RAG assistant",
+        "agentic eval harness",
+        "dual-track MLOps Airflow MLflow",
+        "BiasAperture vision audit"
+      ],
+      "dependencies": [
+        "scripts/fuse_cli.py"
+      ],
+      "byte_size": 7490,
+      "line_count": 93,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\ai-engineering-fellowship",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\ai-engineering-fellowship"
+      ],
+      "mirror_count": 1
+    },
+    "airunway-aks-setup": {
+      "name": "airunway-aks-setup",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Set up AI Runway on AKS — from bare cluster to running model. Covers cluster verification, controller install, GPU assessment, provider setup, and first deployment. WHEN: \\\"setup AI Runway\\\", \\\"onboard AKS cluster\\\", \\\"install AI Runway\\\", \\\"airunway setup\\\", \\\"deploy model to AKS\\\", \\\"GPU inference on AKS\\\", \\\"KAITO setup on AKS\\\", \\\"run LLM on AKS\\\", \\\"vLLM on AKS\\\", \\\"set up model serving on AKS\\\", \\\"AI Runway controller\\\".",
+      "triggers": [
+        "setup AI Runway\\",
+        "onboard AKS cluster\\",
+        "install AI Runway\\",
+        "airunway setup\\",
+        "deploy model to AKS\\",
+        "GPU inference on AKS\\",
+        "KAITO setup on AKS\\",
+        "run LLM on AKS\\",
+        "vLLM on AKS\\",
+        "set up model serving on AKS\\",
+        "AI Runway controller\\"
+      ],
+      "dependencies": [],
+      "byte_size": 4581,
+      "line_count": 80,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\airunway-aks-setup",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "antigravity-guide": {
+      "name": "antigravity-guide",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Provides a comprehensive guide, quick reference, and sitemap for Google Antigravity (AGY), including the Antigravity CLI (agy), Antigravity 2.0, Antigravity IDE, Python SDK, slash commands, keybindings, and customizations (skills, rules, MCP, sidecars). Activate this skill when the user asks questions about how to use, configure, or customize Antigravity, AGY, the agy CLI, the Antigravity IDE, or Antigravity 2.0.",
+      "triggers": [
+        "antigravity-guide"
+      ],
+      "dependencies": [],
+      "byte_size": 3023,
+      "line_count": 55,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\antigravity_guide",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "appinsights-instrumentation": {
+      "name": "appinsights-instrumentation",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Guidance for instrumenting webapps with Azure Application Insights. Provides telemetry patterns, SDK setup, and configuration references. WHEN: how to instrument app, App Insights SDK, telemetry patterns, what is App Insights, Application Insights guidance, instrumentation examples, APM best practices.",
+      "triggers": [
+        "appinsights-instrumentation"
+      ],
+      "dependencies": [],
+      "byte_size": 3872,
+      "line_count": 78,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\appinsights-instrumentation",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "automation": {
+      "name": "automation",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Interactive guide to design and create a scheduled background automation. Use this skill when the user wants to create an automated or recurring scheduled task (e.g. \"summarize my emails every morning\", \"every Monday send me a to-do list\"). Also triggered by the /automation slash command.",
+      "triggers": [
+        "summarize my emails every morning",
+        "every Monday send me a to-do list"
+      ],
+      "dependencies": [],
+      "byte_size": 10249,
+      "line_count": 159,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\automation",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "avionic-telecom-analyzer": {
+      "name": "avionic-telecom-analyzer",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": ">- Aeronautical Telecommunication, Surveillance & Radio Navigation skill (EX 725 04). Computes Radar Range Equations, solves Multilateration Time-Difference-of-Arrival (TDOA) fixes, analyzes VOR/DME/ILS geometries, and models ADS-B / SSR Mode-S avionics telemetry.",
+      "triggers": [
+        "avionic-telecom-analyzer"
+      ],
+      "dependencies": [
+        "tools/skills/avionic-telecom-analyzer/scripts/aero_calc.py"
+      ],
+      "byte_size": 3402,
+      "line_count": 55,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\avionic-telecom-analyzer",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\avionic-telecom-analyzer"
+      ],
+      "mirror_count": 1
+    },
+    "azure-ai": {
+      "name": "azure-ai",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector/hybrid search, speech-to-text, text-to-speech, transcription, OCR. WHEN: AI Search, query search, vector search, hybrid search, semantic search, speech-to-text, text-to-speech, transcribe, OCR, convert text to speech.",
+      "triggers": [
+        "azure-ai"
+      ],
+      "dependencies": [],
+      "byte_size": 3465,
+      "line_count": 71,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-ai",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-aigateway": {
+      "name": "azure-aigateway",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. WHEN: semantic caching, token limit, content safety, load balancing, AI model governance, MCP rate limiting, jailbreak detection, add Azure OpenAI backend, add AI Foundry model, test AI gateway, LLM policies, configure AI backend, token metrics, AI cost control, convert API to MCP, import OpenAPI to gateway.",
+      "triggers": [
+        "azure-aigateway"
+      ],
+      "dependencies": [],
+      "byte_size": 5158,
+      "line_count": 129,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-aigateway",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-app-onboard": {
+      "name": "azure-app-onboard",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "End-to-end orchestrator: from a business idea, app idea, or existing app to running Azure deployment with cost estimates and pre-deploy approval. Analyzes your app, auto-detects the right Azure services, scaffolds infrastructure code, and deploys — tailored to your app, not a template. Handles moving existing apps to Azure without rewriting or with minimal changes. WHEN: bring your app to Azure, plan my app, cost to run, is my code ready to deploy, deploy my app to the cloud, deploy all my services, what Azure services do I need, plan my Azure deployment, deploy my new app to Azure, one-click deploy, I have an app and want it on Azure, migrate my app to Azure, help me get started, build an app, no code yet, starter project. DO NOT USE FOR: use azd for deployment(use azure-deploy), optimizing existing costs (use cost-optimization), code readiness checks only (use azure-app-onboard-prereq).",
+      "triggers": [
+        "azure-app-onboard"
+      ],
+      "dependencies": [],
+      "byte_size": 6888,
+      "line_count": 80,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-app-onboard",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-app-onboard-prereq": {
+      "name": "azure-app-onboard-prereq",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Assess whether source code is ready to deploy to Azure — the check BEFORE infrastructure work. Evaluates build health, app completeness, dependencies and local services, stack compatibility, and deployment feasibility. Answers questions about what your app needs before it can be deployed — frameworks, dependencies, and configuration. Checks whether dependencies are compatible and identifies deployment blockers and unsupported frameworks. WHEN: \\\"evaluate my repo\\\", \\\"is my app ready to deploy\\\", \\\"what does my app need to deploy\\\", \\\"what do I need before deploying\\\", \\\"does my app need\\\", \\\"can I ship this to Azure\\\", \\\"scan my repo for issues\\\", \\\"is this app deployable\\\", \\\"check if my app is ready for Azure\\\", \\\"do I need a Dockerfile\\\", \\\"what's blocking my deployment\\\", \\\"are there any blockers\\\", \\\"are my dependencies compatible\\\", \\\"does Azure support my framework\\\", \\\"what needs to change before deploying\\\", \\\"check my app configuration\\\".",
+      "triggers": [
+        "evaluate my repo\\",
+        "is my app ready to deploy\\",
+        "what does my app need to deploy\\",
+        "what do I need before deploying\\",
+        "does my app need\\",
+        "can I ship this to Azure\\",
+        "scan my repo for issues\\",
+        "is this app deployable\\",
+        "check if my app is ready for Azure\\",
+        "do I need a Dockerfile\\",
+        "what",
+        "are there any blockers\\",
+        "are my dependencies compatible\\",
+        "does Azure support my framework\\",
+        "what needs to change before deploying\\",
+        "check my app configuration\\"
+      ],
+      "dependencies": [],
+      "byte_size": 10322,
+      "line_count": 120,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-app-onboard-prereq",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-cloud-migrate": {
+      "name": "azure-cloud-migrate",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Assess and migrate cross-cloud workloads to Azure with reports and code conversion. Supports Lambda→Functions, Beanstalk/Heroku/App Engine→App Service, Fargate/Kubernetes/Cloud Run/Spring Boot→Container Apps. WHEN: migrate Lambda to Functions, AWS to Azure, migrate Beanstalk, migrate Heroku, migrate App Engine, Cloud Run migration, Fargate to ACA, ECS/Kubernetes/GKE/EKS to Container Apps, Spring Boot to Container Apps, cross-cloud migration.",
+      "triggers": [
+        "azure-cloud-migrate"
+      ],
+      "dependencies": [],
+      "byte_size": 4407,
+      "line_count": 52,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-cloud-migrate",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-compliance": {
+      "name": "azure-compliance",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Run Azure compliance and security audits with azqr plus Key Vault expiration checks. Covers best-practice assessment, resource review, policy/compliance validation, and security posture checks. WHEN: compliance scan, security audit, BEFORE running azqr (compliance cli tool), Azure best practices, Key Vault expiration check, expired certificates, expiring secrets, orphaned resources, compliance assessment.",
+      "triggers": [
+        "azure-compliance"
+      ],
+      "dependencies": [],
+      "byte_size": 4061,
+      "line_count": 87,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-compliance",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-compute": {
+      "name": "azure-compute",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Azure VM/VMSS router. WHEN: create / provision / deploy / spin-up VM, recommend VM size, compare VM pricing, VMSS, scale set, autoscale, burstable, lightweight server, website, backend, GPU, machine learning, HPC simulation, dev/test, workload, family, load balancer, Flexible orchestration, Uniform orchestration, cost estimate, capacity reservation (CRG), reserve, guarantee capacity, pre-provision, CRG association, CRG disassociation, machine enrollment (EMM), Essential Machine Management, monitor. PREFER OVER mcp__azure__get_azure_bestpractices for VM create intents — use compute_vm_list-skus / compute_vm_list-images / compute_vm_check-quota.",
+      "triggers": [
+        "azure-compute"
+      ],
+      "dependencies": [],
+      "byte_size": 2651,
+      "line_count": 32,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-compute",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-deploy": {
+      "name": "azure-deploy",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Execute Azure deployments for ALREADY-PREPARED applications that have existing .azure/deployment-plan.md and infrastructure files. DO NOT use this skill when the user asks to CREATE a new application — use azure-prepare instead. This skill runs azd up, azd deploy, terraform apply, and az deployment commands with built-in error recovery. Requires .azure/deployment-plan.md from azure-prepare and validated status from azure-validate. WHEN: \\\"run azd up\\\", \\\"run azd deploy\\\", \\\"execute deployment\\\", \\\"push to production\\\", \\\"push to cloud\\\", \\\"go live\\\", \\\"ship it\\\", \\\"bicep deploy\\\", \\\"terraform apply\\\", \\\"publish to Azure\\\", \\\"launch on Azure\\\". DO NOT USE WHEN: \\\"create and deploy\\\", \\\"build and deploy\\\", \\\"create a new app\\\", \\\"set up infrastructure\\\", \\\"create and deploy to Azure using Terraform\\\" — use azure-prepare for these.",
+      "triggers": [
+        "run azd up\\",
+        "run azd deploy\\",
+        "execute deployment\\",
+        "push to production\\",
+        "push to cloud\\",
+        "go live\\",
+        "ship it\\",
+        "bicep deploy\\",
+        "terraform apply\\",
+        "publish to Azure\\",
+        "launch on Azure\\",
+        "create and deploy\\",
+        "build and deploy\\",
+        "create a new app\\",
+        "set up infrastructure\\",
+        "create and deploy to Azure using Terraform\\"
+      ],
+      "dependencies": [],
+      "byte_size": 6729,
+      "line_count": 97,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-deploy",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-diagnostics": {
+      "name": "azure-diagnostics",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Debug Azure production issues on Azure using AppLens, Azure Monitor, resource health, and safe triage. WHEN: debug production issues, troubleshoot app service, app service high CPU, app service deployment failure, troubleshoot container apps, container app 503 or target port mismatch, troubleshoot functions, function telemetry missing or stopped after a config/connection-string change, troubleshoot AKS, VM RDP, Linux SSH, VM black screen, can't connect to VM, reset VM password, NSG or firewall blocking, kubectl cannot connect, kube-system/CoreDNS failures, pod pending, crashloop, node not ready, upgrade failures, analyze logs, KQL, insights, image pull failures, cold start issues, health probe failures, resource health, root cause of errors, troubleshoot event hubs, troubleshoot service bus, messaging SDK error, AMQP connection failure, message lock lost, lock renewal during long-running processing, service bus dead letter.",
+      "triggers": [
+        "azure-diagnostics"
+      ],
+      "dependencies": [],
+      "byte_size": 7595,
+      "line_count": 160,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-diagnostics",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-enterprise-infra-planner": {
+      "name": "azure-enterprise-infra-planner",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Architect and provision enterprise Azure infrastructure from workload descriptions. For cloud architects and platform engineers planning networking, identity, security, compliance, and multi-resource topologies with WAF alignment. Generates Bicep or Terraform directly (no azd). WHEN: 'plan Azure infrastructure', 'architect Azure landing zone', 'design hub-spoke network', 'plan multi-region DR topology', 'set up VNets firewalls and private endpoints', 'subscription-scope Bicep deployment', 'Azure Backup for VM workloads'. PREFER azure-prepare FOR app-centric workflows.",
+      "triggers": [
+        "plan Azure infrastructure",
+        "architect Azure landing zone",
+        "design hub-spoke network",
+        "plan multi-region DR topology",
+        "set up VNets firewalls and private endpoints",
+        "subscription-scope Bicep deployment",
+        "Azure Backup for VM workloads"
+      ],
+      "dependencies": [],
+      "byte_size": 6445,
+      "line_count": 106,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-enterprise-infra-planner",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-kubernetes": {
+      "name": "azure-kubernetes",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Plan, create, and configure production-ready Azure Kubernetes Service (AKS) clusters. Covers Day-0 checklist, SKU selection (Automatic vs Standard), networking options (private API server, Azure CNI Overlay, egress configuration), security, and operations (autoscaling, upgrade strategy, cost analysis). WHEN: create AKS environment, provision AKS, enable AKS observability, design AKS networking, choose AKS SKU, secure AKS, optimize AKS, AKS spot nodes, AKS cluster-autoscaler, rightsize AKS pod, pod rightsizing, over-provisioned AKS pod, pod resource requests and limits, Vertical Pod Autoscaler, VPA recommendations.",
+      "triggers": [
+        "azure-kubernetes"
+      ],
+      "dependencies": [],
+      "byte_size": 11443,
+      "line_count": 163,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-kubernetes",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-kusto": {
+      "name": "azure-kusto",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Query and analyze data in Azure Data Explorer (Kusto/ADX) using KQL for log analytics, telemetry, and time series analysis. WHEN: KQL queries, Kusto database queries, Azure Data Explorer, ADX clusters, log analytics, time series data, IoT telemetry, anomaly detection.",
+      "triggers": [
+        "azure-kusto"
+      ],
+      "dependencies": [],
+      "byte_size": 8769,
+      "line_count": 215,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-kusto",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-messaging": {
+      "name": "azure-messaging",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Troubleshoot and resolve issues with Azure Messaging SDKs for Event Hubs and Service Bus. Covers connection failures, authentication errors, message processing issues, and SDK configuration problems. WHEN: event hub SDK error, service bus SDK issue, messaging connection failure, AMQP error, event processor host issue, message lock lost, message lock expired, lock renewal, lock renewal batch, send timeout, receiver disconnected, SDK troubleshooting, azure messaging SDK, event hub consumer, service bus queue issue, topic subscription error, enable logging event hub, service bus logging, eventhub python, servicebus java, eventhub javascript, servicebus dotnet, event hub checkpoint, event hub not receiving messages, service bus dead letter, batch processing lock, session lock expired, idle timeout, connection inactive, link detach, slow reconnect, session error, duplicate events, offset reset, receive batch.",
+      "triggers": [
+        "azure-messaging"
+      ],
+      "dependencies": [],
+      "byte_size": 3338,
+      "line_count": 57,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-messaging",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-prepare": {
+      "name": "azure-prepare",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Prepare azd-based Azure projects for deployment: generates azure.yaml, infrastructure (Bicep/Terraform), and Dockerfiles for the Azure Developer CLI (azd) workflow. USE ONLY when the user explicitly wants to use azd as the deployment tool, or the project already has an azure.yaml file. DO NOT USE FOR: non-azd deployments, Python App Service code-only deploys (use python-appservice-deploy), or cross-cloud migration (use azure-cloud-migrate). WHEN: prepare app for azd, create azure.yaml, set up azd infrastructure, modernize app for Azure with azd, deploy with azd, function app, timer trigger, service bus trigger, event-driven function, managed identity, generate Bicep, generate Terraform, create and deploy to Azure.",
+      "triggers": [
+        "azure-prepare"
+      ],
+      "dependencies": [],
+      "byte_size": 13016,
+      "line_count": 155,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-prepare",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-quotas": {
+      "name": "azure-quotas",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Check/manage Azure quotas and usage across providers. For deployment planning, capacity validation, region selection. WHEN: \\\"check quotas\\\", \\\"service limits\\\", \\\"current usage\\\", \\\"request quota increase\\\", \\\"quota exceeded\\\", \\\"validate capacity\\\", \\\"regional availability\\\", \\\"provisioning limits\\\", \\\"vCPU limit\\\", \\\"how many vCPUs available in my subscription\\\".",
+      "triggers": [
+        "check quotas\\",
+        "service limits\\",
+        "current usage\\",
+        "request quota increase\\",
+        "quota exceeded\\",
+        "validate capacity\\",
+        "regional availability\\",
+        "provisioning limits\\",
+        "vCPU limit\\",
+        "how many vCPUs available in my subscription\\"
+      ],
+      "dependencies": [
+        "./scripts/check-quota.sh"
+      ],
+      "byte_size": 12341,
+      "line_count": 276,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-quotas",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-reliability": {
+      "name": "azure-reliability",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Assess and improve the reliability posture of PaaS Applications (Azure Functions and Azure App Service). Scans deployed resources for zone redundancy, ZRS storage, health probes, and multi-region failover. Presents a feature-pivoted checklist, then drives staged remediation (CLI or IaC patches) end-to-end with user confirmation. WHEN: \\\"assess reliability\\\", \\\"check reliability\\\", \\\"zone redundant\\\", \\\"multi-region failover\\\", \\\"high availability\\\", \\\"disaster recovery\\\", \\\"single points of failure\\\", \\\"reliability posture\\\", \\\"resiliency\\\".",
+      "triggers": [
+        "assess reliability\\",
+        "check reliability\\",
+        "zone redundant\\",
+        "multi-region failover\\",
+        "high availability\\",
+        "disaster recovery\\",
+        "single points of failure\\",
+        "reliability posture\\",
+        "resiliency\\"
+      ],
+      "dependencies": [],
+      "byte_size": 25297,
+      "line_count": 387,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-reliability",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-resource-lookup": {
+      "name": "azure-resource-lookup",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "List, find, and show Azure resources across subscriptions or resource groups. Handles prompts like \\\"list the websites in my subscription\\\", \\\"list my web apps\\\", \\\"show my app services\\\", \\\"list virtual machines\\\", \\\"list my VMs\\\", \\\"show storage accounts\\\", \\\"find container apps\\\", and \\\"what resources do I have\\\". USE FOR: list websites, list web apps, list app services, show websites in subscription, resource inventory, find resources by tag, tag analysis, orphaned resource discovery (not for cost analysis), unattached disks, count resources by type, cross-subscription lookup, and Azure Resource Graph queries. DO NOT USE FOR: deploying/changing resources (use azure-deploy), cost optimization (use cost-optimization from the optional azure-cost plugin), or non-Azure clouds.",
+      "triggers": [
+        "list the websites in my subscription\\",
+        "list my web apps\\",
+        "show my app services\\",
+        "list virtual machines\\",
+        "list my VMs\\",
+        "show storage accounts\\",
+        "find container apps\\",
+        "what resources do I have\\"
+      ],
+      "dependencies": [],
+      "byte_size": 5677,
+      "line_count": 108,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-resource-lookup",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-resource-visualizer": {
+      "name": "azure-resource-visualizer",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the relationships between individual resources. WHEN: create architecture diagram, visualize Azure resources, show resource relationships, generate Mermaid diagram, analyze resource group, diagram my resources, architecture visualization, resource topology, map Azure infrastructure.",
+      "triggers": [
+        "azure-resource-visualizer"
+      ],
+      "dependencies": [],
+      "byte_size": 8711,
+      "line_count": 183,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-resource-visualizer",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-storage": {
+      "name": "azure-storage",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Azure Storage Services including Blob Storage, File Shares, Queue Storage, Table Storage, and Data Lake. Answers questions about storage access tiers (hot, cool, cold, archive), when to use each tier, and tier comparison. Provides object storage, SMB file shares, async messaging, NoSQL key-value, and big data analytics. Includes lifecycle management. USE FOR: blob storage, file shares, queue storage, table storage, data lake, upload files, download blobs, storage accounts, access tiers, storage tiers, hot cool cold archive, storage tier comparison, when to use storage tiers, lifecycle management, Azure Storage concepts. DO NOT USE FOR: SQL databases, Cosmos DB (use azure-prepare), messaging with Event Hubs or Service Bus (use azure-messaging).",
+      "triggers": [
+        "azure-storage"
+      ],
+      "dependencies": [],
+      "byte_size": 5124,
+      "line_count": 100,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-storage",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-upgrade": {
+      "name": "azure-upgrade",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Assess and upgrade Azure workloads between plans, tiers, or SKUs, or modernize Azure SDK dependencies in source code. WHEN: upgrade Consumption to Flex Consumption, upgrade Azure Functions plan, change hosting plan, function app SKU, migrate App Service to Container Apps, modernize legacy Azure Java SDKs (com.microsoft.azure to com.azure), migrate Azure Cache for Redis (ACR/ACRE) to Azure Managed Redis (AMR).",
+      "triggers": [
+        "azure-upgrade"
+      ],
+      "dependencies": [],
+      "byte_size": 6282,
+      "line_count": 91,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-upgrade",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "azure-validate": {
+      "name": "azure-validate",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Pre-deployment validation for Azure readiness. Run deep checks on configuration, infrastructure (Bicep or Terraform), RBAC role assignments, managed identity permissions, and prerequisites before deploying. WHEN: validate my app, check deployment readiness, run preflight checks, verify configuration, check if ready to deploy, validate azure.yaml, validate Bicep, test before deploying, troubleshoot deployment errors, validate Azure Functions, validate function app, validate serverless deployment, verify RBAC roles, check role assignments, review managed identity permissions, what-if analysis, validate Container Apps deployment.",
+      "triggers": [
+        "azure-validate"
+      ],
+      "dependencies": [
+        "references/scripts/workflow.ps1",
+        "references/scripts/workflow.sh"
+      ],
+      "byte_size": 3602,
+      "line_count": 67,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\azure-validate",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "bitwarden": {
+      "name": "bitwarden",
+      "domain": "SYSADMIN_SECURITY",
+      "availability_tier": "INSTALLED",
+      "description": ">- Official Bitwarden Model Context Protocol (MCP) skill for interacting with local Bitwarden vaults. Enables secure vault management (retrieving logins, notes, cards, and creating/updating credentials), managing secure text/file Sends, session control (unlocking via native OS masked prompt, lock, sync), and credential generation while preserving zero-knowledge encryption.",
+      "triggers": [
+        "bitwarden"
+      ],
+      "dependencies": [],
+      "byte_size": 4386,
+      "line_count": 87,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\bitwarden",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\bitwarden"
+      ],
+      "mirror_count": 1
+    },
+    "chat-archiver": {
+      "name": "chat-archiver",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- Universal AI chat archiver for downloading and archiving shared conversation links (such as ChatGPT share URLs, etc.) as clean, structured Markdown history files directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
+      "triggers": [
+        "chat-archiver"
+      ],
+      "dependencies": [],
+      "byte_size": 1773,
+      "line_count": 52,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\chat-archiver",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\chat-archiver"
+      ],
+      "mirror_count": 1
+    },
+    "chrome-extensions": {
+      "name": "chrome-extensions",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "> Build and publish Chrome Extensions using Manifest V3 best practices. Use this skill whenever the user asks to create, modify, debug, or understand Chrome browser extensions, add-ons, or anything involving the Chrome Extensions API. Trigger on mentions of: 'Chrome extension', 'browser extension', 'manifest.json', 'content script', 'service worker' (in browser context), 'popup' (in browser extension context), 'side panel', 'chrome.* API', 'declarativeNetRequest', 'omnibox', 'context menu' (in extension context), 'userScripts', 'user script', 'script manager', or any request to build functionality that integrates with the Chrome browser UI. Also trigger for publishing to the Chrome Web Store: 'publish extension', preparing an extension for publishing, responding to a review rejection, writing permission justifications, or drafting a privacy policy.",
+      "triggers": [
+        "Chrome extension",
+        "browser extension",
+        "manifest.json",
+        "content script",
+        "service worker",
+        "popup",
+        "side panel",
+        "chrome.* API",
+        "declarativeNetRequest",
+        "omnibox",
+        "context menu",
+        "userScripts",
+        "user script",
+        "script manager",
+        "publish extension"
+      ],
+      "dependencies": [],
+      "byte_size": 26986,
+      "line_count": 530,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\chrome-extensions",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\chrome-extensions"
+      ],
+      "mirror_count": 1
+    },
+    "colab-cloud-accelerator": {
+      "name": "colab-cloud-accelerator",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "VERIFIED",
+      "description": "Official Google Colab cloud execution and acceleration skill. Use whenever asked to \"run code on Colab\", \"provision GPU/TPU\", \"fine-tune model on Colab\", \"use Colab MCP\", \"execute Colab CLI\", \"connect to Colab session\", \"offload training to cloud accelerator\", or mentions Google Colab runtimes (T4, L4, A100, TPU v5e/v6e).",
+      "triggers": [
+        "run code on Colab",
+        "provision GPU/TPU",
+        "fine-tune model on Colab",
+        "use Colab MCP",
+        "execute Colab CLI",
+        "connect to Colab session",
+        "offload training to cloud accelerator"
+      ],
+      "dependencies": [],
+      "byte_size": 9361,
+      "line_count": 154,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\colab-cloud-accelerator",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\colab-cloud-accelerator",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\colab-cloud-accelerator"
+      ],
+      "mirror_count": 2
+    },
+    "cold-storage-archiver": {
+      "name": "cold-storage-archiver",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "Autonomous cold-storage packaging, pre-compressed dataset/game repack archiving, and cloud offloading engine. Enforces zero-recompression Store Mode (-m0), self-healing recovery records (-rr3% - -rr5%), 10GB cloud-volume slicing, pre-flight disk headroom triage, and offline shadow indexing into OmniVault (~/.omnivault/catalog.db).",
+      "triggers": [
+        "cold-storage-archiver"
+      ],
+      "dependencies": [],
+      "byte_size": 4421,
+      "line_count": 80,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\cold-storage-archiver",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\cold-storage-archiver",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\cold-storage-archiver"
+      ],
+      "mirror_count": 2
+    },
+    "compliance-report-harmonizer": {
+      "name": "compliance-report-harmonizer",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when generating, styling, converting, or verifying compliance and fairness audit reports across HTML and PDF formats. It enforces structural invariants, dual-format interoperability, pre-calibrated regulatory terminology (Harmonized, Standardized, Uniform, Interoperable, Cohesive), and Blink-engine print standards.",
+      "triggers": [
+        "compliance-report-harmonizer"
+      ],
+      "dependencies": [],
+      "byte_size": 12287,
+      "line_count": 251,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\compliance-report-harmonizer",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\compliance-report-harmonizer"
+      ],
+      "mirror_count": 1
+    },
+    "control-systems-sim": {
+      "name": "control-systems-sim",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "VERIFIED",
+      "description": ">- Dynamic Feedback Control Systems & Stability Simulation engine (EX 509). Analyzes 2nd-order transfer functions, computes time-domain metrics (overshoot, rise time, settling time), generates Bode/Nyquist stability criteria, and tunes PID loops.",
+      "triggers": [
+        "control-systems-sim"
+      ],
+      "dependencies": [
+        "tools/skills/control-systems-sim/scripts/control_analyzer.py"
+      ],
+      "byte_size": 3158,
+      "line_count": 54,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\control-systems-sim",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\control-systems-sim"
+      ],
+      "mirror_count": 1
+    },
+    "cp-archive-harvester": {
+      "name": "cp-archive-harvester",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Autonomous competitive programming (CP) problem and optimal solution harvester using Chrome DevTools Protocol (CDP). Archives CS Academy, IEEEXtreme, and PreXtreme tasks with clean Markdown problem statements, KaTeX LaTeX math formulas, resource limits, sample I/O, and un-truncated 100-point solutions into IEEE-Xtreme-Archive.",
+      "triggers": [
+        "cp-archive-harvester"
+      ],
+      "dependencies": [
+        "harvesters/csacademy_harvester.py"
+      ],
+      "byte_size": 5181,
+      "line_count": 109,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\cp-archive-harvester",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\cp-archive-harvester"
+      ],
+      "mirror_count": 1
+    },
+    "customization-state-sync": {
+      "name": "customization-state-sync",
+      "domain": "SWARM_ORCHESTRATION",
+      "availability_tier": "VERIFIED",
+      "description": "Use this skill when the user asks to \"snapshot customization state\", \"sync customizations across IDEs\", \"project Antigravity rules to Cursor or Claude\", \"audit customization drift\", \"restore agent settings snapshot\", or mentions managing Agent-Customization-Sync.",
+      "triggers": [
+        "snapshot customization state",
+        "sync customizations across IDEs",
+        "project Antigravity rules to Cursor or Claude",
+        "audit customization drift",
+        "restore agent settings snapshot"
+      ],
+      "dependencies": [],
+      "byte_size": 7364,
+      "line_count": 151,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\customization-state-sync",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\customization-state-sync",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\customization-state-sync"
+      ],
+      "mirror_count": 2
+    },
+    "cyber-forensics": {
+      "name": "cyber-forensics",
+      "domain": "SYSADMIN_SECURITY",
+      "availability_tier": "INSTALLED",
+      "description": "Windows Digital Forensics & Incident Response (DFIR) triage and stealth evasion hunting engine (F:\\Aaradhya-Dev-Tamrakar\\Cyber-Forensics). Use whenever asked to scan directories for hidden/masqueraded files, detect NTFS Alternate Data Streams (ADS), unmask CLSID/Unicode RLO exploits, verify executable PE headers, harvest Windows Prefetch execution artifacts, or maintain cryptographic chain-of-custody evidence ledgers.",
+      "triggers": [
+        "cyber-forensics"
+      ],
+      "dependencies": [],
+      "byte_size": 3667,
+      "line_count": 72,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\cyber-forensics",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\cyber-forensics"
+      ],
+      "mirror_count": 1
+    },
+    "design-taste-frontend": {
+      "name": "design-taste-frontend",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Master frontend design system. Use when building high-agency interfaces with strict design taste, calibrated color, typography, Material Design 3 fluidity, 3D spatial transforms, and motion physics. Overrides generic AI styling defaults, purple glows, and Inter overuse.",
+      "triggers": [
+        "design-taste-frontend"
+      ],
+      "dependencies": [],
+      "byte_size": 5809,
+      "line_count": 112,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\design-taste-frontend",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\design-taste-frontend"
+      ],
+      "mirror_count": 1
+    },
+    "discover-azure-skills": {
+      "name": "discover-azure-skills",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Searches the Azure skills catalog and recommends installable agent skills by matching an Azure task to skill metadata and plugin installation guidance. WHEN: before starting any task that involves an Azure or Microsoft-cloud service, product, or data source, when no currently loaded skill or tool already covers it.",
+      "triggers": [
+        "discover-azure-skills"
+      ],
+      "dependencies": [],
+      "byte_size": 2357,
+      "line_count": 42,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\discover-azure-skills",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "doc-archiver": {
+      "name": "doc-archiver",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- Universal Document Archiver for downloading and archiving Google Docs, Google Drive documents, and web pages as clean, structured Markdown files directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
+      "triggers": [
+        "doc-archiver"
+      ],
+      "dependencies": [],
+      "byte_size": 2492,
+      "line_count": 60,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\doc-archiver",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\doc-archiver"
+      ],
+      "mirror_count": 1
+    },
+    "dsa-complexity-optimizer": {
+      "name": "dsa-complexity-optimizer",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "VERIFIED",
+      "description": ">- Data Structures, Algorithms & Complexity Optimization skill (CT 552, CT 551). Audits Big-O space/time asymptotic bounds, selects optimal data structures (balanced trees, heaps, tries, disjoint sets), and optimizes graph traversals and dynamic programming routines.",
+      "triggers": [
+        "dsa-complexity-optimizer"
+      ],
+      "dependencies": [],
+      "byte_size": 3535,
+      "line_count": 53,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\dsa-complexity-optimizer",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\dsa-complexity-optimizer"
+      ],
+      "mirror_count": 1
+    },
+    "dsp-signal-engine": {
+      "name": "dsp-signal-engine",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": ">- Digital Signal Processing (DSP) & Filter Design engine (EX 710, EX 605, SH 501). Synthesizes FIR (windowed sinc) and IIR (Butterworth/Chebyshev via Bilinear Transform) filters, calculates FFT frequency spectra, and models quantization noise.",
+      "triggers": [
+        "dsp-signal-engine"
+      ],
+      "dependencies": [
+        "tools/skills/dsp-signal-engine/scripts/filter_synth.py"
+      ],
+      "byte_size": 2764,
+      "line_count": 50,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\dsp-signal-engine",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\dsp-signal-engine"
+      ],
+      "mirror_count": 1
+    },
+    "edge-ai-model-forge": {
+      "name": "edge-ai-model-forge",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": "Autonomous Edge AI & TinyML model forge for ultra-low-power microcontrollers (ESP32-S3, Cortex-M4/M7, nRF52840, STM32) and edge accelerators. Use whenever asked to \"train edge AI model\", \"design TinyML architecture\", \"quantize model for microcontroller\", \"optimize TFLite Micro model\", \"tune asymmetric loss for edge\", \"profile tensor arena memory\", \"export C header model\", \"prevent quantization clipping\", \"calibrate decision threshold on edge\", \"train SPARK fall detection model\", \"fine-tune IMU classifier on Colab\", or mentions deploying sub-100KB INT8 neural networks with strict flash/SRAM/latency budgets and safety-critical recall requirements.",
+      "triggers": [
+        "train edge AI model",
+        "design TinyML architecture",
+        "quantize model for microcontroller",
+        "optimize TFLite Micro model",
+        "tune asymmetric loss for edge",
+        "profile tensor arena memory",
+        "export C header model",
+        "prevent quantization clipping",
+        "calibrate decision threshold on edge",
+        "train SPARK fall detection model",
+        "fine-tune IMU classifier on Colab"
+      ],
+      "dependencies": [],
+      "byte_size": 24974,
+      "line_count": 419,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\edge-ai-model-forge",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\edge-ai-model-forge",
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\edge-ai-model-forge",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\edge-ai-model-forge"
+      ],
+      "mirror_count": 3
+    },
+    "electronics-circuit-synth": {
+      "name": "electronics-circuit-synth",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": ">- Analog Electronics & Sensor Signal Conditioning skill (EX 501, EX 553, EX 510, EE 401). Designs operational amplifier active filters (Sallen-Key), transistor DC bias networks, Schmitt triggers, 555 timer multivibrators, and Wheatstone bridge sensor conditioning.",
+      "triggers": [
+        "electronics-circuit-synth"
+      ],
+      "dependencies": [
+        "tools/skills/electronics-circuit-synth/scripts/circuit_calc.py"
+      ],
+      "byte_size": 3007,
+      "line_count": 50,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\electronics-circuit-synth",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\electronics-circuit-synth"
+      ],
+      "mirror_count": 1
+    },
+    "embedded-firmware-scaffold": {
+      "name": "embedded-firmware-scaffold",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": ">- Embedded Systems, RTOS & Firmware Architecture skill (CT 655, EX 452, CT 725 03). Generates production-grade bare-metal C/C++ Hardware Abstraction Layers (HAL), peripheral register bitmasks, non-blocking ISR circular buffers, and FreeRTOS task graphs.",
+      "triggers": [
+        "embedded-firmware-scaffold"
+      ],
+      "dependencies": [],
+      "byte_size": 4593,
+      "line_count": 125,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\embedded-firmware-scaffold",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\embedded-firmware-scaffold"
+      ],
+      "mirror_count": 1
+    },
+    "entra-agent-id": {
+      "name": "entra-agent-id",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Provision Microsoft Entra Agent Identity Blueprints, BlueprintPrincipals, and per-instance Agent Identities via Microsoft Graph, and configure OAuth 2.0 token exchange (fmi_path, OBO, cross-tenant) including the Microsoft Entra SDK for AgentID sidecar. USE FOR: Agent Identity Blueprint, BlueprintPrincipal, agent OAuth, fmi_path token exchange, agent OBO, Workload Identity Federation for agents, polyglot agent auth, Microsoft.Identity.Web.AgentIdentities. DO NOT USE FOR: standard Entra app registration (use entra-app-registration), Microsoft Foundry agent authoring (use microsoft-foundry).",
+      "triggers": [
+        "entra-agent-id"
+      ],
+      "dependencies": [],
+      "byte_size": 16392,
+      "line_count": 356,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\entra-agent-id",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "entra-app-registration": {
+      "name": "entra-app-registration",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Guides Microsoft Entra ID app registration, OAuth 2.0 authentication, and MSAL integration. USE FOR: create app registration, register Azure AD app, configure OAuth, set up authentication, add API permissions, generate service principal, MSAL example, console app auth, Entra ID setup, Azure AD authentication. DO NOT USE FOR: Key Vault secrets (use azure-keyvault-expiration-audit), general Azure resource security guidance.",
+      "triggers": [
+        "entra-app-registration"
+      ],
+      "dependencies": [],
+      "byte_size": 8414,
+      "line_count": 191,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\entra-app-registration",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "feature-dev": {
+      "name": "feature-dev",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "Guided feature development with codebase understanding, clarifying requirements, and architecture focus. Use when planning, scoping, or building new features.",
+      "triggers": [
+        "feature-dev"
+      ],
+      "dependencies": [],
+      "byte_size": 5154,
+      "line_count": 126,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\feature-dev",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\feature-dev"
+      ],
+      "mirror_count": 1
+    },
+    "find-skills": {
+      "name": "find-skills",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Helps users discover and install agent skills when they ask questions like \"how do I do X\", \"find a skill for X\", \"is there a skill that can...\", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.",
+      "triggers": [
+        "how do I do X",
+        "find a skill for X",
+        "is there a skill that can..."
+      ],
+      "dependencies": [],
+      "byte_size": 5472,
+      "line_count": 141,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\find-skills",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\find-skills"
+      ],
+      "mirror_count": 1
+    },
+    "fleet-orchestrator": {
+      "name": "fleet-orchestrator",
+      "domain": "SWARM_ORCHESTRATION",
+      "availability_tier": "VERIFIED",
+      "description": ">- This skill should be used when the user asks to \"use fleet-orchestrator\", \"dispatch swarm task\", \"queue background copilot tasks\", \"run headless worker pool\", \"manage multi-account copilot fleet\", \"sync drive manifest\", \"launch fleet GUI\", \"check fleet health\", \"reconcile quotas\", \"run fleet commander\", \"submit autonomous batch\", \"open fleet control center\", \"start worker daemon\", or mentions delegating autonomous batch execution, code drafting, research, and documentation generation across the Fleet-Orchestrator multi-model swarm engine (F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator).",
+      "triggers": [
+        "use fleet-orchestrator",
+        "dispatch swarm task",
+        "queue background copilot tasks",
+        "run headless worker pool",
+        "manage multi-account copilot fleet",
+        "sync drive manifest",
+        "launch fleet GUI",
+        "check fleet health",
+        "reconcile quotas",
+        "run fleet commander",
+        "submit autonomous batch",
+        "open fleet control center",
+        "start worker daemon"
+      ],
+      "dependencies": [
+        "scripts/dispatch_iv_ii_tasks.py",
+        "scripts/sync_drive.py",
+        "tools/copilot_fleet.py",
+        "tools/copilot_queue_worker.py",
+        "tools/fast_intent_router.py",
+        "tools/fleet_commander.py",
+        "tools/fleet_gui.py"
+      ],
+      "byte_size": 17749,
+      "line_count": 258,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\fleet-orchestrator",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\fleet-orchestrator",
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\fleet-orchestrator",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\fleet-orchestrator"
+      ],
+      "mirror_count": 3
+    },
+    "fluid-wordmark-collapse": {
+      "name": "fluid-wordmark-collapse",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "This skill should be used when the user asks to \"collapse logo to initials\", \"collapse name to ADT\", \"implement Anthropic style logo collapse\", \"create collapsible brand wordmark\", \"prevent navbar layout shift on scroll\", \"fix jumping navbar links\", \"lock navbar elements in place\", or mentions fluid wordmark contraction into monograms.",
+      "triggers": [
+        "collapse logo to initials",
+        "collapse name to ADT",
+        "implement Anthropic style logo collapse",
+        "create collapsible brand wordmark",
+        "prevent navbar layout shift on scroll",
+        "fix jumping navbar links",
+        "lock navbar elements in place"
+      ],
+      "dependencies": [],
+      "byte_size": 7579,
+      "line_count": 213,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\fluid-wordmark-collapse",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\fluid-wordmark-collapse"
+      ],
+      "mirror_count": 1
+    },
+    "gemini-api-dev": {
+      "name": "gemini-api-dev",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "Use this skill when writing code that calls the Gemini API for text generation, multi-turn chat, multimodal understanding, image generation, video generation, speech generation (TTS), voice design, voice replication, streaming responses, background research tasks, function calling, structured output, or migrating from the old generateContent API. Covers SDK usage and best practices for Gemini models and agents in Python and TypeScript.",
+      "triggers": [
+        "gemini-api-dev"
+      ],
+      "dependencies": [],
+      "byte_size": 21569,
+      "line_count": 458,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\plugins\\gemini-api\\skills\\gemini-api-dev",
+      "ssot_role": "PLUGIN_EMBEDDED",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "gemini-live-api-dev": {
+      "name": "gemini-live-api-dev",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "Use this skill when building real-time, bidirectional streaming applications with the Gemini Live API, or migrating legacy Live models (2.0/2.5/3.1) to Gemini 3.8 Live. Covers WebSocket-based audio/video/text streaming, voice activity detection (VAD), background reasoning (extended thinking), asynchronous function calling, session management, ephemeral tokens, live transcription, and live translation. SDKs covered - google-genai (Python), @google/genai (JavaScript/TypeScript).",
+      "triggers": [
+        "gemini-live-api-dev"
+      ],
+      "dependencies": [],
+      "byte_size": 18738,
+      "line_count": 408,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\plugins\\gemini-api\\skills\\gemini-live-api-dev",
+      "ssot_role": "PLUGIN_EMBEDDED",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "gemini-omni-flash-api": {
+      "name": "gemini-omni-flash-api",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "Use this skill for generative video editing, text-to-video, image-referenced video generation, first-frame-to-video, first-and-last-frame transitions, and video extensions using Gemini Omni 1.1 Flash (gemini-omni-1.1-flash) via the official google-genai SDK. Includes workflows for pre-processing/optimizing high-resolution or long source videos with ffmpeg, stripping audio for full sound regeneration, and handling turn-by-turn video editing and parallel execution.",
+      "triggers": [
+        "gemini-omni-flash-api"
+      ],
+      "dependencies": [
+        "./scripts/upload_file.py",
+        "./scripts/video/generate_video.py",
+        "./scripts/video/inspect_video.py",
+        "./scripts/video/prep_video.py"
+      ],
+      "byte_size": 25791,
+      "line_count": 450,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\plugins\\gemini-api\\skills\\gemini-omni-flash-api",
+      "ssot_role": "PLUGIN_EMBEDDED",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "generative_ui": {
+      "name": "generative_ui",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "How to render rich interactive HTML widgets inline in the chat or as standalone artifacts. Use this skill when you want to show the user diagrams, data visualizations, interactive controls, educational walkthroughs, or any rich visual content beyond plain text and markdown.",
+      "triggers": [
+        "generative_ui"
+      ],
+      "dependencies": [],
+      "byte_size": 5824,
+      "line_count": 123,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\generative_ui",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "github-issue-pr-workflow": {
+      "name": "github-issue-pr-workflow",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks to \"create an issue\", \"open a PR\", \"issue and PR workflow\", \"track tasks on GitHub issue\", \"create branch from issue\", \"tick off issue checkboxes\", \"request review on PR\", \"assign reviewer\", or follow the complete issue-to-PR development lifecycle.",
+      "triggers": [
+        "create an issue",
+        "open a PR",
+        "issue and PR workflow",
+        "track tasks on GitHub issue",
+        "create branch from issue",
+        "tick off issue checkboxes",
+        "request review on PR",
+        "assign reviewer"
+      ],
+      "dependencies": [],
+      "byte_size": 7836,
+      "line_count": 224,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\github-issue-pr-workflow",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "github-workflow": {
+      "name": "github-workflow",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "VERIFIED",
+      "description": "Default, authoritative workflow for all GitHub development, feature work, bug fixes, refactoring, issue tracking, branch isolation, ecosystem multi-remote synchronization, and pull request reviews. This skill should be used whenever working on GitHub repositories, implementing features, fixing bugs, creating issues, switching branches, syncing code, opening pull requests, or following standard Git development lifecycles.",
+      "triggers": [
+        "github-workflow"
+      ],
+      "dependencies": [],
+      "byte_size": 24314,
+      "line_count": 445,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\github-workflow",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\github-workflow"
+      ],
+      "mirror_count": 1
+    },
+    "google-classroom": {
+      "name": "google-classroom",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- Expert Google Classroom assistant for querying active courses, tracking upcoming assignments and due dates, analyzing coursework descriptions and attachments, checking submission grades and late flags, reading stream announcements, copying course contents, and managing student turn-ins via the classroom MCP server.",
+      "triggers": [
+        "google-classroom"
+      ],
+      "dependencies": [],
+      "byte_size": 9285,
+      "line_count": 126,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\google-classroom",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\google-classroom"
+      ],
+      "mirror_count": 1
+    },
+    "google-stitch-integration": {
+      "name": "google-stitch-integration",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Connects Google Antigravity with external UI layout generators via Model Context Protocol (MCP) to ingest production-ready design files, color tokens, and asset configurations directly from Google Stitch.",
+      "triggers": [
+        "google-stitch-integration"
+      ],
+      "dependencies": [],
+      "byte_size": 3331,
+      "line_count": 68,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\google-stitch-integration",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\google-stitch-integration"
+      ],
+      "mirror_count": 1
+    },
+    "graphify": {
+      "name": "graphify",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "VERIFIED",
+      "description": "Use for any question about a codebase, its architecture, file relationships, or project content — especially when graphify-out/ exists, where the question should be treated as a graphify query first. Turns any input (code, docs, papers, images, videos) into a persistent knowledge graph with god nodes, community detection, and query/path/explain tools.",
+      "triggers": [
+        "graphify"
+      ],
+      "dependencies": [],
+      "byte_size": 43716,
+      "line_count": 755,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\graphify",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\graphify"
+      ],
+      "mirror_count": 1
+    },
+    "graphify-code-search": {
+      "name": "graphify-code-search",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "ACCESSIBLE",
+      "description": "This skill should be used when the user asks to \"search for implementation\", \"find function definition\", \"find how X is implemented\", \"find callers of\", \"who calls this function\", \"what does this function call\", \"check if we already have a helper for\", \"trace call chain\", \"search implementation with graphify\", or when looking to speed up coding by discovering and reusing existing codebase implementations via the Graphify knowledge graph.",
+      "triggers": [
+        "search for implementation",
+        "find function definition",
+        "find how X is implemented",
+        "find callers of",
+        "who calls this function",
+        "what does this function call",
+        "check if we already have a helper for",
+        "trace call chain",
+        "search implementation with graphify"
+      ],
+      "dependencies": [],
+      "byte_size": 5657,
+      "line_count": 127,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\graphify-code-search",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\graphify-code-search"
+      ],
+      "mirror_count": 1
+    },
+    "graphify-optimizer": {
+      "name": "graphify-optimizer",
+      "domain": "RESEARCH_ACADEMIC",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- Expert knowledge graph optimization, noise elimination, and relevancy calibration engine for Graphify. Use whenever analyzing or tuning graphify-out/, pruning leaf-node spur noise, configuring .graphifyignore, executing directed or code-only extractions, labeling semantic communities, or maximizing GraphRAG retrieval signal.",
+      "triggers": [
+        "graphify-optimizer"
+      ],
+      "dependencies": [],
+      "byte_size": 9037,
+      "line_count": 205,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\graphify-optimizer",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\graphify-optimizer"
+      ],
+      "mirror_count": 1
+    },
+    "imagegen": {
+      "name": "imagegen",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas.",
+      "triggers": [
+        "imagegen"
+      ],
+      "dependencies": [],
+      "byte_size": 19516,
+      "line_count": 315,
+      "ssot_path": "C:\\Users\\Aaradhya\\.codex\\skills\\.system\\imagegen",
+      "ssot_role": "CODEX_SYSTEM",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "latex-thesis-architect": {
+      "name": "latex-thesis-architect",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks to \"scaffold latex thesis\", \"draft thesis report\", \"write capstone report\", \"prepare fellowship report\", \"format academic report in latex\", \"audit thesis writing\", \"compile latex report\", \"create beamer slides\", \"defense presentation\", or mentions drafting, reviewing, structuring, or compiling formal engineering thesis and capstone reports in the calm-authority Anthropic voice using CPM DAG orchestration and modular LaTeX and Beamer templates.",
+      "triggers": [
+        "scaffold latex thesis",
+        "draft thesis report",
+        "write capstone report",
+        "prepare fellowship report",
+        "format academic report in latex",
+        "audit thesis writing",
+        "compile latex report",
+        "create beamer slides",
+        "defense presentation"
+      ],
+      "dependencies": [
+        "scripts/audit_latex_thesis.py",
+        "scripts/compile_thesis.py",
+        "scripts/scaffold_thesis.py"
+      ],
+      "byte_size": 9782,
+      "line_count": 137,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\latex-thesis-architect",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\latex-thesis-architect",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\latex-thesis-architect"
+      ],
+      "mirror_count": 2
+    },
+    "mcp-integration": {
+      "name": "mcp-integration",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks to \"add MCP server\", \"integrate MCP\", \"configure MCP in plugin\", \"use .mcp.json\", \"set up Model Context Protocol\", \"connect external service\", mentions \"${CLAUDE_PLUGIN_ROOT} with MCP\", or discusses MCP server types (SSE, stdio, HTTP, WebSocket). Provides comprehensive guidance for integrating Model Context Protocol servers into Claude Code plugins for external tool and service integration.",
+      "triggers": [
+        "add MCP server",
+        "integrate MCP",
+        "configure MCP in plugin",
+        "use .mcp.json",
+        "set up Model Context Protocol",
+        "connect external service",
+        "${CLAUDE_PLUGIN_ROOT} with MCP"
+      ],
+      "dependencies": [],
+      "byte_size": 12521,
+      "line_count": 555,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\mcp-integration",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\mcp-integration"
+      ],
+      "mirror_count": 1
+    },
+    "microsoft-foundry": {
+      "name": "microsoft-foundry",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Build, deploy, evaluate, optimize, fine-tune, and manage Microsoft Foundry agents, models, and resources end to end. USE FOR: foundry, azd ai agent, azd provision/deploy, hosted agent scaffold/develop/run/deploy/troubleshoot, prompt agent create, create agent, update agent, add tool to agent, invoke agent, agent.yaml, agent insights, pull agent insights, evaluate agent, batch eval, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prompt, prompt optimizer, optimize agent instructions, Agent Optimizer scaffold, dataset curation from traces, deploy model, model fine-tuning (SFT/DPO/RFT), Foundry project, RBAC, role assignment, permissions, quota, capacity, region, deployment failure, AI Services, create Foundry resource, knowledge index, customize deployment, onboard, availability, training-data, grader, distillation, large file upload. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).",
+      "triggers": [
+        "microsoft-foundry"
+      ],
+      "dependencies": [
+        "./scripts/check-and-setup-dependencies.sh"
+      ],
+      "byte_size": 27222,
+      "line_count": 293,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\microsoft-foundry",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "migrate-workflows": {
+      "name": "migrate-workflows",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Automatically migrate legacy workflows to modern skills across global and workspace configurations. Scans for existing workflows, creates target SKILL.md files, and safely archives old workflow files.",
+      "triggers": [
+        "migrate-workflows"
+      ],
+      "dependencies": [],
+      "byte_size": 6039,
+      "line_count": 132,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\migrate-workflows",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "modern-web-guidance": {
+      "name": "modern-web-guidance",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "| Search tool for modern web development best practices. MANDATORY: Execute FIRST for all HTML/CSS and clientside JS tasks. Do NOT skip — web APIs evolve rapidly and training weights contain obsolete patterns. Trigger immediately for: - UI/Layout: Modals, dialogs, popovers, Glassmorphism/backdrop-filters, anchor positioning, container queries, `:has()`, `:user-valid`. - Scroll/Motion: View Transitions, Scroll-driven animations, scroll parallax/reveals. - Performance: CWV (LCP, INP), content-visibility, Fetch Priority, image optimization. - System/APIs: Local filesystem access, WebUSB, WebSockets sync, WebAssembly widgets. - Frameworks: Adapting layout/styles in React, Vue, Angular. - General Frontend: Forms, autofill, advanced inputs, custom scrollbars, modern component states, etc. DO NOT trigger for: - Backend: Database SQL, ORMs, Express API routes. - Pipelines: CI/CD deployment, Docker, Actions. - Generic: Local scripts (Python/Go tools), ESLint, Git.",
+      "triggers": [
+        "modern-web-guidance"
+      ],
+      "dependencies": [],
+      "byte_size": 6870,
+      "line_count": 123,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\modern-web-guidance",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\modern-web-guidance"
+      ],
+      "mirror_count": 1
+    },
+    "oose-architecture-modeler": {
+      "name": "oose-architecture-modeler",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Object-Oriented Software Engineering (OOSE) and architectural modeling skill. Translates natural-language requirements into formal UML structural & behavioral models (Class, Sequence, Component, Statechart diagrams in Mermaid.js), subsystem allocations, typed interface contracts, and inter-class test case suites.",
+      "triggers": [
+        "oose-architecture-modeler"
+      ],
+      "dependencies": [],
+      "byte_size": 4132,
+      "line_count": 84,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\oose-architecture-modeler",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\oose-architecture-modeler"
+      ],
+      "mirror_count": 1
+    },
+    "openai-docs": {
+      "name": "openai-docs",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Use for Codex models/pricing, scheduled tasks, skills, settings, setup, troubleshooting, customization, automations, and self-knowledge—including 'you,' 'your,' 'this app,' or 'this coding agent' when they refer to Codex—and for OpenAI APIs/products and ChatGPT Work. Also use for model choice/migration, prompting, SDKs, Responses, Realtime, agents, evals, and Chat/Work/Codex comparisons. Do not use for generic app/software tasks that merely mention Codex.",
+      "triggers": [
+        "you,",
+        "your,",
+        "this app,",
+        "this coding agent"
+      ],
+      "dependencies": [],
+      "byte_size": 5475,
+      "line_count": 38,
+      "ssot_path": "C:\\Users\\Aaradhya\\.codex\\skills\\.system\\openai-docs",
+      "ssot_role": "CODEX_SYSTEM",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "permissioned-github": {
+      "name": "permissioned-github",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Guidelines for interacting with GitHub and request permissions from the user when commands fail due to restrictions in the agent environment.",
+      "triggers": [
+        "permissioned-github"
+      ],
+      "dependencies": [],
+      "byte_size": 8293,
+      "line_count": 187,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\permissioned-github",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "plugin": {
+      "name": "plugin",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "How to manage and create plugins — namespaced bundles of skills, agents, rules, MCP servers and hooks that install, enable and disable as a single unit. Use this skill when the user wants to enable, disable, install or uninstall a plugin, when they want to create a new plugin, or when a new customization should be packaged into a plugin rather than left loose. Also triggered by the /plugin slash command. Don't use for the underlying customization system itself — discovery roots, loading priority, or authoring a standalone skill, agent, rule, hook or MCP server outside a plugin; see the customizations guide skill for those.",
+      "triggers": [
+        "plugin"
+      ],
+      "dependencies": [],
+      "byte_size": 14707,
+      "line_count": 301,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\plugin",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "pm-workflow-orchestrator": {
+      "name": "pm-workflow-orchestrator",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Project Management & Workflow Orchestration skill based on PMI PMBOK, Precedence Diagramming, and Engineering Economics (CT 658, CE 615). Decomposes high-level requirements into Work Breakdown Structures (WBS), computes CPM critical paths, calculates Earned Value metrics, and structures issue acceptance tasks.",
+      "triggers": [
+        "pm-workflow-orchestrator"
+      ],
+      "dependencies": [],
+      "byte_size": 4597,
+      "line_count": 91,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\pm-workflow-orchestrator",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\pm-workflow-orchestrator"
+      ],
+      "mirror_count": 1
+    },
+    "portfolio-project-manager": {
+      "name": "portfolio-project-manager",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Deterministic, Token-Zero project onboarding engine for Aaradhya's portfolio website (AaradhyaDT.github.io). Use whenever asked to add, register, or document a new project, tool, or build in the portfolio. Prevents manual HTML text slicing and guarantees automatic ID numbering, AES-256-GCM link encryption into access.js, filter pill recounting, and zero-token verification.",
+      "triggers": [
+        "portfolio-project-manager"
+      ],
+      "dependencies": [
+        "scripts/add_project.py"
+      ],
+      "byte_size": 4498,
+      "line_count": 98,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\portfolio-project-manager",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\portfolio-project-manager"
+      ],
+      "mirror_count": 1
+    },
+    "pr-review-toolkit": {
+      "name": "pr-review-toolkit",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "Comprehensive pull request and code review toolkit using specialized review perspectives (code simplification, silent failure hunting, test quality analysis, type design audit, and comment health). Use whenever reviewing PRs, diffs, or code changes.",
+      "triggers": [
+        "pr-review-toolkit"
+      ],
+      "dependencies": [],
+      "byte_size": 39125,
+      "line_count": 758,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\pr-review-toolkit",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\pr-review-toolkit"
+      ],
+      "mirror_count": 1
+    },
+    "problem-dissector": {
+      "name": "problem-dissector",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Algorithmic Problem Dissector & Cognitive Deconstruction Engine for Competitive Programming. Parses raw problem statements into structured Agent Dissection Contracts (asymptotics, Big-O bounds, mathematical invariants, algorithmic archetypes, forbidden patterns, and edge-case checklists). Operates headlessly via CLI background tasks to feed downstream coding agents without context pollution.",
+      "triggers": [
+        "problem-dissector"
+      ],
+      "dependencies": [
+        "cli/dissect.py"
+      ],
+      "byte_size": 3763,
+      "line_count": 92,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\problem-dissector",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\problem-dissector"
+      ],
+      "mirror_count": 1
+    },
+    "python-appservice-deploy": {
+      "name": "python-appservice-deploy",
+      "domain": "CLOUD_ENTERPRISE",
+      "availability_tier": "INSTALLED",
+      "description": "Deploy Python (Flask/Django/FastAPI) code to Azure App Service Linux. WHEN: \\\"Flask App Service\\\", \\\"Django App Service\\\", \\\"FastAPI App Service\\\", \\\"deploy Python to App Service\\\". DO NOT USE FOR: Container Apps, Functions, non-Python, Terraform/Bicep/IaC, full infra — use azure-prepare.",
+      "triggers": [
+        "Flask App Service\\",
+        "Django App Service\\",
+        "FastAPI App Service\\",
+        "deploy Python to App Service\\"
+      ],
+      "dependencies": [],
+      "byte_size": 2823,
+      "line_count": 36,
+      "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\python-appservice-deploy",
+      "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "review-agent": {
+      "name": "review-agent",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Perform a read-only, defect-first review of a specified code change and return every actionable finding. Use when another agent delegates review of uncommitted changes, a base-branch diff, a commit, or custom review instructions.",
+      "triggers": [
+        "review-agent"
+      ],
+      "dependencies": [],
+      "byte_size": 2718,
+      "line_count": 57,
+      "ssot_path": "C:\\Users\\Aaradhya\\.codex\\skills\\.system\\review-agent",
+      "ssot_role": "CODEX_SYSTEM",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "rf-link-budget-calc": {
+      "name": "rf-link-budget-calc",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": ">- Radio Frequency (RF), Microwave & Wireless Link Budget calculator (EX 503, EX 653, EX 716, EX 715). Computes Friis free-space path loss, antenna directivity, transmission line VSWR, and end-to-end receiver link margins.",
+      "triggers": [
+        "rf-link-budget-calc"
+      ],
+      "dependencies": [
+        "tools/skills/rf-link-budget-calc/scripts/rf_calc.py"
+      ],
+      "byte_size": 2979,
+      "line_count": 50,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\rf-link-budget-calc",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\rf-link-budget-calc"
+      ],
+      "mirror_count": 1
+    },
+    "security-guidance": {
+      "name": "security-guidance",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "",
+      "triggers": [
+        "security-guidance"
+      ],
+      "dependencies": [],
+      "byte_size": 25387,
+      "line_count": 473,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\security-guidance",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\security-guidance"
+      ],
+      "mirror_count": 1
+    },
+    "shadcn-context": {
+      "name": "shadcn-context",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Provides exact component schemas, prop definitions, and composition rules for shadcn/ui, Radix UI primitives, and modern design system packs to prevent style hallucinations.",
+      "triggers": [
+        "shadcn-context"
+      ],
+      "dependencies": [],
+      "byte_size": 4463,
+      "line_count": 129,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\shadcn-context",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\shadcn-context"
+      ],
+      "mirror_count": 1
+    },
+    "skill-creator": {
+      "name": "skill-creator",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Create or update a Codex skill with appropriately scoped instructions and any needed supporting resources.",
+      "triggers": [
+        "skill-creator"
+      ],
+      "dependencies": [
+        "scripts/generate_openai_yaml.py",
+        "scripts/init_skill.py",
+        "scripts/quick_validate.py"
+      ],
+      "byte_size": 15540,
+      "line_count": 229,
+      "ssot_path": "C:\\Users\\Aaradhya\\.codex\\skills\\.system\\skill-creator",
+      "ssot_role": "CODEX_SYSTEM",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "skill-development": {
+      "name": "skill-development",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "This skill should be used when the user wants to \"create a skill\", \"add a skill to plugin\", \"write a new skill\", \"improve skill description\", \"organize skill content\", or needs guidance on skill structure, progressive disclosure, or skill development best practices for Claude Code plugins.",
+      "triggers": [
+        "create a skill",
+        "add a skill to plugin",
+        "write a new skill",
+        "improve skill description",
+        "organize skill content"
+      ],
+      "dependencies": [],
+      "byte_size": 22829,
+      "line_count": 638,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\skill-development",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\skill-development"
+      ],
+      "mirror_count": 1
+    },
+    "skill-installer": {
+      "name": "skill-installer",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Install Codex skills into $CODEX_HOME/skills from a curated list or a GitHub repo path. Use when a user asks to list installable skills, install a curated skill, or install a skill from another repo (including private repos).",
+      "triggers": [
+        "skill-installer"
+      ],
+      "dependencies": [],
+      "byte_size": 3425,
+      "line_count": 58,
+      "ssot_path": "C:\\Users\\Aaradhya\\.codex\\skills\\.system\\skill-installer",
+      "ssot_role": "CODEX_SYSTEM",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "slm-router-forge": {
+      "name": "slm-router-forge",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "VERIFIED",
+      "description": "Autonomous end-to-end Small Language Model (SLM) forge, local routing engine, and task time allocation synthesizer. Use whenever asked to \"tune an intent router\", \"train a local classifier\", \"fine-tune Qwen on Colab\", \"export GGUF for local inference\", \"harvest task time dataset\", \"allocate task execution timeout\", \"upload model to Google Drive\", \"run model in LM Studio\", or mentions training sub-1B parameter models (e.g., Qwen 0.5B/0.8B LoRA via Unsloth) for low-latency (<50ms) intent discovery, skill routing, and empirical duration budgeting.",
+      "triggers": [
+        "tune an intent router",
+        "train a local classifier",
+        "fine-tune Qwen on Colab",
+        "export GGUF for local inference",
+        "harvest task time dataset",
+        "allocate task execution timeout",
+        "upload model to Google Drive",
+        "run model in LM Studio"
+      ],
+      "dependencies": [
+        "scripts/upload_large_model_to_drive.py"
+      ],
+      "byte_size": 22533,
+      "line_count": 312,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\slm-router-forge",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\slm-router-forge",
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\slm-router-forge",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\slm-router-forge"
+      ],
+      "mirror_count": 3
+    },
+    "split-to-prs": {
+      "name": "split-to-prs",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Split current work into small reviewable PRs. Use when the user asks to split a chat, set of changes, branch, or PR.",
+      "triggers": [
+        "split-to-prs"
+      ],
+      "dependencies": [],
+      "byte_size": 2228,
+      "line_count": 49,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\split-to-prs",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\split-to-prs"
+      ],
+      "mirror_count": 1
+    },
+    "super-nlm": {
+      "name": "super-nlm",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "VERIFIED",
+      "description": "This skill should be used when interacting with Google NotebookLM fleets, querying notebooks via Super-NLM MCP, downloading and managing Studio artifacts (videos, mind maps, reports, audio overviews, quizzes), syncing Google Drive or local folders with code adapters, scheduling batch generation, and running cross-notebook synthesis.",
+      "triggers": [
+        "super-nlm"
+      ],
+      "dependencies": [],
+      "byte_size": 13651,
+      "line_count": 179,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\super-nlm",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\super-nlm",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\super-nlm"
+      ],
+      "mirror_count": 2
+    },
+    "super-nlm-downloads": {
+      "name": "super-nlm-downloads",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user pastes a Google NotebookLM link or notebook ID to download all studio artifacts (videos, quizzes, mind maps, slides, reports), requires files saved directly to the subject's downloads folder outside the repository, or asks to share downloaded folders/files via LocalSend (sharing the whole folder, or bundling files into a date-appended subfolder).",
+      "triggers": [
+        "super-nlm-downloads"
+      ],
+      "dependencies": [],
+      "byte_size": 14015,
+      "line_count": 184,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\super-nlm-downloads",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\super-nlm-downloads"
+      ],
+      "mirror_count": 1
+    },
+    "symbolic-math-engine": {
+      "name": "symbolic-math-engine",
+      "domain": "SWARM_ORCHESTRATION",
+      "availability_tier": "INSTALLED",
+      "description": "This skill should be used when the user asks to \"compute symbolic derivative\", \"evaluate analytical integral\", \"solve differential equation\", \"compute EKF Jacobian matrix\", \"calculate matrix exponential exp(At)\", \"derive transfer function\", \"generate C99 code for math expression\", \"eliminate quantifiers via CAD\", \"prove polynomial non-negativity\", \"solve nonlinear ODE\", \"derive kinematics symbolically\", or mentions using SymPy, Wolfram Engine, or the Tiered Symbolic Mathematics Adapter in Fleet-Orchestrator.",
+      "triggers": [
+        "compute symbolic derivative",
+        "evaluate analytical integral",
+        "solve differential equation",
+        "compute EKF Jacobian matrix",
+        "calculate matrix exponential exp(At)",
+        "derive transfer function",
+        "generate C99 code for math expression",
+        "eliminate quantifiers via CAD",
+        "prove polynomial non-negativity",
+        "solve nonlinear ODE",
+        "derive kinematics symbolically"
+      ],
+      "dependencies": [
+        "tools/symbolic_math_adapter.py"
+      ],
+      "byte_size": 6924,
+      "line_count": 125,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\symbolic-math-engine",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\symbolic-math-engine"
+      ],
+      "mirror_count": 1
+    },
+    "systems-concurrency-harness": {
+      "name": "systems-concurrency-harness",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- Systems Programming, Concurrency & Deadlock Governance skill (CT 612, CT 401). Audits multithreaded systems for race conditions, models Banker's deadlock avoidance, designs thread-safe bounded ring buffers, and scaffolds POSIX/Win32 synchronization.",
+      "triggers": [
+        "systems-concurrency-harness"
+      ],
+      "dependencies": [],
+      "byte_size": 4612,
+      "line_count": 118,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\systems-concurrency-harness",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\systems-concurrency-harness"
+      ],
+      "mirror_count": 1
+    },
+    "ui-plugin-navigation": {
+      "name": "ui-plugin-navigation",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Discover UI plugin panels relevant to the current task and surface a one-click pill in chat to open (toggle) them in the side pane. Use when a running UI plugin's panel would help with what the user is doing, or right after the user enables a new UI plugin pane and a shortcut to open it is handy.",
+      "triggers": [
+        "ui-plugin-navigation"
+      ],
+      "dependencies": [],
+      "byte_size": 3580,
+      "line_count": 82,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\ui-plugin-navigation",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "win-vault": {
+      "name": "win-vault",
+      "domain": "SYSADMIN_SECURITY",
+      "availability_tier": "INSTALLED",
+      "description": "Expert Windows folder locking, privacy vault management, and kernel-level NTFS Access Control (ACL) administration using Win-Vault (F:\\Aaradhya-Dev-Tamrakar\\Win-Vault). Use whenever asked to lock/unlock folders, protect sensitive directories, manage vault master passwords, or enforce low-level filesystem access denial without third-party tools.",
+      "triggers": [
+        "win-vault"
+      ],
+      "dependencies": [],
+      "byte_size": 4176,
+      "line_count": 89,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\win-vault",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\win-vault"
+      ],
+      "mirror_count": 1
+    },
+    "winpilot": {
+      "name": "winpilot",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Expert Windows UI automation, screen perception, window management, and silent screenshot capture using the local WinPilot framework (F:\\Aaradhya-Dev-Tamrakar\\Utility\\windows-pilot). Use whenever interacting with active desktop windows, reading UI Automation (UIA) trees, capturing/saving window screenshots, or extracting content from native apps and browsers.",
+      "triggers": [
+        "winpilot"
+      ],
+      "dependencies": [],
+      "byte_size": 4407,
+      "line_count": 116,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\winpilot",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\winpilot"
+      ],
+      "mirror_count": 1
+    },
+    "writing-like-claude": {
+      "name": "writing-like-claude",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "This skill should be used when the user asks to \"write like claude\", \"write an engineering blog post\", \"write a model release report\", \"draft a system card\", \"create a technical announcement\", \"write a developer migration guide\", \"audit technical writing\", \"write a case study\", or mentions drafting publications, benchmarks, or safety dossiers in the calm-authority Anthropic voice.",
+      "triggers": [
+        "write like claude",
+        "write an engineering blog post",
+        "write a model release report",
+        "draft a system card",
+        "create a technical announcement",
+        "write a developer migration guide",
+        "audit technical writing",
+        "write a case study"
+      ],
+      "dependencies": [],
+      "byte_size": 9733,
+      "line_count": 122,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\writing-like-claude",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\writing-like-claude",
+        "C:\\Users\\Aaradhya\\.agents\\skills\\writing-like-claude"
+      ],
+      "mirror_count": 2
+    }
+  }
+}
