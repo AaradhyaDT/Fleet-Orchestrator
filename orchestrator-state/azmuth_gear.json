@@ -1,6 +1,6 @@
 {
-  "gear": "whisper",
-  "name": "Whisper (Low Power)",
-  "set_at": "2026-10-16T06:38:46.522857+00:00",
-  "reason": "Circuit Breaker tripped: Avail RAM 2.88GB < 3.0GB or Load 81% > 80%"
+  "gear": "balanced",
+  "name": "Balanced (Auto-Managed)",
+  "set_at": "2026-10-16T08:40:58.229522+00:00",
+  "reason": "CLI invocation --gear balanced"
 }

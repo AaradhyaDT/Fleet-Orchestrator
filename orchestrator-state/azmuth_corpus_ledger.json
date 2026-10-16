@@ -1,10 +1,12 @@
 {
   "version": 1,
-  "last_harvest_at": "2026-10-16T03:48:36.568199+00:00",
+  "last_harvest_at": "2026-10-16T08:44:34.270714+00:00",
   "tasks_processed": [
     "a_game",
-    "addition"
+    "addition",
+    "balanced-string",
+    "circular_subarrays"
   ],
-  "invariants_discovered": 2,
+  "invariants_discovered": 4,
   "summary": "Azmuth Language Corpus Harvest Ledger"
 }
