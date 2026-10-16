@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "total_indexed": 635,
+  "total_indexed": 696,
   "problems": {
     "0-k-multiple": {
       "title": "0-K Multiple",
@@ -7135,6 +7135,735 @@
         "FAST_IO_STREAM_UNTIE"
       ],
       "indexed_at": "2026-10-16T11:19:51.147900+00:00"
+    },
+    "two-coins": {
+      "title": "Two Coins",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10$ \n$1 \\leq v_i \\leq 10$, for each $i$, where $1 \\leq i \\leq N$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>2 2 1 3 | 3 | The amounts that can be paid are: 3, 4 and ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.285438+00:00"
+    },
+    "two-elevators": {
+      "title": "Two Elevators",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \n$1 \\leq E_1, E_2 \\leq N$ \n$1 \\leq A_i, B_i \\leq N$ \n$A_i \\neq B_i$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 1 4<br>2 3<br>4 1<br>1 2<br>3 2 | 4 | The first ele",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.286362+00:00"
+    },
+    "two-guards": {
+      "title": "Two Guards",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq A \\leq B \\leq 10^5$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 1 4 | 1 | The first guard comes to the shop in the days 1 and 3 while the second one in the days 1 and 4.\nIn day 2 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.287180+00:00"
+    },
+    "two-rows": {
+      "title": "Two Rows",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq M \\leq 10^5$ \n$-10^5 \\leq A_{i, j} \\leq 10^5$ \nThe game starts with the first player choosing cell $(1, 1)$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>5 7 9 5 12<br>2 1 2 10",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.288004+00:00"
+    },
+    "two-squares": {
+      "title": "Two Squares",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 200$ \n$1 \\leq K \\leq min(30, N, M)$\n\n\n| Input | Output |\n| --- | --- |\n| 3 3 2<br>1 1 0<br>1 1 0<br>0 1 0 | 9 |\n| 3 4 2<br>1 1 0 1<br>1 0 1 1<br>1 1 0 1 | 9 |\n| 5 4 3<br>0 0 1 0<br>1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.288762+00:00"
+    },
+    "two_progressions": {
+      "title": "Two Progressions",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq T \\leq 10$\n$4 \\leq N \\leq 10^5$\nThe sum of all the values of $N$ in an input file is \u2264 $10^5$\nThe values of the array are between $0$ and $10^7$\nYou should only consider solutions where the ar",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.327158+00:00"
+    },
+    "ultimateorbs": {
+      "title": "Ultimate Orbs",
+      "difficulty": "MEDIUM",
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^{6}$ \n$0 \\leq D \\leq 10^{9}$ \n$0 \\leq G_{i} \\leq 10^{9}$ \n\n\n| Input | Output |\n| --- | --- |\n| 13 2\n<br>2 0 1 6 1 0 3 0 13 2 0 4 6 | 4 5 6 7 9 10 11 12 13 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.328398+00:00"
+    },
+    "unfair_game": {
+      "title": "Unfair Game",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The values of the array will be between $-10^9$ and $10^9$\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>-1 2 10 -10 3 | 14 | Alex chooses $-1$, $2$, $3$, and $10$.B",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.329360+00:00"
+    },
+    "unicorns": {
+      "title": "Unicorns",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq A \\leq 1000$ \n$2 \\leq L \\leq 4000$ \n$0 \\leq H \\leq 2000$ \nThere will always be a solution that respects the restrictions in the input.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.330213+00:00"
+    },
+    "uniform-trees": {
+      "title": "Uniform Trees",
+      "difficulty": "HARD",
+      "time_limit": "4000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 200\\,000$ \n$1 \\leq p_i < i$ for $2 \\leq i \\leq N$ \n$p_1$ will be equal to $-1$.\n$1 \\leq v_i \\leq N$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 6<br>-1 3<br>1 2<br>1 2<br>1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.331076+00:00"
+    },
+    "unstable-merge-sort": {
+      "title": "Unstable Merge Sort",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 600$ \nElements of $A$ are integers between $1$ and $N$ \nThe answer will be considered correct if it's absolute error does not exceed $10^{-6}$\n\n\n| Input | Output | Explanation |\n| --- |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.418351+00:00"
+    },
+    "vaporeon": {
+      "title": "Vaporeon",
+      "difficulty": null,
+      "time_limit": "1500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq K \\leq 10^6$ \n$1 \\leq R_i \\leq 10^9$ \nThe total number of operations is $\\leq 200\\,000$ \nFor 20% of the test cases, $N \\leq 1000$ and the total number of operations is $\\",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.419280+00:00"
+    },
+    "vector-size": {
+      "title": "Vector Size",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1000$ \n\n\n| Input | Output |\n| --- | --- |\n| 6<br>1 1 0 1 1 0 | 3 |\n| 7<br>1 1 0 0 0 0 1 | 2 |\n| 5<br>1 0 0 1 1 | 2 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.419799+00:00"
+    },
+    "virus-on-a-tree": {
+      "title": "Virus on a Tree",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq K \\leq N \\leq 10^5$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 6 4<br>3 5 1<br>1 2 0<br>2 3 1<br>3 4 0<br>5 6 1 | 1 | We can cut the edge $(3, 5)$:\n10101123456 |\n| 4 2<br>1 4 0<b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.420348+00:00"
+    },
+    "voting": {
+      "title": "Voting",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le N \\leq 10^5$ \n$X$ and the other judges' assessments are integers between $0$ and $N$\n\n\n| Input | Output |\n| --- | --- |\n| 3 1<br>0 1 2 | 2 1 0 |\n| 3 3<br>0 1 2 | 0 1 2 |\n| 5 0<br>4 3 2 1 0 | 4 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:21.421185+00:00"
+    },
+    "water": {
+      "title": "Water",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "1 GB",
+      "constraints_summary": "$h \\leq 1\\ 000\\ 000\\ 000$\n\n\n#PointsRestrictions18$1\\leq N, Q \\leq 1000$26$1\\leq N, Q \\leq 200000$ and all queries have the same source $u$312$1 \\leq N, Q \\leq 200000$ and all queries have the same des",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.567520+00:00"
+    },
+    "water-bottles": {
+      "title": "Water Bottles",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq L \\leq 10^{18}$ \n$0 \\leq a_i \\leq b_i \\leq 10^9$ \nIt is guaranteed there's always at least one valid solution\nIn each bottle you have to pour an integer number of litres\n",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.568432+00:00"
+    },
+    "water-supply": {
+      "title": "Water Supply",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq T \\leq 2000$ \n$1 \\leq K \\leq N \\leq 2000$ \nThe sum of $N$ for all tests $\\leq 2000$ \n$1 \\leq F_i, C_{i, j}\\leq 10^9$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 2<br>3 1<br>2 5 8<",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.571195+00:00"
+    },
+    "water-tower": {
+      "title": "Water Tower",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq H \\leq 10^9$ \n$1 \\leq Q \\leq 10^5$ \n$0 \\leq t_i \\leq 10^9, 0 \\leq h_i \\leq H$ for each $1 \\leq i \\leq Q$ \nYour result will be checked with an absolute or relative error of $10^{-6}$ \n\n\n| Input",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.572473+00:00"
+    },
+    "water-volume": {
+      "title": "Water Volume",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1\\,000$ \n$1 \\leq x_i \\leq 1\\,000$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>0 1<br>0 1<br>0 1<br>1 3 | 3 | The glass initially has $0$ml of water. The maximum value",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.573321+00:00"
+    },
+    "win-percentages": {
+      "title": "Win Percentages",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq G_1 < G_2 \\leq 10^6$ \n$0 \\leq P_1, P_2 \\leq 100$ \nIt is guaranteed the tests are based on a real scenario, so a valid solution always exists.\n\n\n| Input | Output | Explanation |\n| --- | --- | -",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.672541+00:00"
+    },
+    "word_ordering": {
+      "title": "Word Ordering",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$\nThe length of each string is $\\leq 1 000$\nThe sum of lengths of the strings is $\\leq 10^5$\nThe permutation in the input should also be used when comparing upper case letters.\nThe ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.673115+00:00"
+    },
+    "word_permutation": {
+      "title": "Word Permutation",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The sum of lengths of the strings is \u2264 $10^5$The strings will contain only lower case letters of the English alphabet.\n\n| Input | Output |\n| --- | --- |\n| 3\n<br>xyz\n<br>abc\n<br>foo",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.674092+00:00"
+    },
+    "wordle-duel": {
+      "title": "Wordle Duel",
+      "difficulty": "MEDIUM",
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.675617+00:00"
+    },
+    "work-time": {
+      "title": "Work Time",
+      "difficulty": null,
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq T \\leq 10$ $1 \\leq N \\leq 10^5$ $0 \\leq a_i, b_i, X \\leq 10^6$  \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 2<br>4 1<br>1 2 3 4<br>1 2 2 5<br>4 1<br>1 2 3 4<br>1 1 3 4 | Yes<br>No",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.676204+00:00"
+    },
+    "wrong-brackets": {
+      "title": "Wrong Brackets",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 30$ \n$1 \\leq K$ \n$K$ fits on a signed $64$ bit integer\nOn all the tests there are at least $K$ strings that are not bracket sequences\nCharacter ( comes before ) in lexicographical order",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.799316+00:00"
+    },
+    "x-distance": {
+      "title": "X Distance",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq M \\leq 3 * 10^5$ \n$1 \\leq w_i, X \\leq 10^9$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 7 6 3<br>1 2 1<br>1 3 2<br>3 4 3<br>4 5 1<br>4 6 2<br>1 7 4 | 9 | Th",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.800325+00:00"
+    },
+    "xor-closure": {
+      "title": "Xor Closure",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The elements of the set are integers between $0$ and $10^{18}$.All $N$ elements from the set are pairwise distinct.\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>0 1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.801128+00:00"
+    },
+    "xor-match": {
+      "title": "Xor Match",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq M \\leq 1000$ \n$0 \\leq A_i, B_j \\leq 1$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 7<br>1 0 1<br>1 0 1 0 1 0 1 | 2 | The 2 solutions are\n1\u00a0\u00a0\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4\u05d4",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.804001+00:00"
+    },
+    "xor-submatrix": {
+      "title": "Xor Submatrix",
+      "difficulty": "MEDIUM",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 1000$ \n$0 \\leq V_i < 2^{29}$ \n$0 \\leq U_i < 2^{29}$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 4<br>5 3 1<br>2 1 2 4 | 7 |  |\n| 3 3<br>10 12 4<br>5 10 9 | 15 |  |\n| ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:20:51.805186+00:00"
+    },
+    "xor-the-graph": {
+      "title": "Xor the Graph",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 10^5$ \n$1 \\leq  a, b \\leq N$ \n$c \\in \\{0, 1\\}$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 13 14<br>1 2 1<br>2 3 1<br>3 4 1<br>2 4 1<br>1 4 0<br>4 6 1<br>4 10 0<br>2 5 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T11:21:21.949124+00:00"
+    },
+    "xor-transform": {
+      "title": "Xor Transform",
+      "difficulty": null,
+      "time_limit": "5000 ms",
+      "memory_limit": "1 GB",
+      "constraints_summary": "$1 \\leq N \\times M \\leq 5 *10^{6}$ \n$1 \\leq A_{i, j} < 2^{31} \\ \\forall \\ 0 \\leq i <N, \\ 0 \\leq j < M$ \n$1 \\leq Q \\leq 50 * 10^6$ \n$1 \\leq K < 2^{31}$ \n\n\n| Input | Output | Explanation |\n| --- | --- |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:21:21.950499+00:00"
+    },
+    "xor_cycle": {
+      "title": "Xor Cycle",
+      "difficulty": "HARD",
+      "time_limit": "4000 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$$N-1 \\leq M \\leq 2*10^5$The nodes are numbered from $1$ to $N$The weights are between $0$ and $2^{60}$There can be multiple edges between the same pair of nodes. There can also be ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:21:21.951376+00:00"
+    },
+    "yurys-tree": {
+      "title": "Yury's Tree",
+      "difficulty": null,
+      "time_limit": "4000 ms",
+      "memory_limit": "1 GB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$$1 \\leq Q \\leq 10^5$The initial values of the nodes are integers between $0$ and $10^5$.The weights of the edges are integers between $1$ and $10^5$.For all the updates $1 \\leq x \\",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T11:21:21.952328+00:00"
+    },
+    "zalmolxis": {
+      "title": "Zalmolxis",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N < 10^6$ \n$1 \\leq K \\leq 10^6 - N$ \n\n\n| Input | Output |\n| --- | --- |\n| 9 3<br>27 27 27 27 27 27 26 24 24 | 27 27 27 27 27 27 26 24 24 24 24 27 |\n| 6 6<br>28 26 25 25 26 26 | 28 26 25 25 26 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:21:21.953051+00:00"
+    },
+    "zone-capture": {
+      "title": "Zone Capture",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 1000$\n\n\n| Input | Output |\n| --- | --- |\n| 3 3<br>0 1 1<br>0 0 1<br>0 1 1 | 7 |\n| 5 4<br>1 1 0 0<br>1 0 1 0<br>1 0 1 0<br>1 0 1 0<br>1 0 0 0 | 13 |\n| 3 4<br>0 1 0 1<br>0 0 0 0<br>1 1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:21:22.037620+00:00"
+    },
+    "akritis-one-and-two": {
+      "title": "Akriti\u2019s One and Two",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.516788+00:00"
+    },
+    "anugyas-lantern-festival": {
+      "title": "Anugya\u2019s Lantern Festival",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.517188+00:00"
+    },
+    "brain-rot-outbreak": {
+      "title": "Brain Rot Outbreak",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.517444+00:00"
+    },
+    "deja-vu-1-3": {
+      "title": "Deja Vu",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.517812+00:00"
+    },
+    "make-it-divisible-by-25": {
+      "title": "Make it Divisible by 25",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.518538+00:00"
+    },
+    "nitesh-and-the-green-research-card": {
+      "title": "Nitesh and the Green Research Card",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.518748+00:00"
+    },
+    "powered-addition": {
+      "title": "Powered Addition",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.518996+00:00"
+    },
+    "prajwal-and-the-marble-ap": {
+      "title": "Prajwal and the Marble AP",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.519206+00:00"
+    },
+    "prashansas-forbidden-integer": {
+      "title": "Prashansa\u2019s Forbidden Integer",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.519399+00:00"
+    },
+    "product-of-three-numbers-4": {
+      "title": "Product of Three Numbers",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.519604+00:00"
+    },
+    "roshan-makes-them-equal": {
+      "title": "Roshan Makes Them Equal",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.519837+00:00"
+    },
+    "sampadas-desorting": {
+      "title": "Sampada\u2019s Desorting",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.520328+00:00"
+    },
+    "sanskriti-and-the-storybook-stacks": {
+      "title": "Sanskriti and the Storybook Stacks",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.520516+00:00"
+    },
+    "shrine": {
+      "title": "Shrine",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.520758+00:00"
+    },
+    "shuffle-8": {
+      "title": "Shuffle",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.521089+00:00"
+    },
+    "sudhan-and-the-demodogs": {
+      "title": "Sudhan and the Demodogs",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.521323+00:00"
+    },
+    "sugam-and-the-coin-piles": {
+      "title": "Sugam and the Coin Piles",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.521877+00:00"
+    },
+    "sum-of-2-num-2": {
+      "title": "Sum of 2 Numbers 2",
+      "platform": "hackerrank",
+      "difficulty": "Easy",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.522056+00:00"
+    },
+    "sum-of-2-numbers-1-1-1": {
+      "title": "Sum of 2 Numbers 1",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.522499+00:00"
+    },
+    "sum-of-2-numbers-3-1": {
+      "title": "Sum of 2 Numbers 3",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.522651+00:00"
+    },
+    "sunits-permutation-factory": {
+      "title": "Sunit\u2019s Permutation Factory",
+      "platform": "hackerrank",
+      "difficulty": "Expert",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.522929+00:00"
+    },
+    "swikrits-halloumi-boxes": {
+      "title": "Swikrit\u2019s Halloumi Boxes",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.523147+00:00"
+    },
+    "the-maximum-portfolio-gain": {
+      "title": "The Maximum Portfolio Gain",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.523306+00:00"
+    },
+    "utsav-and-the-monster-horde": {
+      "title": "Utsav and the Monster Horde",
+      "platform": "hackerrank",
+      "difficulty": "Medium",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.523497+00:00"
+    },
+    "welcome-shadows-26": {
+      "title": "WeLcOmE to XtReMe sHaDoWs 2026",
+      "platform": "hackerrank",
+      "difficulty": "Easy",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T11:26:30.523876+00:00"
     }
   }
 }

@@ -341,71 +341,111 @@ def sequence_solved_task_submissions() -> int:
 # --- Problem Constraint Mapping ---
 
 def index_unmapped_problems(batch_size: int = 10) -> int:
-    """Scans CS Academy tasks and indexes their constraint signatures."""
-    if not CSACADEMY_TASKS.exists():
-        return 0
-
+    """Scans CS Academy and HackerRank tasks and indexes their constraint signatures."""
     index_data = load_problem_index()
     indexed_map = index_data.get("problems", {})
     count = 0
 
     from tools.azmuth_gene_catalog import extract_latex_bounds
 
-    for task_dir in sorted(CSACADEMY_TASKS.iterdir()):
-        if count >= batch_size:
-            break
-        if not task_dir.is_dir():
-            continue
+    # 1. CS Academy tasks
+    if CSACADEMY_TASKS.exists():
+        for task_dir in sorted(CSACADEMY_TASKS.iterdir()):
+            if count >= batch_size:
+                break
+            if not task_dir.is_dir():
+                continue
 
-        slug = task_dir.name
-        if slug in indexed_map:
-            continue
+            slug = task_dir.name
+            if slug in indexed_map:
+                continue
 
-        prob_file = task_dir / "problem.json"
-        statement_file = task_dir / "statement.md"
+            prob_file = task_dir / "problem.json"
+            statement_file = task_dir / "statement.md"
 
-        metadata = {}
-        if prob_file.exists():
-            try:
-                metadata = json.loads(prob_file.read_text(encoding="utf-8"))
-            except Exception:
-                pass
+            metadata = {}
+            if prob_file.exists():
+                try:
+                    metadata = json.loads(prob_file.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
 
-        # Extract constraints from statement if available
-        constraints_raw = ""
-        latex_bounds = {}
-        if statement_file.exists():
-            try:
-                stmt_text = statement_file.read_text(encoding="utf-8", errors="ignore")
-                latex_bounds = extract_latex_bounds(stmt_text)
-                m = re.search(r"### Constraints.*?\n(.*?)(?:\n###|\Z)", stmt_text, re.DOTALL)
-                if m:
-                    constraints_raw = m.group(1).strip()
-            except Exception:
-                pass
+            constraints_raw = ""
+            latex_bounds = {}
+            if statement_file.exists():
+                try:
+                    stmt_text = statement_file.read_text(encoding="utf-8", errors="ignore")
+                    latex_bounds = extract_latex_bounds(stmt_text)
+                    m = re.search(r"### Constraints.*?\n(.*?)(?:\n###|\Z)", stmt_text, re.DOTALL)
+                    if m:
+                        constraints_raw = m.group(1).strip()
+                except Exception:
+                    pass
 
-        # Derive suggested Big-O and candidate genes
-        difficulty = metadata.get("difficulty", "MEDIUM")
-        time_limit = metadata.get("time_limit", "1000 ms")
-        memory_limit = metadata.get("memory_limit", "128 MB")
+            difficulty = metadata.get("difficulty", "MEDIUM")
+            time_limit = metadata.get("time_limit", "1000 ms")
+            memory_limit = metadata.get("memory_limit", "128 MB")
 
-        candidate_genes = ["FAST_IO_STREAM_UNTIE"]
-        if "graph" in slug or "tree" in slug:
-            candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
-        if "query" in slug or "subarray" in slug or "range" in slug:
-            candidate_genes.append("SEGMENT_TREE_RANGE_QUERY")
+            candidate_genes = ["FAST_IO_STREAM_UNTIE"]
+            if "graph" in slug or "tree" in slug:
+                candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
+            if "query" in slug or "subarray" in slug or "range" in slug:
+                candidate_genes.append("SEGMENT_TREE_RANGE_QUERY")
 
-        indexed_map[slug] = {
-            "title": metadata.get("title", slug),
-            "difficulty": difficulty,
-            "time_limit": time_limit,
-            "memory_limit": memory_limit,
-            "bounds": latex_bounds,
-            "constraints_summary": constraints_raw[:200],
-            "candidate_genes": candidate_genes,
-            "indexed_at": datetime.now(timezone.utc).isoformat(),
-        }
-        count += 1
+            indexed_map[slug] = {
+                "title": metadata.get("title", slug),
+                "platform": "csacademy",
+                "difficulty": difficulty,
+                "time_limit": time_limit,
+                "memory_limit": memory_limit,
+                "bounds": latex_bounds,
+                "constraints_summary": constraints_raw[:200],
+                "candidate_genes": candidate_genes,
+                "indexed_at": datetime.now(timezone.utc).isoformat(),
+            }
+            count += 1
+
+    # 2. HackerRank contest tasks
+    if HACKERRANK_TASKS.exists() and count < batch_size:
+        for task_dir in sorted(HACKERRANK_TASKS.iterdir()):
+            if count >= batch_size:
+                break
+            if not task_dir.is_dir():
+                continue
+
+            slug = task_dir.name
+            if slug in indexed_map:
+                continue
+
+            prob_file = task_dir / "problem.json"
+            metadata = {}
+            if prob_file.exists():
+                try:
+                    metadata = json.loads(prob_file.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+
+            difficulty = metadata.get("difficulty_name", "MEDIUM") or "MEDIUM"
+            title = metadata.get("name", slug)
+
+            candidate_genes = ["FAST_IO_STREAM_UNTIE"]
+            if "graph" in slug or "tree" in slug:
+                candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
+            if "query" in slug or "array" in slug or "sub" in slug:
+                candidate_genes.append("TWO_POINTER_SLIDING_WINDOW")
+
+            indexed_map[slug] = {
+                "title": title,
+                "platform": "hackerrank",
+                "difficulty": difficulty,
+                "time_limit": "2000 ms",
+                "memory_limit": "512 MB",
+                "bounds": {},
+                "constraints_summary": "HackerRank Xtreme Shadows contest challenge",
+                "candidate_genes": candidate_genes,
+                "indexed_at": datetime.now(timezone.utc).isoformat(),
+            }
+            count += 1
 
     index_data["problems"] = indexed_map
     save_problem_index(index_data)
