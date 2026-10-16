@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "last_updated": "2026-10-16T10:42:35.645841+00:00",
+  "last_updated": "2026-10-16T11:19:48.035949+00:00",
   "packages": {
     "google-genai": {
       "latest_version": "2.29.0",
@@ -56,7 +56,7 @@
       "path": "C:\\Users\\Aaradhya\\AppData\\Local\\Programs\\Python\\Python314\\python.EXE",
       "installed_version": "3.14.7",
       "source": "host_binary",
-      "last_verified": "2026-10-16T10:42:35.624478+00:00"
+      "last_verified": "2026-10-16T11:19:48.013014+00:00"
     }
   }
 }

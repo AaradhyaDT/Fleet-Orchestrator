@@ -194,6 +194,7 @@ def race_gene_alleles(gene_path: Path) -> dict[str, Any]:
                 promotions += 1
 
     data["alleles"] = alleles
+    data["last_raced_at"] = datetime.now(timezone.utc).isoformat()
     gene_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
     return {
@@ -221,30 +222,43 @@ def run_arena_tournament(max_genes: int = 1) -> dict[str, Any]:
     if not gene_files:
         return {"status": "NO_GENES_FOUND", "genes_processed": 0}
 
+    # Prioritize multi-allele genes that have never been raced or were raced least recently
+    def gene_race_priority(p: Path) -> tuple[int, str]:
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+            alleles = d.get("alleles", [])
+            last_raced = d.get("last_raced_at", "")
+            # Priority 0: Multi-allele never raced
+            if len(alleles) > 1 and not last_raced:
+                return (0, "")
+            # Priority 1: Multi-allele raced older
+            if len(alleles) > 1:
+                return (1, last_raced)
+            # Priority 2: Single allele never raced
+            if not last_raced:
+                return (2, "")
+            # Priority 3: Single allele raced older
+            return (3, last_raced)
+        except Exception:
+            return (4, "")
+
+    gene_files.sort(key=gene_race_priority)
+
     ledger = load_arena_ledger()
     processed_this_run = []
     total_benchmarks = 0
     total_promotions = 0
 
-    for g_path in sorted(gene_files):
+    for g_path in gene_files:
         if len(processed_this_run) >= max_genes:
             break
 
-        # Check if gene has unbenchmarked alleles or multiple alleles
-        try:
-            content = json.loads(g_path.read_text(encoding="utf-8"))
-            alleles = content.get("alleles", [])
-            needs_benchmark = any("empirical_fitness" not in a for a in alleles) or len(alleles) > 1
-        except Exception:
-            needs_benchmark = True
-
-        if needs_benchmark:
-            logger.info(f"Raced combat in gene: {g_path.name}")
-            res = race_gene_alleles(g_path)
-            if res.get("status") == "SUCCESS":
-                processed_this_run.append(res)
-                total_benchmarks += res.get("benchmarked_count", 0)
-                total_promotions += res.get("promotions", 0)
+        logger.info(f"Raced combat in gene: {g_path.name}")
+        res = race_gene_alleles(g_path)
+        if res.get("status") == "SUCCESS":
+            processed_this_run.append(res)
+            total_benchmarks += res.get("benchmarked_count", 0)
+            total_promotions += res.get("promotions", 0)
 
     ledger["tournaments_run"] = ledger.get("tournaments_run", 0) + 1
     ledger["alleles_benchmarked"] = ledger.get("alleles_benchmarked", 0) + total_benchmarks

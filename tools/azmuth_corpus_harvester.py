@@ -280,146 +280,60 @@ def materialize_language_invariants() -> int:
 
 
 def sequence_workspace_templates() -> int:
-    """Sequences the 11 C++ workspace templates into Tier 2 and Tier 3 genes."""
-    if not WORKSPACE_TEMPLATES.exists():
-        return 0
-
+    """Sequences all workspace templates, cubic breakers, and symbolic frontier genes into codon_stream."""
     new_genes = 0
+    try:
+        from tools.azmuth_gene_catalog import (
+            get_all_template_genes,
+            get_core_cubic_and_symbolic_genes,
+        )
+        catalog_genes = get_all_template_genes() + get_core_cubic_and_symbolic_genes()
+        for g in catalog_genes:
+            tier = g.get("tier", 2)
+            gene_id = g.get("gene_id", "GENE")
+            if write_gene_file(tier, gene_id, g):
+                new_genes += 1
+    except Exception as e:
+        logger.warning(f"Error sequencing workspace template catalog: {e}")
 
-    # 1. Disjoint Set Union (01_dsu.hpp)
-    dsu_file = WORKSPACE_TEMPLATES / "01_dsu.hpp"
-    if dsu_file.exists():
-        dsu_code = dsu_file.read_text(encoding="utf-8")
-        payload = {
-            "gene_id": "DISJOINT_SET_UNION",
-            "tier": 2,
-            "category": "primitive_structure",
-            "description": "Maintains connected components with near-constant inverse Ackermann time complexity and rollback support.",
-            "alleles": [
-                {
-                    "allele_id": "dsu_path_compression_size",
-                    "dominance": "PRIMARY",
-                    "complexity_time": "O(N * alpha(N))",
-                    "complexity_space": "O(N)",
-                    "environmental_triggers": ["N <= 200000", "connectivity_queries", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 28.5, "ram_kb": 1536, "benchmark_input": "N=2e5 unites & queries"},
-                    "code_template": dsu_code.split("// Rollback DSU")[0].strip(),
-                    "invariants": ["Alpha(N) <= 4 for all practical N <= 10^18"],
-                },
-                {
-                    "allele_id": "rollback_dsu_history",
-                    "dominance": "ALTERNATIVE",
-                    "complexity_time": "O(N * log N)",
-                    "complexity_space": "O(N)",
-                    "environmental_triggers": ["dynamic_connectivity", "divide_and_conquer_offline", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 54.0, "ram_kb": 2048, "benchmark_input": "N=2e5 with rollbacks"},
-                    "code_template": ("struct RollbackDSU" + dsu_code.split("struct RollbackDSU")[1]).strip() if "struct RollbackDSU" in dsu_code else "",
-                    "invariants": ["Supports O(1) step undo at the cost of omitting path compression"],
-                },
-            ],
-        }
-        if write_gene_file(2, "DISJOINT_SET_UNION", payload):
-            new_genes += 1
+    return new_genes
 
-    # 2. Segment Tree (02_segtree.hpp)
-    segtree_file = WORKSPACE_TEMPLATES / "02_segtree.hpp"
-    if segtree_file.exists():
-        code = segtree_file.read_text(encoding="utf-8")
-        payload = {
-            "gene_id": "SEGMENT_TREE_RANGE_QUERY",
-            "tier": 2,
-            "category": "primitive_structure",
-            "description": "Point and range query structure supporting monoid operations and lazy propagation in O(log N).",
-            "alleles": [
-                {
-                    "allele_id": "iterative_segment_tree",
-                    "dominance": "PRIMARY",
-                    "complexity_time": "O(log N)",
-                    "complexity_space": "O(2N)",
-                    "environmental_triggers": ["point_update", "range_query", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 38.0, "ram_kb": 1600, "benchmark_input": "N=2e5 queries"},
-                    "code_template": code[:1500].strip(),
-                    "invariants": ["Non-recursive 2N array prevents call-stack overhead"],
-                }
-            ],
-        }
-        if write_gene_file(2, "SEGMENT_TREE_RANGE_QUERY", payload):
-            new_genes += 1
 
-    # 3. Fenwick Tree (03_fenwick.hpp)
-    fenwick_file = WORKSPACE_TEMPLATES / "03_fenwick.hpp"
-    if fenwick_file.exists():
-        code = fenwick_file.read_text(encoding="utf-8")
-        payload = {
-            "gene_id": "FENWICK_BINARY_INDEXED_TREE",
-            "tier": 2,
-            "category": "primitive_structure",
-            "description": "Prefix sum and point update data structure with minimal constant factor and O(N) memory.",
-            "alleles": [
-                {
-                    "allele_id": "fenwick_1d_bitwise",
-                    "dominance": "PRIMARY",
-                    "complexity_time": "O(log N)",
-                    "complexity_space": "O(N)",
-                    "environmental_triggers": ["prefix_sums", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 18.0, "ram_kb": 800, "benchmark_input": "N=2e5 updates/queries"},
-                    "code_template": code.strip(),
-                    "invariants": ["Isolated lowest set bit via (i & -i) enables branchless traversal"],
-                }
-            ],
-        }
-        if write_gene_file(2, "FENWICK_BINARY_INDEXED_TREE", payload):
-            new_genes += 1
+def sequence_solved_task_submissions() -> int:
+    """Sequences real judge submissions from CS Academy and HackerRank tasks into multi-allele genes."""
+    new_genes = 0
+    try:
+        from tools.azmuth_gene_catalog import (
+            parse_task_submissions,
+            parse_hackerrank_task_submissions,
+        )
 
-    # 4. Dinic Max Flow (05_maxflow.hpp)
-    maxflow_file = WORKSPACE_TEMPLATES / "05_maxflow.hpp"
-    if maxflow_file.exists():
-        code = maxflow_file.read_text(encoding="utf-8")
-        payload = {
-            "gene_id": "DINIC_MAX_FLOW",
-            "tier": 3,
-            "category": "dimensional_collapse",
-            "description": "Computes maximum network flow using level graphs and blocking flows in O(V^2 E) / O(E sqrt(V)) for unit networks.",
-            "alleles": [
-                {
-                    "allele_id": "dinic_scaling_bfs_dfs",
-                    "dominance": "PRIMARY",
-                    "complexity_time": "O(V^2 * E)",
-                    "complexity_space": "O(V + E)",
-                    "environmental_triggers": ["max_flow", "bipartite_matching", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 65.0, "ram_kb": 4096, "benchmark_input": "V=5000, E=30000"},
-                    "code_template": code.strip(),
-                    "invariants": ["Level graph BFS ensures shortest augmenting paths without cycles"],
-                }
-            ],
-        }
-        if write_gene_file(3, "DINIC_MAX_FLOW", payload):
-            new_genes += 1
+        # 1. CS Academy solved tasks
+        if CSACADEMY_TASKS.exists():
+            for task_dir in CSACADEMY_TASKS.iterdir():
+                if not task_dir.is_dir():
+                    continue
+                g = parse_task_submissions(task_dir)
+                if g:
+                    tier = g.get("tier", 2)
+                    gene_id = g.get("gene_id", "GENE")
+                    if write_gene_file(tier, gene_id, g):
+                        new_genes += 1
 
-    # 5. Binary Lifting LCA (06_trees.hpp)
-    trees_file = WORKSPACE_TEMPLATES / "06_trees.hpp"
-    if trees_file.exists():
-        code = trees_file.read_text(encoding="utf-8")
-        payload = {
-            "gene_id": "BINARY_LIFTING_LCA",
-            "tier": 2,
-            "category": "primitive_structure",
-            "description": "Lowest Common Ancestor and tree path aggregation in O(log N) per query with O(N log N) precomputation.",
-            "alleles": [
-                {
-                    "allele_id": "binary_lifting_20_steps",
-                    "dominance": "PRIMARY",
-                    "complexity_time": "O(log N)",
-                    "complexity_space": "O(N * log N)",
-                    "environmental_triggers": ["tree_queries", "ancestor_lookup", "c++20"],
-                    "empirical_fitness": {"runtime_ms": 45.0, "ram_kb": 16000, "benchmark_input": "N=2e5 nodes, 2e5 LCA queries"},
-                    "code_template": code.strip(),
-                    "invariants": ["20 powers of 2 cover all trees up to N=1,000,000"],
-                }
-            ],
-        }
-        if write_gene_file(2, "BINARY_LIFTING_LCA", payload):
-            new_genes += 1
+        # 2. HackerRank contest tasks
+        if HACKERRANK_TASKS.exists():
+            for task_dir in HACKERRANK_TASKS.iterdir():
+                if not task_dir.is_dir():
+                    continue
+                g = parse_hackerrank_task_submissions(task_dir)
+                if g:
+                    tier = g.get("tier", 2)
+                    gene_id = g.get("gene_id", "GENE")
+                    if write_gene_file(tier, gene_id, g):
+                        new_genes += 1
+
+    except Exception as e:
+        logger.warning(f"Error sequencing task submissions: {e}")
 
     return new_genes
 
@@ -434,6 +348,8 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
     index_data = load_problem_index()
     indexed_map = index_data.get("problems", {})
     count = 0
+
+    from tools.azmuth_gene_catalog import extract_latex_bounds
 
     for task_dir in sorted(CSACADEMY_TASKS.iterdir()):
         if count >= batch_size:
@@ -457,9 +373,11 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
 
         # Extract constraints from statement if available
         constraints_raw = ""
+        latex_bounds = {}
         if statement_file.exists():
             try:
                 stmt_text = statement_file.read_text(encoding="utf-8", errors="ignore")
+                latex_bounds = extract_latex_bounds(stmt_text)
                 m = re.search(r"### Constraints.*?\n(.*?)(?:\n###|\Z)", stmt_text, re.DOTALL)
                 if m:
                     constraints_raw = m.group(1).strip()
@@ -482,6 +400,7 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
             "difficulty": difficulty,
             "time_limit": time_limit,
             "memory_limit": memory_limit,
+            "bounds": latex_bounds,
             "constraints_summary": constraints_raw[:200],
             "candidate_genes": candidate_genes,
             "indexed_at": datetime.now(timezone.utc).isoformat(),
@@ -512,7 +431,7 @@ def harvest_single_task() -> dict[str, Any]:
             "genes_created": new_invariants,
         }
 
-    # Priority 2: Sequence C++ workspace templates into codon_stream
+    # Priority 2: Sequence C++ workspace templates and symbolic catalog into codon_stream
     new_template_genes = sequence_workspace_templates()
     if new_template_genes > 0:
         ledger["genes_sequenced"] = ledger.get("genes_sequenced", 0) + new_template_genes
@@ -523,7 +442,18 @@ def harvest_single_task() -> dict[str, Any]:
             "genes_created": new_template_genes,
         }
 
-    # Priority 3: Continuous constraint indexing of CS Academy & HackerRank tasks
+    # Priority 3: Sequence real judge task submissions (CSA & HackerRank)
+    new_task_genes = sequence_solved_task_submissions()
+    if new_task_genes > 0:
+        ledger["genes_sequenced"] = ledger.get("genes_sequenced", 0) + new_task_genes
+        save_corpus_ledger(ledger)
+        return {
+            "status": "SUCCESS",
+            "task": "sequence_solved_task_submissions",
+            "genes_created": new_task_genes,
+        }
+
+    # Priority 4: Continuous constraint indexing of CS Academy & HackerRank tasks
     indexed_count = index_unmapped_problems(batch_size=5)
     if indexed_count > 0:
         ledger["tasks_indexed"] = ledger.get("tasks_indexed", 0) + indexed_count
@@ -534,7 +464,7 @@ def harvest_single_task() -> dict[str, Any]:
             "problems_indexed": indexed_count,
         }
 
-    # Priority 4: Run an Ultimatrix Arena tournament tick
+    # Priority 5: Run an Ultimatrix Arena tournament tick
     try:
         from tools.ultimatrix_arena import run_arena_tournament
         arena_res = run_arena_tournament(max_genes=1)
@@ -554,3 +484,4 @@ def harvest_single_task() -> dict[str, Any]:
 if __name__ == "__main__":
     res = harvest_single_task()
     print(json.dumps(res, indent=2))
+
