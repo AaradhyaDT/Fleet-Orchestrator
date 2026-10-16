@@ -1,306 +1,306 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T11:49:17.976504+00:00",
-  "tournaments_run": 270,
+  "last_tournament_at": "2026-10-16T12:06:48.010085+00:00",
+  "tournaments_run": 398,
   "alleles_benchmarked": 0,
   "promotions": 7,
   "history": [
     {
-      "timestamp": "2026-10-16T11:43:42.464300+00:00",
+      "timestamp": "2026-10-16T11:59:27.472668+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:43:42.612138+00:00",
+      "timestamp": "2026-10-16T11:59:27.497030+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:43:42.764973+00:00",
+      "timestamp": "2026-10-16T11:59:57.644662+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:43:42.801737+00:00",
+      "timestamp": "2026-10-16T11:59:57.802419+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:12.983831+00:00",
+      "timestamp": "2026-10-16T11:59:57.951982+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:13.142883+00:00",
+      "timestamp": "2026-10-16T11:59:57.988415+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:13.291530+00:00",
+      "timestamp": "2026-10-16T12:00:28.140118+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:13.332805+00:00",
+      "timestamp": "2026-10-16T12:00:28.269660+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:43.476502+00:00",
+      "timestamp": "2026-10-16T12:00:28.396793+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:43.599746+00:00",
+      "timestamp": "2026-10-16T12:00:28.437658+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:43.724554+00:00",
+      "timestamp": "2026-10-16T12:00:58.591435+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:44:43.765785+00:00",
+      "timestamp": "2026-10-16T12:00:58.715446+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:13.914734+00:00",
+      "timestamp": "2026-10-16T12:00:58.842252+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:14.066914+00:00",
+      "timestamp": "2026-10-16T12:00:58.879305+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:14.208569+00:00",
+      "timestamp": "2026-10-16T12:01:29.047132+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:14.237373+00:00",
+      "timestamp": "2026-10-16T12:01:29.205088+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:44.323257+00:00",
+      "timestamp": "2026-10-16T12:01:29.366269+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:44.477830+00:00",
+      "timestamp": "2026-10-16T12:01:29.405889+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:44.619321+00:00",
+      "timestamp": "2026-10-16T12:01:59.553190+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:45:44.643600+00:00",
+      "timestamp": "2026-10-16T12:01:59.685600+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:14.823132+00:00",
+      "timestamp": "2026-10-16T12:01:59.828331+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:14.972655+00:00",
+      "timestamp": "2026-10-16T12:01:59.868577+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:15.108925+00:00",
+      "timestamp": "2026-10-16T12:02:30.020572+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:15.144502+00:00",
+      "timestamp": "2026-10-16T12:02:30.182021+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:45.316205+00:00",
+      "timestamp": "2026-10-16T12:02:30.334156+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:45.482614+00:00",
+      "timestamp": "2026-10-16T12:02:30.375058+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:45.615550+00:00",
+      "timestamp": "2026-10-16T12:04:15.564341+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:46:45.656851+00:00",
+      "timestamp": "2026-10-16T12:04:15.701687+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:15.806118+00:00",
+      "timestamp": "2026-10-16T12:04:15.827813+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:15.937179+00:00",
+      "timestamp": "2026-10-16T12:04:15.869119+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:16.093104+00:00",
+      "timestamp": "2026-10-16T12:04:46.038601+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:16.134069+00:00",
+      "timestamp": "2026-10-16T12:04:46.164975+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:46.287593+00:00",
+      "timestamp": "2026-10-16T12:04:46.296767+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:46.416713+00:00",
+      "timestamp": "2026-10-16T12:04:46.338274+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:46.555080+00:00",
+      "timestamp": "2026-10-16T12:05:16.424771+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:47:46.586736+00:00",
+      "timestamp": "2026-10-16T12:05:16.588280+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:16.760613+00:00",
+      "timestamp": "2026-10-16T12:05:16.716099+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:16.891023+00:00",
+      "timestamp": "2026-10-16T12:05:16.757477+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:17.036981+00:00",
+      "timestamp": "2026-10-16T12:05:46.845872+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:17.073209+00:00",
+      "timestamp": "2026-10-16T12:05:46.984781+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:47.225554+00:00",
+      "timestamp": "2026-10-16T12:05:47.141453+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:47.354370+00:00",
+      "timestamp": "2026-10-16T12:05:47.182432+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:47.492782+00:00",
+      "timestamp": "2026-10-16T12:06:17.274921+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:47.531081+00:00",
+      "timestamp": "2026-10-16T12:06:17.413567+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:48:59.109206+00:00",
-      "genes": [
-        "TASK_DIRIJOR"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:48:59.137138+00:00",
-      "genes": [
-        "TASK_DIVIDED_KINGDOM"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:49:17.693737+00:00",
+      "timestamp": "2026-10-16T12:06:17.567206+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:49:17.811148+00:00",
+      "timestamp": "2026-10-16T12:06:17.608470+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:49:17.942650+00:00",
+      "timestamp": "2026-10-16T12:06:47.690201+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]
     },
     {
-      "timestamp": "2026-10-16T11:49:17.976367+00:00",
+      "timestamp": "2026-10-16T12:06:47.835348+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:06:47.974763+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:06:48.009948+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
       ]

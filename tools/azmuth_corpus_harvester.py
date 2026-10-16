@@ -517,6 +517,19 @@ def harvest_single_task() -> dict[str, Any]:
     except Exception as e:
         logger.debug(f"Arena error: {e}")
 
+    # Priority 6: Run an Ultimatrix Autonomous Solver tick for unsolved archive tasks
+    try:
+        from tools.ultimatrix_autonomous_solver import execute_autonomous_solve_batch
+        solve_res = execute_autonomous_solve_batch(batch_size=1)
+        if solve_res.get("tasks_solved", 0) > 0:
+            return {
+                "status": "SUCCESS",
+                "task": "ultimatrix_autonomous_solve",
+                "solve_result": solve_res,
+            }
+    except Exception as e:
+        logger.debug(f"Autonomous solver error: {e}")
+
     gc.collect()
     return {"status": "ALL_SYNCHRONIZED", "task": "idle_state"}
 
