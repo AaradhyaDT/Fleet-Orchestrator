@@ -112,18 +112,18 @@ $headerCP.Enabled = $false
 
 $sep1 = $menu.Items.Add("-")
 
-$itemTurbo = $menu.Items.Add("🚀 Turbo Mode (High Throughput)")
-$itemBalanced = $menu.Items.Add("⚡ Balanced Mode (Auto-Managed)")
-$itemWhisper = $menu.Items.Add("🌱 Whisper Mode (Low Power)")
+$itemTurbo = $menu.Items.Add("[Turbo] Warp Mode (High Throughput)")
+$itemBalanced = $menu.Items.Add("[Balanced] Auto-Managed Mode")
+$itemWhisper = $menu.Items.Add("[Whisper] Low-Power Mode")
 
 $sep2 = $menu.Items.Add("-")
 
-$itemPause = $menu.Items.Add("⏸️ Pause Engine")
+$itemPause = $menu.Items.Add("Pause Engine")
 
 $sep3 = $menu.Items.Add("-")
 
-$itemHarvest = $menu.Items.Add("▶️ Harvest 1 Task Now")
-$itemExit = $menu.Items.Add("❌ Exit Tray Icon")
+$itemHarvest = $menu.Items.Add("Harvest 1 Task Now")
+$itemExit = $menu.Items.Add("Exit Tray Icon")
 
 $notify.ContextMenuStrip = $menu
 
@@ -156,7 +156,7 @@ function Update-TrayState {
     $itemTurbo.Checked = ($gear -eq "turbo")
     $itemBalanced.Checked = ($gear -eq "balanced")
     $itemWhisper.Checked = ($gear -eq "whisper")
-    $itemPause.Text = if ($paused) { "▶️ Resume Engine" } else { "⏸️ Pause Engine" }
+    $itemPause.Text = if ($paused) { "Resume Engine" } else { "Pause Engine" }
 
     $notify.Icon = New-GearIcon $gear $paused
     $notify.Text = "Azmuth [$($gear.ToUpper())] - Free RAM: $($ram.Free)GB"
