@@ -135,30 +135,64 @@ def calculate_analytical_fitness(complexity_time: str, complexity_space: str, n_
     return (runtime_ms, ram_kb)
 
 
-def benchmark_allele(allele: dict[str, Any], compiler: Optional[str] = None) -> dict[str, Any]:
+def benchmark_allele(
+    allele: dict[str, Any],
+    compiler: Optional[str] = None,
+    gene_id: Optional[str] = None,
+) -> dict[str, Any]:
     """Benchmarks a single allele empirically or analytically across C++ and Python."""
     time_comp = allele.get("complexity_time", "O(N)")
     space_comp = allele.get("complexity_space", "O(N)")
     triggers = allele.get("environmental_triggers", [])
     lang = "python" if any("python" in str(t).lower() or str(t).lower() == "py" for t in triggers) else "cpp"
+    code = allele.get("code_template", "")
 
-    runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
+    # Check for empirical sandbox execution if allele corresponds to a known task with samples
+    empirical_measured = False
+    runtime_ms = 0.0
+    ram_kb = 128
+    benchmark_mode = "ANALYTICAL_MODEL"
 
-    # If native compiler exists and code is C++, run compiled harness
-    if compiler and "code_template" in allele and lang == "cpp":
-        try:
-            # Native compilation benchmark
-            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
-        except Exception:
-            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
-    else:
-        # Analytical hardware simulation
+    if gene_id and (gene_id.startswith("TASK_") or gene_id.startswith("HR_")) and code:
+        task_slug = gene_id[5:].lower().replace("_", "-")
+        from tools.ultimatrix_solver import get_task_samples, execute_python_solution
+        samples = get_task_samples(task_slug)
+        if not samples:
+            # Try underscore slug as fallback
+            samples = get_task_samples(gene_id[5:].lower())
+
+        if samples and lang == "python":
+            latencies = []
+            all_succeeded = True
+            for inp, _ in samples[:5]:
+                t0 = time.perf_counter()
+                ret, out, err = execute_python_solution(code, inp, timeout_sec=2.0)
+                elapsed = (time.perf_counter() - t0) * 1000.0
+                if ret == 0:
+                    latencies.append(elapsed)
+                else:
+                    all_succeeded = False
+                    break
+
+            if all_succeeded and latencies:
+                runtime_ms = round(min(latencies), 3)
+                ram_kb = max(128, int(len(code.encode("utf-8")) / 1024) + 64)
+                empirical_measured = True
+                benchmark_mode = "EMPIRICAL_SANDBOX"
+
+    if not empirical_measured:
         runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
+        benchmark_mode = "ANALYTICAL_MODEL"
 
     return {
         "runtime_ms": runtime_ms,
         "ram_kb": ram_kb,
-        "benchmark_input": f"N=2000 (Synthesized Adversarial Combat Vector)",
+        "benchmark_mode": benchmark_mode,
+        "benchmark_input": (
+            "Empirical Judge Sample Vector Suite"
+            if benchmark_mode == "EMPIRICAL_SANDBOX"
+            else "N=2000 (Synthesized Adversarial Combat Vector)"
+        ),
     }
 
 
@@ -184,7 +218,9 @@ def race_gene_alleles(gene_path: Path) -> dict[str, Any]:
     for allele in alleles:
         fitness = allele.get("empirical_fitness")
         if not fitness or "runtime_ms" not in fitness:
-            allele["empirical_fitness"] = benchmark_allele(allele, compiler=compiler)
+            allele["empirical_fitness"] = benchmark_allele(
+                allele, compiler=compiler, gene_id=data.get("gene_id")
+            )
             benchmarked_count += 1
 
     # 2. Sort alleles by fitness (lowest runtime_ms, then lowest ram_kb)

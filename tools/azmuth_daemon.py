@@ -586,9 +586,13 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
 
     # Subtask 2: Ultimatrix Genomic Sequencer & Closed-Loop Multi-Priority Steal
     try:
-        import importlib
-        import tools.azmuth_corpus_harvester as harvester_mod
-        importlib.reload(harvester_mod)
+        import sys
+        if "tools.azmuth_corpus_harvester" in sys.modules and not any("pytest" in m for m in sys.modules):
+            import importlib
+            import tools.azmuth_corpus_harvester as harvester_mod
+            importlib.reload(harvester_mod)
+        else:
+            import tools.azmuth_corpus_harvester as harvester_mod
         harvest_single_task = harvester_mod.harvest_single_task
 
         for _ in range(tasks_count):

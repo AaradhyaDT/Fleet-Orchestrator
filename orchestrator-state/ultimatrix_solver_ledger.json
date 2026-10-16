@@ -1,12 +1,13 @@
 {
   "version": 1,
-  "tasks_attempted": 2,
-  "tasks_solved": 2,
+  "tasks_attempted": 4,
+  "tasks_solved": 4,
   "solved_slugs": [
     "acronyms",
-    "anagrams"
+    "anagrams",
+    "mock-repairable-task"
   ],
-  "last_solve_at": "2026-10-16T12:42:32.644620+00:00",
+  "last_solve_at": "2026-10-16T12:52:58.432176+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:05:58.684661+00:00",
@@ -19,6 +20,18 @@
       "slug": "anagrams",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-16T12:50:11.656516+00:00",
+      "slug": "mock-repairable-task",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:52:58.432128+00:00",
+      "slug": "mock-repairable-task",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
     }
   ],
   "attempted_slugs": {}

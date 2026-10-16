@@ -392,21 +392,174 @@ if __name__ == '__main__':
     return None
 
 
-def run_solution_verification(code: str, samples: list[tuple[str, str]], timeout_sec: float = 2.0) -> bool:
-    """Verifies candidate Python code against all test samples."""
+def run_solution_verification_with_details(
+    code: str, samples: list[tuple[str, str]], timeout_sec: float = 2.0
+) -> tuple[bool, dict[str, Any]]:
+    """Verifies candidate Python code against test samples and returns detailed failure output."""
     from tools.ultimatrix_solver import execute_python_solution
 
     def normalize(text: str) -> str:
         return "\n".join(line.rstrip() for line in text.strip().splitlines())
 
-    for inp, expected in samples:
+    for idx, (inp, expected) in enumerate(samples, 1):
         code_ret, out, err = execute_python_solution(code, inp, timeout_sec=timeout_sec)
         if code_ret != 0:
-            return False
+            return False, {
+                "sample_idx": idx,
+                "input": inp,
+                "expected": expected,
+                "actual": out,
+                "exit_code": code_ret,
+                "error": err or "Process exited with non-zero status",
+            }
         if normalize(out) != normalize(expected):
-            return False
+            return False, {
+                "sample_idx": idx,
+                "input": inp,
+                "expected": expected,
+                "actual": out,
+                "exit_code": code_ret,
+                "error": f"Output mismatch: expected '{expected}', got '{out}'",
+            }
 
-    return True
+    return True, {}
+
+
+def run_solution_verification(code: str, samples: list[tuple[str, str]], timeout_sec: float = 2.0) -> bool:
+    """Verifies candidate Python code against all test samples."""
+    passed, _ = run_solution_verification_with_details(code, samples, timeout_sec=timeout_sec)
+    return passed
+
+
+def synthesize_with_spliced_dna_and_llm(task_info: dict[str, Any]) -> Optional[str]:
+    """Generates a complete solution by splicing candidate genes and invoking Gemini or local adapter."""
+    from tools.ultimatrix_splicer import splice_python_dna
+
+    task_slug = task_info.get("slug", "unknown")
+    title = task_info.get("title", task_slug)
+    candidate_genes = task_info.get("candidate_genes", ["FAST_IO_STREAM_UNTIE"])
+    samples = task_info.get("samples", [])
+
+    # Read statement content
+    statement_text = ""
+    stmt_path_csa = CSACADEMY_TASKS / task_slug / "statement.md"
+    stmt_path_hr = HACKERRANK_TASKS / task_slug / "statement.html"
+    if stmt_path_csa.exists():
+        try:
+            statement_text = stmt_path_csa.read_text(encoding="utf-8")[:2500]
+        except Exception:
+            pass
+    elif stmt_path_hr.exists():
+        try:
+            statement_text = stmt_path_hr.read_text(encoding="utf-8")[:2500]
+        except Exception:
+            pass
+
+    # Splice dominant DNA template scaffolds
+    scaffold = splice_python_dna(candidate_genes, task_title=title)
+
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        return None
+
+    try:
+        from google import genai
+        from google.genai import types
+
+        sample_str = "\n".join(f"Input:\n{inp}\nExpected Output:\n{out}\n" for inp, out in samples[:3])
+        prompt = f"""You are the Azmuth Autonomous Ultimatrix Solver Engine.
+Solve the following Competitive Programming task in Python 3.12+.
+
+Task: {title} ({task_slug})
+Problem Statement:
+{statement_text}
+
+Sample Test Cases:
+{sample_str}
+
+Use this spliced Ultimatrix DNA scaffolding:
+```python
+{scaffold}
+```
+
+Implement the complete, self-contained `solve()` function.
+Return ONLY valid Python code block (wrapped in ```python ... ``` or raw code), no explanations or markdown prose.
+"""
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.1,
+            ),
+        )
+        if response.text:
+            text = response.text.strip()
+            # Clean markdown code fence if present
+            if text.startswith("```"):
+                lines = text.splitlines()
+                if lines[0].startswith("```"):
+                    lines = lines[1:]
+                if lines and lines[-1].startswith("```"):
+                    lines = lines[:-1]
+                text = "\n".join(lines).strip()
+            return text
+    except Exception as exc:
+        logger.warning(f"Spliced-DNA LLM synthesis failed for {task_slug}: {exc}")
+
+    return None
+
+
+def self_heal_solution(code: str, failure_info: dict[str, Any], task_info: dict[str, Any]) -> Optional[str]:
+    """Applies 1 self-healing repair pass using Gemini Flash if sample test fails."""
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        return None
+
+    try:
+        from google import genai
+        from google.genai import types
+
+        prompt = f"""You previously generated a Competitive Programming solution for '{task_info.get('title')}', but a test case failed:
+Input:
+{failure_info.get('input')}
+Expected:
+{failure_info.get('expected')}
+Actual Output:
+{failure_info.get('actual')}
+Error:
+{failure_info.get('error')}
+
+Code:
+```python
+{code}
+```
+
+Fix the logic error or formatting bug in `solve()`.
+Return ONLY the corrected full Python code.
+"""
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.1,
+            ),
+        )
+        if response.text:
+            text = response.text.strip()
+            if text.startswith("```"):
+                lines = text.splitlines()
+                if lines[0].startswith("```"):
+                    lines = lines[1:]
+                if lines and lines[-1].startswith("```"):
+                    lines = lines[:-1]
+                text = "\n".join(lines).strip()
+            return text
+    except Exception as exc:
+        logger.warning(f"Self-healing repair failed: {exc}")
+
+    return None
 
 
 def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
@@ -440,8 +593,11 @@ def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
         except Exception:
             pass
 
-    # 1. Synthesize candidate
+    # 1. Synthesize candidate (deterministic AST archetypes first, spliced-DNA LLM second)
     candidate_code = synthesize_python_solution(task_info)
+    if not candidate_code:
+        candidate_code = synthesize_with_spliced_dna_and_llm(task_info)
+
     if not candidate_code:
         ledger = load_solver_ledger()
         ledger.setdefault("attempted_slugs", {})[task_slug] = "UNSUPPORTED_ARCHETYPE"
@@ -452,8 +608,16 @@ def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
             "message": "Task requires multi-gene reasoning beyond baseline heuristics",
         }
 
-    # 2. Run verification
-    passed = run_solution_verification(candidate_code, samples)
+    # 2. Run verification with self-healing repair pass
+    passed, failure_info = run_solution_verification_with_details(candidate_code, samples)
+    if not passed:
+        # Attempt 1 self-healing repair pass
+        repaired = self_heal_solution(candidate_code, failure_info, task_info)
+        if repaired:
+            passed, failure_info = run_solution_verification_with_details(repaired, samples)
+            if passed:
+                candidate_code = repaired
+
     if not passed:
         ledger = load_solver_ledger()
         ledger.setdefault("attempted_slugs", {})[task_slug] = "VERIFICATION_FAILED"
@@ -462,6 +626,7 @@ def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
             "status": "VERIFICATION_FAILED",
             "task_slug": task_slug,
             "message": "Candidate output did not match expected sample verdicts",
+            "details": failure_info,
         }
 
     # 3. Save verified solution into task archive
