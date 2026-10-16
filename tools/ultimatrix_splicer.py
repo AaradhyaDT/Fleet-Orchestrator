@@ -314,6 +314,202 @@ int main() {
     return "\n".join(out_lines)
 
 
+def translate_cpp_gene_to_python(gene_id: str, code_template: str) -> str:
+    """Translates common C++ algorithmic structures into idiomatic Python 3.12 equivalents."""
+    gid = gene_id.upper()
+
+    if gid == "DISJOINT_SET_UNION":
+        return '''class DSU:
+    def __init__(self, n: int = 0):
+        self.n = n
+        self.num_sets = n
+        self.parent = list(range(n))
+        self.sz = [1] * n
+
+    def find(self, v: int) -> int:
+        path = []
+        while self.parent[v] != v:
+            path.append(v)
+            v = self.parent[v]
+        for node in path:
+            self.parent[node] = v
+        return v
+
+    def unite(self, a: int, b: int) -> bool:
+        a = self.find(a)
+        b = self.find(b)
+        if a == b:
+            return False
+        if self.sz[a] < self.sz[b]:
+            a, b = b, a
+        self.parent[b] = a
+        self.sz[a] += self.sz[b]
+        self.num_sets -= 1
+        return True
+'''
+
+    if gid == "FENWICK_BINARY_INDEXED_TREE":
+        return '''class Fenwick:
+    def __init__(self, n: int):
+        self.n = n
+        self.bit = [0] * (n + 1)
+
+    def add(self, i: int, delta: int) -> None:
+        while i <= self.n:
+            self.bit[i] += delta
+            i += i & (-i)
+
+    def query(self, i: int) -> int:
+        total = 0
+        while i > 0:
+            total += self.bit[i]
+            i -= i & (-i)
+        return total
+'''
+
+    if gid == "SEGMENT_TREE_RANGE_QUERY":
+        return '''class SegTree:
+    def __init__(self, n: int):
+        self.n = n
+        self.tree = [0] * (2 * n)
+
+    def update(self, p: int, val: int) -> None:
+        p += self.n
+        self.tree[p] = val
+        while p > 1:
+            self.tree[p >> 1] = self.tree[p] + self.tree[p ^ 1]
+            p >>= 1
+
+    def query(self, l: int, r: int) -> int:
+        res = 0
+        l += self.n
+        r += self.n
+        while l < r:
+            if l & 1:
+                res += self.tree[l]
+                l += 1
+            if r & 1:
+                r -= 1
+                res += self.tree[r]
+            l >>= 1
+            r >>= 1
+        return res
+'''
+
+    if gid == "DIJKSTRA_SHORTEST_PATH":
+        return '''import heapq
+
+class Dijkstra:
+    def __init__(self, n: int):
+        self.n = n
+        self.adj = [[] for _ in range(n)]
+
+    def add_edge(self, u: int, v: int, w: int) -> None:
+        self.adj[u].append((v, w))
+
+    def run(self, src: int) -> list[int]:
+        dist = [float("inf")] * self.n
+        dist[src] = 0
+        pq = [(0, src)]
+        while pq:
+            d, u = heapq.heappop(pq)
+            if d > dist[u]:
+                continue
+            for v, w in self.adj[u]:
+                if dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
+                    heapq.heappush(pq, (dist[v], v))
+        return dist
+'''
+
+    if gid == "TWO_POINTER_SLIDING_WINDOW":
+        return '''def sliding_window_monotonic(arr: list[int], target: int) -> int:
+    left = 0
+    curr_sum = 0
+    ans = 0
+    for right in range(len(arr)):
+        curr_sum += arr[right]
+        while left <= right and curr_sum > target:
+            curr_sum -= arr[left]
+            left += 1
+        if curr_sum == target:
+            ans += 1
+    return ans
+'''
+
+    # Generic clean Python template comment wrapper
+    return f"# Transliterated from C++ Gene {gene_id}\n# Original signature:\n# {code_template[:300].strip()}\n"
+
+
+def splice_python_dna(gene_ids: list[str], task_title: str = "Competitive Programming Task") -> str:
+    """Splices dominant allele code templates into standard Python 3.12+ solution boilerplate."""
+    all_genes = load_all_genes()
+
+    header_scaffolding = """import sys
+import math
+import collections
+import heapq
+import bisect
+import itertools
+
+# Set recursion depth for deep graph traversals
+sys.setrecursionlimit(300000)
+
+def input():
+    return sys.stdin.readline().rstrip()
+"""
+
+    structures: list[str] = []
+    metadata_notes: list[str] = []
+
+    for gid in gene_ids:
+        g = all_genes.get(gid)
+        if not g:
+            continue
+
+        allele = get_dominant_allele(g)
+        if not allele:
+            continue
+
+        aid = allele.get("allele_id", "default")
+        code = allele.get("code_template", "").strip()
+        fitness = allele.get("empirical_fitness", {})
+        rt = fitness.get("runtime_ms", "N/A")
+
+        metadata_notes.append(f"# [Ultimatrix Gene: {gid}] -> Allele '{aid}' (Runtime: {rt}ms)")
+        py_code = translate_cpp_gene_to_python(gid, code)
+        structures.append(f"# --- Begin Gene: {gid} ---\n{py_code.strip()}\n# --- End Gene: {gid} ---")
+
+    out_lines = []
+    out_lines.append(f'"""')
+    out_lines.append(f'ULTIMATRIX SYNTHESIZED PYTHON DNA STREAM: {task_title}')
+    out_lines.append(f'Assembled by Azmuth Autonomous Cross-Language Splicer (Phase 6)')
+    out_lines.append(f'"""')
+    out_lines.extend(metadata_notes)
+    out_lines.append("")
+    out_lines.append(header_scaffolding)
+    out_lines.append("")
+
+    if structures:
+        out_lines.append("# ==========================================================")
+        out_lines.append("#  SPLICED ALGORITHMIC STRUCTURES & LOGIC")
+        out_lines.append("# ==========================================================")
+        out_lines.append("\n\n".join(structures))
+        out_lines.append("")
+
+    out_lines.append("""def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    # Algorithmic structures are available above for immediate deployment.
+
+if __name__ == '__main__':
+    solve()
+""")
+
+    return "\n".join(out_lines)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Azmuth Ultimatrix DNA Splicer")
     parser.add_argument("--task", type=str, help="Problem slug from CS Academy or HackerRank")

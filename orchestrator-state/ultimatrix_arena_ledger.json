@@ -1,190 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T12:22:42.287947+00:00",
-  "tournaments_run": 486,
+  "last_tournament_at": "2026-10-16T12:26:22.674345+00:00",
+  "tournaments_run": 516,
   "alleles_benchmarked": 0,
-  "promotions": 15,
+  "promotions": 17,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:16:07.550596+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:07.588589+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:11.873064+00:00",
-      "genes": [
-        "TASK_ELECTIONS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:11.901519+00:00",
-      "genes": [
-        "TASK_GCD"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:37.751046+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:37.886364+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:38.031747+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:16:38.072848+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:08.233311+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:08.377645+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:08.519649+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:08.564753+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:38.708281+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:38.848779+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:38.983289+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:17:39.018406+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:09.187178+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:09.314736+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:09.437098+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:09.477425+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:39.601790+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:39.734903+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:39.872940+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:18:39.910528+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:19:58.309559+00:00",
-      "genes": [
-        "TASK_LIGHTBULBS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:19:58.340332+00:00",
-      "genes": [
-        "TASK_MATRIX_EXPLORATION"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:20:22.069757+00:00",
-      "genes": [
-        "TASK_MEET"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:20:22.100650+00:00",
-      "genes": [
-        "TASK_MINMAX_SUBARRAY"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:20:40.091957+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:20:40.239497+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:20:40.390896+00:00",
       "genes": [
@@ -303,6 +123,186 @@
       "timestamp": "2026-10-16T12:22:42.287869+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:12.445157+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:12.601067+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:12.758718+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:12.780152+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:42.825289+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:42.961419+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:43.111492+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:23:43.132555+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:13.290920+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:13.443272+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:13.578230+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:13.595928+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:43.746489+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:43.886205+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:44.021760+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:24:44.039018+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:14.186040+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:14.333119+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:14.466725+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:14.483065+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:44.614082+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:44.767346+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:44.902437+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:25:44.918691+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:15.073916+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:15.226301+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:15.365609+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:15.386324+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:22.639660+00:00",
+      "genes": [
+        "TASK_OIL_WELLS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:22.674273+00:00",
+      "genes": [
+        "TASK_ONLINE_GCD"
       ]
     }
   ]

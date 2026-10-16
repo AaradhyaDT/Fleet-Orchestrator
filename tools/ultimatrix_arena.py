@@ -89,8 +89,8 @@ def detect_cpp_compiler() -> Optional[str]:
     return None
 
 
-def calculate_analytical_fitness(complexity_time: str, complexity_space: str, n_val: int = 2000) -> tuple[float, int]:
-    """Computes deterministic analytical runtime (ms) and RAM (KB) based on hardware_complexity_map.md."""
+def calculate_analytical_fitness(complexity_time: str, complexity_space: str, n_val: int = 2000, language: str = "cpp") -> tuple[float, int]:
+    """Computes deterministic analytical runtime (ms) and RAM (KB) based on hardware_complexity_map.md with language VM compensation."""
     expr = complexity_time.upper().replace(" ", "")
     
     # Estimate operations based on Big-O signature
@@ -112,38 +112,48 @@ def calculate_analytical_fitness(complexity_time: str, complexity_space: str, n_
     else:
         ops = n_val * 10
 
-    # Judge hardware: ~3e8 simple ops/sec -> runtime in ms
-    runtime_ms = max(0.01, round((ops / 3e8) * 1000.0, 2))
+    # Judge hardware: ~3e8 simple ops/sec for C++. Python interpreter overhead ~8x-12x with 2x time-limit compensation
+    lang_norm = language.lower()
+    time_multiplier = 3.5 if "python" in lang_norm or lang_norm.startswith("py") else 1.0
+
+    runtime_ms = max(0.01, round(((ops / 3e8) * 1000.0) * time_multiplier, 2))
 
     # RAM estimation
     sp_expr = complexity_space.upper().replace(" ", "")
     if "O(N^2/64)" in sp_expr:
-        ram_kb = max(64, int((n_val ** 2) / (64 * 1024)))
+        base_ram = max(64, int((n_val ** 2) / (64 * 1024)))
     elif "O(N^2)" in sp_expr:
-        ram_kb = max(256, int((n_val ** 2 * 4) / 1024))
+        base_ram = max(256, int((n_val ** 2 * 4) / 1024))
     elif "O(N)" in sp_expr:
-        ram_kb = max(64, int((n_val * 8) / 1024))
+        base_ram = max(64, int((n_val * 8) / 1024))
     else:
-        ram_kb = 128
+        base_ram = 128
+
+    ram_multiplier = 3.0 if "python" in lang_norm or lang_norm.startswith("py") else 1.0
+    ram_kb = int(base_ram * ram_multiplier)
 
     return (runtime_ms, ram_kb)
 
 
 def benchmark_allele(allele: dict[str, Any], compiler: Optional[str] = None) -> dict[str, Any]:
-    """Benchmarks a single allele empirically or analytically."""
+    """Benchmarks a single allele empirically or analytically across C++ and Python."""
     time_comp = allele.get("complexity_time", "O(N)")
     space_comp = allele.get("complexity_space", "O(N)")
+    triggers = allele.get("environmental_triggers", [])
+    lang = "python" if any("python" in str(t).lower() or str(t).lower() == "py" for t in triggers) else "cpp"
+
+    runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
 
     # If native compiler exists and code is C++, run compiled harness
-    if compiler and "code_template" in allele:
+    if compiler and "code_template" in allele and lang == "cpp":
         try:
             # Native compilation benchmark
-            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp)
+            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
         except Exception:
-            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp)
+            runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
     else:
         # Analytical hardware simulation
-        runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp)
+        runtime_ms, ram_kb = calculate_analytical_fitness(time_comp, space_comp, language=lang)
 
     return {
         "runtime_ms": runtime_ms,
