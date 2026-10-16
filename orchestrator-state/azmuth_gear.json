@@ -1,0 +1,6 @@
+{
+  "gear": "balanced",
+  "name": "Balanced (Auto-Managed)",
+  "set_at": "2026-10-16T05:55:56.148372+00:00",
+  "reason": "CLI invocation --gear balanced"
+}

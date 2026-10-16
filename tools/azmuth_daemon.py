@@ -40,6 +40,34 @@ STATE_DIR = ROOT / "orchestrator-state"
 RUN_LOG = STATE_DIR / "azmuth_run.json"
 PAUSE_FILE = STATE_DIR / "azmuth.pause"
 LOCK_FILE = STATE_DIR / "azmuth.pid.lock"
+GEAR_FILE = STATE_DIR / "azmuth_gear.json"
+
+GEARS: dict[str, dict[str, Any]] = {
+    "whisper": {
+        "name": "Whisper (Low Power)",
+        "burst_idle_minutes": 5.0,
+        "burst_cooldown_sec": 1800.0,  # 30 mins
+        "min_avail_ram_gb": 4.5,
+        "max_ram_load": 70,
+        "tasks_per_burst": 1,
+    },
+    "balanced": {
+        "name": "Balanced (Auto-Managed)",
+        "burst_idle_minutes": 3.0,
+        "burst_cooldown_sec": 300.0,   # 5 mins
+        "min_avail_ram_gb": 4.0,
+        "max_ram_load": 75,
+        "tasks_per_burst": 1,
+    },
+    "turbo": {
+        "name": "Turbo / Warp (High Throughput)",
+        "burst_idle_minutes": 0.75,   # 45 seconds
+        "burst_cooldown_sec": 30.0,    # 30 seconds
+        "min_avail_ram_gb": 3.0,
+        "max_ram_load": 80,
+        "tasks_per_burst": 3,
+    },
+}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -264,6 +292,55 @@ def set_paused(paused: bool, reason: str = "") -> None:
             logger.info("Azmuth Daemon resumed.")
 
 
+def get_current_gear() -> str:
+    """Read the active operational gear, defaulting to 'balanced'."""
+    if GEAR_FILE.exists():
+        try:
+            data = json.loads(GEAR_FILE.read_text(encoding="utf-8"))
+            gear = data.get("gear", "balanced").lower()
+            if gear in GEARS:
+                return gear
+        except Exception:
+            pass
+    return "balanced"
+
+
+def set_current_gear(gear: str, reason: str = "") -> bool:
+    """Set the active operational gear."""
+    gear_key = gear.lower()
+    if gear_key not in GEARS:
+        return False
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "gear": gear_key,
+        "name": GEARS[gear_key]["name"],
+        "set_at": datetime.now(timezone.utc).isoformat(),
+        "reason": reason or "User selected gear",
+    }
+    GEAR_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    logger.info(f"Azmuth gear shifted to '{gear_key}': {reason or 'User action'}")
+    return True
+
+
+def check_and_enforce_gear_safety() -> tuple[str, dict[str, Any]]:
+    """Inspects RAM pressure. If Turbo or Balanced exceeds safety limits, automatically downshifts gear."""
+    current_gear = get_current_gear()
+    cfg = GEARS[current_gear]
+    _, avail_gb, load_pct = get_memory_status_gb()
+
+    # Critical RAM circuit breaker: if RAM drops below 3.0GB or load > 80%
+    if current_gear in ("turbo", "balanced") and (avail_gb < 3.0 or load_pct > 80):
+        logger.warning(
+            f"[Circuit-Breaker] Critical RAM threshold reached (Avail: {avail_gb}GB, Load: {load_pct}%). "
+            f"Auto-downshifting gear from '{current_gear}' to 'whisper'!"
+        )
+        set_current_gear("whisper", reason=f"Circuit Breaker tripped: Avail RAM {avail_gb}GB < 3.0GB or Load {load_pct}% > 80%")
+        current_gear = "whisper"
+        cfg = GEARS["whisper"]
+
+    return (current_gear, cfg)
+
+
 # --- Execution & Verification Subroutines ---
 
 def run_command(cmd: list[str], cwd: Path = ROOT, timeout: float = 120.0) -> subprocess.CompletedProcess[str]:
@@ -409,14 +486,20 @@ def self_heal_code(target_file: str, current_code: str, test_failure_output: str
 
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
-    Bails immediately if user input is detected or available RAM is below safety floor (4.0GB).
+    Bails immediately if user input is detected or available RAM is below safety floor.
+    Dynamically adjusts task volume and safety thresholds based on the active gear.
     """
-    if not has_sufficient_ram(min_avail_gb=4.0, max_load_percent=75):
-        logger.info("[Burst-Steal] Available RAM too low for background task. Skipping burst.")
-        return {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": True}
+    gear_name, gear_cfg = check_and_enforce_gear_safety()
+    min_ram = gear_cfg.get("min_avail_ram_gb", 4.0)
+    max_load = gear_cfg.get("max_ram_load", 75)
+    tasks_count = gear_cfg.get("tasks_per_burst", 1)
 
-    logger.info("[Burst-Steal] System is IDLE and RAM is HEALTHY. Initiating opportunistic burst...")
-    burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": False}
+    if not has_sufficient_ram(min_avail_gb=min_ram, max_load_percent=max_load):
+        logger.info(f"[Burst-Steal:{gear_name.upper()}] Available RAM too low for gear. Skipping burst.")
+        return {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": True, "gear": gear_name}
+
+    logger.info(f"[Burst-Steal:{gear_name.upper()}] System is IDLE and RAM is HEALTHY. Initiating burst...")
+    burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": False, "gear": gear_name}
     start_time = time.time()
 
     # Subtask 1: Refresh and verify skills registry
@@ -429,7 +512,9 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
         burst_result["aborted_due_to_activity"] = True
         return burst_result
 
-    if not has_sufficient_ram(min_avail_gb=3.5, max_load_percent=80):
+    # Circuit breaker check during burst
+    gear_name, gear_cfg = check_and_enforce_gear_safety()
+    if not has_sufficient_ram(min_avail_gb=gear_cfg.get("min_avail_ram_gb", 3.5), max_load_percent=gear_cfg.get("max_ram_load", 80)):
         logger.info("[Burst-Steal] RAM dipped during execution. Yielding burst.")
         burst_result["aborted_due_to_ram"] = True
         return burst_result
@@ -444,22 +529,25 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
         burst_result["aborted_due_to_activity"] = True
         return burst_result
 
-    if not has_sufficient_ram(min_avail_gb=4.0, max_load_percent=75):
-        logger.info("[Burst-Steal] Available RAM constrained. Skipping corpus harvest.")
-        burst_result["aborted_due_to_ram"] = True
-        return burst_result
-
-    # Subtask 3: Stream Ingestion of 1 Competitive-Programming task (Low-RAM Corpus Expansion)
+    # Subtask 3: Stream Ingestion of Competitive-Programming tasks
     try:
         from tools.azmuth_corpus_harvester import harvest_single_task
-        harvest_res = harvest_single_task()
-        if harvest_res.get("status") == "SUCCESS":
-            burst_result["tasks_executed"].append(f"corpus_harvested_{harvest_res.get('task')}")
+        for _ in range(tasks_count):
+            if not is_system_idle(threshold_seconds=10.0):
+                logger.info("[Burst-Steal] User activity detected during multi-task harvest. Yielding.")
+                burst_result["aborted_due_to_activity"] = True
+                break
+            check_and_enforce_gear_safety()
+            harvest_res = harvest_single_task()
+            if harvest_res.get("status") == "SUCCESS":
+                burst_result["tasks_executed"].append(f"corpus_harvested_{harvest_res.get('task')}")
+            else:
+                break
     except Exception as e:
         logger.debug(f"[Burst-Steal] Corpus harvest error: {e}")
 
     elapsed = time.time() - start_time
-    logger.info(f"[Burst-Steal] Completed idle burst in {elapsed:.2f}s.")
+    logger.info(f"[Burst-Steal:{gear_name.upper()}] Completed idle burst in {elapsed:.2f}s.")
     return burst_result
 
 
@@ -584,10 +672,13 @@ def run_daemon_loop(
         while True:
             # Check pause
             if is_paused():
-                time.sleep(10)
+                time.sleep(5)
                 continue
 
             now = time.time()
+            gear_name, gear_cfg = check_and_enforce_gear_safety()
+            active_idle_thresh_sec = gear_cfg.get("burst_idle_minutes", 3.0) * 60.0
+            active_cooldown_sec = gear_cfg.get("burst_cooldown_sec", 300.0)
 
             # 1. Scheduled Full Daily Cycle
             if now - last_cycle_time >= cycle_interval_sec:
@@ -595,13 +686,13 @@ def run_daemon_loop(
                 last_cycle_time = time.time()
 
             # 2. Opportunistic Idle Burst Stealing
-            elif is_system_idle(threshold_seconds=burst_idle_minutes * 60.0):
-                if now - last_burst_time >= burst_cooldown_sec:
+            elif is_system_idle(threshold_seconds=active_idle_thresh_sec):
+                if now - last_burst_time >= active_cooldown_sec:
                     execute_idle_burst()
                     last_burst_time = time.time()
 
-            # Quiet background sleep tick (10 seconds)
-            time.sleep(10)
+            # Quiet background sleep tick (5 seconds)
+            time.sleep(5)
 
     except KeyboardInterrupt:
         logger.info("Azmuth Daemon stopped cleanly by user interrupt.")
@@ -618,10 +709,16 @@ def main() -> int:
     parser.add_argument("--burst-idle-minutes", type=float, default=3.0, help="Idle minutes before stealing cycles (default: 3.0)")
     parser.add_argument("--pause", action="store_true", help="Pause the background Azmuth Daemon")
     parser.add_argument("--resume", action="store_true", help="Resume the background Azmuth Daemon")
+    parser.add_argument("--gear", choices=["whisper", "balanced", "turbo"], help="Set the active speed gear")
     parser.add_argument("--status", action="store_true", help="Print current status (paused/idle/last run)")
     parser.add_argument("--dry-run", action="store_true", help="Audit without modifying state or calling API")
     parser.add_argument("--no-ai", action="store_true", help="Bypass external Gemini API calls")
     args = parser.parse_args()
+
+    if args.gear:
+        set_current_gear(args.gear, f"CLI invocation --gear {args.gear}")
+        print(f"[+] Azmuth Daemon gear set to: {args.gear.upper()} ({GEARS[args.gear]['name']})")
+        return 0
 
     if args.pause:
         set_paused(True, "CLI invocation --pause")
@@ -637,6 +734,7 @@ def main() -> int:
         paused = is_paused()
         idle_s = get_windows_idle_seconds()
         total_ram, avail_ram, ram_load = get_memory_status_gb()
+        gear_name, gear_cfg = check_and_enforce_gear_safety()
         last_log = {}
         if RUN_LOG.exists():
             try:
@@ -647,9 +745,10 @@ def main() -> int:
         print("  FLEET AZMUTH DAEMON STATUS")
         print("==========================================================")
         print(f"  State             : {'PAUSED' if paused else 'ACTIVE'}")
+        print(f"  Active Gear       : {gear_name.upper()} ({gear_cfg['name']})")
         print(f"  Current User Idle : {idle_s:.1f}s ({idle_s/60.0:.2f}m)")
         print(f"  System RAM        : {avail_ram:.2f} GB free / {total_ram:.2f} GB total ({ram_load}% load)")
-        print(f"  RAM Safety Floor  : >= 4.0 GB free (<= 75% load)")
+        print(f"  Gear RAM Floor    : >= {gear_cfg['min_avail_ram_gb']} GB free (<= {gear_cfg['max_ram_load']}% load)")
         print(f"  Last Run Timestamp: {last_log.get('timestamp', 'Never')}")
         print(f"  Last Run Status   : {last_log.get('status', 'Unknown')}")
         print(f"  Smoke Passed      : {last_log.get('smoke_suite_passed', False)}")
