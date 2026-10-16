@@ -146,7 +146,17 @@ def get_task_samples(task_slug: str, platform: Optional[str] = None) -> list[tup
 
 def execute_python_solution(code_or_path: str, input_text: str, timeout_sec: float = 3.0) -> tuple[int, str, str]:
     """Executes a Python solution against input_text and returns (exit_code, stdout, stderr)."""
-    if Path(code_or_path).exists() and Path(code_or_path).is_file():
+    # Safe check if input is a file path or direct code string
+    is_file_path = False
+    if "\n" not in code_or_path and len(code_or_path) < 260:
+        try:
+            p = Path(code_or_path)
+            if p.exists() and p.is_file():
+                is_file_path = True
+        except Exception:
+            is_file_path = False
+
+    if is_file_path:
         cmd = [sys.executable, str(code_or_path)]
         tmp_file = None
     else:

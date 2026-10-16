@@ -1,82 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T12:26:22.674345+00:00",
-  "tournaments_run": 516,
+  "last_tournament_at": "2026-10-16T12:27:46.768964+00:00",
+  "tournaments_run": 528,
   "alleles_benchmarked": 0,
   "promotions": 17,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:20:40.390896+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:20:40.410357+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:10.570383+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:10.720660+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:10.873303+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:10.906805+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:38.470134+00:00",
-      "genes": [
-        "TASK_MOVING_SEGMENTS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:38.500986+00:00",
-      "genes": [
-        "TASK_ODD_DIVISORS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:41.047945+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:41.190891+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:41.334536+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:21:41.351630+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:22:11.505060+00:00",
       "genes": [
@@ -303,6 +231,78 @@
       "timestamp": "2026-10-16T12:26:22.674273+00:00",
       "genes": [
         "TASK_ONLINE_GCD"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:45.535585+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:45.691699+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:45.832317+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:26:45.851139+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:15.989727+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:16.126947+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:16.276318+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:16.297263+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:46.449643+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:46.600725+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:46.746319+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:27:46.768869+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
       ]
     }
   ]
