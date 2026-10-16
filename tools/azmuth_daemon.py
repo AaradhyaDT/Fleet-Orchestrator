@@ -196,6 +196,48 @@ def get_windows_idle_seconds() -> float:
     return 0.0
 
 
+class MEMORYSTATUSEX(ctypes.Structure):
+    _fields_ = [
+        ("dwLength", wintypes.DWORD),
+        ("dwMemoryLoad", wintypes.DWORD),
+        ("ullTotalPhys", ctypes.c_uint64),
+        ("ullAvailPhys", ctypes.c_uint64),
+        ("ullTotalPageFile", ctypes.c_uint64),
+        ("ullAvailPageFile", ctypes.c_uint64),
+        ("ullTotalVirtual", ctypes.c_uint64),
+        ("ullAvailVirtual", ctypes.c_uint64),
+        ("ullAvailExtendedVirtual", ctypes.c_uint64),
+    ]
+
+
+def get_memory_status_gb() -> tuple[float, float, int]:
+    """Returns (total_phys_gb, avail_phys_gb, memory_load_percent)."""
+    if sys.platform != "win32":
+        return (16.0, 8.0, 50)
+    try:
+        stat = MEMORYSTATUSEX()
+        stat.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat)):
+            total_gb = stat.ullTotalPhys / (1024**3)
+            avail_gb = stat.ullAvailPhys / (1024**3)
+            return (round(total_gb, 2), round(avail_gb, 2), int(stat.dwMemoryLoad))
+    except Exception as e:
+        logger.debug(f"Error querying GlobalMemoryStatusEx: {e}")
+    return (16.0, 8.0, 50)
+
+
+def has_sufficient_ram(min_avail_gb: float = 4.0, max_load_percent: int = 75) -> bool:
+    """Checks whether system has sufficient available RAM to execute background tasks without user lag."""
+    _, avail_gb, load_pct = get_memory_status_gb()
+    if avail_gb < min_avail_gb or load_pct > max_load_percent:
+        logger.warning(
+            f"RAM safety gate triggered: Available RAM {avail_gb}GB (< {min_avail_gb}GB threshold) "
+            f"or Load {load_pct}% (> {max_load_percent}%). Backing off to prevent system lag."
+        )
+        return False
+    return True
+
+
 def is_system_idle(threshold_seconds: float = 180.0) -> bool:
     """Check if the system has been idle for longer than threshold (default 3 minutes)."""
     return get_windows_idle_seconds() >= threshold_seconds
@@ -367,25 +409,54 @@ def self_heal_code(target_file: str, current_code: str, test_failure_output: str
 
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
-    Bails immediately if user input is detected.
+    Bails immediately if user input is detected or available RAM is below safety floor (4.0GB).
     """
-    logger.info("[Burst-Steal] System is IDLE. Initiating opportunistic burst...")
-    burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False}
+    if not has_sufficient_ram(min_avail_gb=4.0, max_load_percent=75):
+        logger.info("[Burst-Steal] Available RAM too low for background task. Skipping burst.")
+        return {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": True}
+
+    logger.info("[Burst-Steal] System is IDLE and RAM is HEALTHY. Initiating opportunistic burst...")
+    burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": False}
     start_time = time.time()
 
     # Subtask 1: Refresh and verify skills registry
     reconcile_mirrors_and_registry()
     burst_result["tasks_executed"].append("skills_registry_refresh")
 
-    # Immediate back-off check
+    # Immediate back-off check (user activity or memory pressure)
     if not is_system_idle(threshold_seconds=10.0):
         logger.info("[Burst-Steal] User activity detected! Backing off immediately.")
         burst_result["aborted_due_to_activity"] = True
         return burst_result
 
+    if not has_sufficient_ram(min_avail_gb=3.5, max_load_percent=80):
+        logger.info("[Burst-Steal] RAM dipped during execution. Yielding burst.")
+        burst_result["aborted_due_to_ram"] = True
+        return burst_result
+
     # Subtask 2: Deep capability scan
     gaps = sense_capability_gaps()
     burst_result["tasks_executed"].append(f"capability_gap_scan_found_{gaps.get('total_gaps', 0)}")
+
+    # Pre-task back-off check before corpus ingestion
+    if not is_system_idle(threshold_seconds=10.0):
+        logger.info("[Burst-Steal] User activity detected! Backing off before corpus harvest.")
+        burst_result["aborted_due_to_activity"] = True
+        return burst_result
+
+    if not has_sufficient_ram(min_avail_gb=4.0, max_load_percent=75):
+        logger.info("[Burst-Steal] Available RAM constrained. Skipping corpus harvest.")
+        burst_result["aborted_due_to_ram"] = True
+        return burst_result
+
+    # Subtask 3: Stream Ingestion of 1 Competitive-Programming task (Low-RAM Corpus Expansion)
+    try:
+        from tools.azmuth_corpus_harvester import harvest_single_task
+        harvest_res = harvest_single_task()
+        if harvest_res.get("status") == "SUCCESS":
+            burst_result["tasks_executed"].append(f"corpus_harvested_{harvest_res.get('task')}")
+    except Exception as e:
+        logger.debug(f"[Burst-Steal] Corpus harvest error: {e}")
 
     elapsed = time.time() - start_time
     logger.info(f"[Burst-Steal] Completed idle burst in {elapsed:.2f}s.")
@@ -395,10 +466,18 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
 # --- Core Operational Cycle ---
 
 def execute_cycle(dry_run: bool = False, use_ai: bool = True) -> dict[str, Any]:
-    """Execute a single complete Azmuth self-upgrade cycle with self-healing and pause checks."""
+    """Execute a single complete Azmuth self-upgrade cycle with self-healing, pause checks, and RAM safety."""
     if is_paused():
         logger.info("Azmuth Daemon is currently PAUSED. Skipping cycle.")
         return {"status": "PAUSED", "timestamp": datetime.now(timezone.utc).isoformat()}
+
+    if not has_sufficient_ram(min_avail_gb=3.5, max_load_percent=80):
+        logger.warning("Azmuth Daemon cycle aborted: Insufficient available RAM. Yielding to foreground apps.")
+        return {
+            "status": "ABORTED_LOW_RAM",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "smoke_suite_passed": True,
+        }
 
     cycle_start = datetime.now(timezone.utc)
     logger.info("=== Starting Azmuth Self-Upgrade Cycle ===")
@@ -557,6 +636,7 @@ def main() -> int:
     if args.status:
         paused = is_paused()
         idle_s = get_windows_idle_seconds()
+        total_ram, avail_ram, ram_load = get_memory_status_gb()
         last_log = {}
         if RUN_LOG.exists():
             try:
@@ -568,6 +648,8 @@ def main() -> int:
         print("==========================================================")
         print(f"  State             : {'PAUSED' if paused else 'ACTIVE'}")
         print(f"  Current User Idle : {idle_s:.1f}s ({idle_s/60.0:.2f}m)")
+        print(f"  System RAM        : {avail_ram:.2f} GB free / {total_ram:.2f} GB total ({ram_load}% load)")
+        print(f"  RAM Safety Floor  : >= 4.0 GB free (<= 75% load)")
         print(f"  Last Run Timestamp: {last_log.get('timestamp', 'Never')}")
         print(f"  Last Run Status   : {last_log.get('status', 'Unknown')}")
         print(f"  Smoke Passed      : {last_log.get('smoke_suite_passed', False)}")

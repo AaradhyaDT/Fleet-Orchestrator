@@ -53,7 +53,7 @@
       "dependencies": [
         "tools/adaptive_engine.py"
       ],
-      "byte_size": 8149,
+      "byte_size": 8121,
       "line_count": 131,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
       "ssot_role": "SSOT_USER",
@@ -652,12 +652,12 @@
       "name": "chat-archiver",
       "domain": "RESEARCH_ACADEMIC",
       "availability_tier": "ACCESSIBLE",
-      "description": ">- Universal AI chat archiver for downloading and archiving shared conversation links (such as ChatGPT share URLs, etc.) as clean, structured Markdown history files directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
+      "description": ">- Universal AI chat archiver for downloading and archiving shared conversation links (such as ChatGPT, Google Gemini share URLs, etc.) as clean, structured Markdown history files directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
       "triggers": [
         "chat-archiver"
       ],
       "dependencies": [],
-      "byte_size": 1773,
+      "byte_size": 1788,
       "line_count": 52,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\chat-archiver",
       "ssot_role": "SSOT_USER",
@@ -784,15 +784,20 @@
       "name": "cp-archive-harvester",
       "domain": "ENGINEERING_DEV",
       "availability_tier": "INSTALLED",
-      "description": ">- Autonomous competitive programming (CP) problem and optimal solution harvester using Chrome DevTools Protocol (CDP). Archives CS Academy, IEEEXtreme, and PreXtreme tasks with clean Markdown problem statements, KaTeX LaTeX math formulas, resource limits, sample I/O, and un-truncated 100-point solutions into IEEE-Xtreme-Archive.",
+      "description": ">- Autonomous competitive programming (CP) problem and optimal solution harvester using Chrome DevTools Protocol (CDP). Archives CS Academy, IEEEXtreme, and HackerRank tasks with clean Markdown statements, KaTeX math, resource limits, test cases, and un-truncated optimal solutions. Also manages headless HackerRank contest replica creation, CodeMirror challenge synthesis, and test-case ingestion.",
       "triggers": [
         "cp-archive-harvester"
       ],
       "dependencies": [
-        "harvesters/csacademy_harvester.py"
+        "harvesters/csacademy_harvester.py",
+        "scripts/csa_simulator.py",
+        "scripts/deterministic_solver_engine.py",
+        "scripts/ergonomic_cdp_runner.py",
+        "scripts/harvest_prextreme.py",
+        "scripts/verify.py"
       ],
-      "byte_size": 5181,
-      "line_count": 109,
+      "byte_size": 10471,
+      "line_count": 180,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\cp-archive-harvester",
       "ssot_role": "SSOT_USER",
       "mirrors": [
