@@ -128,19 +128,13 @@ class GeminiKeyRotator:
 
         combined_env = {**file_env, **os.environ}
 
-        # 1. Numbered keys GEMINI_API_KEY_1 .. GEMINI_API_KEY_50
-        i = 1
-        while True:
+        # 1. Numbered keys GEMINI_API_KEY_1 .. GEMINI_API_KEY_64
+        for i in range(1, 65):
             k = f"GEMINI_API_KEY_{i}"
             val = combined_env.get(k, "").strip()
-            if not val:
-                # Allow a small gap up to 2 missing before terminating
-                if i > 2:
-                    break
-            else:
-                if val not in discovered and not val.startswith("REPLACE_"):
-                    discovered.append(val)
-            i += 1
+            if val and val not in discovered and not val.startswith("REPLACE_"):
+                discovered.append(val)
+
 
         # 2. Comma / newline separated GEMINI_API_KEYS
         bulk_keys = combined_env.get("GEMINI_API_KEYS", "").strip()
