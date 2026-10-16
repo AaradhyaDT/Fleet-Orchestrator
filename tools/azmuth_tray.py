@@ -216,11 +216,15 @@ class AzmuthTrayApp:
             menu=self.build_menu(),
         )
 
+        def setup(icon):
+            icon.visible = True
+            logger.info("Azmuth System Tray icon is now visible in taskbar.")
+
         monitor_thread = threading.Thread(target=self.background_monitor_loop, daemon=True)
         monitor_thread.start()
 
         logger.info("Azmuth System Tray Controller started.")
-        self.icon.run()
+        self.icon.run(setup)
 
 
 if __name__ == "__main__":
