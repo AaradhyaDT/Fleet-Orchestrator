@@ -7,7 +7,7 @@
     "anagrams",
     "odd-divisor-count"
   ],
-  "last_solve_at": "2026-10-16T14:47:45.810382+00:00",
+  "last_solve_at": "2026-10-16T14:52:10.784103+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:05:58.684661+00:00",
@@ -31,6 +31,30 @@
   "attempted_slugs": {
     "0-sum-array": "VERIFICATION_FAILED",
     "101-palindromes": "VERIFICATION_FAILED",
-    "addition-time": "VERIFICATION_FAILED"
+    "addition-time": "VERIFICATION_FAILED",
+    "consecutive-sum": "VERIFICATION_FAILED",
+    "constant-sum": "VERIFICATION_FAILED",
+    "distinct-palindromes": "VERIFICATION_FAILED",
+    "double-palindromes": "VERIFICATION_FAILED",
+    "equal-sums": "VERIFICATION_FAILED",
+    "fibonacci-mod": "VERIFICATION_FAILED",
+    "fibonacci-representations-small": "VERIFICATION_FAILED",
+    "free-palindromes": "VERIFICATION_FAILED",
+    "gcd-on-a-circle": "VERIFICATION_FAILED",
+    "gcd-rebuild": "VERIFICATION_FAILED",
+    "matrix-palindromes": "VERIFICATION_FAILED",
+    "neighbour-sum-replacement": "VERIFICATION_FAILED",
+    "no-prime-sum": "VERIFICATION_FAILED",
+    "nogcd": "VERIFICATION_FAILED",
+    "odd-pair-sums": "VERIFICATION_FAILED",
+    "odd-palindromes": "VERIFICATION_FAILED",
+    "odd-sum": "VERIFICATION_FAILED",
+    "palindrome-centers": "VERIFICATION_FAILED",
+    "palindrome-free-strings": "VERIFICATION_FAILED",
+    "reconstruct-sum": "VERIFICATION_FAILED",
+    "reverse-subarray": "UNSUPPORTED_ARCHETYPE",
+    "reversed-number": "UNSUPPORTED_ARCHETYPE",
+    "shifted-diagonal-sum": "VERIFICATION_FAILED",
+    "sliding-product-sum": "VERIFICATION_FAILED"
   }
 }
