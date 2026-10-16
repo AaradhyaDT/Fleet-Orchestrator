@@ -55,10 +55,24 @@ print(a + b)
 
 
 def test_verify_known_sample_pass():
-    res = get_task_samples("akritis-one-and-two")
-    assert len(res) >= 1
-    sub_path = Path("F:/Aaradhya-Dev-Tamrakar/Competitive-Programming/platforms/hackerrank/xtreme-shadows-2026/akritis-one-and-two/submissions/1416433326_1pts.py")
-    if sub_path.exists():
+    from tools.ultimatrix_solver import HACKERRANK_TASKS
+    task_dir = HACKERRANK_TASKS / "akritis-one-and-two"
+    sub_path = task_dir / "submissions" / "1416433326_1pts.py"
+    if task_dir.exists() and sub_path.exists():
+        res = get_task_samples("akritis-one-and-two")
+        assert len(res) >= 1
         v = verify_task_solution("akritis-one-and-two", sub_path)
         assert v["status"] == "PASSED"
         assert v["all_passed"] is True
+    else:
+        # Synthetic test for CI environments without local disk clone of Competitive-Programming
+        sample_html = """
+<div class="challenge">
+<pre>1 2
+3 4</pre>
+<pre>7</pre>
+</div>
+"""
+        samples = extract_samples_from_html(sample_html)
+        assert len(samples) == 1
+        assert samples[0] == ("1 2\n3 4", "7")
