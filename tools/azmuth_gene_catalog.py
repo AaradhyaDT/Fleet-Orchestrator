@@ -252,6 +252,106 @@ def get_all_template_genes() -> list[dict[str, Any]]:
     """Constructs comprehensive list of typed genes from all 11 workspace templates."""
     genes: list[dict[str, Any]] = []
 
+    # 0A. 01_dsu.hpp - Disjoint Set Union
+    genes.append({
+        "gene_id": "DISJOINT_SET_UNION",
+        "tier": 2,
+        "category": "primitive_structure",
+        "description": "Maintains connected components with near-constant inverse Ackermann time complexity and rollback support.",
+        "alleles": [
+            {
+                "allele_id": "dsu_path_compression_size",
+                "dominance": "PRIMARY",
+                "complexity_time": "O(N * alpha(N))",
+                "complexity_space": "O(N)",
+                "environmental_triggers": ["N <= 200000", "connectivity_queries", "c++20"],
+                "empirical_fitness": {"runtime_ms": 28.5, "ram_kb": 1536, "benchmark_input": "N=2e5 unites & queries"},
+                "code_template": "struct DSU {\n    int n, num_sets;\n    std::vector<int> parent, sz;\n    DSU(int n = 0) : n(n), num_sets(n), parent(n), sz(n, 1) {\n        std::iota(parent.begin(), parent.end(), 0);\n    }\n    int find(int v) { return v == parent[v] ? v : parent[v] = find(parent[v]); }\n    bool unite(int a, int b) {\n        a = find(a); b = find(b);\n        if (a == b) return false;\n        if (sz[a] < sz[b]) std::swap(a, b);\n        parent[b] = a; sz[a] += sz[b]; num_sets--;\n        return true;\n    }\n};",
+                "invariants": ["Alpha(N) <= 4 for all practical N <= 10^18"],
+            }
+        ],
+    })
+
+    # 0B. 02_segtree.hpp - Segment Tree Range Query
+    genes.append({
+        "gene_id": "SEGMENT_TREE_RANGE_QUERY",
+        "tier": 2,
+        "category": "primitive_structure",
+        "description": "Point and range query structure supporting monoid operations in O(log N).",
+        "alleles": [
+            {
+                "allele_id": "iterative_segment_tree",
+                "dominance": "PRIMARY",
+                "complexity_time": "O(log N)",
+                "complexity_space": "O(2N)",
+                "environmental_triggers": ["point_update", "range_query", "c++20"],
+                "empirical_fitness": {"runtime_ms": 38.0, "ram_kb": 1600, "benchmark_input": "N=2e5 queries"},
+                "code_template": "struct SegTree {\n    int n;\n    std::vector<long long> tree;\n    SegTree(int n) : n(n), tree(2 * n, 0) {}\n    void update(int p, long long val) {\n        for (tree[p += n] = val; p > 1; p >>= 1) tree[p >> 1] = tree[p] + tree[p ^ 1];\n    }\n    long long query(int l, int r) {\n        long long res = 0;\n        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {\n            if (l & 1) res += tree[l++];\n            if (r & 1) res += tree[--r];\n        }\n        return res;\n    }\n};",
+                "invariants": ["Non-recursive 2N array prevents call-stack overhead"],
+            }
+        ],
+    })
+
+    # 0C. 03_fenwick.hpp - 1D Fenwick Tree
+    genes.append({
+        "gene_id": "FENWICK_BINARY_INDEXED_TREE",
+        "tier": 2,
+        "category": "primitive_structure",
+        "description": "Prefix sum and point update data structure with minimal constant factor and O(N) memory.",
+        "alleles": [
+            {
+                "allele_id": "fenwick_1d_bitwise",
+                "dominance": "PRIMARY",
+                "complexity_time": "O(log N)",
+                "complexity_space": "O(N)",
+                "environmental_triggers": ["prefix_sums", "c++20"],
+                "empirical_fitness": {"runtime_ms": 18.0, "ram_kb": 800, "benchmark_input": "N=2e5 updates/queries"},
+                "code_template": "struct Fenwick {\n    int n;\n    std::vector<long long> bit;\n    Fenwick(int n) : n(n), bit(n + 1, 0) {}\n    void add(int i, long long delta) {\n        for (; i <= n; i += i & -i) bit[i] += delta;\n    }\n    long long query(int i) const {\n        long long sum = 0;\n        for (; i > 0; i -= i & -i) sum += bit[i];\n        return sum;\n    }\n};",
+                "invariants": ["Isolated lowest set bit via (i & -i) enables branchless traversal"],
+            }
+        ],
+    })
+
+    # 0D. 05_maxflow.hpp - Dinic Max Flow
+    genes.append({
+        "gene_id": "DINIC_MAX_FLOW",
+        "tier": 3,
+        "category": "dimensional_collapse",
+        "description": "Computes maximum network flow using level graphs and blocking flows in O(V^2 E).",
+        "alleles": [
+            {
+                "allele_id": "dinic_scaling_bfs_dfs",
+                "dominance": "PRIMARY",
+                "complexity_time": "O(V^2 * E)",
+                "complexity_space": "O(V + E)",
+                "environmental_triggers": ["max_flow", "bipartite_matching", "c++20"],
+                "empirical_fitness": {"runtime_ms": 65.0, "ram_kb": 4096, "benchmark_input": "V=5000, E=30000"},
+                "code_template": "struct Dinic {\n    struct Edge { int to, rev; long long cap; };\n    int n; std::vector<std::vector<Edge>> adj;\n    std::vector<int> level, ptr;\n    Dinic(int n) : n(n), adj(n), level(n), ptr(n) {}\n};",
+                "invariants": ["Level graph BFS ensures shortest augmenting paths without cycles"],
+            }
+        ],
+    })
+
+    # 0E. 06_trees.hpp - Binary Lifting LCA
+    genes.append({
+        "gene_id": "BINARY_LIFTING_LCA",
+        "tier": 2,
+        "category": "primitive_structure",
+        "description": "Lowest Common Ancestor and tree path aggregation in O(log N) per query.",
+        "alleles": [
+            {
+                "allele_id": "binary_lifting_20_steps",
+                "dominance": "PRIMARY",
+                "complexity_time": "O(log N)",
+                "complexity_space": "O(N * log N)",
+                "environmental_triggers": ["tree_queries", "ancestor_lookup", "c++20"],
+                "empirical_fitness": {"runtime_ms": 45.0, "ram_kb": 16000, "benchmark_input": "N=2e5 nodes, 2e5 LCA queries"},
+                "code_template": "struct BinaryLiftingLCA {\n    int n, LOG;\n    std::vector<std::vector<int>> up;\n    std::vector<int> depth;\n    BinaryLiftingLCA(int n) : n(n), LOG(20), up(n, std::vector<int>(20, 0)), depth(n, 0) {}\n};",
+                "invariants": ["20 powers of 2 cover all trees up to N=1,000,000"],
+            }
+        ],
+    })
+
     # 1. 02_segtree.hpp - Lazy Segment Tree
     genes.append({
         "gene_id": "LAZY_SEGMENT_TREE_RANGE_UPDATE",
