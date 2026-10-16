@@ -668,10 +668,10 @@ def harvest_single_task() -> dict[str, Any]:
             "problems_indexed": indexed_count,
         }
 
-    # Priority 5: Run an Ultimatrix Arena tournament tick
+    # Priority 5: Run an Ultimatrix Arena tournament tick (only for newly evolved or unbenchmarked genes)
     try:
         from tools.ultimatrix_arena import run_arena_tournament
-        arena_res = run_arena_tournament(max_genes=1)
+        arena_res = run_arena_tournament(max_genes=1, only_unraced=True)
         if arena_res.get("genes_processed", 0) > 0:
             return {
                 "status": "SUCCESS",

@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "mutations_applied": 10,
-  "promotions_won": 10,
-  "last_mutation_at": "2026-10-16T12:26:21.835654+00:00",
+  "mutations_applied": 14,
+  "promotions_won": 12,
+  "last_mutation_at": "2026-10-16T12:42:32.755740+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:07:46.504343+00:00",
@@ -87,6 +87,42 @@
     },
     {
       "timestamp": "2026-10-16T12:26:21.835540+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:42:30.619937+00:00",
+      "gene_id": "STATIC_FORWARD_STAR_GRAPH",
+      "mutant_created": [
+        "static_forward_star_mut_pragma_tuning"
+      ],
+      "dominant_allele": "static_forward_star_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:42:31.169243+00:00",
+      "gene_id": "STATIC_FORWARD_STAR_GRAPH",
+      "mutant_created": [
+        "vector_adjacency_list_mut_pragma_tuning"
+      ],
+      "dominant_allele": "static_forward_star_mut_pragma_tuning",
+      "promotions": 0
+    },
+    {
+      "timestamp": "2026-10-16T12:42:31.702251+00:00",
+      "gene_id": "STATIC_FORWARD_STAR_GRAPH",
+      "mutant_created": [
+        "vector_adjacency_list_mut_static_memory"
+      ],
+      "dominant_allele": "static_forward_star_mut_pragma_tuning",
+      "promotions": 0
+    },
+    {
+      "timestamp": "2026-10-16T12:42:32.755665+00:00",
       "gene_id": "TEST_MUT_GENE",
       "mutant_created": [
         "orig_impl_mut_fast_io"

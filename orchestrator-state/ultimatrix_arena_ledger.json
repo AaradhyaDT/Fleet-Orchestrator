@@ -1,308 +1,345 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T12:27:46.768964+00:00",
-  "tournaments_run": 528,
+  "last_tournament_at": "2026-10-16T12:42:30.152742+00:00",
+  "tournaments_run": 637,
   "alleles_benchmarked": 0,
-  "promotions": 17,
+  "promotions": 49,
   "history": [
     {
-      "timestamp": "2026-10-16T12:22:11.505060+00:00",
+      "timestamp": "2026-10-16T12:36:23.015895+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:11.656468+00:00",
+      "timestamp": "2026-10-16T12:36:53.154263+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:11.786466+00:00",
+      "timestamp": "2026-10-16T12:36:53.293194+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:11.804977+00:00",
+      "timestamp": "2026-10-16T12:36:53.434610+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:41.962575+00:00",
+      "timestamp": "2026-10-16T12:36:53.450258+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:42.119287+00:00",
+      "timestamp": "2026-10-16T12:37:23.603633+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:42.271409+00:00",
+      "timestamp": "2026-10-16T12:37:23.746204+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:22:42.287869+00:00",
+      "timestamp": "2026-10-16T12:37:23.886756+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:12.445157+00:00",
+      "timestamp": "2026-10-16T12:37:23.902440+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:12.601067+00:00",
+      "timestamp": "2026-10-16T12:37:54.052751+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:12.758718+00:00",
+      "timestamp": "2026-10-16T12:37:54.202734+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:12.780152+00:00",
+      "timestamp": "2026-10-16T12:37:54.346177+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:42.825289+00:00",
+      "timestamp": "2026-10-16T12:37:54.364696+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:42.961419+00:00",
+      "timestamp": "2026-10-16T12:38:24.514451+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:43.111492+00:00",
+      "timestamp": "2026-10-16T12:38:24.647078+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:23:43.132555+00:00",
+      "timestamp": "2026-10-16T12:38:24.764904+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:13.290920+00:00",
+      "timestamp": "2026-10-16T12:38:24.780679+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:13.443272+00:00",
+      "timestamp": "2026-10-16T12:38:54.922215+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:13.578230+00:00",
+      "timestamp": "2026-10-16T12:38:55.056826+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:13.595928+00:00",
+      "timestamp": "2026-10-16T12:38:55.202117+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:43.746489+00:00",
+      "timestamp": "2026-10-16T12:38:55.218634+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:43.886205+00:00",
+      "timestamp": "2026-10-16T12:39:25.372592+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:44.021760+00:00",
+      "timestamp": "2026-10-16T12:39:25.523488+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:24:44.039018+00:00",
+      "timestamp": "2026-10-16T12:39:25.673585+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:14.186040+00:00",
+      "timestamp": "2026-10-16T12:39:25.694273+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:14.333119+00:00",
+      "timestamp": "2026-10-16T12:39:40.633627+00:00",
+      "genes": [
+        "TASK_PLATFORMS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:39:55.844348+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:14.466725+00:00",
+      "timestamp": "2026-10-16T12:39:55.988309+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:14.483065+00:00",
+      "timestamp": "2026-10-16T12:39:56.124664+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:44.614082+00:00",
+      "timestamp": "2026-10-16T12:39:56.139624+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:44.767346+00:00",
+      "timestamp": "2026-10-16T12:40:26.293564+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:44.902437+00:00",
+      "timestamp": "2026-10-16T12:40:26.449012+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:25:44.918691+00:00",
+      "timestamp": "2026-10-16T12:40:26.593655+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:15.073916+00:00",
+      "timestamp": "2026-10-16T12:40:26.609584+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:15.226301+00:00",
+      "timestamp": "2026-10-16T12:40:44.849565+00:00",
+      "genes": [
+        "TASK_RECURSIVE_SHUFFLE",
+        "TASK_SORTING_PARTITION",
+        "TASK_SWAP_PERMUTATION",
+        "TASK_TREE_SWAPPING",
+        "TASK_WORD_ORDERING",
+        "CUBIC_TRANSITIVE_CLOSURE",
+        "HR_SUNITS_PERMUTATION_FACTORY",
+        "TASK_BALANCED_STRING",
+        "TASK_FIBONACCI_REPRESENTATIONS_BIG",
+        "TASK_NUMBER_ELIMINATION",
+        "TASK_ONLINE_XORMAX",
+        "TASK_TREE_GAME",
+        "TASK_TWO_PROGRESSIONS",
+        "TASK_ADDITION",
+        "TASK_GCD",
+        "TASK_LIGHTBULBS",
+        "HR_AKRITIS_ONE_AND_TWO",
+        "HR_ANUGYAS_LANTERN_FESTIVAL",
+        "HR_BRAIN_ROT_OUTBREAK",
+        "HR_DEJA_VU_1_3",
+        "HR_NITESH_AND_THE_GREEN_RESEARCH_CARD",
+        "HR_POWERED_ADDITION",
+        "HR_PRAJWAL_AND_THE_MARBLE_AP",
+        "HR_PRODUCT_OF_THREE_NUMBERS_4",
+        "HR_ROSHAN_MAKES_THEM_EQUAL",
+        "HR_SANSKRITI_AND_THE_STORYBOOK_STACKS",
+        "HR_SHRINE",
+        "HR_SHUFFLE_8",
+        "HR_SUDHAN_AND_THE_DEMODOGS",
+        "HR_SUM_OF_2_NUMBERS_3_1",
+        "HR_SUM_OF_2_NUM_2",
+        "HR_SWIKRITS_HALLOUMI_BOXES",
+        "HR_THE_MAXIMUM_PORTFOLIO_GAIN",
+        "HR_UTSAV_AND_THE_MONSTER_HORDE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:40:44.925546+00:00",
+      "genes": [
+        "TASK_ADDITION",
+        "TASK_GCD",
+        "TASK_LIGHTBULBS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:40:44.995999+00:00",
+      "genes": [
+        "TASK_ADDITION",
+        "TASK_GCD",
+        "TASK_LIGHTBULBS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:40:56.758119+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:15.365609+00:00",
+      "timestamp": "2026-10-16T12:40:56.916354+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:15.386324+00:00",
+      "timestamp": "2026-10-16T12:40:57.057948+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:22.639660+00:00",
-      "genes": [
-        "TASK_OIL_WELLS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:26:22.674273+00:00",
-      "genes": [
-        "TASK_ONLINE_GCD"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:26:45.535585+00:00",
+      "timestamp": "2026-10-16T12:40:57.077619+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:45.691699+00:00",
+      "timestamp": "2026-10-16T12:41:27.233917+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:45.832317+00:00",
+      "timestamp": "2026-10-16T12:41:27.387310+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:26:45.851139+00:00",
+      "timestamp": "2026-10-16T12:41:27.530348+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:15.989727+00:00",
+      "timestamp": "2026-10-16T12:41:27.551769+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:16.126947+00:00",
+      "timestamp": "2026-10-16T12:41:57.708828+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:16.276318+00:00",
+      "timestamp": "2026-10-16T12:41:57.846270+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:16.297263+00:00",
+      "timestamp": "2026-10-16T12:41:57.980822+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:46.449643+00:00",
+      "timestamp": "2026-10-16T12:41:57.996137+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
       ]
     },
     {
-      "timestamp": "2026-10-16T12:27:46.600725+00:00",
+      "timestamp": "2026-10-16T12:42:30.152660+00:00",
       "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:27:46.746319+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:27:46.768869+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
+        "TASK_ACRONYMS"
       ]
     }
   ]

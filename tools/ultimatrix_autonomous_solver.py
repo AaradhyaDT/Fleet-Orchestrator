@@ -68,6 +68,7 @@ def load_solver_ledger() -> dict[str, Any]:
         "tasks_attempted": 0,
         "tasks_solved": 0,
         "solved_slugs": [],
+        "attempted_slugs": {},
         "last_solve_at": None,
         "history": [],
     }
@@ -81,7 +82,7 @@ def save_solver_ledger(ledger: dict[str, Any]) -> None:
 
 
 def get_unsolved_tasks(limit: int = 10) -> list[dict[str, Any]]:
-    """Retrieves unsolved tasks with verified sample test cases."""
+    """Retrieves unsolved tasks with verified sample test cases, prioritized to prevent head-of-line blocking."""
     tasks = []
     if not PROBLEM_INDEX.exists():
         return tasks
@@ -91,12 +92,15 @@ def get_unsolved_tasks(limit: int = 10) -> list[dict[str, Any]]:
         problems = p_data.get("problems", {})
         ledger = load_solver_ledger()
         solved_set = set(ledger.get("solved_slugs", []))
+        attempted_map = ledger.get("attempted_slugs", {})
 
         # Check existing task submissions on disk or db
         existing_task_subs = set()
         if CSACADEMY_TASKS.exists():
             for d in CSACADEMY_TASKS.iterdir():
                 if d.is_dir() and (d / "submissions").exists() and any((d / "submissions").iterdir()):
+                    existing_task_subs.add(d.name)
+                elif d.is_dir() and (d / "solutions").exists() and any((d / "solutions").iterdir()):
                     existing_task_subs.add(d.name)
 
         if CORPUS_DB.exists():
@@ -110,12 +114,38 @@ def get_unsolved_tasks(limit: int = 10) -> list[dict[str, Any]]:
             except Exception:
                 pass
 
+        # Keywords for prioritized high-confidence archetypes
+        high_priority_keywords = [
+            "addition", "sum", "gcd", "anagram", "acronym",
+            "sliding_window", "subarray_sum", "two_pointer",
+            "prefix_sum", "range_sum", "coordinate_compression",
+            "palindrome", "odd_divisor", "divisor", "fibonacci", "reverse",
+        ]
+
+        priority_candidates = []
+        regular_candidates = []
+
+        from tools.ultimatrix_solver import get_task_samples
+
         for slug, info in problems.items():
             if slug in solved_set or slug in existing_task_subs:
                 continue
 
-            # Check if task has sample cases
-            from tools.ultimatrix_solver import get_task_samples
+            s_lower = slug.lower()
+            is_priority = any(k in s_lower for k in high_priority_keywords)
+            # If already attempted and unsupported, put at the back of the queue
+            is_attempted = slug in attempted_map
+
+            item = (is_priority, not is_attempted, slug, info)
+            if is_priority and not is_attempted:
+                priority_candidates.append(item)
+            elif not is_attempted:
+                regular_candidates.append(item)
+            else:
+                regular_candidates.append(item)
+
+        candidate_stream = priority_candidates + regular_candidates
+        for _, _, slug, info in candidate_stream:
             samples = get_task_samples(slug)
             if samples:
                 tasks.append({
@@ -303,6 +333,61 @@ if __name__ == '__main__':
     solve()
 """
 
+    if "palindrome" in slug:
+        return """import sys
+
+def solve():
+    s = sys.stdin.read().strip()
+    if not s:
+        return
+    # Check if s is palindrome or print YES/NO
+    if s == s[::-1]:
+        print("YES")
+    else:
+        print("NO")
+
+if __name__ == '__main__':
+    solve()
+"""
+
+    if "fibonacci" in slug:
+        return """import sys
+
+def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    n = int(tokens[0])
+    if n <= 0:
+        print(0)
+        return
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, (a + b) % 1000000007
+    print(b)
+
+if __name__ == '__main__':
+    solve()
+"""
+
+    if "odd_divisor" in slug or "odd-divisor" in slug:
+        return """import sys
+
+def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    # Count numbers with odd number of divisors (perfect squares)
+    a, b = int(tokens[0]), int(tokens[1])
+    import math
+    r = int(math.isqrt(b))
+    l = int(math.isqrt(a - 1)) if a > 0 else 0
+    print(r - l)
+
+if __name__ == '__main__':
+    solve()
+"""
+
     # Generic I/O wrapper using problem constraints
     return None
 
@@ -358,6 +443,9 @@ def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
     # 1. Synthesize candidate
     candidate_code = synthesize_python_solution(task_info)
     if not candidate_code:
+        ledger = load_solver_ledger()
+        ledger.setdefault("attempted_slugs", {})[task_slug] = "UNSUPPORTED_ARCHETYPE"
+        save_solver_ledger(ledger)
         return {
             "status": "UNSUPPORTED_ARCHETYPE",
             "task_slug": task_slug,
@@ -367,6 +455,9 @@ def solve_task_autonomously(task_slug: str) -> dict[str, Any]:
     # 2. Run verification
     passed = run_solution_verification(candidate_code, samples)
     if not passed:
+        ledger = load_solver_ledger()
+        ledger.setdefault("attempted_slugs", {})[task_slug] = "VERIFICATION_FAILED"
+        save_solver_ledger(ledger)
         return {
             "status": "VERIFICATION_FAILED",
             "task_slug": task_slug,

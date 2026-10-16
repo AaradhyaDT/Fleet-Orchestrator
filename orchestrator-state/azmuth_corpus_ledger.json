@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_harvest_at": "2026-10-16T11:21:22.103028+00:00",
+  "last_harvest_at": "2026-10-16T12:42:29.842967+00:00",
   "tasks_processed": [
     "a_game",
     "addition",
@@ -33,6 +33,6 @@
   ],
   "invariants_discovered": 40,
   "summary": "Azmuth Language Corpus Harvest Ledger",
-  "genes_sequenced": 109,
+  "genes_sequenced": 110,
   "tasks_indexed": 671
 }

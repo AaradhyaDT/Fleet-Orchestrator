@@ -163,8 +163,13 @@ def mutate_gene_file(gene_path: Path) -> dict[str, Any]:
 
     created_mutants = []
     for allele in alleles:
+        # Bounded mutation invariant: do not mutate an already-mutated daughter allele
+        aid = allele.get("allele_id", "")
+        if "_mut_" in aid:
+            continue
+
         for op in operators:
-            candidate_id = f"{allele.get('allele_id')}_mut_{op}"
+            candidate_id = f"{aid}_mut_{op}"
             if candidate_id in existing_ids:
                 continue
 

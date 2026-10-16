@@ -218,8 +218,12 @@ def race_gene_alleles(gene_path: Path) -> dict[str, Any]:
     }
 
 
-def run_arena_tournament(max_genes: int = 1) -> dict[str, Any]:
-    """Runs an Ultimatrix Arena tournament across codon_stream genes."""
+def run_arena_tournament(max_genes: int = 1, only_unraced: bool = False) -> dict[str, Any]:
+    """Runs an Ultimatrix Arena tournament across codon_stream genes.
+    
+    If only_unraced=True, skips stabilized genes where all alleles are already benchmarked
+    and dominance is stable, returning genes_processed=0 so subsequent idle priorities can run.
+    """
     set_process_idle_priority()
     if not CODON_STREAM.exists():
         return {"status": "CODON_STREAM_NOT_FOUND", "genes_processed": 0}
@@ -231,6 +235,33 @@ def run_arena_tournament(max_genes: int = 1) -> dict[str, Any]:
 
     if not gene_files:
         return {"status": "NO_GENES_FOUND", "genes_processed": 0}
+
+    # Filter for only unraced / unbenchmarked genes if requested
+    if only_unraced:
+        unraced_files = []
+        for p in gene_files:
+            try:
+                d = json.loads(p.read_text(encoding="utf-8"))
+                alleles = d.get("alleles", [])
+                last_raced = d.get("last_raced_at")
+                needs_bench = any("runtime_ms" not in (a.get("empirical_fitness") or {}) for a in alleles)
+                primaries = [a for a in alleles if a.get("dominance") == "PRIMARY"]
+                has_single_primary = len(primaries) == 1
+                
+                # Single allele genes that already have fitness and a PRIMARY do not need tournament racing
+                if len(alleles) <= 1 and not needs_bench and has_single_primary:
+                    continue
+
+                # Multi-allele genes that have already raced, have all fitnesses, and have exactly one PRIMARY are stabilized
+                if last_raced and not needs_bench and has_single_primary:
+                    continue
+
+                unraced_files.append(p)
+            except Exception:
+                continue
+        gene_files = unraced_files
+        if not gene_files:
+            return {"status": "ALL_GENES_STABILIZED", "genes_processed": 0}
 
     # Prioritize multi-allele genes that have never been raced or were raced least recently
     def gene_race_priority(p: Path) -> tuple[int, str]:

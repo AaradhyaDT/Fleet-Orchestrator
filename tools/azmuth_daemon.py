@@ -584,9 +584,13 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
         record_burst_history(burst_result)
         return burst_result
 
-    # Subtask 2: Ultimatrix Genomic Sequencer & Problem Constraint Mapping
+    # Subtask 2: Ultimatrix Genomic Sequencer & Closed-Loop Multi-Priority Steal
     try:
-        from tools.azmuth_corpus_harvester import harvest_single_task
+        import importlib
+        import tools.azmuth_corpus_harvester as harvester_mod
+        importlib.reload(harvester_mod)
+        harvest_single_task = harvester_mod.harvest_single_task
+
         for _ in range(tasks_count):
             if not is_system_idle(threshold_seconds=10.0):
                 logger.info("[Burst-Steal] User activity detected during multi-task harvest. Yielding.")
@@ -600,21 +604,15 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
                     task_label += f"_{harvest_res['genes_created']}genes"
                 elif "problems_indexed" in harvest_res:
                     task_label += f"_{harvest_res['problems_indexed']}probs"
+                elif "solve_result" in harvest_res:
+                    task_label += f"_solved_{harvest_res['solve_result'].get('tasks_solved', 0)}"
+                elif "mutation_result" in harvest_res:
+                    task_label += f"_mutated_{harvest_res['mutation_result'].get('genes_mutated', 0)}"
                 burst_result["tasks_executed"].append(f"ultimatrix_{task_label}")
             else:
                 break
     except Exception as e:
         logger.debug(f"[Burst-Steal] Ultimatrix sequencer error: {e}")
-
-    # Subtask 3: Ultimatrix Arena Tournament Race
-    try:
-        from tools.ultimatrix_arena import run_arena_tournament
-        if is_system_idle(threshold_seconds=10.0):
-            arena_res = run_arena_tournament(max_genes=1)
-            if arena_res.get("genes_processed", 0) > 0:
-                burst_result["tasks_executed"].append(f"arena_raced_{arena_res['genes_processed']}_genes")
-    except Exception as e:
-        logger.debug(f"[Burst-Steal] Ultimatrix arena error: {e}")
 
     elapsed = time.time() - start_time
     burst_result["elapsed_sec"] = round(elapsed, 2)
