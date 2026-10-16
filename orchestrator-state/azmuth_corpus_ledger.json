@@ -1,12 +1,38 @@
 {
   "version": 1,
-  "last_harvest_at": "2026-10-16T08:44:34.270714+00:00",
+  "last_harvest_at": "2026-10-16T10:49:49.226726+00:00",
   "tasks_processed": [
     "a_game",
     "addition",
     "balanced-string",
-    "circular_subarrays"
+    "circular_subarrays",
+    "colored_marbles",
+    "dirijor",
+    "divided-kingdom",
+    "elections",
+    "fibonacci-representations-big",
+    "gcd",
+    "lightbulbs",
+    "matrix_exploration",
+    "meet",
+    "minmax_subarray",
+    "moving_segments",
+    "number_elimination",
+    "odd_divisors",
+    "oil-wells",
+    "online_gcd",
+    "online_xormax",
+    "platforms",
+    "recursive_shuffle",
+    "sorting_partition",
+    "swap_permutation",
+    "tree_game",
+    "tree_swapping",
+    "two_progressions",
+    "word_ordering"
   ],
-  "invariants_discovered": 4,
-  "summary": "Azmuth Language Corpus Harvest Ledger"
+  "invariants_discovered": 40,
+  "summary": "Azmuth Language Corpus Harvest Ledger",
+  "genes_sequenced": 9,
+  "tasks_indexed": 110
 }

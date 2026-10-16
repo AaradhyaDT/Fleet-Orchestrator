@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "last_tournament_at": "2026-10-16T10:49:49.248666+00:00",
+  "tournaments_run": 8,
+  "alleles_benchmarked": 0,
+  "promotions": 0,
+  "history": [
+    {
+      "timestamp": "2026-10-16T10:44:11.230869+00:00",
+      "genes": [
+        "CUBIC_TRANSITIVE_CLOSURE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:47:50.612163+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:47:56.943929+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:48:09.711652+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:48:36.614259+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:48:36.742882+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:49:49.135694+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T10:49:49.248557+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    }
+  ]
+}

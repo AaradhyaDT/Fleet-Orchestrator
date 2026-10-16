@@ -104,12 +104,21 @@ def test_pause_resume_lifecycle(tmp_path: Path):
 
 
 def test_idle_burst_stealing():
-    with patch("tools.azmuth_daemon.reconcile_mirrors_and_registry", return_value=True), \
+    with patch("tools.azmuth_daemon.check_and_update_skills_dirty", return_value=True), \
+         patch("tools.azmuth_daemon.reconcile_mirrors_and_registry", return_value=True), \
          patch("tools.azmuth_daemon.is_system_idle", return_value=True), \
          patch("tools.azmuth_daemon.sense_capability_gaps", return_value={"total_gaps": 0}):
         res = execute_idle_burst()
         assert res["aborted_due_to_activity"] is False
         assert "skills_registry_refresh" in res["tasks_executed"]
+
+
+def test_idle_burst_clean_skips_refresh():
+    with patch("tools.azmuth_daemon.check_and_update_skills_dirty", return_value=False), \
+         patch("tools.azmuth_daemon.is_system_idle", return_value=True):
+        res = execute_idle_burst()
+        assert res["aborted_due_to_activity"] is False
+        assert "skills_registry_refresh" not in res["tasks_executed"]
 
 
 def test_execute_cycle_all_healthy():

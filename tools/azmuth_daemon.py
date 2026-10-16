@@ -41,6 +41,8 @@ RUN_LOG = STATE_DIR / "azmuth_run.json"
 PAUSE_FILE = STATE_DIR / "azmuth.pause"
 LOCK_FILE = STATE_DIR / "azmuth.pid.lock"
 GEAR_FILE = STATE_DIR / "azmuth_gear.json"
+BURST_HISTORY = STATE_DIR / "azmuth_burst_history.jsonl"
+DIRTY_GATE_FILE = STATE_DIR / "azmuth_skills_fingerprint.json"
 
 GEARS: dict[str, dict[str, Any]] = {
     "whisper": {
@@ -484,6 +486,61 @@ def self_heal_code(target_file: str, current_code: str, test_failure_output: str
 
 # --- Opportunistic Burst Stealing During Idle ---
 
+def get_skills_mtime_fingerprint() -> float:
+    """Computes max mtime across skills and core tools to detect dirty state in <5ms."""
+    check_paths = [
+        ROOT / ".agents" / "skills",
+        ROOT / "tools" / "mirror_skills.py",
+        ROOT / "tools" / "build_skills_registry.py",
+        ROOT / "tools" / "capability_gap_detector.py",
+    ]
+    max_mtime = 0.0
+    for p in check_paths:
+        if p.is_dir():
+            try:
+                for item in p.iterdir():
+                    if item.is_file():
+                        max_mtime = max(max_mtime, item.stat().st_mtime)
+            except Exception:
+                pass
+        elif p.is_file():
+            try:
+                max_mtime = max(max_mtime, p.stat().st_mtime)
+            except Exception:
+                pass
+    return max_mtime
+
+
+def check_and_update_skills_dirty() -> bool:
+    """Returns True if skills/tools have changed on disk since last check, else False."""
+    current_fp = get_skills_mtime_fingerprint()
+    if DIRTY_GATE_FILE.exists():
+        try:
+            stored = float(DIRTY_GATE_FILE.read_text(encoding="utf-8").strip())
+            if current_fp <= stored:
+                return False
+        except Exception:
+            pass
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    DIRTY_GATE_FILE.write_text(str(current_fp), encoding="utf-8")
+    return True
+
+
+def record_burst_history(entry: dict[str, Any]) -> None:
+    """Appends burst telemetry to rolling JSONL log, capping at 500 lines."""
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        lines: list[str] = []
+        if BURST_HISTORY.exists():
+            lines = BURST_HISTORY.read_text(encoding="utf-8").splitlines()
+        lines.append(json.dumps(entry))
+        if len(lines) > 500:
+            lines = lines[-500:]
+        BURST_HISTORY.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    except Exception as e:
+        logger.debug(f"Could not record burst history: {e}")
+
+
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
     Bails immediately if user input is detected or available RAM is below safety floor.
@@ -502,34 +559,32 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": False, "gear": gear_name}
     start_time = time.time()
 
-    # Subtask 1: Refresh and verify skills registry
-    reconcile_mirrors_and_registry()
-    burst_result["tasks_executed"].append("skills_registry_refresh")
+    # Subtask 1: Refresh and verify skills registry ONLY IF DIRTY
+    if check_and_update_skills_dirty():
+        reconcile_mirrors_and_registry()
+        burst_result["tasks_executed"].append("skills_registry_refresh")
 
-    # Immediate back-off check (user activity or memory pressure)
-    if not is_system_idle(threshold_seconds=10.0):
-        logger.info("[Burst-Steal] User activity detected! Backing off immediately.")
-        burst_result["aborted_due_to_activity"] = True
-        return burst_result
+        # Immediate back-off check (user activity or memory pressure)
+        if not is_system_idle(threshold_seconds=10.0):
+            logger.info("[Burst-Steal] User activity detected! Backing off immediately.")
+            burst_result["aborted_due_to_activity"] = True
+            record_burst_history(burst_result)
+            return burst_result
+
+        gaps = sense_capability_gaps()
+        burst_result["tasks_executed"].append(f"capability_gap_scan_found_{gaps.get('total_gaps', 0)}")
+    else:
+        logger.debug("[Burst-Steal] Skills registry clean (dirty bit=0). Devoting burst to Ultimatrix.")
 
     # Circuit breaker check during burst
     gear_name, gear_cfg = check_and_enforce_gear_safety()
     if not has_sufficient_ram(min_avail_gb=gear_cfg.get("min_avail_ram_gb", 3.5), max_load_percent=gear_cfg.get("max_ram_load", 80)):
         logger.info("[Burst-Steal] RAM dipped during execution. Yielding burst.")
         burst_result["aborted_due_to_ram"] = True
+        record_burst_history(burst_result)
         return burst_result
 
-    # Subtask 2: Deep capability scan
-    gaps = sense_capability_gaps()
-    burst_result["tasks_executed"].append(f"capability_gap_scan_found_{gaps.get('total_gaps', 0)}")
-
-    # Pre-task back-off check before corpus ingestion
-    if not is_system_idle(threshold_seconds=10.0):
-        logger.info("[Burst-Steal] User activity detected! Backing off before corpus harvest.")
-        burst_result["aborted_due_to_activity"] = True
-        return burst_result
-
-    # Subtask 3: Stream Ingestion of Competitive-Programming tasks
+    # Subtask 2: Ultimatrix Genomic Sequencer & Problem Constraint Mapping
     try:
         from tools.azmuth_corpus_harvester import harvest_single_task
         for _ in range(tasks_count):
@@ -540,15 +595,34 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
             check_and_enforce_gear_safety()
             harvest_res = harvest_single_task()
             if harvest_res.get("status") == "SUCCESS":
-                burst_result["tasks_executed"].append(f"corpus_harvested_{harvest_res.get('task')}")
+                task_label = harvest_res.get("task", "task")
+                if "genes_created" in harvest_res:
+                    task_label += f"_{harvest_res['genes_created']}genes"
+                elif "problems_indexed" in harvest_res:
+                    task_label += f"_{harvest_res['problems_indexed']}probs"
+                burst_result["tasks_executed"].append(f"ultimatrix_{task_label}")
             else:
                 break
     except Exception as e:
-        logger.debug(f"[Burst-Steal] Corpus harvest error: {e}")
+        logger.debug(f"[Burst-Steal] Ultimatrix sequencer error: {e}")
+
+    # Subtask 3: Ultimatrix Arena Tournament Race
+    try:
+        from tools.ultimatrix_arena import run_arena_tournament
+        if is_system_idle(threshold_seconds=10.0):
+            arena_res = run_arena_tournament(max_genes=1)
+            if arena_res.get("genes_processed", 0) > 0:
+                burst_result["tasks_executed"].append(f"arena_raced_{arena_res['genes_processed']}_genes")
+    except Exception as e:
+        logger.debug(f"[Burst-Steal] Ultimatrix arena error: {e}")
 
     elapsed = time.time() - start_time
+    burst_result["elapsed_sec"] = round(elapsed, 2)
+    burst_result["timestamp"] = datetime.now(timezone.utc).isoformat()
+    record_burst_history(burst_result)
     logger.info(f"[Burst-Steal:{gear_name.upper()}] Completed idle burst in {elapsed:.2f}s.")
     return burst_result
+
 
 
 # --- Core Operational Cycle ---
@@ -741,19 +815,80 @@ def main() -> int:
                 last_log = json.loads(RUN_LOG.read_text(encoding="utf-8"))
             except Exception:
                 pass
+
+        # Compute bursts in last 60 minutes
+        bursts_last_hour = 0
+        now_ts = time.time()
+        if BURST_HISTORY.exists():
+            try:
+                for line in BURST_HISTORY.read_text(encoding="utf-8").splitlines():
+                    if line.strip():
+                        b_entry = json.loads(line)
+                        b_time_str = b_entry.get("timestamp")
+                        if b_time_str:
+                            b_dt = datetime.fromisoformat(b_time_str)
+                            if (datetime.now(timezone.utc) - b_dt).total_seconds() <= 3600:
+                                bursts_last_hour += 1
+            except Exception:
+                pass
+
+        # Codon stream statistics
+        cp_codon = Path("F:/Aaradhya-Dev-Tamrakar/Competitive-Programming/codon_stream")
+        tier_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
+        total_genes = 0
+        if cp_codon.exists():
+            for t_idx in range(5):
+                t_dir = cp_codon / f"tier{t_idx}_{['hardware', 'language', 'primitives', 'cubic_breakers', 'symbolic'][t_idx]}"
+                if t_dir.exists():
+                    cnt = len(list(t_dir.glob("*.json")))
+                    tier_counts[t_idx] = cnt
+                    total_genes += cnt
+
+        # Problem Index statistics
+        prob_idx_file = STATE_DIR / "azmuth_problem_index.json"
+        total_indexed = 0
+        if prob_idx_file.exists():
+            try:
+                total_indexed = json.loads(prob_idx_file.read_text(encoding="utf-8")).get("total_indexed", 0)
+            except Exception:
+                pass
+
+        # Arena ledger statistics
+        arena_file = STATE_DIR / "ultimatrix_arena_ledger.json"
+        tournaments = 0
+        promotions = 0
+        if arena_file.exists():
+            try:
+                a_data = json.loads(arena_file.read_text(encoding="utf-8"))
+                tournaments = a_data.get("tournaments_run", 0)
+                promotions = a_data.get("promotions", 0)
+            except Exception:
+                pass
+
         print("==========================================================")
-        print("  FLEET AZMUTH DAEMON STATUS")
+        print("  FLEET AZMUTH DAEMON & ULTIMATRIX SENTINEL STATUS")
         print("==========================================================")
-        print(f"  State             : {'PAUSED' if paused else 'ACTIVE'}")
+        print(f"  Daemon State      : {'PAUSED' if paused else 'ACTIVE'}")
         print(f"  Active Gear       : {gear_name.upper()} ({gear_cfg['name']})")
+        print(f"  Bursts (Last Hour): {bursts_last_hour}")
         print(f"  Current User Idle : {idle_s:.1f}s ({idle_s/60.0:.2f}m)")
         print(f"  System RAM        : {avail_ram:.2f} GB free / {total_ram:.2f} GB total ({ram_load}% load)")
         print(f"  Gear RAM Floor    : >= {gear_cfg['min_avail_ram_gb']} GB free (<= {gear_cfg['max_ram_load']}% load)")
+        print("----------------------------------------------------------")
+        print(f"  ULTIMATRIX CODON STREAM (Target: 100 Genes for Phase 2)")
+        print(f"  Total Genes       : {total_genes} / 100")
+        print(f"  Tier 0 (Hardware) : {tier_counts[0]} | Tier 1 (Language) : {tier_counts[1]}")
+        print(f"  Tier 2 (Primitive): {tier_counts[2]} | Tier 3 (Breakers) : {tier_counts[3]}")
+        print(f"  Tier 4 (Symbolic) : {tier_counts[4]}")
+        print(f"  Problems Indexed  : {total_indexed} / 696 Tasks")
+        print(f"  Arena Tournaments : {tournaments} run ({promotions} promotions)")
+        print("----------------------------------------------------------")
         print(f"  Last Run Timestamp: {last_log.get('timestamp', 'Never')}")
         print(f"  Last Run Status   : {last_log.get('status', 'Unknown')}")
         print(f"  Smoke Passed      : {last_log.get('smoke_suite_passed', False)}")
         print("==========================================================")
         return 0
+
 
     if args.loop:
         run_daemon_loop(

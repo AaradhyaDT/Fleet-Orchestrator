@@ -1,6 +1,6 @@
 {
-  "gear": "balanced",
-  "name": "Balanced (Auto-Managed)",
-  "set_at": "2026-10-16T08:40:58.229522+00:00",
-  "reason": "CLI invocation --gear balanced"
+  "gear": "turbo",
+  "name": "Turbo / Warp (High Throughput)",
+  "set_at": "2026-10-16T09:26:46.171274+00:00",
+  "reason": "CLI invocation --gear turbo"
 }

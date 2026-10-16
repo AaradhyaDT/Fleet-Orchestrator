@@ -60,6 +60,16 @@ function Get-IngestedCount {
     return 0
 }
 
+function Get-CodonStreamCount {
+    $cpCodon = "F:\Aaradhya-Dev-Tamrakar\Competitive-Programming\codon_stream"
+    if (Test-Path $cpCodon) {
+        try {
+            return (Get-ChildItem -Path $cpCodon -Recurse -Filter "*.json" | Where-Object { $_.Name -ne "gene.schema.json" }).Count
+        } catch {}
+    }
+    return 0
+}
+
 # --- Create Procedural Dynamic Icon Bitmap ---
 function New-GearIcon($gear, $isPaused) {
     $bmp = New-Object System.Drawing.Bitmap(32, 32)
@@ -149,9 +159,11 @@ function Update-TrayState {
     $ram = Get-RamStats
     $ingested = Get-IngestedCount
 
+    $genes = Get-CodonStreamCount
+
     $headerStatus.Text = if ($paused) { "Azmuth Engine: PAUSED" } else { "Azmuth Engine: " + $gear.ToUpper() }
     $headerRam.Text = "RAM: $($ram.Free)GB free / $($ram.Total)GB ($($ram.Pct)% load)"
-    $headerCP.Text = "CP Ingested: $ingested tasks cataloged"
+    $headerCP.Text = "Ultimatrix: $genes Genes | $ingested Tasks"
 
     $itemTurbo.Checked = ($gear -eq "turbo")
     $itemBalanced.Checked = ($gear -eq "balanced")
@@ -159,7 +171,7 @@ function Update-TrayState {
     $itemPause.Text = if ($paused) { "Resume Engine" } else { "Pause Engine" }
 
     $notify.Icon = New-GearIcon $gear $paused
-    $notify.Text = "Azmuth [$($gear.ToUpper())] - Free RAM: $($ram.Free)GB"
+    $notify.Text = "Azmuth [$($gear.ToUpper())] - $genes Genes - Free RAM: $($ram.Free)GB"
 }
 
 # --- Background Timer (Refreshes status and checks RAM circuit breaker every 3s) ---

@@ -1,0 +1,1229 @@
+{
+  "version": 1,
+  "total_indexed": 110,
+  "problems": {
+    "0-k-multiple": {
+      "title": "0-K Multiple",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq K \\leq 9$ \n\n\n| Input | Output |\n| --- | --- |\n| 5 2 | 20 |\n| 7 4 | 4004 |\n| 13 7 | 7007 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:45:22.314793+00:00"
+    },
+    "0-sum-array": {
+      "title": "0-Sum Array",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1000$ \nfor each element $X$ from the array, $-1000 \\leq X \\leq 1000$,\n\n\n| Input | Output |\n| --- | --- |\n| 5<br>1 3 -5 3 4 | 2 |\n| 4<br>1 2 4 8 | -1 |\n| 5<br>5 3 6 -7 -4 | -1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:45:22.315300+00:00"
+    },
+    "101-palindromes": {
+      "title": "101 Palindromes",
+      "difficulty": "HARD",
+      "time_limit": "800 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "The length of $S$ is between $1$ and $200$.\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>31313 | 0 | $3131$ is divisible by $101$ but it's not a palindrome. |\n| 6<br>102201 | 7 | Consi",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:45:22.315754+00:00"
+    },
+    "3-divisible-pairs": {
+      "title": "3-divisible Pairs",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$\nThe elements of the array are integers between $1$ and $10^5$.\n\n\n| Input | Output |\n| --- | --- |\n| 5<br>1 4 2 3 3 | 3 |\n| 4<br>3 3 3 6 | 6 |\n| 8<br>1 1 7 2 11 3 6 9 | 9 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:45:22.316155+00:00"
+    },
+    "8-divisible": {
+      "title": "8 Divisible",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "The number of digits of $N$ is between $1$ and $1\\,000$ \n$1 \\leq N$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 625 | 256 | $256$ is the only number divisible by $8$ we can obtain |\n| 173",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:45:22.316546+00:00"
+    },
+    "a-single-one": {
+      "title": "A Single One",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$$2 \\leq K \\leq N$$0 \\leq M \\leq N-1$$1 \\leq S \\leq N$The initial position is not forbidden.\n\n| Input | Output |\n| --- | --- |\n| 6 2 0 1 | 0 1 2 3 4 5 |\n| 6 5 0 1 | 0 -1 2 -1 1 -1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.542074+00:00"
+    },
+    "a_game": {
+      "title": "A-Game",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$\nAlex chooses first\n\n\n| Input | Output |\n| --- | --- |\n| 2\n<br>AA | -1 |\n| 9\n<br>AABABABBA | A |\n| 11\n<br>ABAABBABBBA | B |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.542485+00:00"
+    },
+    "aa-tree": {
+      "title": "AA Tree",
+      "difficulty": null,
+      "time_limit": "100 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq L \\leq 9$.\n$1 \\leq N  \\leq 10\\ 000$.\n\n\n#PointsRestrictions119$L\\leq 4$234$5 \\leq  L \\leq 7$347No further constraints.\n\n| Input | Output |\n| --- | --- |\n| 5 2 | 2 |\n| 442 6 | 896944318 |\n| 7133",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.543079+00:00"
+    },
+    "acronyms": {
+      "title": "Acronyms",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \nThe sum of lengths of the $N$ words is $\\leq 10^6$ \nThe strings contain only lowercase letters of the English alphabet\nThe strings are distinct.\n\n\n| Input | Output | Explanation ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.543564+00:00"
+    },
+    "adaptive-binary-search": {
+      "title": "Adaptive Binary Search",
+      "difficulty": "TUTORIAL",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "This task is adaptive\n$2 \\leq N \\leq 10^6$\nYou pass the tests if the number of queries is $\\leq \\lceil\\log N\\rceil$.\n\n\nInteraction7Q 40Q 21Q 31A 4",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.543976+00:00"
+    },
+    "add-and-divide": {
+      "title": "Add and Divide",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^9$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 13 | 6 | We perform the following steps:\n$13 + 1 = 14$ \n$14 / 2 = 7$ \n$7 + 1 = 8$ \n$8 / 2 = 4$ \n$4 / 2 = 2$ \n$2 / 2 = 1$ ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.551622+00:00"
+    },
+    "add-and-subtract": {
+      "title": "Add and Subtract",
+      "difficulty": null,
+      "time_limit": "2000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1\\leq N \\leq 10^5$ \n$-10^9\\leq A_i \\leq 10^9$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5\n<br>6 7 3 8 2 | 8 6 12 10 -4 | $K=1: 8$\n$K=2: 8 - 2=6$\n$K=3: 7 - 3 + 8 = 12$\n$K=4: 7-3+8-2=10",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.552015+00:00"
+    },
+    "addition": {
+      "title": "Addition",
+      "difficulty": "TUTORIAL",
+      "time_limit": "500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$-10^9 \\leq A, B \\leq 10^9$\n\n\n| Input | Output |\n| --- | --- |\n| 10 20 | 30 |\n| 333 876 | 1209 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.552349+00:00"
+    },
+    "addition-time": {
+      "title": "Addition Time",
+      "difficulty": null,
+      "time_limit": "1500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1\\leq N\\leq 10^3$ $1\\leq a_i\\leq 10^{12}$ $1 \\leq X \\leq \\sum_{i = 1}^N a_i$\n\n| Input | Output |\n| --- | --- |\n| 5 26<br>1 2 4 8 20 | 3<br>2 4 20 |\n| 3 39<br>2 35 38 | -1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.552678+00:00"
+    },
+    "adjacent-vowels": {
+      "title": "Adjacent Vowels",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1000$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>aeoui | 4 | $(ae)oui$\n$a(eo)ui$\n$ae(ou)i$\n$aeo(ui)$ |\n| 7<br>abaebio | 2 | $ab(ae)bio$\n$abaeb(io)$ |\n| 7<br>abcdefg ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.552986+00:00"
+    },
+    "aggressive-pawns": {
+      "title": "Aggressive Pawns",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 100$ $0 \\leq X_i, Y_i \\leq 1000$ \n\n| Input | Output |\n| --- | --- |\n| 2<br>1 1 0 0 2 2<br>0 0 1 1 2 2 | Same time<br>Second |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.564981+00:00"
+    },
+    "airport": {
+      "title": "airport",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.565121+00:00"
+    },
+    "aisimok": {
+      "title": "Aisimok",
+      "difficulty": null,
+      "time_limit": "500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le n \\le 10^5$ \nThe heights of the pillars are integers between $1$ and $10^{9}$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 2<br>3 1 | 1 | Macarie welds two segments of length $1$, ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.566018+00:00"
+    },
+    "alex-chills": {
+      "title": "Alex Chills",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le N \\le 10^5$ \n$1 \\le L, R \\le 10^9$ \n$0 \\le f[i] \\le 10^9$  (for every $i$ between $1$ and $N$)\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 1 4<br>1 2 3 | 3 | We have 3 numbers (1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.566675+00:00"
+    },
+    "alex-climbs": {
+      "title": "Alex Climbs",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "976.6 MB",
+      "constraints_summary": "$4 \\le N,M \\le 1\\,000$ $4 \\le K \\le max(N,M)$   \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 4 4\n<br>1010\n<br>1111\n<br>0101\n<br>1111 | 8 | The portion from $(0,1)$ is a double grip, and ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:50.567237+00:00"
+    },
+    "alex-combines": {
+      "title": "Alex Combines",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le N, Q \\le 10^5$ $1 \\le v[i] \\le 10^6$ $1 \\le L, R \\le N$ \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 10<br>5 1 5 5 4 1 4 4 2 4 <br>10<br>2 9<br>2 10<br>7 8<br>7 7<br>1 6<br>4 8<br>3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.839244+00:00"
+    },
+    "alex-concatenates": {
+      "title": "Alex Concatenates",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le |s| \\le 10000$ $1 \\le n \\le 1000$ $1 \\le \\sum_{i=1}^n|w_i| \\le 10^5$ Two substrings are considered the same even if they start at different positions in the given string.\n\n| Input | Output | Ex",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.840211+00:00"
+    },
+    "alex-counts": {
+      "title": "Alex Counts",
+      "difficulty": null,
+      "time_limit": "500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le n \\le 2*10^5$ $1 \\le A[i] \\le 10^6$ (where $A[i]$ denotes the power of the $i$-th card, with $i$ between $1$ and $N$)\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 7\n<br>8 9 2 4 2 3 6",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.840840+00:00"
+    },
+    "alice-tree": {
+      "title": "Alice's Tree",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \nAlice guarantees that there is at least one tree that satisfies a given input.\n\n\n| Input | Output |\n| --- | --- |\n| 4 2<br>1 3 1 1 | 1 2<br>3 2<br>2 4 |\n| 5 4<br>1 2 2 2 1 | 1 2<",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.841215+00:00"
+    },
+    "all-numbers": {
+      "title": "All Numbers",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 50$ \n$0 \\leq D_i \\leq 9$ for $1 \\leq i \\leq N$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>3 2 1 | 1332 | .ace-tm .ace_gutter {<br>  background: #f0f0f0;<br>  color: #",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.842276+00:00"
+    },
+    "alphabet-rotation": {
+      "title": "Alphabet Rotation",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The sum of lengths of the strings is \u2264 $10^5$The strings will contain only lower case letters of the English alphabet.\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.855032+00:00"
+    },
+    "alternant-array": {
+      "title": "Alternant Array",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^4$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>0 0 0 1 1 1 | 1 | $0\\ \\underline{0}\\ 0\\ 1\\ \\underline{1}\\ 1$\n$0\\ 1\\ 0\\ 1\\ 0\\ 1$ |\n| 4<br>0 1 1 0 1 0 0 1 | 2 | $\\unde",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.855464+00:00"
+    },
+    "alternating-subarray": {
+      "title": "Alternating Subarray",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$\nThe values of the array are integers between $1$ and $10^6$\nA subarray of length $1$ is considered alternating\n\n\n| Input | Output |\n| --- | --- |\n| 5<br>1 3 1 1 2 | 3 |\n| 3<br>1 1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "SEGMENT_TREE_RANGE_QUERY"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.855828+00:00"
+    },
+    "amusement-park": {
+      "title": "Amusement Park",
+      "difficulty": "MEDIUM",
+      "time_limit": "1500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq T, A \\leq 1\\,000$ \n$0 \\leq P_{i, j} \\leq 100$ \nThere will be at least one value strictly less than $100$ on each of the $T$ rows of $P$.\nYour result will be checked with an absolute or relativ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.856352+00:00"
+    },
+    "an-unstable-graph": {
+      "title": "An Unstable Graph",
+      "difficulty": "HARD",
+      "time_limit": "1500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$2 \\le N \\le 50$ \n$0 \\le M \\le N (N - 1)$ \nYour result will be checked with an absolute error of \u200b\u200b$10^{-6}$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 2\n<br>1 2 50\n<br>2 3 50 | 0.250",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.856890+00:00"
+    },
+    "anagram-sort": {
+      "title": "Anagram Sort",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 500$ \n$1 \\leq A_i \\leq N$ for $1 \\leq i \\leq N$ \nIt is guaranteed that every integer from $1$ to $\\text{max}(A)$ appears at least once in $A$. \nThe query which ends the interaction (i.e",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.886548+00:00"
+    },
+    "anagrams": {
+      "title": "Anagrams",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ The sum of lengths of all the words is a number between $1$ and $10^5$.The strings contain only lower case letters of the English alphabet.\n\n| Input | Output | Explanation |\n| ---",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.887021+00:00"
+    },
+    "and-closure": {
+      "title": "And Closure",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The elements of the array are integers between $0$ and $10^6$.The chosen subset can be empty, and in this case we consider the and of the elements to be $0$.\n\n| Input | Output |\n| ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.887423+00:00"
+    },
+    "and-or-max": {
+      "title": "And or Max",
+      "difficulty": "HARD",
+      "time_limit": "1500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 2 * 10^5$ \n$1 \\leq Q \\leq 2 * 10^5$ \n$0 \\leq A_i, X < 2^{20}$ \n$1 \\leq L \\leq R \\leq N$  \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5 8<br>1 3 2 5 4<br>3 1 3<br>2 1 1 5<b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.887756+00:00"
+    },
+    "anomalies": {
+      "title": "Anomalies",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N, K \\leq 100$ \n$1 \\leq A_i \\leq 1000$, for any $1 \\leq i \\leq N$ \n\n\n| Input | Output |\n| --- | --- |\n| 3 1<br>1 3 5 | 3 |\n| 3 5<br>7 1 8 | 1 |\n| 5 1<br>1 2 2 2 2 | 0 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:47:56.888146+00:00"
+    },
+    "array-elimination": {
+      "title": "Array Elimination",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$0 \\leq A_i \\leq 10^9$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>2 1 3 3 2 | 8 | The underlined element represents the position of the pointer.\n\n$\\underline{2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.620852+00:00"
+    },
+    "array-macao": {
+      "title": "Array Macao",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq a_i, b_i \\leq 10^9$ \n\n\n| Input | Output |\n| --- | --- |\n| 4<br>12 42 25 11<br>2 16 77 13 | 3 |\n| 3<br>1 5 7<br>25 22 22 | 1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.621603+00:00"
+    },
+    "array-removal": {
+      "title": "Array Removal",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$The values of the array are integers between $0$ and $10^9$\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>6 1 2 3 2<br>2 5 1 4 3 | 14<br>7<br>6<br>5<br>2 | Available",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.622196+00:00"
+    },
+    "array_coloring": {
+      "title": "Array Coloring",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.622745+00:00"
+    },
+    "as-easy-as-abc": {
+      "title": "As easy as ABC",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq K \\leq N \\leq 10^{3}$, $N$ is odd. $1 \\leq A_i \\leq 10^{3}$  \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 9 3<br>4 4 4 8 2 2 9 9 1 | 5 | One can increase the elements on positions ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.623262+00:00"
+    },
+    "aspirations": {
+      "title": "Aspirations",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq l \\leq r \\leq 10^4$ \n$1 \\leq d \\leq 10^4$ \nIf there are multiple solutions, you can output any of them.\n\n\n| Input | Output |\n| --- | --- |\n| 7 13 3 | 2<br>9 12 |\n| 1 20 21 | impossible |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.632225+00:00"
+    },
+    "attack-and-speed": {
+      "title": "Attack and Speed",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq A, S, K, X, Y \\leq 10^9$ \nYou are required to spend all the money\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 14 12 6 3 2 | 2 | For Attack, using $2$ dollars $14 + 2 * 3 = 20$\nFor",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.632874+00:00"
+    },
+    "attending-events": {
+      "title": "Attending Events",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$\n\n  \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>1 2 3 2 1 | 4 |  |\n| 8<br>2 1 2 2 3 1 1 2 | 5 | A valid subsequence of events could be determined by the positions",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.633591+00:00"
+    },
+    "b9i": {
+      "title": "B9i",
+      "difficulty": null,
+      "time_limit": "500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le n \\le 300\\,000$ \n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5<br>AAPPP | Alex | Step 1. Alex has the first coin, so he removes one of Paul's coins. The remaining coins on the table",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.634229+00:00"
+    },
+    "baby-seokhwan": {
+      "title": "Baby Seokhwan",
+      "difficulty": null,
+      "time_limit": "8000 ms",
+      "memory_limit": "1 GB",
+      "constraints_summary": "$1 \\leq N, M, Q \\leq 250\\ 000$ \n\n\nFor each query, the following constraints are satisfied:\n\n$1 \\leq S \\leq E \\leq N$ \n$1 \\leq P \\leq M$ \n$1 \\leq X \\leq 250\\ 000$ \n\n\n| Input | Output |\n| --- | --- |\n| ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.635266+00:00"
+    },
+    "back-in-business": {
+      "title": "Back in Business",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$2 \\leq N, M \\leq 1000$ \nIt is guaranteed that there is at least one contestant on the map.\nIt is guaranteed that there are exactly one S cell and exactly one F cell on the map.\n\n\n| Input | Output | E",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.662925+00:00"
+    },
+    "backpack-packing": {
+      "title": "Backpack Packing",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq A, B \\leq 10^5$ \n$1 \\leq N \\leq 100$ \n$1 \\leq V_i \\leq 10^5$ \nThe objects are packed in the order given in the input\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 7 5 8<br>3 1 4 2 5",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.663615+00:00"
+    },
+    "bad-triplet": {
+      "title": "Bad Triplet",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 10^5$ \n\n\n| Input | Output |\n| --- | --- |\n| 8 8<br>1 6<br>6 3<br>3 4<br>4 5<br>4 7<br>7 8<br>8 1<br>5 2 | 1 7 3 |\n| 3 2<br>1 3<br>2 3 | -1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.664170+00:00"
+    },
+    "balanced-min-pairing": {
+      "title": "Balanced Min Pairing",
+      "difficulty": "EASY",
+      "time_limit": "1500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq T \\leq 25\\ 000$$2 \\leq N \\leq 50\\ 000$, $N$ is evenThe sum of $N$ for all $T$ tests is $\\leq 50\\ 000$The elements of the two arrays are integers between $1$ and $10^5$.\n\n| Input | Output |\n| -",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.664878+00:00"
+    },
+    "balanced-number": {
+      "title": "Balanced Number",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "The number of digits of $N$ is between $1$ and $1000$ \n$N$ does not have leading zeroes, but $N$ can be 0\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 1234567890 | 1 | The number has all d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:09.665482+00:00"
+    },
+    "balanced-string": {
+      "title": "Balanced String",
+      "difficulty": "HARD",
+      "time_limit": "500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq T \\leq 20$\n$1 \\leq |S| \\leq 50.000$\n\n\n| Input | Output |\n| --- | --- |\n| 5<br>ABAABAABAB<br>AABABAABAB<br>ABBABBA<br>AABB<br>ABABABA | 0<br>1<br>0<br>0<br>1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.510281+00:00"
+    },
+    "balanced-strings": {
+      "title": "Balanced Strings",
+      "difficulty": null,
+      "time_limit": "3000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^9$ \n$1 \\leq K \\leq 5$ \n$10^8 \\leq X \\leq 10^9+10$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5 1 1000000007 | 6 | The 6 ways are \"abcab\", \"acbac\", \"bacba\", \"bcabc\", \"c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.510778+00:00"
+    },
+    "ball-sampling": {
+      "title": "Ball Sampling",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 20$ \n$1 \\leq A_i \\leq 100$ \nAn answer is considered correct if the absolute difference between it and the official answer is less than $10^{-6}$. \n\n\n| Input | Output |\n| --- | --- |\n| 3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.511241+00:00"
+    },
+    "banned-digits": {
+      "title": "Banned Digits",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^{18}$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 0 0 0 0 1 0 0 0 0 0<br>25 | 22 | The only banned digit is $4$. The banned numbers are:\n4\n14\n24\nNote that $0$ is counte",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.511705+00:00"
+    },
+    "base-k-xor": {
+      "title": "Base K Xor",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq T \\leq 5 * 10^4$$1 \\leq a \\leq b \\leq 10^8$$2 \\leq k \\leq 10$ \n\n| Input | Output |\n| --- | --- |\n| 4<br>1 5 2<br>5 29 3<br>16 31 4<br>100 10000 7 | 1<br>5<br>0<br>16172 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.512115+00:00"
+    },
+    "bbox-count": {
+      "title": "BBox Count",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 2500$ \nThe coordinates of the points are integers between $1$ and $2500$ \nThe are no two points at the same coordinates\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>1 2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.541441+00:00"
+    },
+    "beautiful-matrix": {
+      "title": "Beautiful Matrix",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$2 \\leq N$ \n$2 \\leq M$ \n$N * M \\leq 3*10^5$ \n$-1000 \\leq A_{i, j} \\leq 1000$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 3<br>9 8 7<br>3 2 1<br>6 5 4 | 92 | .ace-tm .ace_gutter {<br>  b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.542409+00:00"
+    },
+    "best-array-cut": {
+      "title": "Best Array Cut",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \nThe elements of the array are integers between $-100$ and $100$.\n\n\n| Input | Output |\n| --- | --- |\n| 3<br>2 3 1 | 2 |\n| 5<br>3 -2 5 -1 3 | 2 |\n| 8<br>3 1 -2 7 -4 2 -3 1 | 1 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.542821+00:00"
+    },
+    "best-driver": {
+      "title": "Best Driver",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq Q \\leq 100$ $1 \\leq X_1, X_2, C_1, C_2 \\leq 10^4$ the answer will be considered correct if the relativ or absolute error between your result and correct answer is at most $10^{-6}$ It is guara",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.543384+00:00"
+    },
+    "bfs": {
+      "title": "Bfs",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq n, m, Q \\leq 10^5$ \n$1 \\leq S \\leq 10^9$ \n$0 \\leq B_i, F_i \\leq 10^9$ \nFor every swap $|x-y| = 1$ \nIt is guaranteed that before the first swap the game is successful\nFor 10 points $n,m \\leq 10",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.544119+00:00"
+    },
+    "bfs-dfs": {
+      "title": "BFS-DFS",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 4096$ \nThe number of edges $M$ should be at most $10^5$ \nThe two permutations will always start with $1$ \nThe graph is considered to be undirected. Multiple edges and self loops are not",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.565705+00:00"
+    },
+    "bicycle-rental": {
+      "title": "Bicycle Rental",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1000$ \nAll the other numbers in the input are integers between $1$ and $10^5$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>2 4 2<br>3 2 4<br>1 9 1 | 6 | Although you ca",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.566346+00:00"
+    },
+    "big-string": {
+      "title": "Big String",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq |S| \\leq 500$ $1 \\leq K \\leq 50$\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| xrabrsagqw<br>3 | 16 8 0 0 0 0 8 0 0 0 0 0 0 0 0 0 8 16 8 0 0 0 4 5 0 0 |  |\n| agjv<br>1 | 2 0 0 0 0 0 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.566746+00:00"
+    },
+    "binary-differences": {
+      "title": "Binary Differences",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \nThe subarray may be empty \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3\n<br>0 1 0 | 3 | We have $3$ different costs:\n$[1, 0]$ has cost $0$  \n$[1]$ has cost $-1$ \n$[",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.567098+00:00"
+    },
+    "binary-flips": {
+      "title": "Binary Flips",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq T \\leq 40$ \n$1 \\leq N_i, M_i, K_i \\leq 3\\,000$, for any $1 \\leq i \\leq T$  \n$0 \\leq S_i \\leq N_i * M_i$, for any $1 \\leq i \\leq T$ \n$\\sum_{i=1}^{T} (N_i + K_i + M_i)^2 \\leq 10^8$\n\n\n| Input | O",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.567433+00:00"
+    },
+    "binary-isomorphism": {
+      "title": "Binary Isomorphism",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq T \\leq 20$ \n$1 \\leq N \\leq 10^5$. The sum of all values of $N$ in a test is $\\leq 10^5$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>4<br>3 0 2 3<br>3 4 0 3<br>5<br>5 1 0 3 4<",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.623965+00:00"
+    },
+    "binary-search": {
+      "title": "Binary Search",
+      "difficulty": "TUTORIAL",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "This task is NOT adaptive\n$2 \\leq N \\leq 10^6$\nYou pass the tests if the number of queries is $\\leq \\lceil\\log N\\rceil$.\n\n\nInteraction7Q 40Q 21Q 31A 4",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.624295+00:00"
+    },
+    "binary-swaps": {
+      "title": "Binary Swaps",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N, T \\leq 10^6$\n\n\n| Input | Output |\n| --- | --- |\n| 5 1\n<br>0 1 0 1 1 | 1 0 1 0 1 |\n| 6 2\n<br>0 1 1 0 1 1 | 1 1 0 1 1 0 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.624652+00:00"
+    },
+    "binary_matching": {
+      "title": "Binary Matching",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "The length of both $Text$ and $Pattern$ will be between $1$ and $500$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 01100\n<br>010 | 2 1 | By swapping just the second and third bits, we obt",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.624995+00:00"
+    },
+    "bitwise-and-queries": {
+      "title": "Bitwise And Queries",
+      "difficulty": "MEDIUM",
+      "time_limit": "1500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq Q \\leq 10^5$$1 \\leq a \\leq b \\leq 10^{18}$$0 \\leq x \\leq 10^{18}$\n\n| Input | Output |\n| --- | --- |\n| 4<br>1 10 3<br>5 10 0<br>1 63 7<br>32 100 32 | 2<br>6<br>8<br>37 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.625290+00:00"
+    },
+    "black-shapes": {
+      "title": "Black Shapes",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 1000$ \nThere is at least one white cell and one black cell in the matrix\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 3<br>0 1 1<br>0 0 1<br>0 1 0 | 5 | Colouring the c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.659275+00:00"
+    },
+    "black-white-necklace": {
+      "title": "Black White Necklace",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 8<br>1 0 0 1 1 0 0 1 | 2 | $1\\ 0\\ 0\\ 1\\ 1\\ 0\\ 0\\ 1$\n$\\underline{0}\\ 0\\ \\underline{1}\\ 1\\ 1\\ 0\\ 0\\ 1$\n$0\\ 0\\ 1\\ 1\\ 1\\ \\und",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.659700+00:00"
+    },
+    "black-white-tree": {
+      "title": "Black White Tree",
+      "difficulty": "MEDIUM",
+      "time_limit": "3000 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 5*10^4$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 5<br>0 0 1 1<br>1 2<br>2 3<br>3 4<br>2 1<br>2 4<br>1 2<br>1 3<br>2 1 | 1<br>1<br>2 | 1234\n$1^{st}$ query: node $1$",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.660041+00:00"
+    },
+    "boaty-mcboatface": {
+      "title": "Boaty McBoatface",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq D \\leq 1000$ \n$0 \\leq T \\leq 100$ \n$1 \\leq V_1 \\leq 100$ \n$1 \\leq V_2 \\leq 100$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 10 2 5 7 | 5 | Explanation format:\nAfter moving for $T",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.660997+00:00"
+    },
+    "bob-tree": {
+      "title": "Bob's Tree",
+      "difficulty": null,
+      "time_limit": "2500 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \n$1 \\leq Q \\leq 10^5$ \nAll colors are positive integers, not exceeding $N$. \nIt is guaranteed that at the moment of any query-type operation of form $2$ $c$, there are at least tw",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.661664+00:00"
+    },
+    "boring-number": {
+      "title": "Boring Number",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^3$ \n$1 \\leq A_i \\leq 10^5$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>1 2 3 4 | 2 | The arithmetic mean of the numbers is $2.5$. The absolute difference between t",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.695476+00:00"
+    },
+    "boring-operation": {
+      "title": "Boring Operation",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ $1 \\leq A_i \\leq 10^9$  \n\n| Input | Output |\n| --- | --- |\n| 4<br>10 999999999 999999998 5 | 9 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.695787+00:00"
+    },
+    "borland": {
+      "title": "Borland",
+      "difficulty": "HARD",
+      "time_limit": "6000 ms",
+      "memory_limit": "3000 KB",
+      "constraints_summary": "$1 \\leq N \\leq 3* 10^6$ \n$2 \\leq C < 2^{30}$, $C$ is prime\n$1 \\leq S, A, B < C$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 2 3 18 67 | 121 | $V = [2, 24, 23]$\nFor $[1, 2]$, the maximu",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.696095+00:00"
+    },
+    "boss-fight": {
+      "title": "Boss Fight",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq A_1, L_1, A_2, L_2 \\leq 10^{15}$ \n$0 \\leq C \\leq 10^5$ \n$1 \\leq X, Y \\leq 10^9$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 14 3 25<br>3 1 1 | 1 | .ace-tm .ace_gutter {<br>  bac",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.696648+00:00"
+    },
+    "bottle-recycling": {
+      "title": "Bottle Recycling",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^9$ \n$2 \\leq K \\leq 10^9$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 9 3 | 13 | You drink the $9$ bottles, and the store gives you $3$ more for the empty bottles. After ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:48:36.696997+00:00"
+    },
+    "bounded-diameter-trees": {
+      "title": "Bounded Diameter Trees",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$0 \\leq M < N \\leq 300$$2 \\leq P \\leq 10^9$\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 3 2 | 1 | There are $5$ ordered rooted trees: |\n| 6 2 100 | 2 |  |\n| 6 5 10 | 2 | There are actual",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.056848+00:00"
+    },
+    "bounded-difference": {
+      "title": "Bounded Difference",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \n$0 \\leq K \\leq 10^9$ \n$0 \\leq A_i \\leq 10^9$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 1<br>1 3 2 4 | 1 4 | Swapping $\\underline{1}\\ 3\\ 2\\ \\underline{4}$ gives $",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.057290+00:00"
+    },
+    "bounded-distinct": {
+      "title": "Bounded Distinct",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq L \\leq R \\leq N \\leq 10^5$ \nThe elements of the array are integers between $0$ and $10^9$\n\n\n| Input | Output |\n| --- | --- |\n| 5 2 4<br>1 2 1 3 4 | 7 |\n| 5 1 3<br>1 2 1 2 1 | 9 |\n| 6 2 2<br>1 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.057661+00:00"
+    },
+    "bounding-box": {
+      "title": "Bounding Box",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 1000$ \nThe coordinates are integers between $1$ and $1000$. \nThere are no two points that have the same $x$ or $y$ coordinate.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.058014+00:00"
+    },
+    "bracket-grid": {
+      "title": "Bracket Grid",
+      "difficulty": "HARD",
+      "time_limit": "500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le K \\le 10^{9}$ \nThe output must satisfy $1 \\le N, M \\le 200$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 | 3 4\n<br>()))\n<br>((()\n<br>())) | Let the cell on the $i$-th row and $j$",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.060236+00:00"
+    },
+    "bst-fixed-height": {
+      "title": "BST Fixed Height",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq H \\leq N \\leq 500$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 3 | 4 |  |\n| 4 3 | 6 |  |\n| 5 3 | 6 |  |\n| 5 4 | 20 |  |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.069075+00:00"
+    },
+    "build-binary-matrix": {
+      "title": "Build Binary Matrix",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 1000$ \n$1 \\leq R_i \\leq N$ \n$1 \\leq C_i \\leq M$ \n\n\n| Input | Output |\n| --- | --- |\n| 6 4\n<br>5 3 6 6 6 3\n<br>3 1 2 1 | 1000\n<br>0101\n<br>0010\n<br>0010\n<br>0010\n<br>0101 |\n| 2 5\n<br>",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.069388+00:00"
+    },
+    "build-correct-brackets": {
+      "title": "Build Correct Brackets",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "The length of the string is an even integer between $2$ and $2500$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| (()))) | 1 3 | (())()\n(()())\n((())) |\n| ))(( | 2 1 | The only way to achieve",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.070337+00:00"
+    },
+    "build-the-fence": {
+      "title": "Build the Fence",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq K \\leq 10^{14}$ \nThe heights are integers between $1$ and $10^9$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 4<br>15 10 8 | 7 | Cut the boards the followi",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.071146+00:00"
+    },
+    "build-the-towers": {
+      "title": "Build the Towers",
+      "difficulty": "MEDIUM",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \nThe elements of the target array are integers between $0$ and $3$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3<br>2 1 2 | 5<br>2 1 2 3 2 | 0 1 0\n2 0 0\n2 1 0\n2 0 2\n",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.071899+00:00"
+    },
+    "building-bridges": {
+      "title": "Building Bridges",
+      "difficulty": "MEDIUM",
+      "time_limit": "1500 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq n \\leq 10^5$ \n$0 \\leq h_i \\leq 10^6$ \n$0 \\leq |w_i| \\leq 10^6$",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.094773+00:00"
+    },
+    "bunny-on-number-line": {
+      "title": "Bunny on Number Line",
+      "difficulty": "HARD",
+      "time_limit": "3000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le K \\le 100$ \n$1 \\le M, N \\le 10^{9}$ \n$2 \\le x_{1} < x_{2} < ... < x_{K} \\le 10^{9}$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 5 5 3\n<br>4 6 9 13 15 | 215 | Let's denote a valid s",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.095461+00:00"
+    },
+    "camel": {
+      "title": "Camel",
+      "difficulty": "HARD",
+      "time_limit": "450 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$N$ is divisible by $5$ \n$5 \\leq N \\leq 1\\,000$",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.096105+00:00"
+    },
+    "candles": {
+      "title": "Candles",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 10^5$ \n$1 \\leq h_i \\leq 10^5$ \n$1 \\leq c_i \\leq 10^5$  \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 5<br>1 2 5<br>1 2 3 2 1 | 3 | One way spend $3$ romantic evenings w",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.096603+00:00"
+    },
+    "candy-boxes": {
+      "title": "Candy Boxes",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "it's guaranteed that there always exists a valid solution \n$1 \\leq N \\leq 10^5$ \n$1 \\leq M \\leq 10^5$ \nfor operations of type $1$ it's guaranteed that $1\\leq X \\leq N$ \nlet $A_i$ be the initial amount",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.097112+00:00"
+    },
+    "card-collecting-game": {
+      "title": "Card Collecting Game",
+      "difficulty": null,
+      "time_limit": "1500 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le T \\le 2000$ \n$1 \\le a_{i} \\le a_{1} + a_{2} + ... + a_{T} \\le 2000$ for all $i$. \n$1 \\le v_{i} \\le 3000$ for all $i$.\n$1 \\le q_{i} \\le q_{1} + q_{2} + ... + q_{T} \\le 500000$ for all $i$.\n$q_{1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.150256+00:00"
+    },
+    "card-groups": {
+      "title": "Card Groups",
+      "difficulty": null,
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 40$ \nThe numbers on the cards are integers between $0$ and $10^9$ \nIf there are more solutions with equal sum and minimum absolute difference of group sizes, you can output any of them.",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.150992+00:00"
+    },
+    "card-shuffle": {
+      "title": "Card Shuffle",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 10^5$ \n$1 \\leq K \\leq 10^9$ \n\n\n| Input | Output |\n| --- | --- |\n| 7 1 | 7 2 5 4 3 6 1 |\n| 6 6 | 5 6 3 4 1 2 |",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.151676+00:00"
+    },
+    "catch-the-thief": {
+      "title": "Catch the Thief",
+      "difficulty": "HARD",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 2500$ \nIn order to pass a test, $K$ should be smaller than $10 * N$.\nEach node has at least one neighbour.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 2<br>1 2<br>2 3 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.152358+00:00"
+    },
+    "cats": {
+      "title": "Cats",
+      "difficulty": "HARD",
+      "time_limit": "500 ms",
+      "memory_limit": "16 MB",
+      "constraints_summary": "$1 \\leq T \\leq 500$ \n$1 \\leq N \\leq 5000$ \nThe sum of all N in the standard input of a single test is less than or equal $5000$.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 2<br>5<br>0 1 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.152854+00:00"
+    },
+    "cats-and-dogs": {
+      "title": "Cats and Dogs",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 2000$ \nThe coordinates are integers in $[-10^4, 10^4]$ \nThere will not be two animals at the same coordinates\nIn this problem you should work with Euclidian distances\n\n\n| Input | Out",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.176605+00:00"
+    },
+    "celsius-to-fahrenheit": {
+      "title": "Celsius to Fahrenheit",
+      "difficulty": null,
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$-89 \\leq C \\leq 54$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 0 | 32 |  |\n| 10 | 50 |  |\n| 54 | 129 | The highest natural temperature at ground level on Earth was 54 \u00b0C (129 \u00b0F) in Kuw",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.177093+00:00"
+    },
+    "chase": {
+      "title": "Chase",
+      "difficulty": "MEDIUM",
+      "time_limit": "3000 ms",
+      "memory_limit": "512 MB",
+      "constraints_summary": "$1 \\leq n \\leq 10^5$ \n$0 \\leq v \\leq 100$ \n$0 \\leq p_i \\leq 10^9$",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.178083+00:00"
+    },
+    "check-dfs": {
+      "title": "Check DFS",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N, M \\leq 10^5$ \nThe graph is connected, simple and undirected\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4 3<br>1 4 2 3<br>1 2<br>1 3<br>1 4 | 1 | 1234 |\n| 4 4<br>1 2 4 3<br>1 2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.178588+00:00"
+    },
+    "check-square": {
+      "title": "Check Square",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq T \\leq 100$ \nThe coordinates of the points are integers between $1$ and $100$.\nThe $4$ points in a test are distinct.\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 1<br>2 2<br>3 3<b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.179021+00:00"
+    },
+    "checkroom-hooks": {
+      "title": "Checkroom Hooks",
+      "difficulty": null,
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\le N \\le 300$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 3 | 0.000000 1.000000 0.000000\n<br>0.500000 0.000000 0.500000\n<br>0.500000 0.000000 0.500000 | The first person always takes ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.208668+00:00"
+    },
+    "chocolate": {
+      "title": "Chocolate",
+      "difficulty": null,
+      "time_limit": "5000 ms",
+      "memory_limit": "1 GB",
+      "constraints_summary": "$1 \\leq T \\leq 30$ \nThe matrix values are distinct, in the interval $[1, 35\\ 000]$\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 1<br>1  2  3  4  5<br>6  7  8  9 10<br>11 12 13 14 15<br>16 ",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.209048+00:00"
+    },
+    "choose-the-price": {
+      "title": "Choose the Price",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$1 \\leq N \\leq 1000$ \n$1 \\leq V_i \\leq 10^6$ \n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 4<br>2 10 6 3 | 12 | The most income can be achieved by selling the cookies for $6$. In this way,",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.209327+00:00"
+    },
+    "chromatic-number": {
+      "title": "Chromatic Number",
+      "difficulty": "MEDIUM",
+      "time_limit": "2000 ms",
+      "memory_limit": "256 MB",
+      "constraints_summary": "$1 \\leq N \\leq 300$ \n$N - 1 \\leq M \\leq \\frac{N(N - 1)}{2}$ \n$1 \\leq A, B \\leq N$ \n$1 \\leq C \\leq 10^9$ \n$1 \\leq K \\leq N$ \nIt is guaranteed that the first value you need to output is strictly positiv",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.209993+00:00"
+    },
+    "cinema-seats": {
+      "title": "Cinema Seats",
+      "difficulty": "EASY",
+      "time_limit": "1000 ms",
+      "memory_limit": "128 MB",
+      "constraints_summary": "$2 \\leq N \\leq 10^5$ \nThere will be at least one taken seat\nThere will be at least one free seat\n\n\n| Input | Output | Explanation |\n| --- | --- | --- |\n| 10010101 | 4 | You can move the person seating",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T10:49:49.210544+00:00"
+    }
+  }
+}
