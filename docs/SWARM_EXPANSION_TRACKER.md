@@ -82,10 +82,11 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 ### Phase 2: Fleet Configuration Expansion (27 → 31 Accounts)
 *Objective:* Formally expand configuration, ledgers, and sandboxes from 27 to 31 nodes ([Issue #26](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/26) / RFC-001).
 - [x] Add `COPILOT_ACCOUNT_28` through `COPILOT_ACCOUNT_31` to `.env.fleet.copilot`, `.env.fleet`, `.env.fleet.copilot.example`, and `.env.fleet.example`.
-- [x] Expand `.env.fleet.gemini` and `.env.fleet.gemini.example` to support `GEMINI_API_KEY_1` through `GEMINI_API_KEY_31` across independent GCP projects.
-- [ ] Provision 31 isolated `~/.agy-workers/worker_N` profile sandboxes in `.env.fleet.agy`.
+- [x] Expand `.env.fleet.gemini` and `.env.fleet.gemini.example` to support `GEMINI_API_KEY_1` through `GEMINI_API_KEY_32` across independent GCP projects (30 healthy project keys active).
+- [x] Provision 31 isolated `~/.agy-workers/worker_N` profile sandboxes in `.env.fleet.agy` and `.env.fleet.agy.example`.
 - [x] Update `tools/fleet_env.py` and `tools/copilot_fleet.py` to discover and validate all 31 accounts.
-- [x] Audit pool status via `python tools/unified_fleet_cli.py status` (verified 6,200 pooled credit capacity across 31 accounts).
+- [x] Audit pool status via `python tools/unified_fleet_cli.py status` (verified 6,200 pooled credit capacity across 31 accounts and 450 RPM / 45,000 RPD across 30 Gemini keys).
+
 
 
 ### Phase 3: Autonomous CPM DAG Planner & SKU Expansion Engine
