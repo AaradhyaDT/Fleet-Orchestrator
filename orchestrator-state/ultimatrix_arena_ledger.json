@@ -1,40 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T12:52:45.609662+00:00",
-  "tournaments_run": 702,
+  "last_tournament_at": "2026-10-16T13:07:03.993451+00:00",
+  "tournaments_run": 707,
   "alleles_benchmarked": 0,
-  "promotions": 50,
+  "promotions": 51,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:46:39.952835+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:10.110094+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:10.264138+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:10.409240+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:10.450537+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:47:40.627033+00:00",
       "genes": [
@@ -303,6 +273,36 @@
       "timestamp": "2026-10-16T12:52:45.609468+00:00",
       "genes": [
         "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:53:15.690614+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:53:15.836903+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:53:15.985165+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:53:16.007227+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T13:07:03.993278+00:00",
+      "genes": [
+        "TASK_ODD_DIVISOR_COUNT"
       ]
     }
   ]

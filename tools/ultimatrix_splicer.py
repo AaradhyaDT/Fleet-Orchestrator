@@ -249,21 +249,25 @@ constexpr ld EPS = 1e-9;
             f"// [Ultimatrix Gene: {gid}] -> Allele '{aid}' (Dominance: {allele.get('dominance')}, {rt}ms, {ram}KB)"
         )
 
-        if code.startswith("#pragma GCC"):
-            pragmas.append(code)
-        elif gid == "FAST_IO_STREAM_UNTIE":
-            # Handled in main()
-            pass
-        else:
-            # Strip redundant `#pragma once` or `#include` lines from individual gene structures
-            cleaned_lines = []
-            for line in code.splitlines():
-                stripped = line.strip()
-                if stripped.startswith("#pragma once"):
-                    continue
-                if stripped.startswith("#include <") and ">" in stripped:
-                    continue
+        # Extract #pragma GCC lines and filter #pragma once / #include
+        gene_pragmas = []
+        cleaned_lines = []
+        for line in code.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#pragma GCC"):
+                gene_pragmas.append(stripped)
+            elif stripped.startswith("#pragma once"):
+                continue
+            elif stripped.startswith("#include <") and ">" in stripped:
+                continue
+            else:
                 cleaned_lines.append(line)
+
+        for p in gene_pragmas:
+            if p not in pragmas:
+                pragmas.append(p)
+
+        if gid != "FAST_IO_STREAM_UNTIE":
             clean_code = "\n".join(cleaned_lines).strip()
             if clean_code:
                 structures.append(f"// --- Begin Gene: {gid} ({aid}) ---\n{clean_code}\n// --- End Gene: {gid} ---")

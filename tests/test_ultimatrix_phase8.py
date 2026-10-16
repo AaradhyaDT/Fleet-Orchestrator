@@ -118,9 +118,11 @@ def test_solve_task_autonomously_self_healing_success(tmp_path: Path):
     buggy_code = "import sys\ndef solve():\n    print(10)\nif __name__ == '__main__':\n    solve()\n"
     fixed_code = "import sys\ndef solve():\n    t = sys.stdin.read().split()\n    print(int(t[0]) + int(t[1]))\nif __name__ == '__main__':\n    solve()\n"
 
+    tmp_ledger = tmp_path / "mock_ledger.json"
     with patch("tools.ultimatrix_solver.get_task_samples", return_value=samples), \
          patch("tools.ultimatrix_autonomous_solver.synthesize_python_solution", return_value=buggy_code), \
          patch("tools.ultimatrix_autonomous_solver.self_heal_solution", return_value=fixed_code), \
+         patch("tools.ultimatrix_autonomous_solver.SOLVER_LEDGER", tmp_ledger), \
          patch("tools.ultimatrix_autonomous_solver.CSACADEMY_TASKS", tmp_path):
 
         res = solve_task_autonomously(slug)

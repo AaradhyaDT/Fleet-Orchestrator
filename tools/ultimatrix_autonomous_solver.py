@@ -116,7 +116,7 @@ def get_unsolved_tasks(limit: int = 10) -> list[dict[str, Any]]:
 
         # Keywords for prioritized high-confidence archetypes
         high_priority_keywords = [
-            "addition", "sum", "gcd", "anagram", "acronym",
+            "addition", "a-plus-b", "gcd", "anagram", "acronym",
             "sliding_window", "subarray_sum", "two_pointer",
             "prefix_sum", "range_sum", "coordinate_compression",
             "palindrome", "odd_divisor", "divisor", "fibonacci", "reverse",
@@ -241,7 +241,7 @@ if __name__ == '__main__':
 """
 
     # Heuristic template patterns for common competitive programming primitives
-    if ("addition" in slug or "sum" in slug or "a-plus-b" in slug or "a_plus_b" in slug) and "subarray" not in slug and "prefix" not in slug and "range" not in slug:
+    if re.search(r"(?:^|[-_])addition(?:$|[-_])|a[-_]plus[-_]b", slug) and "subarray" not in slug and "prefix" not in slug and "range" not in slug:
         return """import sys
 
 def solve():
@@ -431,8 +431,140 @@ def run_solution_verification(code: str, samples: list[tuple[str, str]], timeout
     return passed
 
 
+def query_llm_with_resilient_fallback(prompt: str, task_slug: str = "unknown") -> Optional[str]:
+    """Queries LLM with multi-model cascade (3.8-flash -> 2.5-flash -> 2.5-flash-lite),
+    circuit breaker cooldown caching, and fallback to CopilotHeadlessAdapter / LM Studio."""
+    # Check circuit breaker cooldown in solver ledger
+    try:
+        ledger = load_solver_ledger()
+        cooldown_until = ledger.get("gemini_circuit_breaker_until")
+        if cooldown_until:
+            cd_dt = datetime.fromisoformat(cooldown_until)
+            if datetime.now(timezone.utc) < cd_dt:
+                logger.info(f"Gemini circuit breaker active until {cooldown_until}; skipping Gemini for Copilot/Local fallback.")
+                return query_copilot_or_local_fallback(prompt, task_slug)
+    except Exception:
+        pass
+
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        models_cascade = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-flash-lite"]
+        try:
+            from google import genai
+            from google.genai import types
+
+            client = genai.Client(api_key=api_key)
+            for model_name in models_cascade:
+                try:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                        config=types.GenerateContentConfig(temperature=0.1),
+                    )
+                    if response and response.text:
+                        text = response.text.strip()
+                        if text.startswith("```"):
+                            lines = text.splitlines()
+                            if lines[0].startswith("```"):
+                                lines = lines[1:]
+                            if lines and lines[-1].startswith("```"):
+                                lines = lines[:-1]
+                            text = "\n".join(lines).strip()
+                        return text
+                except Exception as exc:
+                    err_str = str(exc)
+                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                        logger.warning(f"Gemini model {model_name} quota exhausted (429): {err_str[:120]}")
+                        # Extract retryDelay if available, default to 60s
+                        delay_sec = 60
+                        match = re.search(r"retryDelay':\s*'(\d+)s'", err_str)
+                        if match:
+                            delay_sec = int(match.group(1))
+                        # Record circuit breaker cooldown if this is the last Gemini model
+                        if model_name == models_cascade[-1]:
+                            try:
+                                ldr = load_solver_ledger()
+                                until = datetime.now(timezone.utc).timestamp() + delay_sec
+                                ldr["gemini_circuit_breaker_until"] = datetime.fromtimestamp(until, timezone.utc).isoformat()
+                                save_solver_ledger(ldr)
+                            except Exception:
+                                pass
+                        continue
+                    else:
+                        logger.warning(f"Gemini model {model_name} failed: {exc}")
+                        break
+        except Exception as exc:
+            logger.warning(f"Gemini client initialization/query failed: {exc}")
+
+    # Fallback to Copilot Headless Worker or local LM Studio
+    return query_copilot_or_local_fallback(prompt, task_slug)
+
+
+def query_copilot_or_local_fallback(prompt: str, task_slug: str = "unknown") -> Optional[str]:
+    """Dispatches query to CopilotHeadlessAdapter using available pooled tokens or local LM Studio."""
+    # 1. Attempt Copilot Headless Adapter
+    try:
+        from tools.copilot_fleet import load_env_fleet, discover_accounts
+        env_vars = load_env_fleet()
+        accounts = [acc for acc in discover_accounts(env_vars) if acc.get("has_token")]
+        if accounts:
+            acc = accounts[0]
+            from client.adapters.copilot_headless import CopilotHeadlessAdapter
+            adapter = CopilotHeadlessAdapter(
+                worker_id=acc["worker_id"],
+                nickname=acc["name"],
+                github_token=acc["token"],
+                timeout=45.0,
+                enable_tools=False,
+            )
+            import asyncio
+            result = asyncio.run(adapter.execute_task(
+                task_id=f"ultimatrix-{task_slug}",
+                spec=prompt,
+                stage="code_synthesis",
+                context={},
+            ))
+            if result.get("success") and result.get("result_text"):
+                text = result["result_text"].strip()
+                if "```python" in text:
+                    text = text.split("```python", 1)[1].split("```", 1)[0].strip()
+                elif "```" in text:
+                    text = text.split("```", 1)[1].split("```", 1)[0].strip()
+                return text
+    except Exception as exc:
+        logger.warning(f"Copilot Headless fallback failed: {exc}")
+
+    # 2. Attempt local LM Studio (http://localhost:1234/v1)
+    try:
+        import urllib.request
+        req_data = json.dumps({
+            "model": "qwen2.5-coder-7b-instruct",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": 2048,
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            "http://localhost:1234/v1/chat/completions",
+            data=req_data,
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            if response.status == 200:
+                res_body = json.loads(response.read().decode("utf-8"))
+                content = res_body["choices"][0]["message"]["content"].strip()
+                if "```python" in content:
+                    content = content.split("```python", 1)[1].split("```", 1)[0].strip()
+                elif "```" in content:
+                    content = content.split("```", 1)[1].split("```", 1)[0].strip()
+                return content
+    except Exception:
+        pass
+
+    return None
+
+
 def synthesize_with_spliced_dna_and_llm(task_info: dict[str, Any]) -> Optional[str]:
-    """Generates a complete solution by splicing candidate genes and invoking Gemini or local adapter."""
+    """Generates a complete solution by splicing candidate genes and invoking resilient multi-model LLM."""
     from tools.ultimatrix_splicer import splice_python_dna
 
     task_slug = task_info.get("slug", "unknown")
@@ -458,16 +590,8 @@ def synthesize_with_spliced_dna_and_llm(task_info: dict[str, Any]) -> Optional[s
     # Splice dominant DNA template scaffolds
     scaffold = splice_python_dna(candidate_genes, task_title=title)
 
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        return None
-
-    try:
-        from google import genai
-        from google.genai import types
-
-        sample_str = "\n".join(f"Input:\n{inp}\nExpected Output:\n{out}\n" for inp, out in samples[:3])
-        prompt = f"""You are the Azmuth Autonomous Ultimatrix Solver Engine.
+    sample_str = "\n".join(f"Input:\n{inp}\nExpected Output:\n{out}\n" for inp, out in samples[:3])
+    prompt = f"""You are the Azmuth Autonomous Ultimatrix Solver Engine.
 Solve the following Competitive Programming task in Python 3.12+.
 
 Task: {title} ({task_slug})
@@ -485,42 +609,12 @@ Use this spliced Ultimatrix DNA scaffolding:
 Implement the complete, self-contained `solve()` function.
 Return ONLY valid Python code block (wrapped in ```python ... ``` or raw code), no explanations or markdown prose.
 """
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.1,
-            ),
-        )
-        if response.text:
-            text = response.text.strip()
-            # Clean markdown code fence if present
-            if text.startswith("```"):
-                lines = text.splitlines()
-                if lines[0].startswith("```"):
-                    lines = lines[1:]
-                if lines and lines[-1].startswith("```"):
-                    lines = lines[:-1]
-                text = "\n".join(lines).strip()
-            return text
-    except Exception as exc:
-        logger.warning(f"Spliced-DNA LLM synthesis failed for {task_slug}: {exc}")
-
-    return None
+    return query_llm_with_resilient_fallback(prompt, task_slug=task_slug)
 
 
 def self_heal_solution(code: str, failure_info: dict[str, Any], task_info: dict[str, Any]) -> Optional[str]:
-    """Applies 1 self-healing repair pass using Gemini Flash if sample test fails."""
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        return None
-
-    try:
-        from google import genai
-        from google.genai import types
-
-        prompt = f"""You previously generated a Competitive Programming solution for '{task_info.get('title')}', but a test case failed:
+    """Applies 1 self-healing repair pass using resilient multi-model LLM if sample test fails."""
+    prompt = f"""You previously generated a Competitive Programming solution for '{task_info.get('title')}', but a test case failed:
 Input:
 {failure_info.get('input')}
 Expected:
@@ -538,26 +632,7 @@ Code:
 Fix the logic error or formatting bug in `solve()`.
 Return ONLY the corrected full Python code.
 """
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.1,
-            ),
-        )
-        if response.text:
-            text = response.text.strip()
-            if text.startswith("```"):
-                lines = text.splitlines()
-                if lines[0].startswith("```"):
-                    lines = lines[1:]
-                if lines and lines[-1].startswith("```"):
-                    lines = lines[:-1]
-                text = "\n".join(lines).strip()
-            return text
-    except Exception as exc:
-        logger.warning(f"Self-healing repair failed: {exc}")
+    return query_llm_with_resilient_fallback(prompt, task_slug=task_info.get("slug", "unknown"))
 
     return None
 

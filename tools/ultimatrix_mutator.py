@@ -163,9 +163,10 @@ def mutate_gene_file(gene_path: Path) -> dict[str, Any]:
 
     created_mutants = []
     for allele in alleles:
-        # Bounded mutation invariant: do not mutate an already-mutated daughter allele
+        # Bounded mutation invariant: only mutate PRIMARY or ALTERNATIVE base alleles, never mutate already-mutated daughter alleles
         aid = allele.get("allele_id", "")
-        if "_mut_" in aid:
+        dom = allele.get("dominance", "")
+        if "_mut_" in aid or dom not in ("PRIMARY", "ALTERNATIVE"):
             continue
 
         for op in operators:

@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "tasks_attempted": 4,
-  "tasks_solved": 4,
+  "tasks_attempted": 3,
+  "tasks_solved": 3,
   "solved_slugs": [
     "acronyms",
     "anagrams",
-    "mock-repairable-task"
+    "odd-divisor-count"
   ],
-  "last_solve_at": "2026-10-16T12:52:58.432176+00:00",
+  "last_solve_at": "2026-10-16T14:47:45.810382+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:05:58.684661+00:00",
@@ -22,17 +22,15 @@
       "samples_passed": 2
     },
     {
-      "timestamp": "2026-10-16T12:50:11.656516+00:00",
-      "slug": "mock-repairable-task",
+      "timestamp": "2026-10-16T13:06:33.063491+00:00",
+      "slug": "odd-divisor-count",
       "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-16T12:52:58.432128+00:00",
-      "slug": "mock-repairable-task",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
+      "samples_passed": 3
     }
   ],
-  "attempted_slugs": {}
+  "attempted_slugs": {
+    "0-sum-array": "VERIFICATION_FAILED",
+    "101-palindromes": "VERIFICATION_FAILED",
+    "addition-time": "VERIFICATION_FAILED"
+  }
 }
