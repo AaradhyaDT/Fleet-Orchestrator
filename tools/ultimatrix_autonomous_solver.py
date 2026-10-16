@@ -139,8 +139,79 @@ def synthesize_python_solution(task_info: dict[str, Any]) -> Optional[str]:
     title = task_info.get("title", "").lower()
     genes = task_info.get("candidate_genes", [])
 
+    # Archetype 1: TWO_POINTER_SLIDING_WINDOW / Subarray Monotonicity
+    if "TWO_POINTER_SLIDING_WINDOW" in genes or "sliding_window" in slug or "subarray_sum" in slug or "two_pointers" in slug:
+        return """import sys
+
+def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    n = int(tokens[0])
+    target = int(tokens[1]) if len(tokens) > n else 0
+    arr = [int(x) for x in tokens[len(tokens)-n:]]
+    
+    left = 0
+    curr_sum = 0
+    ans = 0
+    for right in range(n):
+        curr_sum += arr[right]
+        while left <= right and curr_sum > target:
+            curr_sum -= arr[left]
+            left += 1
+        if curr_sum == target:
+            ans += 1
+    print(ans)
+
+if __name__ == '__main__':
+    solve()
+"""
+
+    # Archetype 2: PREFIX_SUM_2D_INCLUSION / 1D Prefix Sum Queries
+    if "PREFIX_SUM_2D_INCLUSION" in genes or "prefix_sum" in slug or "range_sum" in slug:
+        return """import sys
+
+def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    it = iter(tokens)
+    n = int(next(it))
+    q = int(next(it))
+    arr = [int(next(it)) for _ in range(n)]
+    pref = [0] * (n + 1)
+    for i in range(n):
+        pref[i + 1] = pref[i] + arr[i]
+    for _ in range(q):
+        l = int(next(it))
+        r = int(next(it))
+        print(pref[r] - pref[l - 1])
+
+if __name__ == '__main__':
+    solve()
+"""
+
+    # Archetype 3: COORDINATE_COMPRESSOR / Unique Ranking
+    if "coordinate_compression" in slug or "rank_transform" in slug or "compress" in slug:
+        return """import sys
+
+def solve():
+    tokens = sys.stdin.read().split()
+    if not tokens:
+        return
+    n = int(tokens[0])
+    arr = [int(x) for x in tokens[1:n+1]]
+    unique_sorted = sorted(set(arr))
+    mapping = {val: idx + 1 for idx, val in enumerate(unique_sorted)}
+    compressed = [str(mapping[x]) for x in arr]
+    print(' '.join(compressed))
+
+if __name__ == '__main__':
+    solve()
+"""
+
     # Heuristic template patterns for common competitive programming primitives
-    if "addition" in slug or "sum" in slug:
+    if ("addition" in slug or "sum" in slug or "a-plus-b" in slug or "a_plus_b" in slug) and "subarray" not in slug and "prefix" not in slug and "range" not in slug:
         return """import sys
 
 def solve():

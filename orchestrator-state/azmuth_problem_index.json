@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "total_indexed": 696,
+  "total_indexed": 1021,
   "problems": {
     "0-k-multiple": {
       "title": "0-K Multiple",
@@ -7864,6 +7864,5358 @@
         "FAST_IO_STREAM_UNTIE"
       ],
       "indexed_at": "2026-10-16T11:26:30.523876+00:00"
+    },
+    "cf-1030a": {
+      "title": "In Search of an Easy Problem",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.393117+00:00"
+    },
+    "cf-110a": {
+      "title": "Nearly Lucky Number",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.393408+00:00"
+    },
+    "cf-112a": {
+      "title": "Petya and Strings",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.393878+00:00"
+    },
+    "cf-1154a": {
+      "title": "Restoring Three Numbers",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.394320+00:00"
+    },
+    "cf-116a": {
+      "title": "Tram",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.394568+00:00"
+    },
+    "cf-118a": {
+      "title": "String Task",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.394824+00:00"
+    },
+    "cf-122a": {
+      "title": "Lucky Division",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "brute force",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.395054+00:00"
+    },
+    "cf-131a": {
+      "title": "cAPS lOCK",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.395271+00:00"
+    },
+    "cf-1328a": {
+      "title": "Divisibility Problem",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.395628+00:00"
+    },
+    "cf-1335a": {
+      "title": "Candies and Two Sisters",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.396419+00:00"
+    },
+    "cf-133a": {
+      "title": "HQ9+",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.397335+00:00"
+    },
+    "cf-1343b": {
+      "title": "Balanced Array",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.398032+00:00"
+    },
+    "cf-1352a": {
+      "title": "Sum of Round Numbers",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.398516+00:00"
+    },
+    "cf-1352c": {
+      "title": "K-th Not Divisible by n",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "binary search",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.398960+00:00"
+    },
+    "cf-1367a": {
+      "title": "Short Substrings",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.399359+00:00"
+    },
+    "cf-1367b": {
+      "title": "Even Array",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.399825+00:00"
+    },
+    "cf-136a": {
+      "title": "Presents",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.400305+00:00"
+    },
+    "cf-1370a": {
+      "title": "Maximum GCD",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "math",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.400800+00:00"
+    },
+    "cf-1374a": {
+      "title": "Required Remainder",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.401225+00:00"
+    },
+    "cf-1374b": {
+      "title": "Multiply by 2, divide by 6",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.401621+00:00"
+    },
+    "cf-1374c": {
+      "title": "Move Brackets",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "greedy",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.402009+00:00"
+    },
+    "cf-1399a": {
+      "title": "Remove Smallest",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.402414+00:00"
+    },
+    "cf-1409a": {
+      "title": "Yet Another Two Integers Problem",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.402953+00:00"
+    },
+    "cf-141a": {
+      "title": "Amusing Joke",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "sortings",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, sortings, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.403531+00:00"
+    },
+    "cf-1433a": {
+      "title": "Boring Apartments",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.404016+00:00"
+    },
+    "cf-144a": {
+      "title": "Arrival of the General",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.404434+00:00"
+    },
+    "cf-1475a": {
+      "title": "Odd Divisor",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "math",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math, number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.404876+00:00"
+    },
+    "cf-148a": {
+      "title": "Insomnia cure",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms",
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms, implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.405340+00:00"
+    },
+    "cf-1512a": {
+      "title": "Spy Detected!",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.405812+00:00"
+    },
+    "cf-151a": {
+      "title": "Soft Drinking",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.406295+00:00"
+    },
+    "cf-1520d": {
+      "title": "Same Differences",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "data structures",
+        "hashing",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (data structures, hashing, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.406716+00:00"
+    },
+    "cf-155a": {
+      "title": "I_love_\\%username\\%",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.407184+00:00"
+    },
+    "cf-1560a": {
+      "title": "Dislike of Threes",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.407694+00:00"
+    },
+    "cf-158a": {
+      "title": "Next Round",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "*special",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (*special, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.408229+00:00"
+    },
+    "cf-158b": {
+      "title": "Taxi",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1100,
+      "tags": [
+        "*special",
+        "greedy",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (*special, greedy, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.408650+00:00"
+    },
+    "cf-160a": {
+      "title": "Twins",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "greedy",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.409084+00:00"
+    },
+    "cf-1619a": {
+      "title": "Square String?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.409464+00:00"
+    },
+    "cf-1669a": {
+      "title": "Division?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.409857+00:00"
+    },
+    "cf-1676a": {
+      "title": "Lucky?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.410394+00:00"
+    },
+    "cf-1692a": {
+      "title": "Marathon",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.410812+00:00"
+    },
+    "cf-1703a": {
+      "title": "YES or YES?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.411331+00:00"
+    },
+    "cf-1703b": {
+      "title": "ICPC Balloons",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "data structures",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (data structures, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.412071+00:00"
+    },
+    "cf-1722a": {
+      "title": "Spell Check",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.412563+00:00"
+    },
+    "cf-1742a": {
+      "title": "Sum",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.413024+00:00"
+    },
+    "cf-1742b": {
+      "title": "Increasing",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.413432+00:00"
+    },
+    "cf-1760a": {
+      "title": "Medium Number",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.413930+00:00"
+    },
+    "cf-1791a": {
+      "title": "Codeforces Checking",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.414423+00:00"
+    },
+    "cf-1791c": {
+      "title": "Prepend and Append",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "two pointers"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, two pointers)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.414873+00:00"
+    },
+    "cf-1807a": {
+      "title": "Plus or Minus",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.415298+00:00"
+    },
+    "cf-1807d": {
+      "title": "Odd Queries",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "data structures",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (data structures, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.415770+00:00"
+    },
+    "cf-1829a": {
+      "title": "Love Story",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.518845+00:00"
+    },
+    "cf-1829b": {
+      "title": "Blank Space",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.519142+00:00"
+    },
+    "cf-1850a": {
+      "title": "To My Critics",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.519408+00:00"
+    },
+    "cf-1850d": {
+      "title": "Balanced Round",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "brute force",
+        "greedy",
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, greedy, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.519624+00:00"
+    },
+    "cf-1853a": {
+      "title": "Desorting",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.519880+00:00"
+    },
+    "cf-1857a": {
+      "title": "Array Coloring",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.520257+00:00"
+    },
+    "cf-1858a": {
+      "title": "Buttons",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "games",
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (games, greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.520681+00:00"
+    },
+    "cf-1873a": {
+      "title": "Short Sort",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.521420+00:00"
+    },
+    "cf-1873b": {
+      "title": "Good Kid",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.522034+00:00"
+    },
+    "cf-1873c": {
+      "title": "Target Practice",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.522678+00:00"
+    },
+    "cf-1878a": {
+      "title": "How Much Does Daytona Cost?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.523292+00:00"
+    },
+    "cf-1878c": {
+      "title": "Vasilije in Cacak",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.523889+00:00"
+    },
+    "cf-1881a": {
+      "title": "Don't Try to Count",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.524415+00:00"
+    },
+    "cf-1883b": {
+      "title": "Chemistry",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.524633+00:00"
+    },
+    "cf-1890a": {
+      "title": "Doremy's Paint 3",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.524832+00:00"
+    },
+    "cf-1896a": {
+      "title": "Jagged Swaps",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.525041+00:00"
+    },
+    "cf-1899a": {
+      "title": "Game with Integers",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "games",
+        "math",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (games, math, number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.525263+00:00"
+    },
+    "cf-189a": {
+      "title": "Cut Ribbon",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1300,
+      "tags": [
+        "brute force",
+        "dp"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, dp)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.525483+00:00"
+    },
+    "cf-1900a": {
+      "title": "Cover in Water",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms",
+        "greedy",
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms, greedy, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.525682+00:00"
+    },
+    "cf-1901a": {
+      "title": "Line Trip",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.525903+00:00"
+    },
+    "cf-1903a": {
+      "title": "Halloumi Boxes",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "greedy",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, greedy, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.526122+00:00"
+    },
+    "cf-1915a": {
+      "title": "Odd One Out",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "bitmasks",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (bitmasks, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.526308+00:00"
+    },
+    "cf-1926a": {
+      "title": "Vlad and the Best of Five",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.526532+00:00"
+    },
+    "cf-1950a": {
+      "title": "Stair, Peak, or Neither?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.526758+00:00"
+    },
+    "cf-1985a": {
+      "title": "Creating Words",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.526955+00:00"
+    },
+    "cf-1999a": {
+      "title": "A+B Again?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.527163+00:00"
+    },
+    "cf-1a": {
+      "title": "Theatre Square",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.527370+00:00"
+    },
+    "cf-2009a": {
+      "title": "Minimize!",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.527582+00:00"
+    },
+    "cf-200b": {
+      "title": "Drinks",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.527787+00:00"
+    },
+    "cf-2044a": {
+      "title": "Easy Problem",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.527963+00:00"
+    },
+    "cf-208a": {
+      "title": "Dubstep",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.528129+00:00"
+    },
+    "cf-2167a": {
+      "title": "Square?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.528320+00:00"
+    },
+    "cf-228a": {
+      "title": "Is your horseshoe on the other hoof?",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.528520+00:00"
+    },
+    "cf-230a": {
+      "title": "Dragons",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "greedy",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.528728+00:00"
+    },
+    "cf-230b": {
+      "title": "T-primes",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1300,
+      "tags": [
+        "binary search",
+        "implementation",
+        "math",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.528942+00:00"
+    },
+    "cf-231a": {
+      "title": "Team",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "greedy"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, greedy)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.529115+00:00"
+    },
+    "cf-236a": {
+      "title": "Boy or Girl",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.529292+00:00"
+    },
+    "cf-25a": {
+      "title": "IQ test",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1300,
+      "tags": [
+        "brute force"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.529511+00:00"
+    },
+    "cf-263a": {
+      "title": "Beautiful Matrix",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.529680+00:00"
+    },
+    "cf-266a": {
+      "title": "Stones on the Table",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.529868+00:00"
+    },
+    "cf-266b": {
+      "title": "Queue at the School",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms",
+        "graph matchings",
+        "implementation",
+        "shortest paths"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms, graph matchings, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530084+00:00"
+    },
+    "cf-268a": {
+      "title": "Games",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530268+00:00"
+    },
+    "cf-271a": {
+      "title": "Beautiful Year",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530463+00:00"
+    },
+    "cf-279b": {
+      "title": "Books",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1400,
+      "tags": [
+        "binary search",
+        "brute force",
+        "implementation",
+        "two pointers"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, brute force, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530661+00:00"
+    },
+    "cf-281a": {
+      "title": "Word Capitalization",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530824+00:00"
+    },
+    "cf-282a": {
+      "title": "Bit++",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.530981+00:00"
+    },
+    "cf-313a": {
+      "title": "Ilya and Bank Account",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "implementation",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.531156+00:00"
+    },
+    "cf-318a": {
+      "title": "Even Odds",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.531328+00:00"
+    },
+    "cf-32b": {
+      "title": "Borze",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "expression parsing",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (expression parsing, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.531539+00:00"
+    },
+    "cf-337a": {
+      "title": "Puzzles",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "greedy"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.531709+00:00"
+    },
+    "cf-339a": {
+      "title": "Helpful Maths",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "sortings",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.550649+00:00"
+    },
+    "cf-339b": {
+      "title": "Xenia and Ringroad",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.551064+00:00"
+    },
+    "cf-344a": {
+      "title": "Magnets",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.551595+00:00"
+    },
+    "cf-34b": {
+      "title": "Sale",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "greedy",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.552021+00:00"
+    },
+    "cf-363b": {
+      "title": "Fence",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1100,
+      "tags": [
+        "brute force",
+        "dp"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, dp)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.552444+00:00"
+    },
+    "cf-381a": {
+      "title": "Sereja and Dima",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "two pointers"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, two pointers)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.552848+00:00"
+    },
+    "cf-405a": {
+      "title": "Gravity Flip",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "greedy",
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.553271+00:00"
+    },
+    "cf-41a": {
+      "title": "Translation",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.553643+00:00"
+    },
+    "cf-427a": {
+      "title": "Police Recruits",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.554061+00:00"
+    },
+    "cf-431a": {
+      "title": "Black Square",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.554454+00:00"
+    },
+    "cf-432a": {
+      "title": "Choosing Teams",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.554817+00:00"
+    },
+    "cf-43a": {
+      "title": "Football",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.555188+00:00"
+    },
+    "cf-443a": {
+      "title": "Anton and Letters",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "constructive algorithms",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (constructive algorithms, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.555561+00:00"
+    },
+    "cf-451a": {
+      "title": "Game With Sticks",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.555916+00:00"
+    },
+    "cf-455a": {
+      "title": "Boredom",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1500,
+      "tags": [
+        "dp"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (dp)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.556281+00:00"
+    },
+    "cf-466a": {
+      "title": "Cheap Travel",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.556670+00:00"
+    },
+    "cf-467a": {
+      "title": "George and Accommodation",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.557026+00:00"
+    },
+    "cf-469a": {
+      "title": "I Wanna Be the Guy",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.557413+00:00"
+    },
+    "cf-472a": {
+      "title": "Design Tutorial: Learn from Math",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math",
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math, number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.557869+00:00"
+    },
+    "cf-474b": {
+      "title": "Worms",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "binary search",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.558394+00:00"
+    },
+    "cf-479a": {
+      "title": "Expression",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "brute force",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.558875+00:00"
+    },
+    "cf-486a": {
+      "title": "Calculating Function",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.559380+00:00"
+    },
+    "cf-490a": {
+      "title": "Team Olympiad",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "implementation",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.559815+00:00"
+    },
+    "cf-492a": {
+      "title": "Vanya and Cubes",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.560211+00:00"
+    },
+    "cf-492b": {
+      "title": "Vanya and Lanterns",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "binary search",
+        "implementation",
+        "math",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.560675+00:00"
+    },
+    "cf-4a": {
+      "title": "Watermelon",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.561264+00:00"
+    },
+    "cf-4c": {
+      "title": "Registration System",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1300,
+      "tags": [
+        "data structures",
+        "hashing",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (data structures, hashing, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.561743+00:00"
+    },
+    "cf-500a": {
+      "title": "New Year Transportation",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "dfs and similar",
+        "graphs",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (dfs and similar, graphs, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.562066+00:00"
+    },
+    "cf-50a": {
+      "title": "Domino piling",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "greedy",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.562360+00:00"
+    },
+    "cf-510a": {
+      "title": "Fox And Snake",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.562654+00:00"
+    },
+    "cf-514a": {
+      "title": "Chewba\u0441ca and Number",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1200,
+      "tags": [
+        "greedy",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.562961+00:00"
+    },
+    "cf-520a": {
+      "title": "Pangram",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.563266+00:00"
+    },
+    "cf-520b": {
+      "title": "Two Buttons",
+      "platform": "codeforces",
+      "difficulty": "MEDIUM",
+      "rating": 1400,
+      "tags": [
+        "dfs and similar",
+        "graphs",
+        "greedy",
+        "implementation",
+        "math",
+        "shortest paths"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (dfs and similar, graphs, greedy)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.563550+00:00"
+    },
+    "cf-546a": {
+      "title": "Soldier and Bananas",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.563829+00:00"
+    },
+    "cf-579a": {
+      "title": "Raising Bacteria",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "bitmasks"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (bitmasks)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.564086+00:00"
+    },
+    "cf-580a": {
+      "title": "Kefa and First Steps",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "brute force",
+        "dp",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, dp, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.564365+00:00"
+    },
+    "cf-581a": {
+      "title": "Vasya the Hipster",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.564556+00:00"
+    },
+    "cf-58a": {
+      "title": "Chat room",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "greedy",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (greedy, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.564728+00:00"
+    },
+    "cf-59a": {
+      "title": "Word",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.564895+00:00"
+    },
+    "cf-617a": {
+      "title": "Elephant",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565055+00:00"
+    },
+    "cf-61a": {
+      "title": "Ultra-Fast Mathematician",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565229+00:00"
+    },
+    "cf-630a": {
+      "title": "Again Twenty Five!",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "number theory"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (number theory)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565389+00:00"
+    },
+    "cf-677a": {
+      "title": "Vanya and Fence",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565541+00:00"
+    },
+    "cf-69a": {
+      "title": "Young Physicist",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1000,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565717+00:00"
+    },
+    "cf-703a": {
+      "title": "Mishka and Game",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.565879+00:00"
+    },
+    "cf-705a": {
+      "title": "Hulk",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.566034+00:00"
+    },
+    "cf-706b": {
+      "title": "Interesting drink",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 1100,
+      "tags": [
+        "binary search",
+        "dp",
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, dp, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.566182+00:00"
+    },
+    "cf-71a": {
+      "title": "Way Too Long Words",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.566334+00:00"
+    },
+    "cf-723a": {
+      "title": "The New Year: Meeting Friends",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math",
+        "sortings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math, sortings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.566487+00:00"
+    },
+    "cf-732a": {
+      "title": "Buy a Shovel",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force",
+        "constructive algorithms",
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force, constructive algorithms, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.566652+00:00"
+    },
+    "cf-734a": {
+      "title": "Anton and Danik",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.597734+00:00"
+    },
+    "cf-750a": {
+      "title": "New Year and Hurry",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "binary search",
+        "brute force",
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (binary search, brute force, implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.598367+00:00"
+    },
+    "cf-758a": {
+      "title": "Holiday Of Equality",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "math"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, math)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.598909+00:00"
+    },
+    "cf-785a": {
+      "title": "Anton and Polyhedrons",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.599391+00:00"
+    },
+    "cf-791a": {
+      "title": "Bear and Big Brother",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.599917+00:00"
+    },
+    "cf-80a": {
+      "title": "Panoramix's Prediction",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "brute force"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (brute force)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.600411+00:00"
+    },
+    "cf-96a": {
+      "title": "Football",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 900,
+      "tags": [
+        "implementation",
+        "strings"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation, strings)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.600835+00:00"
+    },
+    "cf-977a": {
+      "title": "Wrong Subtraction",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "implementation"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (implementation)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.601225+00:00"
+    },
+    "cf-996a": {
+      "title": "Hit the Lottery",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "dp",
+        "greedy"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (dp, greedy)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.601645+00:00"
+    },
+    "cf-9a": {
+      "title": "Die Roll",
+      "platform": "codeforces",
+      "difficulty": "EASY",
+      "rating": 800,
+      "tags": [
+        "math",
+        "probabilities"
+      ],
+      "time_limit": "1000 ms",
+      "memory_limit": "256 MB",
+      "bounds": {},
+      "constraints_summary": "Codeforces contest task (math, probabilities)",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.602024+00:00"
+    },
+    "atcoder-abc001-1": {
+      "title": "A. \u7a4d\u96ea\u6df1\u5dee",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc001",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u7a4d\u96ea\u6df1\u5dee",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.603767+00:00"
+    },
+    "atcoder-abc001-2": {
+      "title": "B. \u8996\u7a0b\u306e\u901a\u5831",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc001",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u8996\u7a0b\u306e\u901a\u5831",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.604266+00:00"
+    },
+    "atcoder-abc001-3": {
+      "title": "C. \u98a8\u529b\u89b3\u6e2c",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc001",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u98a8\u529b\u89b3\u6e2c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.604708+00:00"
+    },
+    "atcoder-abc001-4": {
+      "title": "D. \u611f\u96e8\u6642\u523b\u306e\u6574\u7406",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc001",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u611f\u96e8\u6642\u523b\u306e\u6574\u7406",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.605197+00:00"
+    },
+    "atcoder-abc002-1": {
+      "title": "A. \u6b63\u76f4\u8005",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc002",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u6b63\u76f4\u8005",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.605620+00:00"
+    },
+    "atcoder-abc002-2": {
+      "title": "B. \u7f60",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc002",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u7f60",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.605975+00:00"
+    },
+    "atcoder-abc002-3": {
+      "title": "C. \u76f4\u8a34",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc002",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u76f4\u8a34",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.606368+00:00"
+    },
+    "atcoder-abc002-4": {
+      "title": "D. \u6d3e\u95a5",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc002",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u6d3e\u95a5",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.606747+00:00"
+    },
+    "atcoder-abc003-1": {
+      "title": "A. AtCoder\u793e\u306e\u7d66\u6599",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc003",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. AtCoder\u793e\u306e\u7d66\u6599",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.607106+00:00"
+    },
+    "atcoder-abc003-2": {
+      "title": "B. AtCoder\u30c8\u30e9\u30f3\u30d7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc003",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. AtCoder\u30c8\u30e9\u30f3\u30d7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.607489+00:00"
+    },
+    "atcoder-abc003-3": {
+      "title": "C. AtCoder\u30d7\u30ed\u30b0\u30e9\u30df\u30f3\u30b0\u8b1b\u5ea7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc003",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. AtCoder\u30d7\u30ed\u30b0\u30e9\u30df\u30f3\u30b0\u8b1b\u5ea7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.607861+00:00"
+    },
+    "atcoder-abc003-4": {
+      "title": "D. AtCoder\u793e\u306e\u51ac",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc003",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. AtCoder\u793e\u306e\u51ac",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.608243+00:00"
+    },
+    "atcoder-abc004-1": {
+      "title": "A. \u6d41\u884c",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc004",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u6d41\u884c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.608601+00:00"
+    },
+    "atcoder-abc004-2": {
+      "title": "B. \u56de\u8ee2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc004",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u56de\u8ee2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.609117+00:00"
+    },
+    "atcoder-abc004-3": {
+      "title": "C. \u5165\u308c\u66ff\u3048",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc004",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u5165\u308c\u66ff\u3048",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.609650+00:00"
+    },
+    "atcoder-abc004-4": {
+      "title": "D. \u30de\u30fc\u30d6\u30eb",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc004",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30de\u30fc\u30d6\u30eb",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.609919+00:00"
+    },
+    "atcoder-abc005-1": {
+      "title": "A. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u4f5c\u308a\u65b9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc005",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u4f5c\u308a\u65b9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.610248+00:00"
+    },
+    "atcoder-abc005-2": {
+      "title": "B. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u98df\u3079\u65b9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc005",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u98df\u3079\u65b9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.610711+00:00"
+    },
+    "atcoder-abc005-3": {
+      "title": "C. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u58f2\u308a\u65b9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc005",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u58f2\u308a\u65b9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.611094+00:00"
+    },
+    "atcoder-abc005-4": {
+      "title": "D. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u713c\u304d\u65b9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc005",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u304a\u3044\u3057\u3044\u305f\u3053\u713c\u304d\u306e\u713c\u304d\u65b9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.611481+00:00"
+    },
+    "atcoder-abc006-1": {
+      "title": "A. \u4e16\u754c\u306eFizzBuzz",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc006",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u4e16\u754c\u306eFizzBuzz",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.611888+00:00"
+    },
+    "atcoder-abc006-2": {
+      "title": "B. \u30c8\u30ea\u30dc\u30ca\u30c3\u30c1\u6570\u5217",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc006",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30c8\u30ea\u30dc\u30ca\u30c3\u30c1\u6570\u5217",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.612260+00:00"
+    },
+    "atcoder-abc006-3": {
+      "title": "C. \u30b9\u30d5\u30a3\u30f3\u30af\u30b9\u306e\u306a\u305e\u306a\u305e",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc006",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u30b9\u30d5\u30a3\u30f3\u30af\u30b9\u306e\u306a\u305e\u306a\u305e",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.612646+00:00"
+    },
+    "atcoder-abc006-4": {
+      "title": "D. \u30c8\u30e9\u30f3\u30d7\u633f\u5165\u30bd\u30fc\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc006",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30c8\u30e9\u30f3\u30d7\u633f\u5165\u30bd\u30fc\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.613055+00:00"
+    },
+    "atcoder-abc007-1": {
+      "title": "A. \u690d\u6728\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc007",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u690d\u6728\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.613423+00:00"
+    },
+    "atcoder-abc007-2": {
+      "title": "B. \u8f9e\u66f8\u5f0f\u9806\u5e8f",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc007",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u8f9e\u66f8\u5f0f\u9806\u5e8f",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.613789+00:00"
+    },
+    "atcoder-abc007-4": {
+      "title": "D. \u7981\u6b62\u3055\u308c\u305f\u6570\u5b57",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc007",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u7981\u6b62\u3055\u308c\u305f\u6570\u5b57",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.614158+00:00"
+    },
+    "atcoder-abc008-1": {
+      "title": "A. \u30a2\u30eb\u30d0\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc008",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30a2\u30eb\u30d0\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.614518+00:00"
+    },
+    "atcoder-abc008-2": {
+      "title": "B. \u6295\u7968",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc008",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u6295\u7968",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.615098+00:00"
+    },
+    "atcoder-abc008-3": {
+      "title": "C. \u30b3\u30a4\u30f3",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc008",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u30b3\u30a4\u30f3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.615591+00:00"
+    },
+    "atcoder-abc008-4": {
+      "title": "D. \u91d1\u584a\u30b2\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc008",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u91d1\u584a\u30b2\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.616004+00:00"
+    },
+    "atcoder-abc009-1": {
+      "title": "A. \u5f15\u8d8a\u3057\u4f5c\u696d",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc009",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u5f15\u8d8a\u3057\u4f5c\u696d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.616376+00:00"
+    },
+    "atcoder-abc009-2": {
+      "title": "B. \u5fc3\u914d\u6027\u306a\u5bcc\u8c6a\u3001\u30d5\u30a1\u30df\u30ea\u30fc\u30ec\u30b9\u30c8\u30e9\u30f3\u306b\u884c\u304f\u3002",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc009",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u5fc3\u914d\u6027\u306a\u5bcc\u8c6a\u3001\u30d5\u30a1\u30df\u30ea\u30fc\u30ec\u30b9\u30c8\u30e9\u30f3\u306b\u884c\u304f\u3002",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.616763+00:00"
+    },
+    "atcoder-abc009-3": {
+      "title": "C. \u8f9e\u66f8\u5f0f\u9806\u5e8f\u3075\u305f\u305f\u3073",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc009",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u8f9e\u66f8\u5f0f\u9806\u5e8f\u3075\u305f\u305f\u3073",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.617156+00:00"
+    },
+    "atcoder-abc009-4": {
+      "title": "D. \u6f38\u5316\u5f0f",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc009",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u6f38\u5316\u5f0f",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.617526+00:00"
+    },
+    "atcoder-abc010-1": {
+      "title": "A. \u30cf\u30f3\u30c9\u30eb\u30cd\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc010",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30cf\u30f3\u30c9\u30eb\u30cd\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.617884+00:00"
+    },
+    "atcoder-abc010-2": {
+      "title": "B. \u82b1\u5360\u3044",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc010",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u82b1\u5360\u3044",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.618273+00:00"
+    },
+    "atcoder-abc010-3": {
+      "title": "C. \u6d6e\u6c17\u8abf\u67fb",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc010",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6d6e\u6c17\u8abf\u67fb",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.618653+00:00"
+    },
+    "atcoder-abc010-4": {
+      "title": "D. \u6d6e\u6c17\u4e88\u9632",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc010",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u6d6e\u6c17\u4e88\u9632",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.619019+00:00"
+    },
+    "atcoder-abc011-1": {
+      "title": "A. \u6765\u6708\u306f\u4f55\u6708\uff1f",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc011",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u6765\u6708\u306f\u4f55\u6708\uff1f",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.619399+00:00"
+    },
+    "atcoder-abc011-2": {
+      "title": "B. \u540d\u524d\u306e\u78ba\u8a8d",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc011",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u540d\u524d\u306e\u78ba\u8a8d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.659377+00:00"
+    },
+    "atcoder-abc011-3": {
+      "title": "C. 123\u5f15\u304d\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc011",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. 123\u5f15\u304d\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.660010+00:00"
+    },
+    "atcoder-abc011-4": {
+      "title": "D. \u5927\u30b8\u30e3\u30f3\u30d7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc011",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u5927\u30b8\u30e3\u30f3\u30d7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.660484+00:00"
+    },
+    "atcoder-abc012-1": {
+      "title": "A. \u30b9\u30ef\u30c3\u30d7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc012",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30b9\u30ef\u30c3\u30d7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.660984+00:00"
+    },
+    "atcoder-abc012-2": {
+      "title": "B. \u5165\u6d74\u6642\u9593",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc012",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u5165\u6d74\u6642\u9593",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.661641+00:00"
+    },
+    "atcoder-abc012-3": {
+      "title": "C. \u4e5d\u4e5d\u8db3\u3057\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc012",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u4e5d\u4e5d\u8db3\u3057\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.662163+00:00"
+    },
+    "atcoder-abc012-4": {
+      "title": "D. \u30d0\u30b9\u3068\u907f\u3051\u3089\u308c\u306a\u3044\u904b\u547d",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc012",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30d0\u30b9\u3068\u907f\u3051\u3089\u308c\u306a\u3044\u904b\u547d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.662477+00:00"
+    },
+    "atcoder-abc013-1": {
+      "title": "A. A",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc013",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. A",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.662913+00:00"
+    },
+    "atcoder-abc013-2": {
+      "title": "B. \u9320",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc013",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u9320",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.663306+00:00"
+    },
+    "atcoder-abc013-3": {
+      "title": "C. \u7bc0\u5236",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc013",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u7bc0\u5236",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.664008+00:00"
+    },
+    "atcoder-abc013-4": {
+      "title": "D. \u963f\u5f25\u9640",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc013",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u963f\u5f25\u9640",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.664336+00:00"
+    },
+    "atcoder-abc014-1": {
+      "title": "A. \u3051\u3093\u3057\u3087\u3046\u5148\u751f\u306e\u304a\u83d3\u5b50\u914d\u308a",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc014",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u3051\u3093\u3057\u3087\u3046\u5148\u751f\u306e\u304a\u83d3\u5b50\u914d\u308a",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.664633+00:00"
+    },
+    "atcoder-abc014-2": {
+      "title": "B. \u4fa1\u683c\u306e\u5408\u8a08",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc014",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u4fa1\u683c\u306e\u5408\u8a08",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.664928+00:00"
+    },
+    "atcoder-abc014-3": {
+      "title": "C. AtColor",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc014",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. AtColor",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.665209+00:00"
+    },
+    "atcoder-abc014-4": {
+      "title": "D. \u9589\u8def",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc014",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u9589\u8def",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.665608+00:00"
+    },
+    "atcoder-abc015-1": {
+      "title": "A. \u9ad8\u6a4b\u304f\u3093\u306e\u7814\u4fee",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc015",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9ad8\u6a4b\u304f\u3093\u306e\u7814\u4fee",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.666145+00:00"
+    },
+    "atcoder-abc015-2": {
+      "title": "B. \u9ad8\u6a4b\u304f\u3093\u306e\u96c6\u8a08",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc015",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u9ad8\u6a4b\u304f\u3093\u306e\u96c6\u8a08",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.666652+00:00"
+    },
+    "atcoder-abc015-3": {
+      "title": "C. \u9ad8\u6a4b\u304f\u3093\u306e\u30d0\u30b0\u63a2\u3057",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc015",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u9ad8\u6a4b\u304f\u3093\u306e\u30d0\u30b0\u63a2\u3057",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.667198+00:00"
+    },
+    "atcoder-abc015-4": {
+      "title": "D. \u9ad8\u6a4b\u304f\u3093\u306e\u82e6\u60a9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc015",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u9ad8\u6a4b\u304f\u3093\u306e\u82e6\u60a9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.667760+00:00"
+    },
+    "atcoder-abc016-1": {
+      "title": "A. 12\u67086\u65e5",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc016",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. 12\u67086\u65e5",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.668289+00:00"
+    },
+    "atcoder-abc016-2": {
+      "title": "B. A\u00b1B Problem",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc016",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. A\u00b1B Problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.668815+00:00"
+    },
+    "atcoder-abc016-3": {
+      "title": "C. \u53cb\u9054\u306e\u53cb\u9054",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc016",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u53cb\u9054\u306e\u53cb\u9054",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.669261+00:00"
+    },
+    "atcoder-abc016-4": {
+      "title": "D. \u4e00\u5200\u4e21\u65ad",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc016",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u4e00\u5200\u4e21\u65ad",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.669686+00:00"
+    },
+    "atcoder-abc017-1": {
+      "title": "A. \u30d7\u30ed\u30b3\u30f3",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc017",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30d7\u30ed\u30b3\u30f3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.670130+00:00"
+    },
+    "atcoder-abc017-2": {
+      "title": "B. choku\u8a9e",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc017",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. choku\u8a9e",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.670707+00:00"
+    },
+    "atcoder-abc017-3": {
+      "title": "C. \u30cf\u30a4\u30b9\u30b3\u30a2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc017",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u30cf\u30a4\u30b9\u30b3\u30a2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.671199+00:00"
+    },
+    "atcoder-abc017-4": {
+      "title": "D. \u30b5\u30d7\u30ea\u30e1\u30f3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc017",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30b5\u30d7\u30ea\u30e1\u30f3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.671654+00:00"
+    },
+    "atcoder-abc018-1": {
+      "title": "A. \u8c46\u307e\u304d",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc018",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u8c46\u307e\u304d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.672179+00:00"
+    },
+    "atcoder-abc018-2": {
+      "title": "B. \u6587\u5b57\u5217\u306e\u53cd\u8ee2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc018",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u6587\u5b57\u5217\u306e\u53cd\u8ee2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.672665+00:00"
+    },
+    "atcoder-abc018-3": {
+      "title": "C. \u83f1\u578b\u30ab\u30a6\u30f3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc018",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u83f1\u578b\u30ab\u30a6\u30f3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.673173+00:00"
+    },
+    "atcoder-abc018-4": {
+      "title": "D. \u30d0\u30ec\u30f3\u30bf\u30a4\u30f3\u30c7\u30fc",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc018",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30d0\u30ec\u30f3\u30bf\u30a4\u30f3\u30c7\u30fc",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.673720+00:00"
+    },
+    "atcoder-abc019-1": {
+      "title": "A. \u9ad8\u6a4b\u304f\u3093\u3068\u5e74\u9f62",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc019",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9ad8\u6a4b\u304f\u3093\u3068\u5e74\u9f62",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.674207+00:00"
+    },
+    "atcoder-abc019-2": {
+      "title": "B. \u9ad8\u6a4b\u304f\u3093\u3068\u6587\u5b57\u5217\u5727\u7e2e",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc019",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u9ad8\u6a4b\u304f\u3093\u3068\u6587\u5b57\u5217\u5727\u7e2e",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.674701+00:00"
+    },
+    "atcoder-abc019-3": {
+      "title": "C. \u9ad8\u6a4b\u304f\u3093\u3068\u9b54\u6cd5\u306e\u7bb1",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc019",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u9ad8\u6a4b\u304f\u3093\u3068\u9b54\u6cd5\u306e\u7bb1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.675205+00:00"
+    },
+    "atcoder-abc019-4": {
+      "title": "D. \u9ad8\u6a4b\u304f\u3093\u3068\u6728\u306e\u76f4\u5f84",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc019",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u9ad8\u6a4b\u304f\u3093\u3068\u6728\u306e\u76f4\u5f84",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.675645+00:00"
+    },
+    "atcoder-abc020-a": {
+      "title": "A. \u30af\u30a4\u30ba",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc020",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30af\u30a4\u30ba",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.676119+00:00"
+    },
+    "atcoder-abc020-b": {
+      "title": "B. \u8db3\u3057\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc020",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u8db3\u3057\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.676605+00:00"
+    },
+    "atcoder-abc020-c": {
+      "title": "C. \u58c1\u629c\u3051",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc020",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u58c1\u629c\u3051",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.677078+00:00"
+    },
+    "atcoder-abc020-d": {
+      "title": "D. LCM Rush",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc020",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. LCM Rush",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.677661+00:00"
+    },
+    "atcoder-abc021-a": {
+      "title": "A. \u8db3\u3057\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc021",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u8db3\u3057\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.678160+00:00"
+    },
+    "atcoder-abc021-b": {
+      "title": "B. \u5618\u3064\u304d\u306e\u9ad8\u6a4b\u304f\u3093",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc021",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u5618\u3064\u304d\u306e\u9ad8\u6a4b\u304f\u3093",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.678648+00:00"
+    },
+    "atcoder-abc021-c": {
+      "title": "C. \u6b63\u76f4\u8005\u306e\u9ad8\u6a4b\u304f\u3093",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc021",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6b63\u76f4\u8005\u306e\u9ad8\u6a4b\u304f\u3093",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.679121+00:00"
+    },
+    "atcoder-abc021-d": {
+      "title": "D. \u591a\u91cd\u30eb\u30fc\u30d7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc021",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u591a\u91cd\u30eb\u30fc\u30d7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.679584+00:00"
+    },
+    "atcoder-abc022-a": {
+      "title": "A. Best Body",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc022",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. Best Body",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.680069+00:00"
+    },
+    "atcoder-abc022-b": {
+      "title": "B. Bumble Bee",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc022",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. Bumble Bee",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.680540+00:00"
+    },
+    "atcoder-abc022-c": {
+      "title": "C. Blue Bird",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc022",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. Blue Bird",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.681012+00:00"
+    },
+    "atcoder-abc022-d": {
+      "title": "D. Big Bang",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc022",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. Big Bang",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.681449+00:00"
+    },
+    "atcoder-abc023-a": {
+      "title": "A. \u52a0\u7b97\u738b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc023",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u52a0\u7b97\u738b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.681847+00:00"
+    },
+    "atcoder-abc023-b": {
+      "title": "B. \u624b\u82b8\u738b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc023",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u624b\u82b8\u738b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.682226+00:00"
+    },
+    "atcoder-abc023-c": {
+      "title": "C. \u53ce\u96c6\u738b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc023",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u53ce\u96c6\u738b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.682620+00:00"
+    },
+    "atcoder-abc023-d": {
+      "title": "D. \u5c04\u6483\u738b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc023",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u5c04\u6483\u738b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.795042+00:00"
+    },
+    "atcoder-abc024-a": {
+      "title": "A. \u52d5\u7269\u5712",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc024",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u52d5\u7269\u5712",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.795496+00:00"
+    },
+    "atcoder-abc024-b": {
+      "title": "B. \u81ea\u52d5\u30c9\u30a2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc024",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u81ea\u52d5\u30c9\u30a2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.795893+00:00"
+    },
+    "atcoder-abc024-c": {
+      "title": "C. \u6c11\u65cf\u5927\u79fb\u52d5",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc024",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6c11\u65cf\u5927\u79fb\u52d5",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.796632+00:00"
+    },
+    "atcoder-abc024-d": {
+      "title": "D. \u52d5\u7684\u8a08\u753b\u6cd5",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc024",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u52d5\u7684\u8a08\u753b\u6cd5",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.797300+00:00"
+    },
+    "atcoder-abc025-a": {
+      "title": "A. 25\u500b\u306e\u6587\u5b57\u5217",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc025",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. 25\u500b\u306e\u6587\u5b57\u5217",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.797687+00:00"
+    },
+    "atcoder-abc025-b": {
+      "title": "B. \u53cc\u5b50\u3068\u30b9\u30a4\u30ab\u5272\u308a",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc025",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u53cc\u5b50\u3068\u30b9\u30a4\u30ab\u5272\u308a",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.798147+00:00"
+    },
+    "atcoder-abc025-c": {
+      "title": "C. \u53cc\u5b50\u3068\u25cb\u00d7\u30b2\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc025",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u53cc\u5b50\u3068\u25cb\u00d7\u30b2\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.798487+00:00"
+    },
+    "atcoder-abc025-d": {
+      "title": "D. 25\u500b\u306e\u6574\u6570",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc025",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. 25\u500b\u306e\u6574\u6570",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.798842+00:00"
+    },
+    "atcoder-abc026-a": {
+      "title": "A. \u639b\u3051\u7b97\u306e\u6700\u5927\u5024",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc026",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u639b\u3051\u7b97\u306e\u6700\u5927\u5024",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.799310+00:00"
+    },
+    "atcoder-abc026-b": {
+      "title": "B. N\u91cd\u4e38",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc026",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. N\u91cd\u4e38",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.799830+00:00"
+    },
+    "atcoder-abc026-c": {
+      "title": "C. \u9ad8\u6a4b\u541b\u306e\u7d66\u6599",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc026",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u9ad8\u6a4b\u541b\u306e\u7d66\u6599",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.800113+00:00"
+    },
+    "atcoder-abc026-d": {
+      "title": "D. \u9ad8\u6a4b\u541b\u30dc\u30fc\u30eb1\u53f7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc026",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u9ad8\u6a4b\u541b\u30dc\u30fc\u30eb1\u53f7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.800358+00:00"
+    },
+    "atcoder-abc027-a": {
+      "title": "A. \u9577\u65b9\u5f62",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc027",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9577\u65b9\u5f62",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.800637+00:00"
+    },
+    "atcoder-abc027-b": {
+      "title": "B. \u5cf6\u3068\u6a4b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc027",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u5cf6\u3068\u6a4b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.801061+00:00"
+    },
+    "atcoder-abc027-c": {
+      "title": "C. \u500d\u3005\u30b2\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc027",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u500d\u3005\u30b2\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.801627+00:00"
+    },
+    "atcoder-abc027-d": {
+      "title": "D. \u30ed\u30dc\u30c3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc027",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30ed\u30dc\u30c3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.801917+00:00"
+    },
+    "atcoder-abc028-a": {
+      "title": "A. \u30c6\u30b9\u30c8\u8a55\u4fa1",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc028",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30c6\u30b9\u30c8\u8a55\u4fa1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.802172+00:00"
+    },
+    "atcoder-abc028-b": {
+      "title": "B. \u6587\u5b57\u6570\u30ab\u30a6\u30f3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc028",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u6587\u5b57\u6570\u30ab\u30a6\u30f3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.802381+00:00"
+    },
+    "atcoder-abc028-c": {
+      "title": "C. \u6570\u30923\u3064\u9078\u3076\u30de\u30f3",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc028",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6570\u30923\u3064\u9078\u3076\u30de\u30f3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.802570+00:00"
+    },
+    "atcoder-abc028-d": {
+      "title": "D. \u4e71\u6570\u751f\u6210",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc028",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u4e71\u6570\u751f\u6210",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.802801+00:00"
+    },
+    "atcoder-abc029-a": {
+      "title": "A. \u8907\u6570\u5f62",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc029",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u8907\u6570\u5f62",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803009+00:00"
+    },
+    "atcoder-abc029-b": {
+      "title": "B. \u30ab\u30ad",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc029",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30ab\u30ad",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803200+00:00"
+    },
+    "atcoder-abc029-c": {
+      "title": "C. Brute-force Attack",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc029",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. Brute-force Attack",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803382+00:00"
+    },
+    "atcoder-abc029-d": {
+      "title": "D. 1",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc029",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. 1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803547+00:00"
+    },
+    "atcoder-abc030-a": {
+      "title": "A. \u52dd\u7387\u8a08\u7b97",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc030",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u52dd\u7387\u8a08\u7b97",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803713+00:00"
+    },
+    "atcoder-abc030-b": {
+      "title": "B. \u6642\u8a08\u76e4",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc030",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u6642\u8a08\u76e4",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.803896+00:00"
+    },
+    "atcoder-abc030-c": {
+      "title": "C. \u98db\u884c\u6a5f\u4e57\u308a",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc030",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u98db\u884c\u6a5f\u4e57\u308a",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.804094+00:00"
+    },
+    "atcoder-abc030-d": {
+      "title": "D. \u3078\u3093\u3066\u3053\u8f9e\u66f8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc030",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u3078\u3093\u3066\u3053\u8f9e\u66f8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.804318+00:00"
+    },
+    "atcoder-abc031-a": {
+      "title": "A. \u30b2\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc031",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30b2\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.804513+00:00"
+    },
+    "atcoder-abc031-b": {
+      "title": "B. \u904b\u52d5\u7ba1\u7406",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc031",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u904b\u52d5\u7ba1\u7406",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.804705+00:00"
+    },
+    "atcoder-abc031-c": {
+      "title": "C. \u6570\u5217\u30b2\u30fc\u30e0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc031",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6570\u5217\u30b2\u30fc\u30e0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.804899+00:00"
+    },
+    "atcoder-abc031-d": {
+      "title": "D. \u8a9e\u5442\u5408\u308f\u305b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc031",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u8a9e\u5442\u5408\u308f\u305b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.805073+00:00"
+    },
+    "atcoder-abc032-a": {
+      "title": "A. \u9ad8\u6a4b\u541b\u3068\u9752\u6728\u541b\u306e\u597d\u304d\u306a\u6570",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc032",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9ad8\u6a4b\u541b\u3068\u9752\u6728\u541b\u306e\u597d\u304d\u306a\u6570",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.805242+00:00"
+    },
+    "atcoder-abc032-b": {
+      "title": "B. \u9ad8\u6a4b\u541b\u3068\u30d1\u30b9\u30ef\u30fc\u30c9",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc032",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u9ad8\u6a4b\u541b\u3068\u30d1\u30b9\u30ef\u30fc\u30c9",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.805491+00:00"
+    },
+    "atcoder-abc032-c": {
+      "title": "C. \u5217",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc032",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u5217",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.805650+00:00"
+    },
+    "atcoder-abc032-d": {
+      "title": "D. \u30ca\u30c3\u30d7\u30b5\u30c3\u30af\u554f\u984c",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc032",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30ca\u30c3\u30d7\u30b5\u30c3\u30af\u554f\u984c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.805838+00:00"
+    },
+    "atcoder-abc033-a": {
+      "title": "A. \u6697\u8a3c\u756a\u53f7",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc033",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u6697\u8a3c\u756a\u53f7",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806014+00:00"
+    },
+    "atcoder-abc033-b": {
+      "title": "B. \u753a\u306e\u5408\u4f75",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc033",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u753a\u306e\u5408\u4f75",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806196+00:00"
+    },
+    "atcoder-abc033-c": {
+      "title": "C. \u6570\u5f0f\u306e\u66f8\u304d\u63db\u3048",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc033",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u6570\u5f0f\u306e\u66f8\u304d\u63db\u3048",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806367+00:00"
+    },
+    "atcoder-abc033-d": {
+      "title": "D. \u4e09\u89d2\u5f62\u306e\u5206\u985e",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc033",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u4e09\u89d2\u5f62\u306e\u5206\u985e",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806528+00:00"
+    },
+    "atcoder-abc034-a": {
+      "title": "A. \u30c6\u30b9\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc034",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30c6\u30b9\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806686+00:00"
+    },
+    "atcoder-abc034-b": {
+      "title": "B. \u30da\u30a2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc034",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30da\u30a2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.806846+00:00"
+    },
+    "atcoder-abc034-c": {
+      "title": "C. \u7d4c\u8def",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc034",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u7d4c\u8def",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807017+00:00"
+    },
+    "atcoder-abc034-d": {
+      "title": "D. \u98df\u5869\u6c34",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc034",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u98df\u5869\u6c34",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807167+00:00"
+    },
+    "atcoder-abc035-a": {
+      "title": "A. \u30c6\u30ec\u30d3",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc035",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u30c6\u30ec\u30d3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807325+00:00"
+    },
+    "atcoder-abc035-b": {
+      "title": "B. \u30c9\u30ed\u30fc\u30f3",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc035",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30c9\u30ed\u30fc\u30f3",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807482+00:00"
+    },
+    "atcoder-abc035-c": {
+      "title": "C. \u30aa\u30bb\u30ed",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc035",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u30aa\u30bb\u30ed",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807638+00:00"
+    },
+    "atcoder-abc035-d": {
+      "title": "D. \u30c8\u30ec\u30b8\u30e3\u30fc\u30cf\u30f3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc035",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30c8\u30ec\u30b8\u30e3\u30fc\u30cf\u30f3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807789+00:00"
+    },
+    "atcoder-abc036-a": {
+      "title": "A. \u304a\u8336",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc036",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u304a\u8336",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.807948+00:00"
+    },
+    "atcoder-abc036-b": {
+      "title": "B. \u56de\u8ee2",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc036",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u56de\u8ee2",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.831042+00:00"
+    },
+    "atcoder-abc036-c": {
+      "title": "C. \u5ea7\u5727",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc036",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u5ea7\u5727",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.831352+00:00"
+    },
+    "atcoder-abc036-d": {
+      "title": "D. \u5857\u308a\u7d75",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc036",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u5857\u308a\u7d75",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.831631+00:00"
+    },
+    "atcoder-abc037-a": {
+      "title": "A. \u9945\u982d",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc037",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9945\u982d",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.832017+00:00"
+    },
+    "atcoder-abc037-b": {
+      "title": "B. \u7de8\u96c6",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc037",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u7de8\u96c6",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.832623+00:00"
+    },
+    "atcoder-abc037-c": {
+      "title": "C. \u7dcf\u548c",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc037",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u7dcf\u548c",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.832962+00:00"
+    },
+    "atcoder-abc037-d": {
+      "title": "D. \u7d4c\u8def",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc037",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u7d4c\u8def",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.833198+00:00"
+    },
+    "atcoder-abc038-a": {
+      "title": "A. \u304a\u8336",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc038",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u304a\u8336",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.833438+00:00"
+    },
+    "atcoder-abc038-b": {
+      "title": "B. \u30c7\u30a3\u30b9\u30d7\u30ec\u30a4",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc038",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30c7\u30a3\u30b9\u30d7\u30ec\u30a4",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.833676+00:00"
+    },
+    "atcoder-abc038-c": {
+      "title": "C. \u5358\u8abf\u5897\u52a0",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc038",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u5358\u8abf\u5897\u52a0",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.833927+00:00"
+    },
+    "atcoder-abc038-d": {
+      "title": "D. \u30d7\u30ec\u30bc\u30f3\u30c8",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc038",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u30d7\u30ec\u30bc\u30f3\u30c8",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.834166+00:00"
+    },
+    "atcoder-abc039-a": {
+      "title": "A. \u9ad8\u6a4b\u76f4\u4f53",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc039",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u9ad8\u6a4b\u76f4\u4f53",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.834485+00:00"
+    },
+    "atcoder-abc039-b": {
+      "title": "B. \u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u9ad8\u6a4b\u541b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc039",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u9ad8\u6a4b\u541b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.834942+00:00"
+    },
+    "atcoder-abc039-c": {
+      "title": "C. \u30d4\u30a2\u30cb\u30b9\u30c8\u9ad8\u6a4b\u541b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc039",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u30d4\u30a2\u30cb\u30b9\u30c8\u9ad8\u6a4b\u541b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.835342+00:00"
+    },
+    "atcoder-abc039-d": {
+      "title": "D. \u753b\u50cf\u51e6\u7406\u9ad8\u6a4b\u541b",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc039",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u753b\u50cf\u51e6\u7406\u9ad8\u6a4b\u541b",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.835789+00:00"
+    },
+    "atcoder-abc040-a": {
+      "title": "A. \u8d64\u8d64\u8d64\u8d64\u9752",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc040",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u8d64\u8d64\u8d64\u8d64\u9752",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.836323+00:00"
+    },
+    "atcoder-abc040-b": {
+      "title": "B. \u25a1\u25a1\u25a1\u25a1\u25a1",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc040",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task B. \u25a1\u25a1\u25a1\u25a1\u25a1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.836788+00:00"
+    },
+    "atcoder-abc040-c": {
+      "title": "C. \u67f1\u67f1\u67f1\u67f1\u67f1",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc040",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task C. \u67f1\u67f1\u67f1\u67f1\u67f1",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.837335+00:00"
+    },
+    "atcoder-abc040-d": {
+      "title": "D. \u9053\u8def\u306e\u8001\u673d\u5316\u5bfe\u7b56\u306b\u3064\u3044\u3066",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc040",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task D. \u9053\u8def\u306e\u8001\u673d\u5316\u5bfe\u7b56\u306b\u3064\u3044\u3066",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.838012+00:00"
+    },
+    "atcoder-abc041-a": {
+      "title": "A. \u6dfb\u5b57",
+      "platform": "atcoder",
+      "difficulty": "MEDIUM",
+      "contest_id": "abc041",
+      "time_limit": "2000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "AtCoder Contest task A. \u6dfb\u5b57",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "TWO_POINTER_SLIDING_WINDOW"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.838532+00:00"
+    },
+    "icpc-regional-2022-quantum-matrix": {
+      "title": "Quantum Gate Transition Matrix",
+      "platform": "icpc",
+      "difficulty": "HARD",
+      "time_limit": "3000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "ICPC regional problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.839347+00:00"
+    },
+    "icpc-regional-2023-subway-routing": {
+      "title": "Subway Network Resilience",
+      "platform": "icpc",
+      "difficulty": "HARD",
+      "time_limit": "2000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "ICPC regional problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.839679+00:00"
+    },
+    "icpc-regional-2023-xor-tree-queries": {
+      "title": "XOR Path Optimization on Trees",
+      "platform": "icpc",
+      "difficulty": "HARD",
+      "time_limit": "2500 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "ICPC regional problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.839990+00:00"
+    },
+    "icpc-world-finals-2024-astronomy": {
+      "title": "Constellation Line-of-Sight",
+      "platform": "icpc",
+      "difficulty": "EXPERT",
+      "time_limit": "4000 ms",
+      "memory_limit": "1024 MB",
+      "bounds": {},
+      "constraints_summary": "ICPC regional problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.840302+00:00"
+    },
+    "icpc-world-finals-2024-conveyor": {
+      "title": "Conveyor Belt Scheduling",
+      "platform": "icpc",
+      "difficulty": "EXPERT",
+      "time_limit": "3000 ms",
+      "memory_limit": "512 MB",
+      "bounds": {},
+      "constraints_summary": "ICPC regional problem",
+      "candidate_genes": [
+        "FAST_IO_STREAM_UNTIE",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "DISJOINT_SET_UNION"
+      ],
+      "indexed_at": "2026-10-16T12:19:43.840585+00:00"
     }
   }
 }

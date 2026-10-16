@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "mutations_applied": 5,
-  "promotions_won": 5,
-  "last_mutation_at": "2026-10-16T12:09:09.884365+00:00",
+  "mutations_applied": 9,
+  "promotions_won": 9,
+  "last_mutation_at": "2026-10-16T12:22:51.486014+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:07:46.504343+00:00",
@@ -42,6 +42,42 @@
     },
     {
       "timestamp": "2026-10-16T12:09:09.884300+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:16:11.239228+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:19:59.061470+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:20:22.750600+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:22:51.485850+00:00",
       "gene_id": "TEST_MUT_GENE",
       "mutant_created": [
         "orig_impl_mut_fast_io"

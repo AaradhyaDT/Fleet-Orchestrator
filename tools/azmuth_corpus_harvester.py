@@ -37,6 +37,10 @@ CP_ROOT = Path("F:/Aaradhya-Dev-Tamrakar/Competitive-Programming")
 CODON_STREAM = CP_ROOT / "codon_stream"
 CSACADEMY_TASKS = CP_ROOT / "platforms" / "csacademy" / "tasks"
 HACKERRANK_TASKS = CP_ROOT / "platforms" / "hackerrank" / "xtreme-shadows-2026"
+CODEFORCES_TASKS = CP_ROOT / "platforms" / "codeforces" / "tasks"
+ATCODER_TASKS = CP_ROOT / "platforms" / "atcoder" / "tasks"
+ICPC_TASKS = CP_ROOT / "platforms" / "icpc" / "tasks"
+IEEEXTREME_TASKS = CP_ROOT / "platforms" / "ieeextreme" / "tasks"
 WORKSPACE_TEMPLATES = CP_ROOT / "templates" / "csa_workspace"
 
 TIER_DIRS = {
@@ -300,12 +304,15 @@ def sequence_workspace_templates() -> int:
 
 
 def sequence_solved_task_submissions() -> int:
-    """Sequences real judge submissions from CS Academy and HackerRank tasks into multi-allele genes."""
+    """Sequences real judge submissions from CS Academy, HackerRank, Codeforces, AtCoder, and ICPC tasks into multi-allele genes."""
     new_genes = 0
     try:
         from tools.azmuth_gene_catalog import (
             parse_task_submissions,
             parse_hackerrank_task_submissions,
+            parse_codeforces_task_submissions,
+            parse_atcoder_task_submissions,
+            parse_icpc_task_submissions,
         )
 
         # 1. CS Academy solved tasks
@@ -331,6 +338,43 @@ def sequence_solved_task_submissions() -> int:
                     gene_id = g.get("gene_id", "GENE")
                     if write_gene_file(tier, gene_id, g):
                         new_genes += 1
+
+        # 3. Codeforces contest tasks
+        if CODEFORCES_TASKS.exists():
+            for task_dir in CODEFORCES_TASKS.iterdir():
+                if not task_dir.is_dir():
+                    continue
+                g = parse_codeforces_task_submissions(task_dir)
+                if g:
+                    tier = g.get("tier", 2)
+                    gene_id = g.get("gene_id", "GENE")
+                    if write_gene_file(tier, gene_id, g):
+                        new_genes += 1
+
+        # 4. AtCoder contest tasks
+        if ATCODER_TASKS.exists():
+            for task_dir in ATCODER_TASKS.iterdir():
+                if not task_dir.is_dir():
+                    continue
+                g = parse_atcoder_task_submissions(task_dir)
+                if g:
+                    tier = g.get("tier", 2)
+                    gene_id = g.get("gene_id", "GENE")
+                    if write_gene_file(tier, gene_id, g):
+                        new_genes += 1
+
+        # 5. ICPC & IEEEXtreme tasks
+        for regional_root in (ICPC_TASKS, IEEEXTREME_TASKS):
+            if regional_root.exists():
+                for task_dir in regional_root.iterdir():
+                    if not task_dir.is_dir():
+                        continue
+                    g = parse_icpc_task_submissions(task_dir)
+                    if g:
+                        tier = g.get("tier", 3)
+                        gene_id = g.get("gene_id", "GENE")
+                        if write_gene_file(tier, gene_id, g):
+                            new_genes += 1
 
     except Exception as e:
         logger.warning(f"Error sequencing task submissions: {e}")
@@ -446,6 +490,126 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
                 "indexed_at": datetime.now(timezone.utc).isoformat(),
             }
             count += 1
+
+    # 3. Codeforces tasks
+    if CODEFORCES_TASKS.exists() and count < batch_size:
+        for task_dir in sorted(CODEFORCES_TASKS.iterdir()):
+            if count >= batch_size:
+                break
+            if not task_dir.is_dir():
+                continue
+
+            slug = task_dir.name
+            if slug in indexed_map:
+                continue
+
+            prob_file = task_dir / "problem.json"
+            metadata = {}
+            if prob_file.exists():
+                try:
+                    metadata = json.loads(prob_file.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+
+            rating = metadata.get("rating", 1500) or 1500
+            diff = "HARD" if rating >= 1600 else ("MEDIUM" if rating >= 1200 else "EASY")
+            title = metadata.get("name", slug)
+            tags = metadata.get("tags", [])
+
+            candidate_genes = ["FAST_IO_STREAM_UNTIE"]
+            if any(t in ("graphs", "trees", "dfs and similar") for t in tags):
+                candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
+            if any(t in ("data structures", "two pointers") for t in tags):
+                candidate_genes.append("TWO_POINTER_SLIDING_WINDOW")
+
+            indexed_map[slug] = {
+                "title": title,
+                "platform": "codeforces",
+                "difficulty": diff,
+                "rating": rating,
+                "tags": tags,
+                "time_limit": metadata.get("time_limit", "1000 ms"),
+                "memory_limit": metadata.get("memory_limit", "256 MB"),
+                "bounds": {},
+                "constraints_summary": f"Codeforces contest task ({', '.join(tags[:3]) if tags else 'standard'})",
+                "candidate_genes": candidate_genes,
+                "indexed_at": datetime.now(timezone.utc).isoformat(),
+            }
+            count += 1
+
+    # 4. AtCoder tasks
+    if ATCODER_TASKS.exists() and count < batch_size:
+        for task_dir in sorted(ATCODER_TASKS.iterdir()):
+            if count >= batch_size:
+                break
+            if not task_dir.is_dir():
+                continue
+
+            slug = task_dir.name
+            if slug in indexed_map:
+                continue
+
+            prob_file = task_dir / "problem.json"
+            metadata = {}
+            if prob_file.exists():
+                try:
+                    metadata = json.loads(prob_file.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+
+            title = metadata.get("title", metadata.get("name", slug))
+            candidate_genes = ["FAST_IO_STREAM_UNTIE", "TWO_POINTER_SLIDING_WINDOW"]
+
+            indexed_map[slug] = {
+                "title": title,
+                "platform": "atcoder",
+                "difficulty": metadata.get("difficulty", "MEDIUM"),
+                "contest_id": metadata.get("contest_id", "abc"),
+                "time_limit": metadata.get("time_limit", "2000 ms"),
+                "memory_limit": metadata.get("memory_limit", "1024 MB"),
+                "bounds": {},
+                "constraints_summary": f"AtCoder Contest task {title}",
+                "candidate_genes": candidate_genes,
+                "indexed_at": datetime.now(timezone.utc).isoformat(),
+            }
+            count += 1
+
+    # 5. ICPC & IEEEXtreme tasks
+    for regional_root, platform_name in ((ICPC_TASKS, "icpc"), (IEEEXTREME_TASKS, "ieeextreme")):
+        if regional_root.exists() and count < batch_size:
+            for task_dir in sorted(regional_root.iterdir()):
+                if count >= batch_size:
+                    break
+                if not task_dir.is_dir():
+                    continue
+
+                slug = task_dir.name
+                if slug in indexed_map:
+                    continue
+
+                prob_file = task_dir / "problem.json"
+                metadata = {}
+                if prob_file.exists():
+                    try:
+                        metadata = json.loads(prob_file.read_text(encoding="utf-8"))
+                    except Exception:
+                        pass
+
+                title = metadata.get("title", metadata.get("name", slug))
+                candidate_genes = ["FAST_IO_STREAM_UNTIE", "STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"]
+
+                indexed_map[slug] = {
+                    "title": title,
+                    "platform": platform_name,
+                    "difficulty": metadata.get("difficulty", "HARD"),
+                    "time_limit": metadata.get("time_limit", "3000 ms"),
+                    "memory_limit": metadata.get("memory_limit", "512 MB"),
+                    "bounds": {},
+                    "constraints_summary": f"{platform_name.upper()} regional problem",
+                    "candidate_genes": candidate_genes,
+                    "indexed_at": datetime.now(timezone.utc).isoformat(),
+                }
+                count += 1
 
     index_data["problems"] = indexed_map
     save_problem_index(index_data)
