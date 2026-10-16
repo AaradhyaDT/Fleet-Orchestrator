@@ -530,6 +530,19 @@ def harvest_single_task() -> dict[str, Any]:
     except Exception as e:
         logger.debug(f"Autonomous solver error: {e}")
 
+    # Priority 7: Run an Ultimatrix Genetic Mutation tick to evolve alleles
+    try:
+        from tools.ultimatrix_mutator import execute_mutation_batch
+        mut_res = execute_mutation_batch(batch_size=1)
+        if mut_res.get("genes_mutated", 0) > 0:
+            return {
+                "status": "SUCCESS",
+                "task": "ultimatrix_genetic_mutation",
+                "mutation_result": mut_res,
+            }
+    except Exception as e:
+        logger.debug(f"Genetic mutator error: {e}")
+
     gc.collect()
     return {"status": "ALL_SYNCHRONIZED", "task": "idle_state"}
 

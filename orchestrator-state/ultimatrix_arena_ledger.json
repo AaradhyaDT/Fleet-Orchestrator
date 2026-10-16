@@ -1,130 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T12:06:48.010085+00:00",
-  "tournaments_run": 398,
+  "last_tournament_at": "2026-10-16T12:09:20.349529+00:00",
+  "tournaments_run": 418,
   "alleles_benchmarked": 0,
   "promotions": 7,
   "history": [
-    {
-      "timestamp": "2026-10-16T11:59:27.472668+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:59:27.497030+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:59:57.644662+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:59:57.802419+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:59:57.951982+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T11:59:57.988415+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:28.140118+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:28.269660+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:28.396793+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:28.437658+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:58.591435+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:58.715446+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:58.842252+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:00:58.879305+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:29.047132+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:29.205088+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:29.366269+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:29.405889+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:59.553190+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:01:59.685600+00:00",
-      "genes": [
-        "STATIC_FORWARD_STAR_GRAPH"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:01:59.828331+00:00",
       "genes": [
@@ -303,6 +183,126 @@
       "timestamp": "2026-10-16T12:06:48.009948+00:00",
       "genes": [
         "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:18.150464+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:18.299671+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:18.437622+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:18.478062+00:00",
+      "genes": [
+        "STATIC_FORWARD_STAR_GRAPH"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:48.638338+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:48.765621+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:48.893583+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:07:48.935414+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:19.118006+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:19.243297+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:19.364525+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:19.405627+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:49.555626+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:49.689169+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:49.817960+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:08:49.861013+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:09:20.044051+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:09:20.186065+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:09:20.308095+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-16T12:09:20.349334+00:00",
+      "genes": [
+        "FAST_IO_STREAM_UNTIE"
       ]
     }
   ]

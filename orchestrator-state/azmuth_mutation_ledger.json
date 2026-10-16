@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "mutations_applied": 5,
+  "promotions_won": 5,
+  "last_mutation_at": "2026-10-16T12:09:09.884365+00:00",
+  "history": [
+    {
+      "timestamp": "2026-10-16T12:07:46.504343+00:00",
+      "gene_id": "FAST_IO_STREAM_UNTIE",
+      "mutant_created": [
+        "ios_sync_untie_mut_pragma_tuning"
+      ],
+      "dominant_allele": "ios_sync_untie_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:07:46.516740+00:00",
+      "gene_id": "INTERACTIVE_STREAM_IO",
+      "mutant_created": [
+        "std_endl_auto_flush_mut_pragma_tuning"
+      ],
+      "dominant_allele": "std_endl_auto_flush_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:08:51.571961+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:09:03.789117+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-16T12:09:09.884300+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    }
+  ]
+}
