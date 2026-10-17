@@ -1602,6 +1602,9 @@ class FleetControlApp(tk.Tk):
         btn_foresight = tk.Button(act_bar, text="🔭 Run Foresight Scan", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_PURPLE, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_foresight, cursor="hand2")
         btn_foresight.pack(side="right", padx=4)
 
+        btn_gh_radar = tk.Button(act_bar, text="🛰️ GitHub Radar", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_AMBER, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_github_radar, cursor="hand2")
+        btn_gh_radar.pack(side="right", padx=4)
+
         btn_harvest_lang = tk.Button(act_bar, text="🌐 Harvest Language Refs", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_harvest_languages, cursor="hand2")
         btn_harvest_lang.pack(side="right", padx=4)
 
@@ -1833,6 +1836,23 @@ class FleetControlApp(tk.Tk):
                 self.log("[SUCCESS] Foresight brief generated: orchestrator-state/macro_foresight_brief.json")
             except Exception as e:
                 self.log(f"[ERROR] Foresight scan failed: {e}")
+            self.refresh_all()
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def on_azmuth_github_radar(self):
+        def _worker():
+            self.log("Running Azmuth Autonomous GitHub Sensory Radar Scan across all 4 streams...")
+            cmd = [sys.executable, str(REPO_ROOT / "tools" / "azmuth_github_sensor.py"), "--scan"]
+            try:
+                flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+                proc = run_background(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
+                for line in proc.stdout.splitlines():
+                    if line.strip():
+                        self.log(line)
+                self.log("[SUCCESS] GitHub intelligence brief generated: orchestrator-state/github_intelligence_brief.md")
+            except Exception as e:
+                self.log(f"[ERROR] GitHub radar scan failed: {e}")
             self.refresh_all()
 
         threading.Thread(target=_worker, daemon=True).start()

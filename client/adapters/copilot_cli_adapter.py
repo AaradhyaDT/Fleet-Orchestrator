@@ -46,6 +46,8 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         copilot_home: str | Path | None = None,
         max_ai_credits: int | None = None,
         allow_custom_instructions: bool = False,
+        disallow_temp_dir: bool = True,
+        headless: bool = False,
     ):
         caps = capabilities or self.DEFAULT_CAPABILITIES
         super().__init__(worker_id, nickname, caps)
@@ -59,6 +61,8 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         self.copilot_home = Path(copilot_home).resolve() if copilot_home else None
         self.max_ai_credits = max_ai_credits
         self.allow_custom_instructions = allow_custom_instructions
+        self.disallow_temp_dir = disallow_temp_dir
+        self.headless = headless
 
     @staticmethod
     def _resolve_copilot_binary() -> str:
@@ -107,6 +111,12 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
             "--no-color",
         ]
 
+        if self.disallow_temp_dir:
+            cmd.append("--disallow-temp-dir")
+
+        if self.headless:
+            cmd.append("--headless")
+
         if not self.allow_custom_instructions:
             cmd.append("--no-custom-instructions")
 
@@ -130,6 +140,52 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
             cmd.extend(["--usage-output-file", usage_file])
 
         return cmd
+
+    @staticmethod
+    def extract_sqlite_session_telemetry(copilot_home: Path | str | None) -> dict[str, Any]:
+        """
+        Extracts high-fidelity telemetry directly from SQLite session-store.db
+        persisted by copilot.EXE in COPILOT_HOME (assistant_usage_events table).
+        """
+        if not copilot_home:
+            return {}
+        home = Path(copilot_home)
+        db_path = home / "session-store.db"
+        if not db_path.exists():
+            return {}
+
+        try:
+            import sqlite3
+            conn = sqlite3.connect(f"file:{db_path.as_posix()}?mode=ro", uri=True, timeout=2.0)
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            # Aggregate across turns for the most recent session
+            row = cur.execute(
+                """
+                SELECT 
+                    session_id,
+                    model,
+                    SUM(input_tokens) AS total_input_tokens,
+                    SUM(output_tokens) AS total_output_tokens,
+                    SUM(cache_read_tokens) AS total_cache_read_tokens,
+                    SUM(cache_write_tokens) AS total_cache_write_tokens,
+                    SUM(reasoning_tokens) AS total_reasoning_tokens,
+                    SUM(total_nano_aiu) AS total_nano_aiu,
+                    SUM(duration_ms) AS total_duration_ms,
+                    api_endpoint,
+                    reasoning_effort,
+                    finish_reason
+                FROM assistant_usage_events
+                WHERE session_id = (SELECT session_id FROM assistant_usage_events ORDER BY id DESC LIMIT 1)
+                GROUP BY session_id
+                """
+            ).fetchone()
+            conn.close()
+            if row:
+                return dict(row)
+        except Exception:
+            pass
+        return {}
 
     async def execute_task(
         self,
@@ -181,6 +237,11 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         if self.copilot_home:
             self.copilot_home.mkdir(parents=True, exist_ok=True)
             child_env["COPILOT_HOME"] = str(self.copilot_home)
+
+        # REA-discovered runtime hardening variables (EXP-REA-001)
+        child_env["COPILOT_ALLOW_ALL"] = "true"
+        child_env["COPILOT_FORCE_WINDOWS_HIDE"] = "1"
+        child_env["COPILOT_DEBUG_SKIP_LAUNCH_CHECKS"] = "1"
 
         proc = None
         try:
@@ -278,14 +339,40 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 else:
                     credits_used = 1.0 if proc.returncode == 0 else 0.0
 
+            # Ingest authentic SQLite session telemetry if COPILOT_HOME exists (EXP-REA-001)
+            session_telemetry = self.extract_sqlite_session_telemetry(self.copilot_home)
+            if session_telemetry:
+                if not tokens_used:
+                    tokens_used = (
+                        (session_telemetry.get("total_input_tokens") or 0)
+                        + (session_telemetry.get("total_output_tokens") or 0)
+                    )
+                if ("totalNanoAiu" not in usage_data and "totalPremiumRequestCost" not in usage_data) and session_telemetry.get("total_nano_aiu"):
+                    credits_used = round(float(session_telemetry["total_nano_aiu"]) / 1_000_000_000.0, 2)
+                if model_used in (None, "copilot-cli-autopilot") and session_telemetry.get("model"):
+                    model_used = session_telemetry["model"]
+
             # Calibrated classification order: check exhaustion first, then anchored 429, strictly on non-zero exit
             quota_exhausted = False
             rate_limited_429 = False
+            rate_limit_kind = None
 
             if proc.returncode != 0:
                 combined_tail = f"{stderr_str}\n{stdout_str[-1024:]}".lower()
-                # 1. Monthly quota / credit exhaustion takes precedence
-                if any(
+                # 1. Weekly / monthly quota or credit exhaustion takes precedence
+                if "user_weekly_rate_limited" in combined_tail:
+                    quota_exhausted = True
+                    rate_limit_kind = "user_weekly_rate_limited"
+                elif "user_model_rate_limited" in combined_tail:
+                    rate_limited_429 = True
+                    rate_limit_kind = "user_model_rate_limited"
+                elif "user_global_rate_limited" in combined_tail:
+                    rate_limited_429 = True
+                    rate_limit_kind = "user_global_rate_limited"
+                elif "integration_rate_limited" in combined_tail:
+                    rate_limited_429 = True
+                    rate_limit_kind = "integration_rate_limited"
+                elif any(
                     p in combined_tail
                     for p in [
                         "credit limit",
@@ -297,9 +384,11 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     ]
                 ):
                     quota_exhausted = True
+                    rate_limit_kind = "quota_exhausted"
                 # 2. Transient HTTP 429 rate-limiting checked second
                 elif re.search(r"http[ /]*429|status[: =]*429|too many requests|rate.?limit", combined_tail):
                     rate_limited_429 = True
+                    rate_limit_kind = "rate_limited_429"
 
             if proc.returncode == 0:
                 return {
@@ -312,6 +401,8 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "usage_data": usage_data,
                     "quota_exhausted": False,
                     "rate_limited_429": False,
+                    "rate_limit_kind": None,
+                    "session_telemetry": session_telemetry,
                     "error": None,
                 }
             else:
@@ -325,6 +416,8 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                     "usage_data": usage_data,
                     "quota_exhausted": quota_exhausted,
                     "rate_limited_429": rate_limited_429,
+                    "rate_limit_kind": rate_limit_kind,
+                    "session_telemetry": session_telemetry,
                     "error": f"CLI_EXIT_{proc.returncode}: {stderr_str[:300] if stderr_str else 'Command failed'}",
                 }
 
@@ -344,6 +437,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 "credits_used": 0,
                 "usage_data": {},
                 "quota_exhausted": False,
+                "rate_limited_429": False,
+                "rate_limit_kind": None,
+                "session_telemetry": {},
                 "error": f"TIMEOUT: Exceeded {self.timeout}s execution window",
             }
         except Exception as e:
@@ -362,6 +458,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
                 "credits_used": 0,
                 "usage_data": {},
                 "quota_exhausted": False,
+                "rate_limited_429": False,
+                "rate_limit_kind": None,
+                "session_telemetry": {},
                 "error": f"SUBPROCESS_ERROR: {e}",
             }
         finally:

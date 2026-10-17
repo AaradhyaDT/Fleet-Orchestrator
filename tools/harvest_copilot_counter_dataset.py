@@ -113,6 +113,18 @@ def harvest_synthetic_invariant_counters() -> List[Dict[str, Any]]:
             "fix": "ref_map = {j.ref_id: j for j in items}\nmatches = [(i, ref_map[i.id]) for i in items if i.id in ref_map]",
             "rule": "Asymptotic Big-O Reduction: Replace quadratic nested loops with O(1) hash maps to achieve O(N) complexity.",
         },
+        {
+            "flaw": "if 'user_weekly_rate_limited' in err: retry_immediately()",
+            "error": "Immediate retry on user_weekly_rate_limited creates thrashing and fails continuously.",
+            "fix": "Mark worker account quota exhausted, trigger failover to next account in pool or fallback to auto tier.",
+            "rule": "Quota Governance: On weekly or global quota exhaustion, fail over to an alternate account with positive balance.",
+        },
+        {
+            "flaw": "copilot -p 'run task' --allow-all-tools",
+            "error": "Missing --disallow-temp-dir and headless environment isolation flags allows worker pollution of OS temp dirs.",
+            "fix": "copilot -p 'run task' --autopilot --allow-all --disallow-temp-dir with COPILOT_ALLOW_ALL=true and COPILOT_FORCE_WINDOWS_HIDE=1",
+            "rule": "Worker Subprocess Hardening: Enforce process isolation via --disallow-temp-dir, COPILOT_ALLOW_ALL, and COPILOT_FORCE_WINDOWS_HIDE.",
+        },
     ]
 
     samples = []
@@ -138,6 +150,59 @@ def harvest_synthetic_invariant_counters() -> List[Dict[str, Any]]:
     return samples
 
 
+def harvest_from_session_stores() -> List[Dict[str, Any]]:
+    """
+    Ingests rate-limit events, model routing telemetry, and failure traces
+    directly from SQLite session-store.db files discovered in orchestrator-state.
+    """
+    import sqlite3
+    samples = []
+
+    db_candidates = list(STATE_DIR.glob("jobs/*/copilot-home/session-store.db")) + list(
+        STATE_DIR.glob("logs/*/copilot-home/session-store.db")
+    )
+
+    for db_path in db_candidates:
+        if not db_path.is_file():
+            continue
+        try:
+            conn = sqlite3.connect(f"file:{db_path.as_posix()}?mode=ro", uri=True, timeout=2.0)
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            tables = [row[0] for row in cur.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]
+            if "assistant_usage_events" in tables:
+                rows = cur.execute(
+                    """
+                    SELECT model, total_nano_aiu, duration_ms, reasoning_tokens,
+                           cache_read_tokens, finish_reason
+                    FROM assistant_usage_events
+                    WHERE finish_reason IS NOT NULL
+                    """
+                ).fetchall()
+                for r in rows:
+                    if r["finish_reason"] in ("content_filter", "error", "length"):
+                        prompt = f"Worker model '{r['model']}' terminated with finish reason '{r['finish_reason']}'."
+                        resp = (
+                            f"### Failure Diagnosis\nExecution halted prematurely due to {r['finish_reason']}.\n\n"
+                            "### Remediation\nFallback to higher intelligence tier or adjust prompt frame."
+                        )
+                        samples.append({
+                            "messages": [
+                                {"role": "system", "content": COUNTER_SYSTEM_PROMPT},
+                                {"role": "user", "content": prompt},
+                                {"role": "assistant", "content": resp},
+                            ],
+                            "source": "sqlite_session_store",
+                            "model": r["model"],
+                        })
+            conn.close()
+        except Exception as e:
+            logger.debug(f"Error reading session store {db_path}: {e}")
+
+    return samples
+
+
 def main():
     parser = argparse.ArgumentParser(description="Harvest Copilot Mistake Counter-Dataset.")
     parser.add_argument("--dry-run", action="store_true", help="Print sample count without writing files")
@@ -145,7 +210,8 @@ def main():
 
     mistakes = harvest_from_mistakes_dir()
     invariants = harvest_synthetic_invariant_counters()
-    all_samples = mistakes + invariants
+    session_samples = harvest_from_session_stores()
+    all_samples = mistakes + invariants + session_samples
 
     random.seed(42)
     random.shuffle(all_samples)

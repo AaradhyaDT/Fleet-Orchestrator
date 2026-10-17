@@ -552,6 +552,7 @@ AZMUTH_TOOL_MODULE_NAMES: list[str] = [
     "tools.azmuth_corpus_harvester",
     "tools.azmuth_macro_graph",
     "tools.azmuth_market_sensor",
+    "tools.azmuth_github_sensor",
 ]
 
 
@@ -662,6 +663,25 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
                 break
     except Exception as e:
         logger.debug(f"[Burst-Steal] Ultimatrix sequencer error: {e}")
+
+    # Subtask 3: Azmuth GitHub Sensory Harvester & Intelligence Radar
+    try:
+        from tools.azmuth_github_sensor import AzmuthGitHubSensor, CACHE_FILE as GH_CACHE_FILE
+        should_refresh_gh = True
+        if GH_CACHE_FILE.exists():
+            age = time.time() - GH_CACHE_FILE.stat().st_mtime
+            if age < 900.0:  # 15 min TTL
+                should_refresh_gh = False
+
+        if should_refresh_gh and is_system_idle(threshold_seconds=10.0):
+            check_and_enforce_gear_safety()
+            gh_sensor = AzmuthGitHubSensor()
+            gh_telemetry = gh_sensor.get_cached_telemetry(force_refresh=True)
+            opps = len(gh_telemetry.get("opportunities", []))
+            rels = len(gh_telemetry.get("releases", []))
+            burst_result["tasks_executed"].append(f"github_radar_harvest_{opps}opps_{rels}rels")
+    except Exception as e:
+        logger.debug(f"[Burst-Steal] GitHub sensor harvest error: {e}")
 
     elapsed = time.time() - start_time
     burst_result["elapsed_sec"] = round(elapsed, 2)
