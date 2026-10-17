@@ -428,6 +428,11 @@ def main():
         help="Exit after being idle with empty queue for specified seconds",
     )
 
+    # Submit-DAG
+    p_dag = subparsers.add_parser("submit-dag", help="Submit topological DAG task bundle using CPM scheduler")
+    p_dag.add_argument("file", type=str, help="Path to JSON file containing DAG tasks")
+    p_dag.add_argument("--dry-run", action="store_true", help="Simulate submission without writing task files")
+
     args = parser.parse_args()
 
     if not args.command or args.command == "status":
@@ -449,6 +454,18 @@ def main():
         cmd_watch(args)
     elif args.command == "daemon":
         cmd_daemon(args)
+    elif args.command == "submit-dag":
+        from tools.dag_planner import submit_dag_bundle
+        res = submit_dag_bundle(args.file, state_dir=Path(args.state_dir) if args.state_dir else None, dry_run=args.dry_run)
+        print("===========================================================================")
+        print(f"  DAG TASK BUNDLE SUBMITTED: {res['bundle_id']}")
+        print("===========================================================================")
+        print(f"  Enqueued Tasks   : {res['enqueued_count']}")
+        print(f"  Project Duration : {res['project_duration']:.2f} time units")
+        print(f"  Critical Path    : {' -> '.join(res['critical_path'])}")
+        print(f"  Parallel Slack   : {', '.join(res['parallel_slack']) if res['parallel_slack'] else 'None'}")
+        print(f"  Dry-Run Mode     : {res['dry_run']}")
+        print("===========================================================================")
 
 
 if __name__ == "__main__":

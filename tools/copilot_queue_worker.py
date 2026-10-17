@@ -537,6 +537,17 @@ class CopilotQueueWorker:
 
                     if not self._task_is_eligible(data):
                         continue
+
+                    # DAG Predecessor Satisfaction Gating
+                    if data.get("predecessors"):
+                        try:
+                            from tools.dag_planner import check_predecessors_satisfied
+                            satisfied, pending_preds = check_predecessors_satisfied(data, self.state_dir)
+                            if not satisfied:
+                                continue
+                        except Exception:
+                            pass
+
                     if data.get("status") == "pending":
                         pending_tasks.append(data)
                     elif data.get("status") == "claimed":
