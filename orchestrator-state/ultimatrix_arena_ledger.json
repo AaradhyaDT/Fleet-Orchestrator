@@ -1,118 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-17T09:56:30.965555+00:00",
-  "tournaments_run": 738,
+  "last_tournament_at": "2026-10-17T10:26:33.658865+00:00",
+  "tournaments_run": 756,
   "alleles_benchmarked": 0,
-  "promotions": 82,
+  "promotions": 100,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:51:14.209387+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:51:14.249791+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:51:44.334849+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:51:44.473764+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:51:44.642601+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:51:44.685506+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:14.792256+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:14.930620+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:15.067149+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:15.106053+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:45.261228+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:45.424318+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:45.568296+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:52:45.609468+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:53:15.690614+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:53:15.836903+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:53:15.985165+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:53:16.007227+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T13:07:03.993278+00:00",
       "genes": [
@@ -303,6 +195,114 @@
       "timestamp": "2026-10-17T09:56:30.965451+00:00",
       "genes": [
         "TASK_101_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:57:25.087785+00:00",
+      "genes": [
+        "TASK_DISTINCT_NEIGHBOURS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:59:01.778483+00:00",
+      "genes": [
+        "TASK_DIVISIBLE_MATCHING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:02:18.637822+00:00",
+      "genes": [
+        "TASK_FIBONACCI_MOD"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:07:24.909468+00:00",
+      "genes": [
+        "TASK_GCD_ON_A_CIRCLE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:08:11.838243+00:00",
+      "genes": [
+        "TASK_ALPHABET_ROTATION"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:08:56.472826+00:00",
+      "genes": [
+        "TASK_ALTERNATING_SUBARRAY"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:09:55.794966+00:00",
+      "genes": [
+        "TASK_ANOMALIES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:11:39.403498+00:00",
+      "genes": [
+        "TASK_ATTACK_AND_SPEED"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:12:39.269781+00:00",
+      "genes": [
+        "TASK_BACKPACK_PACKING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:17:05.163788+00:00",
+      "genes": [
+        "TASK_BALANCED_MIN_PAIRING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:18:04.063626+00:00",
+      "genes": [
+        "TASK_BALANCED_NUMBER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:19:08.449166+00:00",
+      "genes": [
+        "TASK_BEST_ARRAY_CUT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:20:11.494387+00:00",
+      "genes": [
+        "TASK_BICYCLE_RENTAL"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:20:55.764099+00:00",
+      "genes": [
+        "TASK_BLACK_SHAPES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:22:49.310371+00:00",
+      "genes": [
+        "TASK_BLACK_WHITE_NECKLACE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:23:25.374052+00:00",
+      "genes": [
+        "TASK_BORING_NUMBER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:24:23.391009+00:00",
+      "genes": [
+        "TASK_BOTTLE_RECYCLING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T10:26:33.658650+00:00",
+      "genes": [
+        "TASK_BOUNDED_DIFFERENCE"
       ]
     }
   ]

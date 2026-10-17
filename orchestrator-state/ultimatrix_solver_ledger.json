@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 35,
-  "tasks_solved": 35,
+  "tasks_attempted": 53,
+  "tasks_solved": 53,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -37,28 +37,28 @@
     "palindrome-centers",
     "powered-addition",
     "101-palindromes",
-    "distinct_neighbours"
+    "distinct_neighbours",
+    "divisible-matching",
+    "fibonacci-mod",
+    "gcd-on-a-circle",
+    "alphabet-rotation",
+    "alternating-subarray",
+    "anomalies",
+    "attack-and-speed",
+    "backpack-packing",
+    "balanced-min-pairing",
+    "balanced-number",
+    "best-array-cut",
+    "bicycle-rental",
+    "black-shapes",
+    "black-white-necklace",
+    "boring-number",
+    "bottle-recycling",
+    "bounded-difference",
+    "bounded-distinct"
   ],
-  "last_solve_at": "2026-10-17T09:56:54.134294+00:00",
+  "last_solve_at": "2026-10-17T10:27:08.090877+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-16T12:05:58.684661+00:00",
-      "slug": "acronyms",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-16T12:42:32.242897+00:00",
-      "slug": "anagrams",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-16T13:06:33.063491+00:00",
-      "slug": "odd-divisor-count",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-16T18:33:23.107753+00:00",
       "slug": "subarrays-xor-sum",
@@ -250,6 +250,114 @@
       "slug": "distinct_neighbours",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 5
+    },
+    {
+      "timestamp": "2026-10-17T09:58:30.727928+00:00",
+      "slug": "divisible-matching",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T09:59:57.044260+00:00",
+      "slug": "fibonacci-mod",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:06:53.547769+00:00",
+      "slug": "gcd-on-a-circle",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:07:40.323214+00:00",
+      "slug": "alphabet-rotation",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:08:24.887827+00:00",
+      "slug": "alternating-subarray",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-17T10:09:24.362900+00:00",
+      "slug": "anomalies",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:10:17.920242+00:00",
+      "slug": "attack-and-speed",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:12:02.719491+00:00",
+      "slug": "backpack-packing",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:16:33.701457+00:00",
+      "slug": "balanced-min-pairing",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:17:32.648967+00:00",
+      "slug": "balanced-number",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:18:36.998382+00:00",
+      "slug": "best-array-cut",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:19:39.981047+00:00",
+      "slug": "bicycle-rental",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:20:24.409162+00:00",
+      "slug": "black-shapes",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:21:32.766078+00:00",
+      "slug": "black-white-necklace",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:22:53.649426+00:00",
+      "slug": "boring-number",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T10:23:51.667690+00:00",
+      "slug": "bottle-recycling",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-17T10:26:02.174301+00:00",
+      "slug": "bounded-difference",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T10:27:08.090780+00:00",
+      "slug": "bounded-distinct",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
   "attempted_slugs": {}
