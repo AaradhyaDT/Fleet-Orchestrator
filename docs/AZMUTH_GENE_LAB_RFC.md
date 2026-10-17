@@ -23,7 +23,7 @@ The **Azmuth Gene Lab** re-architects algorithmic knowledge into a **Genomic Cod
 
 ## 2. Multi-Tiered Genomic Hierarchy
 
-The Codon Stream is partitioned into five distinct structural tiers spanning from physical silicon to symbolic math:
+The Codon Stream is partitioned into six distinct structural tiers spanning from physical silicon to real-world super-domains:
 
 ```text
 The Codon Stream (codon_stream/)
@@ -31,7 +31,8 @@ The Codon Stream (codon_stream/)
 ├── tier1_language/       # Core Semantics: C++20 (RAII, constexpr, custom allocators) | Python (CPython C-extensions)
 ├── tier2_primitives/     # Workhorse Genes: Static Forward-Star, Segment/Fenwick Trees, SplitMix64
 ├── tier3_cubic_breakers/ # High-Skill Invariants: O(N³) → O(N² / N log N), Bitset 64x, Knuth/CHT DP, Loop Tiling
-└── tier4_symbolic/       # Frontier Frontiers: Fixed-Parameter Tractability (FPT), SMT Invariants, Wolfram/SymPy
+├── tier4_symbolic/       # Frontier Frontiers: Fixed-Parameter Tractability (FPT), SMT Invariants, Wolfram/SymPy
+└── tier5_super_domain/   # Super-Domain Foresight: Bio-Spiking LIF, Thalamic Normalizer, Gut Avoidance, CBF Inhibitory Safety, Lead-Lag Ripple, Historical Crisis Engrams, Chokepoint Alpha
 ```
 
 ---
@@ -115,4 +116,24 @@ To prevent "genetic pollution" and maintain zero-drift reliability across the ec
 * **Phase 3: Autonomous Polyglot Synthesis & Galvanic Mesh [ACTIVE — Target: 250 Genes]**
   - Implement dual C++20/Python cross-synthesis arena racing head-to-head in `ultimatrix_verifier.py`.
   - Deploy lightweight headless worker daemons across secondary laptops/devices to pull idle work units, run allele tournaments, and submit signed **Proof-of-Fitness** PRs back to the mothership.
+
+---
+
+## 6. Bird's-Eye Relational Intelligence & 6-Universe Swappable Cartridges
+
+Crossing bounds from algorithmic coding into real-world master planning ([Issue #181](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/181)), the Azmuth engine mounts domain knowledge as **Cortical Cartridges (`runtimes/universes/u0..u5`)** over a lean mathematical core (`tools/azmuth_macro_graph.py`):
+
+1. **The 6 Swappable Cortical Cartridges (0 MB RAM / 0% CPU on disk when unmounted)**:
+   - `U0`: Ecosystem Autonomic Mesh (28 modules, skills, MCPs, worker pool homeostasis)
+   - `U1`: Research & Publication Arbitrage (`SPARK`, `BiasAperture`, `BRL`, `Nepali-OCR`, SOTA gaps)
+   - `U2`: AI Compute Frontier (16GB RAM, Arc iGPU, NPU, Colab, SLMs/LLMs, RPM/RPD ceilings)
+   - `U3`: Career Opportunity Alpha (Labs, fellowships, grants, 2nd-hop maintainer bottlenecks)
+   - `U4`: Macro Capital Markets (24-node global chip/macro chain + Nepal/NEPSE liquidity chain + 6 Crisis Engrams)
+   - `U5`: Hardware Physics & BOM (Sensors, ESP32-S3, Jetson, RF/DSP/Shannon limits)
+2. **8 Bio-Mimetic Optimization Laws ($20\text{-Watt}$ Reference)**:
+   - Vasodilation (1 mounted lobe in RAM at $<15\text{MB}$), Dual-Perspective (`--view 3pv` vs. `--view fpv`), Thalamic Habituation ($|Z| < 0.8\sigma \to 0$ spikes), Top-$k$ Pre-Contact Gut Avoidance (`PRE_CONTACT_AVOID`), Control Barrier Function (CBF) Mid-Flight Braking (`CATCH_AND_ARREST`), and Near-Miss Core Memory Stamping (`core_memory_engrams.json`).
+3. **The 3-Stream Live Sensory Poller (`tools/azmuth_market_sensor.py`)**:
+   - Stream 1: Zero-key public Yahoo Finance / FRED / Stooq + local telemetry
+   - Stream 2: RSS / event keyword scanner
+   - Stream 3: Sub-10ms deterministic delta caching in `orchestrator-state/macro_sensor_cache.json`.
 

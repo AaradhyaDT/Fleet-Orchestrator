@@ -1,52 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-17T04:17:43.900095+00:00",
-  "tournaments_run": 726,
+  "last_tournament_at": "2026-10-17T09:30:17.503811+00:00",
+  "tournaments_run": 733,
   "alleles_benchmarked": 0,
-  "promotions": 70,
+  "promotions": 77,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:49:42.927413+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:13.005906+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:13.150260+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:13.294449+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:13.331908+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:18.099805+00:00",
-      "genes": [
-        "TASK_ANAGRAMS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:43.420719+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:50:43.553351+00:00",
       "genes": [
@@ -303,6 +261,48 @@
       "timestamp": "2026-10-17T04:17:43.900000+00:00",
       "genes": [
         "TASK_GCD_REBUILD"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:07:53.059895+00:00",
+      "genes": [
+        "TASK_REVERSE_SUBARRAY"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:09:04.994955+00:00",
+      "genes": [
+        "TASK_ADDITION_TIME"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:11:06.056439+00:00",
+      "genes": [
+        "TASK_DISTINCT_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:13:33.977260+00:00",
+      "genes": [
+        "TASK_DOUBLE_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:20:57.781128+00:00",
+      "genes": [
+        "TASK_FIBONACCI_REPRESENTATIONS_SMALL"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:26:46.785322+00:00",
+      "genes": [
+        "TASK_FREE_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:30:17.503707+00:00",
+      "genes": [
+        "TASK_MAKE_IT_DIVISIBLE_BY_25"
       ]
     }
   ]

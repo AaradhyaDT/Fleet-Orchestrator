@@ -100,25 +100,37 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 
 ### Phase 3: Autonomous CPM DAG Planner & SKU Expansion Engine
 *Objective:* Implement dependency-ordered Critical Path Method (CPM) DAG scheduling ([Issues #28](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/28)–[#31](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/31), [#34](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/34)).
-- [ ] Implement `tools/dag_planner.py` supporting linear, fan-out, and diamond topologies.
-- [ ] Integrate `DeterministicCPMSolver` to calculate Earliest/Latest start times, Total Float, and the Critical Path.
-- [ ] Enforce dependency gating and cascade-blocking in `tools/copilot_queue_worker.py`.
-- [ ] Add `submit-dag`, `dag-status`, and `dag-cancel` subcommands to `fleet.bat`.
-- [ ] Create unit test suite `tests/test_dag_planner.py`.
+- [x] Implement `tools/dag_planner.py` supporting linear, fan-out, and diamond topologies.
+- [x] Integrate `DeterministicCPMSolver` to calculate Earliest/Latest start times, Total Float, and the Critical Path.
+- [x] Enforce dependency gating and cascade-blocking in `tools/copilot_queue_worker.py`.
+- [x] Add `submit-dag`, `dag-status`, and `dag-cancel` subcommands to `fleet.bat` and `tools/unified_fleet_cli.py`.
+- [x] Create unit test suite `tests/test_dag_planner.py` (6/6 tests passing).
 
 ### Phase 4: Autonomous GitHub Sentinel Loop
 *Objective:* Enable the fleet to autonomously pick up GitHub issues and submit verified PRs ([Issues #35](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/35)–[#39](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/39)).
-- [ ] Implement `tools/github_issue_sentinel.py` to poll issues labeled `sentinel-ready` via `gh issue list`.
-- [ ] Route issue intent through `tools/fast_intent_router.py` to determine tier, timeout floor, and adapter.
-- [ ] Dispatch execution inside isolated `.worktrees/task_gh_<repo>_<number>`.
-- [ ] Enforce local test gates (`pytest` + `ruff`).
-- [ ] Dispatch automated PRs (`sync.bat -PR` / `gh pr create`) with `Closes #<id>` and test manifests.
-- [ ] Add unit test suite `tests/test_github_issue_sentinel.py`.
+- [x] Implement `tools/github_issue_sentinel.py` to poll issues labeled `sentinel-ready` via `gh issue list`.
+- [x] Route issue intent through `tools/fast_intent_router.py` to determine tier, timeout floor, and adapter.
+- [x] Dispatch execution inside isolated `.worktrees/task_gh_<repo>_<number>`.
+- [x] Enforce local test gates (`pytest` + `ruff`).
+- [x] Dispatch automated PRs (`sync.bat -PR` / `gh pr create`) with `Closes #<id>` and test manifests.
+- [x] Add unit test suite `tests/test_github_issue_sentinel.py` (3/3 tests passing).
 
 ### Phase 5: Unified Desktop Control Center GUI v2.1
 *Objective:* Real-time high-DPI desktop visualization of the entire swarm.
-- [ ] Add Tab 6: `🧬 Azmuth & Ultimatrix` to `tools/fleet_gui.py` (daemon status, gear switcher, codon stream genome browser, DNA splicer).
-- [ ] Enhance Tab 2 (`Pipeline Tasks`) with interactive CPM DAG visualization badges.
+- [x] Add Tab 6: `🧬 Azmuth & Ultimatrix` to `tools/fleet_gui.py` (daemon status, gear switcher, codon stream genome browser, DNA splicer).
+- [x] Enhance Tab 2 (`Pipeline Tasks`) with interactive CPM DAG visualization badges.
+
+### Phase 6: Azmuth Neuromorphic, Temporal-Triad & Multi-Universe Foresight Engine
+*Objective:* Build Bird's-Eye Relational Intelligence & Foresight Engine across 6 swappable cortical cartridges (`U0`–`U5`) with 8 bio-mimetic optimization laws ([Issue #181](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/181)).
+- [ ] Implement `tools/azmuth_macro_graph.py` with `HomeostaticBaselineNormalizer` (Layers 1-3), `ThalamicSignalFilter` (|Z| < 0.8σ), and `PreContactAvoidanceGate` (Top-5 path-attenuated D_gut).
+- [ ] Implement `InhibitorySafetyCatch` with closed-form Control Barrier Function (CBF) braking scalar alpha_brake (`CATCH_AND_ARREST`).
+- [ ] Implement `DualPerspectiveRenderer` supporting `--view 3pv` (allocentric bird's-eye map) and `--view fpv --target <NODE>` (egocentric node horizon).
+- [ ] Implement `ForesightAlphaEngine` with Signals 1-4, Hebbian synaptic consolidation, and plain-English actionable decision lines.
+- [ ] Sequence 6 canonical Tier-5 Super-Domain genes in `Competitive-Programming/codon_stream/tier5_super_domain/` (`bio_lif_spiking_shock_propagator`, `bio_thalamic_habituation_normalizer`, `bio_inhibitory_reflex_safety_catch`, `quant_lead_lag_unpriced_ripple`, `bio_hebbian_engram_pattern_matcher`, `quant_chokepoint_betweenness_alpha`).
+- [ ] Materialize Cortical Lobes `U0` (Ecosystem Mesh), `U1` (Research Arbitrage), and `U2` (AI Compute Frontier) in `Competitive-Programming/runtimes/universes/`.
+- [ ] Materialize Cortical Lobes `U3` (Career Alpha), `U4` (24-Node Chip Supply Chain + Nepal Macro Liquidity + 6 Crisis Engrams), and `U5` (Hardware Physics/BOM).
+- [ ] Build `tools/azmuth_market_sensor.py` (3-stream live poller: Yahoo Finance / FRED / Stooq, RSS scanner, <10ms delta cache).
+- [ ] Integrate into `tools/azmuth_daemon.py`, GUI Tab 6 radar button, and build `tests/test_azmuth_macro_graph.py`.
 
 ---
 
@@ -129,4 +141,6 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 | **Phase 7** | `0bfe208` | `38902470555` | **SUCCESS** (9/9 jobs) | Closed-Loop Evolutionary Scheduler, Anti-Starvation Filter, Auto-Solution Sequencing | 2026-10-16 |
 | **Phase 8** | `cd9e4a0` | `38903713511` | **SUCCESS** (9/9 jobs) | Spliced-DNA Fallback Synthesis, Self-Healing Repair, Empirical Judge Sandbox | 2026-10-16 |
 | **Phase 1 (Exp)** | `1dfc4a2` | `38918736819` | **SUCCESS** (9/9 jobs) | Copilot Muscle Bridge, Multi-Model Gemini Fallback, Mutator Throttle | 2026-10-16 |
-| **Phase 2.5** | Pending Sync | Pending Sync | **PASSED** (16/16 tests) | 3-Tier Language Reference Harvester (30 mods), Solver Escalation, 162 Codon Genes | 2026-10-17 |
+| **Phase 2.5** | `663010e` | `38920412890` | **PASSED** (16/16 tests) | 3-Tier Language Reference Harvester (30 mods), Solver Escalation, 162 Codon Genes | 2026-10-17 |
+| **Phase 3-5** | `52d83bd` | `38923489110` | **PASSED** (25/25 tests) | Tab 6 GUI, CPM DAG Planner (`dag_planner.py`), GitHub Sentinel (`github_issue_sentinel.py`) | 2026-10-17 |
+| **Phase 6** | *In Progress* | Pending | *Pending* | Azmuth Neuromorphic Foresight Engine & 6-Universe Cartridges ([#181](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/181)) | 2026-10-17 |
