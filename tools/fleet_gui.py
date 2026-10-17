@@ -1599,6 +1599,9 @@ class FleetControlApp(tk.Tk):
         btn_burst = tk.Button(act_bar, text="⚡ Run Single Burst", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_burst, cursor="hand2")
         btn_burst.pack(side="right", padx=12)
 
+        btn_foresight = tk.Button(act_bar, text="🔭 Run Foresight Scan", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_PURPLE, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_foresight, cursor="hand2")
+        btn_foresight.pack(side="right", padx=4)
+
         btn_harvest_lang = tk.Button(act_bar, text="🌐 Harvest Language Refs", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_harvest_languages, cursor="hand2")
         btn_harvest_lang.pack(side="right", padx=4)
 
@@ -1707,6 +1710,16 @@ class FleetControlApp(tk.Tk):
         # Render Codon Stream Table
         cp_root = REPO_ROOT.parent / "Competitive-Programming"
         codon_dir = cp_root / "codon_stream"
+        # Update Codon Stream HUD metrics
+        if codon_dir.exists():
+            t_counts = {}
+            for t_idx, t_name in enumerate(["tier0_hardware", "tier1_language", "tier2_primitives", "tier3_domain_breakers", "tier4_symbolic", "tier5_super_domain"]):
+                tp = codon_dir / t_name
+                t_counts[f"T{t_idx}"] = len(list(tp.glob("*.json"))) if tp.exists() else 0
+            total_g = sum(t_counts.values())
+            self.lbl_az_genes.config(text=f"{total_g} / 100 Genes [MET]")
+            self.lbl_az_tiers.config(text=f"T0: {t_counts.get('T0',0)} | T1: {t_counts.get('T1',0)} | T2: {t_counts.get('T2',0)} | T3: {t_counts.get('T3',0)} | T4: {t_counts.get('T4',0)} | T5: {t_counts.get('T5',0)}")
+
         if codon_dir.exists() and len(self.tree_codon.get_children()) == 0:
             tier_dirs = {
                 "T0": codon_dir / "tier0_hardware",
@@ -1714,6 +1727,7 @@ class FleetControlApp(tk.Tk):
                 "T2": codon_dir / "tier2_primitives",
                 "T3": codon_dir / "tier3_domain_breakers",
                 "T4": codon_dir / "tier4_symbolic",
+                "T5": codon_dir / "tier5_super_domain",
             }
             gene_rows = []
             for t_label, t_path in tier_dirs.items():
@@ -1802,6 +1816,23 @@ class FleetControlApp(tk.Tk):
                 self.log("[SUCCESS] 30 Global Language Reference cards harvested & materialized.")
             except Exception as e:
                 self.log(f"[ERROR] Harvest failed: {e}")
+            self.refresh_all()
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def on_azmuth_foresight(self):
+        def _worker():
+            self.log("Running Azmuth Neuromorphic Foresight Scan across all 6 Cartridges...")
+            cmd = [sys.executable, str(REPO_ROOT / "tools" / "azmuth_macro_graph.py"), "--foresight"]
+            try:
+                flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+                proc = run_background(cmd, capture_output=True, text=True, cwd=str(REPO_ROOT), creationflags=flags)
+                for line in proc.stdout.splitlines():
+                    if line.strip():
+                        self.log(line)
+                self.log("[SUCCESS] Foresight brief generated: orchestrator-state/macro_foresight_brief.json")
+            except Exception as e:
+                self.log(f"[ERROR] Foresight scan failed: {e}")
             self.refresh_all()
 
         threading.Thread(target=_worker, daemon=True).start()

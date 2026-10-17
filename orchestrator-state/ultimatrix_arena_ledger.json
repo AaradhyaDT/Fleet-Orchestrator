@@ -1,28 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-17T09:30:17.503811+00:00",
-  "tournaments_run": 733,
+  "last_tournament_at": "2026-10-17T09:50:31.170345+00:00",
+  "tournaments_run": 736,
   "alleles_benchmarked": 0,
-  "promotions": 77,
+  "promotions": 80,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:50:43.553351+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:43.695075+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:50:43.735160+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:51:13.913091+00:00",
       "genes": [
@@ -303,6 +285,24 @@
       "timestamp": "2026-10-17T09:30:17.503707+00:00",
       "genes": [
         "TASK_MAKE_IT_DIVISIBLE_BY_25"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:42:09.473680+00:00",
+      "genes": [
+        "TASK_MATRIX_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:49:11.979642+00:00",
+      "genes": [
+        "TASK_NOGCD"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T09:50:31.170239+00:00",
+      "genes": [
+        "TASK_PALINDROME_CENTERS"
       ]
     }
   ]

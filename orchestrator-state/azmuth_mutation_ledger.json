@@ -1,18 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 586,
-  "promotions_won": 90,
-  "last_mutation_at": "2026-10-17T04:18:59.169569+00:00",
+  "mutations_applied": 587,
+  "promotions_won": 91,
+  "last_mutation_at": "2026-10-17T09:50:32.812186+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-16T14:44:56.652300+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_6755312_techmorph_mut_fast_io"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
     {
       "timestamp": "2026-10-16T14:44:57.523767+00:00",
       "gene_id": "TASK_WORD_ORDERING",
@@ -447,6 +438,15 @@
     },
     {
       "timestamp": "2026-10-17T04:18:59.169474+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T09:50:32.812064+00:00",
       "gene_id": "TEST_MUT_GENE",
       "mutant_created": [
         "orig_impl_mut_fast_io"

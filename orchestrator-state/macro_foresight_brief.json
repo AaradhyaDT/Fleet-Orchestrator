@@ -1,0 +1,98 @@
+{
+  "ripples": [],
+  "pinches": [],
+  "engram_matches": [
+    {
+      "engram_id": "REGIME_2021_CHIP_CHOKEPOINT_BOOM",
+      "label": "2021 Wafer Allocation, Lead-Time Backlog & Packaging Boom",
+      "hybrid_score": 0.6228,
+      "coverage_pct": 100.0,
+      "forward_30d": "+12.0% Semis / Margin compression across downstream consumer assembly",
+      "forward_90d": "+35.0% Upstream semiconductor equipment manufacturers (ASML/Lam/KLA)",
+      "directive": "Overweight upstream sole-source suppliers with pricing power."
+    },
+    {
+      "engram_id": "REGIME_2023_2026_AI_CAPEX_SUPERCYCLE",
+      "label": "2023-2026 Sovereign & Hyperscaler Generative AI Capex Supercycle",
+      "hybrid_score": 0.4961,
+      "coverage_pct": 100.0,
+      "forward_30d": "+14.0% Accelerators & High-Bandwidth Memory / Power grid infrastructure alerts",
+      "forward_90d": "+28.0% Upstream lithography, packaging, and high-voltage transmission equipment",
+      "directive": "Ride the 2nd-hop wave: power generation, cooling, and advanced packaging suppliers."
+    },
+    {
+      "engram_id": "REGIME_GOLDILOCKS_LOW_VOL_EXPANSION",
+      "label": "Tranquil Goldilocks Low-Volatility Corporate Expansion",
+      "hybrid_score": 0.1944,
+      "coverage_pct": 100.0,
+      "forward_30d": "+3.5% Steady upward equity trend with minimal drawdown",
+      "forward_90d": "+8.0% Broad-based sector participation and IPO reactivation",
+      "directive": "Full risk-on deployment with trailing stops."
+    },
+    {
+      "engram_id": "REGIME_2008_LIQUIDITY_FREEZE",
+      "label": "2008 Global Financial Crisis & Banking Liquidity Freeze",
+      "hybrid_score": 0.1649,
+      "coverage_pct": 100.0,
+      "forward_30d": "-18.5% Equities / Multi-standard-deviation flight to Treasuries and Gold",
+      "forward_90d": "-34.0% Global Asset Drawdown before coordinated central bank liquidity swap lines",
+      "directive": "Preserve maximum dry powder; liquid assets strictly in cash and sovereign anchors."
+    },
+    {
+      "engram_id": "REGIME_2022_RATE_SHOCK_VALUATION_RESET",
+      "label": "2022 Aggressive Central Bank Rate Shock & Multiple Compression",
+      "hybrid_score": -0.0513,
+      "coverage_pct": 100.0,
+      "forward_30d": "-10.0% High-multiple tech compression / Outperformance of cash flow anchors",
+      "forward_90d": "Base-building in cash-rich balance sheet monopolies",
+      "directive": "Avoid negative-earnings tech; filter for fortress cash reserves."
+    },
+    {
+      "engram_id": "REGIME_2020_SUPPLY_CHAIN_HALT",
+      "label": "2020 Sudden Global Physical Supply Chain & Fab Outage",
+      "hybrid_score": -0.0866,
+      "coverage_pct": 100.0,
+      "forward_30d": "V-shaped monetary easing trigger / Immediate liquidity rebound",
+      "forward_90d": "Historical rally in digital hyperscalers and semiconductor manufacturing capacity",
+      "directive": "Identify structural bottlenecks whose demand is postponed rather than destroyed."
+    }
+  ],
+  "systemic_chokepoints": [
+    {
+      "node_id": "TSM",
+      "label": "Taiwan Semiconductor Mfg Co (Leading-Edge Wafer & CoWoS)",
+      "betweenness": 0.0538,
+      "max_downstream_hhi": 1.0,
+      "chokepoint_alpha": 0.5269
+    },
+    {
+      "node_id": "NVDA",
+      "label": "NVIDIA Corp (GPU Compute & CUDA Moat)",
+      "betweenness": 0.0492,
+      "max_downstream_hhi": 1.0,
+      "chokepoint_alpha": 0.5246
+    },
+    {
+      "node_id": "CD_RATIO",
+      "label": "Nepal Banking Credit-to-Deposit Ratio",
+      "betweenness": 0.0015,
+      "max_downstream_hhi": 1.0,
+      "chokepoint_alpha": 0.5008
+    },
+    {
+      "node_id": "ARM",
+      "label": "Arm Holdings (Silicon Architecture & IP)",
+      "betweenness": 0.0,
+      "max_downstream_hhi": 1.0,
+      "chokepoint_alpha": 0.5
+    },
+    {
+      "node_id": "VIX",
+      "label": "CBOE Volatility Index (^VIX Macro Fear Valve)",
+      "betweenness": 0.0,
+      "max_downstream_hhi": 1.0,
+      "chokepoint_alpha": 0.5
+    }
+  ],
+  "gut_avoidance_advisories": []
+}

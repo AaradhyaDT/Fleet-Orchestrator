@@ -550,6 +550,8 @@ AZMUTH_TOOL_MODULE_NAMES: list[str] = [
     "tools.ultimatrix_splicer",
     "tools.ultimatrix_mutator",
     "tools.azmuth_corpus_harvester",
+    "tools.azmuth_macro_graph",
+    "tools.azmuth_market_sensor",
 ]
 
 
@@ -879,11 +881,12 @@ def main() -> int:
 
         # Codon stream statistics
         cp_codon = Path("F:/Aaradhya-Dev-Tamrakar/Competitive-Programming/codon_stream")
-        tier_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
+        tier_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
         total_genes = 0
+        tier_names = ['hardware', 'language', 'primitives', 'cubic_breakers', 'symbolic', 'super_domain']
         if cp_codon.exists():
-            for t_idx in range(5):
-                t_dir = cp_codon / f"tier{t_idx}_{['hardware', 'language', 'primitives', 'cubic_breakers', 'symbolic'][t_idx]}"
+            for t_idx in range(6):
+                t_dir = cp_codon / f"tier{t_idx}_{tier_names[t_idx]}"
                 if t_dir.exists():
                     cnt = len(list(t_dir.glob("*.json")))
                     tier_counts[t_idx] = cnt
@@ -946,7 +949,7 @@ def main() -> int:
         print(f"  Total Genes       : {total_genes} (Phase 2 Target: 100 [MET] | Phase 3: 250)")
         print(f"  Tier 0 (Hardware) : {tier_counts[0]} | Tier 1 (Language) : {tier_counts[1]}")
         print(f"  Tier 2 (Primitive): {tier_counts[2]} | Tier 3 (Breakers) : {tier_counts[3]}")
-        print(f"  Tier 4 (Symbolic) : {tier_counts[4]}")
+        print(f"  Tier 4 (Symbolic) : {tier_counts[4]} | Tier 5 (Super-Domain) : {tier_counts[5]}")
         print(f"  Global Lang Refs  : {lang_harvested} / {lang_total} Canonical Modules")
         print(f"  Problems Indexed  : {total_indexed} / 696 Tasks")
         print(f"  Verified Solved   : {tasks_solved} Tasks (100% Sample Verified)")
