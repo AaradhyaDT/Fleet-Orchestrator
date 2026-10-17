@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u1_research_arbitrage",
+  "cortical_lobe": "Research & Publication Arbitrage Cortex",
+  "sensory_adapter": "academic_benchmark_tracker",
+  "description": "Scientific discovery cortex mapping benchmark datasets to published baselines, compute-heavy SOTA extremes, and structural hardware/explainability gaps.",
+  "nodes": [
+    {
+      "id": "FALL_DETECTION_SOTA",
+      "label": "Transformer Heavy Fall Detection (MobiFall/SisFall)",
+      "node_type": "BENCHMARK_SOTA",
+      "unit": "f1_score",
+      "current_value": 0.984,
+      "layer1_homeostatic": { "mu0": 0.92, "sigma0": 0.03, "iqr": 0.04, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.86, "p95": 0.98 },
+      "layer3_nociceptive": { "abs_min": 0.70, "abs_max": 1.0, "survival_limit": 0.90 },
+      "reflex_limiters": { "max_action_step": 0.05, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "SPARK_TINYML_ACCURACY",
+      "label": "SPARK Edge IMU Model (sub-100KB SRAM)",
+      "node_type": "RESEARCH_TARGET",
+      "unit": "f1_score",
+      "current_value": 0.962,
+      "layer1_homeostatic": { "mu0": 0.90, "sigma0": 0.03, "iqr": 0.04, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.85, "p95": 0.97 },
+      "layer3_nociceptive": { "abs_min": 0.75, "abs_max": 1.0, "survival_limit": 0.92 },
+      "reflex_limiters": { "max_action_step": 0.04, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "SHAP_ATTRIBUTION_LATENCY",
+      "label": "KernelSHAP Edge Feasibility Latency",
+      "node_type": "EXPLAINABILITY_GAP",
+      "unit": "latency_ms",
+      "current_value": 14.2,
+      "layer1_homeostatic": { "mu0": 25.0, "sigma0": 8.0, "iqr": 10.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 10.0, "p95": 45.0 },
+      "layer3_nociceptive": { "abs_min": 5.0, "abs_max": 200.0, "survival_limit": 100.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "BIAS_APERTURE_PARITY",
+      "label": "Demographic Parity Disparity (Vision Fairness)",
+      "node_type": "FAIRNESS_GAP",
+      "unit": "disparity_ratio",
+      "current_value": 0.038,
+      "layer1_homeostatic": { "mu0": 0.06, "sigma0": 0.02, "iqr": 0.025, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.015, "p95": 0.095 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 0.20, "survival_limit": 0.12 },
+      "reflex_limiters": { "max_action_step": 0.03, "collateral_harm_ceiling": 0.80 }
+    },
+    {
+      "id": "NEPALI_OCR_CER",
+      "label": "Devanagari Document Character Error Rate",
+      "node_type": "BENCHMARK_SOTA",
+      "unit": "cer_pct",
+      "current_value": 4.8,
+      "layer1_homeostatic": { "mu0": 8.0, "sigma0": 2.5, "iqr": 3.0, "tau0_days": 21 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 3.5, "p95": 14.0 },
+      "layer3_nociceptive": { "abs_min": 1.0, "abs_max": 35.0, "survival_limit": 20.0 },
+      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.85 }
+    }
+  ],
+  "synapses": [
+    { "source": "FALL_DETECTION_SOTA", "target": "SPARK_TINYML_ACCURACY", "edge_type": "BENCHMARKS_AGAINST", "weight": 0.88, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "SPARK_TINYML_ACCURACY", "target": "SHAP_ATTRIBUTION_LATENCY", "edge_type": "CONSTRAINED_BY", "weight": 0.78, "lag_days": 7, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "FALL_DETECTION_SOTA", "target": "SHAP_ATTRIBUTION_LATENCY", "edge_type": "REQUIRES_EXPLANATION", "weight": 0.70, "lag_days": 14, "evidence_tier": "HEURISTIC_HYPOTHESIS" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_TINYML_EXPLAINABILITY_ARBITRAGE",
+      "label": "TinyML Real-Time Explainability Arbitrage Breakthrough",
+      "signature_z": { "FALL_DETECTION_SOTA": 1.8, "SPARK_TINYML_ACCURACY": 2.1, "SHAP_ATTRIBUTION_LATENCY": -1.5 },
+      "forward_30d": "Publishable conference paper draft with <100KB footprint and rigorous SHAP guarantees",
+      "forward_90d": "Accepted paper in flagship embedded AI or healthcare informatics venue",
+      "actionable_directive": "Package asymmetric edge: sub-100KB TinyML IMU inference combined with micro-attribution."
+    }
+  ]
+}

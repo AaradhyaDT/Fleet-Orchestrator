@@ -1,0 +1,378 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u4_macro_capital_markets",
+  "cortical_lobe": "Macro & Capital Markets Cortex",
+  "sensory_adapter": "market_three_stream",
+  "description": "Multi-hop global semiconductor/AI supply chain, macro valves (^VIX, yields, commodities), and Nepal/NEPSE macro liquidity chain.",
+  "nodes": [
+    {
+      "id": "ASML",
+      "label": "ASML Holding NV (EUV/DUV Lithography Monopoly)",
+      "node_type": "SUPPLY_CHOKENODE",
+      "unit": "pct_return_30d",
+      "current_value": 3.8,
+      "layer1_homeostatic": { "mu0": 2.5, "sigma0": 7.5, "iqr": 9.0, "tau0_days": 180 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -12.0, "p95": 16.0 },
+      "layer3_nociceptive": { "abs_min": -45.0, "abs_max": 55.0, "survival_limit": -35.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "ZEISS",
+      "label": "Carl Zeiss SMT (EUV Optics & Mirrors)",
+      "node_type": "SUPPLY_CHOKENODE",
+      "unit": "pct_revenue_growth",
+      "current_value": 8.0,
+      "layer1_homeostatic": { "mu0": 6.0, "sigma0": 4.0, "iqr": 5.0, "tau0_days": 120 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -2.0, "p95": 14.0 },
+      "layer3_nociceptive": { "abs_min": -20.0, "abs_max": 35.0, "survival_limit": -10.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "TSM",
+      "label": "Taiwan Semiconductor Mfg Co (Leading-Edge Wafer & CoWoS)",
+      "node_type": "SUPPLY_CHOKENODE",
+      "unit": "pct_return_30d",
+      "current_value": 5.2,
+      "layer1_homeostatic": { "mu0": 3.0, "sigma0": 6.5, "iqr": 8.0, "tau0_days": 90 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -10.0, "p95": 15.0 },
+      "layer3_nociceptive": { "abs_min": -40.0, "abs_max": 60.0, "survival_limit": -30.0 },
+      "reflex_limiters": { "max_action_step": 12.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "SK_HYNIX",
+      "label": "SK Hynix (High-Bandwidth Memory HBM3e/HBM4)",
+      "node_type": "SUPPLY_CHOKENODE",
+      "unit": "pct_return_30d",
+      "current_value": 6.8,
+      "layer1_homeostatic": { "mu0": 3.5, "sigma0": 9.0, "iqr": 11.0, "tau0_days": 60 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -14.0, "p95": 20.0 },
+      "layer3_nociceptive": { "abs_min": -50.0, "abs_max": 75.0, "survival_limit": -40.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "MU",
+      "label": "Micron Technology (DRAM & HBM Memory)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 4.1,
+      "layer1_homeostatic": { "mu0": 2.0, "sigma0": 8.5, "iqr": 10.0, "tau0_days": 45 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -13.0, "p95": 18.0 },
+      "layer3_nociceptive": { "abs_min": -50.0, "abs_max": 70.0, "survival_limit": -35.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "NVDA",
+      "label": "NVIDIA Corp (GPU Compute & CUDA Moat)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 7.5,
+      "layer1_homeostatic": { "mu0": 4.0, "sigma0": 10.0, "iqr": 12.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -15.0, "p95": 22.0 },
+      "layer3_nociceptive": { "abs_min": -60.0, "abs_max": 85.0, "survival_limit": -45.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "AMD",
+      "label": "Advanced Micro Devices (MI300 AI Accelerators & EPYC)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 2.8,
+      "layer1_homeostatic": { "mu0": 2.5, "sigma0": 9.5, "iqr": 11.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -14.0, "p95": 19.0 },
+      "layer3_nociceptive": { "abs_min": -55.0, "abs_max": 75.0, "survival_limit": -40.0 },
+      "reflex_limiters": { "max_action_step": 18.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "AVGO",
+      "label": "Broadcom (Custom ASIC Accelerators & SerDes Networking)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 4.5,
+      "layer1_homeostatic": { "mu0": 3.0, "sigma0": 7.0, "iqr": 8.5, "tau0_days": 45 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -10.0, "p95": 16.0 },
+      "layer3_nociceptive": { "abs_min": -40.0, "abs_max": 60.0, "survival_limit": -30.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "ARM",
+      "label": "Arm Holdings (Silicon Architecture & IP)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 3.2,
+      "layer1_homeostatic": { "mu0": 3.0, "sigma0": 11.0, "iqr": 13.0, "tau0_days": 60 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -16.0, "p95": 24.0 },
+      "layer3_nociceptive": { "abs_min": -50.0, "abs_max": 80.0, "survival_limit": -40.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "AAPL",
+      "label": "Apple Inc (Consumer Silicon & Edge AI Client)",
+      "node_type": "COMPANY",
+      "unit": "pct_return_30d",
+      "current_value": 1.8,
+      "layer1_homeostatic": { "mu0": 2.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 45 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -7.0, "p95": 11.0 },
+      "layer3_nociceptive": { "abs_min": -30.0, "abs_max": 40.0, "survival_limit": -25.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "MSFT",
+      "label": "Microsoft Corp (Azure Cloud & AI Hyperscaler)",
+      "node_type": "HYPERSCALER",
+      "unit": "pct_return_30d",
+      "current_value": 2.2,
+      "layer1_homeostatic": { "mu0": 2.2, "sigma0": 5.5, "iqr": 6.5, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -8.0, "p95": 12.0 },
+      "layer3_nociceptive": { "abs_min": -35.0, "abs_max": 45.0, "survival_limit": -28.0 },
+      "reflex_limiters": { "max_action_step": 12.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "GOOGL",
+      "label": "Alphabet Inc (GCP Cloud, TPU v5e/v6e & Gemini AI)",
+      "node_type": "HYPERSCALER",
+      "unit": "pct_return_30d",
+      "current_value": 2.6,
+      "layer1_homeostatic": { "mu0": 2.4, "sigma0": 6.0, "iqr": 7.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -9.0, "p95": 13.0 },
+      "layer3_nociceptive": { "abs_min": -35.0, "abs_max": 50.0, "survival_limit": -30.0 },
+      "reflex_limiters": { "max_action_step": 12.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "META",
+      "label": "Meta Platforms (Llama Open Weights & Capex Cluster)",
+      "node_type": "HYPERSCALER",
+      "unit": "pct_return_30d",
+      "current_value": 3.4,
+      "layer1_homeostatic": { "mu0": 3.0, "sigma0": 8.0, "iqr": 9.5, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -12.0, "p95": 17.0 },
+      "layer3_nociceptive": { "abs_min": -65.0, "abs_max": 75.0, "survival_limit": -45.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "AMZN",
+      "label": "Amazon.com (AWS Cloud Hyperscaler & Trainium/Inferentia)",
+      "node_type": "HYPERSCALER",
+      "unit": "pct_return_30d",
+      "current_value": 2.1,
+      "layer1_homeostatic": { "mu0": 2.2, "sigma0": 6.5, "iqr": 7.5, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -9.0, "p95": 14.0 },
+      "layer3_nociceptive": { "abs_min": -45.0, "abs_max": 55.0, "survival_limit": -35.0 },
+      "reflex_limiters": { "max_action_step": 12.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "SPY",
+      "label": "SPDR S&P 500 ETF Trust (Macro Equity Index)",
+      "node_type": "MACRO_INDEX",
+      "unit": "pct_return_30d",
+      "current_value": 1.4,
+      "layer1_homeostatic": { "mu0": 1.2, "sigma0": 3.8, "iqr": 4.5, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -5.5, "p95": 8.0 },
+      "layer3_nociceptive": { "abs_min": -35.0, "abs_max": 35.0, "survival_limit": -22.0 },
+      "reflex_limiters": { "max_action_step": 8.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "QQQ",
+      "label": "Invesco QQQ Trust (Nasdaq 100 Tech Index)",
+      "node_type": "MACRO_INDEX",
+      "unit": "pct_return_30d",
+      "current_value": 2.0,
+      "layer1_homeostatic": { "mu0": 1.8, "sigma0": 5.2, "iqr": 6.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -8.0, "p95": 11.5 },
+      "layer3_nociceptive": { "abs_min": -45.0, "abs_max": 50.0, "survival_limit": -30.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "VIX",
+      "label": "CBOE Volatility Index (^VIX Macro Fear Valve)",
+      "node_type": "MACRO_VALVE",
+      "unit": "index_points",
+      "current_value": 15.4,
+      "layer1_homeostatic": { "mu0": 16.5, "sigma0": 5.0, "iqr": 5.5, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 11.5, "p95": 28.0 },
+      "layer3_nociceptive": { "abs_min": 9.0, "abs_max": 85.0, "survival_limit": 40.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "US10Y_2Y_SPREAD",
+      "label": "US 10-Year vs 2-Year Treasury Yield Spread",
+      "node_type": "MACRO_VALVE",
+      "unit": "basis_points",
+      "current_value": 18.0,
+      "layer1_homeostatic": { "mu0": 50.0, "sigma0": 45.0, "iqr": 55.0, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": -75.0, "p95": 140.0 },
+      "layer3_nociceptive": { "abs_min": -110.0, "abs_max": 250.0, "survival_limit": -85.0 },
+      "reflex_limiters": { "max_action_step": 30.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "COPPER_HG",
+      "label": "Copper Futures HG=F (Industrial Grid & Power Conduit)",
+      "node_type": "COMMODITY",
+      "unit": "usd_per_lb",
+      "current_value": 4.45,
+      "layer1_homeostatic": { "mu0": 4.10, "sigma0": 0.35, "iqr": 0.40, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 3.40, "p95": 4.85 },
+      "layer3_nociceptive": { "abs_min": 2.0, "abs_max": 5.20, "survival_limit": 5.0 },
+      "reflex_limiters": { "max_action_step": 0.50, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "CRUDE_CL",
+      "label": "Crude Oil Futures CL=F (Global Energy Input)",
+      "node_type": "COMMODITY",
+      "unit": "usd_per_barrel",
+      "current_value": 74.2,
+      "layer1_homeostatic": { "mu0": 78.0, "sigma0": 12.0, "iqr": 14.0, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 55.0, "p95": 105.0 },
+      "layer3_nociceptive": { "abs_min": -37.0, "abs_max": 145.0, "survival_limit": 125.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "GOLD_GC",
+      "label": "Gold Futures GC=F (Monetary Debasement & Geopolitical Hedge)",
+      "node_type": "COMMODITY",
+      "unit": "usd_per_oz",
+      "current_value": 2680.0,
+      "layer1_homeostatic": { "mu0": 2200.0, "sigma0": 250.0, "iqr": 300.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1800.0, "p95": 2750.0 },
+      "layer3_nociceptive": { "abs_min": 1100.0, "abs_max": 3200.0, "survival_limit": 3000.0 },
+      "reflex_limiters": { "max_action_step": 200.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "TAIWAN_GRID",
+      "label": "Taiwan Power Grid Reserve Margin (Semiconductor Fab Power)",
+      "node_type": "INFRASTRUCTURE_CHOKENODE",
+      "unit": "reserve_margin_pct",
+      "current_value": 11.2,
+      "layer1_homeostatic": { "mu0": 14.0, "sigma0": 3.0, "iqr": 3.5, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 7.0, "p95": 19.0 },
+      "layer3_nociceptive": { "abs_min": 3.0, "abs_max": 25.0, "survival_limit": 6.0 },
+      "reflex_limiters": { "max_action_step": 4.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "AB_SUBSTRATE",
+      "label": "Ajinomoto Build-up Film (ABF Substrate Packaging Chokepoint)",
+      "node_type": "MATERIALS_CHOKENODE",
+      "unit": "lead_time_weeks",
+      "current_value": 18.0,
+      "layer1_homeostatic": { "mu0": 16.0, "sigma0": 6.0, "iqr": 7.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 8.0, "p95": 35.0 },
+      "layer3_nociceptive": { "abs_min": 6.0, "abs_max": 65.0, "survival_limit": 50.0 },
+      "reflex_limiters": { "max_action_step": 8.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "NEON_PRECURSOR",
+      "label": "Semiconductor Laser Excimer Neon Gas Precursor",
+      "node_type": "MATERIALS_CHOKENODE",
+      "unit": "usd_per_m3",
+      "current_value": 180.0,
+      "layer1_homeostatic": { "mu0": 150.0, "sigma0": 60.0, "iqr": 70.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 80.0, "p95": 400.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 3000.0, "survival_limit": 1500.0 },
+      "reflex_limiters": { "max_action_step": 200.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "NRB_POLICY_RATE",
+      "label": "Nepal Rastra Bank Policy Repo Rate",
+      "node_type": "NEPAL_MACRO_VALVE",
+      "unit": "rate_pct",
+      "current_value": 5.0,
+      "layer1_homeostatic": { "mu0": 6.5, "sigma0": 1.2, "iqr": 1.5, "tau0_days": 90 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 4.5, "p95": 8.5 },
+      "layer3_nociceptive": { "abs_min": 3.5, "abs_max": 10.0, "survival_limit": 9.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "CD_RATIO",
+      "label": "Nepal Banking Credit-to-Deposit Ratio",
+      "node_type": "NEPAL_MACRO_VALVE",
+      "unit": "ratio_pct",
+      "current_value": 78.4,
+      "layer1_homeostatic": { "mu0": 83.0, "sigma0": 4.5, "iqr": 5.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 75.0, "p95": 90.0 },
+      "layer3_nociceptive": { "abs_min": 70.0, "abs_max": 95.0, "survival_limit": 90.0 },
+      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "NEPSE_INDEX",
+      "label": "Nepal Stock Exchange Benchmark Index",
+      "node_type": "NEPAL_MACRO_INDEX",
+      "unit": "index_points",
+      "current_value": 2680.0,
+      "layer1_homeostatic": { "mu0": 2200.0, "sigma0": 450.0, "iqr": 500.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1400.0, "p95": 3000.0 },
+      "layer3_nociceptive": { "abs_min": 1100.0, "abs_max": 3250.0, "survival_limit": 1300.0 },
+      "reflex_limiters": { "max_action_step": 200.0, "collateral_harm_ceiling": 0.85 }
+    }
+  ],
+  "synapses": [
+    { "source": "ZEISS", "target": "ASML", "edge_type": "SUPPLIES_TO", "weight": 0.95, "lag_days": 60, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NEON_PRECURSOR", "target": "ASML", "edge_type": "INPUT_COMMODITY", "weight": 0.72, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "ASML", "target": "TSM", "edge_type": "SUPPLIES_TO", "weight": 0.92, "lag_days": 45, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TAIWAN_GRID", "target": "TSM", "edge_type": "CONSTRAINS", "weight": 0.80, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "AB_SUBSTRATE", "target": "TSM", "edge_type": "INPUT_COMMODITY", "weight": 0.85, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TSM", "target": "NVDA", "edge_type": "SUPPLIES_TO", "weight": 0.90, "lag_days": 21, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "SK_HYNIX", "target": "NVDA", "edge_type": "SUPPLIES_TO", "weight": 0.88, "lag_days": 21, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "MU", "target": "NVDA", "edge_type": "SUPPLIES_TO", "weight": 0.75, "lag_days": 21, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TSM", "target": "AMD", "edge_type": "SUPPLIES_TO", "weight": 0.86, "lag_days": 21, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TSM", "target": "AVGO", "edge_type": "SUPPLIES_TO", "weight": 0.82, "lag_days": 21, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "ARM", "target": "AAPL", "edge_type": "LICENSES_IP_TO", "weight": 0.85, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NVDA", "target": "MSFT", "edge_type": "SUPPLIES_TO", "weight": 0.88, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NVDA", "target": "GOOGL", "edge_type": "SUPPLIES_TO", "weight": 0.84, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NVDA", "target": "META", "edge_type": "SUPPLIES_TO", "weight": 0.86, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NVDA", "target": "AMZN", "edge_type": "SUPPLIES_TO", "weight": 0.85, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "COPPER_HG", "target": "MSFT", "edge_type": "INPUT_INFRASTRUCTURE", "weight": 0.70, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "VIX", "target": "SPY", "edge_type": "HEDGES", "weight": -0.85, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "US10Y_2Y_SPREAD", "target": "QQQ", "edge_type": "MACRO_DISCOUNT_VALVE", "weight": 0.75, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "NRB_POLICY_RATE", "target": "CD_RATIO", "edge_type": "MONETARY_TRANSMISSION", "weight": 0.82, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "CD_RATIO", "target": "NEPSE_INDEX", "edge_type": "LIQUIDITY_COUPLING", "weight": -0.88, "lag_days": 14, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_2008_LIQUIDITY_FREEZE",
+      "label": "2008 Global Financial Crisis & Banking Liquidity Freeze",
+      "signature_z": { "VIX": 3.8, "SPY": -3.2, "QQQ": -3.0, "US10Y_2Y_SPREAD": -2.2, "CRUDE_CL": -2.8 },
+      "forward_30d": "-18.5% Equities / Multi-standard-deviation flight to Treasuries and Gold",
+      "forward_90d": "-34.0% Global Asset Drawdown before coordinated central bank liquidity swap lines",
+      "actionable_directive": "Preserve maximum dry powder; liquid assets strictly in cash and sovereign anchors."
+    },
+    {
+      "engram_id": "REGIME_2020_SUPPLY_CHAIN_HALT",
+      "label": "2020 Sudden Global Physical Supply Chain & Fab Outage",
+      "signature_z": { "VIX": 3.5, "ASML": -1.8, "TSM": -1.5, "SPY": -2.5, "CRUDE_CL": -3.5 },
+      "forward_30d": "V-shaped monetary easing trigger / Immediate liquidity rebound",
+      "forward_90d": "Historical rally in digital hyperscalers and semiconductor manufacturing capacity",
+      "actionable_directive": "Identify structural bottlenecks whose demand is postponed rather than destroyed."
+    },
+    {
+      "engram_id": "REGIME_2021_CHIP_CHOKEPOINT_BOOM",
+      "label": "2021 Wafer Allocation, Lead-Time Backlog & Packaging Boom",
+      "signature_z": { "ASML": 2.4, "TSM": 2.2, "AB_SUBSTRATE": 2.8, "NVDA": 2.1, "VIX": -0.5 },
+      "forward_30d": "+12.0% Semis / Margin compression across downstream consumer assembly",
+      "forward_90d": "+35.0% Upstream semiconductor equipment manufacturers (ASML/Lam/KLA)",
+      "actionable_directive": "Overweight upstream sole-source suppliers with pricing power."
+    },
+    {
+      "engram_id": "REGIME_2022_RATE_SHOCK_VALUATION_RESET",
+      "label": "2022 Aggressive Central Bank Rate Shock & Multiple Compression",
+      "signature_z": { "US10Y_2Y_SPREAD": -2.1, "QQQ": -2.2, "NVDA": -2.5, "VIX": 1.8, "GOLD_GC": -0.8 },
+      "forward_30d": "-10.0% High-multiple tech compression / Outperformance of cash flow anchors",
+      "forward_90d": "Base-building in cash-rich balance sheet monopolies",
+      "actionable_directive": "Avoid negative-earnings tech; filter for fortress cash reserves."
+    },
+    {
+      "engram_id": "REGIME_2023_2026_AI_CAPEX_SUPERCYCLE",
+      "label": "2023-2026 Sovereign & Hyperscaler Generative AI Capex Supercycle",
+      "signature_z": { "NVDA": 2.8, "SK_HYNIX": 2.6, "TSM": 2.2, "MSFT": 1.8, "COPPER_HG": 1.6 },
+      "forward_30d": "+14.0% Accelerators & High-Bandwidth Memory / Power grid infrastructure alerts",
+      "forward_90d": "+28.0% Upstream lithography, packaging, and high-voltage transmission equipment",
+      "actionable_directive": "Ride the 2nd-hop wave: power generation, cooling, and advanced packaging suppliers."
+    },
+    {
+      "engram_id": "REGIME_GOLDILOCKS_LOW_VOL_EXPANSION",
+      "label": "Tranquil Goldilocks Low-Volatility Corporate Expansion",
+      "signature_z": { "VIX": -1.2, "SPY": 1.4, "QQQ": 1.6, "US10Y_2Y_SPREAD": 0.8, "COPPER_HG": 0.6 },
+      "forward_30d": "+3.5% Steady upward equity trend with minimal drawdown",
+      "forward_90d": "+8.0% Broad-based sector participation and IPO reactivation",
+      "actionable_directive": "Full risk-on deployment with trailing stops."
+    }
+  ]
+}

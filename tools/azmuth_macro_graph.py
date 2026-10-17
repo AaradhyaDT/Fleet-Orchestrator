@@ -15,7 +15,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Invariant: Low RAM footprint (<15 MB), zero-division safe, and pure standard library.
-DEFAULT_CARTRIDGE_DIR = Path(__file__).resolve().parent.parent.parent / "Competitive-Programming" / "runtimes" / "universes"
+LOCAL_BUNDLED_CARTRIDGES = Path(__file__).resolve().parent.parent / "data" / "universes"
+SIBLING_CP_CARTRIDGES = Path(__file__).resolve().parent.parent.parent / "Competitive-Programming" / "runtimes" / "universes"
+DEFAULT_CARTRIDGE_DIR = LOCAL_BUNDLED_CARTRIDGES if LOCAL_BUNDLED_CARTRIDGES.exists() else SIBLING_CP_CARTRIDGES
 DEFAULT_STATE_DIR = Path(__file__).resolve().parent.parent / "orchestrator-state"
 
 
@@ -474,9 +476,19 @@ class CorticalCartridgeLoader:
 
     @staticmethod
     def load_cartridge(cartridge_path: Path) -> Dict[str, Any]:
-        if not cartridge_path.exists():
-            raise FileNotFoundError(f"Cortical cartridge not found: {cartridge_path}")
-        with open(cartridge_path, "r", encoding="utf-8") as f:
+        target = cartridge_path
+        if not target.exists():
+            # Check local data/universes
+            alt_local = LOCAL_BUNDLED_CARTRIDGES / cartridge_path.name
+            if alt_local.exists():
+                target = alt_local
+            else:
+                alt_sibling = SIBLING_CP_CARTRIDGES / cartridge_path.name
+                if alt_sibling.exists():
+                    target = alt_sibling
+                else:
+                    raise FileNotFoundError(f"Cortical cartridge not found: {cartridge_path} (checked {LOCAL_BUNDLED_CARTRIDGES} and {SIBLING_CP_CARTRIDGES})")
+        with open(target, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
 

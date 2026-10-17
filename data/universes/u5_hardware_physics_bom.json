@@ -1,0 +1,68 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u5_hardware_physics_bom",
+  "cortical_lobe": "Hardware & Physics Sensorimotor Cortex",
+  "sensory_adapter": "embedded_sensor_monitor",
+  "description": "Sensorimotor and physics cortex mapping physical phenomena to transducers, signal conditioning, MCUs (ESP32-S3, STM32, Jetson), and Shannon/Nyquist/memory physical ceilings.",
+  "nodes": [
+    {
+      "id": "ESP32_S3_SRAM_ALLOCATED_KB",
+      "label": "ESP32-S3 Internal SRAM Allocated (512KB Max)",
+      "node_type": "MCU_RESOURCE",
+      "unit": "sram_kb",
+      "current_value": 312.0,
+      "layer1_homeostatic": { "mu0": 280.0, "sigma0": 40.0, "iqr": 50.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 180.0, "p95": 420.0 },
+      "layer3_nociceptive": { "abs_min": 64.0, "abs_max": 512.0, "survival_limit": 480.0 },
+      "reflex_limiters": { "max_action_step": 32.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "IMU_SAMPLING_FREQ_HZ",
+      "label": "BMI270 6-Axis IMU Sampling Frequency",
+      "node_type": "SENSOR_TRANSDUCER",
+      "unit": "frequency_hz",
+      "current_value": 100.0,
+      "layer1_homeostatic": { "mu0": 100.0, "sigma0": 15.0, "iqr": 20.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 50.0, "p95": 200.0 },
+      "layer3_nociceptive": { "abs_min": 25.0, "abs_max": 400.0, "survival_limit": 350.0 },
+      "reflex_limiters": { "max_action_step": 25.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "TENSOR_ARENA_SIZE_KB",
+      "label": "TFLite Micro Runtime Tensor Arena Footprint",
+      "node_type": "TINYML_RUNTIME",
+      "unit": "arena_kb",
+      "current_value": 88.0,
+      "layer1_homeostatic": { "mu0": 85.0, "sigma0": 8.0, "iqr": 10.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 60.0, "p95": 110.0 },
+      "layer3_nociceptive": { "abs_min": 32.0, "abs_max": 160.0, "survival_limit": 140.0 },
+      "reflex_limiters": { "max_action_step": 16.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "BLE_TX_POWER_MA",
+      "label": "BLE 5.0 Active Transmission Current Draw",
+      "node_type": "POWER_SUBSYSTEM",
+      "unit": "current_ma",
+      "current_value": 14.5,
+      "layer1_homeostatic": { "mu0": 12.0, "sigma0": 3.0, "iqr": 3.5, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 7.0, "p95": 22.0 },
+      "layer3_nociceptive": { "abs_min": 2.0, "abs_max": 50.0, "survival_limit": 35.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "IMU_SAMPLING_FREQ_HZ", "target": "TENSOR_ARENA_SIZE_KB", "edge_type": "DRIVES_BUFFER_SIZE", "weight": 0.82, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TENSOR_ARENA_SIZE_KB", "target": "ESP32_S3_SRAM_ALLOCATED_KB", "edge_type": "CONSUMES_SRAM", "weight": 0.95, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "IMU_SAMPLING_FREQ_HZ", "target": "BLE_TX_POWER_MA", "edge_type": "INCREASES_TELEMETRY_BURN", "weight": 0.76, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_SPARK_SUB_100KB_OPTIMAL",
+      "label": "SPARK Wearable Sub-100KB INT8 Pareto Frontier",
+      "signature_z": { "ESP32_S3_SRAM_ALLOCATED_KB": 0.8, "IMU_SAMPLING_FREQ_HZ": 0.0, "TENSOR_ARENA_SIZE_KB": 0.38, "BLE_TX_POWER_MA": 0.83 },
+      "forward_30d": "Continuous 48-hour battery longevity with zero SRAM allocation fragmentation",
+      "forward_90d": "Hardware prototype validation in field trials",
+      "actionable_directive": "Preserve 100Hz IMU sampling with circular DMA buffer."
+    }
+  ]
+}

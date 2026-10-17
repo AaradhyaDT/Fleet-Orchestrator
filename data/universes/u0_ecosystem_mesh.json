@@ -1,0 +1,92 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u0_ecosystem_mesh",
+  "cortical_lobe": "Ecosystem Autonomic Mesh",
+  "sensory_adapter": "local_repository_mesh",
+  "description": "Autonomic nervous system mapping 28 ecosystem repositories, shared tools, MCPs, and 31-worker fleet homeostasis.",
+  "nodes": [
+    {
+      "id": "Fleet-Orchestrator",
+      "label": "Multi-Model Swarm Engine & Brainstem",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "task_queue_depth",
+      "current_value": 0.0,
+      "layer1_homeostatic": { "mu0": 0.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.0, "p95": 12.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 100.0, "survival_limit": 50.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "brainstorm",
+      "label": "Central R&D Incubator & Graph Root",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "graph_node_count",
+      "current_value": 7028.0,
+      "layer1_homeostatic": { "mu0": 7000.0, "sigma0": 150.0, "iqr": 200.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 6700.0, "p95": 7300.0 },
+      "layer3_nociceptive": { "abs_min": 5000.0, "abs_max": 12000.0, "survival_limit": 10000.0 },
+      "reflex_limiters": { "max_action_step": 500.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "Competitive-Programming",
+      "label": "Azmuth Codon Stream & Genetic Vault",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "sequenced_genes",
+      "current_value": 168.0,
+      "layer1_homeostatic": { "mu0": 150.0, "sigma0": 20.0, "iqr": 25.0, "tau0_days": 2 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 100.0, "p95": 200.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 500.0, "survival_limit": 400.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "SPARK",
+      "label": "Edge AI Fall Detection Wearable",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "model_flash_kb",
+      "current_value": 84.5,
+      "layer1_homeostatic": { "mu0": 80.0, "sigma0": 10.0, "iqr": 12.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 50.0, "p95": 95.0 },
+      "layer3_nociceptive": { "abs_min": 20.0, "abs_max": 100.0, "survival_limit": 98.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "BiasAperture",
+      "label": "Vision Fairness & Audit Engine",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "disparity_bootstrap_ci",
+      "current_value": 0.042,
+      "layer1_homeostatic": { "mu0": 0.05, "sigma0": 0.015, "iqr": 0.02, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.01, "p95": 0.08 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 0.15, "survival_limit": 0.10 },
+      "reflex_limiters": { "max_action_step": 0.02, "collateral_harm_ceiling": 0.80 }
+    },
+    {
+      "id": "Super-NLM",
+      "label": "Google NotebookLM Fleet Orchestrator",
+      "node_type": "ECOSYSTEM_MODULE",
+      "unit": "active_notebook_count",
+      "current_value": 8.0,
+      "layer1_homeostatic": { "mu0": 6.0, "sigma0": 2.0, "iqr": 3.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.0, "p95": 12.0 },
+      "layer3_nociceptive": { "abs_min": 1.0, "abs_max": 30.0, "survival_limit": 25.0 },
+      "reflex_limiters": { "max_action_step": 4.0, "collateral_harm_ceiling": 0.85 }
+    }
+  ],
+  "synapses": [
+    { "source": "brainstorm", "target": "Fleet-Orchestrator", "edge_type": "FEEDS_CAPABILITY", "weight": 0.95, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "Competitive-Programming", "target": "Fleet-Orchestrator", "edge_type": "FEEDS_CAPABILITY", "weight": 0.92, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "Fleet-Orchestrator", "target": "SPARK", "edge_type": "DISPATCHES_TASK", "weight": 0.82, "lag_days": 2, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "Fleet-Orchestrator", "target": "BiasAperture", "edge_type": "DISPATCHES_TASK", "weight": 0.80, "lag_days": 2, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "brainstorm", "target": "Super-NLM", "edge_type": "FEEDS_DATA", "weight": 0.88, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_REPO_SYNC_CONVERGENCE",
+      "label": "Tri-Repo Multi-Branch Convergence Synchronization",
+      "signature_z": { "Fleet-Orchestrator": 0.2, "brainstorm": 0.3, "Competitive-Programming": 0.4 },
+      "forward_30d": "Zero regression pass across 67 simulation & Z3 tests",
+      "forward_90d": "Autonomous issue sentinel PR cycle without manual drift",
+      "actionable_directive": "Execute .\\sync.bat across repositories to maintain deterministic synchronization."
+    }
+  ]
+}

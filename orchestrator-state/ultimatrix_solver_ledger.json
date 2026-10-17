@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 33,
-  "tasks_solved": 33,
+  "tasks_attempted": 35,
+  "tasks_solved": 35,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -35,9 +35,11 @@
     "matrix-palindromes",
     "nogcd",
     "palindrome-centers",
-    "powered-addition"
+    "powered-addition",
+    "101-palindromes",
+    "distinct_neighbours"
   ],
-  "last_solve_at": "2026-10-17T09:50:40.663742+00:00",
+  "last_solve_at": "2026-10-17T09:56:54.134294+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:05:58.684661+00:00",
@@ -236,6 +238,18 @@
       "slug": "powered-addition",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T09:54:49.948131+00:00",
+      "slug": "101-palindromes",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T09:56:54.134179+00:00",
+      "slug": "distinct_neighbours",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 5
     }
   ],
   "attempted_slugs": {}

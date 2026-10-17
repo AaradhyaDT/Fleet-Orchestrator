@@ -1,0 +1,68 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u3_career_opportunity_alpha",
+  "cortical_lobe": "Career & Opportunity Alpha Cortex",
+  "sensory_adapter": "opportunity_intelligence_network",
+  "description": "Strategic career and research opportunity cortex mapping target academic labs (KU, international AI systems), fellowships, research grants, and 2nd-hop maintainer bottlenecks.",
+  "nodes": [
+    {
+      "id": "KU_RESEARCH_LAB",
+      "label": "Kathmandu University AI & Systems Research Lab",
+      "node_type": "RESEARCH_LAB",
+      "unit": "unsolved_research_gaps",
+      "current_value": 4.0,
+      "layer1_homeostatic": { "mu0": 3.0, "sigma0": 1.0, "iqr": 1.5, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1.0, "p95": 6.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 20.0, "survival_limit": 15.0 },
+      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "AI_FELLOWSHIP_FUSEMACHINES",
+      "label": "Fusemachines AI Fellowship Program Intake",
+      "node_type": "FELLOWSHIP_PROGRAM",
+      "unit": "cohort_readiness_score",
+      "current_value": 94.5,
+      "layer1_homeostatic": { "mu0": 85.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 75.0, "p95": 96.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 98.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "GLOBAL_AI_SYSTEMS_LABS",
+      "label": "Global Systems/ML Graduate Lab Opportunities",
+      "node_type": "RESEARCH_LAB",
+      "unit": "grant_openings",
+      "current_value": 7.0,
+      "layer1_homeostatic": { "mu0": 5.0, "sigma0": 2.0, "iqr": 2.5, "tau0_days": 60 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.0, "p95": 10.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 25.0, "survival_limit": 20.0 },
+      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "OPEN_SOURCE_MAINTAINER_PIPELINE",
+      "label": "Frontier OSS Core Maintainer Backdoor",
+      "node_type": "OSS_COMMUNITY",
+      "unit": "unsolved_prs_issues",
+      "current_value": 18.0,
+      "layer1_homeostatic": { "mu0": 12.0, "sigma0": 4.0, "iqr": 5.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 6.0, "p95": 22.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 50.0, "survival_limit": 40.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.85 }
+    }
+  ],
+  "synapses": [
+    { "source": "KU_RESEARCH_LAB", "target": "GLOBAL_AI_SYSTEMS_LABS", "edge_type": "FEEDS_OPPORTUNITY", "weight": 0.84, "lag_days": 60, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "AI_FELLOWSHIP_FUSEMACHINES", "target": "GLOBAL_AI_SYSTEMS_LABS", "edge_type": "FEEDS_OPPORTUNITY", "weight": 0.89, "lag_days": 45, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "OPEN_SOURCE_MAINTAINER_PIPELINE", "target": "GLOBAL_AI_SYSTEMS_LABS", "edge_type": "UNLOCKED_BY_CONTRIBUTION", "weight": 0.92, "lag_days": 30, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_FELLOWSHIP_RESEARCH_CONVERGENCE",
+      "label": "Fellowship Portfolio & Research Paper Convergence Breakthrough",
+      "signature_z": { "KU_RESEARCH_LAB": 1.0, "AI_FELLOWSHIP_FUSEMACHINES": 1.9, "GLOBAL_AI_SYSTEMS_LABS": 1.0, "OPEN_SOURCE_MAINTAINER_PIPELINE": 1.5 },
+      "forward_30d": "Flagship capstone project completion (SPARK + BiasAperture) with mentor signoff",
+      "forward_90d": "Direct invitation to research affiliate or funded graduate fellowship",
+      "actionable_directive": "Publish verified benchmarks across SPARK and BiasAperture before international deadline."
+    }
+  ]
+}

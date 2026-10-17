@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u2_ai_compute_frontier",
+  "cortical_lobe": "AI & Silicon Compute Cortex",
+  "sensory_adapter": "hardware_runtime_monitor",
+  "description": "Silicon and model cortex mapping hardware memory limits, local OpenVINO/NPU/Arc runtimes, model quantization, and API token quota envelopes.",
+  "nodes": [
+    {
+      "id": "METEOR_LAKE_NPU_UTIL",
+      "label": "Intel AI Boost NPU (11 TOPS)",
+      "node_type": "HARDWARE_DEVICE",
+      "unit": "utilization_pct",
+      "current_value": 12.0,
+      "layer1_homeostatic": { "mu0": 15.0, "sigma0": 10.0, "iqr": 12.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.0, "p95": 65.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 100.0, "survival_limit": 90.0 },
+      "reflex_limiters": { "max_action_step": 25.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "SYS_RAM_HEADROOM_GB",
+      "label": "System RAM Free Headroom (16GB Physical)",
+      "node_type": "HARDWARE_MEMORY",
+      "unit": "free_headroom_gb",
+      "current_value": 4.8,
+      "layer1_homeostatic": { "mu0": 5.0, "sigma0": 1.2, "iqr": 1.5, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.5, "p95": 8.0 },
+      "layer3_nociceptive": { "abs_min": 1.0, "abs_max": 16.0, "survival_limit": 2.5 },
+      "reflex_limiters": { "max_action_step": 1.5, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "SLM_ROUTER_LATENCY_MS",
+      "label": "Qwen 0.5B Intent Router Inference Latency",
+      "node_type": "MODEL_RUNTIME",
+      "unit": "latency_ms",
+      "current_value": 28.5,
+      "layer1_homeostatic": { "mu0": 35.0, "sigma0": 8.0, "iqr": 10.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 18.0, "p95": 55.0 },
+      "layer3_nociceptive": { "abs_min": 10.0, "abs_max": 200.0, "survival_limit": 120.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "GEMINI_BURST_RPM",
+      "label": "Active Gemini 30-Project Mesh Burst Rate",
+      "node_type": "API_QUOTA_VALVE",
+      "unit": "rpm",
+      "current_value": 450.0,
+      "layer1_homeostatic": { "mu0": 450.0, "sigma0": 30.0, "iqr": 40.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 300.0, "p95": 465.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 465.0, "survival_limit": 460.0 },
+      "reflex_limiters": { "max_action_step": 50.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "COPILOT_CREDIT_BURN_PCT",
+      "label": "Pooled 6,200 Monthly Copilot Credit Burn Ratio",
+      "node_type": "API_QUOTA_VALVE",
+      "unit": "pct_burned",
+      "current_value": 4.6,
+      "layer1_homeostatic": { "mu0": 25.0, "sigma0": 15.0, "iqr": 20.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.0, "p95": 75.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 100.0, "survival_limit": 95.0 },
+      "reflex_limiters": { "max_action_step": 10.0, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "SYS_RAM_HEADROOM_GB", "target": "SLM_ROUTER_LATENCY_MS", "edge_type": "CONSTRAINS", "weight": -0.75, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "METEOR_LAKE_NPU_UTIL", "target": "SLM_ROUTER_LATENCY_MS", "edge_type": "ACCELERATES", "weight": -0.85, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "SLM_ROUTER_LATENCY_MS", "target": "GEMINI_BURST_RPM", "edge_type": "ROUTES_TRAFFIC_TO", "weight": 0.70, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_METEOR_LAKE_NPU_OFFLOAD",
+      "label": "Local 11-TOPS NPU Zero-Quota Anchor Super-State",
+      "signature_z": { "METEOR_LAKE_NPU_UTIL": 1.8, "SYS_RAM_HEADROOM_GB": 0.5, "SLM_ROUTER_LATENCY_MS": -1.2 },
+      "forward_30d": "Sub-30ms offline intent classification with zero API cost",
+      "forward_90d": "Permanent local model resilience regardless of external network connectivity",
+      "actionable_directive": "Route local background tasks through OpenVINO NPU runner."
+    }
+  ]
+}
