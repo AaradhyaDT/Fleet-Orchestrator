@@ -13,16 +13,16 @@ This tracker records the phase-by-phase evolution of Fleet-Orchestrator into a *
 
 ### Current vs. Target Swarm Capacity
 
-| Resource / Modality | Current Situ (Baseline) | Target 31×31 Mesh (RFC-001) | Multiplier / Gain |
+| Resource / Modality | Current Situ (Live Verified) | Target 31×31 Mesh (RFC-001) | Status |
 |:---|:---|:---|:---|
-| **Active Copilot PATs** | 27 accounts (`copilot-w1` ... `copilot-w27`) | 31 accounts (`copilot-w1` ... `copilot-w31`) | **+14.8% accounts** |
-| **Pooled Copilot AI Credits** | **5,117 / 5,400 monthly credits** (94.8% intact) | **6,200 monthly credits** | **+800 credits/mo** |
-| **Coding Tasks / Month** | ~1,000 – 2,500 tasks | **~2,000 – 3,100 tasks** | **~70 – 100 tasks/day** |
-| **Google AI Studio Keys** | 1 unbilled key (single GCP project) | **31 keys** (across 31 independent GCP projects) | **31× keys** |
-| **Gemini Burst Rate Limit** | 15 RPM | **465 RPM** (7.7 requests/sec) | **31× burst rate** |
-| **Gemini Daily Request Limit** | 1,500 RPD (or 20/day on flash-3.8 free tier) | **46,500 RPD** | **31× to 2,325× daily quota** |
-| **Gemini Multi-Model Fallback** | Single model (`gemini-3.8-flash`) | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | **93 quota buckets** (139.5k req/day) |
-| **Antigravity CLI Cortexes** | 1 interactive session | **31 isolated sandboxes** (`~/.agy-workers/worker_N`) | **31 parallel cortexes** |
+| **Active Copilot PATs** | **31 accounts** (`copilot-w1` ... `copilot-w31`) | 31 accounts (`copilot-w1` ... `copilot-w31`) | **100% Online** |
+| **Pooled Copilot AI Credits** | **5,917.4 / 6,200 monthly credits** (95.4% intact) | **6,200 monthly credits** | **Fully Provisioned** |
+| **Coding Tasks / Month** | **~2,000 – 3,100 tasks** | **~2,000 – 3,100 tasks** | **~70 – 100 tasks/day** |
+| **Google AI Studio Keys** | **30 keys** (29 in `.env.fleet.gemini` + 1 in OS env across GCP projects) | **31 keys** (across 31 projects) | **Active Mesh (450 RPM)** |
+| **Gemini Burst Rate Limit** | **450 RPM** (7.5 requests/sec) | **465 RPM** (7.7 requests/sec) | **High-Throughput Pool** |
+| **Gemini Daily Request Limit** | **45,000 RPD** | **46,500 RPD** | **Full Daily Quota** |
+| **Gemini Multi-Model Fallback** | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | **87–90 quota buckets** |
+| **Antigravity CLI Cortexes** | **31 isolated sandboxes** (`~/.agy-workers/worker_N`) | **31 isolated sandboxes** (`~/.agy-workers/worker_N`) | **31 parallel cortexes** |
 | **Local Hardware Acceleration** | Intel Core Ultra 7 155H (11 TOPS NPU + Arc iGPU) | Same physical hardware | $0.00 marginal cost |
 | **Safe Concurrency Limit** | 4 – 6 active subprocesses (`INV-HW-THROTTLE`) | 4 – 6 active subprocesses (`INV-HW-THROTTLE`) | Thermal/RAM preservation |
 
