@@ -1,308 +1,312 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-17T10:26:33.658865+00:00",
-  "tournaments_run": 756,
+  "last_tournament_at": "2026-10-17T12:34:09.673815+00:00",
+  "tournaments_run": 821,
   "alleles_benchmarked": 0,
-  "promotions": 100,
+  "promotions": 164,
   "history": [
     {
-      "timestamp": "2026-10-16T13:07:03.993278+00:00",
+      "timestamp": "2026-10-17T10:42:13.572414+00:00",
       "genes": [
-        "TASK_ODD_DIVISOR_COUNT"
+        "TASK_DICTIONARY_PAGINATION"
       ]
     },
     {
-      "timestamp": "2026-10-17T02:35:58.753450+00:00",
+      "timestamp": "2026-10-17T10:42:51.290186+00:00",
       "genes": [
-        "TASK_SUBARRAYS_XOR_SUM"
+        "TASK_DIV_3"
       ]
     },
     {
-      "timestamp": "2026-10-17T02:37:06.180816+00:00",
+      "timestamp": "2026-10-17T10:43:28.370934+00:00",
       "genes": [
-        "TASK_TEMPLATE_ADDITION"
+        "TASK_DOMINANT_POINT"
       ]
     },
     {
-      "timestamp": "2026-10-17T02:42:37.173795+00:00",
+      "timestamp": "2026-10-17T10:46:55.483958+00:00",
       "genes": [
-        "TASK_0_K_MULTIPLE"
+        "TASK_DOMINOES_ROTATIONS"
       ]
     },
     {
-      "timestamp": "2026-10-17T02:44:06.596539+00:00",
+      "timestamp": "2026-10-17T10:47:32.291357+00:00",
       "genes": [
-        "TASK_0_SUM_ARRAY"
+        "TASK_DONKEY_PARADOX"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:12:43.894420+00:00",
+      "timestamp": "2026-10-17T10:48:43.144798+00:00",
       "genes": [
-        "TASK_NEIGHBOUR_SUM_REPLACEMENT"
+        "TASK_DOUBLE_REPLACE"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:12:44.155276+00:00",
+      "timestamp": "2026-10-17T10:49:19.562159+00:00",
       "genes": [
-        "TASK_ODD_PAIR_SUMS"
+        "TASK_DRAGONS"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:13:14.721532+00:00",
+      "timestamp": "2026-10-17T10:51:50.923897+00:00",
       "genes": [
-        "TASK_ODD_PALINDROMES"
+        "TASK_EQUALITY"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:13:14.958726+00:00",
+      "timestamp": "2026-10-17T10:52:26.726781+00:00",
       "genes": [
-        "TASK_ODD_SUM"
+        "TASK_ERASE_EXTREMES"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:13:45.212801+00:00",
+      "timestamp": "2026-10-17T10:53:02.298969+00:00",
       "genes": [
-        "TASK_PALINDROME_FREE_STRINGS"
+        "TASK_ERASE_VALUE"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:13:45.468249+00:00",
+      "timestamp": "2026-10-17T10:53:37.646679+00:00",
       "genes": [
-        "TASK_RECONSTRUCT_SUM"
+        "TASK_EXPECTED_DICE"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:13:45.749671+00:00",
+      "timestamp": "2026-10-17T10:56:30.486537+00:00",
       "genes": [
-        "TASK_REVERSED_NUMBER"
+        "TASK_FAST_TRAVEL"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:14:15.994326+00:00",
+      "timestamp": "2026-10-17T10:57:07.110583+00:00",
       "genes": [
-        "TASK_SHIFTED_DIAGONAL_SUM"
+        "TASK_FAST_TYPING"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:16:42.177823+00:00",
+      "timestamp": "2026-10-17T10:57:48.052945+00:00",
       "genes": [
-        "TASK_3_DIVISIBLE_PAIRS"
+        "TASK_FIICODE_2022_A1"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:16:42.455948+00:00",
+      "timestamp": "2026-10-17T10:58:31.883746+00:00",
       "genes": [
-        "TASK_8_DIVISIBLE"
+        "TASK_FIICODE_2022_A2"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:16:42.719490+00:00",
+      "timestamp": "2026-10-17T10:59:15.908213+00:00",
       "genes": [
-        "TASK_ADD_AND_DIVIDE"
+        "TASK_FIICODE_2022_B2"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:17:13.025525+00:00",
+      "timestamp": "2026-10-17T10:59:51.739838+00:00",
       "genes": [
-        "TASK_ADJACENT_VOWELS"
+        "TASK_FILL_THE_GLASSES"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:17:13.315109+00:00",
+      "timestamp": "2026-10-17T11:00:28.277245+00:00",
       "genes": [
-        "TASK_A_SINGLE_ONE"
+        "TASK_FINAL_INDEX"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:17:13.564901+00:00",
+      "timestamp": "2026-10-17T11:01:15.601091+00:00",
       "genes": [
-        "TASK_CONSECUTIVE_SUM"
+        "TASK_FLIP_THE_MATRIX"
       ]
     },
     {
-      "timestamp": "2026-10-17T04:17:43.900000+00:00",
+      "timestamp": "2026-10-17T11:02:08.543288+00:00",
       "genes": [
-        "TASK_GCD_REBUILD"
+        "TASK_FLIP_THE_PREFIX"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:07:53.059895+00:00",
+      "timestamp": "2026-10-17T11:02:44.833198+00:00",
       "genes": [
-        "TASK_REVERSE_SUBARRAY"
+        "TASK_FOOD_PAIRING"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:09:04.994955+00:00",
+      "timestamp": "2026-10-17T11:04:59.209854+00:00",
       "genes": [
-        "TASK_ADDITION_TIME"
+        "TASK_FOOTBALL_TOURNAMENT"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:11:06.056439+00:00",
+      "timestamp": "2026-10-17T11:05:53.667504+00:00",
       "genes": [
-        "TASK_DISTINCT_PALINDROMES"
+        "TASK_FOXES_ON_A_WHEEL"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:13:33.977260+00:00",
+      "timestamp": "2026-10-17T11:06:29.381455+00:00",
       "genes": [
-        "TASK_DOUBLE_PALINDROMES"
+        "TASK_FREQUENCY_EXCEPTION"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:20:57.781128+00:00",
+      "timestamp": "2026-10-17T11:07:05.339063+00:00",
       "genes": [
-        "TASK_FIBONACCI_REPRESENTATIONS_SMALL"
+        "TASK_FREQUENT_NUMBERS"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:26:46.785322+00:00",
+      "timestamp": "2026-10-17T11:07:41.450644+00:00",
       "genes": [
-        "TASK_FREE_PALINDROMES"
+        "TASK_FRIDAY_13"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:30:17.503707+00:00",
+      "timestamp": "2026-10-17T11:08:16.849284+00:00",
       "genes": [
-        "TASK_MAKE_IT_DIVISIBLE_BY_25"
+        "TASK_GAME_OF_CHANCE"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:42:09.473680+00:00",
+      "timestamp": "2026-10-17T11:08:53.908030+00:00",
       "genes": [
-        "TASK_MATRIX_PALINDROMES"
+        "TASK_GROUP_SPLIT"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:49:11.979642+00:00",
+      "timestamp": "2026-10-17T11:09:40.537518+00:00",
       "genes": [
-        "TASK_NOGCD"
+        "TASK_HISTOGRAM_PARTITION"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:50:31.170239+00:00",
+      "timestamp": "2026-10-17T11:11:03.972259+00:00",
       "genes": [
-        "TASK_PALINDROME_CENTERS"
+        "TASK_HUGE_MATRIX"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:51:11.933314+00:00",
+      "timestamp": "2026-10-17T11:11:53.115283+00:00",
       "genes": [
-        "TASK_POWERED_ADDITION"
+        "TASK_INCREASING_PAIR"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:56:30.965451+00:00",
+      "timestamp": "2026-10-17T11:12:44.148632+00:00",
       "genes": [
-        "TASK_101_PALINDROMES"
+        "TASK_INDEPENDENT_RECTANGLES"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:57:25.087785+00:00",
+      "timestamp": "2026-10-17T11:13:23.881305+00:00",
       "genes": [
-        "TASK_DISTINCT_NEIGHBOURS"
+        "TASK_INSERT_IN_SORTED_ARRAY"
       ]
     },
     {
-      "timestamp": "2026-10-17T09:59:01.778483+00:00",
+      "timestamp": "2026-10-17T11:14:00.052477+00:00",
       "genes": [
-        "TASK_DIVISIBLE_MATCHING"
+        "TASK_JEANS_AND_SHIRTS"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:02:18.637822+00:00",
+      "timestamp": "2026-10-17T11:14:37.168022+00:00",
       "genes": [
-        "TASK_FIBONACCI_MOD"
+        "TASK_JOKERS"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:07:24.909468+00:00",
+      "timestamp": "2026-10-17T11:15:12.531682+00:00",
       "genes": [
-        "TASK_GCD_ON_A_CIRCLE"
+        "TASK_K_CONSEQUAL"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:08:11.838243+00:00",
+      "timestamp": "2026-10-17T11:15:48.887725+00:00",
       "genes": [
-        "TASK_ALPHABET_ROTATION"
+        "TASK_K_SUBSETS_REMOVAL"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:08:56.472826+00:00",
+      "timestamp": "2026-10-17T11:16:28.116699+00:00",
       "genes": [
-        "TASK_ALTERNATING_SUBARRAY"
+        "TASK_KARAOKE_GROUP"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:09:55.794966+00:00",
+      "timestamp": "2026-10-17T11:17:10.557173+00:00",
       "genes": [
-        "TASK_ANOMALIES"
+        "TASK_KTH_SPECIAL_NUMBER"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:11:39.403498+00:00",
+      "timestamp": "2026-10-17T11:17:46.094893+00:00",
       "genes": [
-        "TASK_ATTACK_AND_SPEED"
+        "TASK_LARGEST_AND_SUBSET"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:12:39.269781+00:00",
+      "timestamp": "2026-10-17T11:18:22.598498+00:00",
       "genes": [
-        "TASK_BACKPACK_PACKING"
+        "TASK_LETTERS_DEQUE"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:17:05.163788+00:00",
+      "timestamp": "2026-10-17T11:18:57.870745+00:00",
       "genes": [
-        "TASK_BALANCED_MIN_PAIRING"
+        "TASK_LIMITED_VOCABULARY"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:18:04.063626+00:00",
+      "timestamp": "2026-10-17T11:19:33.335956+00:00",
       "genes": [
-        "TASK_BALANCED_NUMBER"
+        "TASK_LONG_PRESSED_NAME"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:19:08.449166+00:00",
+      "timestamp": "2026-10-17T11:20:08.920380+00:00",
       "genes": [
-        "TASK_BEST_ARRAY_CUT"
+        "TASK_LUCKY_DAYS"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:20:11.494387+00:00",
+      "timestamp": "2026-10-17T11:20:45.020311+00:00",
       "genes": [
-        "TASK_BICYCLE_RENTAL"
+        "TASK_MATRIX_ROTATIONS"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:20:55.764099+00:00",
+      "timestamp": "2026-10-17T11:21:26.872733+00:00",
       "genes": [
-        "TASK_BLACK_SHAPES"
+        "TASK_MAX_EVEN_SUBARRAY"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:22:49.310371+00:00",
+      "timestamp": "2026-10-17T11:22:21.080524+00:00",
       "genes": [
-        "TASK_BLACK_WHITE_NECKLACE"
+        "TASK_MAX_WAVE_ARRAY"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:23:25.374052+00:00",
+      "timestamp": "2026-10-17T11:22:56.890710+00:00",
       "genes": [
-        "TASK_BORING_NUMBER"
+        "TASK_MIN_COIN_PAYMENT"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:24:23.391009+00:00",
+      "timestamp": "2026-10-17T11:23:34.438297+00:00",
       "genes": [
-        "TASK_BOTTLE_RECYCLING"
+        "TASK_MIN_PAIRING"
       ]
     },
     {
-      "timestamp": "2026-10-17T10:26:33.658650+00:00",
+      "timestamp": "2026-10-17T12:34:09.673702+00:00",
       "genes": [
-        "TASK_BOUNDED_DIFFERENCE"
+        "FAST_IO_STREAM_UNTIE",
+        "INTERACTIVE_STREAM_IO",
+        "HR_SUNITS_PERMUTATION_FACTORY",
+        "STATIC_FORWARD_STAR_GRAPH",
+        "BINARY_SEARCH_ON_ANSWER"
       ]
     }
   ]
