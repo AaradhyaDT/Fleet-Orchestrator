@@ -6,12 +6,31 @@ param(
     [switch]$Hidden
 )
 
+# --- Force Silence: Instantly Hide Console Window from Desktop & Taskbar ---
+$showWindowAsyncDef = @"
+[System.Runtime.InteropServices.DllImport("kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+
+[System.Runtime.InteropServices.DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+"@
+try {
+    $win32 = Add-Type -MemberDefinition $showWindowAsyncDef -Name "Win32ConsoleHelper" -Namespace "AzmuthTray" -PassThru -ErrorAction SilentlyContinue
+    $hwnd = [AzmuthTray.Win32ConsoleHelper]::GetConsoleWindow()
+    if ($hwnd -ne [System.IntPtr]::Zero) {
+        [AzmuthTray.Win32ConsoleHelper]::ShowWindowAsync($hwnd, 0) | Out-Null # 0 = SW_HIDE
+    }
+} catch {}
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 $RepoRoot = "F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator"
 $PythonExe = "C:\Users\Aaradhya\AppData\Local\Programs\Python\Python314\python.exe"
+$PythonwExe = "C:\Users\Aaradhya\AppData\Local\Programs\Python\Python314\pythonw.exe"
+$SilentPython = if (Test-Path $PythonwExe) { $PythonwExe } else { $PythonExe }
+
 $GearFile = Join-Path $RepoRoot "orchestrator-state\azmuth_gear.json"
 $PauseFile = Join-Path $RepoRoot "orchestrator-state\azmuth.pause"
 $LedgerFile = Join-Path $RepoRoot "orchestrator-state\azmuth_corpus_ledger.json"
@@ -27,15 +46,24 @@ function Get-AzmuthGear {
 }
 
 function Set-AzmuthGear($gear) {
-    & $PythonExe (Join-Path $RepoRoot "tools\azmuth_daemon.py") --gear $gear
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $SilentPython
+    $psi.Arguments = "`"$RepoRoot\tools\azmuth_daemon.py`" --gear $gear"
+    $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+    $psi.CreateNoWindow = $true
+    $psi.UseShellExecute = $false
+    [System.Diagnostics.Process]::Start($psi) | Out-Null
 }
 
 function Toggle-AzmuthPause {
-    if (Test-Path $PauseFile) {
-        & $PythonExe (Join-Path $RepoRoot "tools\azmuth_daemon.py") --resume
-    } else {
-        & $PythonExe (Join-Path $RepoRoot "tools\azmuth_daemon.py") --pause
-    }
+    $arg = if (Test-Path $PauseFile) { "--resume" } else { "--pause" }
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $SilentPython
+    $psi.Arguments = "`"$RepoRoot\tools\azmuth_daemon.py`" $arg"
+    $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+    $psi.CreateNoWindow = $true
+    $psi.UseShellExecute = $false
+    [System.Diagnostics.Process]::Start($psi) | Out-Null
 }
 
 function Get-RamStats {
@@ -144,7 +172,13 @@ $itemWhisper.add_Click({ Set-AzmuthGear "whisper"; Update-TrayState })
 $itemPause.add_Click({ Toggle-AzmuthPause; Update-TrayState })
 $itemHarvest.add_Click({
     [System.Threading.ThreadPool]::QueueUserWorkItem({
-        & $PythonExe (Join-Path $RepoRoot "tools\azmuth_corpus_harvester.py")
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = $SilentPython
+        $psi.Arguments = "`"$RepoRoot\tools\azmuth_corpus_harvester.py`""
+        $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+        $psi.CreateNoWindow = $true
+        $psi.UseShellExecute = $false
+        [System.Diagnostics.Process]::Start($psi) | Out-Null
     })
 })
 $itemExit.add_Click({

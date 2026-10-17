@@ -75,7 +75,7 @@ class GitHubTokenPool:
                             k, v = line.split("=", 1)
                             k = k.strip()
                             v = v.strip().strip('"').strip("'")
-                            if "TOKEN" in k and v and v.startswith("github_pat_"):
+                            if "TOKEN" in k and v and (v.startswith("github_pat_") or v.startswith("ghp_") or v.startswith("mock_")):
                                 if v not in discovered:
                                     discovered.append(v)
                 except Exception as e:

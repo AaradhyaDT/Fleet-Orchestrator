@@ -24,9 +24,9 @@ def mock_env_file(tmp_path: Path) -> Path:
     env_file = tmp_path / ".env.fleet.test"
     content = "\n".join([
         "# Test Accounts",
-        "COPILOT_ACCOUNT_1_TOKEN=github_pat_placeholder_token_alpha",
-        "COPILOT_ACCOUNT_2_TOKEN=github_pat_placeholder_token_beta",
-        "COPILOT_ACCOUNT_3_TOKEN=github_pat_placeholder_token_gamma",
+        "COPILOT_ACCOUNT_1_TOKEN=mock_1",
+        "COPILOT_ACCOUNT_2_TOKEN=mock_2",
+        "COPILOT_ACCOUNT_3_TOKEN=mock_3",
     ])
     env_file.write_text(content, encoding="utf-8")
     return env_file
