@@ -82,7 +82,12 @@ Fleet-Orchestrator/
 │   ├── copilot_fleet.py           # Multi-account Copilot fleet controller (status, canary, reconcile, dashboard)
 │   ├── fast_intent_router.py      # Sub-50ms local intent router with LM Studio integration & fallback
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
-│   └── fleet_gui.py               # Modern Fleet-Orchestrator Control Center v2.0 (Tkinter High-DPI GUI)
+│   ├── fleet_gui.py               # Modern Fleet-Orchestrator Control Center v2.0 (Tkinter High-DPI GUI)
+│   ├── azmuth_daemon.py           # Adaptive background harvesting daemon (Eco/Balanced/Turbo gears, 162 genes)
+│   ├── azmuth_language_harvester.py # 3-Tier 30-Module Global Language & Runtime Reference Harvester
+│   ├── ultimatrix_autonomous_solver.py # 4-Stage escalating CP solver (Heuristic, Invariant, Codon, Frontier)
+│   ├── ultimatrix_arena.py        # Automated tournament battle arena & gene promotion
+│   └── ultimatrix_splicer.py      # Cross-repo codon stream splicer & gene synthesizer
 │
 ├── .github/workflows/             # GitHub Actions CI/CD workflows
 │   ├── ci.yml                     # Dynamic matrix CI/CD & container verification

@@ -1,0 +1,389 @@
+{
+  "version": 1,
+  "last_harvest_at": "2026-10-17T05:36:48.202028+00:00",
+  "total_manifest_topics": 30,
+  "harvested_count": 30,
+  "harvested_ids": {
+    "python_collections_deque_counter": {
+      "gene_id": "LANG_PYTHON_COLLECTIONS_DEQUE",
+      "language": "python",
+      "provenance": "LIVE_HTTP:151b8f1afc6c7cc4",
+      "harvested_at": "2026-10-17T04:04:40.296632+00:00"
+    },
+    "python_heapq_priority_queue": {
+      "gene_id": "LANG_PYTHON_HEAPQ_PRIORITY",
+      "language": "python",
+      "provenance": "LIVE_HTTP:a24fb1aa3f678a45",
+      "harvested_at": "2026-10-17T04:04:40.781584+00:00"
+    },
+    "python_bisect_binary_search": {
+      "gene_id": "LANG_PYTHON_BISECT_SEARCH",
+      "language": "python",
+      "provenance": "LIVE_HTTP:20cef315e8c43ad7",
+      "harvested_at": "2026-10-17T04:04:41.239785+00:00"
+    },
+    "python_itertools_combinatorics": {
+      "gene_id": "LANG_PYTHON_ITERTOOLS_ALGEBRA",
+      "language": "python",
+      "provenance": "LIVE_HTTP:8d150e4c101c15d2",
+      "harvested_at": "2026-10-17T04:04:41.829720+00:00"
+    },
+    "python_functools_memoization": {
+      "gene_id": "LANG_PYTHON_FUNCTOOLS_CACHE",
+      "language": "python",
+      "provenance": "LIVE_HTTP:1236425bf6c8d18b",
+      "harvested_at": "2026-10-17T04:04:42.299416+00:00"
+    },
+    "python_math_number_theory": {
+      "gene_id": "LANG_PYTHON_MATH_NUMTHEORY",
+      "language": "python",
+      "provenance": "LIVE_HTTP:802ecf6b8e97e8fa",
+      "harvested_at": "2026-10-17T04:04:42.623729+00:00"
+    },
+    "cpp20_stl_vector_contiguous": {
+      "gene_id": "LANG_CPP_STL_VECTOR_RESERVE",
+      "language": "cpp",
+      "provenance": "LIVE_HTTP:f05a9e02683484cb",
+      "harvested_at": "2026-10-17T04:04:44.229609+00:00"
+    },
+    "cpp20_stl_algorithms_ranges": {
+      "gene_id": "LANG_CPP_STL_ALGORITHMS",
+      "language": "cpp",
+      "provenance": "LIVE_HTTP:cfd87e28e4d6a0be",
+      "harvested_at": "2026-10-17T04:04:45.042789+00:00"
+    },
+    "cpp20_bit_manipulation_header": {
+      "gene_id": "LANG_CPP20_BIT_INTRINSICS",
+      "language": "cpp",
+      "provenance": "LIVE_HTTP:bb9c14f3d6c77f31",
+      "harvested_at": "2026-10-17T04:04:46.572624+00:00"
+    },
+    "cpp20_ordered_set_map_tree": {
+      "gene_id": "LANG_CPP_ORDERED_SET_SWEEP",
+      "language": "cpp",
+      "provenance": "LIVE_HTTP:316455b0f196f16a",
+      "harvested_at": "2026-10-17T04:04:47.794848+00:00"
+    },
+    "rust_std_collections_vec_btree": {
+      "gene_id": "LANG_RUST_STD_COLLECTIONS",
+      "language": "rust",
+      "provenance": "LIVE_HTTP:1824bc21ff7bb7be",
+      "harvested_at": "2026-10-17T04:04:48.921866+00:00"
+    },
+    "c99_stdint_bitwise_deterministic": {
+      "gene_id": "LANG_C99_FIXED_WIDTH_RINGBUF",
+      "language": "c99",
+      "provenance": "LIVE_HTTP:9d7f932ee7b5687a",
+      "harvested_at": "2026-10-17T04:04:50.273908+00:00"
+    },
+    "python_asyncio_httpx_concurrency": {
+      "gene_id": "LANG_PYTHON_ASYNCIO_HTTPX",
+      "language": "python",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:d88804f37449c604",
+      "harvested_at": "2026-10-17T05:36:33.113854+00:00"
+    },
+    "python_sqlite_wal_fts5": {
+      "gene_id": "LANG_PYTHON_SQLITE_WAL_FTS",
+      "language": "python",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:21aef15bc06103b3",
+      "harvested_at": "2026-10-17T05:36:33.442399+00:00"
+    },
+    "python_fastapi_pydantic_v2_mcp": {
+      "gene_id": "LANG_PYTHON_FASTAPI_PYDANTIC",
+      "language": "python",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:af1ec28bd5a83f6e",
+      "harvested_at": "2026-10-17T05:36:34.005393+00:00"
+    },
+    "ts_node_esm_mcp_sdk": {
+      "gene_id": "LANG_TS_NODE_ESM_MCP",
+      "language": "typescript",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:48e33bc706433914",
+      "harvested_at": "2026-10-17T05:36:34.219026+00:00"
+    },
+    "modern_frontend_react_svelte_mv3": {
+      "gene_id": "LANG_WEB_SIGNALS_MV3",
+      "language": "javascript",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:125cdf0f0b41ee18",
+      "harvested_at": "2026-10-17T05:36:35.547689+00:00"
+    },
+    "powershell7_win32_pipeline_automation": {
+      "gene_id": "LANG_PWSH7_PIPELINE_GIT",
+      "language": "powershell",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:08b137dddee67f4f",
+      "harvested_at": "2026-10-17T05:36:36.446703+00:00"
+    },
+    "win32_ntfs_acl_and_dfir": {
+      "gene_id": "LANG_WIN32_NTFS_DFIR",
+      "language": "powershell",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:b2435949a4842cd2",
+      "harvested_at": "2026-10-17T05:36:36.981157+00:00"
+    },
+    "csharp_dotnet_span_pinvoke": {
+      "gene_id": "LANG_CSHARP_SPAN_PINVOKE",
+      "language": "csharp",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:4ec36c3041a0e71b",
+      "harvested_at": "2026-10-17T05:36:38.501521+00:00"
+    },
+    "kotlin_coroutines_jetpack_compose": {
+      "gene_id": "LANG_KOTLIN_COROUTINES_COMPOSE",
+      "language": "kotlin",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:1728eb1b84d72f68",
+      "harvested_at": "2026-10-17T05:36:39.507250+00:00"
+    },
+    "c99_esp32_freertos_tinyml": {
+      "gene_id": "LANG_ESP32_FREERTOS_TINYML",
+      "language": "c99",
+      "tier_category": "tier_a_ecosystem",
+      "provenance": "LIVE_HTTP:29c6e92c41f1a0bb",
+      "harvested_at": "2026-10-17T05:36:40.249006+00:00"
+    },
+    "sql_analytical_window_functions_ctes": {
+      "gene_id": "LANG_SQL_ANALYTICAL_WINDOWS",
+      "language": "sql",
+      "tier_category": "tier_b_learning",
+      "provenance": "LIVE_HTTP:b31fa5d569a90b52",
+      "harvested_at": "2026-10-17T05:36:41.431728+00:00"
+    },
+    "pytorch_cuda_tensors_and_vit": {
+      "gene_id": "LANG_PYTORCH_CUDA_VIT",
+      "language": "python",
+      "tier_category": "tier_b_learning",
+      "provenance": "LIVE_HTTP:a289d0978e92532b",
+      "harvested_at": "2026-10-17T05:36:43.056704+00:00"
+    },
+    "scipy_scientific_shap_mlops": {
+      "gene_id": "LANG_SCIPY_SHAP_MLOPS",
+      "language": "python",
+      "tier_category": "tier_b_learning",
+      "provenance": "LIVE_HTTP:3657d442ba0c626d",
+      "harvested_at": "2026-10-17T05:36:43.532872+00:00"
+    },
+    "matlab_scipy_dsp_control_telecom": {
+      "gene_id": "LANG_DSP_CONTROL_TELECOM",
+      "language": "matlab",
+      "tier_category": "tier_b_learning",
+      "provenance": "LIVE_HTTP:e1d7774b2d76eac1",
+      "harvested_at": "2026-10-17T05:36:45.081335+00:00"
+    },
+    "latex_katex_and_print_harmonization": {
+      "gene_id": "LANG_LATEX_KATEX_PRINT",
+      "language": "latex",
+      "tier_category": "tier_b_learning",
+      "provenance": "LIVE_HTTP:9203357debc0e543",
+      "harvested_at": "2026-10-17T05:36:46.300107+00:00"
+    },
+    "z3_smt_formal_verification": {
+      "gene_id": "LANG_Z3_SMT_FORMAL_PROOFS",
+      "language": "z3",
+      "tier_category": "tier_c_strategic",
+      "provenance": "OFFLINE_CANONICAL:fc3ffa907ae95ae2",
+      "harvested_at": "2026-10-17T05:36:46.708823+00:00"
+    },
+    "golang_concurrency_and_runtime": {
+      "gene_id": "LANG_GO_GMP_CONCURRENCY",
+      "language": "go",
+      "tier_category": "tier_c_strategic",
+      "provenance": "LIVE_HTTP:9a72a7a4580f8852",
+      "harvested_at": "2026-10-17T05:36:47.765892+00:00"
+    },
+    "wasm_linear_memory_and_simd": {
+      "gene_id": "LANG_WASM_LINEAR_SIMD",
+      "language": "wasm",
+      "tier_category": "tier_c_strategic",
+      "provenance": "LIVE_HTTP:483f3b02f04d41c0",
+      "harvested_at": "2026-10-17T05:36:48.201960+00:00"
+    }
+  },
+  "genes_materialized": 30,
+  "history": [
+    {
+      "timestamp": "2026-10-17T04:04:40.296640+00:00",
+      "topic_id": "python_collections_deque_counter",
+      "gene_id": "LANG_PYTHON_COLLECTIONS_DEQUE",
+      "provenance": "LIVE_HTTP:151b8f1afc6c7cc4"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:40.781592+00:00",
+      "topic_id": "python_heapq_priority_queue",
+      "gene_id": "LANG_PYTHON_HEAPQ_PRIORITY",
+      "provenance": "LIVE_HTTP:a24fb1aa3f678a45"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:41.239791+00:00",
+      "topic_id": "python_bisect_binary_search",
+      "gene_id": "LANG_PYTHON_BISECT_SEARCH",
+      "provenance": "LIVE_HTTP:20cef315e8c43ad7"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:41.829728+00:00",
+      "topic_id": "python_itertools_combinatorics",
+      "gene_id": "LANG_PYTHON_ITERTOOLS_ALGEBRA",
+      "provenance": "LIVE_HTTP:8d150e4c101c15d2"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:42.299422+00:00",
+      "topic_id": "python_functools_memoization",
+      "gene_id": "LANG_PYTHON_FUNCTOOLS_CACHE",
+      "provenance": "LIVE_HTTP:1236425bf6c8d18b"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:42.623740+00:00",
+      "topic_id": "python_math_number_theory",
+      "gene_id": "LANG_PYTHON_MATH_NUMTHEORY",
+      "provenance": "LIVE_HTTP:802ecf6b8e97e8fa"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:44.229617+00:00",
+      "topic_id": "cpp20_stl_vector_contiguous",
+      "gene_id": "LANG_CPP_STL_VECTOR_RESERVE",
+      "provenance": "LIVE_HTTP:f05a9e02683484cb"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:45.042796+00:00",
+      "topic_id": "cpp20_stl_algorithms_ranges",
+      "gene_id": "LANG_CPP_STL_ALGORITHMS",
+      "provenance": "LIVE_HTTP:cfd87e28e4d6a0be"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:46.572632+00:00",
+      "topic_id": "cpp20_bit_manipulation_header",
+      "gene_id": "LANG_CPP20_BIT_INTRINSICS",
+      "provenance": "LIVE_HTTP:bb9c14f3d6c77f31"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:47.794855+00:00",
+      "topic_id": "cpp20_ordered_set_map_tree",
+      "gene_id": "LANG_CPP_ORDERED_SET_SWEEP",
+      "provenance": "LIVE_HTTP:316455b0f196f16a"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:48.921877+00:00",
+      "topic_id": "rust_std_collections_vec_btree",
+      "gene_id": "LANG_RUST_STD_COLLECTIONS",
+      "provenance": "LIVE_HTTP:1824bc21ff7bb7be"
+    },
+    {
+      "timestamp": "2026-10-17T04:04:50.273915+00:00",
+      "topic_id": "c99_stdint_bitwise_deterministic",
+      "gene_id": "LANG_C99_FIXED_WIDTH_RINGBUF",
+      "provenance": "LIVE_HTTP:9d7f932ee7b5687a"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:33.113862+00:00",
+      "topic_id": "python_asyncio_httpx_concurrency",
+      "gene_id": "LANG_PYTHON_ASYNCIO_HTTPX",
+      "provenance": "LIVE_HTTP:d88804f37449c604"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:33.442406+00:00",
+      "topic_id": "python_sqlite_wal_fts5",
+      "gene_id": "LANG_PYTHON_SQLITE_WAL_FTS",
+      "provenance": "LIVE_HTTP:21aef15bc06103b3"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:34.005399+00:00",
+      "topic_id": "python_fastapi_pydantic_v2_mcp",
+      "gene_id": "LANG_PYTHON_FASTAPI_PYDANTIC",
+      "provenance": "LIVE_HTTP:af1ec28bd5a83f6e"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:34.219033+00:00",
+      "topic_id": "ts_node_esm_mcp_sdk",
+      "gene_id": "LANG_TS_NODE_ESM_MCP",
+      "provenance": "LIVE_HTTP:48e33bc706433914"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:35.547698+00:00",
+      "topic_id": "modern_frontend_react_svelte_mv3",
+      "gene_id": "LANG_WEB_SIGNALS_MV3",
+      "provenance": "LIVE_HTTP:125cdf0f0b41ee18"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:36.446712+00:00",
+      "topic_id": "powershell7_win32_pipeline_automation",
+      "gene_id": "LANG_PWSH7_PIPELINE_GIT",
+      "provenance": "LIVE_HTTP:08b137dddee67f4f"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:36.981165+00:00",
+      "topic_id": "win32_ntfs_acl_and_dfir",
+      "gene_id": "LANG_WIN32_NTFS_DFIR",
+      "provenance": "LIVE_HTTP:b2435949a4842cd2"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:38.501529+00:00",
+      "topic_id": "csharp_dotnet_span_pinvoke",
+      "gene_id": "LANG_CSHARP_SPAN_PINVOKE",
+      "provenance": "LIVE_HTTP:4ec36c3041a0e71b"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:39.507257+00:00",
+      "topic_id": "kotlin_coroutines_jetpack_compose",
+      "gene_id": "LANG_KOTLIN_COROUTINES_COMPOSE",
+      "provenance": "LIVE_HTTP:1728eb1b84d72f68"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:40.249016+00:00",
+      "topic_id": "c99_esp32_freertos_tinyml",
+      "gene_id": "LANG_ESP32_FREERTOS_TINYML",
+      "provenance": "LIVE_HTTP:29c6e92c41f1a0bb"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:41.431736+00:00",
+      "topic_id": "sql_analytical_window_functions_ctes",
+      "gene_id": "LANG_SQL_ANALYTICAL_WINDOWS",
+      "provenance": "LIVE_HTTP:b31fa5d569a90b52"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:43.056715+00:00",
+      "topic_id": "pytorch_cuda_tensors_and_vit",
+      "gene_id": "LANG_PYTORCH_CUDA_VIT",
+      "provenance": "LIVE_HTTP:a289d0978e92532b"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:43.532880+00:00",
+      "topic_id": "scipy_scientific_shap_mlops",
+      "gene_id": "LANG_SCIPY_SHAP_MLOPS",
+      "provenance": "LIVE_HTTP:3657d442ba0c626d"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:45.081342+00:00",
+      "topic_id": "matlab_scipy_dsp_control_telecom",
+      "gene_id": "LANG_DSP_CONTROL_TELECOM",
+      "provenance": "LIVE_HTTP:e1d7774b2d76eac1"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:46.300116+00:00",
+      "topic_id": "latex_katex_and_print_harmonization",
+      "gene_id": "LANG_LATEX_KATEX_PRINT",
+      "provenance": "LIVE_HTTP:9203357debc0e543"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:46.708831+00:00",
+      "topic_id": "z3_smt_formal_verification",
+      "gene_id": "LANG_Z3_SMT_FORMAL_PROOFS",
+      "provenance": "OFFLINE_CANONICAL:fc3ffa907ae95ae2"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:47.765901+00:00",
+      "topic_id": "golang_concurrency_and_runtime",
+      "gene_id": "LANG_GO_GMP_CONCURRENCY",
+      "provenance": "LIVE_HTTP:9a72a7a4580f8852"
+    },
+    {
+      "timestamp": "2026-10-17T05:36:48.201968+00:00",
+      "topic_id": "wasm_linear_memory_and_simd",
+      "gene_id": "LANG_WASM_LINEAR_SIMD",
+      "provenance": "LIVE_HTTP:483f3b02f04d41c0"
+    }
+  ]
+}

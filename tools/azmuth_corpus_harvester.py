@@ -382,7 +382,82 @@ def sequence_solved_task_submissions() -> int:
     return new_genes
 
 
-# --- Problem Constraint Mapping ---
+# --- Problem Constraint Mapping & Problem-Dissector Integration ---
+
+DISSECTOR_ROOT = Path("F:/Aaradhya-Dev-Tamrakar/Problem-Dissector")
+
+ARCHETYPE_GENE_MAP: dict[str, list[str]] = {
+    "01": ["LANG_PYTHON_FUNCTOOLS_CACHE", "MATRIX_EXPONENTIATION"],
+    "02": ["STATIC_FORWARD_STAR_GRAPH", "DIJKSTRA_SHORTEST_PATH", "DISJOINT_SET_UNION", "LANG_PYTHON_COLLECTIONS_DEQUE"],
+    "03": ["BINARY_LIFTING_LCA", "DISJOINT_SET_UNION"],
+    "04": ["SEGMENT_TREE_RANGE_QUERY", "FENWICK_BINARY_INDEXED_TREE", "SPARSE_TABLE_RMQ_O1"],
+    "05": ["LINEAR_SIEVE_PRIME_FACTORIZATION", "FAST_MODULAR_EXPONENTIATION", "LANG_PYTHON_MATH_NUMTHEORY"],
+    "06": ["TWO_POINTER_SLIDING_WINDOW", "MONOTONIC_DEQUE_SLIDING_WINDOW", "LANG_PYTHON_BISECT_SEARCH"],
+    "07": ["MONOTONE_CHAIN_CONVEX_HULL"],
+    "08": ["KMP_PREFIX_AUTOMATON", "COMPACT_PREFIX_TRIE"],
+}
+
+
+def compute_dissection_contract_and_genes(
+    slug: str,
+    title: str,
+    statement_text: str,
+    time_limit: str = "1000 ms",
+    memory_limit: str = "256 MB",
+    platform: str = "csacademy",
+    difficulty: str = "MEDIUM",
+) -> tuple[list[str], dict[str, Any]]:
+    """Invokes Problem-Dissector (<20ms deterministic fast path) to derive candidate genes and contract metadata."""
+    candidate_genes = ["FAST_IO_STREAM_UNTIE"]
+    contract_summary: dict[str, Any] = {}
+
+    if statement_text and DISSECTOR_ROOT.exists():
+        try:
+            if str(DISSECTOR_ROOT) not in sys.path:
+                sys.path.insert(0, str(DISSECTOR_ROOT))
+            from dissector.adapters.base import RawProblemData
+            from dissector.engine import build_agent_contract, dissect_problem
+
+            raw_prob = RawProblemData(
+                slug=slug,
+                title=title,
+                statement_markdown=statement_text,
+                time_limit_str=time_limit,
+                memory_limit_str=memory_limit,
+                platform=platform,
+                difficulty=difficulty,
+            )
+            report = dissect_problem(raw_prob)
+            contract = build_agent_contract(report)
+            arch_id = contract.archetype_id
+            for g in ARCHETYPE_GENE_MAP.get(arch_id, []):
+                if g not in candidate_genes:
+                    candidate_genes.append(g)
+            contract_summary = {
+                "archetype_id": arch_id,
+                "archetype_name": contract.archetype_name,
+                "time_complexity": contract.asymptotics.time_complexity,
+                "space_complexity": contract.asymptotics.space_complexity,
+                "dominant_dimension": contract.asymptotics.dominant_dimension,
+                "core_invariants": contract.core_invariants[:3],
+                "forbidden_approaches": contract.forbidden_approaches[:3],
+            }
+        except Exception as exc:
+            logger.debug(f"Problem-Dissector fallback for {slug}: {exc}")
+
+    # Slug keyword enrichment
+    s_low = slug.lower()
+    if ("graph" in s_low or "tree" in s_low) and "DISJOINT_SET_UNION" not in candidate_genes:
+        candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
+    if ("query" in s_low or "subarray" in s_low or "range" in s_low) and "SEGMENT_TREE_RANGE_QUERY" not in candidate_genes:
+        candidate_genes.append("SEGMENT_TREE_RANGE_QUERY")
+    if ("palindrome" in s_low or "string" in s_low) and "KMP_PREFIX_AUTOMATON" not in candidate_genes:
+        candidate_genes.append("KMP_PREFIX_AUTOMATON")
+    if ("gcd" in s_low or "prime" in s_low or "divisor" in s_low) and "LANG_PYTHON_MATH_NUMTHEORY" not in candidate_genes:
+        candidate_genes.append("LANG_PYTHON_MATH_NUMTHEORY")
+
+    return candidate_genes, contract_summary
+
 
 def index_unmapped_problems(batch_size: int = 10) -> int:
     """Scans CS Academy and HackerRank tasks and indexes their constraint signatures."""
@@ -415,6 +490,7 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
                     pass
 
             constraints_raw = ""
+            stmt_text = ""
             latex_bounds = {}
             if statement_file.exists():
                 try:
@@ -429,15 +505,20 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
             difficulty = metadata.get("difficulty", "MEDIUM")
             time_limit = metadata.get("time_limit", "1000 ms")
             memory_limit = metadata.get("memory_limit", "128 MB")
+            title = metadata.get("title", slug)
 
-            candidate_genes = ["FAST_IO_STREAM_UNTIE"]
-            if "graph" in slug or "tree" in slug:
-                candidate_genes.extend(["STATIC_FORWARD_STAR_GRAPH", "DISJOINT_SET_UNION"])
-            if "query" in slug or "subarray" in slug or "range" in slug:
-                candidate_genes.append("SEGMENT_TREE_RANGE_QUERY")
+            candidate_genes, dissection_contract = compute_dissection_contract_and_genes(
+                slug=slug,
+                title=title,
+                statement_text=stmt_text,
+                time_limit=time_limit,
+                memory_limit=memory_limit,
+                platform="csacademy",
+                difficulty=difficulty,
+            )
 
             indexed_map[slug] = {
-                "title": metadata.get("title", slug),
+                "title": title,
                 "platform": "csacademy",
                 "difficulty": difficulty,
                 "time_limit": time_limit,
@@ -445,6 +526,7 @@ def index_unmapped_problems(batch_size: int = 10) -> int:
                 "bounds": latex_bounds,
                 "constraints_summary": constraints_raw[:200],
                 "candidate_genes": candidate_genes,
+                "dissection_contract": dissection_contract,
                 "indexed_at": datetime.now(timezone.utc).isoformat(),
             }
             count += 1
@@ -656,6 +738,17 @@ def harvest_single_task() -> dict[str, Any]:
             "task": "sequence_solved_task_submissions",
             "genes_created": new_task_genes,
         }
+
+    # Priority 3.5: Harvest canonical Programming Language Global References & Tier-1 Codons
+    try:
+        from tools.azmuth_language_harvester import harvest_language_reference_step
+        lang_res = harvest_language_reference_step(batch_size=1)
+        if lang_res.get("topics_harvested", 0) > 0:
+            ledger["genes_sequenced"] = ledger.get("genes_sequenced", 0) + lang_res.get("genes_created", 0)
+            save_corpus_ledger(ledger)
+            return lang_res
+    except Exception as e:
+        logger.debug(f"Language harvester error: {e}")
 
     # Priority 4: Continuous constraint indexing of CS Academy & HackerRank tasks
     indexed_count = index_unmapped_problems(batch_size=5)

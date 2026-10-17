@@ -1,13 +1,33 @@
 {
   "version": 1,
-  "tasks_attempted": 3,
-  "tasks_solved": 3,
+  "tasks_attempted": 23,
+  "tasks_solved": 23,
   "solved_slugs": [
     "acronyms",
     "anagrams",
-    "odd-divisor-count"
+    "odd-divisor-count",
+    "subarrays-xor-sum",
+    "template-addition",
+    "0-k-multiple",
+    "0-sum-array",
+    "reversed-number",
+    "odd-sum",
+    "odd-pair-sums",
+    "neighbour-sum-replacement",
+    "shifted-diagonal-sum",
+    "reconstruct-sum",
+    "palindrome-free-strings",
+    "odd-palindromes",
+    "consecutive-sum",
+    "gcd-rebuild",
+    "3-divisible-pairs",
+    "8-divisible",
+    "add-and-divide",
+    "adjacent-vowels",
+    "a-single-one",
+    "reverse-subarray"
   ],
-  "last_solve_at": "2026-10-16T14:52:10.784103+00:00",
+  "last_solve_at": "2026-10-17T05:34:01.971728+00:00",
   "history": [
     {
       "timestamp": "2026-10-16T12:05:58.684661+00:00",
@@ -26,35 +46,127 @@
       "slug": "odd-divisor-count",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-16T18:33:23.107753+00:00",
+      "slug": "subarrays-xor-sum",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-17T02:36:05.352276+00:00",
+      "slug": "template-addition",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-17T02:42:36.736124+00:00",
+      "slug": "0-k-multiple",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T02:44:06.176092+00:00",
+      "slug": "0-sum-array",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:12:14.182776+00:00",
+      "slug": "reversed-number",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-17T04:12:28.076403+00:00",
+      "slug": "odd-sum",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:12:28.304949+00:00",
+      "slug": "odd-pair-sums",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:12:28.575853+00:00",
+      "slug": "neighbour-sum-replacement",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 4
+    },
+    {
+      "timestamp": "2026-10-17T04:12:28.829614+00:00",
+      "slug": "shifted-diagonal-sum",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:12:55.997020+00:00",
+      "slug": "reconstruct-sum",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:12:56.161091+00:00",
+      "slug": "palindrome-free-strings",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:12:56.319969+00:00",
+      "slug": "odd-palindromes",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:16:08.976221+00:00",
+      "slug": "consecutive-sum",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:16:09.137125+00:00",
+      "slug": "gcd-rebuild",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:16:09.407812+00:00",
+      "slug": "3-divisible-pairs",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:16:09.698516+00:00",
+      "slug": "8-divisible",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T04:16:09.888963+00:00",
+      "slug": "add-and-divide",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:16:10.074973+00:00",
+      "slug": "adjacent-vowels",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:16:10.332382+00:00",
+      "slug": "a-single-one",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-17T05:34:01.971663+00:00",
+      "slug": "reverse-subarray",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
-  "attempted_slugs": {
-    "0-sum-array": "VERIFICATION_FAILED",
-    "101-palindromes": "VERIFICATION_FAILED",
-    "addition-time": "VERIFICATION_FAILED",
-    "consecutive-sum": "VERIFICATION_FAILED",
-    "constant-sum": "VERIFICATION_FAILED",
-    "distinct-palindromes": "VERIFICATION_FAILED",
-    "double-palindromes": "VERIFICATION_FAILED",
-    "equal-sums": "VERIFICATION_FAILED",
-    "fibonacci-mod": "VERIFICATION_FAILED",
-    "fibonacci-representations-small": "VERIFICATION_FAILED",
-    "free-palindromes": "VERIFICATION_FAILED",
-    "gcd-on-a-circle": "VERIFICATION_FAILED",
-    "gcd-rebuild": "VERIFICATION_FAILED",
-    "matrix-palindromes": "VERIFICATION_FAILED",
-    "neighbour-sum-replacement": "VERIFICATION_FAILED",
-    "no-prime-sum": "VERIFICATION_FAILED",
-    "nogcd": "VERIFICATION_FAILED",
-    "odd-pair-sums": "VERIFICATION_FAILED",
-    "odd-palindromes": "VERIFICATION_FAILED",
-    "odd-sum": "VERIFICATION_FAILED",
-    "palindrome-centers": "VERIFICATION_FAILED",
-    "palindrome-free-strings": "VERIFICATION_FAILED",
-    "reconstruct-sum": "VERIFICATION_FAILED",
-    "reverse-subarray": "UNSUPPORTED_ARCHETYPE",
-    "reversed-number": "UNSUPPORTED_ARCHETYPE",
-    "shifted-diagonal-sum": "VERIFICATION_FAILED",
-    "sliding-product-sum": "VERIFICATION_FAILED"
-  }
+  "attempted_slugs": {}
 }

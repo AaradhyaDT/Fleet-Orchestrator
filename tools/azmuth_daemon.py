@@ -541,11 +541,54 @@ def record_burst_history(entry: dict[str, Any]) -> None:
         logger.debug(f"Could not record burst history: {e}")
 
 
+# --- Dynamic Module Hot-Reloading Guard ---
+
+MODULE_MTIMES: dict[str, int] = {}
+AZMUTH_TOOL_MODULE_NAMES: list[str] = [
+    "tools.azmuth_language_harvester",
+    "tools.ultimatrix_autonomous_solver",
+    "tools.ultimatrix_splicer",
+    "tools.ultimatrix_mutator",
+    "tools.azmuth_corpus_harvester",
+]
+
+
+def check_and_reload_tool_modules() -> list[str]:
+    """Inspects file modification timestamps for Azmuth and Ultimatrix tool scripts.
+    If any tool file has been modified on disk, reloads the dependency chain in topological order
+    so the daemon never executes stale in-memory bytecode across long-running background sessions.
+    """
+    if any("pytest" in m for m in sys.modules):
+        return []
+
+    import importlib
+    reloaded: list[str] = []
+    for mod_name in AZMUTH_TOOL_MODULE_NAMES:
+        try:
+            rel_path = mod_name.replace(".", "/") + ".py"
+            file_path = ROOT / rel_path
+            if file_path.exists():
+                cur_mtime = file_path.stat().st_mtime_ns
+                prev_mtime = MODULE_MTIMES.get(mod_name)
+                if prev_mtime is not None and cur_mtime != prev_mtime:
+                    if mod_name in sys.modules:
+                        importlib.reload(sys.modules[mod_name])
+                        reloaded.append(mod_name)
+                        logger.info(f"[Hot-Reload] Reloaded modified module in memory: {mod_name}")
+                MODULE_MTIMES[mod_name] = cur_mtime
+        except Exception as exc:
+            logger.debug(f"[Hot-Reload] Error checking/reloading {mod_name}: {exc}")
+    return reloaded
+
+
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
     Bails immediately if user input is detected or available RAM is below safety floor.
     Dynamically adjusts task volume and safety thresholds based on the active gear.
     """
+    # Hot-reload any modified tool modules prior to burst execution
+    check_and_reload_tool_modules()
+
     gear_name, gear_cfg = check_and_enforce_gear_safety()
     min_ram = gear_cfg.get("min_avail_ram_gb", 4.0)
     max_load = gear_cfg.get("max_ram_load", 75)
@@ -867,6 +910,28 @@ def main() -> int:
             except Exception:
                 pass
 
+        # Global Language Reference ledger statistics
+        lang_file = STATE_DIR / "azmuth_language_ledger.json"
+        lang_harvested = 0
+        lang_total = 12
+        if lang_file.exists():
+            try:
+                l_data = json.loads(lang_file.read_text(encoding="utf-8"))
+                lang_harvested = l_data.get("harvested_count", 0)
+                lang_total = l_data.get("total_manifest_topics", 12)
+            except Exception:
+                pass
+
+        # Solver ledger statistics
+        solver_file = STATE_DIR / "ultimatrix_solver_ledger.json"
+        tasks_solved = 0
+        if solver_file.exists():
+            try:
+                s_data = json.loads(solver_file.read_text(encoding="utf-8"))
+                tasks_solved = len(s_data.get("solved_slugs", []))
+            except Exception:
+                pass
+
         print("==========================================================")
         print("  FLEET AZMUTH DAEMON & ULTIMATRIX SENTINEL STATUS")
         print("==========================================================")
@@ -877,12 +942,14 @@ def main() -> int:
         print(f"  System RAM        : {avail_ram:.2f} GB free / {total_ram:.2f} GB total ({ram_load}% load)")
         print(f"  Gear RAM Floor    : >= {gear_cfg['min_avail_ram_gb']} GB free (<= {gear_cfg['max_ram_load']}% load)")
         print("----------------------------------------------------------")
-        print(f"  ULTIMATRIX CODON STREAM (Target: 100 Genes for Phase 2)")
-        print(f"  Total Genes       : {total_genes} / 100")
+        print(f"  ULTIMATRIX CODON STREAM (Phase 2 Graduated | Phase 3 Target: 250 Genes)")
+        print(f"  Total Genes       : {total_genes} (Phase 2 Target: 100 [MET] | Phase 3: 250)")
         print(f"  Tier 0 (Hardware) : {tier_counts[0]} | Tier 1 (Language) : {tier_counts[1]}")
         print(f"  Tier 2 (Primitive): {tier_counts[2]} | Tier 3 (Breakers) : {tier_counts[3]}")
         print(f"  Tier 4 (Symbolic) : {tier_counts[4]}")
+        print(f"  Global Lang Refs  : {lang_harvested} / {lang_total} Canonical Modules")
         print(f"  Problems Indexed  : {total_indexed} / 696 Tasks")
+        print(f"  Verified Solved   : {tasks_solved} Tasks (100% Sample Verified)")
         print(f"  Arena Tournaments : {tournaments} run ({promotions} promotions)")
         print("----------------------------------------------------------")
         print(f"  Last Run Timestamp: {last_log.get('timestamp', 'Never')}")

@@ -89,6 +89,15 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 
 
 
+### Phase 2.5: Azmuth 3-Tier Language Reference Harvester & Solver Escalation Ladder
+*Objective:* Expand Codon Stream across 3 tiers (Ecosystem, AI Fellowship, Strategic Runtimes), eliminate solver plateau, and guard against in-memory daemon staleness.
+- [x] Build and integrate `tools/azmuth_language_harvester.py` materializing 30 canonical language modules over live HTTP into `runtimes/global_references/` and `codon_stream/tier1_language/`.
+- [x] Generate master ecosystem language index [`runtimes/global_references/INDEX.md`](../../Competitive-Programming/runtimes/global_references/INDEX.md) and fast zero-token query CLI (`--lookup`, `--tier`, `--list`).
+- [x] Eliminate keyword hijacking bug and implement 4-stage Escalation Ladder in `tools/ultimatrix_autonomous_solver.py` (Archetype -> Spliced-DNA LLM -> Context-Grounded Self-Healing -> Sequencing).
+- [x] Expand Python 3.12+ DNA translations from 5 to 19 algorithms in `tools/ultimatrix_splicer.py` and add structural mutators in `tools/ultimatrix_mutator.py`.
+- [x] Implement dynamic module mtime hot-reload guard in `tools/azmuth_daemon.py` (`check_and_reload_tool_modules`).
+- [x] Solve and sample-verify 23 competitive programming tasks (100% sample pass rate), expanding Codon Stream to 162 genes (162% of Phase 2 milestone target).
+
 ### Phase 3: Autonomous CPM DAG Planner & SKU Expansion Engine
 *Objective:* Implement dependency-ordered Critical Path Method (CPM) DAG scheduling ([Issues #28](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/28)–[#31](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/31), [#34](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/34)).
 - [ ] Implement `tools/dag_planner.py` supporting linear, fan-out, and diamond topologies.
@@ -120,3 +129,4 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 | **Phase 7** | `0bfe208` | `38902470555` | **SUCCESS** (9/9 jobs) | Closed-Loop Evolutionary Scheduler, Anti-Starvation Filter, Auto-Solution Sequencing | 2026-10-16 |
 | **Phase 8** | `cd9e4a0` | `38903713511` | **SUCCESS** (9/9 jobs) | Spliced-DNA Fallback Synthesis, Self-Healing Repair, Empirical Judge Sandbox | 2026-10-16 |
 | **Phase 1 (Exp)** | `1dfc4a2` | `38918736819` | **SUCCESS** (9/9 jobs) | Copilot Muscle Bridge, Multi-Model Gemini Fallback, Mutator Throttle | 2026-10-16 |
+| **Phase 2.5** | Pending Sync | Pending Sync | **PASSED** (16/16 tests) | 3-Tier Language Reference Harvester (30 mods), Solver Escalation, 162 Codon Genes | 2026-10-17 |

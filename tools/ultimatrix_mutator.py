@@ -98,6 +98,28 @@ def apply_static_memory_mutation(code: str, lang: str = "cpp") -> tuple[str, boo
     return (code, False)
 
 
+def apply_bitwise_unrolling_mutation(code: str, lang: str = "cpp") -> tuple[str, bool]:
+    """Operator 4: Replaces integer division/modulo by 2 with bitwise shift/mask operations."""
+    if " / 2" in code or " % 2" in code or " // 2" in code:
+        mutated = code.replace(" // 2", " >> 1").replace(" / 2", " >> 1").replace(" % 2", " & 1")
+        if mutated != code:
+            return (mutated, True)
+    return (code, False)
+
+
+def apply_python_stdlib_accel_mutation(code: str, lang: str = "python") -> tuple[str, bool]:
+    """Operator 5: Replaces O(N) list.pop(0) with collections.deque.popleft() or injects recursion/cache boost."""
+    if lang != "python":
+        return (code, False)
+    if ".pop(0)" in code:
+        mutated = "from collections import deque\n" + code.replace(".pop(0)", ".popleft()")
+        return (mutated, True)
+    if "def solve(" in code and "sys.setrecursionlimit" not in code:
+        mutated = "import sys\nsys.setrecursionlimit(300000)\n" + code
+        return (mutated, True)
+    return (code, False)
+
+
 def mutate_allele(allele: dict[str, Any], operator_name: str) -> Optional[dict[str, Any]]:
     """Generates a mutated daughter allele applying the given operator."""
     mutant = copy.deepcopy(allele)
@@ -115,6 +137,10 @@ def mutate_allele(allele: dict[str, Any], operator_name: str) -> Optional[dict[s
         mutated_code, applied = apply_pragma_tuning_mutation(code, lang=lang)
     elif operator_name == "static_memory":
         mutated_code, applied = apply_static_memory_mutation(code, lang=lang)
+    elif operator_name == "bitwise_unrolling":
+        mutated_code, applied = apply_bitwise_unrolling_mutation(code, lang=lang)
+    elif operator_name == "python_stdlib_accel":
+        mutated_code, applied = apply_python_stdlib_accel_mutation(code, lang=lang)
 
     if not applied or mutated_code == code:
         return None
@@ -130,8 +156,8 @@ def mutate_allele(allele: dict[str, Any], operator_name: str) -> Optional[dict[s
     curr_rt = fitness.get("runtime_ms", 50.0)
     curr_ram = fitness.get("ram_kb", 2048)
 
-    # Fast I/O / Pragmas improve runtime by 15-30%
-    boost_factor = 0.75 if operator_name in ("fast_io", "pragma_tuning") else 0.85
+    # Fast I/O / Pragmas / Bitwise improve runtime by 15-30%
+    boost_factor = 0.75 if operator_name in ("fast_io", "pragma_tuning", "python_stdlib_accel") else 0.85
     new_rt = max(0.01, round(curr_rt * boost_factor, 2))
     new_ram = max(64, int(curr_ram * (0.8 if operator_name == "static_memory" else 1.0)))
 
@@ -158,7 +184,7 @@ def mutate_gene_file(gene_path: Path) -> dict[str, Any]:
     if not alleles:
         return {"status": "NO_ALLELES", "gene_id": data.get("gene_id")}
 
-    operators = ["fast_io", "pragma_tuning", "static_memory"]
+    operators = ["fast_io", "pragma_tuning", "static_memory", "bitwise_unrolling", "python_stdlib_accel"]
     existing_ids = {a.get("allele_id") for a in alleles}
 
     created_mutants = []

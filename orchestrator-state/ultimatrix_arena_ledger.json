@@ -1,124 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-16T13:07:03.993451+00:00",
-  "tournaments_run": 707,
+  "last_tournament_at": "2026-10-17T04:17:43.900095+00:00",
+  "tournaments_run": 726,
   "alleles_benchmarked": 0,
-  "promotions": 51,
+  "promotions": 70,
   "history": [
-    {
-      "timestamp": "2026-10-16T12:47:40.627033+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:40.773992+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:40.907049+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:47:40.947206+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:11.124242+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:11.263411+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:11.415216+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:11.453930+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:41.635879+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:41.760829+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:41.915884+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:48:41.954975+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:12.102280+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:12.265051+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:12.403809+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:12.431469+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:42.585943+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:42.734355+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-16T12:49:42.886403+00:00",
-      "genes": [
-        "FAST_IO_STREAM_UNTIE"
-      ]
-    },
     {
       "timestamp": "2026-10-16T12:49:42.927413+00:00",
       "genes": [
@@ -303,6 +189,120 @@
       "timestamp": "2026-10-16T13:07:03.993278+00:00",
       "genes": [
         "TASK_ODD_DIVISOR_COUNT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T02:35:58.753450+00:00",
+      "genes": [
+        "TASK_SUBARRAYS_XOR_SUM"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T02:37:06.180816+00:00",
+      "genes": [
+        "TASK_TEMPLATE_ADDITION"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T02:42:37.173795+00:00",
+      "genes": [
+        "TASK_0_K_MULTIPLE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T02:44:06.596539+00:00",
+      "genes": [
+        "TASK_0_SUM_ARRAY"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:12:43.894420+00:00",
+      "genes": [
+        "TASK_NEIGHBOUR_SUM_REPLACEMENT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:12:44.155276+00:00",
+      "genes": [
+        "TASK_ODD_PAIR_SUMS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:13:14.721532+00:00",
+      "genes": [
+        "TASK_ODD_PALINDROMES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:13:14.958726+00:00",
+      "genes": [
+        "TASK_ODD_SUM"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:13:45.212801+00:00",
+      "genes": [
+        "TASK_PALINDROME_FREE_STRINGS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:13:45.468249+00:00",
+      "genes": [
+        "TASK_RECONSTRUCT_SUM"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:13:45.749671+00:00",
+      "genes": [
+        "TASK_REVERSED_NUMBER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:14:15.994326+00:00",
+      "genes": [
+        "TASK_SHIFTED_DIAGONAL_SUM"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:16:42.177823+00:00",
+      "genes": [
+        "TASK_3_DIVISIBLE_PAIRS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:16:42.455948+00:00",
+      "genes": [
+        "TASK_8_DIVISIBLE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:16:42.719490+00:00",
+      "genes": [
+        "TASK_ADD_AND_DIVIDE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:17:13.025525+00:00",
+      "genes": [
+        "TASK_ADJACENT_VOWELS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:17:13.315109+00:00",
+      "genes": [
+        "TASK_A_SINGLE_ONE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:17:13.564901+00:00",
+      "genes": [
+        "TASK_CONSECUTIVE_SUM"
+      ]
+    },
+    {
+      "timestamp": "2026-10-17T04:17:43.900000+00:00",
+      "genes": [
+        "TASK_GCD_REBUILD"
       ]
     }
   ]

@@ -441,6 +441,308 @@ class Dijkstra:
     return ans
 '''
 
+    if gid == "BINARY_LIFTING_LCA":
+        return '''class BinaryLiftingLCA:
+    def __init__(self, n: int, adj: list[list[int]], root: int = 0):
+        self.n = n
+        self.LOG = max(1, n.bit_length())
+        self.up = [[-1] * n for _ in range(self.LOG)]
+        self.depth = [0] * n
+        self._bfs_build(adj, root)
+
+    def _bfs_build(self, adj: list[list[int]], root: int) -> None:
+        from collections import deque
+        visited = [False] * self.n
+        visited[root] = True
+        q = deque([root])
+        while q:
+            u = q.popleft()
+            for v in adj[u]:
+                if not visited[v]:
+                    visited[v] = True
+                    self.depth[v] = self.depth[u] + 1
+                    self.up[0][v] = u
+                    q.append(v)
+        for k in range(1, self.LOG):
+            for v in range(self.n):
+                p = self.up[k - 1][v]
+                if p != -1:
+                    self.up[k][v] = self.up[k - 1][p]
+
+    def lca(self, u: int, v: int) -> int:
+        if self.depth[u] < self.depth[v]:
+            u, v = v, u
+        diff = self.depth[u] - self.depth[v]
+        for k in range(self.LOG):
+            if (diff >> k) & 1:
+                u = self.up[k][u]
+        if u == v:
+            return u
+        for k in range(self.LOG - 1, -1, -1):
+            if self.up[k][u] != self.up[k][v]:
+                u = self.up[k][u]
+                v = self.up[k][v]
+        return self.up[0][u]
+'''
+
+    if gid == "TARJAN_STRONGLY_CONNECTED_COMPONENTS":
+        return '''def tarjan_scc(n: int, adj: list[list[int]]) -> tuple[int, list[int]]:
+    tin = [-1] * n
+    low = [-1] * n
+    comp = [-1] * n
+    on_stack = [False] * n
+    stack: list[int] = []
+    timer = 0
+    scc_cnt = 0
+
+    def dfs(u: int) -> None:
+        nonlocal timer, scc_cnt
+        tin[u] = low[u] = timer
+        timer += 1
+        stack.append(u)
+        on_stack[u] = True
+        for v in adj[u]:
+            if tin[v] == -1:
+                dfs(v)
+                low[u] = min(low[u], low[v])
+            elif on_stack[v]:
+                low[u] = min(low[u], tin[v])
+        if low[u] == tin[u]:
+            while True:
+                w = stack.pop()
+                on_stack[w] = False
+                comp[w] = scc_cnt
+                if w == u:
+                    break
+            scc_cnt += 1
+
+    for i in range(n):
+        if tin[i] == -1:
+            dfs(i)
+    return scc_cnt, comp
+'''
+
+    if gid == "KMP_PREFIX_AUTOMATON":
+        return '''def kmp_prefix_function(s: str) -> list[int]:
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i - 1]
+        while j > 0 and s[i] != s[j]:
+            j = pi[j - 1]
+        if s[i] == s[j]:
+            j += 1
+        pi[i] = j
+    return pi
+'''
+
+    if gid == "COMPACT_PREFIX_TRIE":
+        return '''class PrefixTrie:
+    def __init__(self) -> None:
+        self.children: list[dict[str, int]] = [{}]
+        self.is_end: list[bool] = [False]
+
+    def insert(self, word: str) -> None:
+        node = 0
+        for ch in word:
+            nxt = self.children[node].get(ch)
+            if nxt is None:
+                nxt = len(self.children)
+                self.children[node][ch] = nxt
+                self.children.append({})
+                self.is_end.append(False)
+            node = nxt
+        self.is_end[node] = True
+'''
+
+    if gid == "SPARSE_TABLE_RMQ_O1":
+        return '''class SparseTableRMQ:
+    def __init__(self, arr: list[int]):
+        self.n = len(arr)
+        self.LOG = max(1, self.n.bit_length())
+        self.st = [list(arr)]
+        for k in range(1, self.LOG):
+            prev = self.st[k - 1]
+            step = 1 << (k - 1)
+            limit = self.n - (1 << k) + 1
+            if limit <= 0:
+                break
+            self.st.append([min(prev[i], prev[i + step]) for i in range(limit)])
+
+    def query_min(self, l: int, r: int) -> int:
+        length = r - l + 1
+        k = length.bit_length() - 1
+        return min(self.st[k][l], self.st[k][r - (1 << k) + 1])
+'''
+
+    if gid == "MONOTONIC_DEQUE_SLIDING_WINDOW":
+        return '''from collections import deque
+
+def sliding_window_min(arr: list[int], k: int) -> list[int]:
+    dq: deque[int] = deque()
+    res: list[int] = []
+    for i, val in enumerate(arr):
+        while dq and arr[dq[-1]] >= val:
+            dq.pop()
+        dq.append(i)
+        if dq[0] <= i - k:
+            dq.popleft()
+        if i >= k - 1:
+            res.append(arr[dq[0]])
+    return res
+'''
+
+    if gid == "LINEAR_SIEVE_PRIME_FACTORIZATION":
+        return '''def linear_sieve(limit: int) -> tuple[list[int], list[int]]:
+    spf = list(range(limit + 1))
+    primes: list[int] = []
+    for i in range(2, limit + 1):
+        if spf[i] == i:
+            primes.append(i)
+        for p in primes:
+            if p > spf[i] or i * p > limit:
+                break
+            spf[i * p] = p
+    return primes, spf
+'''
+
+    if gid in ("FAST_MODULAR_EXPONENTIATION", "EXTENDED_EUCLIDEAN_GCD"):
+        return '''def mod_pow(base: int, exp: int, mod: int = 1_000_000_007) -> int:
+    return pow(base, exp, mod)
+
+def mod_inv(a: int, mod: int = 1_000_000_007) -> int:
+    return pow(a, -1, mod)
+'''
+
+    if gid == "MATRIX_EXPONENTIATION":
+        return '''def mat_mul(A: list[list[int]], B: list[list[int]], mod: int = 1_000_000_007) -> list[list[int]]:
+    m = len(A)
+    res = [[0] * m for _ in range(m)]
+    for i in range(m):
+        for k in range(m):
+            if A[i][k] == 0:
+                continue
+            aik = A[i][k]
+            for j in range(m):
+                res[i][j] = (res[i][j] + aik * B[k][j]) % mod
+    return res
+
+def mat_pow(A: list[list[int]], p: int, mod: int = 1_000_000_007) -> list[list[int]]:
+    m = len(A)
+    res = [[int(i == j) for j in range(m)] for i in range(m)]
+    base = [row[:] for row in A]
+    while p > 0:
+        if p & 1:
+            res = mat_mul(res, base, mod)
+        base = mat_mul(base, base, mod)
+        p >>= 1
+    return res
+'''
+
+    if gid == "MONOTONE_CHAIN_CONVEX_HULL":
+        return '''def convex_hull(points: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    pts = sorted(set(points))
+    if len(pts) <= 1:
+        return pts
+
+    def cross(o: tuple[int, int], a: tuple[int, int], b: tuple[int, int]) -> int:
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    lower: list[tuple[int, int]] = []
+    for p in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    upper: list[tuple[int, int]] = []
+    for p in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    return lower[:-1] + upper[:-1]
+'''
+
+    if gid == "DINIC_MAX_FLOW":
+        return '''from collections import deque
+
+class DinicMaxFlow:
+    def __init__(self, n: int):
+        self.n = n
+        self.adj: list[list[list[int]]] = [[] for _ in range(n)]
+
+    def add_edge(self, u: int, v: int, cap: int) -> None:
+        self.adj[u].append([v, cap, len(self.adj[v])])
+        self.adj[v].append([u, 0, len(self.adj[u]) - 1])
+
+    def max_flow(self, s: int, t: int) -> int:
+        flow = 0
+        while True:
+            level = [-1] * self.n
+            level[s] = 0
+            q = deque([s])
+            while q:
+                u = q.popleft()
+                for v, cap, _ in self.adj[u]:
+                    if cap > 0 and level[v] < 0:
+                        level[v] = level[u] + 1
+                        q.append(v)
+            if level[t] < 0:
+                return flow
+            it = [0] * self.n
+
+            def dfs(u: int, pushed: int) -> int:
+                if pushed == 0 or u == t:
+                    return pushed
+                while it[u] < len(self.adj[u]):
+                    edge = self.adj[u][it[u]]
+                    v, cap, rev = edge
+                    if level[u] + 1 == level[v] and cap > 0:
+                        tr = dfs(v, min(pushed, cap))
+                        if tr > 0:
+                            edge[1] -= tr
+                            self.adj[v][rev][1] += tr
+                            return tr
+                    it[u] += 1
+                return 0
+
+            while True:
+                pushed = dfs(s, 10**18)
+                if pushed == 0:
+                    break
+                flow += pushed
+'''
+
+    if gid == "PREFIX_SUM_2D_INCLUSION":
+        return '''class PrefixSum2D:
+    def __init__(self, grid: list[list[int]]):
+        r = len(grid)
+        c = len(grid[0]) if r else 0
+        self.pref = [[0] * (c + 1) for _ in range(r + 1)]
+        for i in range(r):
+            for j in range(c):
+                self.pref[i + 1][j + 1] = (
+                    grid[i][j] + self.pref[i][j + 1] + self.pref[i + 1][j] - self.pref[i][j]
+                )
+
+    def query(self, r1: int, c1: int, r2: int, c2: int) -> int:
+        return (
+            self.pref[r2 + 1][c2 + 1]
+            - self.pref[r1][c2 + 1]
+            - self.pref[r2 + 1][c1]
+            + self.pref[r1][c1]
+        )
+'''
+
+    if gid == "COORDINATE_COMPRESSOR":
+        return '''def compress_coordinates(arr: list[int]) -> tuple[list[int], list[int]]:
+    unique_sorted = sorted(set(arr))
+    rank_map = {val: idx for idx, val in enumerate(unique_sorted)}
+    return [rank_map[x] for x in arr], unique_sorted
+'''
+
+    # If the gene template itself is already valid Python (e.g. LANG_PYTHON_*), return it directly
+    if gid.startswith("LANG_PYTHON_") or "def " in code_template or "import " in code_template:
+        return code_template + "\n"
+
     # Generic clean Python template comment wrapper
     return f"# Transliterated from C++ Gene {gene_id}\n# Original signature:\n# {code_template[:300].strip()}\n"
 

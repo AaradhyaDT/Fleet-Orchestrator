@@ -1,72 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 579,
-  "promotions_won": 83,
-  "last_mutation_at": "2026-10-16T14:52:10.819061+00:00",
+  "mutations_applied": 586,
+  "promotions_won": 90,
+  "last_mutation_at": "2026-10-17T04:18:59.169569+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-16T14:43:48.553108+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_31648_sasa_mut_pragma_tuning"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:43:49.408689+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_43739_phoenix1369_mut_fast_io"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:43:50.476742+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_43739_phoenix1369_mut_pragma_tuning"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:44:21.327058+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_6163773_logicforce_mut_pragma_tuning"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:44:22.486102+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_4008400_pcc_mut_pragma_tuning"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:44:24.292008+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_6111730_ariel_pincay_mut_fast_io"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
-    {
-      "timestamp": "2026-10-16T14:44:55.507057+00:00",
-      "gene_id": "TASK_WORD_ORDERING",
-      "mutant_created": [
-        "sub_6111730_ariel_pincay_mut_pragma_tuning"
-      ],
-      "dominant_allele": "sub_3894_rocky_mut_pragma_tuning",
-      "promotions": 0
-    },
     {
       "timestamp": "2026-10-16T14:44:56.652300+00:00",
       "gene_id": "TASK_WORD_ORDERING",
@@ -453,6 +390,69 @@
       ],
       "dominant_allele": "sub_7544827_zhanglewei4598_mut_pragma_tuning",
       "promotions": 0
+    },
+    {
+      "timestamp": "2026-10-17T04:05:04.268990+00:00",
+      "gene_id": "LANG_C99_FIXED_WIDTH_RINGBUF",
+      "mutant_created": [
+        "c99_stdint_bitwise_deterministic_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "c99_stdint_bitwise_deterministic_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:05:10.865046+00:00",
+      "gene_id": "LANG_CPP20_BIT_INTRINSICS",
+      "mutant_created": [
+        "cpp20_bit_manipulation_header_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "cpp20_bit_manipulation_header_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:05:17.366638+00:00",
+      "gene_id": "LANG_CPP_ORDERED_SET_SWEEP",
+      "mutant_created": [
+        "cpp20_ordered_set_map_tree_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "cpp20_ordered_set_map_tree_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:05:54.021395+00:00",
+      "gene_id": "LANG_CPP_STL_ALGORITHMS",
+      "mutant_created": [
+        "cpp20_stl_algorithms_ranges_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "cpp20_stl_algorithms_ranges_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:06:00.378541+00:00",
+      "gene_id": "LANG_CPP_STL_VECTOR_RESERVE",
+      "mutant_created": [
+        "cpp20_stl_vector_contiguous_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "cpp20_stl_vector_contiguous_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:06:06.981466+00:00",
+      "gene_id": "LANG_RUST_STD_COLLECTIONS",
+      "mutant_created": [
+        "rust_std_collections_vec_btree_canonical_mut_pragma_tuning"
+      ],
+      "dominant_allele": "rust_std_collections_vec_btree_canonical_mut_pragma_tuning",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-17T04:18:59.169474+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
     }
   ]
 }
