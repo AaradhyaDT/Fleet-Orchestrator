@@ -9,19 +9,22 @@
 
 ## 1. Executive Summary & Fleet Capacity Ledger
 
-This tracker records the phase-by-phase evolution of Fleet-Orchestrator into a **31-node homogeneous tri-modal swarm mesh** operating in symbiosis with the **Azmuth Ultimatrix Genomic Engine** and the wider 28-tool ecosystem.
+This tracker records the phase-by-phase evolution of Fleet-Orchestrator into a **decoupled asymmetric swarm mesh** (31 GitHub Copilot workers $\times$ 30 Google Gemini GCP project keys) operating in symbiosis with the **Azmuth Ultimatrix Genomic Engine** and the wider 28-tool ecosystem.
+
+> [!NOTE]
+> **Asymmetric Decoupled Pool Invariant (`INV-ASYM-FLEET`)**: GitHub PAT accounts and Google AI Studio accounts are **intentionally decoupled**. Because GitHub accounts were registered across diverse email providers (not strictly Gmail), the swarm does not enforce a synthetic 1:1 symmetric pairing. Copilot Workers (Code Muscle: 31 accounts) and Gemini Keys (Fast-Path Acceleration: 30 keys) rotate through independent circular allocators.
 
 ### Current vs. Target Swarm Capacity
 
-| Resource / Modality | Current Situ (Live Verified) | Target 31×31 Mesh (RFC-001) | Status |
+| Resource / Modality | Current Situ (Live Verified) | Target Architecture (`INV-ASYM-FLEET`) | Status |
 |:---|:---|:---|:---|
-| **Active Copilot PATs** | **31 accounts** (`copilot-w1` ... `copilot-w31`) | 31 accounts (`copilot-w1` ... `copilot-w31`) | **100% Online** |
+| **Active Copilot PATs** | **31 accounts** (`copilot-w1` ... `copilot-w31`) | **31 accounts** (all available GitHub PATs) | **100% Saturated (Online)** |
 | **Pooled Copilot AI Credits** | **5,917.4 / 6,200 monthly credits** (95.4% intact) | **6,200 monthly credits** | **Fully Provisioned** |
 | **Coding Tasks / Month** | **~2,000 – 3,100 tasks** | **~2,000 – 3,100 tasks** | **~70 – 100 tasks/day** |
-| **Google AI Studio Keys** | **30 keys** (29 in `.env.fleet.gemini` + 1 in OS env across GCP projects) | **31 keys** (across 31 projects) | **Active Mesh (450 RPM)** |
-| **Gemini Burst Rate Limit** | **450 RPM** (7.5 requests/sec) | **465 RPM** (7.7 requests/sec) | **High-Throughput Pool** |
-| **Gemini Daily Request Limit** | **45,000 RPD** | **46,500 RPD** | **Full Daily Quota** |
-| **Gemini Multi-Model Fallback** | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | **87–90 quota buckets** |
+| **Google AI Studio Keys** | **30 keys** (29 in `.env.fleet.gemini` + 1 in OS env across GCP projects) | **30 keys** (all available Gmail/GCP accounts) | **100% Saturated (450 RPM)** |
+| **Gemini Burst Rate Limit** | **450 RPM** (7.5 requests/sec) | **450 RPM** (across 30 GCP project buckets) | **High-Throughput Pool** |
+| **Gemini Daily Request Limit** | **45,000 RPD** | **45,000 RPD** | **Full Daily Quota** |
+| **Gemini Multi-Model Fallback** | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | 3 models (`3.8-flash` → `2.5-flash` → `2.5-flash-lite`) | **90 quota buckets** |
 | **Antigravity CLI Cortexes** | **31 isolated sandboxes** (`~/.agy-workers/worker_N`) | **31 isolated sandboxes** (`~/.agy-workers/worker_N`) | **31 parallel cortexes** |
 | **Local Hardware Acceleration** | Intel Core Ultra 7 155H (11 TOPS NPU + Arc iGPU) | Same physical hardware | $0.00 marginal cost |
 | **Safe Concurrency Limit** | 4 – 6 active subprocesses (`INV-HW-THROTTLE`) | 4 – 6 active subprocesses (`INV-HW-THROTTLE`) | Thermal/RAM preservation |

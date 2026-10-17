@@ -39,15 +39,15 @@ Every node $N_i$ ($i \in \{1 \dots 31\}$) dynamically assumes one of three trans
 
 ## 3. Architecture
 
-### 3.1 Aggregate Fleet Capacity
+### 3.1 Aggregate Fleet Capacity & Asymmetric Decoupled Pools (`INV-ASYM-FLEET`)
 
-$$\text{Total Fleet} = 31 \times \begin{pmatrix} \text{Antigravity Cortex (2M Context)} \\ 1{,}500\text{ Gemini RPD} / 15\text{ RPM} \\ 200\text{ Copilot AI Credits/month} \end{pmatrix}$$
+> **Invariant (`INV-ASYM-FLEET`):** GitHub PATs and Google AI Studio accounts operate as **decoupled asymmetric pools**. Because GitHub accounts were registered across diverse email providers (not strictly Gmail), the swarm does not force a synthetic 1:1 email coupling. Copilot Workers (Code Muscle: 31 accounts) and Gemini Keys (Fast-Path Acceleration: 30 GCP project keys) cycle through independent ring allocators.
 
-| Modality | Per Node | 31-Node Pool | Role in Triad |
+| Modality | Per Node | Active Fleet Pool | Role in Triad |
 |:---|:---|:---|:---|
 | **Antigravity CLI** | Isolated profile sandbox | **31 concurrent cortexes** | Deep reasoning, DAG planning, invariant auditing |
-| **Gemini API** | 1,500 RPD / 15 RPM | **46,500 RPD / 465 RPM** | Zero-credit fast paths, JSON/AST validation, lint |
-| **Copilot CLI** | 200 credits/month | **6,200 credits/month** | Multi-file code generation in `.worktrees/` |
+| **Gemini API** | 1,500 RPD / 15 RPM | **45,000 RPD / 450 RPM** (30 GCP projects) | Zero-credit fast paths, JSON/AST validation, lint |
+| **Copilot CLI** | 200 credits/month | **6,200 credits/month** (31 accounts) | Multi-file code generation in `.worktrees/` |
 
 ### 3.2 Tri-Ring Topology
 
