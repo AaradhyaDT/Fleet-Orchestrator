@@ -158,3 +158,22 @@ To complement the financial/macro telemetry of `azmuth_market_sensor.py`, the se
    - To eliminate terminal popups under Windows 11 Windows Terminal (`wt.exe` / OpenConsole), `azmuth_tray.py` and startup keys run via `pythonw.exe` rather than `powershell.exe -WindowStyle Hidden`.
    - Guarantees true zero-window desktop presence with interactive notification tray access (`WinSta0\Default`).
 
+---
+
+## 8. Native Win32 60FPS Mission Control & Phylogenetic Gene Visualizer
+
+To provide visual observability into Azmuth's continuous cognitive work without heavy browser/Electron memory bloat, `tools/azmuth_gui.py` provides a standalone native desktop application:
+
+1. **Mission Control Architecture & Oscilloscope Telemetry**:
+   - Runs on native Win32 High-DPI Tkinter Canvas with Windows 11 dark mode title bar (`DwmSetWindowAttribute`).
+   - Hardware-smooth 60 FPS real-time RAM oscilloscope sparkline showing available memory against the tunable Circuit-Breaker threshold (default $3.0\text{ GB}$).
+   - Live Gear switching (`Whisper`, `Balanced`, `Turbo`) and on-the-fly Thalamic $|Z|$-score threshold slider ($0.1\sigma$ to $3.0\sigma$).
+2. **Three Switchable 60FPS Graph & Flow Canvases**:
+   - **View 1 (End-to-End Pipeline & PAT Flow)**: Visualizes the 4-stream sensory ingestion, orbital 30-PAT token radar ring, Thalamic salience sieve, U0–U5 cortex, Ultimatrix gene sequencer, and SSOT ledgers with animated signal packets.
+   - **View 2 (U0–U5 Neuromorphic Causal DAG)**: Renders the active cortical cartridge (`u0`..`u5`) with homeostatic color-coded nodes, directed axonal synapses with weights & lag days, and interactive **Multi-Hop Shock Propagation (+2.0σ)** simulations.
+   - **View 3 (Phylogenetic Gene Evolution Tree & Allele Arena)**: Renders the two-level evolutionary lineage of any of the 349+ sequenced genes (`Wild-Type Base Submissions` $\rightarrow$ `Genetic Operator Edges` $\rightarrow$ `Mutated Daughter Alleles` $\rightarrow$ `Arena PRIMARY Champion`), complete with net speedup percentages.
+3. **Interactive Capability Card & Mutation Diff Inspector**:
+   - Inspects Big-O time/space asymptotic bounds, environmental triggers (`N<=2e5`, `avx2`), formal mathematical invariants, empirical runtime/RAM fitness bars, and syntax-highlighted code templates with mutation additions highlighted.
+   - One-click **"⚡ Mutate & Race in Arena Now"** trigger applies genetic operators live and dynamically animates new branch growth on the phylogenetic tree.
+
+

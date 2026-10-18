@@ -135,8 +135,24 @@ $notify.Icon = New-GearIcon $currentGear $isPaused
 $notify.Text = "Azmuth Engine: " + $currentGear.ToUpper()
 $notify.Visible = $true
 
+function Open-AzmuthCommandCenter {
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $SilentPython
+    $psi.Arguments = "`"$RepoRoot\tools\azmuth_gui.py`""
+    $psi.WorkingDirectory = $RepoRoot
+    $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Normal
+    $psi.CreateNoWindow = $false
+    $psi.UseShellExecute = $false
+    [System.Diagnostics.Process]::Start($psi) | Out-Null
+}
+
 # --- Context Menu Strip ---
 $menu = New-Object System.Windows.Forms.ContextMenuStrip
+
+$itemOpenGui = $menu.Items.Add("Open Azmuth Command Center")
+$itemOpenGui.Font = New-Object System.Drawing.Font($itemOpenGui.Font, [System.Drawing.FontStyle]::Bold)
+
+$sepTop = $menu.Items.Add("-")
 
 $headerStatus = $menu.Items.Add("Azmuth Engine: ACTIVE")
 $headerStatus.Enabled = $false
@@ -160,16 +176,30 @@ $itemPause = $menu.Items.Add("Pause Engine")
 
 $sep3 = $menu.Items.Add("-")
 
+$itemScanGh = $menu.Items.Add("Scan GitHub Sensory Radar Now")
 $itemHarvest = $menu.Items.Add("Harvest 1 Task Now")
 $itemExit = $menu.Items.Add("Exit Tray Icon")
 
 $notify.ContextMenuStrip = $menu
 
 # Event Handlers
+$itemOpenGui.add_Click({ Open-AzmuthCommandCenter })
+$notify.add_DoubleClick({ Open-AzmuthCommandCenter })
 $itemTurbo.add_Click({ Set-AzmuthGear "turbo"; Update-TrayState })
 $itemBalanced.add_Click({ Set-AzmuthGear "balanced"; Update-TrayState })
 $itemWhisper.add_Click({ Set-AzmuthGear "whisper"; Update-TrayState })
 $itemPause.add_Click({ Toggle-AzmuthPause; Update-TrayState })
+$itemScanGh.add_Click({
+    [System.Threading.ThreadPool]::QueueUserWorkItem({
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = $SilentPython
+        $psi.Arguments = "`"$RepoRoot\tools\azmuth_github_sensor.py`" --scan"
+        $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+        $psi.CreateNoWindow = $true
+        $psi.UseShellExecute = $false
+        [System.Diagnostics.Process]::Start($psi) | Out-Null
+    })
+})
 $itemHarvest.add_Click({
     [System.Threading.ThreadPool]::QueueUserWorkItem({
         $psi = New-Object System.Diagnostics.ProcessStartInfo

@@ -144,6 +144,22 @@ class AzmuthTrayApp:
         set_paused(not currently_paused, reason="Tray Menu Toggle")
         self.update_icon()
 
+    def on_open_gui(self, icon=None, item=None):
+        """Launches the Azmuth Command Center GUI via pythonw.exe (zero console flash)."""
+        import subprocess
+        gui_script = ROOT / "tools" / "azmuth_gui.py"
+        py_exe = Path(sys.executable)
+        pythonw = py_exe.with_name("pythonw.exe")
+        exe_to_use = str(pythonw if pythonw.exists() else py_exe)
+        creationflags = 0x08000000 if sys.platform == "win32" else 0  # CREATE_NO_WINDOW
+        subprocess.Popen([exe_to_use, str(gui_script)], cwd=str(ROOT), creationflags=creationflags)
+
+    def on_scan_github(self, icon, item):
+        def _scan():
+            from tools.azmuth_github_sensor import AzmuthGitHubSensor
+            AzmuthGitHubSensor().get_cached_telemetry(force_refresh=True)
+        threading.Thread(target=_scan, daemon=True).start()
+
     def on_harvest_single(self, icon, item):
         threading.Thread(target=harvest_single_task, daemon=True).start()
 
@@ -175,6 +191,8 @@ class AzmuthTrayApp:
             return is_paused()
 
         return pystray.Menu(
+            item("🖥️ Open Azmuth Command Center", self.on_open_gui, default=True),
+            pystray.Menu.SEPARATOR,
             item(f"Azmuth Engine: {'PAUSED' if is_paused() else 'ACTIVE'}", lambda icon, item: None, enabled=False),
             item(f"RAM: {avail:.1f}GB free / {total:.1f}GB ({load}% load)", lambda icon, item: None, enabled=False),
             item(f"CP Corpus: {ingested} tasks cataloged", lambda icon, item: None, enabled=False),
@@ -185,6 +203,7 @@ class AzmuthTrayApp:
             pystray.Menu.SEPARATOR,
             item("⏸️ Pause Azmuth Background", self.on_toggle_pause, checked=is_paused_checked),
             pystray.Menu.SEPARATOR,
+            item("📡 Scan GitHub Sensory Radar Now", self.on_scan_github),
             item("▶️ Harvest 1 Task Now", self.on_harvest_single),
             item("🔄 Run Verification Cycle Now", self.on_run_cycle),
             pystray.Menu.SEPARATOR,

@@ -1,12 +1,12 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-18T02:20:04.887441+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-18T04:41:17.192519+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[torch-spyre/spyre-inference]** [[FP8] Support block-wise FP8 quantization](https://github.com/torch-spyre/spyre-inference/issues/259) (Comments: 1, Salience: 1.2)
 - **[torch-spyre/spyre-inference]** [[FP8] Support online FP8 quantization (W8A16 dynamic)](https://github.com/torch-spyre/spyre-inference/issues/257) (Comments: 0, Salience: 1.0)
 - **[vllm-project/vllm-omni]** [[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving](https://github.com/vllm-project/vllm-omni/issues/8586) (Comments: 31, Salience: 2.0)
 - **[vllm-project/vllm-omni]** [[New Model]: FLUX 3 Image Klein main-branch support and inference optimization](https://github.com/vllm-project/vllm-omni/issues/8993) (Comments: 7, Salience: 2.0)
-- **[Nobayprotocol/Nobay-Protocol]** [Add Hardhat test suite for ListingRegistry.sol](https://github.com/Nobayprotocol/Nobay-Protocol/issues/3) (Comments: 17, Salience: 2.0)
+- **[Nobayprotocol/Nobay-Protocol]** [Add Hardhat test suite for ListingRegistry.sol](https://github.com/Nobayprotocol/Nobay-Protocol/issues/3) (Comments: 18, Salience: 2.0)
 - **[kubestellar/kubestellar]** [[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability](https://github.com/kubestellar/kubestellar/issues/3827) (Comments: 3, Salience: 1.6)
 - **[kubestellar/kubestellar]** [[outreach] KubeCon NA 2026 talk proposal ? AI-Maintained Open Source at Scale](https://github.com/kubestellar/kubestellar/issues/3789) (Comments: 2, Salience: 1.4)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 1, Salience: 1.2)
@@ -26,7 +26,7 @@
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-17T20:13:46Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-18T03:20:47Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-16T18:33:05Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-15T11:44:55Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-18T02:35:47Z`

@@ -1,297 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 665,
-  "promotions_won": 167,
-  "last_mutation_at": "2026-10-18T02:06:39.629303+00:00",
+  "mutations_applied": 697,
+  "promotions_won": 199,
+  "last_mutation_at": "2026-10-18T04:57:02.273633+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-17T11:48:56.069773+00:00",
-      "gene_id": "TASK_ADJACENT_VOWELS",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:49:01.849202+00:00",
-      "gene_id": "TASK_ALPHABET_ROTATION",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:49:07.687535+00:00",
-      "gene_id": "TASK_ALTERNATING_SUBARRAY",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:49:43.566524+00:00",
-      "gene_id": "TASK_ANAGRAMS",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:49:49.392653+00:00",
-      "gene_id": "TASK_BALANCED_NUMBER",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:49:55.233381+00:00",
-      "gene_id": "TASK_BEST_ARRAY_CUT",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:50:31.117981+00:00",
-      "gene_id": "TASK_BICYCLE_RENTAL",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:50:36.897612+00:00",
-      "gene_id": "TASK_BLACK_WHITE_NECKLACE",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:50:42.630319+00:00",
-      "gene_id": "TASK_BOUNDING_BOX",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:51:18.473999+00:00",
-      "gene_id": "TASK_CARD_SHUFFLE",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:51:24.282234+00:00",
-      "gene_id": "TASK_CONSECUTIVE_SUM",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:51:30.072896+00:00",
-      "gene_id": "TASK_CONTIGUOUS_SEGMENTS",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:53:40.961935+00:00",
-      "gene_id": "TASK_DISTINCT_PALINDROMES",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:53:46.688936+00:00",
-      "gene_id": "TASK_DOUBLE_PALINDROMES",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:53:52.572684+00:00",
-      "gene_id": "TASK_FIICODE_2022_A1",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:55:18.942194+00:00",
-      "gene_id": "TASK_FREE_PALINDROMES",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:55:24.959737+00:00",
-      "gene_id": "TASK_GCD_REBUILD",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:55:30.788527+00:00",
-      "gene_id": "TASK_K_SUBSETS_REMOVAL",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:56:06.876586+00:00",
-      "gene_id": "TASK_KTH_SPECIAL_NUMBER",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:56:12.744595+00:00",
-      "gene_id": "TASK_MAKE_IT_DIVISIBLE_BY_25",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:56:18.613701+00:00",
-      "gene_id": "TASK_MATRIX_PALINDROMES",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:56:54.593107+00:00",
-      "gene_id": "TASK_MAX_EVEN_SUBARRAY",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:57:00.584393+00:00",
-      "gene_id": "TASK_MAX_WAVE_ARRAY",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:57:06.513229+00:00",
-      "gene_id": "TASK_MIN_COIN_PAYMENT",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:57:42.709322+00:00",
-      "gene_id": "TASK_NEIGHBOUR_SUM_REPLACEMENT",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T11:57:48.507871+00:00",
-      "gene_id": "TASK_NOGCD",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T13:11:39.473556+00:00",
-      "gene_id": "TASK_ODD_DIVISOR_COUNT",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T13:16:45.718563+00:00",
-      "gene_id": "TASK_ODD_PAIR_SUMS",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T13:21:52.590279+00:00",
-      "gene_id": "TASK_ODD_PALINDROMES",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T13:27:00.068136+00:00",
-      "gene_id": "TASK_ODD_SUM",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T13:56:41.333144+00:00",
-      "gene_id": "TASK_PALINDROME_CENTERS",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-17T14:40:15.466947+00:00",
-      "gene_id": "TASK_PALINDROME_FREE_STRINGS",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-17T14:40:21.177261+00:00",
       "gene_id": "TASK_POWERED_ADDITION",
@@ -452,6 +164,294 @@
         "auto_solution_python_mut_bitwise_unrolling"
       ],
       "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T02:56:02.085420+00:00",
+      "gene_id": "TASK_MOVE_THE_BISHOP",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T02:57:08.060892+00:00",
+      "gene_id": "TASK_NEXT_DANCE_MOVE",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:03:55.378509+00:00",
+      "gene_id": "TASK_NUMBERS_GAME",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:10:00.173654+00:00",
+      "gene_id": "TASK_AISIMOK",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:12:32.029081+00:00",
+      "gene_id": "TASK_AKRITIS_ONE_AND_TWO",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:14:15.959118+00:00",
+      "gene_id": "TASK_ALTERNANT_ARRAY",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:15:45.112704+00:00",
+      "gene_id": "TASK_PERMUTATION_MATRIX",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:22:51.029793+00:00",
+      "gene_id": "TASK_AS_EASY_AS_ABC",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:28:20.426932+00:00",
+      "gene_id": "TASK_BACK_IN_BUSINESS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:32:49.271933+00:00",
+      "gene_id": "TASK_BASE_K_XOR",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:39:05.106528+00:00",
+      "gene_id": "TASK_POSITIVE_PRODUCT_SUBARRAYS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:39:54.243166+00:00",
+      "gene_id": "TASK_POSTIVIE_XOR",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:41:10.006080+00:00",
+      "gene_id": "TASK_RACE_QUALIFYING",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:43:29.794682+00:00",
+      "gene_id": "TASK_CARD_GROUPS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:43:50.040580+00:00",
+      "gene_id": "TASK_RECURSIVE_STRING",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:46:49.687541+00:00",
+      "gene_id": "TASK_REMOVED_PAGES",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:50:28.074460+00:00",
+      "gene_id": "TASK_SOCCER_FIELD",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:50:50.438451+00:00",
+      "gene_id": "TASK_SQUARISH_RECTANGLE",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:54:36.011053+00:00",
+      "gene_id": "TASK_SUM_TRIPLETS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T03:55:12.488910+00:00",
+      "gene_id": "TASK_SUSPECT_INTERVAL",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:00:48.217250+00:00",
+      "gene_id": "TASK_CONSECUTIVE_REMAINDERS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:04:48.362171+00:00",
+      "gene_id": "TASK_COSMOLOGICAL_NIGHTMARE",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:04:59.393448+00:00",
+      "gene_id": "TASK_COUNT_SQUARES",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:05:25.820392+00:00",
+      "gene_id": "TASK_TWO_GUARDS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:06:22.582907+00:00",
+      "gene_id": "TASK_ALEX_CONCATENATES",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:13:08.839040+00:00",
+      "gene_id": "TASK_CRYPTO",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:21:09.164090+00:00",
+      "gene_id": "TASK_B9I",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:27:51.194970+00:00",
+      "gene_id": "TASK_DIRECT_THE_GRAPH",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:30:28.186000+00:00",
+      "gene_id": "TASK_DISK_MECHANISM",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:31:10.053857+00:00",
+      "gene_id": "TASK_DISTINCT_ROTATIONS",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:49:33.978915+00:00",
+      "gene_id": "TASK_DOUCHEBAG_PARKING",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T04:57:02.273565+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
       "promotions": 1
     }
   ]

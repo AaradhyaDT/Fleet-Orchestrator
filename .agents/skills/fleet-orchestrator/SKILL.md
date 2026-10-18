@@ -339,6 +339,7 @@ Fleet-Orchestrator/
 │   ├── fleet_gui.py               # Fleet Control Center v2.1 (Tkinter High-DPI GUI with Azmuth Tab 6)
 │   ├── fleet_watchdog.py          # Fleet health watchdog
 │   ├── azmuth_github_sensor.py    # 4-stream GitHub sensory radar (U3, U1/U2, Codon, U0) with PAT rotation & Thalamic filter
+│   ├── azmuth_gui.py              # Native Win32 60FPS Mission Control & Phylogenetic Gene Visualizer
 │   ├── azmuth_tray.py             # Silent system tray controller (pythonw.exe GUI subsystem)
 │   ├── azmuth_daemon.py           # Autonomous 24h background daemon with burst subtasks
 │   ├── azmuth_market_sensor.py    # 3-stream live market/macro sensor
@@ -370,7 +371,7 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Live state (tasks/, checkpoints/, ledger/, scratchpads/, memory/, live-status/)
 ├── worker-prompts/                # 6 specialized role prompts (orchestrator, researcher, writer, qa-reviewer, seo-optimizer, formatter)
 ├── models/                        # Local GGUF model weights (git-ignored)
-├── tests/                         # 583 automated pytest tests (75+ test suites)
+├── tests/                         # 587 automated pytest tests (75+ test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
 ├── .env.fleet.copilot.example     # 31-account GitHub Copilot PAT template (6,200 monthly credits)
 ├── .env.fleet.gemini.example      # 32-slot Google AI Studio Gemini API key template
@@ -378,6 +379,7 @@ Fleet-Orchestrator/
 ├── .env.fleet.example             # Consolidated legacy token template
 ├── drive-manifest.json            # Google Drive sync manifest with file IDs
 ├── sync.bat / sync.ps1            # Ecosystem sync with selective CI bypass
+├── launch_azmuth_gui.bat          # One-click Azmuth Command Center GUI launcher (pythonw.exe)
 ├── launch_azmuth_tray.bat         # One-click silent tray launcher (pythonw.exe)
 └── launch_fleet_gui.bat           # One-click GUI launcher
 ```
@@ -397,5 +399,23 @@ Fleet-Orchestrator/
 
 ### Silent Windows 11 GUI Subsystem Runtime (`IMAGE_SUBSYSTEM_WINDOWS_GUI`)
 - **Zero-Window Invariant**: Windows 11 ConPTY / Windows Terminal displays a blank window when running `powershell.exe -WindowStyle Hidden` on startup. To prevent this, `FleetAzmuthTray` and `launch_azmuth_tray.bat` invoke `pythonw.exe` directly.
-- **System Tray Icon**: Lives in the notification area with circular gear icon, providing tactile status checks, codon counts, and manual radar triggers.
+- **System Tray Icon**: Lives in the notification area with circular gear icon, providing tactile status checks, codon counts, manual radar triggers, and one-click launch of the Command Center GUI.
+
+---
+
+## 7. Azmuth Neuromorphic Command Center GUI & Phylogenetic Gene Visualizer
+
+### Native Desktop Command Center (`tools/azmuth_gui.py`)
+- **Mission Control Layout & Oscilloscope**:
+  - Standalone Win32 High-DPI Tkinter Canvas with Windows 11 dark mode (`DwmSetWindowAttribute`).
+  - Hardware-smooth 60 FPS real-time RAM oscilloscope sparkline tracking available memory against the tunable Circuit-Breaker threshold ($3.0\text{ GB}$).
+  - Live Gear switcher (`Whisper`, `Balanced`, `Turbo`) and live Thalamic $|Z|$-score threshold tuner ($0.1\sigma$ to $3.0\sigma$).
+- **Three Switchable 60FPS Graph & Flow Canvases**:
+  - **View 1 (End-to-End Pipeline & PAT Flow)**: 4-stream sensory ingestion, orbital 30-PAT token radar ring, Thalamic salience sieve, U0–U5 cortex, Ultimatrix gene sequencer, and SSOT ledgers with animated signal packets.
+  - **View 2 (U0–U5 Neuromorphic Causal DAG)**: Renders active cortical cartridges (`u0`..`u5`) with homeostatic color-coded nodes, directed axonal synapses with weights & lag days, and interactive **Multi-Hop Shock Propagation (+2.0σ)** simulations.
+  - **View 3 (Phylogenetic Gene Evolution Tree & Allele Arena)**: Renders the two-level evolutionary lineage of any of the 349+ sequenced genes (`Wild-Type Base Submissions` $\rightarrow$ `Genetic Operator Edges` $\rightarrow$ `Mutated Daughter Alleles` $\rightarrow$ `Arena PRIMARY Champion`), complete with net speedup percentages.
+- **Interactive Capability Card & Mutation Diff Inspector**:
+  - Displays Big-O time/space asymptotic bounds, environmental triggers (`N<=2e5`, `avx2`), formal mathematical invariants, empirical runtime/RAM fitness bars, and syntax-highlighted code templates with mutation additions highlighted.
+  - One-click **"⚡ Mutate & Race in Arena Now"** trigger applies genetic operators live and dynamically animates new branch growth on the phylogenetic tree.
+
 
