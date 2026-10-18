@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 143,
-  "tasks_solved": 143,
+  "tasks_attempted": 144,
+  "tasks_solved": 144,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -145,16 +145,11 @@
     "prime-distance",
     "processing-discounts",
     "race-qualifying",
-    "rectangle-partition"
+    "rectangle-partition",
+    "rectangle-path"
   ],
-  "last_solve_at": "2026-10-18T02:37:14.243614+00:00",
+  "last_solve_at": "2026-10-18T02:37:51.081336+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-17T11:07:44.944473+00:00",
-      "slug": "game-of-chance",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-17T11:08:22.120500+00:00",
       "slug": "group-split",
@@ -448,6 +443,12 @@
       "slug": "rectangle-partition",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T02:37:51.081221+00:00",
+      "slug": "rectangle-path",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
     }
   ],
   "attempted_slugs": {
