@@ -48,37 +48,109 @@ VD_EXE = REPO_ROOT / "tools" / "VirtualDesktop.exe"
 LAUNCH_SCRIPT = REPO_ROOT / "launch-fleet.ps1"
 ORCHESTRATOR_URL = os.getenv("ORCHESTRATOR_URL", "http://127.0.0.1:8000/api/v1")
 
-# Refined Linear / VS Code Modern Dark Palette
-BG_MAIN = "#0d0e11"
-BG_CARD = "#16181d"
-BG_CARD_ALT = "#1b1e26"
-BG_INPUT = "#1f222a"
-BORDER_COLOR = "#2a2d36"
-BORDER_LIGHT = "#3b404d"
+# ============================================================================
+# ADT Signature Telemetry & Desktop Palette
+# ============================================================================
+BG_VOID = "#0a0d12"
+BG_MAIN = "#0f141c"
+BG_CARD = "#141923"
+BG_CARD_ALT = "#19202c"
+BG_INPUT = "#0c1017"
+BORDER_COLOR = "#1e2736"
+BORDER_LIGHT = "#2d3a50"
 
-TEXT_PRIMARY = "#f3f4f6"
-TEXT_SECONDARY = "#d1d5db"
-TEXT_MUTED = "#9ca3af"
+TEXT_PRIMARY = "#f1f5f9"
+TEXT_SECONDARY = "#94a3b8"
+TEXT_MUTED = "#64748b"
 
-ACCENT_BLUE = "#2563eb"
-ACCENT_BLUE_HOVER = "#1d4ed8"
-ACCENT_GREEN = "#10b981"
-ACCENT_GREEN_HOVER = "#059669"
-ACCENT_PURPLE = "#a855f7"
-ACCENT_AMBER = "#f59e0b"
-ACCENT_RED = "#ef4444"
-ACCENT_CYAN = "#06b6d4"
+ACCENT_GOLD = "#d4a85a"           # ADT Architectural Hardware Gold & Monogram
+ACCENT_BLUE = "#3b82f6"           # Electric Research Cobalt
+ACCENT_BLUE_HOVER = "#2563eb"
+ACCENT_GREEN = "#22c55e"          # Cactus Green (Online / Active)
+ACCENT_GREEN_HOVER = "#16a34a"
+ACCENT_AMBER = "#f59e0b"          # Warning / Pending / Cooldown
+ACCENT_RED = "#ef4444"            # Terracotta (Fault / Aborted)
+ACCENT_CYAN = "#06b6d4"           # Telemetry accent
+ACCENT_INDIGO = "#6366f1"         # Calm Research Indigo (Replacing Banned Purple)
+ACCENT_PURPLE = ACCENT_INDIGO     # Backward-compatibility alias
 
-# Typography Hierarchy
-FONT_BRAND = ("Segoe UI Semibold", 13)
-FONT_TITLE = ("Segoe UI Semibold", 11)
-FONT_SUBTITLE = ("Segoe UI Semibold", 10)
-FONT_BODY = ("Segoe UI", 9)
-FONT_BODY_BOLD = ("Segoe UI Semibold", 9)
-FONT_BODY_MUTED = ("Segoe UI", 8)
+ADT_THEMES = {
+    "dark": {
+        "bg_void": "#0a0d12",
+        "bg_main": "#0f141c",
+        "bg_card": "#141923",
+        "bg_card_alt": "#19202c",
+        "bg_input": "#0c1017",
+        "border_color": "#1e2736",
+        "border_light": "#2d3a50",
+        "text_primary": "#f1f5f9",
+        "text_secondary": "#94a3b8",
+        "text_muted": "#64748b",
+        "accent_gold": "#d4a85a",
+        "accent_blue": "#3b82f6",
+        "accent_green": "#22c55e",
+        "accent_amber": "#f59e0b",
+        "accent_red": "#ef4444",
+        "accent_indigo": "#6366f1",
+        "canvas_grid": "#18202d",
+    },
+    "paper": {
+        "bg_void": "#f6f4ef",
+        "bg_main": "#f6f4ef",
+        "bg_card": "#ffffff",
+        "bg_card_alt": "#eae6de",
+        "bg_input": "#ffffff",
+        "border_color": "#ded8cb",
+        "border_light": "#c8c1b3",
+        "text_primary": "#141518",
+        "text_secondary": "#4a4c52",
+        "text_muted": "#7b7e87",
+        "accent_gold": "#b45309",
+        "accent_blue": "#2563eb",
+        "accent_green": "#15803d",
+        "accent_amber": "#b45309",
+        "accent_red": "#b91c1c",
+        "accent_indigo": "#4338ca",
+        "canvas_grid": "#e5e0d5",
+    },
+}
+
+# Typography Hierarchy with Resilient Fallbacks
+FONT_BRAND = ("Segoe UI Variable Display", 13, "bold")
+FONT_TITLE = ("Segoe UI Variable Display", 11, "bold")
+FONT_SUBTITLE = ("Segoe UI Variable Text", 10, "bold")
+FONT_BODY = ("Segoe UI Variable Text", 9)
+FONT_BODY_BOLD = ("Segoe UI Variable Text", 9, "bold")
+FONT_BODY_MUTED = ("Segoe UI Variable Text", 8)
 FONT_MONO = ("Cascadia Code", 9)
-FONT_BADGE = ("Segoe UI Semibold", 8)
-FONT_KPI = ("Segoe UI Semibold", 16)
+FONT_BADGE = ("Segoe UI Variable Text", 8, "bold")
+FONT_KPI = ("Segoe UI Variable Display", 17, "bold")
+
+GEOMETRY_FILE = REPO_ROOT / "orchestrator-state" / "gui_geometry.json"
+
+
+def sanitize_geometry(x: int, y: int, w: int, h: int) -> tuple[int, int, int, int]:
+    """Self-healing geometry sanitizer against disconnected external displays."""
+    vx, vy, vw, vh = 0, 0, 1920, 1080
+    if ctypes.windll:
+        try:
+            user32 = ctypes.windll.user32
+            vx = user32.GetSystemMetrics(76)
+            vy = user32.GetSystemMetrics(77)
+            vw = user32.GetSystemMetrics(78)
+            vh = user32.GetSystemMetrics(79)
+        except Exception:
+            pass
+    if vw <= 0 or vh <= 0:
+        vw, vh = 1920, 1080
+
+    w = max(1080, min(w, vw))
+    h = max(700, min(h, vh))
+    if x < vx or (x + 200) > (vx + vw) or y < vy or (y + 100) > (vy + vh):
+        x = max(0, (vw - w) // 2)
+        y = max(0, (vh - h) // 2)
+    return x, y, w, h
+
 
 
 def attach_default_desktop() -> bool:
@@ -133,10 +205,13 @@ def set_dark_titlebar(hwnd: int):
 class FleetControlApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("⚡ Fleet-Orchestrator Control Center (v2.0)")
-        self.geometry("1260x860")
+        self.is_light = False
+        self.title("ADT · Fleet-Orchestrator Control Center (v2.0)")
         self.minsize(1080, 700)
         self.configure(bg=BG_MAIN)
+
+        # Self-healing window geometry
+        self._restore_window_geometry()
 
         # Set Windows dark titlebar
         self.update_idletasks()
@@ -162,90 +237,217 @@ class FleetControlApp(tk.Tk):
         self._stop_tailer = False
         self._daemon_log_pos = 0
         self._cached_batches: list[dict[str, Any]] = []
+        self._toast_frame = None
+        self._toast_timer = None
 
         self._init_styles()
         self._build_ui()
+        self._bind_hotkeys()
 
         # Start background polling loop and log tailer
         self._start_daemon_log_tailer()
         self._auto_refresh_loop()
 
     def destroy(self):
+        self._save_window_geometry()
         self._stop_tailer = True
         self._destroyed = True
         super().destroy()
+
+    def _restore_window_geometry(self):
+        try:
+            if GEOMETRY_FILE.exists():
+                with open(GEOMETRY_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                x = data.get("x", 120)
+                y = data.get("y", 80)
+                w = data.get("width", 1260)
+                h = data.get("height", 860)
+                is_max = data.get("is_maximized", False)
+                x, y, w, h = sanitize_geometry(x, y, w, h)
+                self.geometry(f"{w}x{h}+{x}+{y}")
+                if is_max:
+                    self.state("zoomed")
+                return
+        except Exception:
+            pass
+        self.geometry("1260x860")
+
+    def _save_window_geometry(self):
+        try:
+            GEOMETRY_FILE.parent.mkdir(parents=True, exist_ok=True)
+            is_max = (self.state() == "zoomed")
+            active_t = ""
+            if hasattr(self, "notebook") and self.notebook.tabs():
+                active_t = self.notebook.tab(self.notebook.select(), "text").strip()
+            data = {
+                "x": self.winfo_x(),
+                "y": self.winfo_y(),
+                "width": self.winfo_width(),
+                "height": self.winfo_height(),
+                "is_maximized": is_max,
+                "active_tab": active_t,
+                "theme": "paper" if getattr(self, "is_light", False) else "dark",
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
+            with open(GEOMETRY_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception:
+            pass
+
+    def _bind_hotkeys(self):
+        self.bind("<F5>", lambda e: self._on_hotkey_refresh())
+        self.bind("<Control-r>", lambda e: self._on_hotkey_refresh())
+        self.bind("<Control-t>", lambda e: self.toggle_theme())
+        self.bind("<Escape>", lambda e: self._on_hotkey_escape())
+        for i in range(1, 7):
+            self.bind(f"<Control-Key-{i}>", lambda e, idx=i - 1: self._select_tab_by_index(idx))
+
+    def _on_hotkey_refresh(self):
+        self.refresh_all()
+        self.show_toast("Telemetry Synchronized (F5)", level="gold")
+
+    def _select_tab_by_index(self, idx: int):
+        try:
+            tabs = self.notebook.tabs()
+            if 0 <= idx < len(tabs):
+                self.notebook.select(tabs[idx])
+                name = self.notebook.tab(tabs[idx], "text").strip()
+                self.show_toast(f"Switched to [{name}]", level="info")
+        except Exception:
+            pass
+
+    def _on_hotkey_escape(self):
+        self._set_worker_filter("All")
+        self._set_task_filter("All")
+        self.refresh_all()
+        self.show_toast("Filters Reset (Esc)", level="info")
+
+    def show_toast(self, message: str, level: str = "info", duration_ms: int = 2800):
+        try:
+            t = ADT_THEMES["paper" if self.is_light else "dark"]
+            if self._toast_frame is None:
+                self._toast_frame = tk.Frame(self, bg=t["bg_card_alt"], highlightbackground=t["border_light"], highlightthickness=1)
+                self._toast_lbl = tk.Label(self._toast_frame, bg=t["bg_card_alt"], font=FONT_BODY_BOLD, padx=12, pady=6)
+                self._toast_lbl.pack()
+            color_map = {
+                "info": t["accent_blue"],
+                "success": t["accent_green"],
+                "warn": t["accent_amber"],
+                "error": t["accent_red"],
+                "gold": t["accent_gold"],
+            }
+            fg_col = color_map.get(level, t["accent_blue"])
+            self._toast_frame.config(bg=t["bg_card_alt"], highlightbackground=t["border_light"])
+            self._toast_lbl.config(text=f"● {message}", bg=t["bg_card_alt"], fg=fg_col)
+            self._toast_frame.place(relx=0.98, rely=0.94, anchor="se")
+            self._toast_frame.lift()
+            if self._toast_timer:
+                self.after_cancel(self._toast_timer)
+            self._toast_timer = self.after(duration_ms, self._hide_toast)
+        except Exception:
+            pass
+
+    def _hide_toast(self):
+        try:
+            if self._toast_frame:
+                self._toast_frame.place_forget()
+        except Exception:
+            pass
+
+    def toggle_theme(self):
+        self.is_light = not self.is_light
+        theme_key = "paper" if self.is_light else "dark"
+        t = ADT_THEMES[theme_key]
+        self.configure(bg=t["bg_main"])
+        self._init_styles()
+        try:
+            hwnd = ctypes.windll.user32.GetParent(self.winfo_id()) or self.winfo_id()
+            val = ctypes.c_int(0 if self.is_light else 1)
+            for attr in (20, 19):
+                ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                    ctypes.c_void_p(hwnd), ctypes.c_uint(attr), ctypes.byref(val), ctypes.sizeof(val)
+                )
+        except Exception:
+            pass
+        if hasattr(self, "btn_theme"):
+            self.btn_theme.config(text="☾ Dark" if self.is_light else "☼ Paper", bg=t["bg_input"], fg=t["text_primary"])
+        self.show_toast(f"Theme: {'Paper Mode' if self.is_light else 'Dark Slate Mode'}", level="gold")
+
 
     def _init_styles(self):
         self.style = ttk.Style(self)
         self.style.theme_use("clam")
 
+        t = ADT_THEMES["paper" if getattr(self, "is_light", False) else "dark"]
+
         # Global backgrounds
-        self.style.configure(".", background=BG_MAIN, foreground=TEXT_PRIMARY, font=FONT_BODY)
-        self.style.configure("TLabel", background=BG_MAIN, foreground=TEXT_PRIMARY)
-        self.style.configure("Card.TFrame", background=BG_CARD)
-        self.style.configure("TFrame", background=BG_MAIN)
+        self.style.configure(".", background=t["bg_main"], foreground=t["text_primary"], font=FONT_BODY)
+        self.style.configure("TLabel", background=t["bg_main"], foreground=t["text_primary"])
+        self.style.configure("Card.TFrame", background=t["bg_card"])
+        self.style.configure("TFrame", background=t["bg_main"])
 
         # Tabs styling (Notebook)
         self.style.configure(
             "TNotebook",
-            background=BG_MAIN,
+            background=t["bg_main"],
             borderwidth=0,
             tabmargins=[14, 6, 14, 0],
         )
         self.style.configure(
             "TNotebook.Tab",
-            background=BG_CARD,
-            foreground=TEXT_SECONDARY,
+            background=t["bg_card"],
+            foreground=t["text_secondary"],
             padding=[16, 8],
             font=FONT_SUBTITLE,
             borderwidth=0,
         )
         self.style.map(
             "TNotebook.Tab",
-            background=[("selected", BG_CARD_ALT), ("active", BG_INPUT)],
-            foreground=[("selected", TEXT_PRIMARY), ("active", "#ffffff")],
+            background=[("selected", t["bg_card_alt"]), ("active", t["bg_input"])],
+            foreground=[("selected", t["text_primary"]), ("active", "#ffffff" if not getattr(self, "is_light", False) else "#000000")],
         )
 
         # Combobox styling
         self.style.configure(
             "TCombobox",
-            fieldbackground=BG_INPUT,
-            background=BG_CARD,
-            foreground=TEXT_PRIMARY,
-            arrowcolor=TEXT_MUTED,
+            fieldbackground=t["bg_input"],
+            background=t["bg_card"],
+            foreground=t["text_primary"],
+            arrowcolor=t["text_muted"],
             borderwidth=1,
             relief="flat",
         )
         self.style.map(
             "TCombobox",
-            fieldbackground=[("readonly", BG_INPUT)],
-            foreground=[("readonly", TEXT_PRIMARY)],
-            selectbackground=[("readonly", BG_INPUT)],
-            selectforeground=[("readonly", TEXT_PRIMARY)],
+            fieldbackground=[("readonly", t["bg_input"])],
+            foreground=[("readonly", t["text_primary"])],
+            selectbackground=[("readonly", t["bg_input"])],
+            selectforeground=[("readonly", t["text_primary"])],
         )
 
         # Treeview styling (clean modern tables)
         self.style.configure(
             "Treeview",
-            background=BG_CARD,
-            foreground=TEXT_PRIMARY,
-            fieldbackground=BG_CARD,
+            background=t["bg_card"],
+            foreground=t["text_primary"],
+            fieldbackground=t["bg_card"],
             rowheight=30,
             font=FONT_BODY,
             borderwidth=0,
         )
         self.style.configure(
             "Treeview.Heading",
-            background=BG_INPUT,
-            foreground=TEXT_SECONDARY,
+            background=t["bg_input"],
+            foreground=t["text_secondary"],
             font=FONT_SUBTITLE,
             relief="flat",
             padding=(8, 6),
         )
         self.style.map(
             "Treeview",
-            background=[("selected", "#1e3a8a")],
-            foreground=[("selected", "#ffffff")],
+            background=[("selected", "#1e3a8a" if not getattr(self, "is_light", False) else "#bfdbfe")],
+            foreground=[("selected", "#ffffff" if not getattr(self, "is_light", False) else "#0f172a")],
         )
 
     def _build_ui(self):
@@ -258,18 +460,33 @@ class FleetControlApp(tk.Tk):
         brand_frame = tk.Frame(header, bg=BG_CARD)
         brand_frame.pack(side="left", padx=16, pady=10)
 
+        # ADT Signature Monogram & Title
+        title_row = tk.Frame(brand_frame, bg=BG_CARD)
+        title_row.pack(anchor="w")
+
+        lbl_crest = tk.Label(
+            title_row,
+            text="[ADT]",
+            font=FONT_BADGE,
+            bg=BG_CARD,
+            fg=ACCENT_GOLD,
+            padx=4,
+            pady=0,
+        )
+        lbl_crest.pack(side="left", padx=(0, 6))
+
         lbl_logo = tk.Label(
-            brand_frame,
-            text="⚡ FLEET-ORCHESTRATOR",
+            title_row,
+            text="FLEET-ORCHESTRATOR",
             font=FONT_BRAND,
             bg=BG_CARD,
             fg=TEXT_PRIMARY,
         )
-        lbl_logo.pack(anchor="w")
+        lbl_logo.pack(side="left")
 
         lbl_sub = tk.Label(
             brand_frame,
-            text="Autonomous Multi-Model Swarm Engine & 27x Copilot Pool",
+            text="Autonomous Multi-Model Swarm Engine · 27x Copilot Pool",
             font=FONT_BODY_MUTED,
             bg=BG_CARD,
             fg=TEXT_MUTED,
@@ -293,7 +510,7 @@ class FleetControlApp(tk.Tk):
 
         btn_refresh = tk.Button(
             hdr_right,
-            text="🔄 Refresh",
+            text="↻ Refresh",
             bg=BG_INPUT,
             fg=TEXT_PRIMARY,
             activebackground=BORDER_COLOR,
@@ -306,7 +523,24 @@ class FleetControlApp(tk.Tk):
             command=self.refresh_all,
             cursor="hand2",
         )
-        btn_refresh.pack(side="right")
+        btn_refresh.pack(side="right", padx=(6, 0))
+
+        self.btn_theme = tk.Button(
+            hdr_right,
+            text="☼ Paper",
+            bg=BG_INPUT,
+            fg=TEXT_SECONDARY,
+            activebackground=BORDER_COLOR,
+            activeforeground="#ffffff",
+            font=FONT_BADGE,
+            relief="flat",
+            bd=0,
+            padx=10,
+            pady=4,
+            command=self.toggle_theme,
+            cursor="hand2",
+        )
+        self.btn_theme.pack(side="right")
 
         # =====================================================================
         # 2. PERSISTENT TELEMETRY & QUOTA HUD (Top Burn-Rate Banner)
@@ -351,7 +585,7 @@ class FleetControlApp(tk.Tk):
         tk.Label(c4, text="SWARM TOPOLOGY & PIPELINE", font=FONT_BODY_MUTED, bg=BG_INPUT, fg=TEXT_MUTED).pack(anchor="w")
         self.kpi_topology = tk.Label(c4, text="27 Ready  |  27 Idle  |  0 Busy", font=FONT_BODY_BOLD, bg=BG_INPUT, fg=TEXT_PRIMARY)
         self.kpi_topology.pack(anchor="w", pady=(3, 0))
-        self.kpi_tasks_stat = tk.Label(c4, text="0 Tasks Pending  •  0 Checkpoints", font=FONT_BODY_MUTED, bg=BG_INPUT, fg=ACCENT_PURPLE)
+        self.kpi_tasks_stat = tk.Label(c4, text="0 Tasks Pending  ·  0 Checkpoints", font=FONT_BODY_MUTED, bg=BG_INPUT, fg=ACCENT_GOLD)
         self.kpi_tasks_stat.pack(anchor="w")
 
         # Visual Canvas Progress Bar
@@ -371,37 +605,71 @@ class FleetControlApp(tk.Tk):
         # 3. MAIN WORKSPACE NOTEBOOK (Tabs)
         # =====================================================================
         self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill="both", expand=True, padx=14, pady=(0, 10))
+        self.notebook.pack(fill="both", expand=True, padx=14, pady=(0, 6))
 
         # Tab 1: Fleet Army Matrix
         self.tab_workers = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_workers, text=" 🛡️ Fleet Army (27 Workers) ")
+        self.notebook.add(self.tab_workers, text=" Fleet Army (27 Workers) ")
         self._build_tab_workers()
 
         # Tab 2: Task Queue & Pipelines
         self.tab_tasks = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_tasks, text=" 📋 Pipeline Tasks ")
+        self.notebook.add(self.tab_tasks, text=" Pipeline Tasks ")
         self._build_tab_tasks()
 
         # Tab 3: Batch Monitor
         self.tab_batches = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_batches, text=" 📦 Batch Monitor ")
+        self.notebook.add(self.tab_batches, text=" Batch Monitor ")
         self._build_tab_batches()
 
         # Tab 4: Windows & Desktop Arranger (Win32)
         self.tab_arranger = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_arranger, text=" 🪟 Windows & Desktop Arranger ")
+        self.notebook.add(self.tab_arranger, text=" Windows & Desktop Arranger ")
         self._build_tab_arranger()
 
         # Tab 5: Swarm Activity Console
         self.tab_logs = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_logs, text=" 📜 Swarm Activity Console ")
+        self.notebook.add(self.tab_logs, text=" Swarm Activity Console ")
         self._build_tab_logs()
 
         # Tab 6: Azmuth & Ultimatrix (Codon Stream & Global Languages)
         self.tab_azmuth = tk.Frame(self.notebook, bg=BG_MAIN)
-        self.notebook.add(self.tab_azmuth, text=" 🧬 Azmuth & Ultimatrix ")
+        self.notebook.add(self.tab_azmuth, text=" Azmuth & Ultimatrix ")
         self._build_tab_azmuth()
+
+        # =====================================================================
+        # 4. BOTTOM STATUS BAR (Telemetry & Power-User Hotkey Legend)
+        # =====================================================================
+        self.status_bar = tk.Frame(self, bg=BG_CARD, height=26, highlightbackground=BORDER_COLOR, highlightthickness=1)
+        self.status_bar.pack(fill="x", side="bottom")
+
+        self.lbl_status_left = tk.Label(
+            self.status_bar,
+            text="● FLEET READY · 27 Workers Registered",
+            font=FONT_BODY_MUTED,
+            bg=BG_CARD,
+            fg=ACCENT_GREEN,
+        )
+        self.lbl_status_left.pack(side="left", padx=14, pady=3)
+
+        self.lbl_status_center = tk.Label(
+            self.status_bar,
+            text="F5 Refresh  ·  Ctrl+1..6 Tabs  ·  Ctrl+T Theme  ·  Esc Reset Filters",
+            font=FONT_BODY_MUTED,
+            bg=BG_CARD,
+            fg=TEXT_MUTED,
+        )
+        self.lbl_status_center.pack(side="left", expand=True, pady=3)
+
+        self.lbl_status_right = tk.Label(
+            self.status_bar,
+            text="ADT Fleet Control v2.0",
+            font=FONT_BODY_MUTED,
+            bg=BG_CARD,
+            fg=TEXT_MUTED,
+        )
+        self.lbl_status_right.pack(side="right", padx=14, pady=3)
+
 
     # =========================================================================
     # TAB 1: FLEET ARMY MATRIX
@@ -429,7 +697,7 @@ class FleetControlApp(tk.Tk):
         self.btn_f_cd.pack(side="left", padx=2)
 
         # Quick Actions on Right
-        btn_canary = tk.Button(filter_bar, text="⚡ Run Canary Check", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_run_canary, cursor="hand2")
+        btn_canary = tk.Button(filter_bar, text="✦ Run Canary Check", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_run_canary, cursor="hand2")
         btn_canary.pack(side="right", padx=12)
 
         split_frame = tk.Frame(container, bg=BG_MAIN)
@@ -561,7 +829,7 @@ class FleetControlApp(tk.Tk):
         self.btn_t_blocked.pack(side="left", padx=2)
 
         # Right actions
-        btn_run_worker = tk.Button(t_bar, text="⚡ Run Single Worker Step", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_run_worker_step, cursor="hand2")
+        btn_run_worker = tk.Button(t_bar, text="▶ Run Single Worker Step", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_run_worker_step, cursor="hand2")
         btn_run_worker.pack(side="right", padx=12)
 
         # Split: Left Tasks Table, Right Task Inspector
@@ -854,12 +1122,17 @@ class FleetControlApp(tk.Tk):
                 "status": status_str,
                 "tasks": btasks,
             }
-            self._cached_batches.append(batch_info)
+            status_display = {
+                "COMPLETE": "● Complete",
+                "RUNNING": "● Running",
+                "BLOCKED": "● Blocked",
+                "PENDING": "● Pending",
+            }.get(status_str, f"● {status_str}")
 
             self.tree_batches.insert(
                 "",
                 "end",
-                values=(bid, dispatcher, tot, done_cnt, pending_cnt, f"{pct:.1f}%", status_str),
+                values=(bid, dispatcher, tot, done_cnt, pending_cnt, f"{pct:.1f}%", status_display),
             )
 
     def _on_batch_selected(self, event):
@@ -903,16 +1176,16 @@ class FleetControlApp(tk.Tk):
         row1 = tk.Frame(vdesk_card, bg=BG_CARD)
         row1.pack(fill="x", padx=14, pady=10)
 
-        btn_tile = tk.Button(row1, text="🪟 Tile Windows (3-Column Grid)", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=self.on_tile_windows, cursor="hand2")
+        btn_tile = tk.Button(row1, text="⊞ Tile Windows (3-Column Grid)", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=self.on_tile_windows, cursor="hand2")
         btn_tile.pack(side="left", padx=(0, 6))
 
-        btn_focus = tk.Button(row1, text="🎯 Focus Zone (PowerToys Stack)", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=self.on_focus_layout, cursor="hand2")
+        btn_focus = tk.Button(row1, text="◎ Focus Zone (PowerToys Stack)", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=self.on_focus_layout, cursor="hand2")
         btn_focus.pack(side="left", padx=6)
 
-        btn_vdesk2 = tk.Button(row1, text="🖥️ Switch to Desktop 2 (Fleet)", bg=ACCENT_BLUE, fg="#ffffff", activebackground=ACCENT_BLUE_HOVER, font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=lambda: self.on_switch_desktop(1), cursor="hand2")
+        btn_vdesk2 = tk.Button(row1, text="⎈ Switch to Desktop 2 (Fleet)", bg=ACCENT_BLUE, fg="#ffffff", activebackground=ACCENT_BLUE_HOVER, font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=lambda: self.on_switch_desktop(1), cursor="hand2")
         btn_vdesk2.pack(side="left", padx=6)
 
-        btn_vdesk1 = tk.Button(row1, text="🏠 Return to Desktop 1", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=lambda: self.on_switch_desktop(0), cursor="hand2")
+        btn_vdesk1 = tk.Button(row1, text="⌂ Return to Desktop 1", bg=BG_INPUT, fg=TEXT_PRIMARY, activebackground=BORDER_COLOR, activeforeground="#fff", font=FONT_BODY_BOLD, relief="flat", bd=0, padx=14, pady=7, command=lambda: self.on_switch_desktop(0), cursor="hand2")
         btn_vdesk1.pack(side="left", padx=6)
 
         # Prompt Injection Console
@@ -923,8 +1196,8 @@ class FleetControlApp(tk.Tk):
         ctrl_row.pack(fill="x", padx=14, pady=(10, 6))
 
         tk.Label(ctrl_row, text="Target Worker:", font=FONT_BODY_BOLD, bg=BG_CARD, fg=TEXT_PRIMARY).pack(side="left", padx=(0, 8))
-        self.target_var = tk.StringVar(value="⚡ Broadcast All")
-        self.target_cb = ttk.Combobox(ctrl_row, textvariable=self.target_var, values=["⚡ Broadcast All"], state="readonly", width=26, font=FONT_BODY)
+        self.target_var = tk.StringVar(value="✦ Broadcast All")
+        self.target_cb = ttk.Combobox(ctrl_row, textvariable=self.target_var, values=["✦ Broadcast All"], state="readonly", width=26, font=FONT_BODY)
         self.target_cb.pack(side="left", padx=(0, 16))
 
         tk.Label(ctrl_row, text="Templates:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(side="left", padx=(0, 6))
@@ -966,7 +1239,7 @@ class FleetControlApp(tk.Tk):
 
         btn_send = tk.Button(
             text_row,
-            text="🚀 Dispatch &\nHit Enter",
+            text="▶ Dispatch &\nHit Enter",
             bg=ACCENT_GREEN,
             fg="#ffffff",
             activebackground=ACCENT_GREEN_HOVER,
@@ -981,7 +1254,7 @@ class FleetControlApp(tk.Tk):
         btn_send.pack(side="right", fill="y")
 
     def _set_tmpl_orch(self):
-        self.target_var.set("⚡ Broadcast All")
+        self.target_var.set("✦ Broadcast All")
         self.prompt_text.delete("1.0", tk.END)
         self.prompt_text.insert("1.0", "You are the Fleet Orchestrator. Inspect active tasks and coordinate domain handoffs.")
 
@@ -994,7 +1267,7 @@ class FleetControlApp(tk.Tk):
         self.prompt_text.insert("1.0", "Claim pending draft stage tasks and produce clean, verified implementation deliverables.")
 
     def _set_tmpl_ping(self):
-        self.target_var.set("⚡ Broadcast All")
+        self.target_var.set("✦ Broadcast All")
         self.prompt_text.delete("1.0", tk.END)
         self.prompt_text.insert("1.0", "Autonomous Fleet Swarm: check in and report status.")
 
@@ -1040,7 +1313,7 @@ class FleetControlApp(tk.Tk):
         self.log_text.tag_config("tag_success", foreground=ACCENT_GREEN)
         self.log_text.tag_config("tag_warn", foreground=ACCENT_AMBER)
         self.log_text.tag_config("tag_err", foreground=ACCENT_RED)
-        self.log_text.tag_config("tag_task", foreground=ACCENT_PURPLE)
+        self.log_text.tag_config("tag_task", foreground=ACCENT_GOLD)
 
         self.log("Fleet Control Center v2.0 initialized. Quota telemetry active.")
 
@@ -1289,6 +1562,13 @@ class FleetControlApp(tk.Tk):
             if w.get("cooldown_until"):
                 note_str = f"Cooldown until {w['cooldown_until'][11:19]}"
 
+            status_display = {
+                "idle": "● Idle",
+                "busy": "● Busy",
+                "cooldown": "● Cooldown",
+                "offline": "● Offline",
+            }.get(st, f"● {st.capitalize()}")
+
             self.tree_workers.insert(
                 "",
                 "end",
@@ -1296,7 +1576,7 @@ class FleetControlApp(tk.Tk):
                     w.get("worker_id"),
                     w.get("name"),
                     "Copilot CLI",
-                    st.upper(),
+                    status_display,
                     elapsed_str,
                     used_str,
                     rem_str,
@@ -1328,10 +1608,18 @@ class FleetControlApp(tk.Tk):
             dispatcher = t.get("created_by") or "-"
             prio = t.get("priority", 5)
 
+            status_display = {
+                "pending": "● Pending",
+                "claimed": "● Claimed",
+                "done": "● Done",
+                "merged": "● Done",
+                "blocked": "● Blocked",
+            }.get(st, f"● {st.capitalize()}")
+
             self.tree_tasks.insert(
                 "",
                 "end",
-                values=(tid, stage, kind, st.upper(), worker, dispatcher, prio),
+                values=(tid, stage, kind, status_display, worker, dispatcher, prio),
             )
 
     def _auto_refresh_loop(self):
@@ -1571,7 +1859,7 @@ class FleetControlApp(tk.Tk):
         c_c = tk.Frame(c_row, bg=BG_INPUT, highlightbackground=BORDER_COLOR, highlightthickness=1, padx=12, pady=8)
         c_c.pack(side="left", fill="both", expand=True, padx=(6, 0))
         tk.Label(c_c, text="LANG REFS & VERIFIED SOLVER", font=FONT_BODY_MUTED, bg=BG_INPUT, fg=TEXT_MUTED).pack(anchor="w")
-        self.lbl_az_langs = tk.Label(c_c, text="30 / 30 Modules (Tiers A-C)", font=FONT_BODY_BOLD, bg=BG_INPUT, fg=ACCENT_PURPLE)
+        self.lbl_az_langs = tk.Label(c_c, text="30 / 30 Modules (Tiers A-C)", font=FONT_BODY_BOLD, bg=BG_INPUT, fg=ACCENT_INDIGO)
         self.lbl_az_langs.pack(anchor="w", pady=(2, 0))
         self.lbl_az_solver = tk.Label(c_c, text="23 Tasks Solved (100% Sample Verified)", font=FONT_BODY_MUTED, bg=BG_INPUT, fg=ACCENT_AMBER)
         self.lbl_az_solver.pack(anchor="w")
@@ -1582,30 +1870,30 @@ class FleetControlApp(tk.Tk):
 
         tk.Label(act_bar, text="Gear Selection:", font=FONT_BODY_MUTED, bg=BG_CARD, fg=TEXT_MUTED).pack(side="left", padx=(12, 6), pady=8)
 
-        self.btn_gear_eco = tk.Button(act_bar, text="🌱 ECO", font=FONT_BADGE, bg=BG_INPUT, fg=TEXT_SECONDARY, bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("eco"), cursor="hand2")
+        self.btn_gear_eco = tk.Button(act_bar, text="● ECO", font=FONT_BADGE, bg=BG_INPUT, fg=TEXT_SECONDARY, bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("eco"), cursor="hand2")
         self.btn_gear_eco.pack(side="left", padx=2)
 
-        self.btn_gear_bal = tk.Button(act_bar, text="⚖️ BALANCED", font=FONT_BADGE, bg=BG_INPUT, fg=TEXT_SECONDARY, bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("balanced"), cursor="hand2")
+        self.btn_gear_bal = tk.Button(act_bar, text="● BALANCED", font=FONT_BADGE, bg=BG_INPUT, fg=TEXT_SECONDARY, bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("balanced"), cursor="hand2")
         self.btn_gear_bal.pack(side="left", padx=2)
 
-        self.btn_gear_turbo = tk.Button(act_bar, text="🚀 TURBO", font=FONT_BADGE, bg=ACCENT_BLUE, fg="#fff", bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("turbo"), cursor="hand2")
+        self.btn_gear_turbo = tk.Button(act_bar, text="● TURBO", font=FONT_BADGE, bg=ACCENT_BLUE, fg="#fff", bd=0, padx=10, pady=4, relief="flat", command=lambda: self.on_switch_gear("turbo"), cursor="hand2")
         self.btn_gear_turbo.pack(side="left", padx=2)
 
         # Daemon Pause / Resume Toggle
-        self.btn_az_toggle = tk.Button(act_bar, text="⏸ Pause Daemon", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_AMBER, bd=0, padx=10, pady=4, relief="flat", command=self.on_toggle_azmuth_pause, cursor="hand2")
+        self.btn_az_toggle = tk.Button(act_bar, text="■ Pause Daemon", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_AMBER, bd=0, padx=10, pady=4, relief="flat", command=self.on_toggle_azmuth_pause, cursor="hand2")
         self.btn_az_toggle.pack(side="left", padx=12)
 
         # Right-side action triggers
-        btn_burst = tk.Button(act_bar, text="⚡ Run Single Burst", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_burst, cursor="hand2")
+        btn_burst = tk.Button(act_bar, text="▶ Run Single Burst", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_GREEN, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_burst, cursor="hand2")
         btn_burst.pack(side="right", padx=12)
 
-        btn_foresight = tk.Button(act_bar, text="🔭 Run Foresight Scan", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_PURPLE, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_foresight, cursor="hand2")
+        btn_foresight = tk.Button(act_bar, text="✦ Run Foresight Scan", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_INDIGO, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_foresight, cursor="hand2")
         btn_foresight.pack(side="right", padx=4)
 
-        btn_gh_radar = tk.Button(act_bar, text="🛰️ GitHub Radar", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_AMBER, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_github_radar, cursor="hand2")
+        btn_gh_radar = tk.Button(act_bar, text="◈ GitHub Radar", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_AMBER, bd=0, padx=10, pady=4, relief="flat", command=self.on_azmuth_github_radar, cursor="hand2")
         btn_gh_radar.pack(side="right", padx=4)
 
-        btn_harvest_lang = tk.Button(act_bar, text="🌐 Harvest Language Refs", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_harvest_languages, cursor="hand2")
+        btn_harvest_lang = tk.Button(act_bar, text="☷ Harvest Language Refs", font=FONT_BADGE, bg=BG_INPUT, fg=ACCENT_CYAN, bd=0, padx=10, pady=4, relief="flat", command=self.on_harvest_languages, cursor="hand2")
         btn_harvest_lang.pack(side="right", padx=4)
 
         # 2. Main Content Split (Left: Codon Stream Browser, Right: Global Language Reference Cards)

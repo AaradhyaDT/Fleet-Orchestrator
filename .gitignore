@@ -126,6 +126,7 @@ orchestrator-state/jobs/
 orchestrator-state/tasks/task_*.json
 orchestrator-state/checkpoints/task_*.json
 orchestrator-state/qa-reviews/copilot_mistakes/task_*.json
+orchestrator-state/gui_geometry.json
 !orchestrator-state/tasks/.gitkeep
 !orchestrator-state/checkpoints/.gitkeep
 

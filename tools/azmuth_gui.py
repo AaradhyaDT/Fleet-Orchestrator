@@ -130,7 +130,8 @@ class GUITheme:
             self.accent_emerald = "#059669"
             self.accent_amber = "#d97706"
             self.accent_crimson = "#dc2626"
-            self.accent_purple = "#7c3aed"
+            self.accent_indigo = "#4f46e5"
+            self.accent_purple = self.accent_indigo
             self.accent_gold = "#b45309"
         else:
             self.bg_void = "#090b0e"
@@ -154,14 +155,15 @@ class GUITheme:
             self.accent_emerald = "#10b981"
             self.accent_amber = "#f59e0b"
             self.accent_crimson = "#ef4444"
-            self.accent_purple = "#a855f7"
+            self.accent_indigo = "#6366f1"
+            self.accent_purple = self.accent_indigo
             self.accent_gold = "#eab308"
 
         self.tier_colors = {
             0: "#f43f5e",  # T0 Hardware Substrate
             1: self.accent_amber,  # T1 Language Runtime
             2: self.accent_cyan,   # T2 Primitives
-            3: self.accent_purple, # T3 Cubic Breakers
+            3: self.accent_indigo, # T3 Cubic Breakers
             4: self.accent_emerald,# T4 Symbolic Frontier
             5: self.accent_gold,   # T5 Super-Domain Foresight
         }
@@ -524,7 +526,7 @@ class AzmuthCommandCenterGUI:
         """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
         pct_str = f"{int(self.zoom_level * 100)}%"
         self.btn_zoom_reset.configure(text=pct_str)
-        self.lbl_footer_zoom.configure(text=f"🔍 Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
+        self.lbl_footer_zoom.configure(text=f"Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
 
         # Update panel widths
         self.left_panel.configure(width=max(220, int(round(300 * self.scale))))
@@ -552,7 +554,7 @@ class AzmuthCommandCenterGUI:
         self.theme = GUITheme(is_light=not self.theme.is_light)
         set_window_dark_mode(self.root, is_dark=not self.theme.is_light)
         self.btn_theme_toggle.configure(
-            text="🌙 Dark Mode" if self.theme.is_light else "☀️ Light Mode",
+            text="☾ Dark Mode" if self.theme.is_light else "☼ Light Mode",
             bg=self.theme.bg_card,
             fg=self.theme.text_primary,
         )
@@ -754,7 +756,7 @@ class AzmuthCommandCenterGUI:
         self.btn_row.pack(anchor="w", pady=(2, 0))
 
         self.gear_buttons: Dict[str, tk.Button] = {}
-        for g_key, g_label in [("whisper", "🌱 Whisper"), ("balanced", "⚡ Balanced"), ("turbo", "🚀 Turbo")]:
+        for g_key, g_label in [("whisper", "● Whisper"), ("balanced", "● Balanced"), ("turbo", "● Turbo")]:
             b = tk.Button(
                 self.btn_row,
                 text=g_label,
@@ -854,7 +856,7 @@ class AzmuthCommandCenterGUI:
         # Light / Dark Theme Toggle Pill
         self.btn_theme_toggle = tk.Button(
             ctrl_header_frame,
-            text="☀️ Light Mode" if not t.is_light else "🌙 Dark Mode",
+            text="☼ Light Mode" if not t.is_light else "☾ Dark Mode",
             font=self.font("Segoe UI", 8),
             bg=t.bg_card,
             fg=t.text_primary,
@@ -945,11 +947,11 @@ class AzmuthCommandCenterGUI:
         self.act_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
         actions = [
-            ("📡 Scan GitHub", t.accent_cyan, self._trigger_github_scan),
-            ("🧠 Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
-            ("🧬 Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
-            ("📥 Harvest Task", t.accent_emerald, self._trigger_harvest_task),
-            ("🔄 Verify Cycle", t.accent_gold, self._trigger_full_cycle),
+            ("◈ Scan GitHub", t.accent_cyan, self._trigger_github_scan),
+            ("✦ Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
+            ("▶ Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
+            ("☷ Harvest Task", t.accent_emerald, self._trigger_harvest_task),
+            ("↻ Verify Cycle", t.accent_gold, self._trigger_full_cycle),
         ]
         for label, color, cmd in actions:
             b = tk.Button(
@@ -1171,7 +1173,7 @@ class AzmuthCommandCenterGUI:
 
         self.lbl_footer_zoom = tk.Label(
             self.footer,
-            text="🔍 Zoom: 100% (Ctrl+= / Ctrl+- / Ctrl+0)",
+            text="Zoom: 100% (Ctrl+= / Ctrl+- / Ctrl+0)",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_panel,
@@ -1210,7 +1212,7 @@ class AzmuthCommandCenterGUI:
             self.lbl_canvas_mode.configure(
                 text="VIEW [1] — END-TO-END SENSORY, THALAMIC & GENOMIC PIPELINE FLOW", fg=t.accent_cyan
             )
-            self.btn_contextual_action.configure(text="📡 Scan Radar", bg=t.accent_cyan, fg=t.bg_void)
+            self.btn_contextual_action.configure(text="◈ Scan Radar", bg=t.accent_cyan, fg=t.bg_void)
         elif view_name == "dag":
             self.left_header_lbl.configure(text="CORTICAL CARTRIDGES (U0–U5)")
             self.lbl_canvas_mode.configure(
@@ -1222,7 +1224,7 @@ class AzmuthCommandCenterGUI:
             self.lbl_canvas_mode.configure(
                 text="VIEW [3] — PHYLOGENETIC GENE EVOLUTION TREE & ALLELE ARENA", fg=t.accent_purple
             )
-            self.btn_contextual_action.configure(text="🧬 Mutate & Race", bg=t.accent_purple, fg=t.text_primary)
+            self.btn_contextual_action.configure(text="▶ Mutate & Race", bg=t.accent_purple, fg=t.text_primary)
 
         self._populate_left_panel()
         self._redraw_active_canvas()
@@ -1248,13 +1250,13 @@ class AzmuthCommandCenterGUI:
         if self.active_view == "pipeline":
             t = self.gh_cache_data.get("telemetry", {})
             streams = [
-                ("STREAM_U3_LABS", f"📡 [U3] Lab Alpha ({len(t.get('opportunities', []))} hits)"),
-                ("STREAM_U1_RELEASES", f"🚀 [U1/U2] SOTA Releases ({len(t.get('releases', []))} tags)"),
-                ("STREAM_CODON_CP", f"🧬 [Codon] CP Archives ({len(t.get('cp_archives', []))} repos)"),
-                ("STREAM_U0_ECO", f"🛡️ [U0] Ecosystem Health ({len(t.get('ecosystem', []))} repos)"),
-                ("STAGE_PAT_RING", f"🔑 30-PAT Token Pool ({len(self.gh_sensor.pool.tokens)} tokens)"),
+                ("STREAM_U3_LABS", f"◈ [U3] Lab Alpha ({len(t.get('opportunities', []))} hits)"),
+                ("STREAM_U1_RELEASES", f"▶ [U1/U2] SOTA Releases ({len(t.get('releases', []))} tags)"),
+                ("STREAM_CODON_CP", f"✦ [Codon] CP Archives ({len(t.get('cp_archives', []))} repos)"),
+                ("STREAM_U0_ECO", f"● [U0] Ecosystem Health ({len(t.get('ecosystem', []))} repos)"),
+                ("STAGE_PAT_RING", f"◈ 30-PAT Token Pool ({len(self.gh_sensor.pool.tokens)} tokens)"),
                 ("STAGE_THALAMIC", f"⚡ Thalamic Sieve (|Z| >= {self.thalamic_z_threshold.get():.1f}σ)"),
-                ("STAGE_ULTIMATRIX", f"🏆 Ultimatrix Arena ({self.arena_ledger_data.get('tournaments_run', 0)} races)"),
+                ("STAGE_ULTIMATRIX", f"✦ Ultimatrix Arena ({self.arena_ledger_data.get('tournaments_run', 0)} races)"),
             ]
             for s_id, s_label in streams:
                 if not q or q in s_label.lower():
@@ -1309,7 +1311,7 @@ class AzmuthCommandCenterGUI:
                 desc = g.get("description", "")
                 allele_cnt = len(g.get("alleles", []))
                 has_mut = any("_mut_" in a.get("allele_id", "") for a in g.get("alleles", []))
-                tag = "🧬" if has_mut else "🔹"
+                tag = "✦" if has_mut else "●"
                 lbl = f" {tag} [T{tier}] {gid} ({allele_cnt}A)"
                 if not q or q in gid.lower() or q in desc.lower() or q in g.get("category", "").lower():
                     self.left_listbox.insert(tk.END, lbl)
@@ -1749,7 +1751,7 @@ class AzmuthCommandCenterGUI:
             anchor="w",
         )
         speedup_txt = (
-            f"🏆 Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
+            f"★ Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
         )
         self.canvas.create_text(w - 24, 10 + banner_h / 2, text=speedup_txt, fill=t.accent_gold, font=self.font("Segoe UI Semibold", 9), anchor="e")
 
@@ -1807,7 +1809,7 @@ class AzmuthCommandCenterGUI:
                 aid[:20],
                 f"{comp} • {rt} ms • {ram} KB",
                 col,
-                badge="👑 PRIMARY" if is_prim else "BASE",
+                badge="★ PRIMARY" if is_prim else "BASE",
                 payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": aid},
             )
 
@@ -1849,7 +1851,7 @@ class AzmuthCommandCenterGUI:
                     mid[-22:],
                     f"Mutant • {rt} ms • {ram} KB",
                     col,
-                    badge="👑 CHAMPION" if is_prim else "MUTANT",
+                    badge="★ CHAMPION" if is_prim else "MUTANT",
                     payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": mid},
                 )
         else:
@@ -2066,7 +2068,7 @@ class AzmuthCommandCenterGUI:
                 pady=2,
             ).pack(side=tk.LEFT, padx=2)
 
-        self.inspector_text.insert(tk.END, f"🧬 {gene_id}\n", "h1")
+        self.inspector_text.insert(tk.END, f"✦ {gene_id}\n", "h1")
         self.inspector_text.insert(tk.END, f"{phylo['description']}\n\n", "muted")
 
         if target_allele:
@@ -2094,7 +2096,7 @@ class AzmuthCommandCenterGUI:
                 bar_len = max(2, min(20, int(rt / 4.0)))
                 bar_str = "█" * bar_len
                 tag = "gold" if a.get("dominance") == "PRIMARY" else "code"
-                crown = "👑" if a.get("dominance") == "PRIMARY" else "  "
+                crown = "★" if a.get("dominance") == "PRIMARY" else " "
                 self.inspector_text.insert(
                     tk.END, f"{crown} {a_id[:20]:<20} {bar_str} {rt:>5.1f}ms | {ram}KB\n", tag
                 )
