@@ -7,6 +7,8 @@ exclude = [
     "__pycache__",
     ".worktrees",
     "mcp-servers",
+    "scratch",
+    ".gemini",
 ]
 
 [lint]
