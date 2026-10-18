@@ -60,6 +60,7 @@ if sys.platform == "win32":
         pass
 
 import tkinter as tk
+from tkinter import font as tkFont
 from tkinter import ttk
 
 from tools.azmuth_daemon import (
@@ -426,6 +427,12 @@ class AzmuthCommandCenterGUI:
         self.press_pos: Tuple[float, float] = (0.0, 0.0)
         self.action_buttons: List[Tuple[tk.Button, str]] = []
 
+        # 4c. Interactive Node Dragging & Session Layout
+        self.custom_node_positions: Dict[str, Tuple[float, float]] = {}
+        self.dragged_node_id: Optional[str] = None
+        self.is_node_dragging: bool = False
+        self.node_drag_start_world: Optional[Tuple[float, float]] = None
+
         # 5. Cached Subsystems Data
         self.gh_sensor = AzmuthGitHubSensor()
         self.gh_cache_data: Dict[str, Any] = {}
@@ -547,6 +554,13 @@ class AzmuthCommandCenterGUI:
         self.cam_x = 640.0
         self.cam_y = 380.0
         self._apply_zoom_and_layout()
+
+    def reset_layout(self) -> None:
+        """Clears user manual node dragging offsets and restores default camera view."""
+        self.custom_node_positions.clear()
+        self.dragged_node_id = None
+        self.is_node_dragging = False
+        self.zoom_reset()
 
     def _apply_zoom_and_layout(self) -> None:
         """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
@@ -693,6 +707,17 @@ class AzmuthCommandCenterGUI:
                 v_btn.configure(bg=t.bg_panel, fg=t.text_secondary)
 
         self.lbl_canvas_mode.configure(bg=t.bg_main)
+        if hasattr(self, "canvas_bar"):
+            self.canvas_bar.configure(bg=t.bg_main)
+        if hasattr(self, "lbl_canvas_hint"):
+            self.lbl_canvas_hint.configure(bg=t.bg_main, fg=t.text_muted)
+        if hasattr(self, "btn_reset_layout"):
+            self.btn_reset_layout.configure(
+                bg=t.bg_panel,
+                fg=t.accent_cyan,
+                activebackground=t.accent_cyan,
+                activeforeground=t.bg_void,
+            )
 
         # Update text syntax highlight tags
         self.inspector_text.tag_configure("h1", font=self.font("Segoe UI Semibold", 10), foreground=t.text_primary)
@@ -1209,9 +1234,25 @@ class AzmuthCommandCenterGUI:
         )
         self.lbl_canvas_mode.pack(side=tk.LEFT)
 
+        self.btn_reset_layout = tk.Button(
+            self.canvas_bar,
+            text="↺ Reset Layout",
+            font=self.font("Segoe UI", 8),
+            bg=t.bg_panel,
+            fg=t.accent_cyan,
+            activebackground=t.accent_cyan,
+            activeforeground=t.bg_void,
+            relief=tk.FLAT,
+            padx=6,
+            pady=1,
+            cursor="hand2",
+            command=self.reset_layout,
+        )
+        self.btn_reset_layout.pack(side=tk.RIGHT, padx=(6, 0))
+
         self.lbl_canvas_hint = tk.Label(
             self.canvas_bar,
-            text="Pan: Drag • Zoom: Wheel / Ctrl+= • Reset: Ctrl+0",
+            text="Drag Node: Move • Drag Canvas: Pan • Zoom: Wheel",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_main,
@@ -1454,12 +1495,22 @@ class AzmuthCommandCenterGUI:
         self._draw_active_pulses()
 
     def _register_clickable_node(
-        self, node_id: str, x1: float, y1: float, x2: float, y2: float, payload: Dict[str, Any]
+        self,
+        node_id: str,
+        x1: float,
+        y1: float,
+        x2: float,
+        y2: float,
+        payload: Dict[str, Any],
+        world_pos: Optional[Tuple[float, float]] = None,
+        world_dim: Optional[Tuple[float, float]] = None,
     ) -> None:
         self.canvas_nodes[node_id] = {
             "bbox": (x1, y1, x2, y2),
             "center": ((x1 + x2) / 2.0, (y1 + y2) / 2.0),
             "payload": payload,
+            "world_pos": world_pos,
+            "world_dim": world_dim,
         }
 
     def _draw_node_box(
@@ -1478,9 +1529,35 @@ class AzmuthCommandCenterGUI:
         t = self.theme
         cw = max(self.canvas.winfo_width(), 680)
         ch = max(self.canvas.winfo_height(), 500)
+
+        # Check for user-dragged override in world space
+        if node_id in self.custom_node_positions:
+            wx, wy = self.custom_node_positions[node_id]
+
         sx, sy = self.w2s(wx, wy, cw, ch)
-        nw = max(80.0, base_w * self.cam_zoom)
-        nh = max(30.0, base_h * self.cam_zoom)
+
+        # Scaled typography metrics (SVG-Style vector auto-fitting)
+        title_sz = max(7, min(14, int(round(9 * self.cam_zoom))))
+        sub_sz = max(6, min(12, int(round(8 * self.cam_zoom))))
+        badge_sz = max(6, min(11, int(round(7 * self.cam_zoom))))
+
+        f_title = tkFont.Font(family="Segoe UI Semibold", size=title_sz)
+        f_sub = tkFont.Font(family="Consolas", size=sub_sz)
+        f_badge = tkFont.Font(family="Consolas", size=badge_sz, weight="bold") if badge else None
+
+        tw = f_title.measure(title)
+        sw = f_sub.measure(subtitle)
+        bw = (f_badge.measure(badge) + int(12 * self.cam_zoom)) if f_badge else 0
+
+        # Auto-fit width and height to comfortably enclose text
+        stripe_w = max(3, int(5 * self.cam_zoom))
+        text_w = max(tw, sw)
+        req_w = text_w + bw + stripe_w + int(24 * self.cam_zoom)
+        req_h = f_title.metrics("linespace") + f_sub.metrics("linespace") + int(14 * self.cam_zoom)
+
+        nw = max(base_w * self.cam_zoom, float(req_w))
+        nh = max(base_h * self.cam_zoom, float(req_h))
+
         x1, y1 = sx - nw / 2.0, sy - nh / 2.0
         x2, y2 = sx + nw / 2.0, sy + nh / 2.0
 
@@ -1501,17 +1578,12 @@ class AzmuthCommandCenterGUI:
 
         self.canvas.create_rectangle(x1, y1, x2, y2, fill=bg_col, outline=border_col, width=border_w)
         # Left accent stripe
-        stripe_w = max(3, int(5 * self.cam_zoom))
         self.canvas.create_rectangle(x1, y1, x1 + stripe_w, y2, fill=accent, outline="")
 
         # Title & Subtitle with bounded scaled typography
-        title_sz = max(7, min(13, int(round(9 * self.cam_zoom))))
-        sub_sz = max(6, min(11, int(round(8 * self.cam_zoom))))
-        badge_sz = max(6, min(10, int(round(7 * self.cam_zoom))))
-
         self.canvas.create_text(
             x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
-            y1 + nh * 0.32,
+            y1 + nh * 0.33,
             text=title,
             fill=t.text_primary,
             font=("Segoe UI Semibold", title_sz),
@@ -1519,7 +1591,7 @@ class AzmuthCommandCenterGUI:
         )
         self.canvas.create_text(
             x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
-            y1 + nh * 0.68,
+            y1 + nh * 0.67,
             text=subtitle,
             fill=t.text_muted,
             font=("Consolas", sub_sz),
@@ -1528,14 +1600,20 @@ class AzmuthCommandCenterGUI:
         if badge:
             self.canvas.create_text(
                 x2 - max(4, int(8 * self.cam_zoom)),
-                y1 + nh * 0.32,
+                y1 + nh * 0.33,
                 text=badge,
                 fill=accent,
                 font=("Consolas", badge_sz, "bold"),
                 anchor="e",
             )
 
-        self._register_clickable_node(node_id, x1, y1, x2, y2, payload or {"id": node_id, "title": title})
+        # Store world and screen coordinates in node registry
+        self._register_clickable_node(
+            node_id, x1, y1, x2, y2,
+            payload or {"id": node_id, "title": title},
+            world_pos=(wx, wy),
+            world_dim=(nw / self.cam_zoom, nh / self.cam_zoom)
+        )
 
     def _draw_directed_edge(
         self,
@@ -1624,6 +1702,10 @@ class AzmuthCommandCenterGUI:
             ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, 620.0),
         ]
 
+        # Check custom node positions for pipeline stages
+        if "STAGE_PAT_RING" in self.custom_node_positions:
+            pat_wx, pat_wy = self.custom_node_positions["STAGE_PAT_RING"]
+
         for s_id, s_title, s_sub, s_col, sy in streams:
             self._draw_directed_edge(col1_wx + half_bw, sy, pat_wx - 60.0, pat_wy, color=s_col, base_width=1)
             self._draw_node_box(
@@ -1670,6 +1752,8 @@ class AzmuthCommandCenterGUI:
             pat_sx + screen_r + ring_pad,
             pat_sy + screen_r + ring_pad,
             {"type": "pipeline_stage", "id": "STAGE_PAT_RING"},
+            world_pos=(pat_wx, pat_wy),
+            world_dim=((ring_world_r + 10.0) * 2, (ring_world_r + 10.0) * 2),
         )
 
         self._draw_directed_edge(pat_wx, pat_wy + ring_world_r + 6.0, thal_wx, thal_wy - 30.0, color=t.accent_cyan, label="150k req/hr")
@@ -1943,48 +2027,66 @@ class AzmuthCommandCenterGUI:
         edge_lookup = {e["target_allele"]: e for e in phylo["edges"]}
 
         if mutants:
-            n_mut = len(mutants)
-            mut_vstep = max(110.0, 600.0 / max(n_mut + 1, 1))
-            mut_total_h = (n_mut - 1) * mut_vstep
-            mut_base_y = 380.0 - (mut_total_h / 2.0)
-
-            for idx, mut in enumerate(mutants):
-                mid = mut.get("allele_id", f"mut_{idx}")
-                my = mut_base_y + idx * mut_vstep
+            # Group mutants by operator into clean parallel lanes to prevent massive single-column vertical pileups
+            operator_lanes: Dict[str, List[Dict[str, Any]]] = {}
+            for mut in mutants:
+                mid = mut.get("allele_id", "")
                 e_info = edge_lookup.get(mid, {})
-                parent_id = e_info.get("source_allele", "")
-                op_name = e_info.get("operator", "mutation")
-                speedup = e_info.get("speedup_pct", 0.0)
+                op_raw = e_info.get("operator", "mutation")
+                # Normalize operator key for lane grouping
+                op_key = op_raw.replace("operator_", "").replace("+", "").strip()
+                operator_lanes.setdefault(op_key, []).append(mut)
 
-                px, py = wt_positions.get(parent_id, (wt_wx, root_wy))
-                is_prim = mut.get("dominance") == "PRIMARY"
-                col = t.accent_gold if is_prim else t.accent_emerald
+            # Sort lanes so primary/fastest operators appear first
+            sorted_op_keys = sorted(operator_lanes.keys(), key=lambda k: ("pragma" not in k, "bitwise" not in k, k))
+            lane_base_x = 1040.0
+            lane_spacing = 380.0
 
-                fit = mut.get("empirical_fitness", {})
-                rt = fit.get("runtime_ms", "?")
-                ram = fit.get("ram_kb", "?")
+            for lane_idx, op_key in enumerate(sorted_op_keys):
+                lane_mutants = operator_lanes[op_key]
+                cur_lane_wx = lane_base_x + lane_idx * lane_spacing
+                n_lane_mut = len(lane_mutants)
+                mut_vstep = max(78.0, 560.0 / max(n_lane_mut + 1, 1))
+                mut_total_h = (n_lane_mut - 1) * mut_vstep
+                mut_base_y = 380.0 - (mut_total_h / 2.0)
 
-                self._draw_directed_edge(
-                    px + half_abw,
-                    py,
-                    mut_wx - half_abw,
-                    my,
-                    color=col,
-                    label=f"+{op_name} ({speedup:+.0f}%)",
-                    base_width=2,
-                )
-                self._draw_node_box(
-                    f"ALLELE::{mid}",
-                    mut_wx,
-                    my,
-                    allele_bw,
-                    allele_bh,
-                    mid[-22:],
-                    f"Mutant • {rt} ms • {ram} KB",
-                    col,
-                    badge="★ CHAMPION" if is_prim else "MUTANT",
-                    payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": mid},
-                )
+                for idx, mut in enumerate(lane_mutants):
+                    mid = mut.get("allele_id", f"mut_{idx}")
+                    my = mut_base_y + idx * mut_vstep
+                    e_info = edge_lookup.get(mid, {})
+                    parent_id = e_info.get("source_allele", "")
+                    op_name = e_info.get("operator", op_key)
+                    speedup = e_info.get("speedup_pct", 0.0)
+
+                    px, py = wt_positions.get(parent_id, (wt_wx, root_wy))
+                    is_prim = mut.get("dominance") == "PRIMARY"
+                    col = t.accent_gold if is_prim else t.accent_emerald
+
+                    fit = mut.get("empirical_fitness", {})
+                    rt = fit.get("runtime_ms", "?")
+                    ram = fit.get("ram_kb", "?")
+
+                    self._draw_directed_edge(
+                        px + half_abw,
+                        py,
+                        cur_lane_wx - half_abw,
+                        my,
+                        color=col,
+                        label=f"+{op_name} ({speedup:+.0f}%)",
+                        base_width=2,
+                    )
+                    self._draw_node_box(
+                        f"ALLELE::{mid}",
+                        cur_lane_wx,
+                        my,
+                        allele_bw,
+                        allele_bh,
+                        mid[-22:],
+                        f"Mutant • {rt} ms • {ram} KB",
+                        col,
+                        badge="★ CHAMPION" if is_prim else f"+{op_key[:8]}",
+                        payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": mid},
+                    )
         else:
             self._draw_directed_edge(
                 wt_wx + half_abw,
@@ -2269,26 +2371,64 @@ class AzmuthCommandCenterGUI:
         self.pan_start = (event.x, event.y)
         self.press_pos = (event.x, event.y)
         self.is_panning = False
+        self.is_node_dragging = False
+        self.dragged_node_id = None
+
+        cw = max(self.canvas.winfo_width(), 680)
+        ch = max(self.canvas.winfo_height(), 500)
+
+        # Hit test nodes in reverse order (topmost node first)
+        for nid, info in reversed(list(self.canvas_nodes.items())):
+            x1, y1, x2, y2 = info["bbox"]
+            if x1 <= event.x <= x2 and y1 <= event.y <= y2:
+                self.dragged_node_id = nid
+                # Record initial node center in world coordinates
+                w_pos = info.get("world_pos")
+                if not w_pos:
+                    w_pos = self.s2w((x1 + x2) / 2.0, (y1 + y2) / 2.0, cw, ch)
+                self.node_drag_start_world = w_pos
+                self.custom_node_positions[nid] = w_pos
+                break
 
     def _on_canvas_motion(self, event: Any) -> None:
         if not self.pan_start:
             return
         dx = event.x - self.pan_start[0]
         dy = event.y - self.pan_start[1]
-        if not self.is_panning:
-            if math.hypot(event.x - self.press_pos[0], event.y - self.press_pos[1]) > 4:
+        dist = math.hypot(event.x - self.press_pos[0], event.y - self.press_pos[1])
+
+        cw = max(self.canvas.winfo_width(), 680)
+        ch = max(self.canvas.winfo_height(), 500)
+
+        if self.dragged_node_id:
+            if not self.is_node_dragging and dist > 4:
+                self.is_node_dragging = True
+            if self.is_node_dragging:
+                # Move specific node in world coordinates
+                cur_wx, cur_wy = self.custom_node_positions.get(self.dragged_node_id, (640.0, 380.0))
+                new_wx = cur_wx + dx / max(0.01, self.cam_zoom)
+                new_wy = cur_wy + dy / max(0.01, self.cam_zoom)
+                self.custom_node_positions[self.dragged_node_id] = (new_wx, new_wy)
+                self.pan_start = (event.x, event.y)
+                self._redraw_active_canvas()
+        else:
+            if not self.is_panning and dist > 4:
                 self.is_panning = True
-        if self.is_panning:
-            self.cam_x -= dx / max(0.01, self.cam_zoom)
-            self.cam_y -= dy / max(0.01, self.cam_zoom)
-            self.pan_start = (event.x, event.y)
-            self._redraw_active_canvas()
+            if self.is_panning:
+                # Pan entire virtual camera
+                self.cam_x -= dx / max(0.01, self.cam_zoom)
+                self.cam_y -= dy / max(0.01, self.cam_zoom)
+                self.pan_start = (event.x, event.y)
+                self._redraw_active_canvas()
 
     def _on_canvas_release(self, event: Any) -> None:
-        if not self.is_panning:
+        dist = math.hypot(event.x - self.press_pos[0], event.y - self.press_pos[1])
+        if not self.is_panning and not self.is_node_dragging and dist <= 4:
             self._handle_node_click(event.x, event.y)
         self.pan_start = None
         self.is_panning = False
+        self.is_node_dragging = False
+        self.dragged_node_id = None
 
     def _on_pan_start(self, event: Any) -> None:
         self.pan_start = (event.x, event.y)

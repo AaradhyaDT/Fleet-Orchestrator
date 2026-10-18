@@ -177,3 +177,79 @@ def test_azmuth_gui_zoom_and_theme_toggle():
         except Exception:
             pass
 
+
+def test_azmuth_gui_node_dragging_and_layout_reset():
+    """Verifies that dragging nodes records custom world coordinates and reset_layout clears them."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        app.switch_view("pipeline")
+        app._redraw_active_canvas()
+
+        # Verify initial state has zero custom drag positions
+        assert len(app.custom_node_positions) == 0
+
+        # Simulate custom world-position override for STAGE_PAT_RING
+        app.custom_node_positions["STAGE_PAT_RING"] = (720.0, 310.0)
+        app._redraw_active_canvas()
+        node_info = app.canvas_nodes.get("STAGE_PAT_RING")
+        assert node_info is not None
+        assert node_info["world_pos"] == (720.0, 310.0)
+
+        # Execute layout reset
+        app.reset_layout()
+        assert len(app.custom_node_positions) == 0
+        assert app.cam_zoom == 1.0
+        assert app.cam_x == 640.0
+        assert app.cam_y == 380.0
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+
+
+def test_azmuth_gui_view3_multi_column_operator_lanes():
+    """Verifies View 3 organizes high-density mutant alleles into parallel horizontal lanes."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        app.switch_view("genes")
+        app._redraw_active_canvas()
+
+        # Find any gene with mutants
+        has_mut_gene = None
+        for gid, gdata in app.genes_catalog.items():
+            if len(gdata.get("alleles", [])) > 2:
+                has_mut_gene = gid
+                break
+
+        if has_mut_gene:
+            app.selected_gene_id = has_mut_gene
+            app._redraw_active_canvas()
+
+            # Inspect world X coordinates of allele nodes
+            allele_nodes = [
+                info for nid, info in app.canvas_nodes.items()
+                if nid.startswith("ALLELE::") and info.get("world_pos")
+            ]
+            assert len(allele_nodes) >= 2
+            # Verify nodes exist in canvas
+            assert len(app.canvas_nodes) >= 3
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+
+

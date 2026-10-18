@@ -1,136 +1,110 @@
 {
-  "timestamp": "2026-10-18T07:47:00.460828+00:00",
-  "timestamp_epoch": 1792309608.3082929,
+  "timestamp": "2026-10-18T08:23:31.900378+00:00",
+  "timestamp_epoch": 1792311798.2804298,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
       {
-        "id": "torch-spyre/spyre-inference#259",
-        "title": "[FP8] Support block-wise FP8 quantization",
-        "repo": "torch-spyre/spyre-inference",
-        "url": "https://github.com/torch-spyre/spyre-inference/issues/259",
+        "id": "Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP#229",
+        "title": "Tamcpp ????",
+        "repo": "Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP",
+        "url": "https://github.com/Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP/issues/229",
         "labels": [
-          "enhancement",
+          "good first issue",
           "help wanted",
-          "stage/010-actionable"
-        ],
-        "comments": 1,
-        "created_at": "2026-06-09T19:10:15Z",
-        "updated_at": "2026-10-17T17:42:55Z",
-        "salience": 1.2
-      },
-      {
-        "id": "torch-spyre/spyre-inference#257",
-        "title": "[FP8] Support online FP8 quantization (W8A16 dynamic)",
-        "repo": "torch-spyre/spyre-inference",
-        "url": "https://github.com/torch-spyre/spyre-inference/issues/257",
-        "labels": [
-          "enhancement",
-          "help wanted",
-          "stage/010-actionable"
-        ],
-        "comments": 0,
-        "created_at": "2026-06-09T19:08:53Z",
-        "updated_at": "2026-10-17T17:42:54Z",
-        "salience": 1.0
-      },
-      {
-        "id": "vllm-project/vllm-omni#8586",
-        "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
-        "repo": "vllm-project/vllm-omni",
-        "url": "https://github.com/vllm-project/vllm-omni/issues/8586",
-        "labels": [
-          "enhancement",
-          "help wanted",
-          "diffusion",
-          "RFC"
-        ],
-        "comments": 31,
-        "created_at": "2026-10-07T14:16:56Z",
-        "updated_at": "2026-10-17T11:42:23Z",
-        "salience": 2.0
-      },
-      {
-        "id": "vllm-project/vllm-omni#8993",
-        "title": "[New Model]: FLUX 3 Image Klein main-branch support and inference optimization",
-        "repo": "vllm-project/vllm-omni",
-        "url": "https://github.com/vllm-project/vllm-omni/issues/8993",
-        "labels": [
-          "help wanted",
-          "new model"
-        ],
-        "comments": 7,
-        "created_at": "2026-10-15T16:30:53Z",
-        "updated_at": "2026-10-17T10:22:17Z",
-        "salience": 2.0
-      },
-      {
-        "id": "Nobayprotocol/Nobay-Protocol#3",
-        "title": "Add Hardhat test suite for ListingRegistry.sol",
-        "repo": "Nobayprotocol/Nobay-Protocol",
-        "url": "https://github.com/Nobayprotocol/Nobay-Protocol/issues/3",
-        "labels": [
-          "help wanted",
-          "Solidity",
-          "Bounty",
-          "Testing"
-        ],
-        "comments": 18,
-        "created_at": "2025-05-20T17:37:48Z",
-        "updated_at": "2026-10-18T03:48:57Z",
-        "salience": 2.0
-      },
-      {
-        "id": "kubestellar/kubestellar#3827",
-        "title": "[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3827",
-        "labels": [
-          "help wanted",
-          "lifecycle/stale",
-          "stage/010-actionable",
-          "stage/stalled",
-          "agent/outreach"
-        ],
-        "comments": 3,
-        "created_at": "2026-06-08T13:25:17Z",
-        "updated_at": "2026-10-17T17:30:03Z",
-        "salience": 1.6
-      },
-      {
-        "id": "kubestellar/kubestellar#3789",
-        "title": "[outreach] KubeCon NA 2026 talk proposal ? AI-Maintained Open Source at Scale",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3789",
-        "labels": [
-          "help wanted",
-          "priority/medium",
-          "lifecycle/rotten",
-          "conference",
-          "stage/010-actionable",
-          "stage/stalled"
+          "feature"
         ],
         "comments": 2,
-        "created_at": "2026-06-06T13:20:26Z",
-        "updated_at": "2026-10-17T17:29:02Z",
+        "created_at": "2026-09-10T14:48:27Z",
+        "updated_at": "2026-09-11T00:25:21Z",
         "salience": 1.4
       },
       {
-        "id": "kubestellar/kubestellar#3791",
-        "title": "[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3791",
+        "id": "diesimo-ai/TinyP#1",
+        "title": "TinyP Roadmap",
+        "repo": "diesimo-ai/TinyP",
+        "url": "https://github.com/diesimo-ai/TinyP/issues/1",
         "labels": [
-          "kind/feature",
-          "help wanted",
+          "enhancement",
           "good first issue",
-          "stage/010-actionable",
-          "stage/stalled"
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-08-03T01:20:22Z",
+        "updated_at": "2026-08-03T01:20:22Z",
+        "salience": 1.0
+      },
+      {
+        "id": "existence-master/Sentient#159",
+        "title": "Forward or CC an email to give Sentient a task",
+        "repo": "existence-master/Sentient",
+        "url": "https://github.com/existence-master/Sentient/issues/159",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "area: tasks",
+          "area: integrations",
+          "priority: P1",
+          "size: M"
         ],
         "comments": 1,
-        "created_at": "2026-06-06T13:20:27Z",
-        "updated_at": "2026-10-17T17:28:59Z",
+        "created_at": "2026-10-09T09:55:26Z",
+        "updated_at": "2026-10-18T06:25:30Z",
         "salience": 1.2
+      },
+      {
+        "id": "timerloggedout-spec/termux-monorepo#184",
+        "title": "Credential Authorizations & Last-Used Evidence",
+        "repo": "timerloggedout-spec/termux-monorepo",
+        "url": "https://github.com/timerloggedout-spec/termux-monorepo/issues/184",
+        "labels": [
+          "bug",
+          "enhancement",
+          "help wanted",
+          "security",
+          "priority",
+          "production",
+          "backlog",
+          "`gh`ActionsWorkflows",
+          "ToDo-2-Ta'D\u00e3!n!!\ud83e\ude84",
+          "Roster:Teams:Games:Players",
+          "agentic-workflows",
+          "Providers",
+          "A2A"
+        ],
+        "comments": 72,
+        "created_at": "2026-08-12T03:59:16Z",
+        "updated_at": "2026-10-18T06:20:31Z",
+        "salience": 2.0
+      },
+      {
+        "id": "GD4AI/obsidian-llm-wiki#703",
+        "title": "[Bug] Ingest hangs indefinitely on a single file ? cancelIngestion() cannot abort it",
+        "repo": "GD4AI/obsidian-llm-wiki",
+        "url": "https://github.com/GD4AI/obsidian-llm-wiki/issues/703",
+        "labels": [
+          "bug",
+          "help wanted"
+        ],
+        "comments": 3,
+        "created_at": "2026-09-13T15:22:53Z",
+        "updated_at": "2026-10-18T04:55:11Z",
+        "salience": 1.6
+      },
+      {
+        "id": "Saidur-droid/MergeEarn#69",
+        "title": "Add current judge-flow screenshots to README",
+        "repo": "Saidur-droid/MergeEarn",
+        "url": "https://github.com/Saidur-droid/MergeEarn/issues/69",
+        "labels": [
+          "help wanted",
+          "good first issue",
+          "bounty-waiting"
+        ],
+        "comments": 4,
+        "created_at": "2026-09-22T08:32:03Z",
+        "updated_at": "2026-10-18T04:49:49Z",
+        "salience": 1.8
       }
     ],
     "releases": [
