@@ -417,6 +417,7 @@ class AzmuthCommandCenterGUI:
         # 4. Animation & Canvas State
         self.anim_tick: int = 0
         self.pulses: List[Dict[str, Any]] = []
+        self.active_canvas_edges: List[Dict[str, Any]] = []
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
         self.selected_node_id: Optional[str] = None
 
@@ -569,13 +570,15 @@ class AzmuthCommandCenterGUI:
         self.is_node_dragging = False
         self.pan_start = None
         self.is_panning = False
+        self.pulses.clear()
+        if hasattr(self, "canvas"):
+            self.canvas.delete("pulse_particle")
         self.zoom_reset()
         if hasattr(self, "lbl_footer_job"):
             self.lbl_footer_job.configure(
                 text="● Status: DAG layout reset to default schematic render",
                 fg=self.theme.accent_cyan,
             )
-        self._spawn_pulse_wave(color=self.theme.accent_cyan, count=6)
 
     def _apply_zoom_and_layout(self) -> None:
         """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
@@ -1336,6 +1339,9 @@ class AzmuthCommandCenterGUI:
         self.active_view = view_name
         self.selected_node_id = None
         self.shock_overlay.clear()
+        self.pulses.clear()
+        if hasattr(self, "canvas"):
+            self.canvas.delete("pulse_particle")
         t = self.theme
 
         for v_id, btn in self.view_buttons.items():
@@ -1515,6 +1521,7 @@ class AzmuthCommandCenterGUI:
     def _redraw_active_canvas(self) -> None:
         self.canvas.delete("all")
         self.canvas_nodes.clear()
+        self.active_canvas_edges = []
         w = max(self.canvas.winfo_width(), 680)
         h = max(self.canvas.winfo_height(), 500)
         t = self.theme
@@ -1777,6 +1784,14 @@ class AzmuthCommandCenterGUI:
             arrowshape=(arr_len, arr_len + 2, 4),
             dash=dash_pat,
         )
+        if hasattr(self, "active_canvas_edges"):
+            self.active_canvas_edges.append({
+                "x1": x1, "y1": y1,
+                "cp1_x": cp1_x, "cp1_y": cp1_y,
+                "cp2_x": cp2_x, "cp2_y": cp2_y,
+                "x2": x2, "y2": y2,
+                "color": color,
+            })
         if label:
             mx = 0.125 * x1 + 0.375 * cp1_x + 0.375 * cp2_x + 0.125 * x2
             my = 0.125 * y1 + 0.375 * cp1_y + 0.375 * cp2_y + 0.125 * y2
@@ -2798,21 +2813,18 @@ class AzmuthCommandCenterGUI:
         self._populate_left_panel()
         self._redraw_active_canvas()
 
-    def _spawn_pulse_wave(self, color: str = "#06b6d4", count: int = 8) -> None:
-        keys = list(self.canvas_nodes.keys())
-        if len(keys) < 2:
+    def _spawn_pulse_wave(self, color: Optional[str] = None, count: int = 6) -> None:
+        if not hasattr(self, "active_canvas_edges") or not self.active_canvas_edges:
             return
-        for i in range(min(count, len(keys) - 1)):
-            c1 = self.canvas_nodes[keys[i]]["center"]
-            c2 = self.canvas_nodes[keys[(i + 1) % len(keys)]]["center"]
+        n_edges = len(self.active_canvas_edges)
+        for i in range(min(count, n_edges * 2)):
+            edge_idx = i % n_edges
+            edge_col = color or self.active_canvas_edges[edge_idx]["color"]
             self.pulses.append({
-                "x1": c1[0],
-                "y1": c1[1],
-                "x2": c2[0],
-                "y2": c2[1],
-                "progress": (i * 0.12) % 1.0,
-                "speed": 0.035,
-                "color": color,
+                "edge_idx": edge_idx,
+                "progress": (i * 0.18) % 1.0,
+                "speed": 0.02 + (i % 3) * 0.005,
+                "color": edge_col,
             })
 
     def _run_background_job(self, job_title: str, pulse_color: str, target_fn: Callable[[], None]) -> None:
@@ -2835,6 +2847,9 @@ class AzmuthCommandCenterGUI:
 
     def _on_background_job_complete(self) -> None:
         self.is_job_running = False
+        self.pulses.clear()
+        if hasattr(self, "canvas"):
+            self.canvas.delete("pulse_particle")
         self.active_job_label = "IDLE — Monitoring Telemetry"
         self.lbl_footer_job.configure(
             text="● Status: IDLE — Work Complete & Ledgers Synchronized (60 FPS)", fg=self.theme.accent_emerald
@@ -3021,23 +3036,40 @@ class AzmuthCommandCenterGUI:
 
     def _draw_active_pulses(self) -> None:
         self.canvas.delete("pulse_particle")
+        if not hasattr(self, "active_canvas_edges") or not self.active_canvas_edges:
+            self.pulses.clear()
+            return
+
         remaining = []
-        t = self.theme
-        pr = max(3, int(4 * self.zoom_level))
+        n_edges = len(self.active_canvas_edges)
+        pr = max(2, int(3.5 * self.zoom_level))
+
         for p in self.pulses:
             p["progress"] += p["speed"]
+            e_idx = p.get("edge_idx", 0)
+            if e_idx >= n_edges:
+                continue
+
             if p["progress"] < 1.0:
-                prog = p["progress"]
-                px = p["x1"] + (p["x2"] - p["x1"]) * prog
-                py = p["y1"] + (p["y2"] - p["y1"]) * prog
+                t = p["progress"]
+                u = 1.0 - t
+                edge = self.active_canvas_edges[e_idx]
+                px = (u**3) * edge["x1"] + 3 * (u**2) * t * edge["cp1_x"] + 3 * u * (t**2) * edge["cp2_x"] + (t**3) * edge["x2"]
+                py = (u**3) * edge["y1"] + 3 * (u**2) * t * edge["cp1_y"] + 3 * u * (t**2) * edge["cp2_y"] + (t**3) * edge["y2"]
                 col = p["color"]
+                # Clean glowing particle gliding along the curved edge trace
                 self.canvas.create_oval(
-                    px - pr, py - pr, px + pr, py + pr, fill=col, outline=t.text_primary, width=1, tags="pulse_particle"
+                    px - pr, py - pr, px + pr, py + pr,
+                    fill=col,
+                    outline="",
+                    tags="pulse_particle",
                 )
                 remaining.append(p)
             elif self.is_job_running:
                 p["progress"] = 0.0
+                p["edge_idx"] = (e_idx + 1) % n_edges
                 remaining.append(p)
+
         self.pulses = remaining
 
     def _draw_oscilloscope(self) -> None:

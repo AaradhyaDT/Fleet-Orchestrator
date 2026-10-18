@@ -12,3 +12,5 @@
 {"timestamp": "2026-10-18T13:03:54.392034+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-18T13:06:25.066194+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-18T13:16:25.776640+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
+{"timestamp": "2026-10-18T13:20:16.103548+00:00", "event_type": "GITHUB_RADAR_SWEEP", "source": "AzmuthGitHubSensor", "item_id": "30-PAT-Pool", "title": "Scanned 4 streams: 8 opportunities, 5 releases", "status": "SUCCESS", "details": {"opps": 8, "rels": 5}}
+{"timestamp": "2026-10-18T13:20:18.945188+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}

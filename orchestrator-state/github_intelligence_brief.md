@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-18T13:03:51.799271+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-18T13:20:16.102717+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 5, Salience: 2.0)
