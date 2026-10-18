@@ -683,7 +683,7 @@ class AzmuthCommandCenterGUI:
             g_b.configure(bg=t.bg_card, fg=t.text_secondary)
         if hasattr(self, "btn_pause"):
             self.btn_pause.configure(bg=t.bg_card, fg=t.text_secondary)
-        self._highlight_selected_gear()
+        self._refresh_header_indicators()
 
         # View Buttons Re-theming
         for v_id, v_btn in self.view_buttons.items():
@@ -1211,16 +1211,25 @@ class AzmuthCommandCenterGUI:
 
         self.lbl_canvas_hint = tk.Label(
             self.canvas_bar,
-            text="Zoom: Ctrl+= / Ctrl+- / Ctrl+0 • Click nodes for capabilities",
+            text="Pan: Drag • Zoom: Wheel / Ctrl+= • Reset: Ctrl+0",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_main,
         )
         self.lbl_canvas_hint.pack(side=tk.RIGHT)
 
-        self.canvas = tk.Canvas(center_frame, bg=t.bg_void, highlightthickness=0, cursor="crosshair")
+        self.canvas = tk.Canvas(center_frame, bg=t.bg_void, highlightthickness=0, cursor="fleur")
         self.canvas.pack(fill=tk.BOTH, expand=True)
-        self.canvas.bind("<Button-1>", self._on_canvas_click)
+        self.canvas.bind("<ButtonPress-1>", self._on_canvas_press)
+        self.canvas.bind("<B1-Motion>", self._on_canvas_motion)
+        self.canvas.bind("<ButtonRelease-1>", self._on_canvas_release)
+        self.canvas.bind("<ButtonPress-2>", self._on_pan_start)
+        self.canvas.bind("<B2-Motion>", self._on_pan_motion)
+        self.canvas.bind("<ButtonRelease-2>", self._on_pan_end)
+        self.canvas.bind("<ButtonPress-3>", self._on_pan_start)
+        self.canvas.bind("<B3-Motion>", self._on_pan_motion)
+        self.canvas.bind("<ButtonRelease-3>", self._on_pan_end)
+        self.canvas.bind("<MouseWheel>", self._on_canvas_mousewheel)
         self.canvas.bind("<Configure>", lambda e: self._redraw_active_canvas())
 
     def _build_status_footer(self) -> None:
@@ -1456,8 +1465,8 @@ class AzmuthCommandCenterGUI:
     def _draw_node_box(
         self,
         node_id: str,
-        cx: float,
-        cy: float,
+        wx: float,
+        wy: float,
         base_w: float,
         base_h: float,
         title: str,
@@ -1467,51 +1476,62 @@ class AzmuthCommandCenterGUI:
         payload: Optional[Dict[str, Any]] = None,
     ) -> None:
         t = self.theme
-        nw = self.s(base_w)
-        nh = self.s(base_h)
-        x1, y1 = cx - nw / 2, cy - nh / 2
-        x2, y2 = cx + nw / 2, cy + nh / 2
-        is_sel = self.selected_node_id == node_id
+        cw = max(self.canvas.winfo_width(), 680)
+        ch = max(self.canvas.winfo_height(), 500)
+        sx, sy = self.w2s(wx, wy, cw, ch)
+        nw = max(80.0, base_w * self.cam_zoom)
+        nh = max(30.0, base_h * self.cam_zoom)
+        x1, y1 = sx - nw / 2.0, sy - nh / 2.0
+        x2, y2 = sx + nw / 2.0, sy + nh / 2.0
 
+        # Frustum culling
+        if x2 < -120 or x1 > cw + 120 or y2 < -120 or y1 > ch + 120:
+            return
+
+        is_sel = self.selected_node_id == node_id
         border_col = accent if is_sel else t.border_active
-        border_w = max(2, int(2 * self.zoom_level)) if is_sel else 1
+        border_w = max(2, int(2 * self.cam_zoom)) if is_sel else 1
         bg_col = t.bg_card_hover if is_sel else t.bg_card
 
         if is_sel:
-            pad = max(2, int(3 * self.zoom_level))
+            pad = max(2, int(3 * self.cam_zoom))
             self.canvas.create_rectangle(
                 x1 - pad, y1 - pad, x2 + pad, y2 + pad, outline=accent, width=1, dash=(3, 3)
             )
 
         self.canvas.create_rectangle(x1, y1, x2, y2, fill=bg_col, outline=border_col, width=border_w)
         # Left accent stripe
-        stripe_w = max(3, int(5 * self.zoom_level))
+        stripe_w = max(3, int(5 * self.cam_zoom))
         self.canvas.create_rectangle(x1, y1, x1 + stripe_w, y2, fill=accent, outline="")
 
-        # Title & Subtitle with scaled fonts
+        # Title & Subtitle with bounded scaled typography
+        title_sz = max(7, min(13, int(round(9 * self.cam_zoom))))
+        sub_sz = max(6, min(11, int(round(8 * self.cam_zoom))))
+        badge_sz = max(6, min(10, int(round(7 * self.cam_zoom))))
+
         self.canvas.create_text(
-            x1 + stripe_w + max(6, int(8 * self.zoom_level)),
-            y1 + nh * 0.30,
+            x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
+            y1 + nh * 0.32,
             text=title,
             fill=t.text_primary,
-            font=self.font("Segoe UI Semibold", 9),
+            font=("Segoe UI Semibold", title_sz),
             anchor="w",
         )
         self.canvas.create_text(
-            x1 + stripe_w + max(6, int(8 * self.zoom_level)),
-            y1 + nh * 0.70,
+            x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
+            y1 + nh * 0.68,
             text=subtitle,
             fill=t.text_muted,
-            font=self.font("Consolas", 8),
+            font=("Consolas", sub_sz),
             anchor="w",
         )
         if badge:
             self.canvas.create_text(
-                x2 - max(6, int(8 * self.zoom_level)),
-                y1 + nh * 0.30,
+                x2 - max(4, int(8 * self.cam_zoom)),
+                y1 + nh * 0.32,
                 text=badge,
                 fill=accent,
-                font=self.font("Consolas", 8, "bold"),
+                font=("Consolas", badge_sz, "bold"),
                 anchor="e",
             )
 
@@ -1519,28 +1539,61 @@ class AzmuthCommandCenterGUI:
 
     def _draw_directed_edge(
         self,
-        x1: float,
-        y1: float,
-        x2: float,
-        y2: float,
+        wx1: float,
+        wy1: float,
+        wx2: float,
+        wy2: float,
         color: str = "#384152",
         label: str = "",
         dashed: bool = False,
         base_width: int = 2,
     ) -> None:
         t = self.theme
+        cw = max(self.canvas.winfo_width(), 680)
+        ch = max(self.canvas.winfo_height(), 500)
+        x1, y1 = self.w2s(wx1, wy1, cw, ch)
+        x2, y2 = self.w2s(wx2, wy2, cw, ch)
+
+        # Frustum culling
+        if max(x1, x2) < -120 or min(x1, x2) > cw + 120 or max(y1, y2) < -120 or min(y1, y2) > ch + 120:
+            return
+
         dash_pat = (4, 4) if dashed else None
-        ew = max(1, int(round(base_width * self.zoom_level)))
-        arr_len = max(6, int(round(9 * self.zoom_level)))
+        ew = max(1, int(round(base_width * self.cam_zoom)))
+        arr_len = max(5, int(round(8 * self.cam_zoom)))
+
+        # Smooth cubic Bezier spline control points
+        dx = max(24.0 * self.cam_zoom, abs(x2 - x1) * 0.45)
+        cp1_x, cp1_y = x1 + dx, y1
+        cp2_x, cp2_y = x2 - dx, y2
+
         self.canvas.create_line(
-            x1, y1, x2, y2, fill=color, width=ew, arrow=tk.LAST, arrowshape=(arr_len, arr_len + 2, 4), dash=dash_pat
+            x1, y1, cp1_x, cp1_y, cp2_x, cp2_y, x2, y2,
+            fill=color,
+            width=ew,
+            smooth=True,
+            arrow=tk.LAST,
+            arrowshape=(arr_len, arr_len + 2, 4),
+            dash=dash_pat,
         )
         if label:
-            mx, my = (x1 + x2) / 2.0, (y1 + y2) / 2.0
-            box_w = max(36, int(round(44 * self.zoom_level)))
-            box_h = max(10, int(round(12 * self.zoom_level)))
-            self.canvas.create_rectangle(mx - box_w, my - box_h, mx + box_w, my + box_h, fill=t.bg_void, outline=t.border_subtle)
-            self.canvas.create_text(mx, my, text=label, fill=color, font=self.font("Consolas", 7))
+            mx = 0.125 * x1 + 0.375 * cp1_x + 0.375 * cp2_x + 0.125 * x2
+            my = 0.125 * y1 + 0.375 * cp1_y + 0.375 * cp2_y + 0.125 * y2
+            lbl_sz = max(6, min(10, int(round(7 * self.cam_zoom))))
+            bw = max(26, int(len(label) * lbl_sz * 0.44 + 8))
+            bh = max(10, int(lbl_sz * 1.5))
+            self.canvas.create_rectangle(
+                mx - bw, my - bh, mx + bw, my + bh,
+                fill=t.bg_card,
+                outline=t.border_subtle,
+                width=1,
+            )
+            self.canvas.create_text(
+                mx, my,
+                text=label,
+                fill=color,
+                font=("Consolas", lbl_sz),
+            )
 
     # --- VIEW 1: Pipeline & 30-PAT Ring Schematic ---
 
@@ -2202,8 +2255,69 @@ class AzmuthCommandCenterGUI:
     # Canvas Clicks & Actions
     # ------------------------------------------------------------------------
 
-    def _on_canvas_click(self, event: Any) -> None:
-        cx, cy = event.x, event.y
+    def _on_canvas_press(self, event: Any) -> None:
+        self.pan_start = (event.x, event.y)
+        self.press_pos = (event.x, event.y)
+        self.is_panning = False
+
+    def _on_canvas_motion(self, event: Any) -> None:
+        if not self.pan_start:
+            return
+        dx = event.x - self.pan_start[0]
+        dy = event.y - self.pan_start[1]
+        if not self.is_panning:
+            if math.hypot(event.x - self.press_pos[0], event.y - self.press_pos[1]) > 4:
+                self.is_panning = True
+        if self.is_panning:
+            self.cam_x -= dx / max(0.01, self.cam_zoom)
+            self.cam_y -= dy / max(0.01, self.cam_zoom)
+            self.pan_start = (event.x, event.y)
+            self._redraw_active_canvas()
+
+    def _on_canvas_release(self, event: Any) -> None:
+        if not self.is_panning:
+            self._handle_node_click(event.x, event.y)
+        self.pan_start = None
+        self.is_panning = False
+
+    def _on_pan_start(self, event: Any) -> None:
+        self.pan_start = (event.x, event.y)
+        self.is_panning = True
+
+    def _on_pan_motion(self, event: Any) -> None:
+        if not self.pan_start:
+            return
+        dx = event.x - self.pan_start[0]
+        dy = event.y - self.pan_start[1]
+        self.cam_x -= dx / max(0.01, self.cam_zoom)
+        self.cam_y -= dy / max(0.01, self.cam_zoom)
+        self.pan_start = (event.x, event.y)
+        self._redraw_active_canvas()
+
+    def _on_pan_end(self, event: Any) -> None:
+        self.pan_start = None
+        self.is_panning = False
+
+    def _on_canvas_mousewheel(self, event: Any) -> None:
+        cw = max(self.canvas.winfo_width(), 680)
+        ch = max(self.canvas.winfo_height(), 500)
+        wx, wy = self.s2w(event.x, event.y, cw, ch)
+
+        factor = 1.15 if event.delta > 0 else (1.0 / 1.15)
+        new_zoom = max(0.4, min(3.0, round(self.cam_zoom * factor, 2)))
+        self.cam_zoom = new_zoom
+        self.zoom_level = new_zoom
+
+        # Keep world position (wx, wy) invariant under cursor (event.x, event.y)
+        self.cam_x = wx - (event.x - cw / 2.0) / self.cam_zoom
+        self.cam_y = wy - (event.y - ch / 2.0) / self.cam_zoom
+
+        pct_str = f"{int(self.cam_zoom * 100)}%"
+        self.btn_zoom_reset.configure(text=pct_str)
+        self.lbl_footer_zoom.configure(text=f"Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
+        self._redraw_active_canvas()
+
+    def _handle_node_click(self, cx: float, cy: float) -> None:
         for nid, info in self.canvas_nodes.items():
             x1, y1, x2, y2 = info["bbox"]
             if x1 <= cx <= x2 and y1 <= cy <= y2:
@@ -2226,6 +2340,10 @@ class AzmuthCommandCenterGUI:
 
                 self._redraw_active_canvas()
                 break
+
+    def _on_canvas_click(self, event: Any) -> None:
+        """Backward-compatible click handler for unit tests."""
+        self._handle_node_click(event.x, event.y)
 
     def _on_contextual_inspector_action(self) -> None:
         if self.active_view == "pipeline":

@@ -14,7 +14,7 @@ version: 2.0.0
 
 # Fleet-Orchestrator Swarm Control Skill
 
-Operational commands, architectural guidelines, and execution workflows for **Fleet-Orchestrator** (`F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator`), a production-grade autonomous multi-model agent fleet and swarm platform that pools heterogeneous AI compute models into a unified, high-concurrency autonomous swarm. **583 tests, 100% pass rate across 75+ test suites.**
+Operational commands, architectural guidelines, and execution workflows for **Fleet-Orchestrator** (`F:\Aaradhya-Dev-Tamrakar\Fleet-Orchestrator`), a production-grade autonomous multi-model agent fleet and swarm platform that pools heterogeneous AI compute models into a unified, high-concurrency autonomous swarm. **588 tests, 100% pass rate across 75+ test suites.**
 
 ---
 
@@ -371,7 +371,7 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Live state (tasks/, checkpoints/, ledger/, scratchpads/, memory/, live-status/)
 ├── worker-prompts/                # 6 specialized role prompts (orchestrator, researcher, writer, qa-reviewer, seo-optimizer, formatter)
 ├── models/                        # Local GGUF model weights (git-ignored)
-├── tests/                         # 587 automated pytest tests (75+ test suites)
+├── tests/                         # 588 automated pytest tests (75+ test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
 ├── .env.fleet.copilot.example     # 31-account GitHub Copilot PAT template (6,200 monthly credits)
 ├── .env.fleet.gemini.example      # 32-slot Google AI Studio Gemini API key template
@@ -407,7 +407,7 @@ Fleet-Orchestrator/
 
 ### Native Desktop Command Center (`tools/azmuth_gui.py`)
 - **Mission Control Layout & Oscilloscope**:
-  - Standalone Win32 High-DPI Tkinter Canvas with Windows 11 dark mode (`DwmSetWindowAttribute`).
+  - Standalone Win32 High-DPI Tkinter Canvas with Windows 11 dark/light mode title bar (`DwmSetWindowAttribute`).
   - Hardware-smooth 60 FPS real-time RAM oscilloscope sparkline tracking available memory against the tunable Circuit-Breaker threshold ($3.0\text{ GB}$).
   - Live Gear switcher (`Whisper`, `Balanced`, `Turbo`) and live Thalamic $|Z|$-score threshold tuner ($0.1\sigma$ to $3.0\sigma$).
 - **Three Switchable 60FPS Graph & Flow Canvases**:
@@ -417,5 +417,11 @@ Fleet-Orchestrator/
 - **Interactive Capability Card & Mutation Diff Inspector**:
   - Displays Big-O time/space asymptotic bounds, environmental triggers (`N<=2e5`, `avx2`), formal mathematical invariants, empirical runtime/RAM fitness bars, and syntax-highlighted code templates with mutation additions highlighted.
   - One-click **"⚡ Mutate & Race in Arena Now"** trigger applies genetic operators live and dynamically animates new branch growth on the phylogenetic tree.
+- **High-DPI Adaptation, Interactive Zoom Ladder & Theme Toggling**:
+  - **High-DPI Awareness**: Win32 `GetDpiForWindow` / Tkinter scaling dynamically sets `self.scale`.
+  - **Center-Bounded Layout**: Bounds content width (`min(w * 0.90, 1050 * scale)`) centered horizontally to prevent node dispersal on 4K/ultra-wide screens.
+  - **Interactive Zoom Ladder**: Supports keyboard shortcuts (`Ctrl+=`, `Ctrl+-`, `Ctrl+0`, `Ctrl+MouseWheel`) stepping across 8 zoom levels from $75\%$ to $200\%$.
+  - **Dynamic Theme Engine**: Seamless runtime toggle between Dark Mode (`#090b0e`) and Light Mode (`#f8fafc` / `#ffffff`) via `Ctrl+T` or header button, updating widget palettes and Windows 11 DWM titlebar frames.
+
 
 

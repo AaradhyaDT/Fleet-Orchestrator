@@ -53,7 +53,7 @@
       "dependencies": [
         "tools/adaptive_engine.py"
       ],
-      "byte_size": 7956,
+      "byte_size": 8015,
       "line_count": 134,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
       "ssot_role": "SSOT_USER",
@@ -875,8 +875,8 @@
         "design-taste-gui"
       ],
       "dependencies": [],
-      "byte_size": 18231,
-      "line_count": 316,
+      "byte_size": 19001,
+      "line_count": 328,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\design-taste-gui",
       "ssot_role": "SSOT_USER",
       "mirrors": [],
@@ -1127,8 +1127,8 @@
         "tools/ultimatrix_splicer.py",
         "tools/unified_fleet_cli.py"
       ],
-      "byte_size": 33380,
-      "line_count": 421,
+      "byte_size": 34105,
+      "line_count": 427,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\fleet-orchestrator",
       "ssot_role": "SSOT_USER",
       "mirrors": [

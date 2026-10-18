@@ -30,7 +30,7 @@ flowchart TD
 2. **Domain Commanders**: Writes tasks to `orchestrator-state/tasks/`. Returns **<300w manifest** to Lead.
 3. **Headless Workers & Cloud**: 31 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`).
 4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
-5. **Azmuth Neuromorphic Core**: 20W spiking macro-graph engine (`azmuth_macro_graph.py`) across 6 Cartridges (`U0`–`U5`), live sensors, GitHub radar (`azmuth_github_sensor.py`), and CBF brake.
+5. **Azmuth Neuromorphic Core**: 20W spiking macro-graph engine (`azmuth_macro_graph.py`) across 6 Cartridges (`U0`–`U5`), live sensors, GitHub radar (`azmuth_github_sensor.py`), CBF brake, and 60FPS High-DPI Command Center GUI (`tools/azmuth_gui.py`).
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).
 
