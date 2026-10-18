@@ -1,154 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-17T12:34:09.673815+00:00",
-  "tournaments_run": 821,
+  "last_tournament_at": "2026-10-18T02:23:14.732586+00:00",
+  "tournaments_run": 845,
   "alleles_benchmarked": 0,
-  "promotions": 164,
+  "promotions": 188,
   "history": [
-    {
-      "timestamp": "2026-10-17T10:42:13.572414+00:00",
-      "genes": [
-        "TASK_DICTIONARY_PAGINATION"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:42:51.290186+00:00",
-      "genes": [
-        "TASK_DIV_3"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:43:28.370934+00:00",
-      "genes": [
-        "TASK_DOMINANT_POINT"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:46:55.483958+00:00",
-      "genes": [
-        "TASK_DOMINOES_ROTATIONS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:47:32.291357+00:00",
-      "genes": [
-        "TASK_DONKEY_PARADOX"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:48:43.144798+00:00",
-      "genes": [
-        "TASK_DOUBLE_REPLACE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:49:19.562159+00:00",
-      "genes": [
-        "TASK_DRAGONS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:51:50.923897+00:00",
-      "genes": [
-        "TASK_EQUALITY"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:52:26.726781+00:00",
-      "genes": [
-        "TASK_ERASE_EXTREMES"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:53:02.298969+00:00",
-      "genes": [
-        "TASK_ERASE_VALUE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:53:37.646679+00:00",
-      "genes": [
-        "TASK_EXPECTED_DICE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:56:30.486537+00:00",
-      "genes": [
-        "TASK_FAST_TRAVEL"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:57:07.110583+00:00",
-      "genes": [
-        "TASK_FAST_TYPING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:57:48.052945+00:00",
-      "genes": [
-        "TASK_FIICODE_2022_A1"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:58:31.883746+00:00",
-      "genes": [
-        "TASK_FIICODE_2022_A2"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:59:15.908213+00:00",
-      "genes": [
-        "TASK_FIICODE_2022_B2"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T10:59:51.739838+00:00",
-      "genes": [
-        "TASK_FILL_THE_GLASSES"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:00:28.277245+00:00",
-      "genes": [
-        "TASK_FINAL_INDEX"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:01:15.601091+00:00",
-      "genes": [
-        "TASK_FLIP_THE_MATRIX"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:02:08.543288+00:00",
-      "genes": [
-        "TASK_FLIP_THE_PREFIX"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:02:44.833198+00:00",
-      "genes": [
-        "TASK_FOOD_PAIRING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:04:59.209854+00:00",
-      "genes": [
-        "TASK_FOOTBALL_TOURNAMENT"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:05:53.667504+00:00",
-      "genes": [
-        "TASK_FOXES_ON_A_WHEEL"
-      ]
-    },
-    {
-      "timestamp": "2026-10-17T11:06:29.381455+00:00",
-      "genes": [
-        "TASK_FREQUENCY_EXCEPTION"
-      ]
-    },
     {
       "timestamp": "2026-10-17T11:07:05.339063+00:00",
       "genes": [
@@ -307,6 +163,150 @@
         "HR_SUNITS_PERMUTATION_FACTORY",
         "STATIC_FORWARD_STAR_GRAPH",
         "BINARY_SEARCH_ON_ANSWER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:04:13.443087+00:00",
+      "genes": [
+        "TASK_CITY_UPGRADES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:07:29.436416+00:00",
+      "genes": [
+        "TASK_FALLING_LEAVES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:09:26.752441+00:00",
+      "genes": [
+        "TASK_MIN_SWAP_COUNTING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:10:01.854546+00:00",
+      "genes": [
+        "TASK_MISSING_NUMBER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:10:42.019395+00:00",
+      "genes": [
+        "TASK_MONEY_MACHINE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:11:53.581575+00:00",
+      "genes": [
+        "TASK_MONOTONE_SUBARRAY"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:12:30.033187+00:00",
+      "genes": [
+        "TASK_MOVE_THE_BISHOP"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:13:06.029012+00:00",
+      "genes": [
+        "TASK_NESTED_SEGMENTS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:13:41.349263+00:00",
+      "genes": [
+        "TASK_NEXT_DANCE_MOVE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:14:16.844162+00:00",
+      "genes": [
+        "TASK_NUMBERS_GAME"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:14:52.781599+00:00",
+      "genes": [
+        "TASK_NUMBERS_TOURNAMENT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:15:28.096626+00:00",
+      "genes": [
+        "TASK_ONE_LETTER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:16:05.250548+00:00",
+      "genes": [
+        "TASK_OPEN_THE_BOTTLES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:16:44.146401+00:00",
+      "genes": [
+        "TASK_PAIR_SWAP"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:17:20.219495+00:00",
+      "genes": [
+        "TASK_PALINDROMIC_FRIENDSHIP"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:17:56.463739+00:00",
+      "genes": [
+        "TASK_PATH_TRAVEL"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:18:40.879418+00:00",
+      "genes": [
+        "TASK_PERMUTATION_MATRIX"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:19:16.493517+00:00",
+      "genes": [
+        "TASK_PLANTS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:19:52.285330+00:00",
+      "genes": [
+        "TASK_POISONED_FOOD"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:20:41.766807+00:00",
+      "genes": [
+        "TASK_POKEMON_EVOLUTION"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:21:24.382417+00:00",
+      "genes": [
+        "TASK_POKEMON_FIGHT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:22:00.779089+00:00",
+      "genes": [
+        "TASK_POSITIVE_PRODUCT_SUBARRAYS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:22:37.237179+00:00",
+      "genes": [
+        "TASK_POSTIVIE_XOR"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:23:14.732429+00:00",
+      "genes": [
+        "TASK_PRIME_DISTANCE"
       ]
     }
   ]

@@ -235,7 +235,10 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         if self.github_token:
             child_env["COPILOT_GITHUB_TOKEN"] = self.github_token
         if self.copilot_home:
-            self.copilot_home.mkdir(parents=True, exist_ok=True)
+            try:
+                self.copilot_home.mkdir(parents=True, exist_ok=True)
+            except Exception:
+                pass
             child_env["COPILOT_HOME"] = str(self.copilot_home)
 
         # REA-discovered runtime hardening variables (EXP-REA-001)

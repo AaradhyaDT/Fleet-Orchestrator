@@ -1,9 +1,39 @@
 {
-  "timestamp": "2026-10-17T16:41:26.753681+00:00",
-  "timestamp_epoch": 1792255273.0891738,
+  "timestamp": "2026-10-18T02:20:04.887441+00:00",
+  "timestamp_epoch": 1792289992.290682,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "torch-spyre/spyre-inference#259",
+        "title": "[FP8] Support block-wise FP8 quantization",
+        "repo": "torch-spyre/spyre-inference",
+        "url": "https://github.com/torch-spyre/spyre-inference/issues/259",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "stage/010-actionable"
+        ],
+        "comments": 1,
+        "created_at": "2026-06-09T19:10:15Z",
+        "updated_at": "2026-10-17T17:42:55Z",
+        "salience": 1.2
+      },
+      {
+        "id": "torch-spyre/spyre-inference#257",
+        "title": "[FP8] Support online FP8 quantization (W8A16 dynamic)",
+        "repo": "torch-spyre/spyre-inference",
+        "url": "https://github.com/torch-spyre/spyre-inference/issues/257",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "stage/010-actionable"
+        ],
+        "comments": 0,
+        "created_at": "2026-06-09T19:08:53Z",
+        "updated_at": "2026-10-17T17:42:54Z",
+        "salience": 1.0
+      },
       {
         "id": "vllm-project/vllm-omni#8586",
         "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
@@ -35,52 +65,20 @@
         "salience": 2.0
       },
       {
-        "id": "AlexsJones/llmfit#1036",
-        "title": "Fit estimates don't account for Unsloth Studio's beyond-VRAM offload",
-        "repo": "AlexsJones/llmfit",
-        "url": "https://github.com/AlexsJones/llmfit/issues/1036",
+        "id": "Nobayprotocol/Nobay-Protocol#3",
+        "title": "Add Hardhat test suite for ListingRegistry.sol",
+        "repo": "Nobayprotocol/Nobay-Protocol",
+        "url": "https://github.com/Nobayprotocol/Nobay-Protocol/issues/3",
         "labels": [
-          "enhancement",
           "help wanted",
-          "Hardware Compatibility",
-          "Data Collection"
+          "Solidity",
+          "Bounty",
+          "Testing"
         ],
-        "comments": 4,
-        "created_at": "2026-09-14T04:48:01Z",
-        "updated_at": "2026-10-17T06:05:18Z",
-        "salience": 1.8
-      },
-      {
-        "id": "MakazhanAlpamys/Soup#797",
-        "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/797",
-        "labels": [
-          "bug",
-          "help wanted",
-          "difficulty:6",
-          "area:training"
-        ],
-        "comments": 10,
-        "created_at": "2026-09-11T11:08:01Z",
-        "updated_at": "2026-10-17T00:25:38Z",
+        "comments": 17,
+        "created_at": "2025-05-20T17:37:48Z",
+        "updated_at": "2026-10-17T22:43:56Z",
         "salience": 2.0
-      },
-      {
-        "id": "kubestellar/kubestellar#3791",
-        "title": "[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3791",
-        "labels": [
-          "kind/feature",
-          "help wanted",
-          "good first issue",
-          "stage/010-actionable"
-        ],
-        "comments": 1,
-        "created_at": "2026-06-06T13:20:27Z",
-        "updated_at": "2026-10-16T17:33:39Z",
-        "salience": 1.2
       },
       {
         "id": "kubestellar/kubestellar#3827",
@@ -90,12 +88,13 @@
         "labels": [
           "help wanted",
           "lifecycle/stale",
-          "outreach",
-          "stage/010-actionable"
+          "stage/010-actionable",
+          "stage/stalled",
+          "agent/outreach"
         ],
         "comments": 3,
         "created_at": "2026-06-08T13:25:17Z",
-        "updated_at": "2026-10-16T17:22:43Z",
+        "updated_at": "2026-10-17T17:30:03Z",
         "salience": 1.6
       },
       {
@@ -108,28 +107,30 @@
           "priority/medium",
           "lifecycle/rotten",
           "conference",
-          "stage/010-actionable"
+          "stage/010-actionable",
+          "stage/stalled"
         ],
         "comments": 2,
         "created_at": "2026-06-06T13:20:26Z",
-        "updated_at": "2026-10-16T17:21:57Z",
+        "updated_at": "2026-10-17T17:29:02Z",
         "salience": 1.4
       },
       {
-        "id": "bodycount0/stellar-drips-protocol#4",
-        "title": "[FEAT] Implement on-chain subscription analytics and event history viewer",
-        "repo": "bodycount0/stellar-drips-protocol",
-        "url": "https://github.com/bodycount0/stellar-drips-protocol/issues/4",
+        "id": "kubestellar/kubestellar#3791",
+        "title": "[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility",
+        "repo": "kubestellar/kubestellar",
+        "url": "https://github.com/kubestellar/kubestellar/issues/3791",
         "labels": [
-          "enhancement",
+          "kind/feature",
           "help wanted",
-          "frontend",
-          "bounty"
+          "good first issue",
+          "stage/010-actionable",
+          "stage/stalled"
         ],
-        "comments": 4,
-        "created_at": "2026-08-08T11:36:48Z",
-        "updated_at": "2026-10-11T15:48:52Z",
-        "salience": 1.8
+        "comments": 1,
+        "created_at": "2026-06-06T13:20:27Z",
+        "updated_at": "2026-10-17T17:28:59Z",
+        "salience": 1.2
       }
     ],
     "releases": [
@@ -177,19 +178,19 @@
     "cp_archives": [
       {
         "repo": "ShahjalalShohag/code-library",
-        "stars": 3728,
+        "stars": 3729,
         "url": "https://github.com/ShahjalalShohag/code-library",
         "description": "Templates, algorithms and data structures implemented and collected for programming contests.",
         "default_branch": "main",
-        "updated_at": "2026-10-17T04:35:31Z"
+        "updated_at": "2026-10-17T17:09:18Z"
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3572,
+        "stars": 3573,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-17T15:28:15Z"
+        "updated_at": "2026-10-18T00:44:40Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -220,7 +221,7 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-17T10:15:02Z",
+        "pushed_at": "2026-10-17T20:13:46Z",
         "stars": 0,
         "forks": 0
       },

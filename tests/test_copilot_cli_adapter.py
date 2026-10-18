@@ -317,7 +317,7 @@ async def test_copilot_cli_build_command_rea_flags():
 
 
 @pytest.mark.asyncio
-async def test_copilot_cli_child_env_hardening():
+async def test_copilot_cli_child_env_hardening(tmp_path):
     captured_env = {}
 
     async def fake_spawn(*cmd, **kwargs):
@@ -333,7 +333,7 @@ async def test_copilot_cli_child_env_hardening():
         nickname="Env Agent",
         copilot_path="copilot.exe",
         github_token="placeholder_token",
-        copilot_home="F:/tmp/copilot_home",
+        copilot_home=str(tmp_path / "copilot_home"),
     )
 
     with patch("client.adapters.copilot_cli_adapter.spawn_background", side_effect=fake_spawn):

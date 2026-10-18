@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 98,
-  "total_skill_instances": 166,
+  "total_distinct_skills": 99,
+  "total_skill_instances": 168,
   "domain_counts": {
     "AI_ENGINEERING_ML": 12,
     "SWARM_ORCHESTRATION": 4,
     "ENGINEERING_DEV": 16,
-    "DOMAIN_HARDWARE": 6,
+    "DOMAIN_HARDWARE": 7,
     "SYSADMIN_SECURITY": 3,
     "RESEARCH_ACADEMIC": 6,
     "FRONTEND_PRODUCT": 14,
@@ -14,7 +14,7 @@
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
-    "INSTALLED": 61,
+    "INSTALLED": 62,
     "VERIFIED": 10,
     "ACCESSIBLE": 27
   },
@@ -1632,6 +1632,24 @@
       "ssot_role": "UNIVERSAL_HUB",
       "mirrors": [],
       "mirror_count": 0
+    },
+    "reverse-engineer-anything": {
+      "name": "reverse-engineer-anything",
+      "domain": "DOMAIN_HARDWARE",
+      "availability_tier": "INSTALLED",
+      "description": "Reverse engineer native, managed, Electron/JavaScript, packaged, firmware, and browser targets with REA. Use shipped-artifact or requested runtime evidence to explain features, compare versions, decompile code, or guide a reconstruction. Skip REA for ordinary source-repository architecture analysis.",
+      "triggers": [
+        "reverse-engineer-anything"
+      ],
+      "dependencies": [],
+      "byte_size": 23523,
+      "line_count": 356,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\reverse-engineer-anything",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "C:\\Users\\Aaradhya\\.agents\\skills\\reverse-engineer-anything"
+      ],
+      "mirror_count": 1
     },
     "review-agent": {
       "name": "review-agent",
