@@ -37,7 +37,13 @@ make lint       # Static analysis
 make format     # Formatting verification
 make test       # Test suites
 make verify     # Combined verification gate
+make sync       # Delegates to scripts/sync.bat (or root sync.bat)
 ```
+
+### Task Runner vs. Version Control Engine Boundary (`Makefile` vs `sync.ps1`)
+- **Omnibus Task Runner (`Makefile` / `make.bat`)**: The universal front-door interface for developer workflows (`test`, `lint`, `format`, `verify`, `audit`, `clean`). Highly recommended in collaborative/fellowship repositories (e.g. `BiasAperture`) where Linux/macOS cohort members expect standard build targets.
+- **VCS & Governance Engine (`sync.ps1` / `sync.bat`)**: The sole authoritative engine for version control, secret screening, diff AST analysis, automated conventional commits, and PR routing. A `Makefile` **never** replaces `sync.ps1`; instead, `make sync` delegates directly to `sync.bat`.
+- **The Root Forwarder Invariant**: When sync engines are organized under `scripts/` (`scripts/sync.ps1`, `scripts/sync.bat`) to declutter the repository root, a root `sync.bat` forwarder (`call "%~dp0scripts\sync.bat" %*`) **MUST** be maintained at the repository root. This ensures that all ecosystem tools and subagents calling `.\sync.bat` from the root succeed deterministically.
 
 ---
 

@@ -419,6 +419,7 @@ class AzmuthCommandCenterGUI:
         self.pulses: List[Dict[str, Any]] = []
         self.active_canvas_edges: List[Dict[str, Any]] = []
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
+        self.pat_ring_info: Optional[Tuple[float, float, float]] = None
         self.selected_node_id: Optional[str] = None
 
         # 4b. Virtual Camera & Canvas Viewport Transform
@@ -1901,6 +1902,7 @@ class AzmuthCommandCenterGUI:
 
         # 3. Draw 30-PAT Ring in World Coordinates
         pat_wx, pat_wy = stage_positions["STAGE_PAT_RING"]
+        self.pat_ring_info = (pat_wx, pat_wy, ring_world_r)
         pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
         screen_r = ring_world_r * self.cam_zoom
         ring_pad = 10.0 * self.cam_zoom
@@ -1915,22 +1917,18 @@ class AzmuthCommandCenterGUI:
             width=1,
         )
         tokens = self.gh_sensor.pool.tokens
-        n_tok = max(len(tokens), 30)
-        ptr = self.gh_sensor.pool._pointer % max(len(tokens), 1)
-        for i in range(n_tok):
-            angle = (2 * math.pi * i / n_tok) - math.pi / 2
-            tx = pat_sx + screen_r * math.cos(angle)
-            ty = pat_sy + screen_r * math.sin(angle)
-            is_active = (i == ptr) or (self.is_job_running and (i == (self.anim_tick // 4) % n_tok))
-            dot_col = t.accent_gold if is_active else (t.accent_cyan if i < len(tokens) else t.border_subtle)
-            rd = max(3, int(4 * self.cam_zoom)) if is_active else max(2, int(2.5 * self.cam_zoom))
-            self.canvas.create_oval(tx - rd, ty - rd, tx + rd, ty + rd, fill=dot_col, outline="")
-
         lbl_fnt_sz = max(7, min(10, int(9 * self.cam_zoom)))
         sub_fnt_sz = max(6, min(9, int(8 * self.cam_zoom)))
-        self.canvas.create_text(pat_sx, pat_sy - 6 * self.cam_zoom, text="30-PAT RING", fill=t.text_primary, font=("Segoe UI Semibold", lbl_fnt_sz))
         self.canvas.create_text(
-            pat_sx, pat_sy + 8 * self.cam_zoom, text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan, font=("Consolas", sub_fnt_sz)
+            pat_sx, pat_sy - 6 * self.cam_zoom,
+            text="30-PAT RING", fill=t.text_primary,
+            font=("Segoe UI Semibold", lbl_fnt_sz)
+        )
+        self.canvas.create_text(
+            pat_sx, pat_sy + 8 * self.cam_zoom,
+            text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan,
+            font=("Consolas", sub_fnt_sz),
+            tags="pat_ring_subtext",
         )
         self._register_clickable_node(
             "STAGE_PAT_RING",
@@ -1942,6 +1940,7 @@ class AzmuthCommandCenterGUI:
             world_pos=(pat_wx, pat_wy),
             world_dim=((ring_world_r + 10.0) * 2, (ring_world_r + 10.0) * 2),
         )
+        self._draw_pat_ring_dots()
 
         # 4. Thalamic Salience Gate
         thal_wx, thal_wy = stage_positions["STAGE_THALAMIC"]

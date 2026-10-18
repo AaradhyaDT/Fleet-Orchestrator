@@ -326,7 +326,7 @@
     "num-cube-sets",
     "overlapping-matrices"
   ],
-  "last_solve_at": "2026-10-18T13:17:52.901418+00:00",
+  "last_solve_at": "2026-10-18T13:22:16.763914+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:09:58.245868+00:00",
@@ -629,6 +629,8 @@
       "samples_passed": 2
     }
   ],
-  "attempted_slugs": {},
+  "attempted_slugs": {
+    "connect-the-graph": "UNSUPPORTED_ARCHETYPE"
+  },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
