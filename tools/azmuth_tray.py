@@ -30,6 +30,15 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+# Force Silent: If started via python.exe (instead of pythonw.exe), hide console window immediately
+if sys.platform == "win32":
+    try:
+        _hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+        if _hwnd:
+            ctypes.windll.user32.ShowWindow(_hwnd, 0)  # 0 = SW_HIDE
+    except Exception:
+        pass
+
 import pystray
 from pystray import MenuItem as item
 

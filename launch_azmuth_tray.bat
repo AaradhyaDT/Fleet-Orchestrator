@@ -1,4 +1,4 @@
 @echo off
 title Azmuth Tray Launcher
-powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "%~dp0tools\azmuth_tray.ps1"
+start "" wscript.exe //nologo "%~dp0launch_azmuth_tray.vbs"
 exit /b 0

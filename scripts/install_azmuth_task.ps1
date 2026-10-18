@@ -28,10 +28,10 @@ Set-ItemProperty -Path $RunKey -Name "FleetAzmuthDaemon" -Value $RunCommand
 Write-Host "[+] Successfully registered in HKCU Run Key: FleetAzmuthDaemon" -ForegroundColor Green
 Write-Host "    Value: $RunCommand" -ForegroundColor Gray
 
-# 2. Register Native Windows Tray Controller in HKCU Startup Run key
-$TrayScriptPath = Join-Path $RepoRoot "tools\azmuth_tray.ps1"
-if (Test-Path $TrayScriptPath) {
-    $TrayRunCommand = "powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$TrayScriptPath`""
+# 2. Register Native Windows Tray Controller in HKCU Startup Run key (100% silent windowless launch)
+$TrayVbsPath = Join-Path $RepoRoot "launch_azmuth_tray.vbs"
+if (Test-Path $TrayVbsPath) {
+    $TrayRunCommand = "wscript.exe //nologo `"$TrayVbsPath`""
     Set-ItemProperty -Path $RunKey -Name "FleetAzmuthTray" -Value $TrayRunCommand
     Write-Host "[+] Successfully registered in HKCU Run Key: FleetAzmuthTray" -ForegroundColor Green
     Write-Host "    Value: $TrayRunCommand" -ForegroundColor Gray

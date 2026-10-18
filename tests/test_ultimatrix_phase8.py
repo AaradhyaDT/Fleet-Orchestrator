@@ -99,6 +99,7 @@ def test_spliced_dna_llm_synthesis_mocked():
     mock_response.text = "```python\nimport sys\ndef solve():\n    print('YES')\nif __name__ == '__main__':\n    solve()\n```"
 
     with patch.dict("os.environ", {"GEMINI_API_KEY": "dummy_test_key"}), \
+         patch("tools.ultimatrix_autonomous_solver.load_solver_ledger", return_value={}), \
          patch("google.genai.Client") as mock_client_cls:
         mock_client = MagicMock()
         mock_client.models.generate_content.return_value = mock_response

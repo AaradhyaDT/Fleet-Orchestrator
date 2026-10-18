@@ -199,13 +199,19 @@ class GitHubIssueSentinel:
             run_command(["git", "worktree", "remove", "--force", str(worktree_path)], cwd=self.repo_root)
             shutil.rmtree(worktree_path, ignore_errors=True)
 
-        logger.info(f"Creating isolated worktree at: {worktree_path}")
+        # Determine base commit/ref (prefer main if it exists, otherwise HEAD)
+        base_ref = "HEAD"
+        check_code, _, _ = run_command(["git", "rev-parse", "--verify", "main"], cwd=self.repo_root)
+        if check_code == 0:
+            base_ref = "main"
+
+        logger.info(f"Creating isolated worktree at: {worktree_path} from {base_ref}")
         code, out, err = run_command(
-            ["git", "worktree", "add", "-b", branch_name, str(worktree_path), "main"],
+            ["git", "worktree", "add", "-B", branch_name, str(worktree_path), base_ref],
             cwd=self.repo_root,
         )
         if code != 0:
-            # Branch might already exist; retry without -b
+            # Fallback retry without -B if worktree or branch already active
             code, out, err = run_command(
                 ["git", "worktree", "add", str(worktree_path), branch_name],
                 cwd=self.repo_root,
