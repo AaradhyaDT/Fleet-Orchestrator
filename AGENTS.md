@@ -19,6 +19,10 @@ To avoid breaking branch tracking and prevent wasteful multi-step Git commands, 
   ```powershell
   .\sync.bat                              # or .\sync.ps1
   ```
+- **Dry-Run Preview (Simulate without modifying Git)**:
+  ```powershell
+  .\sync.bat -WhatIf                      # or .\sync.ps1 -WhatIf
+  ```
 - **Major Features / Architectural Changes**:
   ```powershell
   .\sync.bat -m "feat(scope): detailed commit summary"
@@ -32,13 +36,26 @@ To avoid breaking branch tracking and prevent wasteful multi-step Git commands, 
 
 ## 2. Verification Gates & Reality Layer
 
-Before finalizing changes or committing:
-1. **Pytest Verification**:
+Before finalizing changes or executing `.\sync.bat`:
+1. **Linting & Code Hygiene Gate** (Mandatory — Zero Errors):
    ```powershell
-   pytest tests/
+   ruff check .
    ```
-   Ensure all unit tests pass with 100% pass rate.
-2. **Adapter Verification**:
+2. **Secret Leakage & Schema Validation**:
+   ```powershell
+   python tools/ci_secret_scanner.py --all
+   python tools/validate_schemas.py --all
+   ```
+3. **Skill Mirror Audit & Synchronization**:
+   ```powershell
+   python tools/mirror_skills.py --fix    # or --sync (copies SSOT adaptive-workflow to global & brainstorm mirrors)
+   ```
+4. **Pytest Verification**:
+   ```powershell
+   pytest tests/                          # 100% pass rate required
+   pytest -k "azmuth" -v                  # Prefer -k keyword selection over literal quoted globs on Windows
+   ```
+5. **Adapter Verification**:
    ```powershell
    pytest tests/test_copilot_cli_adapter.py -v
    pytest tests/test_copilot_headless.py -v
@@ -46,7 +63,12 @@ Before finalizing changes or committing:
 
 ---
 
-## 3. Security & Invariants
+## 3. Canonical Repository Layout & Invariants
 
+- **Linter Configuration**: `ruff.toml` (do NOT look for `pyproject.toml` or `.ruff.toml`).
+- **Test Configuration**: `pytest.ini`.
+- **CI/CD Workflow**: `.github/workflows/ci.yml` (do NOT look for `ci-cd.yml`).
+- **Google Drive Sync**: `scripts/sync_drive.py` (located in `scripts/`, not `tools/`).
+- **Scratch & Test Isolation**: Store ephemeral runner scripts in `<appDataDir>\brain\<conversation-id>/scratch/`. Repository `scratch/` is strictly git-ignored and never committed to Git.
 - **Zero Credential Commits**: Never commit `.env`, `.env.fleet`, `*.db`, session files, cookies, or raw tokens.
 - **Process Isolation**: Each worker subprocess driving `copilot.exe` must receive its own isolated `COPILOT_GITHUB_TOKEN` and `COPILOT_HOME` directory.

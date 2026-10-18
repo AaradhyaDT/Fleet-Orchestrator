@@ -50,6 +50,7 @@ __pycache__/
 .copilot-workers/
 
 # Local generated state / analysis artifacts
+scratch/
 orchestrator-state/scratchpads/*
 graphify-out/*
 graphify-out/cache/**

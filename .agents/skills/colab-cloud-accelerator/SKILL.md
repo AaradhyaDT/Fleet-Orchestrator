@@ -147,8 +147,18 @@ colab url -s router-forge --open
    - **T4 (16GB)**: `~0.85` units/hr (~$0.085/hr)
    - **Standard CPU**: `~0.10` units/hr (~$0.01/hr)
    
-   All long-running training notebooks must initialize a `ColabCostTracker` in Cell 1 and invoke `tracker.report()` right before teardown. This logs exact wall time, burned compute units, and estimated USD cost directly into the experiment transcript and output reports.
-
-
-
-
+9. **Headless CLI vs. Browser UI Inspection & "Runtime Disconnected" Gotchas**:
+   When bridging headless `colab` CLI background jobs with interactive browser inspection:
+   - **The Ephemeral Teardown Invariant**: Headless `colab` CLI scripts (`tools/azmuth_colab_burst.py`) auto-execute `colab stop -s <name>` in `finally:` blocks. If an agent shares a session link (`colab url -s <name>`), do **NOT** terminate or cancel the driving process while the user is actively viewing the runtime. Terminating or aborting the task immediately destroys the backend tunnel, causing Google Colab to display:
+     ```
+     Active sessions: Runtime disconnected (Unknown notebook)
+     ```
+   - **Safe Browser Inspection Protocol**: Always provide the URL with context explaining the headless lifecycle:
+     ```powershell
+     colab url -s <session-name>
+     ```
+     *"The VM is executing headlessly in the background. It will remain active until the batch task completes, after which it will auto-teardown to protect compute unit balance."*
+   - **Opening Directly into Browser UI**: To launch the browser attached to an active session without manual URL pasting, execute:
+     ```powershell
+     colab url -s <session-name> --open
+     ```

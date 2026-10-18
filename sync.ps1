@@ -19,7 +19,10 @@ param (
     [switch]$SkipCI,
 
     [Alias("Prune", "Clean")]
-    [switch]$Hygiene
+    [switch]$Hygiene,
+
+    [Alias("DryRun")]
+    [switch]$WhatIf
 )
 
 Set-StrictMode -Version Latest
@@ -141,8 +144,8 @@ function Get-AutoCommitMessage {
 
     $isNewlineOnly = $false
     if ($rawDiff -match '\\ No newline at end of file') {
-        $addedLines = $rawDiff | Where-Object { $_ -match '^\+[^+]' } | ForEach-Object { $_.Substring(1) }
-        $removedLines = $rawDiff | Where-Object { $_ -match '^-[^-]' } | ForEach-Object { $_.Substring(1) }
+        $addedLines = @($rawDiff | Where-Object { $_ -match '^\+[^+]' } | ForEach-Object { $_.Substring(1) })
+        $removedLines = @($rawDiff | Where-Object { $_ -match '^-[^-]' } | ForEach-Object { $_.Substring(1) })
         if ($addedLines.Count -eq 1 -and $removedLines.Count -eq 1 -and $addedLines[0] -eq $removedLines[0]) {
             $isNewlineOnly = $true
         }
@@ -395,10 +398,27 @@ try {
         exit 0
     }
 
+    if ($WhatIf) {
+        Write-Status -Message "[WhatIf] Running dry-run simulation mode..." -Color ([System.ConsoleColor]::Magenta)
+        Write-Status -Message "Active working tree status:"
+        git status --short
+        $autoMsg = if ($Message) { $Message } else { Get-AutoCommitMessage }
+        if ($autoMsg) {
+            Write-Notice -Message "[WhatIf] Proposed commit message: '$autoMsg'"
+        }
+        else {
+            Write-Notice -Message "[WhatIf] Working tree is clean; no commit would be generated."
+        }
+        Write-Status -Message "[WhatIf] Simulating pre-commit verification gates..."
+        ruff check .
+        Write-Success -Message "[WhatIf] Dry-run simulation completed cleanly. Zero changes written to git."
+        exit 0
+    }
+
     # Mirror SSOT skills to global config and clean mirrors (INV-SSOT-ADAPTIVE)
     $mirrorScript = Join-Path $RepoPath "tools\mirror_skills.py"
     if (Test-Path $mirrorScript) {
-        python $mirrorScript
+        python $mirrorScript --fix
     }
 
     Write-Status -Message "Staging all tracked and new files..."
@@ -420,6 +440,35 @@ try {
         Write-Notice -Message "Unstage or remove the offending content, then re-run the script."
         git reset
         exit 1
+    }
+
+    # Deterministic Pre-Commit Verification Gates (Ruff, Schemas, Secret Scanner)
+    Write-Status -Message "Running pre-commit code hygiene gate (ruff check)..."
+    ruff check .
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Ruff check failed with lint or syntax errors. Aborting commit."
+        git reset
+        exit 1
+    }
+
+    $schemaValidator = Join-Path $RepoPath "tools\validate_schemas.py"
+    if (Test-Path $schemaValidator) {
+        python $schemaValidator --all
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Schema validation failed. Aborting commit."
+            git reset
+            exit 1
+        }
+    }
+
+    $secretScanner = Join-Path $RepoPath "tools\ci_secret_scanner.py"
+    if (Test-Path $secretScanner) {
+        python $secretScanner --all
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Secret leakage scan detected potential secrets. Aborting commit."
+            git reset
+            exit 1
+        }
     }
 
     if (-not $Message) {

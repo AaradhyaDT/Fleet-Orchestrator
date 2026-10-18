@@ -195,7 +195,7 @@ def main() -> int:
     """
     parser = argparse.ArgumentParser(description="SSOT Skill Mirroring Engine for adaptive-workflow")
     parser.add_argument("--check", action="store_true", help="Audit drift without copying files")
-    parser.add_argument("--fix", action="store_true", help="Mirror SSOT to mirrors")
+    parser.add_argument("--fix", "--sync", action="store_true", help="Mirror SSOT to mirrors")
     parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
     args = parser.parse_args()
 
