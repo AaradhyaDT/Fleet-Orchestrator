@@ -131,3 +131,49 @@ def test_azmuth_gui_views_and_inspectors():
             app._on_close()
         except Exception:
             pass
+
+
+def test_azmuth_gui_zoom_and_theme_toggle():
+    """Verifies DPI zoom scaling (Ctrl+=, Ctrl+-, Ctrl+0) and theme toggle (Ctrl+T) operations."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        initial_zoom = app.zoom_level
+        assert initial_zoom == 1.0
+        assert app.theme.is_light is False
+
+        # Test Zoom In
+        app.zoom_in()
+        assert app.zoom_level > initial_zoom
+        assert app.scale > 0.0
+
+        # Test Zoom Out back and further
+        app.zoom_out()
+        assert app.zoom_level == initial_zoom
+        app.zoom_out()
+        assert app.zoom_level < initial_zoom
+
+        # Test Zoom Reset
+        app.zoom_reset()
+        assert app.zoom_level == 1.0
+
+        # Test Theme Toggle to Light
+        app.toggle_theme()
+        assert app.theme.is_light is True
+        assert "Dark Mode" in app.btn_theme_toggle.cget("text")
+
+        # Test Theme Toggle back to Dark
+        app.toggle_theme()
+        assert app.theme.is_light is False
+        assert "Light Mode" in app.btn_theme_toggle.cget("text")
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+

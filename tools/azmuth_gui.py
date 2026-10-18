@@ -3,22 +3,27 @@
 ---------------------
 Azmuth Autonomous Neuromorphic Command Center & Phylogenetic Gene Explorer.
 
-Industry-grade, zero-browser-overhead native desktop GUI (Win32 High-DPI + 60FPS Canvas):
-1. Unified Mission Control Layout:
-   - Top Telemetry & Operator Tuning Bar: Live Gear switcher (Whisper / Balanced / Turbo),
-     60FPS RAM Oscilloscope Sparkline with tunable Circuit-Breaker line, 30-PAT Token Ring summary,
-     live Thalamic |Z|-score threshold tuner, and 1-click execution triggers.
-2. Switchable 60FPS Visual Graph Canvas:
-   - [1] End-to-End Pipeline Flow: 4 Sensory Streams -> 30-PAT Rotating Ring -> Thalamic Z-Score Sieve
-         -> U0-U5 Cortical Brain -> Ultimatrix Gene Sequencer -> SSOT Ledgers.
-   - [2] U0-U5 Neuromorphic Causal DAG: Swappable cortical cartridges (U0..U5), live Z-score node coloring,
-         axonal synapse weights/lags, Egocentric First-Person View (FPV), and interactive Multi-Hop Shock propagation.
-   - [3] Gene Lab & Phylogenetic Evolution Tree: Tier 0-5 taxonomy browser (349+ genes), branching
-         Wild-Type -> Mutator Edge (+fast_io, +pragma_tuning, +bitwise_unrolling, +stdlib_accel) ->
-         Daughter Allele -> Ultimatrix Arena PRIMARY Champion tree, plus live "Mutate & Battle Now" execution.
-3. Right Interactive Node & Gene Capability Inspector:
-   - Displays Time/Space Big-O complexity bounds, Environmental Triggers, Mathematical Invariants,
-     Empirical Fitness (ms / KB) bars, and Code Template / Mutation Diff viewer.
+High-agency desktop command center with:
+1. Dynamic Resolution & DPI Auto-Scaling with Interactive Zoom:
+   - Ctrl + = / Ctrl + + : Zoom In
+   - Ctrl + - / Ctrl + _ : Zoom Out
+   - Ctrl + 0            : Reset Zoom to Default (100%)
+   - Ctrl + MouseWheel   : Smooth Canvas Zooming
+2. Dynamic Dark / Light Theme Switching (Ctrl + T or Header Toggle):
+   - Seamlessly switches full window palette, canvas grid, code inspector, and Windows 11 titlebar.
+3. Unified Mission Control Layout:
+   - Top Telemetry Bar: Live Gear Switcher, 60FPS RAM Oscilloscope Sparkline with Circuit Breaker line,
+     30-PAT Ring indicator, live Thalamic |Z|-score threshold tuner, zoom controls, and theme toggle.
+4. Switchable 60FPS Graph & Flow Canvases:
+   - [1] End-to-End Pipeline & PAT Flow: Sensory streams -> 30-PAT ring -> Thalamic sieve -> Cortex -> Gene Sequencer -> SSOT.
+   - [2] U0-U5 Neuromorphic Causal DAG: Swappable cortical cartridges, homeostatic node colors, axonal synapses,
+         Egocentric First-Person View (FPV), and Multi-Hop Shock propagation (+2.0σ).
+   - [3] Phylogenetic Gene Evolution Tree & Allele Arena: 349+ genes across Tiers 0-5, branching Wild-Type ->
+         Mutator Edge (+fast_io, +pragma_tuning, +static_memory, +bitwise_unrolling, +python_stdlib_accel) ->
+         Mutated Daughter Allele -> Arena PRIMARY Champion, with live "Mutate & Race Now" execution.
+5. Interactive Capability & Code Diff Inspector:
+   - Big-O Time/Space bounds, Environmental Triggers, Mathematical Invariants, Empirical Fitness comparison bars,
+     and syntax-highlighted code template viewer.
 """
 
 from __future__ import annotations
@@ -41,7 +46,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-# Hide console window immediately if launched via python.exe on Windows, and protect pythonw.exe stdio
+# Protect stdio under pythonw.exe and hide console if started via python.exe
 if sys.platform == "win32":
     if sys.stdout is None:
         sys.stdout = open(os.devnull, "w", encoding="utf-8")
@@ -93,37 +98,74 @@ ARENA_LEDGER = STATE_DIR / "ultimatrix_arena_ledger.json"
 MACRO_BRIEF_JSON = STATE_DIR / "macro_foresight_brief.json"
 RUN_LOG_JSON = STATE_DIR / "azmuth_run.json"
 
-# --- Calibrated Linear / Oscilloscope Dark Palette ---
-BG_VOID = "#090b0e"
-BG_MAIN = "#0d0f14"
-BG_PANEL = "#12151c"
-BG_CARD = "#171b24"
-BG_CARD_HOVER = "#1e2430"
-BG_INPUT = "#0f1218"
 
-BORDER_SUBTLE = "#222834"
-BORDER_ACTIVE = "#384152"
+# ============================================================================
+# Dynamic Theme Engine (Dark & Light)
+# ============================================================================
 
-TEXT_PRIMARY = "#f3f4f6"
-TEXT_SECONDARY = "#cbd5e1"
-TEXT_MUTED = "#64748b"
+class GUITheme:
+    """Encapsulates color palette tokens for Dark and Light modes."""
 
-ACCENT_CYAN = "#06b6d4"
-ACCENT_BLUE = "#3b82f6"
-ACCENT_EMERALD = "#10b981"
-ACCENT_AMBER = "#f59e0b"
-ACCENT_CRIMSON = "#ef4444"
-ACCENT_PURPLE = "#a855f7"
-ACCENT_GOLD = "#eab308"
+    def __init__(self, is_light: bool = False):
+        self.is_light = is_light
+        if is_light:
+            self.bg_void = "#f8fafc"
+            self.bg_main = "#f1f5f9"
+            self.bg_panel = "#ffffff"
+            self.bg_card = "#f8fafc"
+            self.bg_card_hover = "#e2e8f0"
+            self.bg_input = "#ffffff"
+            self.border_subtle = "#e2e8f0"
+            self.border_active = "#cbd5e1"
+            self.text_primary = "#0f172a"
+            self.text_secondary = "#334155"
+            self.text_muted = "#64748b"
+            self.grid_line = "#e2e8f0"
+            self.code_bg = "#f1f5f9"
+            self.code_fg = "#0f172a"
+            self.code_diff_bg = "#dcfce7"
+            self.code_diff_fg = "#15803d"
+            self.accent_cyan = "#0284c7"
+            self.accent_blue = "#2563eb"
+            self.accent_emerald = "#059669"
+            self.accent_amber = "#d97706"
+            self.accent_crimson = "#dc2626"
+            self.accent_purple = "#7c3aed"
+            self.accent_gold = "#b45309"
+        else:
+            self.bg_void = "#090b0e"
+            self.bg_main = "#0d0f14"
+            self.bg_panel = "#12151c"
+            self.bg_card = "#171b24"
+            self.bg_card_hover = "#1e2430"
+            self.bg_input = "#0f1218"
+            self.border_subtle = "#222834"
+            self.border_active = "#384152"
+            self.text_primary = "#f3f4f6"
+            self.text_secondary = "#cbd5e1"
+            self.text_muted = "#64748b"
+            self.grid_line = "#0e1218"
+            self.code_bg = "#0b0e14"
+            self.code_fg = "#e2e8f0"
+            self.code_diff_bg = "#062e1e"
+            self.code_diff_fg = "#4ade80"
+            self.accent_cyan = "#06b6d4"
+            self.accent_blue = "#3b82f6"
+            self.accent_emerald = "#10b981"
+            self.accent_amber = "#f59e0b"
+            self.accent_crimson = "#ef4444"
+            self.accent_purple = "#a855f7"
+            self.accent_gold = "#eab308"
 
-TIER_COLORS = {
-    0: "#f43f5e",  # T0 Hardware Substrate (Rose/Crimson)
-    1: "#f59e0b",  # T1 Language Runtime (Amber)
-    2: "#06b6d4",  # T2 Primitives & Structures (Cyan)
-    3: "#a855f7",  # T3 Cubic Breakers (Purple)
-    4: "#10b981",  # T4 Symbolic & Frontier (Emerald)
-    5: "#eab308",  # T5 Super-Domain Foresight (Gold)
-}
+        self.tier_colors = {
+            0: "#f43f5e",  # T0 Hardware Substrate
+            1: self.accent_amber,  # T1 Language Runtime
+            2: self.accent_cyan,   # T2 Primitives
+            3: self.accent_purple, # T3 Cubic Breakers
+            4: self.accent_emerald,# T4 Symbolic Frontier
+            5: self.accent_gold,   # T5 Super-Domain Foresight
+        }
+
 
 TIER_NAMES = {
     0: "T0: Hardware Substrate",
@@ -134,15 +176,12 @@ TIER_NAMES = {
     5: "T5: Super-Domain Foresight",
 }
 
-FONT_BRAND = ("Segoe UI Semibold", 12)
-FONT_TITLE = ("Segoe UI Semibold", 10)
-FONT_SUBTITLE = ("Segoe UI Semibold", 9)
-FONT_BODY = ("Segoe UI", 9)
-FONT_SMALL = ("Segoe UI", 8)
-FONT_MONO = ("Consolas", 9)
-FONT_MONO_SMALL = ("Consolas", 8)
-FONT_KPI = ("Segoe UI Semibold", 14)
+ZOOM_LEVELS = [0.65, 0.75, 0.85, 1.0, 1.15, 1.30, 1.50, 1.75, 2.0, 2.25]
 
+
+# ============================================================================
+# Win32 DPI & Desktop Attachment Helpers
+# ============================================================================
 
 def attach_default_desktop() -> bool:
     """Attach the calling thread to the interactive 'Default' desktop in WinSta0."""
@@ -160,7 +199,38 @@ def attach_default_desktop() -> bool:
     return False
 
 
-def enable_win32_dpi_and_dark_bar(root: Optional[tk.Tk] = None) -> None:
+def get_system_dpi_scale() -> float:
+    """Detects native display scaling (e.g. 1.0, 1.25, 1.5, 2.0)."""
+    if sys.platform == "win32":
+        try:
+            user32 = ctypes.windll.user32
+            dpi = user32.GetDpiForSystem()
+            if dpi and dpi > 0:
+                return max(1.0, round(dpi / 96.0, 2))
+        except Exception:
+            pass
+    return 1.0
+
+
+def set_window_dark_mode(root: tk.Tk, is_dark: bool) -> None:
+    """Sets the Windows 11/10 titlebar to light or dark mode."""
+    if sys.platform != "win32":
+        return
+    try:
+        root.update_idletasks()
+        hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
+        if not hwnd:
+            hwnd = root.winfo_id()
+        val = ctypes.c_int(1 if is_dark else 0)
+        for attr in (20, 19):
+            ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                hwnd, attr, ctypes.byref(val), ctypes.sizeof(val)
+            )
+    except Exception:
+        pass
+
+
+def enable_win32_dpi_and_dark_bar(root: Optional[tk.Tk] = None, is_dark: bool = True) -> None:
     """Enables Windows 11/10 Per-Monitor High-DPI awareness and dark title bar."""
     if sys.platform != "win32":
         return
@@ -174,18 +244,7 @@ def enable_win32_dpi_and_dark_bar(root: Optional[tk.Tk] = None) -> None:
             pass
 
     if root is not None:
-        try:
-            root.update_idletasks()
-            hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
-            if not hwnd:
-                hwnd = root.winfo_id()
-            for attr in (20, 19):
-                val = ctypes.c_int(1)
-                ctypes.windll.dwmapi.DwmSetWindowAttribute(
-                    hwnd, attr, ctypes.byref(val), ctypes.sizeof(val)
-                )
-        except Exception:
-            pass
+        set_window_dark_mode(root, is_dark)
 
 
 # ============================================================================
@@ -193,14 +252,7 @@ def enable_win32_dpi_and_dark_bar(root: Optional[tk.Tk] = None) -> None:
 # ============================================================================
 
 def build_gene_phylogeny(gene_data: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Constructs a structured Two-Level Phylogenetic Evolution Tree from a gene dictionary.
-    Identifies:
-      - Wild-type / root alleles (no '_mut_' in allele_id)
-      - Mutated daughter alleles ('<parent>_mut_<operator>')
-      - Operator edges (+fast_io, +pragma_tuning, +static_memory, +bitwise_unrolling, +python_stdlib_accel)
-      - Dominant PRIMARY champion & fitness speedup metrics
-    """
+    """Constructs a structured Two-Level Phylogenetic Evolution Tree from a gene dictionary."""
     gene_id = gene_data.get("gene_id", "UNKNOWN_GENE")
     tier = int(gene_data.get("tier", 2))
     category = gene_data.get("category", "primitive_structure")
@@ -220,12 +272,10 @@ def build_gene_phylogeny(gene_data: Dict[str, Any]) -> Dict[str, Any]:
         else:
             wild_types.append(a)
 
-    # If all alleles happen to have _mut_ (edge case), treat the first as root
     if not wild_types and alleles:
         wild_types.append(alleles[0])
         mutants = alleles[1:]
 
-    # Link mutants to their parent wild-type allele
     for m in mutants:
         mid = m.get("allele_id", "")
         parent_id, op_name = mid.split("_mut_", 1)
@@ -246,7 +296,6 @@ def build_gene_phylogeny(gene_data: Dict[str, Any]) -> Dict[str, Any]:
             "promoted_to_primary": m.get("dominance") == "PRIMARY",
         })
 
-    # Identify overall champion
     champion = None
     for a in alleles:
         if a.get("dominance") == "PRIMARY":
@@ -258,7 +307,6 @@ def build_gene_phylogeny(gene_data: Dict[str, Any]) -> Dict[str, Any]:
             key=lambda x: float(x.get("empirical_fitness", {}).get("runtime_ms", 9999.0)),
         )
 
-    # Calculate best speedup across the gene
     base_rts = [
         float(w.get("empirical_fitness", {}).get("runtime_ms", 50.0))
         for w in wild_types
@@ -323,7 +371,7 @@ def list_available_cartridges() -> List[Dict[str, Any]]:
 
 
 # ============================================================================
-# Main GUI Application
+# Main GUI Application with Zoom & Light Theme
 # ============================================================================
 
 class AzmuthCommandCenterGUI:
@@ -332,32 +380,42 @@ class AzmuthCommandCenterGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("Azmuth Autonomous Neuromorphic Command Center — Foresight & Ultimatrix Gene Lab")
-        self.root.geometry("1480x900")
-        self.root.minsize(1240, 760)
-        self.root.configure(bg=BG_MAIN)
 
-        enable_win32_dpi_and_dark_bar(self.root)
+        # 1. Scaling & Resolution Setup
+        self.system_dpi: float = get_system_dpi_scale()
+        self.zoom_idx: int = 3  # default 1.0x in ZOOM_LEVELS
+        self.zoom_level: float = ZOOM_LEVELS[self.zoom_idx]
+        self.theme: GUITheme = GUITheme(is_light=False)
 
-        # Runtime State & Tunable Parameters
+        # Base window geometry adapted to system DPI
+        base_w = int(1440 * self.system_dpi)
+        base_h = int(880 * self.system_dpi)
+        self.root.geometry(f"{min(base_w, 1920)}x{min(base_h, 1080)}")
+        self.root.minsize(980, 620)
+        self.root.configure(bg=self.theme.bg_main)
+
+        enable_win32_dpi_and_dark_bar(self.root, is_dark=not self.theme.is_light)
+
+        # 2. Runtime State & Tunable Parameters
         self.active_view: str = "pipeline"  # "pipeline" | "dag" | "genes"
         self.thalamic_z_threshold: tk.DoubleVar = tk.DoubleVar(value=0.80)
         self.ram_circuit_limit_gb: tk.DoubleVar = tk.DoubleVar(value=3.00)
         self.search_query_var: tk.StringVar = tk.StringVar(value="")
         self.selected_tier_filter: int = -1  # -1 = All Tiers
 
-        # Live Telemetry Buffers
+        # 3. Live Telemetry Buffers
         self.ram_history: List[float] = [50.0] * 80
         self.avail_gb_history: List[float] = [8.0] * 80
         self.active_job_label: str = "IDLE — Monitoring Telemetry"
         self.is_job_running: bool = False
 
-        # Animation & Particle State (60 FPS)
+        # 4. Animation & Canvas State
         self.anim_tick: int = 0
         self.pulses: List[Dict[str, Any]] = []
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
         self.selected_node_id: Optional[str] = None
 
-        # Cached Subsystem Data
+        # 5. Cached Subsystems Data
         self.gh_sensor = AzmuthGitHubSensor()
         self.gh_cache_data: Dict[str, Any] = {}
         self.cartridges: List[Dict[str, Any]] = list_available_cartridges()
@@ -373,39 +431,225 @@ class AzmuthCommandCenterGUI:
         self.mutation_ledger_data: Dict[str, Any] = {}
         self.corpus_ledger_data: Dict[str, Any] = {}
 
-        # Load initial data
+        # Load initial telemetry
         self._reload_all_telemetry()
 
-        # Build UI Layout
+        # Build UI Components
         self._configure_ttk_styles()
         self._build_top_telemetry_bar()
         self._build_tuning_and_action_bar()
         self._build_main_workspace()
         self._build_status_footer()
 
+        # Bind Keybindings for Zoom & Theme
+        self._bind_zoom_and_theme_shortcuts()
+
         # Populate initial view
         self.switch_view("pipeline")
 
-        # Start 60FPS Canvas Animation Loop & 2s Telemetry Poller
+        # 60FPS Canvas Animation Loop & 2s Telemetry Poller
         self._running = True
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
         self._schedule_animation_frame()
         self._schedule_telemetry_poll()
 
     # ------------------------------------------------------------------------
-    # Data Loading & Synchronization
+    # Dynamic Scaling & Font Helpers
+    # ------------------------------------------------------------------------
+
+    @property
+    def scale(self) -> float:
+        """Returns total effective scaling factor combining display DPI and user zoom level."""
+        return max(0.5, round(self.system_dpi * self.zoom_level, 2))
+
+    def s(self, px: float) -> int:
+        """Scales a pixel dimension by total effective scale."""
+        return max(1, int(round(px * self.scale)))
+
+    def font(self, family: str = "Segoe UI", base_pt: int = 9, weight: str = "normal") -> tuple:
+        """Returns a scaled font specification."""
+        scaled_pt = max(7, int(round(base_pt * self.zoom_level)))
+        return (family, scaled_pt, weight) if weight != "normal" else (family, scaled_pt)
+
+    # ------------------------------------------------------------------------
+    # Zoom Controls & Keyboard Shortcuts
+    # ------------------------------------------------------------------------
+
+    def _bind_zoom_and_theme_shortcuts(self) -> None:
+        # Zoom In: Ctrl + = / Ctrl + + / Ctrl + NumpadAdd
+        self.root.bind("<Control-equal>", lambda e: self.zoom_in())
+        self.root.bind("<Control-plus>", lambda e: self.zoom_in())
+        self.root.bind("<Control-KP_Add>", lambda e: self.zoom_in())
+
+        # Zoom Out: Ctrl + - / Ctrl + _ / Ctrl + NumpadSubtract
+        self.root.bind("<Control-minus>", lambda e: self.zoom_out())
+        self.root.bind("<Control-underscore>", lambda e: self.zoom_out())
+        self.root.bind("<Control-KP_Subtract>", lambda e: self.zoom_out())
+
+        # Reset Zoom: Ctrl + 0 / Ctrl + Numpad0
+        self.root.bind("<Control-Key-0>", lambda e: self.zoom_reset())
+        self.root.bind("<Control-KP_0>", lambda e: self.zoom_reset())
+
+        # Theme Toggle: Ctrl + T
+        self.root.bind("<Control-t>", lambda e: self.toggle_theme())
+        self.root.bind("<Control-T>", lambda e: self.toggle_theme())
+
+        # MouseWheel Zooming with Control held down
+        self.root.bind("<Control-MouseWheel>", self._on_ctrl_mousewheel)
+
+    def _on_ctrl_mousewheel(self, event: Any) -> None:
+        if event.delta > 0:
+            self.zoom_in()
+        elif event.delta < 0:
+            self.zoom_out()
+
+    def zoom_in(self) -> None:
+        if self.zoom_idx < len(ZOOM_LEVELS) - 1:
+            self.zoom_idx += 1
+            self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+            self._apply_zoom_and_layout()
+
+    def zoom_out(self) -> None:
+        if self.zoom_idx > 0:
+            self.zoom_idx -= 1
+            self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+            self._apply_zoom_and_layout()
+
+    def zoom_reset(self) -> None:
+        self.zoom_idx = ZOOM_LEVELS.index(1.0) if 1.0 in ZOOM_LEVELS else 3
+        self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+        self._apply_zoom_and_layout()
+
+    def _apply_zoom_and_layout(self) -> None:
+        """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
+        pct_str = f"{int(self.zoom_level * 100)}%"
+        self.btn_zoom_reset.configure(text=pct_str)
+        self.lbl_footer_zoom.configure(text=f"🔍 Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
+
+        # Update panel widths
+        self.left_panel.configure(width=max(220, int(round(300 * self.scale))))
+        self.right_panel.configure(width=max(280, int(round(390 * self.scale))))
+
+        # Update font on core labels
+        self.lbl_title.configure(font=self.font("Segoe UI Semibold", 11))
+        self.lbl_engine_sub.configure(font=self.font("Segoe UI", 8))
+        self.left_header_lbl.configure(font=self.font("Segoe UI Semibold", 9))
+        self.right_title_lbl.configure(font=self.font("Segoe UI Semibold", 9))
+        self.lbl_canvas_mode.configure(font=self.font("Segoe UI Semibold", 9))
+        self.lbl_canvas_hint.configure(font=self.font("Segoe UI", 8))
+        self.inspector_text.configure(font=self.font("Consolas", 9))
+        self.left_listbox.configure(font=self.font("Consolas", 8))
+
+        # Re-render canvas
+        self._redraw_active_canvas()
+
+    # ------------------------------------------------------------------------
+    # Theme Toggling (Dark / Light)
+    # ------------------------------------------------------------------------
+
+    def toggle_theme(self) -> None:
+        """Toggles between Dark and Light mode, updating colors and Windows 11 titlebar."""
+        self.theme = GUITheme(is_light=not self.theme.is_light)
+        set_window_dark_mode(self.root, is_dark=not self.theme.is_light)
+        self.btn_theme_toggle.configure(
+            text="🌙 Dark Mode" if self.theme.is_light else "☀️ Light Mode",
+            bg=self.theme.bg_card,
+            fg=self.theme.text_primary,
+        )
+        self._apply_theme_colors()
+        self._redraw_active_canvas()
+
+    def _apply_theme_colors(self) -> None:
+        t = self.theme
+        self.root.configure(bg=t.bg_main)
+        self.top_header.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
+        self.brand_frame.configure(bg=t.bg_panel)
+        self.title_row.configure(bg=t.bg_panel)
+        self.status_dot.configure(bg=t.bg_panel)
+        self.lbl_title.configure(bg=t.bg_panel, fg=t.text_primary)
+        self.lbl_engine_sub.configure(bg=t.bg_panel, fg=t.text_muted)
+
+        self.gear_frame.configure(bg=t.bg_panel)
+        self.btn_row.configure(bg=t.bg_panel)
+        self.lbl_gear_hdr.configure(bg=t.bg_panel, fg=t.text_muted)
+
+        self.osc_frame.configure(bg=t.bg_panel)
+        self.osc_top.configure(bg=t.bg_panel)
+        self.lbl_osc_hdr.configure(bg=t.bg_panel, fg=t.text_muted)
+        self.lbl_ram_readout.configure(bg=t.bg_panel)
+        self.osc_canvas.configure(bg=t.bg_void, highlightbackground=t.border_subtle)
+
+        self.kpi_container.configure(bg=t.bg_panel)
+        for card in self.kpi_cards:
+            card.configure(bg=t.bg_card, highlightbackground=t.border_subtle)
+        for lbl_t in self.kpi_title_lbls:
+            lbl_t.configure(bg=t.bg_card, fg=t.text_muted)
+        for lbl_v in self.kpi_labels.values():
+            lbl_v.configure(bg=t.bg_card)
+
+        self.bar.configure(bg=t.bg_card, highlightbackground=t.border_subtle)
+        self.view_frame.configure(bg=t.bg_card)
+        self.tune_frame.configure(bg=t.bg_card)
+        self.act_frame.configure(bg=t.bg_card)
+        self.lbl_tune_z.configure(bg=t.bg_card, fg=t.text_secondary)
+        self.lbl_tune_ram.configure(bg=t.bg_card, fg=t.text_secondary)
+        self.spin_z.configure(bg=t.bg_input, fg=t.accent_cyan, buttonbackground=t.bg_panel)
+        self.spin_ram.configure(bg=t.bg_input, fg=t.accent_amber, buttonbackground=t.bg_panel)
+
+        self.left_panel.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
+        self.left_header_lbl.configure(bg=t.bg_card, fg=t.text_primary)
+        self.left_filter_frame.configure(bg=t.bg_panel)
+        self.search_entry.configure(bg=t.bg_input, fg=t.text_primary, insertbackground=t.accent_cyan)
+        self.tier_filter_row.configure(bg=t.bg_panel)
+        self.left_listbox.configure(
+            bg=t.bg_void,
+            fg=t.text_secondary,
+            selectbackground=t.accent_blue,
+            selectforeground=t.text_primary,
+            highlightbackground=t.border_subtle,
+        )
+
+        self.right_panel.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
+        self.right_hdr.configure(bg=t.bg_card)
+        self.right_title_lbl.configure(bg=t.bg_card, fg=t.text_primary)
+        self.cap_summary_frame.configure(bg=t.bg_panel)
+        self.inspector_text.configure(
+            bg=t.bg_void,
+            fg=t.text_secondary,
+            highlightbackground=t.border_subtle,
+        )
+        self.canvas_bar.configure(bg=t.bg_main)
+        self.lbl_canvas_hint.configure(bg=t.bg_main, fg=t.text_muted)
+        self.canvas.configure(bg=t.bg_void)
+
+        self.footer.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
+        self.lbl_footer_right.configure(bg=t.bg_panel, fg=t.text_muted)
+        self.lbl_footer_zoom.configure(bg=t.bg_panel, fg=t.text_muted)
+
+        # Update text syntax highlight tags
+        self.inspector_text.tag_configure("h1", font=self.font("Segoe UI Semibold", 10), foreground=t.text_primary)
+        self.inspector_text.tag_configure("h2", font=self.font("Segoe UI Semibold", 9), foreground=t.accent_cyan)
+        self.inspector_text.tag_configure("gold", foreground=t.accent_gold, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("emerald", foreground=t.accent_emerald, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("crimson", foreground=t.accent_crimson, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("purple", foreground=t.accent_purple, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("muted", foreground=t.text_muted)
+        self.inspector_text.tag_configure("mutation_add", foreground=t.code_diff_fg, background=t.code_diff_bg)
+        self.inspector_text.tag_configure("code", foreground=t.code_fg, background=t.code_bg)
+
+        self._refresh_header_indicators()
+
+    # ------------------------------------------------------------------------
+    # Data Loading
     # ------------------------------------------------------------------------
 
     def _reload_all_telemetry(self) -> None:
-        """Loads latest JSON state from orchestrator-state and codon_stream."""
-        # 1. GitHub Sensor Cache
         if GH_CACHE_FILE.exists():
             try:
                 self.gh_cache_data = json.loads(GH_CACHE_FILE.read_text(encoding="utf-8"))
             except Exception:
                 self.gh_cache_data = {}
 
-        # 2. Ledgers
         if CORPUS_LEDGER.exists():
             try:
                 self.corpus_ledger_data = json.loads(CORPUS_LEDGER.read_text(encoding="utf-8"))
@@ -418,14 +662,11 @@ class AzmuthCommandCenterGUI:
                 pass
         self.mutation_ledger_data = load_mutation_ledger()
 
-        # 3. Cortical Cartridge
         self._load_selected_cartridge()
 
-        # 4. Genes Catalog
         try:
             self.genes_catalog = load_all_genes()
             if not self.selected_gene_id and self.genes_catalog:
-                # Pick a gene that has multiple alleles or mutations by default for rich visual tree
                 for gid, gdata in self.genes_catalog.items():
                     if any("_mut_" in a.get("allele_id", "") for a in gdata.get("alleles", [])):
                         self.selected_gene_id = gid
@@ -436,7 +677,6 @@ class AzmuthCommandCenterGUI:
             logger.debug(f"Error loading genes: {e}")
 
     def _load_selected_cartridge(self) -> None:
-        """Loads and normalizes the active U0..U5 cartridge using current Thalamic threshold."""
         if not self.cartridges:
             return
         idx = min(max(self.current_cartridge_idx, 0), len(self.cartridges) - 1)
@@ -453,7 +693,7 @@ class AzmuthCommandCenterGUI:
             logger.debug(f"Failed loading cartridge: {e}")
 
     # ------------------------------------------------------------------------
-    # UI Construction
+    # UI Building
     # ------------------------------------------------------------------------
 
     def _configure_ttk_styles(self) -> None:
@@ -464,141 +704,176 @@ class AzmuthCommandCenterGUI:
             pass
         style.configure(
             "Vertical.TScrollbar",
-            background=BG_CARD,
-            troughcolor=BG_PANEL,
-            bordercolor=BG_PANEL,
-            arrowcolor=TEXT_MUTED,
+            background=self.theme.bg_card,
+            troughcolor=self.theme.bg_panel,
+            bordercolor=self.theme.bg_panel,
+            arrowcolor=self.theme.text_muted,
         )
 
     def _build_top_telemetry_bar(self) -> None:
-        """Constructs the top telemetry header with Gear switcher, RAM oscilloscope, and KPIs."""
-        header = tk.Frame(self.root, bg=BG_PANEL, height=74, highlightthickness=1, highlightbackground=BORDER_SUBTLE)
-        header.pack(fill=tk.X, side=tk.TOP)
-        header.pack_propagate(False)
+        t = self.theme
+        self.top_header = tk.Frame(self.root, bg=t.bg_panel, highlightthickness=1, highlightbackground=t.border_subtle)
+        self.top_header.pack(fill=tk.X, side=tk.TOP)
 
         # 1. Brand & Engine Status
-        brand_frame = tk.Frame(header, bg=BG_PANEL, padx=14)
-        brand_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.brand_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=12, pady=8)
+        self.brand_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        title_row = tk.Frame(brand_frame, bg=BG_PANEL)
-        title_row.pack(anchor="w", pady=(12, 2))
+        self.title_row = tk.Frame(self.brand_frame, bg=t.bg_panel)
+        self.title_row.pack(anchor="w")
 
-        self.status_dot = tk.Canvas(title_row, width=12, height=12, bg=BG_PANEL, highlightthickness=0)
-        self.status_dot.pack(side=tk.LEFT, padx=(0, 8))
-        self.status_dot.create_oval(2, 2, 10, 10, fill=ACCENT_EMERALD, outline="", tags="dot")
+        self.status_dot = tk.Canvas(self.title_row, width=12, height=12, bg=t.bg_panel, highlightthickness=0)
+        self.status_dot.pack(side=tk.LEFT, padx=(0, 6))
+        self.status_dot.create_oval(2, 2, 10, 10, fill=t.accent_emerald, outline="", tags="dot")
 
-        tk.Label(
-            title_row,
+        self.lbl_title = tk.Label(
+            self.title_row,
             text="AZMUTH NEUROMORPHIC CORE",
-            font=FONT_BRAND,
-            fg=TEXT_PRIMARY,
-            bg=BG_PANEL,
-        ).pack(side=tk.LEFT)
+            font=self.font("Segoe UI Semibold", 11),
+            fg=t.text_primary,
+            bg=t.bg_panel,
+        )
+        self.lbl_title.pack(side=tk.LEFT)
 
         self.lbl_engine_sub = tk.Label(
-            brand_frame,
+            self.brand_frame,
             text="U0-U5 Foresight • 30-PAT Sensory Radar • Ultimatrix Gene Lab",
-            font=FONT_SMALL,
-            fg=TEXT_MUTED,
-            bg=BG_PANEL,
+            font=self.font("Segoe UI", 8),
+            fg=t.text_muted,
+            bg=t.bg_panel,
         )
         self.lbl_engine_sub.pack(anchor="w")
 
-        # Divider
-        tk.Frame(header, bg=BORDER_SUBTLE, width=1).pack(side=tk.LEFT, fill=tk.Y, pady=10)
-
         # 2. Live Gear Selector Pills
-        gear_frame = tk.Frame(header, bg=BG_PANEL, padx=12)
-        gear_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.gear_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
+        self.gear_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        tk.Label(gear_frame, text="DAEMON GEAR & STATE", font=FONT_SMALL, fg=TEXT_MUTED, bg=BG_PANEL).pack(
-            anchor="w", pady=(10, 4)
-        )
-        btn_row = tk.Frame(gear_frame, bg=BG_PANEL)
-        btn_row.pack(anchor="w")
+        self.lbl_gear_hdr = tk.Label(self.gear_frame, text="DAEMON GEAR", font=self.font("Segoe UI", 8), fg=t.text_muted, bg=t.bg_panel)
+        self.lbl_gear_hdr.pack(anchor="w")
+        self.btn_row = tk.Frame(self.gear_frame, bg=t.bg_panel)
+        self.btn_row.pack(anchor="w", pady=(2, 0))
 
         self.gear_buttons: Dict[str, tk.Button] = {}
         for g_key, g_label in [("whisper", "🌱 Whisper"), ("balanced", "⚡ Balanced"), ("turbo", "🚀 Turbo")]:
             b = tk.Button(
-                btn_row,
+                self.btn_row,
                 text=g_label,
-                font=FONT_SMALL,
-                bg=BG_CARD,
-                fg=TEXT_SECONDARY,
-                activebackground=ACCENT_BLUE,
-                activeforeground=TEXT_PRIMARY,
+                font=self.font("Segoe UI", 8),
+                bg=t.bg_card,
+                fg=t.text_secondary,
                 relief=tk.FLAT,
-                padx=8,
-                pady=3,
+                padx=6,
+                pady=2,
                 cursor="hand2",
                 command=lambda k=g_key: self._on_select_gear(k),
             )
-            b.pack(side=tk.LEFT, padx=(0, 4))
+            b.pack(side=tk.LEFT, padx=(0, 3))
             self.gear_buttons[g_key] = b
 
         self.btn_pause = tk.Button(
-            btn_row,
+            self.btn_row,
             text="⏸ Pause",
-            font=FONT_SMALL,
-            bg=BG_CARD,
-            fg=TEXT_SECONDARY,
+            font=self.font("Segoe UI", 8),
+            bg=t.bg_card,
+            fg=t.text_secondary,
+            relief=tk.FLAT,
+            padx=6,
+            pady=2,
+            cursor="hand2",
+            command=self._on_toggle_pause,
+        )
+        self.btn_pause.pack(side=tk.LEFT, padx=(3, 0))
+
+        # 3. 60FPS RAM Oscilloscope Sparkline
+        self.osc_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
+        self.osc_frame.pack(side=tk.LEFT, fill=tk.Y)
+
+        self.osc_top = tk.Frame(self.osc_frame, bg=t.bg_panel)
+        self.osc_top.pack(fill=tk.X)
+        self.lbl_osc_hdr = tk.Label(self.osc_top, text="RAM OSCILLOSCOPE", font=self.font("Segoe UI", 8), fg=t.text_muted, bg=t.bg_panel)
+        self.lbl_osc_hdr.pack(side=tk.LEFT)
+        self.lbl_ram_readout = tk.Label(
+            self.osc_top, text="8.0 GB Free (50%)", font=self.font("Consolas", 8), fg=t.accent_cyan, bg=t.bg_panel
+        )
+        self.lbl_ram_readout.pack(side=tk.RIGHT, padx=(6, 0))
+
+        self.osc_canvas = tk.Canvas(
+            self.osc_frame, width=170, height=28, bg=t.bg_void, highlightthickness=1, highlightbackground=t.border_subtle
+        )
+        self.osc_canvas.pack(pady=(2, 0))
+
+        # 4. KPI Telemetry Cards
+        self.kpi_container = tk.Frame(self.top_header, bg=t.bg_panel, padx=8, pady=8)
+        self.kpi_container.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.kpi_labels: Dict[str, tk.Label] = {}
+        self.kpi_cards: List[tk.Frame] = []
+        self.kpi_title_lbls: List[tk.Label] = []
+        kpis = [
+            ("pat_pool", "GITHUB PAT POOL", f"{len(self.gh_sensor.pool.tokens)} / 30 Ready", t.accent_cyan),
+            ("genes", "GENES SEQUENCED", f"{len(self.genes_catalog)} Loci", t.accent_purple),
+            ("mutations", "MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 0)}", t.accent_emerald),
+            ("arena", "ARENA RACES", f"{self.arena_ledger_data.get('tournaments_run', 0)}", t.accent_gold),
+        ]
+        for k_id, k_title, k_val, k_color in kpis:
+            card = tk.Frame(self.kpi_container, bg=t.bg_card, padx=8, pady=4, highlightthickness=1, highlightbackground=t.border_subtle)
+            card.pack(side=tk.LEFT, fill=tk.Y, padx=3)
+            self.kpi_cards.append(card)
+            t_lbl = tk.Label(card, text=k_title, font=self.font("Segoe UI", 7), fg=t.text_muted, bg=t.bg_card)
+            t_lbl.pack(anchor="w")
+            self.kpi_title_lbls.append(t_lbl)
+            lbl = tk.Label(card, text=k_val, font=self.font("Segoe UI Semibold", 9), fg=k_color, bg=t.bg_card)
+            lbl.pack(anchor="w")
+            self.kpi_labels[k_id] = lbl
+
+        # 5. Zoom & Theme Controls in Header (Far Right)
+        ctrl_header_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
+        ctrl_header_frame.pack(side=tk.RIGHT, fill=tk.Y)
+
+        zoom_row = tk.Frame(ctrl_header_frame, bg=t.bg_panel)
+        zoom_row.pack(anchor="e")
+
+        btn_zoom_out = tk.Button(
+            zoom_row, text=" - ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
+            relief=tk.FLAT, padx=4, pady=1, cursor="hand2", command=self.zoom_out
+        )
+        btn_zoom_out.pack(side=tk.LEFT, padx=1)
+
+        self.btn_zoom_reset = tk.Button(
+            zoom_row, text="100%", font=self.font("Consolas", 8), bg=t.bg_card, fg=t.accent_cyan,
+            relief=tk.FLAT, padx=6, pady=1, cursor="hand2", command=self.zoom_reset
+        )
+        self.btn_zoom_reset.pack(side=tk.LEFT, padx=1)
+
+        btn_zoom_in = tk.Button(
+            zoom_row, text=" + ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
+            relief=tk.FLAT, padx=4, pady=1, cursor="hand2", command=self.zoom_in
+        )
+        btn_zoom_in.pack(side=tk.LEFT, padx=1)
+
+        # Light / Dark Theme Toggle Pill
+        self.btn_theme_toggle = tk.Button(
+            ctrl_header_frame,
+            text="☀️ Light Mode" if not t.is_light else "🌙 Dark Mode",
+            font=self.font("Segoe UI", 8),
+            bg=t.bg_card,
+            fg=t.text_primary,
             relief=tk.FLAT,
             padx=8,
             pady=3,
             cursor="hand2",
-            command=self._on_toggle_pause,
+            command=self.toggle_theme,
         )
-        self.btn_pause.pack(side=tk.LEFT, padx=(4, 0))
-
-        tk.Frame(header, bg=BORDER_SUBTLE, width=1).pack(side=tk.LEFT, fill=tk.Y, pady=10)
-
-        # 3. 60FPS RAM Oscilloscope & Circuit Breaker Sparkline
-        osc_frame = tk.Frame(header, bg=BG_PANEL, padx=12)
-        osc_frame.pack(side=tk.LEFT, fill=tk.Y)
-
-        osc_top = tk.Frame(osc_frame, bg=BG_PANEL)
-        osc_top.pack(fill=tk.X, pady=(8, 2))
-        tk.Label(osc_top, text="RAM OSCILLOSCOPE", font=FONT_SMALL, fg=TEXT_MUTED, bg=BG_PANEL).pack(side=tk.LEFT)
-        self.lbl_ram_readout = tk.Label(
-            osc_top, text="8.0 GB Free (50%)", font=FONT_MONO_SMALL, fg=ACCENT_CYAN, bg=BG_PANEL
-        )
-        self.lbl_ram_readout.pack(side=tk.RIGHT, padx=(8, 0))
-
-        self.osc_canvas = tk.Canvas(
-            osc_frame, width=190, height=34, bg=BG_VOID, highlightthickness=1, highlightbackground=BORDER_SUBTLE
-        )
-        self.osc_canvas.pack()
-
-        tk.Frame(header, bg=BORDER_SUBTLE, width=1).pack(side=tk.LEFT, fill=tk.Y, pady=10)
-
-        # 4. KPI Telemetry Cards
-        kpi_container = tk.Frame(header, bg=BG_PANEL, padx=10)
-        kpi_container.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-        self.kpi_labels: Dict[str, tk.Label] = {}
-        kpis = [
-            ("pat_pool", "GITHUB PAT POOL", f"{len(self.gh_sensor.pool.tokens)} / 30 Ready", ACCENT_CYAN),
-            ("genes", "GENES SEQUENCED", f"{len(self.genes_catalog)} Loci", ACCENT_PURPLE),
-            ("mutations", "MUTATIONS APPLIED", f"{self.mutation_ledger_data.get('mutations_applied', 0)}", ACCENT_EMERALD),
-            ("arena", "ARENA BATTLES", f"{self.arena_ledger_data.get('tournaments_run', 0)} Races", ACCENT_GOLD),
-        ]
-        for k_id, k_title, k_val, k_color in kpis:
-            card = tk.Frame(kpi_container, bg=BG_CARD, padx=12, pady=6, highlightthickness=1, highlightbackground=BORDER_SUBTLE)
-            card.pack(side=tk.LEFT, fill=tk.Y, padx=4, pady=10)
-            tk.Label(card, text=k_title, font=("Segoe UI", 7), fg=TEXT_MUTED, bg=BG_CARD).pack(anchor="w")
-            lbl = tk.Label(card, text=k_val, font=FONT_TITLE, fg=k_color, bg=BG_CARD)
-            lbl.pack(anchor="w", pady=(2, 0))
-            self.kpi_labels[k_id] = lbl
+        self.btn_theme_toggle.pack(anchor="e", pady=(4, 0))
 
     def _build_tuning_and_action_bar(self) -> None:
-        """Constructs the operator parameter tuning bar and view mode switcher."""
-        bar = tk.Frame(self.root, bg=BG_CARD, height=46, highlightthickness=1, highlightbackground=BORDER_SUBTLE)
-        bar.pack(fill=tk.X, side=tk.TOP)
-        bar.pack_propagate(False)
+        t = self.theme
+        self.bar = tk.Frame(self.root, bg=t.bg_card, highlightthickness=1, highlightbackground=t.border_subtle)
+        self.bar.pack(fill=tk.X, side=tk.TOP)
 
         # View Switcher Tabs (Left)
-        view_frame = tk.Frame(bar, bg=BG_CARD, padx=10)
-        view_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.view_frame = tk.Frame(self.bar, bg=t.bg_card, padx=8, pady=4)
+        self.view_frame.pack(side=tk.LEFT, fill=tk.Y)
 
         self.view_buttons: Dict[str, tk.Button] = {}
         views = [
@@ -608,103 +883,102 @@ class AzmuthCommandCenterGUI:
         ]
         for v_id, v_text in views:
             btn = tk.Button(
-                view_frame,
+                self.view_frame,
                 text=v_text,
-                font=FONT_SUBTITLE,
-                bg=BG_PANEL,
-                fg=TEXT_SECONDARY,
+                font=self.font("Segoe UI Semibold", 9),
+                bg=t.bg_panel,
+                fg=t.text_secondary,
                 relief=tk.FLAT,
-                padx=12,
-                pady=5,
+                padx=10,
+                pady=4,
                 cursor="hand2",
                 command=lambda v=v_id: self.switch_view(v),
             )
-            btn.pack(side=tk.LEFT, padx=3, pady=7)
+            btn.pack(side=tk.LEFT, padx=2)
             self.view_buttons[v_id] = btn
 
-        tk.Frame(bar, bg=BORDER_SUBTLE, width=1).pack(side=tk.LEFT, fill=tk.Y, pady=8, padx=4)
+        # Tuning Controls (Middle)
+        self.tune_frame = tk.Frame(self.bar, bg=t.bg_card, padx=6, pady=4)
+        self.tune_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        # Live Parameter Tuning Controls (Middle)
-        tune_frame = tk.Frame(bar, bg=BG_CARD, padx=6)
-        tune_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.lbl_tune_z = tk.Label(self.tune_frame, text="Thalamic |Z| Gate:", font=self.font("Segoe UI", 8), fg=t.text_secondary, bg=t.bg_card)
+        self.lbl_tune_z.pack(side=tk.LEFT, padx=(4, 2))
 
-        tk.Label(tune_frame, text="Thalamic |Z| Gate:", font=FONT_SMALL, fg=TEXT_SECONDARY, bg=BG_CARD).pack(
-            side=tk.LEFT, padx=(4, 2)
-        )
         self.spin_z = tk.Spinbox(
-            tune_frame,
+            self.tune_frame,
             from_=0.1,
             to=3.0,
             increment=0.1,
             textvariable=self.thalamic_z_threshold,
             width=5,
-            font=FONT_MONO_SMALL,
-            bg=BG_INPUT,
-            fg=ACCENT_CYAN,
-            buttonbackground=BG_PANEL,
+            font=self.font("Consolas", 8),
+            bg=t.bg_input,
+            fg=t.accent_cyan,
+            buttonbackground=t.bg_panel,
             relief=tk.FLAT,
             command=self._on_parameter_tuned,
         )
-        self.spin_z.pack(side=tk.LEFT, padx=(0, 10))
+        self.spin_z.pack(side=tk.LEFT, padx=(0, 8))
         self.spin_z.bind("<Return>", lambda e: self._on_parameter_tuned())
 
-        tk.Label(tune_frame, text="RAM Breaker (GB):", font=FONT_SMALL, fg=TEXT_SECONDARY, bg=BG_CARD).pack(
-            side=tk.LEFT, padx=(4, 2)
-        )
+        self.lbl_tune_ram = tk.Label(self.tune_frame, text="RAM Breaker:", font=self.font("Segoe UI", 8), fg=t.text_secondary, bg=t.bg_card)
+        self.lbl_tune_ram.pack(side=tk.LEFT, padx=(4, 2))
+
         self.spin_ram = tk.Spinbox(
-            tune_frame,
+            self.tune_frame,
             from_=1.5,
             to=8.0,
             increment=0.5,
             textvariable=self.ram_circuit_limit_gb,
             width=5,
-            font=FONT_MONO_SMALL,
-            bg=BG_INPUT,
-            fg=ACCENT_AMBER,
-            buttonbackground=BG_PANEL,
+            font=self.font("Consolas", 8),
+            bg=t.bg_input,
+            fg=t.accent_amber,
+            buttonbackground=t.bg_panel,
             relief=tk.FLAT,
             command=self._on_parameter_tuned,
         )
-        self.spin_ram.pack(side=tk.LEFT, padx=(0, 10))
+        self.spin_ram.pack(side=tk.LEFT, padx=(0, 8))
 
-        # Action Triggers (Right)
-        act_frame = tk.Frame(bar, bg=BG_CARD, padx=10)
-        act_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        # Action Buttons (Right)
+        self.act_frame = tk.Frame(self.bar, bg=t.bg_card, padx=8, pady=4)
+        self.act_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
         actions = [
-            ("📡 Scan GitHub", ACCENT_CYAN, self._trigger_github_scan),
-            ("🧠 Synthesize DAG", ACCENT_BLUE, self._trigger_macro_synthesis),
-            ("🧬 Mutate & Battle", ACCENT_PURPLE, self._trigger_mutate_selected_gene),
-            ("📥 Harvest Task", ACCENT_EMERALD, self._trigger_harvest_task),
-            ("🔄 Verify Cycle", ACCENT_GOLD, self._trigger_full_cycle),
+            ("📡 Scan GitHub", t.accent_cyan, self._trigger_github_scan),
+            ("🧠 Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
+            ("🧬 Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
+            ("📥 Harvest Task", t.accent_emerald, self._trigger_harvest_task),
+            ("🔄 Verify Cycle", t.accent_gold, self._trigger_full_cycle),
         ]
         for label, color, cmd in actions:
             b = tk.Button(
-                act_frame,
+                self.act_frame,
                 text=label,
-                font=FONT_SMALL,
-                bg=BG_PANEL,
+                font=self.font("Segoe UI", 8),
+                bg=t.bg_panel,
                 fg=color,
                 activebackground=color,
-                activeforeground=BG_VOID,
+                activeforeground=t.bg_void,
                 highlightthickness=1,
                 highlightbackground=color,
                 relief=tk.FLAT,
-                padx=9,
-                pady=4,
+                padx=8,
+                pady=3,
                 cursor="hand2",
                 command=cmd,
             )
-            b.pack(side=tk.LEFT, padx=3, pady=8)
+            b.pack(side=tk.LEFT, padx=2)
 
     def _build_main_workspace(self) -> None:
-        """Constructs the 3-column Mission Control workspace: Left Browser, Central 60FPS Canvas, Right Inspector."""
-        workspace = tk.Frame(self.root, bg=BG_MAIN)
+        t = self.theme
+        workspace = tk.Frame(self.root, bg=t.bg_main)
         workspace.pack(fill=tk.BOTH, expand=True)
 
-        # 1. Left Sidebar (Taxonomy / Sensory Streams / Cartridge Selector)
+        # 1. Left Sidebar
         self.left_panel = tk.Frame(
-            workspace, bg=BG_PANEL, width=300, highlightthickness=1, highlightbackground=BORDER_SUBTLE
+            workspace, bg=t.bg_panel, width=max(220, int(round(300 * self.scale))),
+            highlightthickness=1, highlightbackground=t.border_subtle
         )
         self.left_panel.pack(side=tk.LEFT, fill=tk.Y)
         self.left_panel.pack_propagate(False)
@@ -712,68 +986,65 @@ class AzmuthCommandCenterGUI:
         self.left_header_lbl = tk.Label(
             self.left_panel,
             text="SENSORY & GENOMIC EXPLORER",
-            font=FONT_SUBTITLE,
-            fg=TEXT_PRIMARY,
-            bg=BG_CARD,
+            font=self.font("Segoe UI Semibold", 9),
+            fg=t.text_primary,
+            bg=t.bg_card,
             anchor="w",
-            padx=12,
-            pady=8,
+            padx=10,
+            pady=6,
         )
         self.left_header_lbl.pack(fill=tk.X)
 
-        # Search & Filter Box inside Left Panel
-        self.left_filter_frame = tk.Frame(self.left_panel, bg=BG_PANEL, padx=8, pady=6)
+        self.left_filter_frame = tk.Frame(self.left_panel, bg=t.bg_panel, padx=6, pady=4)
         self.left_filter_frame.pack(fill=tk.X)
 
-        search_entry = tk.Entry(
+        self.search_entry = tk.Entry(
             self.left_filter_frame,
             textvariable=self.search_query_var,
-            font=FONT_BODY,
-            bg=BG_INPUT,
-            fg=TEXT_PRIMARY,
-            insertbackground=ACCENT_CYAN,
+            font=self.font("Segoe UI", 9),
+            bg=t.bg_input,
+            fg=t.text_primary,
+            insertbackground=t.accent_cyan,
             relief=tk.FLAT,
             highlightthickness=1,
-            highlightbackground=BORDER_ACTIVE,
+            highlightbackground=t.border_active,
         )
-        search_entry.pack(fill=tk.X, ipady=4)
+        self.search_entry.pack(fill=tk.X, ipady=3)
         self.search_query_var.trace_add("write", lambda *_: self._populate_left_panel())
 
-        # Tier filter pills row (used in Gene Lab view)
-        self.tier_filter_row = tk.Frame(self.left_panel, bg=BG_PANEL, padx=6, pady=2)
+        self.tier_filter_row = tk.Frame(self.left_panel, bg=t.bg_panel, padx=4, pady=2)
         self.tier_filter_row.pack(fill=tk.X)
         self.tier_pill_btns: Dict[int, tk.Button] = {}
         for t_idx, t_short in [(-1, "ALL"), (0, "T0"), (1, "T1"), (2, "T2"), (3, "T3"), (4, "T4"), (5, "T5")]:
             tb = tk.Button(
                 self.tier_filter_row,
                 text=t_short,
-                font=("Consolas", 8, "bold"),
-                bg=BG_CARD,
-                fg=TIER_COLORS.get(t_idx, TEXT_SECONDARY),
+                font=self.font("Consolas", 8, "bold"),
+                bg=t.bg_card,
+                fg=t.tier_colors.get(t_idx, t.text_secondary),
                 relief=tk.FLAT,
-                padx=5,
-                pady=2,
+                padx=4,
+                pady=1,
                 cursor="hand2",
                 command=lambda ti=t_idx: self._set_tier_filter(ti),
             )
             tb.pack(side=tk.LEFT, padx=1, expand=True, fill=tk.X)
             self.tier_pill_btns[t_idx] = tb
 
-        # Scrollable Listbox for Left Items
-        list_container = tk.Frame(self.left_panel, bg=BG_PANEL, padx=6, pady=4)
+        list_container = tk.Frame(self.left_panel, bg=t.bg_panel, padx=4, pady=4)
         list_container.pack(fill=tk.BOTH, expand=True)
 
         scrollbar = ttk.Scrollbar(list_container, orient=tk.VERTICAL)
         self.left_listbox = tk.Listbox(
             list_container,
-            bg=BG_VOID,
-            fg=TEXT_SECONDARY,
-            selectbackground=ACCENT_BLUE,
-            selectforeground=TEXT_PRIMARY,
-            font=FONT_MONO_SMALL,
+            bg=t.bg_void,
+            fg=t.text_secondary,
+            selectbackground=t.accent_blue,
+            selectforeground=t.text_primary,
+            font=self.font("Consolas", 8),
             relief=tk.FLAT,
             highlightthickness=1,
-            highlightbackground=BORDER_SUBTLE,
+            highlightbackground=t.border_subtle,
             activestyle="none",
             yscrollcommand=scrollbar.set,
         )
@@ -783,177 +1054,187 @@ class AzmuthCommandCenterGUI:
         self.left_listbox.bind("<<ListboxSelect>>", self._on_left_list_select)
         self.left_items_meta: List[Dict[str, Any]] = []
 
-        # 2. Right Panel (Interactive Node & Gene Capability Inspector)
+        # 2. Right Panel (Capability & Telemetry Inspector)
         self.right_panel = tk.Frame(
-            workspace, bg=BG_PANEL, width=395, highlightthickness=1, highlightbackground=BORDER_SUBTLE
+            workspace, bg=t.bg_panel, width=max(280, int(round(390 * self.scale))),
+            highlightthickness=1, highlightbackground=t.border_subtle
         )
         self.right_panel.pack(side=tk.RIGHT, fill=tk.Y)
         self.right_panel.pack_propagate(False)
 
-        right_hdr = tk.Frame(self.right_panel, bg=BG_CARD)
-        right_hdr.pack(fill=tk.X)
+        self.right_hdr = tk.Frame(self.right_panel, bg=t.bg_card)
+        self.right_hdr.pack(fill=tk.X)
         self.right_title_lbl = tk.Label(
-            right_hdr,
+            self.right_hdr,
             text="CAPABILITY & NODE INSPECTOR",
-            font=FONT_SUBTITLE,
-            fg=TEXT_PRIMARY,
-            bg=BG_CARD,
+            font=self.font("Segoe UI Semibold", 9),
+            fg=t.text_primary,
+            bg=t.bg_card,
             anchor="w",
-            padx=12,
-            pady=8,
+            padx=10,
+            pady=6,
         )
         self.right_title_lbl.pack(side=tk.LEFT)
 
         self.btn_contextual_action = tk.Button(
-            right_hdr,
+            self.right_hdr,
             text="⚡ Action",
-            font=FONT_SMALL,
-            bg=ACCENT_PURPLE,
-            fg=TEXT_PRIMARY,
+            font=self.font("Segoe UI", 8),
+            bg=t.accent_purple,
+            fg=t.text_primary,
             relief=tk.FLAT,
-            padx=8,
+            padx=6,
             pady=2,
             cursor="hand2",
             command=self._on_contextual_inspector_action,
         )
-        self.btn_contextual_action.pack(side=tk.RIGHT, padx=8, pady=6)
+        self.btn_contextual_action.pack(side=tk.RIGHT, padx=6, pady=4)
 
-        # Structured Capability Badges Area
-        self.cap_summary_frame = tk.Frame(self.right_panel, bg=BG_PANEL, padx=10, pady=8)
+        self.cap_summary_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=6)
         self.cap_summary_frame.pack(fill=tk.X)
 
-        # Syntax-styled Inspector Text / Code Template / Telemetry View
-        insp_text_frame = tk.Frame(self.right_panel, bg=BG_PANEL, padx=10, pady=4)
+        insp_text_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=4)
         insp_text_frame.pack(fill=tk.BOTH, expand=True)
 
         insp_scroll = ttk.Scrollbar(insp_text_frame, orient=tk.VERTICAL)
         self.inspector_text = tk.Text(
             insp_text_frame,
-            bg=BG_VOID,
-            fg=TEXT_SECONDARY,
-            font=FONT_MONO_SMALL,
+            bg=t.bg_void,
+            fg=t.text_secondary,
+            font=self.font("Consolas", 8),
             wrap=tk.WORD,
             relief=tk.FLAT,
-            padx=10,
-            pady=8,
+            padx=8,
+            pady=6,
             highlightthickness=1,
-            highlightbackground=BORDER_SUBTLE,
+            highlightbackground=t.border_subtle,
             yscrollcommand=insp_scroll.set,
         )
         insp_scroll.config(command=self.inspector_text.yview)
         self.inspector_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         insp_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
-        # Configure text highlight tags for code, diffs, and capabilities
-        self.inspector_text.tag_configure("h1", font=("Segoe UI Semibold", 10), foreground=TEXT_PRIMARY)
-        self.inspector_text.tag_configure("h2", font=("Segoe UI Semibold", 9), foreground=ACCENT_CYAN)
-        self.inspector_text.tag_configure("gold", foreground=ACCENT_GOLD, font=("Consolas", 8, "bold"))
-        self.inspector_text.tag_configure("emerald", foreground=ACCENT_EMERALD, font=("Consolas", 8, "bold"))
-        self.inspector_text.tag_configure("crimson", foreground=ACCENT_CRIMSON, font=("Consolas", 8, "bold"))
-        self.inspector_text.tag_configure("purple", foreground=ACCENT_PURPLE, font=("Consolas", 8, "bold"))
-        self.inspector_text.tag_configure("muted", foreground=TEXT_MUTED)
-        self.inspector_text.tag_configure("mutation_add", foreground="#4ade80", background="#062e1e")
-        self.inspector_text.tag_configure("code", foreground="#e2e8f0", background="#0b0e14")
+        self.inspector_text.tag_configure("h1", font=self.font("Segoe UI Semibold", 10), foreground=t.text_primary)
+        self.inspector_text.tag_configure("h2", font=self.font("Segoe UI Semibold", 9), foreground=t.accent_cyan)
+        self.inspector_text.tag_configure("gold", foreground=t.accent_gold, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("emerald", foreground=t.accent_emerald, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("crimson", foreground=t.accent_crimson, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("purple", foreground=t.accent_purple, font=self.font("Consolas", 8, "bold"))
+        self.inspector_text.tag_configure("muted", foreground=t.text_muted)
+        self.inspector_text.tag_configure("mutation_add", foreground=t.code_diff_fg, background=t.code_diff_bg)
+        self.inspector_text.tag_configure("code", foreground=t.code_fg, background=t.code_bg)
 
-        # 3. Central 60FPS Interactive Graph Canvas
-        center_frame = tk.Frame(workspace, bg=BG_VOID)
+        # 3. Central 60FPS Interactive Canvas
+        center_frame = tk.Frame(workspace, bg=t.bg_void)
         center_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Canvas Top Overlay Bar
-        canvas_bar = tk.Frame(center_frame, bg=BG_MAIN, height=32, padx=12)
-        canvas_bar.pack(fill=tk.X, side=tk.TOP)
+        self.canvas_bar = tk.Frame(center_frame, bg=t.bg_main, padx=10, pady=3)
+        self.canvas_bar.pack(fill=tk.X, side=tk.TOP)
         self.lbl_canvas_mode = tk.Label(
-            canvas_bar,
-            text="LIVE SCHEMATIC: END-TO-END SENSORY & GENOMIC PIPELINE",
-            font=FONT_SUBTITLE,
-            fg=ACCENT_CYAN,
-            bg=BG_MAIN,
+            self.canvas_bar,
+            text="VIEW [1] — END-TO-END SENSORY, THALAMIC & GENOMIC PIPELINE FLOW",
+            font=self.font("Segoe UI Semibold", 9),
+            fg=t.accent_cyan,
+            bg=t.bg_main,
         )
-        self.lbl_canvas_mode.pack(side=tk.LEFT, pady=4)
+        self.lbl_canvas_mode.pack(side=tk.LEFT)
 
         self.lbl_canvas_hint = tk.Label(
-            canvas_bar,
-            text="Click any node, synapse, or allele branch to inspect real telemetry & capabilities",
-            font=FONT_SMALL,
-            fg=TEXT_MUTED,
-            bg=BG_MAIN,
+            self.canvas_bar,
+            text="Zoom: Ctrl+= / Ctrl+- / Ctrl+0 • Click nodes for capabilities",
+            font=self.font("Segoe UI", 8),
+            fg=t.text_muted,
+            bg=t.bg_main,
         )
-        self.lbl_canvas_hint.pack(side=tk.RIGHT, pady=4)
+        self.lbl_canvas_hint.pack(side=tk.RIGHT)
 
-        self.canvas = tk.Canvas(center_frame, bg=BG_VOID, highlightthickness=0, cursor="crosshair")
+        self.canvas = tk.Canvas(center_frame, bg=t.bg_void, highlightthickness=0, cursor="crosshair")
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas.bind("<Button-1>", self._on_canvas_click)
         self.canvas.bind("<Configure>", lambda e: self._redraw_active_canvas())
 
     def _build_status_footer(self) -> None:
-        footer = tk.Frame(self.root, bg=BG_PANEL, height=28, highlightthickness=1, highlightbackground=BORDER_SUBTLE)
-        footer.pack(fill=tk.X, side=tk.BOTTOM)
-        footer.pack_propagate(False)
+        t = self.theme
+        self.footer = tk.Frame(self.root, bg=t.bg_panel, height=26, highlightthickness=1, highlightbackground=t.border_subtle)
+        self.footer.pack(fill=tk.X, side=tk.BOTTOM)
+        self.footer.pack_propagate(False)
 
         self.lbl_footer_job = tk.Label(
-            footer,
-            text="● Status: IDLE — Event-Driven Telemetry Heartbeat Active (60 FPS)",
-            font=FONT_MONO_SMALL,
-            fg=ACCENT_EMERALD,
-            bg=BG_PANEL,
-            padx=12,
+            self.footer,
+            text="● Status: IDLE — Event-Driven Telemetry Active (60 FPS)",
+            font=self.font("Consolas", 8),
+            fg=t.accent_emerald,
+            bg=t.bg_panel,
+            padx=10,
         )
         self.lbl_footer_job.pack(side=tk.LEFT)
 
+        self.lbl_footer_zoom = tk.Label(
+            self.footer,
+            text="🔍 Zoom: 100% (Ctrl+= / Ctrl+- / Ctrl+0)",
+            font=self.font("Segoe UI", 8),
+            fg=t.text_muted,
+            bg=t.bg_panel,
+            padx=10,
+        )
+        self.lbl_footer_zoom.pack(side=tk.RIGHT)
+
         self.lbl_footer_right = tk.Label(
-            footer,
-            text="Subsystem: IMAGE_SUBSYSTEM_WINDOWS_GUI (Zero-Console) | Close window to return to System Tray",
-            font=FONT_SMALL,
-            fg=TEXT_MUTED,
-            bg=BG_PANEL,
-            padx=12,
+            self.footer,
+            text="Theme: Ctrl+T | Subsystem: Win32 GUI",
+            font=self.font("Segoe UI", 8),
+            fg=t.text_muted,
+            bg=t.bg_panel,
+            padx=10,
         )
         self.lbl_footer_right.pack(side=tk.RIGHT)
 
     # ------------------------------------------------------------------------
-    # View Switching & Left Panel Population
+    # View Switching & Left Panel
     # ------------------------------------------------------------------------
 
     def switch_view(self, view_name: str) -> None:
         self.active_view = view_name
         self.selected_node_id = None
         self.shock_overlay.clear()
+        t = self.theme
 
         for v_id, btn in self.view_buttons.items():
             if v_id == view_name:
-                btn.configure(bg=ACCENT_BLUE, fg=TEXT_PRIMARY)
+                btn.configure(bg=t.accent_blue, fg=t.text_primary)
             else:
-                btn.configure(bg=BG_PANEL, fg=TEXT_SECONDARY)
+                btn.configure(bg=t.bg_panel, fg=t.text_secondary)
 
         if view_name == "pipeline":
             self.left_header_lbl.configure(text="4-STREAM RADAR & 30-PAT POOL")
             self.lbl_canvas_mode.configure(
-                text="VIEW [1] — END-TO-END SENSORY, THALAMIC & GENOMIC PIPELINE FLOW", fg=ACCENT_CYAN
+                text="VIEW [1] — END-TO-END SENSORY, THALAMIC & GENOMIC PIPELINE FLOW", fg=t.accent_cyan
             )
-            self.btn_contextual_action.configure(text="📡 Scan Radar", bg=ACCENT_CYAN, fg=BG_VOID)
+            self.btn_contextual_action.configure(text="📡 Scan Radar", bg=t.accent_cyan, fg=t.bg_void)
         elif view_name == "dag":
             self.left_header_lbl.configure(text="CORTICAL CARTRIDGES (U0–U5)")
             self.lbl_canvas_mode.configure(
-                text="VIEW [2] — U0–U5 NEUROMORPHIC CAUSAL DAG & SHOCK PROPAGATION", fg=ACCENT_BLUE
+                text="VIEW [2] — U0–U5 NEUROMORPHIC CAUSAL DAG & SHOCK PROPAGATION", fg=t.accent_blue
             )
-            self.btn_contextual_action.configure(text="⚡ Shock (+2.0σ)", bg=ACCENT_CRIMSON, fg=TEXT_PRIMARY)
+            self.btn_contextual_action.configure(text="⚡ Shock (+2.0σ)", bg=t.accent_crimson, fg=t.text_primary)
         elif view_name == "genes":
             self.left_header_lbl.configure(text=f"GENOMIC TAXONOMY ({len(self.genes_catalog)} GENES)")
             self.lbl_canvas_mode.configure(
-                text="VIEW [3] — PHYLOGENETIC GENE EVOLUTION TREE & ALLELE ARENA", fg=ACCENT_PURPLE
+                text="VIEW [3] — PHYLOGENETIC GENE EVOLUTION TREE & ALLELE ARENA", fg=t.accent_purple
             )
-            self.btn_contextual_action.configure(text="🧬 Mutate & Race", bg=ACCENT_PURPLE, fg=TEXT_PRIMARY)
+            self.btn_contextual_action.configure(text="🧬 Mutate & Race", bg=t.accent_purple, fg=t.text_primary)
 
         self._populate_left_panel()
         self._redraw_active_canvas()
 
     def _set_tier_filter(self, tier_idx: int) -> None:
         self.selected_tier_filter = tier_idx
+        t = self.theme
         for ti, btn in self.tier_pill_btns.items():
             if ti == tier_idx:
-                btn.configure(bg=ACCENT_BLUE, fg=TEXT_PRIMARY)
+                btn.configure(bg=t.accent_blue, fg=t.text_primary)
             else:
-                btn.configure(bg=BG_CARD, fg=TIER_COLORS.get(ti, TEXT_SECONDARY))
+                btn.configure(bg=t.bg_card, fg=t.tier_colors.get(ti, t.text_secondary))
         if self.active_view != "genes":
             self.switch_view("genes")
         else:
@@ -965,7 +1246,6 @@ class AzmuthCommandCenterGUI:
         q = self.search_query_var.get().strip().lower()
 
         if self.active_view == "pipeline":
-            # List 4 GitHub streams + Token Pool summary
             t = self.gh_cache_data.get("telemetry", {})
             streams = [
                 ("STREAM_U3_LABS", f"📡 [U3] Lab Alpha ({len(t.get('opportunities', []))} hits)"),
@@ -981,9 +1261,8 @@ class AzmuthCommandCenterGUI:
                     self.left_listbox.insert(tk.END, f" {s_label}")
                     self.left_items_meta.append({"type": "pipeline_stage", "id": s_id})
 
-            # Also append individual discovered GitHub items
             for opp in t.get("opportunities", []):
-                lbl = f"   • [U3] {opp.get('repo', '')}: {opp.get('title', '')[:32]}"
+                lbl = f"   • [U3] {opp.get('repo', '')}: {opp.get('title', '')[:30]}"
                 if not q or q in lbl.lower():
                     self.left_listbox.insert(tk.END, lbl)
                     self.left_items_meta.append({"type": "gh_item", "stream": "U3", "data": opp})
@@ -995,7 +1274,6 @@ class AzmuthCommandCenterGUI:
                     self.left_items_meta.append({"type": "gh_item", "stream": "U1/U2", "data": rel})
 
         elif self.active_view == "dag":
-            # List U0..U5 Cartridges + Nodes in active cartridge
             for idx, c in enumerate(self.cartridges):
                 marker = "▶" if idx == self.current_cartridge_idx else " "
                 lbl = f"{marker} [{c['universe_id']}] {c['cortical_lobe']} ({c['node_count']}N)"
@@ -1015,7 +1293,6 @@ class AzmuthCommandCenterGUI:
                         self.left_items_meta.append({"type": "dag_node", "id": nid})
 
         elif self.active_view == "genes":
-            # List genes filtered by Tier and Search Query, prioritizing mutated multi-allele genes first
             sorted_genes = sorted(
                 self.genes_catalog.values(),
                 key=lambda g: (
@@ -1071,21 +1348,22 @@ class AzmuthCommandCenterGUI:
             self._redraw_active_canvas()
 
     # ------------------------------------------------------------------------
-    # Central 60FPS Graph Canvas Rendering
+    # Scaled Canvas Rendering (with Zoom & Resolution Adaptation)
     # ------------------------------------------------------------------------
 
     def _redraw_active_canvas(self) -> None:
         self.canvas.delete("all")
         self.canvas_nodes.clear()
         w = max(self.canvas.winfo_width(), 680)
-        h = max(self.canvas.winfo_height(), 520)
+        h = max(self.canvas.winfo_height(), 500)
+        t = self.theme
 
-        # Draw subtle technical oscilloscope background grid
-        grid_step = 40
+        # Technical grid lines scaled to zoom
+        grid_step = max(24, int(round(36 * self.zoom_level)))
         for gx in range(0, w, grid_step):
-            self.canvas.create_line(gx, 0, gx, h, fill="#0e1218", width=1)
+            self.canvas.create_line(gx, 0, gx, h, fill=t.grid_line, width=1)
         for gy in range(0, h, grid_step):
-            self.canvas.create_line(0, gy, w, gy, fill="#0e1218", width=1)
+            self.canvas.create_line(0, gy, w, gy, fill=t.grid_line, width=1)
 
         if self.active_view == "pipeline":
             self._draw_pipeline_flow_view(w, h)
@@ -1094,7 +1372,6 @@ class AzmuthCommandCenterGUI:
         elif self.active_view == "genes":
             self._draw_gene_phylogeny_view(w, h)
 
-        # Render active telemetry pulses on top
         self._draw_active_pulses()
 
     def _register_clickable_node(
@@ -1111,41 +1388,61 @@ class AzmuthCommandCenterGUI:
         node_id: str,
         cx: float,
         cy: float,
-        w: float,
-        h: float,
+        base_w: float,
+        base_h: float,
         title: str,
         subtitle: str,
         accent: str,
         badge: str = "",
         payload: Optional[Dict[str, Any]] = None,
     ) -> None:
-        x1, y1 = cx - w / 2, cy - h / 2
-        x2, y2 = cx + w / 2, cy + h / 2
+        t = self.theme
+        nw = self.s(base_w)
+        nh = self.s(base_h)
+        x1, y1 = cx - nw / 2, cy - nh / 2
+        x2, y2 = cx + nw / 2, cy + nh / 2
         is_sel = self.selected_node_id == node_id
 
-        border_col = accent if is_sel else BORDER_ACTIVE
-        border_w = 2 if is_sel else 1
-        bg_col = BG_CARD_HOVER if is_sel else BG_CARD
+        border_col = accent if is_sel else t.border_active
+        border_w = max(2, int(2 * self.zoom_level)) if is_sel else 1
+        bg_col = t.bg_card_hover if is_sel else t.bg_card
 
-        # Subtle outer glow if selected
         if is_sel:
+            pad = max(2, int(3 * self.zoom_level))
             self.canvas.create_rectangle(
-                x1 - 3, y1 - 3, x2 + 3, y2 + 3, outline=accent, width=1, dash=(3, 3)
+                x1 - pad, y1 - pad, x2 + pad, y2 + pad, outline=accent, width=1, dash=(3, 3)
             )
 
         self.canvas.create_rectangle(x1, y1, x2, y2, fill=bg_col, outline=border_col, width=border_w)
-        # Left accent bar
-        self.canvas.create_rectangle(x1, y1, x1 + 5, y2, fill=accent, outline="")
+        # Left accent stripe
+        stripe_w = max(3, int(5 * self.zoom_level))
+        self.canvas.create_rectangle(x1, y1, x1 + stripe_w, y2, fill=accent, outline="")
 
+        # Title & Subtitle with scaled fonts
         self.canvas.create_text(
-            x1 + 14, y1 + 16, text=title, fill=TEXT_PRIMARY, font=FONT_SUBTITLE, anchor="w"
+            x1 + stripe_w + max(6, int(8 * self.zoom_level)),
+            y1 + nh * 0.30,
+            text=title,
+            fill=t.text_primary,
+            font=self.font("Segoe UI Semibold", 9),
+            anchor="w",
         )
         self.canvas.create_text(
-            x1 + 14, y1 + 36, text=subtitle, fill=TEXT_MUTED, font=FONT_MONO_SMALL, anchor="w"
+            x1 + stripe_w + max(6, int(8 * self.zoom_level)),
+            y1 + nh * 0.70,
+            text=subtitle,
+            fill=t.text_muted,
+            font=self.font("Consolas", 8),
+            anchor="w",
         )
         if badge:
             self.canvas.create_text(
-                x2 - 8, y1 + 15, text=badge, fill=accent, font=FONT_MONO_SMALL, anchor="e"
+                x2 - max(6, int(8 * self.zoom_level)),
+                y1 + nh * 0.30,
+                text=badge,
+                fill=accent,
+                font=self.font("Consolas", 8, "bold"),
+                anchor="e",
             )
 
         self._register_clickable_node(node_id, x1, y1, x2, y2, payload or {"id": node_id, "title": title})
@@ -1156,40 +1453,48 @@ class AzmuthCommandCenterGUI:
         y1: float,
         x2: float,
         y2: float,
-        color: str = BORDER_ACTIVE,
+        color: str = "#384152",
         label: str = "",
         dashed: bool = False,
-        width: int = 2,
+        base_width: int = 2,
     ) -> None:
+        t = self.theme
         dash_pat = (4, 4) if dashed else None
+        ew = max(1, int(round(base_width * self.zoom_level)))
+        arr_len = max(6, int(round(9 * self.zoom_level)))
         self.canvas.create_line(
-            x1, y1, x2, y2, fill=color, width=width, arrow=tk.LAST, arrowshape=(8, 10, 4), dash=dash_pat
+            x1, y1, x2, y2, fill=color, width=ew, arrow=tk.LAST, arrowshape=(arr_len, arr_len + 2, 4), dash=dash_pat
         )
         if label:
             mx, my = (x1 + x2) / 2.0, (y1 + y2) / 2.0
-            self.canvas.create_rectangle(mx - 42, my - 9, mx + 42, my + 9, fill=BG_VOID, outline=BORDER_SUBTLE)
-            self.canvas.create_text(mx, my, text=label, fill=color, font=("Consolas", 7))
+            box_w = max(36, int(round(44 * self.zoom_level)))
+            box_h = max(10, int(round(12 * self.zoom_level)))
+            self.canvas.create_rectangle(mx - box_w, my - box_h, mx + box_w, my + box_h, fill=t.bg_void, outline=t.border_subtle)
+            self.canvas.create_text(mx, my, text=label, fill=color, font=self.font("Consolas", 7))
 
     # --- VIEW 1: Pipeline & 30-PAT Ring Schematic ---
 
     def _draw_pipeline_flow_view(self, w: float, h: float) -> None:
-        t = self.gh_cache_data.get("telemetry", {})
-        opp_cnt = len(t.get("opportunities", []))
-        rel_cnt = len(t.get("releases", []))
-        cp_cnt = len(t.get("cp_archives", []))
-        eco_cnt = len(t.get("ecosystem", []))
+        t = self.theme
+        tel = self.gh_cache_data.get("telemetry", {})
+        opp_cnt = len(tel.get("opportunities", []))
+        rel_cnt = len(tel.get("releases", []))
+        cp_cnt = len(tel.get("cp_archives", []))
+        eco_cnt = len(tel.get("ecosystem", []))
 
-        col1_x = w * 0.14
-        col2_x = w * 0.37
-        col3_x = w * 0.62
-        col4_x = w * 0.86
+        # Dynamic center-anchored bounding box so wide screens don't have massive empty deadspace
+        flow_width = min(w * 0.92, 1020 * self.scale)
+        start_x = (w - flow_width) / 2.0
+        col1_x = start_x + flow_width * 0.12
+        col2_x = start_x + flow_width * 0.38
+        col3_x = start_x + flow_width * 0.64
+        col4_x = start_x + flow_width * 0.88
 
-        # Column 1: 4 Sensory Streams
         streams = [
-            ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", ACCENT_CYAN, h * 0.18),
-            ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", ACCENT_BLUE, h * 0.38),
-            ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", ACCENT_PURPLE, h * 0.58),
-            ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", ACCENT_EMERALD, h * 0.78),
+            ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", t.accent_cyan, h * 0.18),
+            ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", t.accent_blue, h * 0.38),
+            ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, h * 0.58),
+            ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, h * 0.78),
         ]
 
         pat_cx, pat_cy = col2_x, h * 0.34
@@ -1198,22 +1503,25 @@ class AzmuthCommandCenterGUI:
         gene_cx, gene_cy = col3_x, h * 0.72
         arena_cx, arena_cy = col4_x, h * 0.53
 
-        # Edges from Streams -> PAT Ring & Thalamic Sieve
+        box_w = 175
+        box_h = 48
+        half_bw = self.s(box_w) / 2.0
+
         for s_id, s_title, s_sub, s_col, sy in streams:
-            self._draw_directed_edge(col1_x + 95, sy, pat_cx - 72, pat_cy, color=s_col, width=1)
+            self._draw_directed_edge(col1_x + half_bw, sy, pat_cx - self.s(60), pat_cy, color=s_col, base_width=1)
             self._draw_node_box(
-                s_id, col1_x, sy, 190, 54, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
+                s_id, col1_x, sy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
             )
 
-        # Stage 2A: 30-PAT Circular Token Ring (Visual Orbital Radar)
-        ring_r = 58
+        # 30-PAT Ring
+        ring_r = self.s(52)
         self.canvas.create_oval(
-            pat_cx - ring_r - 12,
-            pat_cy - ring_r - 12,
-            pat_cx + ring_r + 12,
-            pat_cy + ring_r + 12,
-            fill=BG_CARD,
-            outline=BORDER_ACTIVE,
+            pat_cx - ring_r - self.s(10),
+            pat_cy - ring_r - self.s(10),
+            pat_cx + ring_r + self.s(10),
+            pat_cy + ring_r + self.s(10),
+            fill=t.bg_card,
+            outline=t.border_active,
             width=1,
         )
         tokens = self.gh_sensor.pool.tokens
@@ -1223,82 +1531,76 @@ class AzmuthCommandCenterGUI:
             angle = (2 * math.pi * i / n_tok) - math.pi / 2
             tx = pat_cx + ring_r * math.cos(angle)
             ty = pat_cy + ring_r * math.sin(angle)
-            is_active_slot = (i == ptr) or (self.is_job_running and (i == (self.anim_tick // 4) % n_tok))
-            dot_col = ACCENT_GOLD if is_active_slot else (ACCENT_CYAN if i < len(tokens) else BORDER_SUBTLE)
-            r_dot = 5 if is_active_slot else 3
-            self.canvas.create_oval(tx - r_dot, ty - r_dot, tx + r_dot, ty + r_dot, fill=dot_col, outline="")
+            is_active = (i == ptr) or (self.is_job_running and (i == (self.anim_tick // 4) % n_tok))
+            dot_col = t.accent_gold if is_active else (t.accent_cyan if i < len(tokens) else t.border_subtle)
+            rd = max(3, int(4 * self.zoom_level)) if is_active else max(2, int(2.5 * self.zoom_level))
+            self.canvas.create_oval(tx - rd, ty - rd, tx + rd, ty + rd, fill=dot_col, outline="")
 
-        self.canvas.create_text(pat_cx, pat_cy - 8, text="30-PAT RING", fill=TEXT_PRIMARY, font=FONT_SUBTITLE)
+        self.canvas.create_text(pat_cx, pat_cy - self.s(6), text="30-PAT RING", fill=t.text_primary, font=self.font("Segoe UI Semibold", 9))
         self.canvas.create_text(
-            pat_cx, pat_cy + 10, text=f"{len(tokens)} Pooled Keys", fill=ACCENT_CYAN, font=FONT_MONO_SMALL
+            pat_cx, pat_cy + self.s(8), text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan, font=self.font("Consolas", 8)
         )
         self._register_clickable_node(
             "STAGE_PAT_RING",
-            pat_cx - 70,
-            pat_cy - 70,
-            pat_cx + 70,
-            pat_cy + 70,
+            pat_cx - ring_r - self.s(10),
+            pat_cy - ring_r - self.s(10),
+            pat_cx + ring_r + self.s(10),
+            pat_cy + ring_r + self.s(10),
             {"type": "pipeline_stage", "id": "STAGE_PAT_RING"},
         )
 
-        # Edge PAT Ring -> Thalamic Filter
-        self._draw_directed_edge(pat_cx, pat_cy + 72, thal_cx, thal_cy - 40, color=ACCENT_CYAN, label="150k req/hr")
+        self._draw_directed_edge(pat_cx, pat_cy + ring_r + self.s(6), thal_cx, thal_cy - self.s(30), color=t.accent_cyan, label="150k req/hr")
 
-        # Stage 2B: Thalamic Z-Score Sieve
         z_gate = self.thalamic_z_threshold.get()
         self._draw_node_box(
             "STAGE_THALAMIC",
             thal_cx,
             thal_cy,
-            205,
-            68,
+            185,
+            58,
             "Thalamic Salience Gate",
             f"Prunes Noise |Z| < {z_gate:.2f}σ",
-            ACCENT_AMBER,
+            t.accent_amber,
             badge="SIEVE",
             payload={"type": "pipeline_stage", "id": "STAGE_THALAMIC"},
         )
 
-        # Edges Thalamic -> Cortex & Gene Sequencer
         self._draw_directed_edge(
-            thal_cx + 102, thal_cy - 10, cortex_cx - 105, cortex_cy + 10, color=ACCENT_BLUE, label="Salient Spikes"
+            thal_cx + half_bw, thal_cy - self.s(10), cortex_cx - half_bw, cortex_cy + self.s(10), color=t.accent_blue, label="Salient Spikes"
         )
         self._draw_directed_edge(
-            thal_cx + 102, thal_cy + 10, gene_cx - 105, gene_cy, color=ACCENT_PURPLE, label="Codon Feed"
+            thal_cx + half_bw, thal_cy + self.s(10), gene_cx - half_bw, gene_cy, color=t.accent_purple, label="Codon Feed"
         )
 
-        # Stage 3A: U0-U5 Cortical Brain
         self._draw_node_box(
             "STAGE_CORTEX",
             cortex_cx,
             cortex_cy,
-            210,
-            68,
+            185,
+            58,
             "U0–U5 Cortical Foresight",
-            f"6 Mounted Universes • {len(self.cartridges)} Lobes",
-            ACCENT_BLUE,
+            f"6 Cartridges • {len(self.cartridges)} Lobes",
+            t.accent_blue,
             badge="DAG",
             payload={"type": "pipeline_stage", "id": "STAGE_CORTEX"},
         )
 
-        # Stage 3B: Ultimatrix Gene Sequencer & Mutator
         mut_cnt = self.mutation_ledger_data.get("mutations_applied", 0)
         self._draw_node_box(
             "STAGE_ULTIMATRIX",
             gene_cx,
             gene_cy,
-            210,
-            68,
+            185,
+            58,
             "Ultimatrix Gene Sequencer",
-            f"{len(self.genes_catalog)} Genes • {mut_cnt} Mutations",
-            ACCENT_PURPLE,
+            f"{len(self.genes_catalog)} Genes • {mut_cnt} Muts",
+            t.accent_purple,
             badge="T0-T5",
             payload={"type": "pipeline_stage", "id": "STAGE_ULTIMATRIX"},
         )
 
-        # Edges to Stage 4: Arena & SSOT Ledgers
-        self._draw_directed_edge(cortex_cx + 105, cortex_cy, arena_cx - 100, arena_cy - 18, color=ACCENT_BLUE)
-        self._draw_directed_edge(gene_cx + 105, gene_cy, arena_cx - 100, arena_cy + 18, color=ACCENT_PURPLE)
+        self._draw_directed_edge(cortex_cx + half_bw, cortex_cy, arena_cx - half_bw, arena_cy - self.s(16), color=t.accent_blue)
+        self._draw_directed_edge(gene_cx + half_bw, gene_cy, arena_cx - half_bw, arena_cy + self.s(16), color=t.accent_purple)
 
         races = self.arena_ledger_data.get("tournaments_run", 0)
         promos = self.arena_ledger_data.get("promotions", 0)
@@ -1306,11 +1608,11 @@ class AzmuthCommandCenterGUI:
             "STAGE_ARENA_SSOT",
             arena_cx,
             arena_cy,
-            200,
-            76,
+            180,
+            64,
             "Arena & SSOT Ledgers",
-            f"{races} Tournaments • {promos} Promoted",
-            ACCENT_GOLD,
+            f"{races} Races • {promos} Promoted",
+            t.accent_gold,
             badge="VERIFIED",
             payload={"type": "pipeline_stage", "id": "STAGE_ARENA_SSOT"},
         )
@@ -1322,24 +1624,22 @@ class AzmuthCommandCenterGUI:
     # --- VIEW 2: U0-U5 Neuromorphic Causal DAG ---
 
     def _draw_causal_dag_view(self, w: float, h: float) -> None:
+        t = self.theme
         if not self.current_macro_graph:
             self._load_selected_cartridge()
         if not self.current_macro_graph or not self.current_macro_graph.nodes:
-            self.canvas.create_text(w / 2, h / 2, text="No Cortical Cartridge Loaded", fill=TEXT_MUTED, font=FONT_TITLE)
+            self.canvas.create_text(w / 2, h / 2, text="No Cortical Cartridge Loaded", fill=t.text_muted, font=self.font("Segoe UI", 11))
             return
 
         nodes = list(self.current_macro_graph.nodes.values())
         synapses = self.current_macro_graph.synapses
-        n_cnt = len(nodes)
 
-        # Compute deterministic layered/topological radial positions
         positions: Dict[str, Tuple[float, float]] = {}
         in_deg: Dict[str, int] = {n["id"]: 0 for n in nodes}
         for s in synapses:
             if s["target"] in in_deg:
                 in_deg[s["target"]] += 1
 
-        # Group into 3 columns: Roots (in_deg == 0), Mid-layer, Downstream sinks
         roots = [n for n in nodes if in_deg.get(n["id"], 0) == 0]
         others = [n for n in nodes if in_deg.get(n["id"], 0) > 0]
         mid_split = max(1, len(others) // 2)
@@ -1347,13 +1647,19 @@ class AzmuthCommandCenterGUI:
         sinks = others[mid_split:]
 
         layers = [l for l in [roots, mids, sinks] if l]
+        flow_width = min(w * 0.90, 1050 * self.scale)
+        start_x = (w - flow_width) / 2.0
+
         for l_idx, layer in enumerate(layers):
-            lx = w * (0.18 + 0.64 * (l_idx / max(len(layers) - 1, 1)))
+            lx = start_x + flow_width * (0.12 + 0.76 * (l_idx / max(len(layers) - 1, 1)))
             for r_idx, n in enumerate(layer):
                 ly = h * ((r_idx + 1) / (len(layer) + 1))
                 positions[n["id"]] = (lx, ly)
 
-        # Draw Directed Axonal Synapses First
+        node_bw = 160
+        node_bh = 50
+        half_bw = self.s(node_bw) / 2.0
+
         for s in synapses:
             src, tgt = s["source"], s["target"]
             if src in positions and tgt in positions:
@@ -1361,20 +1667,19 @@ class AzmuthCommandCenterGUI:
                 x2, y2 = positions[tgt]
                 weight = float(s.get("weight", 0.0))
                 lag = int(s.get("lag_days", 0))
-                edge_col = ACCENT_EMERALD if weight >= 0 else ACCENT_CRIMSON
+                edge_col = t.accent_emerald if weight >= 0 else t.accent_crimson
                 if tgt in self.shock_overlay:
-                    edge_col = ACCENT_GOLD
+                    edge_col = t.accent_gold
                 self._draw_directed_edge(
-                    x1 + 88,
+                    x1 + half_bw,
                     y1,
-                    x2 - 88,
+                    x2 - half_bw,
                     y2,
                     color=edge_col,
                     label=f"w={weight:+.2f} ({lag}d)",
-                    width=2 if abs(weight) >= 0.5 else 1,
+                    base_width=2 if abs(weight) >= 0.5 else 1,
                 )
 
-        # Draw Cortical Nodes
         z_thresh = self.thalamic_z_threshold.get()
         for n in nodes:
             nid = n["id"]
@@ -1384,30 +1689,30 @@ class AzmuthCommandCenterGUI:
             eff_z = z + shock_delta
 
             if abs(eff_z) < z_thresh:
-                col = TEXT_MUTED
+                col = t.text_muted
                 badge = "HABITUATED"
             elif abs(eff_z) < 2.0:
-                col = ACCENT_CYAN
+                col = t.accent_cyan
                 badge = f"Z={eff_z:+.2f}σ"
             elif abs(eff_z) < 3.0:
-                col = ACCENT_AMBER
+                col = t.accent_amber
                 badge = f"WARN {eff_z:+.1f}σ"
             else:
-                col = ACCENT_CRIMSON
+                col = t.accent_crimson
                 badge = f"SPIKE {eff_z:+.1f}σ"
 
             if shock_delta != 0.0:
                 badge = f"⚡ Δ{shock_delta:+.2f}"
-                col = ACCENT_GOLD
+                col = t.accent_gold
 
             self._draw_node_box(
                 nid,
                 cx,
                 cy,
-                176,
-                56,
-                nid[:18],
-                f"{n.get('label', '')[:24]}",
+                node_bw,
+                node_bh,
+                nid[:16],
+                f"{n.get('label', '')[:22]}",
                 col,
                 badge=badge,
                 payload={"type": "dag_node", "id": nid},
@@ -1420,92 +1725,99 @@ class AzmuthCommandCenterGUI:
     # --- VIEW 3: Phylogenetic Gene Evolution Tree & Capabilities ---
 
     def _draw_gene_phylogeny_view(self, w: float, h: float) -> None:
+        t = self.theme
         if not self.selected_gene_id or self.selected_gene_id not in self.genes_catalog:
             if self.genes_catalog:
                 self.selected_gene_id = next(iter(self.genes_catalog.keys()))
             else:
-                self.canvas.create_text(w / 2, h / 2, text="No Sequenced Genes Found", fill=TEXT_MUTED, font=FONT_TITLE)
+                self.canvas.create_text(w / 2, h / 2, text="No Sequenced Genes Found", fill=t.text_muted, font=self.font("Segoe UI", 11))
                 return
 
         gene_data = self.genes_catalog[self.selected_gene_id]
         phylo = build_gene_phylogeny(gene_data)
-        tier_col = TIER_COLORS.get(phylo["tier"], ACCENT_CYAN)
+        tier_col = t.tier_colors.get(phylo["tier"], t.accent_cyan)
 
-        # Layout Columns:
-        # Col 1 (x=0.14): Root Gene Locus Card
-        # Col 2 (x=0.42): Wild-Type / Base Submission Alleles (Gen 1)
-        # Col 3 (x=0.72): Mutated Daughter Alleles via Genetic Operators (Gen 2)
-        # Col 4 (x=0.90): Ultimatrix Arena Trophy / Primary Dominance Summary
-        root_x, root_y = w * 0.14, h * 0.50
-        wt_x = w * 0.44
-        mut_x = w * 0.78
-
-        # Top Banner inside Canvas showing Gene Evolution Summary
-        self.canvas.create_rectangle(16, 12, w - 16, 54, fill=BG_CARD, outline=BORDER_SUBTLE)
+        # Top Banner on canvas
+        banner_h = max(32, int(42 * self.zoom_level))
+        self.canvas.create_rectangle(14, 10, w - 14, 10 + banner_h, fill=t.bg_card, outline=t.border_subtle)
         self.canvas.create_text(
-            30,
-            33,
+            24,
+            10 + banner_h / 2,
             text=f"GENE LOCUS: {phylo['gene_id']}  |  {phylo['tier_label']}  |  Category: {phylo['category'].upper()}",
             fill=tier_col,
-            font=FONT_SUBTITLE,
+            font=self.font("Segoe UI Semibold", 9),
             anchor="w",
         )
         speedup_txt = (
-            f"🏆 Net Evolutionary Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
+            f"🏆 Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
         )
-        self.canvas.create_text(w - 30, 33, text=speedup_txt, fill=ACCENT_GOLD, font=FONT_SUBTITLE, anchor="e")
+        self.canvas.create_text(w - 24, 10 + banner_h / 2, text=speedup_txt, fill=t.accent_gold, font=self.font("Segoe UI Semibold", 9), anchor="e")
 
-        # 1. Draw Gene Root Node
+        flow_width = min(w * 0.90, 1050 * self.scale)
+        start_x = (w - flow_width) / 2.0
+        root_x, root_y = start_x + flow_width * 0.12, h * 0.52
+        wt_x = start_x + flow_width * 0.44
+        mut_x = start_x + flow_width * 0.82
+
+        root_bw = 180
+        root_bh = 64
+        half_rbw = self.s(root_bw) / 2.0
+
         self._draw_node_box(
             f"GENE_ROOT::{phylo['gene_id']}",
             root_x,
             root_y,
-            195,
-            72,
-            phylo["gene_id"][:20],
-            f"{phylo['tier_label'][:25]}",
+            root_bw,
+            root_bh,
+            phylo["gene_id"][:18],
+            f"{phylo['tier_label'][:22]}",
             tier_col,
             badge=f"T{phylo['tier']}",
             payload={"type": "gene_root", "gene_id": phylo["gene_id"]},
         )
 
-        # 2. Draw Wild-Type Base Alleles (Generation 1)
         wild_types = phylo["wild_types"]
         wt_positions: Dict[str, Tuple[float, float]] = {}
+        allele_bw = 195
+        allele_bh = 56
+        half_abw = self.s(allele_bw) / 2.0
+
+        top_offset = 18 + banner_h
+        avail_h = h - top_offset - 20
+
         for idx, wt in enumerate(wild_types):
             aid = wt.get("allele_id", f"wt_{idx}")
-            wy = 70 + (h - 110) * ((idx + 1) / (len(wild_types) + 1))
+            wy = top_offset + avail_h * ((idx + 1) / (len(wild_types) + 1))
             wt_positions[aid] = (wt_x, wy)
 
             is_prim = wt.get("dominance") == "PRIMARY"
-            col = ACCENT_GOLD if is_prim else ACCENT_CYAN
+            col = t.accent_gold if is_prim else t.accent_cyan
             fit = wt.get("empirical_fitness", {})
             rt = fit.get("runtime_ms", "?")
             ram = fit.get("ram_kb", "?")
             comp = wt.get("complexity_time", "O(N)")
 
-            self._draw_directed_edge(root_x + 98, root_y, wt_x - 105, wy, color=tier_col, label="Wild-Type")
+            self._draw_directed_edge(root_x + half_rbw, root_y, wt_x - half_abw, wy, color=tier_col, label="Wild-Type")
             self._draw_node_box(
                 f"ALLELE::{aid}",
                 wt_x,
                 wy,
-                210,
-                64,
-                aid[:22],
+                allele_bw,
+                allele_bh,
+                aid[:20],
                 f"{comp} • {rt} ms • {ram} KB",
                 col,
                 badge="👑 PRIMARY" if is_prim else "BASE",
                 payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": aid},
             )
 
-        # 3. Draw Mutated Daughter Alleles (Generation 2) & Mutation Operator Labels
         mutants = phylo["mutants"]
         edge_lookup = {e["target_allele"]: e for e in phylo["edges"]}
 
         if mutants:
             for idx, mut in enumerate(mutants):
                 mid = mut.get("allele_id", f"mut_{idx}")
-                my = 70 + (h - 110) * ((idx + 1) / (len(mutants) + 1))
+                my = top_offset + avail_h * ((idx + 1) / (len(mutants) + 1))
                 e_info = edge_lookup.get(mid, {})
                 parent_id = e_info.get("source_allele", "")
                 op_name = e_info.get("operator", "mutation")
@@ -1513,41 +1825,40 @@ class AzmuthCommandCenterGUI:
 
                 px, py = wt_positions.get(parent_id, (wt_x, root_y))
                 is_prim = mut.get("dominance") == "PRIMARY"
-                col = ACCENT_GOLD if is_prim else ACCENT_EMERALD
+                col = t.accent_gold if is_prim else t.accent_emerald
 
                 fit = mut.get("empirical_fitness", {})
                 rt = fit.get("runtime_ms", "?")
                 ram = fit.get("ram_kb", "?")
 
                 self._draw_directed_edge(
-                    px + 105,
+                    px + half_abw,
                     py,
-                    mut_x - 110,
+                    mut_x - half_abw,
                     my,
                     color=col,
                     label=f"+{op_name} ({speedup:+.0f}%)",
-                    width=2,
+                    base_width=2,
                 )
                 self._draw_node_box(
                     f"ALLELE::{mid}",
                     mut_x,
                     my,
-                    220,
-                    66,
-                    mid[-24:],
+                    allele_bw,
+                    allele_bh,
+                    mid[-22:],
                     f"Mutant • {rt} ms • {ram} KB",
                     col,
                     badge="👑 CHAMPION" if is_prim else "MUTANT",
                     payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": mid},
                 )
         else:
-            # Show unmutated potential branch placeholder
             self._draw_directed_edge(
-                wt_x + 105,
+                wt_x + half_abw,
                 root_y,
-                mut_x - 105,
+                mut_x - half_abw,
                 root_y,
-                color=BORDER_ACTIVE,
+                color=t.border_active,
                 label="Click 'Mutate & Race'",
                 dashed=True,
             )
@@ -1555,11 +1866,11 @@ class AzmuthCommandCenterGUI:
                 "MUTATE_CTA",
                 mut_x,
                 root_y,
-                210,
-                64,
+                allele_bw,
+                allele_bh,
                 "⚡ Evolve Daughter Allele",
                 "Inject +fast_io / +pragma / +bitwise",
-                ACCENT_PURPLE,
+                t.accent_purple,
                 badge="READY",
                 payload={"type": "trigger_mutate", "gene_id": phylo["gene_id"]},
             )
@@ -1569,7 +1880,7 @@ class AzmuthCommandCenterGUI:
             self._inspect_gene_or_allele(phylo["gene_id"], self.selected_allele_id)
 
     # ------------------------------------------------------------------------
-    # Right Panel: Capability & Telemetry Inspector
+    # Inspector Population
     # ------------------------------------------------------------------------
 
     def _clear_inspector_badges(self) -> None:
@@ -1579,14 +1890,15 @@ class AzmuthCommandCenterGUI:
     def _inspect_pipeline_stage(self, stage_id: str) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
-        t = self.gh_cache_data.get("telemetry", {})
+        t = self.theme
+        tel = self.gh_cache_data.get("telemetry", {})
 
         tk.Label(
             self.cap_summary_frame,
             text=f"STAGE: {stage_id}",
-            font=FONT_SUBTITLE,
-            fg=ACCENT_CYAN,
-            bg=BG_PANEL,
+            font=self.font("Segoe UI Semibold", 9),
+            fg=t.accent_cyan,
+            bg=t.bg_panel,
         ).pack(anchor="w")
 
         if stage_id == "STAGE_PAT_RING":
@@ -1614,7 +1926,7 @@ class AzmuthCommandCenterGUI:
                 "gold",
             )
             self.inspector_text.insert(tk.END, "SALIENT U3 LAB OPPORTUNITIES:\n", "h2")
-            for opp in t.get("opportunities", []):
+            for opp in tel.get("opportunities", []):
                 sal = float(opp.get("salience", 1.0))
                 status_tag = "emerald" if sal >= z_gate else "muted"
                 self.inspector_text.insert(
@@ -1631,12 +1943,13 @@ class AzmuthCommandCenterGUI:
     def _inspect_github_item(self, stream: str, item_data: Dict[str, Any]) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
+        t = self.theme
         tk.Label(
             self.cap_summary_frame,
             text=f"GITHUB RADAR HIT [{stream}]",
-            font=FONT_SUBTITLE,
-            fg=ACCENT_CYAN,
-            bg=BG_PANEL,
+            font=self.font("Segoe UI Semibold", 9),
+            fg=t.accent_cyan,
+            bg=t.bg_panel,
         ).pack(anchor="w")
         self.inspector_text.insert(tk.END, f"{item_data.get('repo', 'Repository')}\n", "h1")
         self.inspector_text.insert(tk.END, json.dumps(item_data, indent=2), "code")
@@ -1647,27 +1960,27 @@ class AzmuthCommandCenterGUI:
         if not self.current_macro_graph or node_id not in self.current_macro_graph.nodes:
             return
 
+        t = self.theme
         node = self.current_macro_graph.nodes[node_id]
         gut = PreContactAvoidanceGate.evaluate(node_id, self.current_macro_graph)
 
-        # Badges
-        badge_row = tk.Frame(self.cap_summary_frame, bg=BG_PANEL)
+        badge_row = tk.Frame(self.cap_summary_frame, bg=t.bg_panel)
         badge_row.pack(fill=tk.X)
         tk.Label(
             badge_row,
             text=f"Z-Score: {node['z_score']:+.2f}σ",
-            font=FONT_MONO_SMALL,
-            fg=ACCENT_CYAN,
-            bg=BG_CARD,
+            font=self.font("Consolas", 8),
+            fg=t.accent_cyan,
+            bg=t.bg_card,
             padx=6,
             pady=2,
         ).pack(side=tk.LEFT, padx=(0, 4))
         tk.Label(
             badge_row,
             text=f"State: {node['state_label']}",
-            font=FONT_MONO_SMALL,
-            fg=ACCENT_GOLD,
-            bg=BG_CARD,
+            font=self.font("Consolas", 8),
+            fg=t.accent_gold,
+            bg=t.bg_card,
             padx=6,
             pady=2,
         ).pack(side=tk.LEFT, padx=4)
@@ -1707,6 +2020,7 @@ class AzmuthCommandCenterGUI:
         if not gene_data:
             return
 
+        t = self.theme
         phylo = build_gene_phylogeny(gene_data)
         target_allele = phylo["champion"]
         if allele_id:
@@ -1715,18 +2029,17 @@ class AzmuthCommandCenterGUI:
                     target_allele = a
                     break
 
-        tier_col = TIER_COLORS.get(phylo["tier"], ACCENT_CYAN)
+        tier_col = t.tier_colors.get(phylo["tier"], t.accent_cyan)
 
-        # Top Capability Pills in Summary Frame
-        row1 = tk.Frame(self.cap_summary_frame, bg=BG_PANEL)
+        row1 = tk.Frame(self.cap_summary_frame, bg=t.bg_panel)
         row1.pack(fill=tk.X, pady=(0, 4))
 
         tk.Label(
             row1,
             text=f"T{phylo['tier']} • {phylo['category'].upper()}",
-            font=("Consolas", 8, "bold"),
+            font=self.font("Consolas", 8, "bold"),
             fg=tier_col,
-            bg=BG_CARD,
+            bg=t.bg_card,
             padx=6,
             pady=2,
         ).pack(side=tk.LEFT, padx=(0, 4))
@@ -1737,23 +2050,22 @@ class AzmuthCommandCenterGUI:
             tk.Label(
                 row1,
                 text=f"Time: {t_comp}",
-                font=("Consolas", 8, "bold"),
-                fg=ACCENT_EMERALD,
-                bg=BG_CARD,
+                font=self.font("Consolas", 8, "bold"),
+                fg=t.accent_emerald,
+                bg=t.bg_card,
                 padx=6,
                 pady=2,
             ).pack(side=tk.LEFT, padx=2)
             tk.Label(
                 row1,
                 text=f"Space: {s_comp}",
-                font=("Consolas", 8, "bold"),
-                fg=ACCENT_CYAN,
-                bg=BG_CARD,
+                font=self.font("Consolas", 8, "bold"),
+                fg=t.accent_cyan,
+                bg=t.bg_card,
                 padx=6,
                 pady=2,
             ).pack(side=tk.LEFT, padx=2)
 
-        # Detailed Capability Card in Inspector Text
         self.inspector_text.insert(tk.END, f"🧬 {gene_id}\n", "h1")
         self.inspector_text.insert(tk.END, f"{phylo['description']}\n\n", "muted")
 
@@ -1762,20 +2074,17 @@ class AzmuthCommandCenterGUI:
             dom = target_allele.get("dominance", "PRIMARY")
             self.inspector_text.insert(tk.END, f"INSPECTING ALLELE: {aid} [{dom}]\n", "gold" if dom == "PRIMARY" else "h2")
 
-            # 1. Environmental Triggers
             triggers = target_allele.get("environmental_triggers", [])
             if triggers:
                 self.inspector_text.insert(tk.END, "\nENVIRONMENTAL TRIGGERS & CONSTRAINTS:\n", "h2")
-                self.inspector_text.insert(tk.END, "  " + "  •  ".join(str(t) for t in triggers) + "\n", "purple")
+                self.inspector_text.insert(tk.END, "  " + "  •  ".join(str(tg) for tg in triggers) + "\n", "purple")
 
-            # 2. Mathematical Invariants
             invariants = target_allele.get("invariants", [])
             if invariants:
                 self.inspector_text.insert(tk.END, "\nMATHEMATICAL & ALGORITHMIC INVARIANTS:\n", "h2")
                 for inv in invariants:
                     self.inspector_text.insert(tk.END, f"  ✓ {inv}\n", "emerald")
 
-            # 3. Empirical Fitness Comparison Bars across all alleles
             self.inspector_text.insert(tk.END, "\nEMPIRICAL ARENA FITNESS COMPARISON:\n", "h2")
             for a in gene_data.get("alleles", []):
                 a_id = a.get("allele_id", "")
@@ -1790,7 +2099,6 @@ class AzmuthCommandCenterGUI:
                     tk.END, f"{crown} {a_id[:20]:<20} {bar_str} {rt:>5.1f}ms | {ram}KB\n", tag
                 )
 
-            # 4. Evolutionary Lineage Edges
             if phylo["edges"]:
                 self.inspector_text.insert(tk.END, "\nEVOLUTIONARY MUTATION LINEAGE:\n", "h2")
                 for e in phylo["edges"]:
@@ -1800,7 +2108,6 @@ class AzmuthCommandCenterGUI:
                         "emerald",
                     )
 
-            # 5. Code Template with Mutation Highlighting
             code = target_allele.get("code_template", "")
             if code:
                 self.inspector_text.insert(tk.END, "\nSEQUENCED CODE TEMPLATE & MUTATIONS:\n", "h2")
@@ -1822,7 +2129,7 @@ class AzmuthCommandCenterGUI:
                     )
 
     # ------------------------------------------------------------------------
-    # Canvas Interaction & Live Action Triggers
+    # Canvas Clicks & Actions
     # ------------------------------------------------------------------------
 
     def _on_canvas_click(self, event: Any) -> None:
@@ -1859,14 +2166,12 @@ class AzmuthCommandCenterGUI:
             self._trigger_mutate_selected_gene()
 
     def _on_parameter_tuned(self) -> None:
-        """Called when the user adjusts Thalamic Z-Score threshold or RAM Circuit-Breaker limit."""
         if self.active_view == "dag":
             self._load_selected_cartridge()
         self._populate_left_panel()
         self._redraw_active_canvas()
 
-    def _spawn_pulse_wave(self, color: str = ACCENT_CYAN, count: int = 8) -> None:
-        """Emits animated signal packets along active canvas nodes."""
+    def _spawn_pulse_wave(self, color: str = "#06b6d4", count: int = 8) -> None:
         keys = list(self.canvas_nodes.keys())
         if len(keys) < 2:
             return
@@ -1905,7 +2210,7 @@ class AzmuthCommandCenterGUI:
         self.is_job_running = False
         self.active_job_label = "IDLE — Monitoring Telemetry"
         self.lbl_footer_job.configure(
-            text="● Status: IDLE — Work Complete & Ledgers Synchronized (60 FPS)", fg=ACCENT_EMERALD
+            text="● Status: IDLE — Work Complete & Ledgers Synchronized (60 FPS)", fg=self.theme.accent_emerald
         )
         self._reload_all_telemetry()
         self._populate_left_panel()
@@ -1917,7 +2222,7 @@ class AzmuthCommandCenterGUI:
         def job():
             self.gh_sensor.get_cached_telemetry(force_refresh=True)
 
-        self._run_background_job("4-Stream GitHub Sensory Radar Scan (30-PAT Pool)", ACCENT_CYAN, job)
+        self._run_background_job("4-Stream GitHub Sensory Radar Scan (30-PAT Pool)", self.theme.accent_cyan, job)
 
     def _trigger_macro_synthesis(self) -> None:
         def job():
@@ -1930,7 +2235,7 @@ class AzmuthCommandCenterGUI:
                 STATE_DIR.mkdir(parents=True, exist_ok=True)
                 MACRO_BRIEF_JSON.write_text(json.dumps(brief, indent=2), encoding="utf-8")
 
-        self._run_background_job("U0-U5 Neuromorphic Causal Synthesis", ACCENT_BLUE, job)
+        self._run_background_job("U0-U5 Neuromorphic Causal Synthesis", self.theme.accent_blue, job)
 
     def _trigger_shock_simulation(self) -> None:
         if not self.current_macro_graph:
@@ -1947,7 +2252,7 @@ class AzmuthCommandCenterGUI:
         for aff in shock_res.get("affected_targets", []):
             self.shock_overlay[aff["target"]] = float(aff["impact_score"])
 
-        self._spawn_pulse_wave(color=ACCENT_GOLD, count=14)
+        self._spawn_pulse_wave(color=self.theme.accent_gold, count=14)
         self._redraw_active_canvas()
         self.inspector_text.insert(tk.END, f"\n⚡ SHOCK PROPAGATION (+2.0σ on {target}):\n", "gold")
         for aff in shock_res.get("affected_targets", []):
@@ -1969,7 +2274,6 @@ class AzmuthCommandCenterGUI:
             if g_file:
                 mutate_gene_file(g_file)
             else:
-                # Materialize baseline gene into codon_stream so it can evolve on disk
                 g_data = self.genes_catalog.get(gid)
                 if g_data and CODON_STREAM.exists():
                     tier = int(g_data.get("tier", 2))
@@ -1987,13 +2291,13 @@ class AzmuthCommandCenterGUI:
                     new_path.write_text(json.dumps(g_data, indent=2), encoding="utf-8")
                     mutate_gene_file(new_path)
 
-        self._run_background_job(f"Ultimatrix Genetic Mutation & Arena Race [{gid}]", ACCENT_PURPLE, job)
+        self._run_background_job(f"Ultimatrix Mutation & Arena Race [{gid}]", self.theme.accent_purple, job)
 
     def _trigger_harvest_task(self) -> None:
-        self._run_background_job("Harvesting & Sequencing Competitive Programming Task", ACCENT_EMERALD, harvest_single_task)
+        self._run_background_job("Harvesting CP Task", self.theme.accent_emerald, harvest_single_task)
 
     def _trigger_full_cycle(self) -> None:
-        self._run_background_job("Full Azmuth Sentinel Verification Cycle", ACCENT_GOLD, execute_cycle)
+        self._run_background_job("Full Sentinel Verification Cycle", self.theme.accent_gold, execute_cycle)
 
     def _on_select_gear(self, gear_name: str) -> None:
         set_current_gear(gear_name, reason="Azmuth Command Center GUI")
@@ -2004,21 +2308,23 @@ class AzmuthCommandCenterGUI:
         self._refresh_header_indicators()
 
     # ------------------------------------------------------------------------
-    # 60FPS Animation & Telemetry Loop
+    # 60FPS Animation Loop
     # ------------------------------------------------------------------------
 
     def _draw_active_pulses(self) -> None:
         self.canvas.delete("pulse_particle")
         remaining = []
+        t = self.theme
+        pr = max(3, int(4 * self.zoom_level))
         for p in self.pulses:
             p["progress"] += p["speed"]
             if p["progress"] < 1.0:
-                t = p["progress"]
-                px = p["x1"] + (p["x2"] - p["x1"]) * t
-                py = p["y1"] + (p["y2"] - p["y1"]) * t
+                prog = p["progress"]
+                px = p["x1"] + (p["x2"] - p["x1"]) * prog
+                py = p["y1"] + (p["y2"] - p["y1"]) * prog
                 col = p["color"]
                 self.canvas.create_oval(
-                    px - 5, py - 5, px + 5, py + 5, fill=col, outline=TEXT_PRIMARY, width=1, tags="pulse_particle"
+                    px - pr, py - pr, px + pr, py + pr, fill=col, outline=t.text_primary, width=1, tags="pulse_particle"
                 )
                 remaining.append(p)
             elif self.is_job_running:
@@ -2028,26 +2334,27 @@ class AzmuthCommandCenterGUI:
 
     def _draw_oscilloscope(self) -> None:
         self.osc_canvas.delete("all")
-        w, h = 190, 34
+        w = self.osc_canvas.winfo_width()
+        h = self.osc_canvas.winfo_height()
+        if w < 10 or h < 10:
+            w, h = 170, 28
+        t = self.theme
 
-        # Draw RAM circuit breaker safety line
         total_gb, avail_gb, load_pct = get_memory_status_gb()
         breaker_gb = float(self.ram_circuit_limit_gb.get())
         breaker_ratio = min(max(1.0 - (breaker_gb / max(total_gb, 1.0)), 0.1), 0.95)
         by = h * (1.0 - breaker_ratio)
-        self.osc_canvas.create_line(0, by, w, by, fill=ACCENT_CRIMSON, dash=(2, 2), width=1)
+        self.osc_canvas.create_line(0, by, w, by, fill=t.accent_crimson, dash=(2, 2), width=1)
 
-        # Draw 60FPS RAM load waveform
         pts = []
         n = len(self.ram_history)
         for i, val in enumerate(self.ram_history):
             x = (i / max(n - 1, 1)) * w
-            # Add subtle 60fps micro-harmonic when active job is running
             jitter = math.sin((self.anim_tick + i) * 0.25) * (2.2 if self.is_job_running else 0.5)
-            y = h - ((min(max(val + jitter, 5.0), 98.0) / 100.0) * (h - 6)) - 3
+            y = h - ((min(max(val + jitter, 5.0), 98.0) / 100.0) * (h - 4)) - 2
             pts.extend([x, y])
 
-        line_col = ACCENT_CRIMSON if avail_gb < breaker_gb else (ACCENT_GOLD if self.is_job_running else ACCENT_CYAN)
+        line_col = t.accent_crimson if avail_gb < breaker_gb else (t.accent_gold if self.is_job_running else t.accent_cyan)
         if len(pts) >= 4:
             self.osc_canvas.create_line(*pts, fill=line_col, width=1.5, smooth=True)
 
@@ -2058,42 +2365,40 @@ class AzmuthCommandCenterGUI:
         self._draw_oscilloscope()
         if self.pulses or self.is_job_running:
             self._draw_active_pulses()
-        self.root.after(16, self._schedule_animation_frame)  # ~60 FPS
+        self.root.after(16, self._schedule_animation_frame)
 
     def _refresh_header_indicators(self) -> None:
         gear = get_current_gear()
         paused = is_paused()
         total_gb, avail_gb, load_pct = get_memory_status_gb()
+        t = self.theme
 
         self.ram_history.append(float(load_pct))
         self.ram_history = self.ram_history[-80:]
         self.lbl_ram_readout.configure(
             text=f"{avail_gb:.1f} GB Free ({load_pct}%)",
-            fg=ACCENT_CRIMSON if avail_gb < self.ram_circuit_limit_gb.get() else ACCENT_CYAN,
+            fg=t.accent_crimson if avail_gb < self.ram_circuit_limit_gb.get() else t.accent_cyan,
         )
 
-        # Update status dot & pause button
-        self.status_dot.itemconfig("dot", fill=ACCENT_AMBER if paused else ACCENT_EMERALD)
+        self.status_dot.itemconfig("dot", fill=t.accent_amber if paused else t.accent_emerald)
         self.btn_pause.configure(
             text="▶ Resume" if paused else "⏸ Pause",
-            bg=ACCENT_AMBER if paused else BG_CARD,
-            fg=BG_VOID if paused else TEXT_SECONDARY,
+            bg=t.accent_amber if paused else t.bg_card,
+            fg=t.bg_void if paused else t.text_secondary,
         )
 
-        # Highlight active gear pill
-        gear_colors = {"whisper": ACCENT_EMERALD, "balanced": ACCENT_BLUE, "turbo": ACCENT_CRIMSON}
+        gear_colors = {"whisper": t.accent_emerald, "balanced": t.accent_blue, "turbo": t.accent_crimson}
         for g_key, btn in self.gear_buttons.items():
             if g_key == gear:
-                btn.configure(bg=gear_colors.get(g_key, ACCENT_BLUE), fg=TEXT_PRIMARY)
+                btn.configure(bg=gear_colors.get(g_key, t.accent_blue), fg=t.text_primary)
             else:
-                btn.configure(bg=BG_CARD, fg=TEXT_SECONDARY)
+                btn.configure(bg=t.bg_card, fg=t.text_secondary)
 
-        # Update KPI labels
-        ready_toks = sum(1 for t in self.gh_sensor.pool.tokens if t.get("status") == "READY")
+        ready_toks = sum(1 for tok in self.gh_sensor.pool.tokens if tok.get("status") == "READY")
         self.kpi_labels["pat_pool"].configure(text=f"{ready_toks} / {len(self.gh_sensor.pool.tokens)} Ready")
         self.kpi_labels["genes"].configure(text=f"{len(self.genes_catalog)} Loci")
         self.kpi_labels["mutations"].configure(text=f"{self.mutation_ledger_data.get('mutations_applied', 0)}")
-        self.kpi_labels["arena"].configure(text=f"{self.arena_ledger_data.get('tournaments_run', 0)} Races")
+        self.kpi_labels["arena"].configure(text=f"{self.arena_ledger_data.get('tournaments_run', 0)}")
 
     def _schedule_telemetry_poll(self) -> None:
         if not self._running:

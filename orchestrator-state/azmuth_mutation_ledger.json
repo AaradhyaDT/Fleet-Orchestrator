@@ -1,18 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 697,
-  "promotions_won": 199,
-  "last_mutation_at": "2026-10-18T04:57:02.273633+00:00",
+  "mutations_applied": 698,
+  "promotions_won": 200,
+  "last_mutation_at": "2026-10-18T05:13:42.475635+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-17T14:40:21.177261+00:00",
-      "gene_id": "TASK_POWERED_ADDITION",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-17T14:40:26.865868+00:00",
       "gene_id": "TASK_RECONSTRUCT_SUM",
@@ -447,6 +438,15 @@
     },
     {
       "timestamp": "2026-10-18T04:57:02.273565+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-18T05:13:42.475580+00:00",
       "gene_id": "TEST_MUT_GENE",
       "mutant_created": [
         "orig_impl_mut_fast_io"
