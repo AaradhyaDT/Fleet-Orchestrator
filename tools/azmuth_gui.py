@@ -2441,6 +2441,39 @@ class AzmuthCommandCenterGUI:
                     f"• [{tok['id']:<10}] {tok['status']} | Core: {tok['remaining_core']} | Search: {tok['remaining_search']}\n",
                     "code",
                 )
+        elif stage_id == "STREAM_U3_LABS":
+            opps = tel.get("opportunities", [])
+            self.inspector_text.insert(tk.END, f"U3 LAB OPPORTUNITY ALPHA ({len(opps)} Hits)\n", "h1")
+            ts = self.gh_cache_data.get("timestamp", "Live")
+            self.inspector_text.insert(tk.END, f"Last Scan: {ts}\n\n", "muted")
+            for opp in opps:
+                sal = float(opp.get("salience", 1.0))
+                self.inspector_text.insert(tk.END, f"◈ {opp.get('repo')}\n", "emerald")
+                self.inspector_text.insert(tk.END, f"  Issue: {opp.get('title')}\n  Salience: [Z={sal:+.2f}σ] | Comments: {opp.get('comments', 0)}\n  Updated: {opp.get('updated_at', '')}\n  URL: {opp.get('url')}\n\n", "code")
+        elif stage_id == "STREAM_U1_RELEASES":
+            rels = tel.get("releases", [])
+            self.inspector_text.insert(tk.END, f"U1/U2 SOTA AI RELEASES ({len(rels)} Upstream Tags)\n", "h1")
+            ts = self.gh_cache_data.get("timestamp", "Live")
+            self.inspector_text.insert(tk.END, f"Last Scan: {ts}\n\n", "muted")
+            for rel in rels:
+                self.inspector_text.insert(tk.END, f"▶ {rel.get('repo')} [{rel.get('tag')}]\n", "gold")
+                self.inspector_text.insert(tk.END, f"  Title: {rel.get('name')}\n  Published: {rel.get('published_at', '')}\n  Summary: {rel.get('body_snippet', '')[:120]}...\n  URL: {rel.get('url')}\n\n", "code")
+        elif stage_id == "STREAM_CODON_CP":
+            cps = tel.get("cp_archives", [])
+            self.inspector_text.insert(tk.END, f"CODON STREAM CP ARCHIVES ({len(cps)} Repos)\n", "h1")
+            ts = self.gh_cache_data.get("timestamp", "Live")
+            self.inspector_text.insert(tk.END, f"Last Scan: {ts}\n\n", "muted")
+            for cp in cps:
+                self.inspector_text.insert(tk.END, f"✦ {cp.get('repo')} ★ {cp.get('stars', 0):,}\n", "purple")
+                self.inspector_text.insert(tk.END, f"  Branch: {cp.get('default_branch')} | Updated: {cp.get('updated_at', '')}\n  Desc: {cp.get('description', '')}\n  URL: {cp.get('url')}\n\n", "code")
+        elif stage_id == "STREAM_U0_ECO":
+            ecos = tel.get("ecosystem", [])
+            self.inspector_text.insert(tk.END, f"U0 PUBLIC ECOSYSTEM HEALTH ({len(ecos)} Repos)\n", "h1")
+            ts = self.gh_cache_data.get("timestamp", "Live")
+            self.inspector_text.insert(tk.END, f"Last Scan: {ts}\n\n", "muted")
+            for eco in ecos:
+                self.inspector_text.insert(tk.END, f"● {eco.get('repo')}\n", "emerald")
+                self.inspector_text.insert(tk.END, f"  Open Issues: {eco.get('open_issues_count', 0)} | Stars: {eco.get('stars', 0)} | Forks: {eco.get('forks', 0)}\n  Pushed: {eco.get('pushed_at', '')}\n\n", "code")
         elif stage_id == "STAGE_THALAMIC":
             z_gate = self.thalamic_z_threshold.get()
             self.inspector_text.insert(tk.END, "THALAMIC SALIENCE FILTER\n", "h1")
@@ -2461,8 +2494,16 @@ class AzmuthCommandCenterGUI:
                 )
         else:
             self.inspector_text.insert(tk.END, f"TELEMETRY SNAPSHOT — {stage_id}\n\n", "h1")
+            stream_key_map = {
+                "STREAM_CODON_CP": "cp_archives",
+                "STREAM_U1_RELEASES": "releases",
+                "STREAM_U3_LABS": "opportunities",
+                "STREAM_U0_ECO": "ecosystem",
+            }
+            target_key = stream_key_map.get(stage_id)
+            data_to_show = tel.get(target_key, tel) if target_key else tel
             self.inspector_text.insert(
-                tk.END, json.dumps(self.gh_cache_data.get("telemetry", {}), indent=2)[:3500], "code"
+                tk.END, json.dumps(data_to_show, indent=2)[:3500], "code"
             )
 
     def _inspect_github_item(self, stream: str, item_data: Dict[str, Any]) -> None:
@@ -2858,6 +2899,8 @@ class AzmuthCommandCenterGUI:
         self._redraw_active_canvas()
         if self.active_view == "genes" and self.selected_gene_id:
             self._inspect_gene_or_allele(self.selected_gene_id, self.selected_allele_id)
+        elif self.active_view == "pipeline" and self.selected_node_id:
+            self._inspect_pipeline_stage(self.selected_node_id)
 
     def _trigger_github_scan(self) -> None:
         def job():

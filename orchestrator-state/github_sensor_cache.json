@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-18T13:25:37.352261+00:00",
-  "timestamp_epoch": 1792329923.943584,
+  "timestamp": "2026-10-18T13:34:55.111061+00:00",
+  "timestamp_epoch": 1792330475.0778706,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
@@ -33,6 +33,22 @@
         "created_at": "2026-08-03T01:20:22Z",
         "updated_at": "2026-08-03T01:20:22Z",
         "salience": 1.0
+      },
+      {
+        "id": "Nodal-stellar/Nodal-AI#774",
+        "title": "x402 seller: Express middleware to paywall routes with a facilitator",
+        "repo": "Nodal-stellar/Nodal-AI",
+        "url": "https://github.com/Nodal-stellar/Nodal-AI/issues/774",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "Stellar Wave",
+          "backend"
+        ],
+        "comments": 1,
+        "created_at": "2026-10-14T17:50:35Z",
+        "updated_at": "2026-10-18T13:29:41Z",
+        "salience": 1.2
       },
       {
         "id": "Saidur-droid/MergeEarn#69",
@@ -87,20 +103,6 @@
         "created_at": "2026-08-12T03:59:16Z",
         "updated_at": "2026-10-18T06:20:31Z",
         "salience": 2.0
-      },
-      {
-        "id": "GD4AI/obsidian-llm-wiki#703",
-        "title": "[Bug] Ingest hangs indefinitely on a single file ? cancelIngestion() cannot abort it",
-        "repo": "GD4AI/obsidian-llm-wiki",
-        "url": "https://github.com/GD4AI/obsidian-llm-wiki/issues/703",
-        "labels": [
-          "bug",
-          "help wanted"
-        ],
-        "comments": 3,
-        "created_at": "2026-09-13T15:22:53Z",
-        "updated_at": "2026-10-18T04:55:11Z",
-        "salience": 1.6
       }
     ],
     "releases": [

@@ -1,13 +1,13 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-18T13:25:37.352261+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-18T13:34:55.111061+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP]** [Tamcpp ????](https://github.com/Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP/issues/229) (Comments: 2, Salience: 1.4)
 - **[diesimo-ai/TinyP]** [TinyP Roadmap](https://github.com/diesimo-ai/TinyP/issues/1) (Comments: 0, Salience: 1.0)
+- **[Nodal-stellar/Nodal-AI]** [x402 seller: Express middleware to paywall routes with a facilitator](https://github.com/Nodal-stellar/Nodal-AI/issues/774) (Comments: 1, Salience: 1.2)
 - **[Saidur-droid/MergeEarn]** [Add current judge-flow screenshots to README](https://github.com/Saidur-droid/MergeEarn/issues/69) (Comments: 4, Salience: 1.8)
 - **[tractorjuice/arc-kit]** [help wanted: contribute a /arckit:build recipe for your jurisdiction](https://github.com/tractorjuice/arc-kit/issues/424) (Comments: 16, Salience: 2.0)
 - **[timerloggedout-spec/termux-monorepo]** [Credential Authorizations & Last-Used Evidence](https://github.com/timerloggedout-spec/termux-monorepo/issues/184) (Comments: 72, Salience: 2.0)
-- **[GD4AI/obsidian-llm-wiki]** [[Bug] Ingest hangs indefinitely on a single file ? cancelIngestion() cannot abort it](https://github.com/GD4AI/obsidian-llm-wiki/issues/703) (Comments: 3, Salience: 1.6)
 
 ## 2. Trending SOTA AI & TinyML Releases (`U1` & `U2`)
 - **[unslothai/unsloth]** Tag `v0.1.908-beta` - *Meta Muse Spark Open + NVIDIA Nemotron 3.5* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.908-beta))
