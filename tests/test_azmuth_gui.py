@@ -344,4 +344,51 @@ def test_azmuth_gui_canvas_double_click_reset_and_action_button():
             pass
 
 
+def test_azmuth_gui_pat_ring_continuous_animation():
+    """Verifies that PAT ring dots update live during animation ticks without requiring dragging."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        app.switch_view("pipeline")
+        app._redraw_active_canvas()
+
+        # pat_ring_info should be recorded
+        assert app.pat_ring_info is not None
+        assert app.pat_ring_info[0] == 540.0
+        assert app.pat_ring_info[1] == 240.0
+
+        # Verify initial dots created
+        dot_items = app.canvas.find_withtag("pat_ring_dots")
+        assert len(dot_items) >= 30
+
+        # Simulate job running and animation tick progression
+        app.is_job_running = True
+        app.anim_tick = 0
+        app._draw_pat_ring_dots()
+        subtext_item = app.canvas.find_withtag("pat_ring_subtext")
+        assert len(subtext_item) == 1
+        assert "Rotating Key #1" in app.canvas.itemcget(subtext_item[0], "text")
+
+        # Advance tick by 8 (2 steps forward)
+        app.anim_tick = 8
+        app._draw_pat_ring_dots()
+        assert "Rotating Key #3" in app.canvas.itemcget(subtext_item[0], "text")
+
+        # When idle, displays pooled keys
+        app.is_job_running = False
+        app._draw_pat_ring_dots()
+        assert "Pooled Keys" in app.canvas.itemcget(subtext_item[0], "text")
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+
+
+
 

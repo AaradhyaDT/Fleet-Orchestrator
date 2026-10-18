@@ -3097,11 +3097,50 @@ class AzmuthCommandCenterGUI:
         if len(pts) >= 4:
             self.osc_canvas.create_line(*pts, fill=line_col, width=1.5, smooth=True)
 
+    def _draw_pat_ring_dots(self) -> None:
+        """Renders live rotating GitHub PAT pool indicator dots at 60 FPS."""
+        if self.active_view != "pipeline" or not self.pat_ring_info:
+            return
+        self.canvas.delete("pat_ring_dots")
+        pat_wx, pat_wy, ring_world_r = self.pat_ring_info
+        w = max(self.canvas.winfo_width(), 680)
+        h = max(self.canvas.winfo_height(), 500)
+        pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
+        screen_r = ring_world_r * self.cam_zoom
+        t = self.theme
+        tokens = self.gh_sensor.pool.tokens
+        n_tok = max(len(tokens), 30)
+        ptr = self.gh_sensor.pool._pointer % max(len(tokens), 1)
+
+        # Rotate gold indicator continuously when job/burst runs, or track pool pointer
+        active_idx = (self.anim_tick // 4) % n_tok if self.is_job_running else ptr
+
+        for i in range(n_tok):
+            angle = (2 * math.pi * i / n_tok) - math.pi / 2
+            tx = pat_sx + screen_r * math.cos(angle)
+            ty = pat_sy + screen_r * math.sin(angle)
+            is_active = (i == active_idx)
+            dot_col = t.accent_gold if is_active else (t.accent_cyan if i < len(tokens) else t.border_subtle)
+            rd = max(3.5, 4.5 * self.cam_zoom) if is_active else max(2.0, 2.5 * self.cam_zoom)
+            self.canvas.create_oval(
+                tx - rd, ty - rd, tx + rd, ty + rd,
+                fill=dot_col,
+                outline="",
+                tags="pat_ring_dots",
+            )
+
+        if self.is_job_running:
+            self.canvas.itemconfigure("pat_ring_subtext", text=f"Rotating Key #{active_idx + 1}")
+        else:
+            self.canvas.itemconfigure("pat_ring_subtext", text=f"{len(tokens)} Pooled Keys")
+
     def _schedule_animation_frame(self) -> None:
         if not self._running:
             return
         self.anim_tick += 1
         self._draw_oscilloscope()
+        if self.active_view == "pipeline":
+            self._draw_pat_ring_dots()
         if self.pulses or self.is_job_running:
             self._draw_active_pulses()
         self.root.after(16, self._schedule_animation_frame)
