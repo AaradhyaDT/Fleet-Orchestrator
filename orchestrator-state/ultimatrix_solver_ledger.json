@@ -326,7 +326,7 @@
     "num-cube-sets",
     "overlapping-matrices"
   ],
-  "last_solve_at": "2026-10-18T13:30:12.384109+00:00",
+  "last_solve_at": "2026-10-18T13:42:58.088577+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:09:58.245868+00:00",
@@ -631,7 +631,9 @@
   ],
   "attempted_slugs": {
     "connect-the-graph": "UNSUPPORTED_ARCHETYPE",
-    "equal-sums": "VERIFICATION_FAILED"
+    "equal-sums": "VERIFICATION_FAILED",
+    "find-edge-list": "UNSUPPORTED_ARCHETYPE",
+    "tennis-tournament": "UNSUPPORTED_ARCHETYPE"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

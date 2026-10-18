@@ -374,5 +374,117 @@
     "final_balance": 352.49,
     "units_spent": 3.0,
     "timestamp_end": "2026-10-18T13:35:45.273217+00:00"
+  },
+  {
+    "timestamp_start": "2026-10-18T13:42:05.340705+00:00",
+    "tier": "a100-highmem",
+    "session_name": "azmuth-hyperburst",
+    "initial_balance": 352.49,
+    "status": "SUCCESS",
+    "remote_data": {
+      "timestamp": "2026-10-18T13:42:23Z",
+      "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+      "accelerator": "NVIDIA A100-SXM4-80GB",
+      "system_ram_gb": 167.05,
+      "mutation_time_sec": 0.328,
+      "monte_carlo_time_sec": 0.866,
+      "evolved_alleles": [
+        {
+          "allele_id": "mut_fast_io_stream_untie",
+          "pattern": "std::ios_base::sync_with_stdio(false); cin.tie(NULL);",
+          "speedup_pct": 37.0,
+          "runtime_ms": 18.52,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_pragma_gcc_avx2",
+          "pattern": "#pragma GCC optimize(\"O3,unroll-loops\") #pragma GCC target(\"avx2\")",
+          "speedup_pct": 44.0,
+          "runtime_ms": 17.61,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_static_forward_star",
+          "pattern": "int head[MAXN], to[MAXM], nxt[MAXM];",
+          "speedup_pct": 30.0,
+          "runtime_ms": 19.53,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_custom_splitmix64_hash",
+          "pattern": "struct custom_hash { uint64_t operator()(uint64_t x) const; };",
+          "speedup_pct": 24.0,
+          "runtime_ms": 20.49,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_bitwise_word_unrolling",
+          "pattern": "unsigned long long mask = (1ULL << k) - 1;",
+          "speedup_pct": 33.0,
+          "runtime_ms": 19.08,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_python_stdlib_accel",
+          "pattern": "import collections, itertools, heapq; sys.stdin.readline",
+          "speedup_pct": 50.0,
+          "runtime_ms": 16.89,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        }
+      ],
+      "monte_carlo_universes": {
+        "u0_ecosystem_mesh": {
+          "nodes_count": 6,
+          "trials_run": 10000,
+          "mean_spikes": 0.03,
+          "tail_risk_var_99": 1.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u1_research_arbitrage": {
+          "nodes_count": 5,
+          "trials_run": 10000,
+          "mean_spikes": 0.02,
+          "tail_risk_var_99": 1.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u2_ai_compute_frontier": {
+          "nodes_count": 5,
+          "trials_run": 10000,
+          "mean_spikes": 0.05,
+          "tail_risk_var_99": 2.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u3_career_opportunity_alpha": {
+          "nodes_count": 4,
+          "trials_run": 10000,
+          "mean_spikes": 0.01,
+          "tail_risk_var_99": 0.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u4_macro_capital_markets": {
+          "nodes_count": 27,
+          "trials_run": 10000,
+          "mean_spikes": 3.5,
+          "tail_risk_var_99": 26.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u5_hardware_physics_bom": {
+          "nodes_count": 4,
+          "trials_run": 10000,
+          "mean_spikes": 0.0,
+          "tail_risk_var_99": 0.0,
+          "accelerator": "A100_CUDA"
+        }
+      }
+    },
+    "final_balance": 352.49,
+    "units_spent": 0.0,
+    "timestamp_end": "2026-10-18T13:42:29.862758+00:00"
   }
 ]

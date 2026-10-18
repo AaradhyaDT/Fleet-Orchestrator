@@ -1,6 +1,6 @@
 {
-  "gear": "turbo",
-  "name": "Turbo / Warp (High Throughput)",
-  "set_at": "2026-10-18T13:07:33.137556+00:00",
-  "reason": "Azmuth Command Center GUI"
+  "gear": "whisper",
+  "name": "Whisper (Low Power)",
+  "set_at": "2026-10-18T13:38:22.666974+00:00",
+  "reason": "Circuit Breaker tripped: Avail RAM 2.93GB < 3.0GB or Load 81% > 80%"
 }

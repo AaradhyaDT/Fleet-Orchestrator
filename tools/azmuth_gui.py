@@ -2987,7 +2987,7 @@ class AzmuthCommandCenterGUI:
         """Launches the A100 High-RAM Cloud Hyper-Burst in background thread."""
         def job():
             import subprocess
-            cmd = [sys.executable, str(ROOT / "tools" / "azmuth_colab_burst.py"), "--tier", "a100-highmem", "--sync-drive"]
+            cmd = [sys.executable, str(ROOT / "tools" / "azmuth_colab_burst.py"), "--tier", "a100-highmem"]
             logger.info(f"Executing Cloud Hyper-Burst: {' '.join(cmd)}")
             res = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
             if res.returncode != 0:

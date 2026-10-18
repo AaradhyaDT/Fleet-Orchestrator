@@ -1,108 +1,136 @@
 {
-  "timestamp": "2026-10-18T13:34:55.111061+00:00",
-  "timestamp_epoch": 1792330475.0778706,
+  "timestamp": "2026-10-18T13:42:51.761975+00:00",
+  "timestamp_epoch": 1792330956.9156783,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
       {
-        "id": "Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP#229",
-        "title": "Tamcpp ????",
-        "repo": "Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP",
-        "url": "https://github.com/Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP/issues/229",
+        "id": "microsoft/PyRIT#2489",
+        "title": "FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix",
+        "repo": "microsoft/PyRIT",
+        "url": "https://github.com/microsoft/PyRIT/issues/2489",
         "labels": [
-          "good first issue",
-          "help wanted",
-          "feature"
-        ],
-        "comments": 2,
-        "created_at": "2026-09-10T14:48:27Z",
-        "updated_at": "2026-09-11T00:25:21Z",
-        "salience": 1.4
-      },
-      {
-        "id": "diesimo-ai/TinyP#1",
-        "title": "TinyP Roadmap",
-        "repo": "diesimo-ai/TinyP",
-        "url": "https://github.com/diesimo-ai/TinyP/issues/1",
-        "labels": [
-          "enhancement",
-          "good first issue",
           "help wanted"
         ],
-        "comments": 0,
-        "created_at": "2026-08-03T01:20:22Z",
-        "updated_at": "2026-08-03T01:20:22Z",
-        "salience": 1.0
+        "comments": 5,
+        "created_at": "2026-08-25T19:17:18Z",
+        "updated_at": "2026-10-18T08:10:51Z",
+        "salience": 2.0
       },
       {
-        "id": "Nodal-stellar/Nodal-AI#774",
-        "title": "x402 seller: Express middleware to paywall routes with a facilitator",
-        "repo": "Nodal-stellar/Nodal-AI",
-        "url": "https://github.com/Nodal-stellar/Nodal-AI/issues/774",
+        "id": "torch-spyre/spyre-inference#259",
+        "title": "[FP8] Support block-wise FP8 quantization",
+        "repo": "torch-spyre/spyre-inference",
+        "url": "https://github.com/torch-spyre/spyre-inference/issues/259",
         "labels": [
           "enhancement",
           "help wanted",
-          "Stellar Wave",
-          "backend"
+          "stage/010-actionable"
         ],
         "comments": 1,
-        "created_at": "2026-10-14T17:50:35Z",
-        "updated_at": "2026-10-18T13:29:41Z",
+        "created_at": "2026-06-09T19:10:15Z",
+        "updated_at": "2026-10-17T17:42:55Z",
         "salience": 1.2
       },
       {
-        "id": "Saidur-droid/MergeEarn#69",
-        "title": "Add current judge-flow screenshots to README",
-        "repo": "Saidur-droid/MergeEarn",
-        "url": "https://github.com/Saidur-droid/MergeEarn/issues/69",
+        "id": "torch-spyre/spyre-inference#257",
+        "title": "[FP8] Support online FP8 quantization (W8A16 dynamic)",
+        "repo": "torch-spyre/spyre-inference",
+        "url": "https://github.com/torch-spyre/spyre-inference/issues/257",
         "labels": [
+          "enhancement",
           "help wanted",
+          "stage/010-actionable"
+        ],
+        "comments": 0,
+        "created_at": "2026-06-09T19:08:53Z",
+        "updated_at": "2026-10-17T17:42:54Z",
+        "salience": 1.0
+      },
+      {
+        "id": "vllm-project/vllm-omni#8586",
+        "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
+        "repo": "vllm-project/vllm-omni",
+        "url": "https://github.com/vllm-project/vllm-omni/issues/8586",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "diffusion",
+          "RFC"
+        ],
+        "comments": 31,
+        "created_at": "2026-10-07T14:16:56Z",
+        "updated_at": "2026-10-17T11:42:23Z",
+        "salience": 2.0
+      },
+      {
+        "id": "optiqor/kerno#50",
+        "title": "Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule",
+        "repo": "optiqor/kerno",
+        "url": "https://github.com/optiqor/kerno/issues/50",
+        "labels": [
+          "documentation",
           "good first issue",
-          "bounty-waiting"
-        ],
-        "comments": 4,
-        "created_at": "2026-09-22T08:32:03Z",
-        "updated_at": "2026-10-18T13:15:32Z",
-        "salience": 1.8
-      },
-      {
-        "id": "tractorjuice/arc-kit#424",
-        "title": "help wanted: contribute a /arckit:build recipe for your jurisdiction",
-        "repo": "tractorjuice/arc-kit",
-        "url": "https://github.com/tractorjuice/arc-kit/issues/424",
-        "labels": [
-          "enhancement",
-          "help wanted"
-        ],
-        "comments": 16,
-        "created_at": "2026-05-03T22:22:10Z",
-        "updated_at": "2026-10-18T11:56:27Z",
-        "salience": 2.0
-      },
-      {
-        "id": "timerloggedout-spec/termux-monorepo#184",
-        "title": "Credential Authorizations & Last-Used Evidence",
-        "repo": "timerloggedout-spec/termux-monorepo",
-        "url": "https://github.com/timerloggedout-spec/termux-monorepo/issues/184",
-        "labels": [
-          "bug",
-          "enhancement",
           "help wanted",
-          "security",
-          "priority",
-          "production",
-          "backlog",
-          "`gh`ActionsWorkflows",
-          "ToDo-2-Ta'D\u00e3!n!!\ud83e\ude84",
-          "Roster:Teams:Games:Players",
-          "agentic-workflows",
-          "Providers",
-          "A2A"
+          "P2",
+          "area/community",
+          "claimed"
         ],
-        "comments": 72,
-        "created_at": "2026-08-12T03:59:16Z",
-        "updated_at": "2026-10-18T06:20:31Z",
+        "comments": 58,
+        "created_at": "2026-05-10T13:00:29Z",
+        "updated_at": "2026-10-18T09:22:42Z",
         "salience": 2.0
+      },
+      {
+        "id": "Nobayprotocol/Nobay-Protocol#3",
+        "title": "Add Hardhat test suite for ListingRegistry.sol",
+        "repo": "Nobayprotocol/Nobay-Protocol",
+        "url": "https://github.com/Nobayprotocol/Nobay-Protocol/issues/3",
+        "labels": [
+          "help wanted",
+          "Solidity",
+          "Bounty",
+          "Testing"
+        ],
+        "comments": 18,
+        "created_at": "2025-05-20T17:37:48Z",
+        "updated_at": "2026-10-18T03:48:57Z",
+        "salience": 2.0
+      },
+      {
+        "id": "kubestellar/kubestellar#3827",
+        "title": "[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability",
+        "repo": "kubestellar/kubestellar",
+        "url": "https://github.com/kubestellar/kubestellar/issues/3827",
+        "labels": [
+          "help wanted",
+          "lifecycle/stale",
+          "stage/010-actionable",
+          "stage/stalled",
+          "agent/outreach"
+        ],
+        "comments": 3,
+        "created_at": "2026-06-08T13:25:17Z",
+        "updated_at": "2026-10-17T17:30:03Z",
+        "salience": 1.6
+      },
+      {
+        "id": "kubestellar/kubestellar#3789",
+        "title": "[outreach] KubeCon NA 2026 talk proposal ? AI-Maintained Open Source at Scale",
+        "repo": "kubestellar/kubestellar",
+        "url": "https://github.com/kubestellar/kubestellar/issues/3789",
+        "labels": [
+          "help wanted",
+          "priority/medium",
+          "lifecycle/rotten",
+          "conference",
+          "stage/010-actionable",
+          "stage/stalled"
+        ],
+        "comments": 2,
+        "created_at": "2026-06-06T13:20:26Z",
+        "updated_at": "2026-10-17T17:29:02Z",
+        "salience": 1.4
       }
     ],
     "releases": [

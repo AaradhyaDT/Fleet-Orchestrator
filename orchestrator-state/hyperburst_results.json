@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-10-18T13:35:25Z",
+  "timestamp": "2026-10-18T13:42:23Z",
   "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
   "accelerator": "NVIDIA A100-SXM4-80GB",
   "system_ram_gb": 167.05,
-  "mutation_time_sec": 0.368,
-  "monte_carlo_time_sec": 0.816,
+  "mutation_time_sec": 0.328,
+  "monte_carlo_time_sec": 0.866,
   "evolved_alleles": [
     {
       "allele_id": "mut_fast_io_stream_untie",
@@ -59,42 +59,42 @@
     "u0_ecosystem_mesh": {
       "nodes_count": 6,
       "trials_run": 10000,
-      "mean_spikes": 0.12,
-      "tail_risk_var_99": 3.0,
+      "mean_spikes": 0.03,
+      "tail_risk_var_99": 1.0,
       "accelerator": "A100_CUDA"
     },
     "u1_research_arbitrage": {
       "nodes_count": 5,
       "trials_run": 10000,
-      "mean_spikes": 0.06,
-      "tail_risk_var_99": 2.0,
+      "mean_spikes": 0.02,
+      "tail_risk_var_99": 1.0,
       "accelerator": "A100_CUDA"
     },
     "u2_ai_compute_frontier": {
       "nodes_count": 5,
       "trials_run": 10000,
-      "mean_spikes": 0.01,
-      "tail_risk_var_99": 0.0,
+      "mean_spikes": 0.05,
+      "tail_risk_var_99": 2.0,
       "accelerator": "A100_CUDA"
     },
     "u3_career_opportunity_alpha": {
       "nodes_count": 4,
       "trials_run": 10000,
       "mean_spikes": 0.01,
-      "tail_risk_var_99": 1.0,
+      "tail_risk_var_99": 0.0,
       "accelerator": "A100_CUDA"
     },
     "u4_macro_capital_markets": {
       "nodes_count": 27,
       "trials_run": 10000,
-      "mean_spikes": 3.29,
+      "mean_spikes": 3.5,
       "tail_risk_var_99": 26.0,
       "accelerator": "A100_CUDA"
     },
     "u5_hardware_physics_bom": {
       "nodes_count": 4,
       "trials_run": 10000,
-      "mean_spikes": 0.01,
+      "mean_spikes": 0.0,
       "tail_risk_var_99": 0.0,
       "accelerator": "A100_CUDA"
     }
