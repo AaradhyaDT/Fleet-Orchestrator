@@ -4,7 +4,7 @@
 The fleet dynamically pools compute across three distinct provider layers configured via modular environment files:
 
 ### A. GitHub Copilot Fleet (`.env.fleet.copilot`)
-- Up to 27 accounts pooled dynamically ($27 \times 200 = 5,400$ monthly credits).
+- Up to 31 accounts pooled dynamically ($31 \times 200 = 6,200$ monthly credits).
 - GitHub Fine-Grained PATs with "Copilot Requests" Read & Write permissions and 90-day expiry.
 - Subprocess isolation with isolated `COPILOT_HOME` directories.
 

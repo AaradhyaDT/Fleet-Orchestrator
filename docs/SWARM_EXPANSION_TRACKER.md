@@ -135,6 +135,15 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 - [x] Build `tools/azmuth_market_sensor.py` (3-stream live poller: Yahoo Finance / FRED / Stooq, RSS scanner, <10ms delta cache).
 - [x] Integrate into `tools/azmuth_daemon.py`, GUI Tab 6 radar button, and build `tests/test_azmuth_macro_graph.py` (8/8 tests passing; 573/573 full suite).
 
+### Phase 9: REA Headless Runtime Hardening & SQLite Telemetry Governance
+*Objective:* Harden `CopilotCLIAdapter` and worker daemon using findings empirically reverse-engineered from `copilot.EXE` and `@github/copilot` v1.0.65 via REA ([Issue #182](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/182) / [PR #183](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/183)).
+- [x] Injected `--disallow-temp-dir` by default into `build_cli_command()` to prevent background worker pollution of OS temp dirs.
+- [x] Injected process isolation flags and runtime environment variables: `COPILOT_ALLOW_ALL=true`, `COPILOT_FORCE_WINDOWS_HIDE=1`, and `COPILOT_DEBUG_SKIP_LAUNCH_CHECKS=1`.
+- [x] Built `extract_sqlite_session_telemetry()` directly querying SQLite `session-store.db` (WAL mode) for authentic `assistant_usage_events` metrics (`total_nano_aiu`, `duration_ms`, `cache_read_tokens`, `reasoning_tokens`, `model="gpt-6-luna"`).
+- [x] Added calibrated rate-limit categorization (`user_weekly_rate_limited`, `user_model_rate_limited`, `user_global_rate_limited`, `integration_rate_limited`).
+- [x] Extended `tools/harvest_copilot_counter_dataset.py` with `harvest_from_session_stores()` to continuously mine usage patterns and failure traces from worker sessions.
+- [x] Added 5 unit tests in `tests/test_copilot_cli_adapter.py` and validated full test suite (582/582 passed).
+
 ---
 
 ## 4. Execution History & Provenance Log
@@ -147,4 +156,6 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 | **Phase 2.5** | `663010e` | `38920412890` | **PASSED** (16/16 tests) | 3-Tier Language Reference Harvester (30 mods), Solver Escalation, 162 Codon Genes | 2026-10-17 |
 | **Phase 3-5** | `52d83bd` | `38923489110` | **PASSED** (25/25 tests) | Tab 6 GUI, CPM DAG Planner (`dag_planner.py`), GitHub Sentinel (`github_issue_sentinel.py`) | 2026-10-17 |
 | **Phase 6** | `ed69000` | `39023041427` | **SUCCESS** (9/9 jobs) | Azmuth Neuromorphic Foresight Engine, 6-Universe Cartridges (`U0`–`U5`), 3-Stream Live Sensor, 573/573 Tests ([#181](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/181)) | 2026-10-17 |
+| **Phase 9** | `5fa7f78` | `39090074501` | **SUCCESS** (9/9 jobs) | REA Headless Runtime Hardening, SQLite Telemetry Governance, 582/582 Tests ([#182](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/182) / [#183](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/183)) | 2026-10-18 |
+
 

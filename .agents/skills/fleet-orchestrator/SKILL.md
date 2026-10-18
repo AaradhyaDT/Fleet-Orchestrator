@@ -28,9 +28,10 @@ flowchart TD
 
     Scheduler --> AdapterMesh["Multi-Provider Adapter Mesh\n(client/adapters/)"]
 
-    AdapterMesh --> CopilotCLI["27x Copilot CLI Workers\n(.env.fleet.copilot)"]
-    AdapterMesh --> GeminiAPI["Gemini API Rotator\n(.env.fleet.gemini, N keys)"]
-    AdapterMesh --> AGYCLI["Antigravity CLI Fleet\n(.env.fleet.agy, M workers)"]
+    AdapterMesh --> CopilotCLI["31x Copilot CLI Workers\n(.env.fleet.copilot, 6,200 credits)"]
+    AdapterMesh --> GeminiAPI["Gemini API Rotator\n(.env.fleet.gemini, 30 keys, 450 RPM)"]
+    AdapterMesh --> AGYCLI["Antigravity CLI Fleet\n(.env.fleet.agy, 31 sandboxes)"]
+    AdapterMesh --> AzmuthMacro["Azmuth Neuromorphic Cortex\n(U0-U5 Cartridges, <15MB RAM)"]
     AdapterMesh --> CopilotHeadless["Copilot Headless REST\n(~15 MB RAM, tool-calling loop)"]
     AdapterMesh --> ClaudeCDP["Claude Desktop CDP\n(Adversarial QA review)"]
     AdapterMesh --> GroqOllama["Groq + Ollama Local\n(Zero-latency classification)"]
@@ -53,6 +54,7 @@ flowchart TD
 | **ScratchpadManager** | `server/core/scratchpad_manager.py` | 3-section persistent Markdown shared state (Plan → Diffs → QA Verdict) with atomic `os.replace` writes and exclusive lock files. |
 | **Supervisor** | `server/core/supervisor.py` | Self-healing loop: stale heartbeat detection (>120s), expired lease reclamation, cooldown timer resets. |
 | **Credit Ledger** | `tools/credit_ledger.py` | Leaf accounting engine with OS file locks (`msvcrt`/`fcntl`), per-worker sidecar ledgers, `(file_size, mtime)` event cache, automatic month rollover. |
+| **Azmuth Ultimatrix** | `tools/azmuth_*.py`, `tools/ultimatrix_*.py` | Genomic algorithmic synthesis, allele racing, and multi-tier DNA splicing engine (`azmuth_gene_catalog.py`, `ultimatrix_splicer.py`, `ultimatrix_arena.py`, `ultimatrix_mutator.py`). |
 | **Antigravity Bridge** | `client/antigravity_bridge.py` | Harvests live chat state, conversation transcripts, active artifacts, and Antigravity customizations; projects `TASK_CONTEXT.md` + `.github/copilot-instructions.md` into worktrees. |
 | **Fleet Env Loader** | `tools/fleet_env.py` | Zero-friction cascading loader across `.env.fleet.copilot`, `.env.fleet.gemini`, `.env.fleet.agy`, and `.env.fleet`. |
 | **Remote MCP Server** | `server/mcp_remote.py` | 23-tool Streamable HTTP/SSE MCP server: `create_task`, `list_tasks`, `acquire_task`, `claim_task`, `renew_task_lease`, `submit_checkpoint`, `submit_qa_review`, `submit_job_from_template`, `register_worker`, `worker_heartbeat`, `push_memory`, `search_memory`, `read_team_context`, and more. |
@@ -109,9 +111,10 @@ When delegating work from Antigravity, handoff tasks directly as native **Backgr
 
 ### Tri-Fleet Environment Configuration & Auditing
 Multi-model worker pools are configured across modular provider files with cascading fallback to legacy `.env.fleet`:
-- `.env.fleet.copilot`: 27 GitHub Copilot accounts (Fine-Grained PATs, 5,400 monthly AI credits).
-- `.env.fleet.gemini`: Google AI Studio Gemini API keys (pooled 15 RPM/1,500 RPD per GCP project).
-- `.env.fleet.agy`: Google Antigravity CLI worker pool (`agy.exe -p`, isolated `AGY_WORKER_HOME` sandboxes).
+- `.env.fleet.copilot`: 31 GitHub Copilot accounts (Fine-Grained PATs, 6,200 monthly AI credits).
+- `.env.fleet.gemini`: Google AI Studio Gemini API keys (30 healthy GCP project keys active, pooled 450 RPM / 45,000 RPD).
+- `.env.fleet.agy`: Google Antigravity CLI worker pool (31 isolated sandboxes `~/.agy-workers/worker_N`, `agy.exe -p`, `--dangerously-skip-permissions`).
+
 
 ```powershell
 python tools/fleet_env.py                    # Audit all 3 fleet env files and merged config
@@ -265,7 +268,8 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
    - Gemini: Google AI Studio keys generated in separate GCP projects to multiply RPM/RPD without hitting single-project bottlenecks.
    - AGY: Headless CLI workers require isolated `AGY_WORKER_HOME` sandboxes to prevent SQLite lock collisions on `conversation_summaries.db`, plus mandatory `--dangerously-skip-permissions`.
 10. **Tier-Aware Timeout Floor (`INV-TIER-FLOOR`)**: The `--auto-tier` flag enforces minimum timeout floors (`efficiency`→120s, `balance`→300s, `intelligence`→600s). The SLM's computed `timeout_ceiling_s` is escalated to the tier floor when it falls below, preventing timeout kills on correctly-scoped tasks.
-11. **Persistent Circular Round-Robin (`INV-CIRCULAR-ROBIN`)**: Worker rotation across the 27 pooled accounts must persist across separate processes, CLI commands, and restarts via `orchestrator-state/round_robin_pointer.json` guarded by an OS file lock (`FileLock`). Never rely on in-memory counters for round-robin dispatch; every one-shot task must advance circularly (`w1 → w2 → ... → w27 → w1`) to prevent front-loaded credit bias on `copilot-w1`.
+11. **Persistent Circular Round-Robin (`INV-CIRCULAR-ROBIN`)**: Worker rotation across the 31 pooled accounts must persist across separate processes, CLI commands, and restarts via `orchestrator-state/round_robin_pointer.json` guarded by an OS file lock (`FileLock`). Never rely on in-memory counters for round-robin dispatch; every one-shot task must advance circularly (`w1 → w2 → ... → w31 → w1`) to prevent front-loaded credit bias on `copilot-w1`.
+
 12. **Task Eligibility & Kind/Stage Contract (`INV-TASK-ELIGIBILITY`)**: `copilot_queue_worker.py` determines worker task eligibility strictly via:
     ```python
     stage = data.get("current_stage") or data.get("stage") or (data.get("pipeline_stages")[0] if data.get("pipeline_stages") else None)
@@ -340,9 +344,9 @@ Fleet-Orchestrator/
 ├── models/                        # Local GGUF model weights (git-ignored)
 ├── tests/                         # 332 automated pytest tests (55 test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
-├── .env.fleet.copilot.example     # 27-account GitHub Copilot PAT template
-├── .env.fleet.gemini.example      # 30-slot Google AI Studio Gemini API key template
-├── .env.fleet.agy.example         # 8-worker Antigravity CLI worker pool template
+├── .env.fleet.copilot.example     # 31-account GitHub Copilot PAT template (6,200 monthly credits)
+├── .env.fleet.gemini.example      # 32-slot Google AI Studio Gemini API key template
+├── .env.fleet.agy.example         # 31-worker Antigravity CLI worker pool template
 ├── .env.fleet.example             # Consolidated legacy token template
 ├── drive-manifest.json            # Google Drive sync manifest with file IDs
 ├── sync.bat / sync.ps1            # Ecosystem sync with selective CI bypass

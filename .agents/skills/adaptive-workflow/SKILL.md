@@ -1,11 +1,11 @@
 ---
 name: adaptive-workflow
-description: Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, routes tasks across a 2D matrix, executes zero-AI fast paths, solves CPM DAGs mathematically, marshals 27 pooled Copilot workers, and drives Fleet Master Brain (3B/7B), Agent-Reflex self-healing, and Colab GPU accelerators.
+description: Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, routes tasks across a 2D matrix, executes zero-AI fast paths, solves CPM DAGs mathematically, marshals 31 pooled Copilot workers and 30 Gemini keys (INV-ASYM-FLEET), and drives Azmuth Neuromorphic Foresight (U0-U5), Fleet Master Brain (3B/7B), Agent-Reflex self-healing, and Colab GPU accelerators.
 ---
 
 # Adaptive Workflow Orchestrator (`adaptive-workflow`)
 
-Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 32 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 27-worker Fleet pool, Colab accelerators, 9 archetypes, real-time grounding & zero-help loops.
+Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 35 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 31-worker Copilot pool (`INV-ASYM-FLEET`), 30 Gemini GCP project keys, Azmuth Neuromorphic & 6-Universe Foresight Engine (`U0`–`U5`), Colab accelerators, 9 archetypes, real-time grounding & zero-help loops.
 
 ---
 
@@ -16,7 +16,7 @@ flowchart TD
     User["User Goals"] --> Lead["Lead Agent (Main Chat)\n- Context <5k tokens\n- Fast paths (<20 ms)\n- Port 1234 router"]
     Lead -->|"Subagent"| Cmdr["Fleet Commander\nChild context"]
     Cmdr -->|"Enqueue"| Q["Fleet Queue"]
-    Q --> W["27x Workers (.worktrees/<task_id>)"]
+    Q --> W["31x Workers (.worktrees/<task_id>)"]
     W --> Exec["Step Run"]
     Exec --> Err{"Exit == 0?"}
     Err -- No --> Reflex["Agent-Reflex (1234)\nAuto fix (<50 ms)"]
@@ -28,8 +28,9 @@ flowchart TD
 ### Hierarchy Responsibilities:
 1. **Lead Agent**: Triage via `adaptive_engine.py`. Tier 0 fast paths ($0). Solves CPM ($TS=0$). Ephemeral Commander, context $<5\text{k}$ tokens (`INV-CTX-FIREBREAK`).
 2. **Domain Commanders**: Writes task JSONs to `orchestrator-state/tasks/`. Absorbs logs/retries. Returns **<300w manifest** to Lead.
-3. **Headless Workers & Cloud**: 27 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live telemetry.
+3. **Headless Workers & Cloud**: 31 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live telemetry.
 4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
+5. **Azmuth Neuromorphic Core**: 20W spiking macro-graph engine (`azmuth_macro_graph.py`) across 6 Cortical Cartridges (`U0`–`U5`), 3-stream live sensor, and CBF inhibitory brake.
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).
 
@@ -40,12 +41,13 @@ Protocols: [`references/fleet-command-architecture.md`](references/fleet-command
 | Tier | Workload | Backend | Cost | Latency / RAM |
 | :--- | :--- | :--- | :--- | :--- |
 | **Tier 0** | Routine: `audit.bat`, `sync.bat`, CP solver/replica (`cp-archive-harvester`), thesis, tests | Shell / Python | **$0.00** | **<20 ms** / **<10 MB** |
+| **Tier 0-Bio**| Azmuth Neuromorphic Foresight Scan across 6 universes (`U0`–`U5`) & Live Market Sensor | `azmuth_macro_graph.py` | **$0.00** | **<50 ms** / **<15 MB** |
 | **Tier 1A** | Intent triage, time allocation, matrix routing | `fleet-master-3b` / `qwen-router` | **$0.00** | **30-50 ms** / **380MB–1.8GB** |
 | **Tier 1B** | Agent-Reflex self-healing & action prefetch | `fleet-master-3b` (port 1234) | **$0.00** | **<50 ms** / **~1.8 GB** |
-| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (27 workers, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
+| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (31 workers, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
 | **Tier 1D** | Deep refactoring, test fixes, invariant audits | `fleet-master-7b` ($\ge 8\text{GB}$ RAM) | **$0.00** | **300-800 ms** / **~4.36 GB** |
 | **Tier 1E** | Cloud GPU/TPU training, CUDA, remote `.ipynb` | `colab-cloud-accelerator` | Compute units | Cloud VM / **0 MB** |
-| **Tier 2** | Interactive conversational reasoning | Gemini 3.8 Flash / Lite | **<$0.001** | Sub-second / **0 MB** |
+| **Tier 2** | Interactive conversational reasoning | Gemini 3.8 Flash / Lite (30-key pool, 450 RPM) | **<$0.001** | Sub-second / **0 MB** |
 | **Tier 3** | Complex deadlocks after test failure | Claude Opus, Gemini Pro | Standard API | Gated on failure |
 
 Fast paths: [`references/deterministic-zero-ai-protocol.md`](references/deterministic-zero-ai-protocol.md) | Models: [`references/fleet-master-brain-models.md`](references/fleet-master-brain-models.md) | Reflex: [`references/agent-reflex-and-tool-speculator.md`](references/agent-reflex-and-tool-speculator.md).
