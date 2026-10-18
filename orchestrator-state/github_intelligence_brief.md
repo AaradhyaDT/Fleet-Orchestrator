@@ -1,13 +1,15 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-18T08:23:31.900378+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-18T08:40:05.804316+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP]** [Tamcpp ????](https://github.com/Awesome-Embedded-Learning-Studio/Tutorial_AwesomeModernCPP/issues/229) (Comments: 2, Salience: 1.4)
-- **[diesimo-ai/TinyP]** [TinyP Roadmap](https://github.com/diesimo-ai/TinyP/issues/1) (Comments: 0, Salience: 1.0)
-- **[existence-master/Sentient]** [Forward or CC an email to give Sentient a task](https://github.com/existence-master/Sentient/issues/159) (Comments: 1, Salience: 1.2)
-- **[timerloggedout-spec/termux-monorepo]** [Credential Authorizations & Last-Used Evidence](https://github.com/timerloggedout-spec/termux-monorepo/issues/184) (Comments: 72, Salience: 2.0)
-- **[GD4AI/obsidian-llm-wiki]** [[Bug] Ingest hangs indefinitely on a single file ? cancelIngestion() cannot abort it](https://github.com/GD4AI/obsidian-llm-wiki/issues/703) (Comments: 3, Salience: 1.6)
-- **[Saidur-droid/MergeEarn]** [Add current judge-flow screenshots to README](https://github.com/Saidur-droid/MergeEarn/issues/69) (Comments: 4, Salience: 1.8)
+- **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 5, Salience: 2.0)
+- **[torch-spyre/spyre-inference]** [[FP8] Support block-wise FP8 quantization](https://github.com/torch-spyre/spyre-inference/issues/259) (Comments: 1, Salience: 1.2)
+- **[torch-spyre/spyre-inference]** [[FP8] Support online FP8 quantization (W8A16 dynamic)](https://github.com/torch-spyre/spyre-inference/issues/257) (Comments: 0, Salience: 1.0)
+- **[vllm-project/vllm-omni]** [[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving](https://github.com/vllm-project/vllm-omni/issues/8586) (Comments: 31, Salience: 2.0)
+- **[Nobayprotocol/Nobay-Protocol]** [Add Hardhat test suite for ListingRegistry.sol](https://github.com/Nobayprotocol/Nobay-Protocol/issues/3) (Comments: 18, Salience: 2.0)
+- **[kubestellar/kubestellar]** [[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability](https://github.com/kubestellar/kubestellar/issues/3827) (Comments: 3, Salience: 1.6)
+- **[kubestellar/kubestellar]** [[outreach] KubeCon NA 2026 talk proposal ? AI-Maintained Open Source at Scale](https://github.com/kubestellar/kubestellar/issues/3789) (Comments: 2, Salience: 1.4)
+- **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 1, Salience: 1.2)
 
 ## 2. Trending SOTA AI & TinyML Releases (`U1` & `U2`)
 - **[unslothai/unsloth]** Tag `v0.1.908-beta` - *Meta Muse Spark Open + NVIDIA Nemotron 3.5* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.908-beta))

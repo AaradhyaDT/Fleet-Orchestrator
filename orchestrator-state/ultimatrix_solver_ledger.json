@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 243,
-  "tasks_solved": 243,
+  "tasks_attempted": 245,
+  "tasks_solved": 245,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -245,22 +245,12 @@
     "dominant-free-sets",
     "douchebag-parking",
     "dranei",
-    "editor"
+    "editor",
+    "max-or-subarray",
+    "t-shapes"
   ],
-  "last_solve_at": "2026-10-18T07:56:36.813481+00:00",
+  "last_solve_at": "2026-10-18T08:47:28.286875+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T03:28:58.566961+00:00",
-      "slug": "big-string",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T03:30:08.649811+00:00",
-      "slug": "binary-flips",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-18T03:30:45.799541+00:00",
       "slug": "binary-isomorphism",
@@ -548,10 +538,25 @@
       "slug": "editor",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T08:43:47.280971+00:00",
+      "slug": "max-or-subarray",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-18T08:44:33.905055+00:00",
+      "slug": "t-shapes",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
     }
   ],
   "attempted_slugs": {
-    "connect-the-graph": "VERIFICATION_FAILED"
+    "connect-the-graph": "VERIFICATION_FAILED",
+    "equal-sums": "VERIFICATION_FAILED",
+    "find-edge-list": "VERIFICATION_FAILED",
+    "tennis-tournament": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-18T00:00:01.343989+00:00"
 }

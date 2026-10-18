@@ -1,4 +1,4 @@
 @echo off
 title Azmuth Tray Launcher
-start "" wscript.exe //nologo "%~dp0launch_azmuth_tray.vbs"
+start "" pythonw.exe "%~dp0tools\azmuth_tray.py"
 exit /b 0

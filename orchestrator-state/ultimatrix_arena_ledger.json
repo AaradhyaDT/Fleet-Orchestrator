@@ -1,22 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-18T04:57:02.068244+00:00",
-  "tournaments_run": 948,
+  "last_tournament_at": "2026-10-18T08:44:35.970410+00:00",
+  "tournaments_run": 950,
   "alleles_benchmarked": 0,
-  "promotions": 291,
+  "promotions": 293,
   "history": [
-    {
-      "timestamp": "2026-10-18T03:29:00.457891+00:00",
-      "genes": [
-        "TASK_BIG_STRING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T03:30:10.595474+00:00",
-      "genes": [
-        "TASK_BINARY_FLIPS"
-      ]
-    },
     {
       "timestamp": "2026-10-18T03:30:47.673148+00:00",
       "genes": [
@@ -303,6 +291,18 @@
       "timestamp": "2026-10-18T04:57:02.068104+00:00",
       "genes": [
         "TASK_EDITOR"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T08:43:49.414720+00:00",
+      "genes": [
+        "TASK_MAX_OR_SUBARRAY"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T08:44:35.970237+00:00",
+      "genes": [
+        "TASK_T_SHAPES"
       ]
     }
   ]
