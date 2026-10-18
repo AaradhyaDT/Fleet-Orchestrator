@@ -1,16 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-18T02:23:14.732586+00:00",
-  "tournaments_run": 845,
+  "last_tournament_at": "2026-10-18T02:35:51.483601+00:00",
+  "tournaments_run": 846,
   "alleles_benchmarked": 0,
-  "promotions": 188,
+  "promotions": 189,
   "history": [
-    {
-      "timestamp": "2026-10-17T11:07:05.339063+00:00",
-      "genes": [
-        "TASK_FREQUENT_NUMBERS"
-      ]
-    },
     {
       "timestamp": "2026-10-17T11:07:41.450644+00:00",
       "genes": [
@@ -307,6 +301,12 @@
       "timestamp": "2026-10-18T02:23:14.732429+00:00",
       "genes": [
         "TASK_PRIME_DISTANCE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-18T02:35:51.483487+00:00",
+      "genes": [
+        "TASK_PROCESSING_DISCOUNTS"
       ]
     }
   ]
