@@ -1605,44 +1605,42 @@ class AzmuthCommandCenterGUI:
         cp_cnt = len(tel.get("cp_archives", []))
         eco_cnt = len(tel.get("ecosystem", []))
 
-        # Dynamic center-anchored bounding box so wide screens don't have massive empty deadspace
-        flow_width = min(w * 0.92, 1020 * self.scale)
-        start_x = (w - flow_width) / 2.0
-        col1_x = start_x + flow_width * 0.12
-        col2_x = start_x + flow_width * 0.38
-        col3_x = start_x + flow_width * 0.64
-        col4_x = start_x + flow_width * 0.88
+        # World Coordinate Schematic Layout
+        col1_wx = 190.0
+        pat_wx, pat_wy = 540.0, 240.0
+        thal_wx, thal_wy = 540.0, 540.0
+        cortex_wx, cortex_wy = 880.0, 240.0
+        gene_wx, gene_wy = 880.0, 540.0
+        arena_wx, arena_wy = 1200.0, 390.0
+
+        box_w = 175.0
+        box_h = 48.0
+        half_bw = box_w / 2.0
 
         streams = [
-            ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", t.accent_cyan, h * 0.18),
-            ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", t.accent_blue, h * 0.38),
-            ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, h * 0.58),
-            ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, h * 0.78),
+            ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", t.accent_cyan, 140.0),
+            ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", t.accent_blue, 300.0),
+            ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, 460.0),
+            ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, 620.0),
         ]
 
-        pat_cx, pat_cy = col2_x, h * 0.34
-        thal_cx, thal_cy = col2_x, h * 0.72
-        cortex_cx, cortex_cy = col3_x, h * 0.34
-        gene_cx, gene_cy = col3_x, h * 0.72
-        arena_cx, arena_cy = col4_x, h * 0.53
-
-        box_w = 175
-        box_h = 48
-        half_bw = self.s(box_w) / 2.0
-
         for s_id, s_title, s_sub, s_col, sy in streams:
-            self._draw_directed_edge(col1_x + half_bw, sy, pat_cx - self.s(60), pat_cy, color=s_col, base_width=1)
+            self._draw_directed_edge(col1_wx + half_bw, sy, pat_wx - 60.0, pat_wy, color=s_col, base_width=1)
             self._draw_node_box(
-                s_id, col1_x, sy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
+                s_id, col1_wx, sy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
             )
 
-        # 30-PAT Ring
-        ring_r = self.s(52)
+        # 30-PAT Ring in World Coordinates
+        ring_world_r = 52.0
+        pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
+        screen_r = ring_world_r * self.cam_zoom
+        ring_pad = 10.0 * self.cam_zoom
+
         self.canvas.create_oval(
-            pat_cx - ring_r - self.s(10),
-            pat_cy - ring_r - self.s(10),
-            pat_cx + ring_r + self.s(10),
-            pat_cy + ring_r + self.s(10),
+            pat_sx - screen_r - ring_pad,
+            pat_sy - screen_r - ring_pad,
+            pat_sx + screen_r + ring_pad,
+            pat_sy + screen_r + ring_pad,
             fill=t.bg_card,
             outline=t.border_active,
             width=1,
@@ -1652,35 +1650,37 @@ class AzmuthCommandCenterGUI:
         ptr = self.gh_sensor.pool._pointer % max(len(tokens), 1)
         for i in range(n_tok):
             angle = (2 * math.pi * i / n_tok) - math.pi / 2
-            tx = pat_cx + ring_r * math.cos(angle)
-            ty = pat_cy + ring_r * math.sin(angle)
+            tx = pat_sx + screen_r * math.cos(angle)
+            ty = pat_sy + screen_r * math.sin(angle)
             is_active = (i == ptr) or (self.is_job_running and (i == (self.anim_tick // 4) % n_tok))
             dot_col = t.accent_gold if is_active else (t.accent_cyan if i < len(tokens) else t.border_subtle)
-            rd = max(3, int(4 * self.zoom_level)) if is_active else max(2, int(2.5 * self.zoom_level))
+            rd = max(3, int(4 * self.cam_zoom)) if is_active else max(2, int(2.5 * self.cam_zoom))
             self.canvas.create_oval(tx - rd, ty - rd, tx + rd, ty + rd, fill=dot_col, outline="")
 
-        self.canvas.create_text(pat_cx, pat_cy - self.s(6), text="30-PAT RING", fill=t.text_primary, font=self.font("Segoe UI Semibold", 9))
+        lbl_fnt_sz = max(7, min(10, int(9 * self.cam_zoom)))
+        sub_fnt_sz = max(6, min(9, int(8 * self.cam_zoom)))
+        self.canvas.create_text(pat_sx, pat_sy - 6 * self.cam_zoom, text="30-PAT RING", fill=t.text_primary, font=("Segoe UI Semibold", lbl_fnt_sz))
         self.canvas.create_text(
-            pat_cx, pat_cy + self.s(8), text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan, font=self.font("Consolas", 8)
+            pat_sx, pat_sy + 8 * self.cam_zoom, text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan, font=("Consolas", sub_fnt_sz)
         )
         self._register_clickable_node(
             "STAGE_PAT_RING",
-            pat_cx - ring_r - self.s(10),
-            pat_cy - ring_r - self.s(10),
-            pat_cx + ring_r + self.s(10),
-            pat_cy + ring_r + self.s(10),
+            pat_sx - screen_r - ring_pad,
+            pat_sy - screen_r - ring_pad,
+            pat_sx + screen_r + ring_pad,
+            pat_sy + screen_r + ring_pad,
             {"type": "pipeline_stage", "id": "STAGE_PAT_RING"},
         )
 
-        self._draw_directed_edge(pat_cx, pat_cy + ring_r + self.s(6), thal_cx, thal_cy - self.s(30), color=t.accent_cyan, label="150k req/hr")
+        self._draw_directed_edge(pat_wx, pat_wy + ring_world_r + 6.0, thal_wx, thal_wy - 30.0, color=t.accent_cyan, label="150k req/hr")
 
         z_gate = self.thalamic_z_threshold.get()
         self._draw_node_box(
             "STAGE_THALAMIC",
-            thal_cx,
-            thal_cy,
-            185,
-            58,
+            thal_wx,
+            thal_wy,
+            185.0,
+            58.0,
             "Thalamic Salience Gate",
             f"Prunes Noise |Z| < {z_gate:.2f}σ",
             t.accent_amber,
@@ -1689,18 +1689,18 @@ class AzmuthCommandCenterGUI:
         )
 
         self._draw_directed_edge(
-            thal_cx + half_bw, thal_cy - self.s(10), cortex_cx - half_bw, cortex_cy + self.s(10), color=t.accent_blue, label="Salient Spikes"
+            thal_wx + half_bw, thal_wy - 10.0, cortex_wx - half_bw, cortex_wy + 10.0, color=t.accent_blue, label="Salient Spikes"
         )
         self._draw_directed_edge(
-            thal_cx + half_bw, thal_cy + self.s(10), gene_cx - half_bw, gene_cy, color=t.accent_purple, label="Codon Feed"
+            thal_wx + half_bw, thal_wy + 10.0, gene_wx - half_bw, gene_wy, color=t.accent_purple, label="Codon Feed"
         )
 
         self._draw_node_box(
             "STAGE_CORTEX",
-            cortex_cx,
-            cortex_cy,
-            185,
-            58,
+            cortex_wx,
+            cortex_wy,
+            185.0,
+            58.0,
             "U0–U5 Cortical Foresight",
             f"6 Cartridges • {len(self.cartridges)} Lobes",
             t.accent_blue,
@@ -1711,10 +1711,10 @@ class AzmuthCommandCenterGUI:
         mut_cnt = self.mutation_ledger_data.get("mutations_applied", 0)
         self._draw_node_box(
             "STAGE_ULTIMATRIX",
-            gene_cx,
-            gene_cy,
-            185,
-            58,
+            gene_wx,
+            gene_wy,
+            185.0,
+            58.0,
             "Ultimatrix Gene Sequencer",
             f"{len(self.genes_catalog)} Genes • {mut_cnt} Muts",
             t.accent_purple,
@@ -1722,17 +1722,17 @@ class AzmuthCommandCenterGUI:
             payload={"type": "pipeline_stage", "id": "STAGE_ULTIMATRIX"},
         )
 
-        self._draw_directed_edge(cortex_cx + half_bw, cortex_cy, arena_cx - half_bw, arena_cy - self.s(16), color=t.accent_blue)
-        self._draw_directed_edge(gene_cx + half_bw, gene_cy, arena_cx - half_bw, arena_cy + self.s(16), color=t.accent_purple)
+        self._draw_directed_edge(cortex_wx + half_bw, cortex_wy, arena_wx - half_bw, arena_wy - 16.0, color=t.accent_blue)
+        self._draw_directed_edge(gene_wx + half_bw, gene_wy, arena_wx - half_bw, arena_wy + 16.0, color=t.accent_purple)
 
         races = self.arena_ledger_data.get("tournaments_run", 0)
         promos = self.arena_ledger_data.get("promotions", 0)
         self._draw_node_box(
             "STAGE_ARENA_SSOT",
-            arena_cx,
-            arena_cy,
-            180,
-            64,
+            arena_wx,
+            arena_wy,
+            180.0,
+            64.0,
             "Arena & SSOT Ledgers",
             f"{races} Races • {promos} Promoted",
             t.accent_gold,
@@ -1770,34 +1770,39 @@ class AzmuthCommandCenterGUI:
         sinks = others[mid_split:]
 
         layers = [l for l in [roots, mids, sinks] if l]
-        flow_width = min(w * 0.90, 1050 * self.scale)
-        start_x = (w - flow_width) / 2.0
+        layer_spacing = 380.0
+        start_wx = 200.0
 
         for l_idx, layer in enumerate(layers):
-            lx = start_x + flow_width * (0.12 + 0.76 * (l_idx / max(len(layers) - 1, 1)))
+            lx = start_wx + l_idx * layer_spacing
+            n_in_layer = len(layer)
+            # Ensure at least 110 world units clearance between vertically stacked nodes
+            v_step = max(110.0, 600.0 / max(n_in_layer + 1, 1))
+            total_h = (n_in_layer - 1) * v_step
+            base_y = 380.0 - (total_h / 2.0)
             for r_idx, n in enumerate(layer):
-                ly = h * ((r_idx + 1) / (len(layer) + 1))
+                ly = base_y + r_idx * v_step
                 positions[n["id"]] = (lx, ly)
 
-        node_bw = 160
-        node_bh = 50
-        half_bw = self.s(node_bw) / 2.0
+        node_bw = 160.0
+        node_bh = 50.0
+        half_bw = node_bw / 2.0
 
         for s in synapses:
             src, tgt = s["source"], s["target"]
             if src in positions and tgt in positions:
-                x1, y1 = positions[src]
-                x2, y2 = positions[tgt]
+                wx1, wy1 = positions[src]
+                wx2, wy2 = positions[tgt]
                 weight = float(s.get("weight", 0.0))
                 lag = int(s.get("lag_days", 0))
                 edge_col = t.accent_emerald if weight >= 0 else t.accent_crimson
                 if tgt in self.shock_overlay:
                     edge_col = t.accent_gold
                 self._draw_directed_edge(
-                    x1 + half_bw,
-                    y1,
-                    x2 - half_bw,
-                    y2,
+                    wx1 + half_bw,
+                    wy1,
+                    wx2 - half_bw,
+                    wy2,
                     color=edge_col,
                     label=f"w={weight:+.2f} ({lag}d)",
                     base_width=2 if abs(weight) >= 0.5 else 1,
@@ -1806,7 +1811,7 @@ class AzmuthCommandCenterGUI:
         z_thresh = self.thalamic_z_threshold.get()
         for n in nodes:
             nid = n["id"]
-            cx, cy = positions.get(nid, (w / 2, h / 2))
+            wx, wy = positions.get(nid, (640.0, 380.0))
             z = float(n.get("z_score", 0.0))
             shock_delta = self.shock_overlay.get(nid, 0.0)
             eff_z = z + shock_delta
@@ -1830,8 +1835,8 @@ class AzmuthCommandCenterGUI:
 
             self._draw_node_box(
                 nid,
-                cx,
-                cy,
+                wx,
+                wy,
                 node_bw,
                 node_bh,
                 nid[:16],
@@ -1876,20 +1881,18 @@ class AzmuthCommandCenterGUI:
         )
         self.canvas.create_text(w - 24, 10 + banner_h / 2, text=speedup_txt, fill=t.accent_gold, font=self.font("Segoe UI Semibold", 9), anchor="e")
 
-        flow_width = min(w * 0.90, 1050 * self.scale)
-        start_x = (w - flow_width) / 2.0
-        root_x, root_y = start_x + flow_width * 0.12, h * 0.52
-        wt_x = start_x + flow_width * 0.44
-        mut_x = start_x + flow_width * 0.82
+        root_wx, root_wy = 240.0, 380.0
+        wt_wx = 640.0
+        mut_wx = 1040.0
 
-        root_bw = 180
-        root_bh = 64
-        half_rbw = self.s(root_bw) / 2.0
+        root_bw = 180.0
+        root_bh = 64.0
+        half_rbw = root_bw / 2.0
 
         self._draw_node_box(
             f"GENE_ROOT::{phylo['gene_id']}",
-            root_x,
-            root_y,
+            root_wx,
+            root_wy,
             root_bw,
             root_bh,
             phylo["gene_id"][:18],
@@ -1901,17 +1904,19 @@ class AzmuthCommandCenterGUI:
 
         wild_types = phylo["wild_types"]
         wt_positions: Dict[str, Tuple[float, float]] = {}
-        allele_bw = 195
-        allele_bh = 56
-        half_abw = self.s(allele_bw) / 2.0
+        allele_bw = 195.0
+        allele_bh = 56.0
+        half_abw = allele_bw / 2.0
 
-        top_offset = 18 + banner_h
-        avail_h = h - top_offset - 20
+        n_wt = len(wild_types)
+        wt_vstep = max(110.0, 600.0 / max(n_wt + 1, 1))
+        wt_total_h = (n_wt - 1) * wt_vstep
+        wt_base_y = 380.0 - (wt_total_h / 2.0)
 
         for idx, wt in enumerate(wild_types):
             aid = wt.get("allele_id", f"wt_{idx}")
-            wy = top_offset + avail_h * ((idx + 1) / (len(wild_types) + 1))
-            wt_positions[aid] = (wt_x, wy)
+            wy = wt_base_y + idx * wt_vstep
+            wt_positions[aid] = (wt_wx, wy)
 
             is_prim = wt.get("dominance") == "PRIMARY"
             col = t.accent_gold if is_prim else t.accent_cyan
@@ -1920,10 +1925,10 @@ class AzmuthCommandCenterGUI:
             ram = fit.get("ram_kb", "?")
             comp = wt.get("complexity_time", "O(N)")
 
-            self._draw_directed_edge(root_x + half_rbw, root_y, wt_x - half_abw, wy, color=tier_col, label="Wild-Type")
+            self._draw_directed_edge(root_wx + half_rbw, root_wy, wt_wx - half_abw, wy, color=tier_col, label="Wild-Type")
             self._draw_node_box(
                 f"ALLELE::{aid}",
-                wt_x,
+                wt_wx,
                 wy,
                 allele_bw,
                 allele_bh,
@@ -1938,15 +1943,20 @@ class AzmuthCommandCenterGUI:
         edge_lookup = {e["target_allele"]: e for e in phylo["edges"]}
 
         if mutants:
+            n_mut = len(mutants)
+            mut_vstep = max(110.0, 600.0 / max(n_mut + 1, 1))
+            mut_total_h = (n_mut - 1) * mut_vstep
+            mut_base_y = 380.0 - (mut_total_h / 2.0)
+
             for idx, mut in enumerate(mutants):
                 mid = mut.get("allele_id", f"mut_{idx}")
-                my = top_offset + avail_h * ((idx + 1) / (len(mutants) + 1))
+                my = mut_base_y + idx * mut_vstep
                 e_info = edge_lookup.get(mid, {})
                 parent_id = e_info.get("source_allele", "")
                 op_name = e_info.get("operator", "mutation")
                 speedup = e_info.get("speedup_pct", 0.0)
 
-                px, py = wt_positions.get(parent_id, (wt_x, root_y))
+                px, py = wt_positions.get(parent_id, (wt_wx, root_wy))
                 is_prim = mut.get("dominance") == "PRIMARY"
                 col = t.accent_gold if is_prim else t.accent_emerald
 
@@ -1957,7 +1967,7 @@ class AzmuthCommandCenterGUI:
                 self._draw_directed_edge(
                     px + half_abw,
                     py,
-                    mut_x - half_abw,
+                    mut_wx - half_abw,
                     my,
                     color=col,
                     label=f"+{op_name} ({speedup:+.0f}%)",
@@ -1965,7 +1975,7 @@ class AzmuthCommandCenterGUI:
                 )
                 self._draw_node_box(
                     f"ALLELE::{mid}",
-                    mut_x,
+                    mut_wx,
                     my,
                     allele_bw,
                     allele_bh,
@@ -1977,18 +1987,18 @@ class AzmuthCommandCenterGUI:
                 )
         else:
             self._draw_directed_edge(
-                wt_x + half_abw,
-                root_y,
-                mut_x - half_abw,
-                root_y,
+                wt_wx + half_abw,
+                root_wy,
+                mut_wx - half_abw,
+                root_wy,
                 color=t.border_active,
                 label="Click 'Mutate & Race'",
                 dashed=True,
             )
             self._draw_node_box(
                 "MUTATE_CTA",
-                mut_x,
-                root_y,
+                mut_wx,
+                root_wy,
                 allele_bw,
                 allele_bh,
                 "⚡ Evolve Daughter Allele",
