@@ -25,6 +25,7 @@ This catalog documents the workstation runtime environment, software tools, and 
 | **Tier 0** | **Python & `uv`** | `3.12.10` / `3.14.7` | Native process (<20 ms) | Solves mathematical CPM DAGs (`adaptive_orchestrator.py`), reconciles registries (`reconciliation_engine.py`), executes `pytest`. |
 | **Tier 0** | **Git & GitHub CLI** | `git` / `gh` | Native CLI | Manages ephemeral worktrees (`.worktrees/<task_id>`), repo multi-sync (`sync.bat`), and institutional PRs (`gh pr create`). |
 | **Tier 0** | **Fast Directory Navigation** | `zoxide` | Shell hook | High-speed directory switching across 28 modules and satellite workspaces. |
+| **Tier 0-Bio**| **Azmuth Neuromorphic Core** | `tools/azmuth_*.py` | Background daemon / Win32 GUI | Autonomous self-evolving engine across 6 Cartridges (`U0`–`U5`), idle-burst daemon (`azmuth_daemon.py`), native tray controller (`azmuth_tray.py`), and 60FPS vector Command Center GUI (`azmuth_gui.py`). |
 | **Tier 1A / 1B** | **LM Studio** | `v0.4.21+2` | Port 1234 REST/SSE | Hosts local GGUF models (`qwen-router`, `fleet-master-3b`, `fleet-master-7b`) for <50 ms intent triage and Agent-Reflex self-healing. |
 | **Tier 1A / 1B** | **Ollama** | `v0.33.1` | Headless CLI / Daemon | Standalone fallback runtime for quantized small language model execution. |
 | **Tier 1C** | **Copilot CLI** | `copilot.exe` (GitHub) | Headless Subprocess | Drives 27 pooled worker accounts (`worker_1`..`worker_27`) under `~/.copilot-workers/` inside isolated git worktrees. |

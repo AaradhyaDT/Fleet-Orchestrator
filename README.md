@@ -83,18 +83,26 @@ Fleet-Orchestrator/
 │   ├── fast_intent_router.py      # Sub-50ms local intent router with LM Studio integration & fallback
 │   ├── fleet_cli.py               # General fleet inspection and management CLI
 │   ├── fleet_gui.py               # Modern Fleet-Orchestrator Control Center v2.0 (Tkinter High-DPI GUI)
-│   ├── azmuth_daemon.py           # Adaptive background harvesting daemon (Eco/Balanced/Turbo gears, 162 genes)
+│   ├── azmuth_daemon.py           # Adaptive background harvesting daemon (Whisper/Balanced/Turbo gears, 162 genes)
+│   ├── azmuth_tray.py             # Native Windows system tray controller & circuit breaker watcher
+│   ├── azmuth_gui.py              # Azmuth Neuromorphic Command Center (60FPS High-DPI Vector Canvas GUI)
+│   ├── azmuth_macro_graph.py      # Neuromorphic Spiking Macro-Graph Engine (Cartridges U0-U5)
+│   ├── azmuth_github_sensor.py    # 4-Stream Autonomous GitHub Sensory Radar & 30-PAT Ring
 │   ├── azmuth_language_harvester.py # 3-Tier 30-Module Global Language & Runtime Reference Harvester
 │   ├── ultimatrix_autonomous_solver.py # 4-Stage escalating CP solver (Heuristic, Invariant, Codon, Frontier)
 │   ├── ultimatrix_arena.py        # Automated tournament battle arena & gene promotion
 │   └── ultimatrix_splicer.py      # Cross-repo codon stream splicer & gene synthesizer
 │
+├── launch_azmuth_gui.bat          # Instant launcher for Azmuth Neuromorphic Command Center GUI
+├── launch_azmuth_tray.bat         # Silent pythonw launcher for Azmuth System Tray Controller
 ├── .github/workflows/             # GitHub Actions CI/CD workflows
 │   ├── ci.yml                     # Dynamic matrix CI/CD & container verification
 │   ├── self-healing-watchdog.yml  # Autonomous scheduled health sentinel
 │   └── sync-drive.yml             # Continuous Google Drive & NotebookLM documentation sync
 │
 ├── scripts/                       # Hybrid benchmarks & orchestration tests
+│   ├── install_azmuth_task.ps1    # Windowless Windows Startup HKCU installer for Azmuth daemon & tray
+│   ├── uninstall_azmuth_task.ps1  # Clean Windows Startup HKCU uninstaller for Azmuth daemon & tray
 │   ├── dispatch_iv_ii_tasks.py    # Autonomous task dispatcher for IV-II study packs
 │   ├── sync_drive.py              # Zero-dependency Google Drive doc sync engine
 │   ├── upload_large_model_to_drive.py # Resumable chunked upload for binary ML models
@@ -279,7 +287,44 @@ cancellation, retries, artifacts, and the security boundary.
 
 ---
 
-## 4. Verification & Testing
+## 4. Azmuth Neuromorphic Engine, Daemon & System Tray Controller
+
+The Azmuth Neuromorphic Core (`tools/azmuth_*.py`) provides continuous background telemetry sensing, idle-time burst execution, and algorithmic DNA mutation:
+
+- **Autonomous Background Daemon (`tools/azmuth_daemon.py`)**:
+  - Runs windowlessly in the background via `pythonw.exe`.
+  - Respects dynamic speed gears:
+    - **Whisper (Low Power)**: Idle trigger 5 min, cooldown 30 min, min free RAM 4.5 GB, max RAM load 70%.
+    - **Balanced (Auto-Managed)**: Idle trigger 3 min, cooldown 5 min, min free RAM 4.0 GB, max RAM load 75%.
+    - **Turbo / Warp (High Throughput)**: Idle trigger 45s, cooldown 30s, min free RAM 3.0 GB, max RAM load 80%.
+  - Hardware circuit breaker automatically downshifts gears if free RAM drops below safe operational floors.
+  - Idle detection via Win32 `user32!GetLastInputInfo` backs off within $<500\text{ ms}$ upon user keyboard or mouse input.
+
+- **Native Windows System Tray Controller (`tools/azmuth_tray.py`)**:
+  - Resides quietly in the Windows 11 Taskbar Notification Area using `pystray`.
+  - Dynamically updates its 64×64 RGBA icon and tooltip to reflect live gear, pause state, and available RAM.
+  - Context menu features:
+    - One-click launch for the **Azmuth Neuromorphic Command Center GUI** (`launch_azmuth_gui.bat` / `tools/azmuth_gui.py`).
+    - Speed Gear selector (Turbo, Balanced, Whisper) with instant radio toggles.
+    - Pause / Resume toggle (`azmuth.pause` sentinel).
+    - Immediate triggers: Scan GitHub Sensory Radar, Harvest 1 Task Now, Run Verification Cycle Now.
+
+- **Startup Automation & Management**:
+  ```powershell
+  # Arm background daemon and system tray to launch silently at Windows logon
+  powershell -ExecutionPolicy Bypass -File scripts/install_azmuth_task.ps1
+
+  # Disarm and unregister from Windows Registry Run key
+  powershell -ExecutionPolicy Bypass -File scripts/uninstall_azmuth_task.ps1
+
+  # Manual launches
+  .\launch_azmuth_gui.bat          # Open Command Center GUI (60FPS vector canvas)
+  .\launch_azmuth_tray.bat         # Launch System Tray Controller (windowless pythonw)
+  ```
+
+---
+
+## 5. Verification & Testing
 
 Run the focused suites or the full pytest suite from the repository root:
 ```powershell
@@ -292,7 +337,7 @@ pytest tests/
 
 ---
 
-## 5. Personal Knowledge Integrations
+## 6. Personal Knowledge Integrations
 
 This repository contains optional personal Google Drive and NotebookLM integrations. They are separate from the local job bridge. The Drive workflow can upload Markdown and update its manifest only when manually dispatched; pushes to `main` do not start that workflow. Dispatch it only when you intend to sync the selected repository documents to your personal Drive.
 
@@ -319,6 +364,6 @@ This repository contains optional personal Google Drive and NotebookLM integrati
 
 ---
 
-## 6. License
+## 7. License
 
 MIT License. Developed by Aaradhya Dev Tamrakar.

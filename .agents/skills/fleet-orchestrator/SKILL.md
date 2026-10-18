@@ -234,17 +234,29 @@ REST API: `/api/v1/tasks`, `/api/v1/workers`, `/api/v1/jobs`, `/api/v1/memory`, 
 ```powershell
 .\launch_copilot_fleet.bat                  # Multi-account fleet launcher
 .\launch_fleet_gui.bat                      # Fleet Control Center GUI v2.0
+.\launch_azmuth_gui.bat                     # Azmuth Neuromorphic Command Center GUI (60FPS vector canvas)
+.\launch_azmuth_tray.bat                    # Azmuth System Tray Controller (windowless pythonw)
 ```
 
-### Azmuth Ultimatrix & Genomic Splicing (`tools/azmuth_*.py`, `tools/ultimatrix_*.py`)
-The Azmuth Ultimatrix pipeline sequences, mutates, and splices algorithmic DNA across **5 hierarchical Gene Tiers (Tier 0 to Tier 4)**:
-- **Tier 0 (Hardware Substrate)**: AVX2/SIMD bitwise intrinsics, cache-aligned arrays, `FAST_IO_STREAM_UNTIE`, `INTERACTIVE_STREAM_IO`.
-- **Tier 1 (Language Runtime)**: `SplitMix64` anti-hash collision, unbounded recursion limits, `FAST_MODULAR_EXPONENTIATION`, `EXTENDED_EUCLIDEAN_GCD`, `BINARY_SEARCH_ON_ANSWER`.
-- **Tier 2 (Primitives & Graph Structures)**: `DISJOINT_SET_UNION`, `FENWICK_BINARY_INDEXED_TREE`, `SEGMENT_TREE_RANGE_QUERY`, `DIJKSTRA_SHORTEST_PATH`, `TRIE_PREFIX_TREE`, `SPARSE_TABLE_RMQ`.
-- **Tier 3 (Dimensional Collapse & Cubic Breakers)**: $O(N^3) \to O(N^2)$ reduction, 64-way bitset Floyd-Warshall, `DINIC_MAX_FLOW`, `MIN_COST_MAX_FLOW`, `TWO_SAT_SOLVER`, `CONVEX_HULL_TRICK`, Knuth DP, `HEAVY_LIGHT_DECOMPOSITION`, `MO_ALGORITHM_OFFLINE`.
-- **Tier 4 (Frontier Mathematics & Symbolic CAS)**: `POLLARDS_RHO_PRIME_FACTORIZATION`, `MILLER_RABIN_PRIMALITY_TEST`, `NUMBER_THEORETIC_TRANSFORM_NTT`, Chinese Remainder Theorem, Lucas' Theorem.
+### Azmuth Daemon, System Tray & Ultimatrix Pipeline (`tools/azmuth_*.py`, `tools/ultimatrix_*.py`)
+The Azmuth Neuromorphic system combines continuous background telemetry sensing, idle-burst code evolution, and genetic DNA splicing:
+- **Autonomous Daemon (`tools/azmuth_daemon.py`)**: Runs daily maintenance and opportunistic idle bursts via Win32 idle sensing across 3 speed gears (`whisper`, `balanced`, `turbo`), protected by a RAM circuit breaker.
+- **System Tray Controller (`tools/azmuth_tray.py`)**: Native Windows notification icon providing live gear switching, pause sentinel toggle, and immediate sensory/harvesting triggers.
+- **Command Center GUI (`tools/azmuth_gui.py`)**: 60FPS High-DPI interactive vector canvas with infinite virtual camera, node dragging, 6 cortical cartridges (`U0`–`U5`), and multi-lane phylogenetic lineage visualization.
+- **Genomic Splicing Pipeline**: Sequences, mutates, and splices algorithmic DNA across **5 hierarchical Gene Tiers (Tier 0 to Tier 4)**:
+  - **Tier 0 (Hardware Substrate)**: AVX2/SIMD bitwise intrinsics, cache-aligned arrays, `FAST_IO_STREAM_UNTIE`, `INTERACTIVE_STREAM_IO`.
+  - **Tier 1 (Language Runtime)**: `SplitMix64` anti-hash collision, unbounded recursion limits, `FAST_MODULAR_EXPONENTIATION`, `EXTENDED_EUCLIDEAN_GCD`, `BINARY_SEARCH_ON_ANSWER`.
+  - **Tier 2 (Primitives & Graph Structures)**: `DISJOINT_SET_UNION`, `FENWICK_BINARY_INDEXED_TREE`, `SEGMENT_TREE_RANGE_QUERY`, `DIJKSTRA_SHORTEST_PATH`, `TRIE_PREFIX_TREE`, `SPARSE_TABLE_RMQ`.
+  - **Tier 3 (Dimensional Collapse & Cubic Breakers)**: $O(N^3) \to O(N^2)$ reduction, 64-way bitset Floyd-Warshall, `DINIC_MAX_FLOW`, `MIN_COST_MAX_FLOW`, `TWO_SAT_SOLVER`, `CONVEX_HULL_TRICK`, Knuth DP, `HEAVY_LIGHT_DECOMPOSITION`, `MO_ALGORITHM_OFFLINE`.
+  - **Tier 4 (Frontier Mathematics & Symbolic CAS)**: `POLLARDS_RHO_PRIME_FACTORIZATION`, `MILLER_RABIN_PRIMALITY_TEST`, `NUMBER_THEORETIC_TRANSFORM_NTT`, Chinese Remainder Theorem, Lucas' Theorem.
 
 ```powershell
+# Arm background daemon & system tray to launch silently at Windows logon
+powershell -ExecutionPolicy Bypass -File scripts/install_azmuth_task.ps1
+
+# Disarm from Windows Registry Run key
+powershell -ExecutionPolicy Bypass -File scripts/uninstall_azmuth_task.ps1
+
 # Splice verified algorithmic DNA directly into clean C++ solution
 python tools/ultimatrix_splicer.py --genes FAST_IO_STREAM_UNTIE,DISJOINT_SET_UNION,DIJKSTRA_SHORTEST_PATH --output solution.cpp
 
