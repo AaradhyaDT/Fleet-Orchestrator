@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 141,
-  "tasks_solved": 141,
+  "tasks_attempted": 143,
+  "tasks_solved": 143,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -143,22 +143,12 @@
     "positive-product-subarrays",
     "postivie-xor",
     "prime-distance",
-    "processing-discounts"
+    "processing-discounts",
+    "race-qualifying",
+    "rectangle-partition"
   ],
-  "last_solve_at": "2026-10-18T02:35:50.313423+00:00",
+  "last_solve_at": "2026-10-18T02:37:14.243614+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-17T11:06:33.451038+00:00",
-      "slug": "frequent-numbers",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-17T11:07:09.498390+00:00",
-      "slug": "friday-13",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-17T11:07:44.944473+00:00",
       "slug": "game-of-chance",
@@ -444,6 +434,18 @@
     {
       "timestamp": "2026-10-18T02:35:50.313265+00:00",
       "slug": "processing-discounts",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T02:36:27.066629+00:00",
+      "slug": "race-qualifying",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T02:37:14.225636+00:00",
+      "slug": "rectangle-partition",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     }

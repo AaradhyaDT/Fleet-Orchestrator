@@ -30,7 +30,7 @@ flowchart TD
 2. **Domain Commanders**: Writes task JSONs to `orchestrator-state/tasks/`. Absorbs logs/retries. Returns **<300w manifest** to Lead.
 3. **Headless Workers & Cloud**: 31 accounts in `.worktrees/<task_id>` + `ColabCloudAdapter` (zero local `.ipynb`). Dispatched as native Antigravity 2.0 Background Tasks with live telemetry.
 4. **Agent-Reflex**: Intercepts tool errors at port 1234 for sub-second recovery (`INV-AGENT-REFLEX`).
-5. **Azmuth Neuromorphic Core**: 20W spiking macro-graph engine (`azmuth_macro_graph.py`) across 6 Cortical Cartridges (`U0`–`U5`), 3-stream live sensor, and CBF inhibitory brake.
+5. **Azmuth Neuromorphic Core**: 20W spiking macro-graph engine (`azmuth_macro_graph.py`) across 6 Cortical Cartridges (`U0`–`U5`), 3-stream live sensor, GitHub sensory radar (`azmuth_github_sensor.py`), and CBF inhibitory brake.
 
 Protocols: [`references/fleet-command-architecture.md`](references/fleet-command-architecture.md).
 
@@ -41,10 +41,10 @@ Protocols: [`references/fleet-command-architecture.md`](references/fleet-command
 | Tier | Workload | Backend | Cost | Latency / RAM |
 | :--- | :--- | :--- | :--- | :--- |
 | **Tier 0** | Routine: `audit.bat`, `sync.bat`, CP solver/replica (`cp-archive-harvester`), thesis, tests | Shell / Python | **$0.00** | **<20 ms** / **<10 MB** |
-| **Tier 0-Bio**| Azmuth Neuromorphic Foresight Scan across 6 universes (`U0`–`U5`) & Live Market Sensor | `azmuth_macro_graph.py` | **$0.00** | **<50 ms** / **<15 MB** |
+| **Tier 0-Bio**| Azmuth Neuromorphic Foresight & GitHub Sensory Radar across 6 universes (`U0`–`U5`), Live Market & GitHub Sensors | `azmuth_macro_graph.py`, `azmuth_github_sensor.py` | **$0.00** | **<50 ms** / **<15 MB** |
 | **Tier 1A** | Intent triage, time allocation, matrix routing | `fleet-master-3b` / `qwen-router` | **$0.00** | **30-50 ms** / **380MB–1.8GB** |
 | **Tier 1B** | Agent-Reflex self-healing & action prefetch | `fleet-master-3b` (port 1234) | **$0.00** | **<50 ms** / **~1.8 GB** |
-| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (31 workers, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
+| **Tier 1C** | Multi-file coding, batch tasks, test generation | `Fleet-Orchestrator` (31 workers, REA headless hardening, tier floors: eff→120s, bal→300s, int→600s) | **$0.00** | Cloud / **<30 MB** |
 | **Tier 1D** | Deep refactoring, test fixes, invariant audits | `fleet-master-7b` ($\ge 8\text{GB}$ RAM) | **$0.00** | **300-800 ms** / **~4.36 GB** |
 | **Tier 1E** | Cloud GPU/TPU training, CUDA, remote `.ipynb` | `colab-cloud-accelerator` | Compute units | Cloud VM / **0 MB** |
 | **Tier 2** | Interactive conversational reasoning | Gemini 3.8 Flash / Lite (30-key pool, 450 RPM) | **<$0.001** | Sub-second / **0 MB** |
@@ -87,7 +87,7 @@ python tools/adaptive_engine.py triage "refactor router" -f sim/routing_engine.p
 | **(V1, R0)** | `CONCURRENT_LOCAL` | Parallel edits; pre/post SHA-256 | Up to 4 |
 | **(V1, R1)** | `STAR_SUBAGENTS` | Disjoint subagents on scratch files | 3 subagents |
 | **(V1, R2)** | `DECOUPLED_SLICES` | Micro-PR branches (`split-to-prs`) | Sequential |
-| **(V2, R0)** | `FLEET_SWARM` | Fleet-Orchestrator cloud pool | Up to 27 |
+| **(V2, R0)** | `FLEET_SWARM` | Fleet-Orchestrator cloud pool | Up to 31 |
 | **(V2, R1)** | `THROTTLED_FLEET` | Batched sub-PR slices via Fleet | Throttled |
 | **(V2, R2)** | `STRICT_INTERLOCK` | Halted; requires confirmation | Blocked |
 

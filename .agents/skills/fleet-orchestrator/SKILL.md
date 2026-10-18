@@ -63,7 +63,7 @@ flowchart TD
 
 | Adapter | Class | Capabilities |
 |:---|:---|:---|
-| **Copilot CLI** | `CopilotCLIAdapter` | `copilot.exe --autopilot` with subprocess token injection, worktree sandboxing, `totalNanoAIU` credit parsing, usage file telemetry. |
+| **Copilot CLI** | `CopilotCLIAdapter` | `copilot.exe --autopilot` with `--disallow-temp-dir`, `--headless`, `COPILOT_ALLOW_ALL=true`, `COPILOT_FORCE_WINDOWS_HIDE=1`, `COPILOT_DEBUG_SKIP_LAUNCH_CHECKS=1`, subprocess token injection, worktree sandboxing, `totalNanoAIU` credit parsing, direct SQLite session telemetry (`session-state.db`), and discrete rate-limit classification. |
 | **Copilot Headless** | `CopilotHeadlessAdapter` | Pure async HTTP REST + OpenAI-compatible tool-calling loop (`read_file`, `write_file`, `run_command`). ~15 MB RAM per instance. |
 | **Claude Desktop CDP** | `ClaudeDesktopCDPAdapter` | Chrome DevTools Protocol via WebSocket. DOM injection + WinPilot fallback. Model selection, thinking budget, cooldown detection. |
 | **Claude Desktop Proxy** | `ClaudeDesktopProxyAdapter` | Higher-level Claude Desktop proxy with session management. |
@@ -305,6 +305,8 @@ pytest tests/test_e2e_pipeline.py -v                    # End-to-end DAG pipelin
     - **Idle Guardrail**: Pass `--idle-timeout <seconds>` (e.g. `--idle-timeout 15`) so the worker automatically shuts down if no work arrives within the timeout window.
     - **Isolated Commander Batches**: Use `python tools/fleet_commander.py --specs "..."` which redirects child logs and exits immediately upon completion.
     - **One-Shot Tasks**: Use `--once` (`python tools/copilot_queue_worker.py --once`) or `fleet.bat run-task --spec "..."`.
+14. **Headless Runtime Hardening & Direct Telemetry (`INV-HEADLESS-HARDENING`)**:
+    Workers driving `copilot.exe` (`CopilotCLIAdapter`) enforce headless execution flags: `--disallow-temp-dir`, `--headless`, `COPILOT_ALLOW_ALL=true`, `COPILOT_FORCE_WINDOWS_HIDE=1`, and `COPILOT_DEBUG_SKIP_LAUNCH_CHECKS=1`. Telemetry is extracted directly from `session-state.db` via `extract_sqlite_session_telemetry()`, bypassing ephemeral files, and rate limits are classified into discrete `RATE_LIMIT_HOURLY` and `RATE_LIMIT_DAILY` tiers with automated cooldown governance.
 
 ---
 
@@ -334,8 +336,15 @@ Fleet-Orchestrator/
 │   ├── copilot_queue_worker.py    # Background queue worker with worktree isolation
 │   ├── fleet_commander.py         # Context-firebreak batch orchestrator (≤300 word manifests)
 │   ├── fleet_cli.py               # Claude Desktop multi-instance fleet CLI
-│   ├── fleet_gui.py               # Fleet Control Center v2.0 (Tkinter High-DPI GUI)
+│   ├── fleet_gui.py               # Fleet Control Center v2.1 (Tkinter High-DPI GUI with Azmuth Tab 6)
 │   ├── fleet_watchdog.py          # Fleet health watchdog
+│   ├── azmuth_github_sensor.py    # 4-stream GitHub sensory radar (U3, U1/U2, Codon, U0) with PAT rotation & Thalamic filter
+│   ├── azmuth_tray.py             # Silent system tray controller (pythonw.exe GUI subsystem)
+│   ├── azmuth_daemon.py           # Autonomous 24h background daemon with burst subtasks
+│   ├── azmuth_market_sensor.py    # 3-stream live market/macro sensor
+│   ├── azmuth_macro_graph.py      # 6-universe neuromorphic foresight engine (U0-U5)
+│   ├── dag_planner.py             # Autonomous CPM DAG planner with topological sorting
+│   ├── github_issue_sentinel.py   # Autonomous GitHub sentinel polling sentinel-ready issues
 │   ├── fast_intent_router.py      # Sub-50ms local Qwen GGUF intent router
 │   ├── npu_engine.py              # Intel Core Ultra NPU/iGPU/CPU multi-silicon engine
 │   ├── credit_ledger.py           # Leaf credit ledger with OS file locks
@@ -345,6 +354,7 @@ Fleet-Orchestrator/
 │   └── stress_test_concurrency.py # Multi-worker concurrency stress harness
 │
 ├── scripts/                       # Dispatchers & sync engines
+│   ├── install_azmuth_task.ps1    # Windows startup installer registering pure GUI pythonw.exe
 │   ├── dispatch_iv_ii_tasks.py    # IV-II academic study pack task dispatcher
 │   ├── sync_drive.py              # Zero-dependency Google Drive sync (urllib + SHA-256)
 │   └── upload_large_model_to_drive.py # Resumable chunked upload for ML models
@@ -360,7 +370,7 @@ Fleet-Orchestrator/
 ├── orchestrator-state/            # Live state (tasks/, checkpoints/, ledger/, scratchpads/, memory/, live-status/)
 ├── worker-prompts/                # 6 specialized role prompts (orchestrator, researcher, writer, qa-reviewer, seo-optimizer, formatter)
 ├── models/                        # Local GGUF model weights (git-ignored)
-├── tests/                         # 332 automated pytest tests (55 test suites)
+├── tests/                         # 583 automated pytest tests (75+ test suites)
 ├── .github/workflows/             # CI (dynamic matrix), self-healing watchdog, Drive sync
 ├── .env.fleet.copilot.example     # 31-account GitHub Copilot PAT template (6,200 monthly credits)
 ├── .env.fleet.gemini.example      # 32-slot Google AI Studio Gemini API key template
@@ -368,5 +378,24 @@ Fleet-Orchestrator/
 ├── .env.fleet.example             # Consolidated legacy token template
 ├── drive-manifest.json            # Google Drive sync manifest with file IDs
 ├── sync.bat / sync.ps1            # Ecosystem sync with selective CI bypass
+├── launch_azmuth_tray.bat         # One-click silent tray launcher (pythonw.exe)
 └── launch_fleet_gui.bat           # One-click GUI launcher
 ```
+
+---
+
+## 6. Azmuth Autonomous GitHub Sensory Radar & Silent Tray Runtime
+
+### Autonomous GitHub Sensory Radar (`tools/azmuth_github_sensor.py`)
+- **4 Autonomous Universe Streams**:
+  - `U3 Career & Lab Alpha`: Tracks tier-1 AI research labs, fellowship challenges, and grant opportunities.
+  - `U1/U2 SOTA AI Releases`: Tracks frontier model weights, inference speedups, and quantization breakthroughs.
+  - `Codon Stream CP Templates`: Harvests new algorithmic templates, CP problem solutions, and data structures into the genetic vault.
+  - `U0 Ecosystem Health`: Audits repositories across the ecosystem for broken workflows, commits, and open issues.
+- **Quota Resilience**: Rotates requests across 30 discovered PATs from `.env.fleet.copilot`.
+- **Thalamic Habituation**: Filters low-magnitude noise (`|Z| < 0.8σ`), outputting high-signal digests to `orchestrator-state/github_intelligence_brief.md`.
+
+### Silent Windows 11 GUI Subsystem Runtime (`IMAGE_SUBSYSTEM_WINDOWS_GUI`)
+- **Zero-Window Invariant**: Windows 11 ConPTY / Windows Terminal displays a blank window when running `powershell.exe -WindowStyle Hidden` on startup. To prevent this, `FleetAzmuthTray` and `launch_azmuth_tray.bat` invoke `pythonw.exe` directly.
+- **System Tray Icon**: Lives in the notification area with circular gear icon, providing tactile status checks, codon counts, and manual radar triggers.
+
