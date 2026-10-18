@@ -137,3 +137,24 @@ Crossing bounds from algorithmic coding into real-world master planning ([Issue 
    - Stream 2: RSS / event keyword scanner
    - Stream 3: Sub-10ms deterministic delta caching in `orchestrator-state/macro_sensor_cache.json`.
 
+---
+
+## 7. Autonomous GitHub Sensory Radar & Subsystem Isolation
+
+To complement the financial/macro telemetry of `azmuth_market_sensor.py`, the sensory layer incorporates an autonomous **GitHub Sensory Radar (`tools/azmuth_github_sensor.py`)**:
+
+1. **4 Autonomous Sensory Channels**:
+   - `U3 Career & Lab Alpha`: Tracks high-impact AI lab repos, fellowship challenges, and grant calls.
+   - `U1/U2 SOTA AI Releases`: Tracks frontier model releases, inference engines, and quantization repos.
+   - `Codon Stream CP Templates`: Harvests new algorithmic templates, CP problem solutions, and data structures.
+   - `U0 Ecosystem Health`: Continuously audits health, commits, and open issues across the user's personal repositories.
+2. **Circular PAT Rotation & Zero Rate-Limit Starvation**:
+   - Rotates requests across all 30 healthy PATs in `.env.fleet.copilot`.
+   - Distributes rate limit consumption (up to 5,000 req/hr per key) with automatic backoff on 403/429.
+3. **Thalamic Habituation & Delta Caching**:
+   - Computes statistical novelty against `orchestrator-state/github_sensor_cache.json`.
+   - Drops minor noise/churn (`|Z| < 0.8σ`), promoting only high-signal discoveries to `orchestrator-state/github_intelligence_brief.md`.
+4. **Pure GUI Subsystem Isolation (`IMAGE_SUBSYSTEM_WINDOWS_GUI`)**:
+   - To eliminate terminal popups under Windows 11 Windows Terminal (`wt.exe` / OpenConsole), `azmuth_tray.py` and startup keys run via `pythonw.exe` rather than `powershell.exe -WindowStyle Hidden`.
+   - Guarantees true zero-window desktop presence with interactive notification tray access (`WinSta0\Default`).
+

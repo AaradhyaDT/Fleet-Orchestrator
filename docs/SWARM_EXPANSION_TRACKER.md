@@ -144,6 +144,16 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 - [x] Extended `tools/harvest_copilot_counter_dataset.py` with `harvest_from_session_stores()` to continuously mine usage patterns and failure traces from worker sessions.
 - [x] Added 5 unit tests in `tests/test_copilot_cli_adapter.py` and validated full test suite (582/582 passed).
 
+### Phase 10: Autonomous GitHub Sensory Radar & Zero-Friction Headless Subsystem Runtime
+*Objective:* Continuous passive GitHub discovery stream across 4 universe channels rotating over 30 PATs, paired with Windows GUI subsystem (`pythonw.exe`) startup isolation eliminating terminal popups on boot.
+- [x] Implement `tools/azmuth_github_sensor.py` with 4 sensory streams (`U3` Career/Lab Alpha, `U1/U2` SOTA AI Releases, Codon Stream CP Templates, `U0` Ecosystem Health).
+- [x] Circular PAT rotation across 30 discovered Copilot tokens with Thalamic noise filtering (`|Z| < 0.8σ`), persistent caching (`orchestrator-state/github_sensor_cache.json`), and markdown briefing (`orchestrator-state/github_intelligence_brief.md`).
+- [x] Wire Subtask 3 sensory scan into `execute_idle_burst()` in `tools/azmuth_daemon.py`.
+- [x] Add `🛰️ GitHub Radar` action button to Tab 6 in `tools/fleet_gui.py`.
+- [x] Enhance `tools/azmuth_tray.py` with live codon counts and manual radar scan action.
+- [x] Solve Windows 11 ConPTY / Windows Terminal boot window bug by migrating `HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\FleetAzmuthTray` and `launch_azmuth_tray.bat` to pure Windows GUI subsystem executable (`pythonw.exe`).
+- [x] Create comprehensive unit test suite `tests/test_azmuth_github_sensor.py` (5/5 tests passing; 583/583 full suite).
+
 ---
 
 ## 4. Execution History & Provenance Log
@@ -157,5 +167,6 @@ To eliminate single-provider quota starvation (e.g. Gemini 429 exhaustion), all 
 | **Phase 3-5** | `52d83bd` | `38923489110` | **PASSED** (25/25 tests) | Tab 6 GUI, CPM DAG Planner (`dag_planner.py`), GitHub Sentinel (`github_issue_sentinel.py`) | 2026-10-17 |
 | **Phase 6** | `ed69000` | `39023041427` | **SUCCESS** (9/9 jobs) | Azmuth Neuromorphic Foresight Engine, 6-Universe Cartridges (`U0`–`U5`), 3-Stream Live Sensor, 573/573 Tests ([#181](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/181)) | 2026-10-17 |
 | **Phase 9** | `5fa7f78` | `39090074501` | **SUCCESS** (9/9 jobs) | REA Headless Runtime Hardening, SQLite Telemetry Governance, 582/582 Tests ([#182](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/182) / [#183](https://github.com/AaradhyaDT/Fleet-Orchestrator/pull/183)) | 2026-10-18 |
+| **Phase 10** | `Pending` | Local | **PASSED** (583/583 tests) | Autonomous GitHub Sensory Radar, 4-Stream PAT Rotation, Thalamic Filter, Silent pythonw.exe Tray Subsystem | 2026-10-18 |
 
 

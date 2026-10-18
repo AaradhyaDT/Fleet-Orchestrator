@@ -236,14 +236,32 @@ REST API: `/api/v1/tasks`, `/api/v1/workers`, `/api/v1/jobs`, `/api/v1/memory`, 
 .\launch_fleet_gui.bat                      # Fleet Control Center GUI v2.0
 ```
 
----
-
-## 3. Verification & Testing
+### Azmuth Ultimatrix & Genomic Splicing (`tools/azmuth_*.py`, `tools/ultimatrix_*.py`)
+The Azmuth Ultimatrix pipeline sequences, mutates, and splices algorithmic DNA across **5 hierarchical Gene Tiers (Tier 0 to Tier 4)**:
+- **Tier 0 (Hardware Substrate)**: AVX2/SIMD bitwise intrinsics, cache-aligned arrays, `FAST_IO_STREAM_UNTIE`, `INTERACTIVE_STREAM_IO`.
+- **Tier 1 (Language Runtime)**: `SplitMix64` anti-hash collision, unbounded recursion limits, `FAST_MODULAR_EXPONENTIATION`, `EXTENDED_EUCLIDEAN_GCD`, `BINARY_SEARCH_ON_ANSWER`.
+- **Tier 2 (Primitives & Graph Structures)**: `DISJOINT_SET_UNION`, `FENWICK_BINARY_INDEXED_TREE`, `SEGMENT_TREE_RANGE_QUERY`, `DIJKSTRA_SHORTEST_PATH`, `TRIE_PREFIX_TREE`, `SPARSE_TABLE_RMQ`.
+- **Tier 3 (Dimensional Collapse & Cubic Breakers)**: $O(N^3) \to O(N^2)$ reduction, 64-way bitset Floyd-Warshall, `DINIC_MAX_FLOW`, `MIN_COST_MAX_FLOW`, `TWO_SAT_SOLVER`, `CONVEX_HULL_TRICK`, Knuth DP, `HEAVY_LIGHT_DECOMPOSITION`, `MO_ALGORITHM_OFFLINE`.
+- **Tier 4 (Frontier Mathematics & Symbolic CAS)**: `POLLARDS_RHO_PRIME_FACTORIZATION`, `MILLER_RABIN_PRIMALITY_TEST`, `NUMBER_THEORETIC_TRANSFORM_NTT`, Chinese Remainder Theorem, Lucas' Theorem.
 
 ```powershell
-pytest tests/                                           # Full 195-test suite
+# Splice verified algorithmic DNA directly into clean C++ solution
+python tools/ultimatrix_splicer.py --genes FAST_IO_STREAM_UNTIE,DISJOINT_SET_UNION,DIJKSTRA_SHORTEST_PATH --output solution.cpp
+
+# Autonomous allele mutation & arena racing
+python tools/ultimatrix_mutator.py --mutate-batch 3
+python tools/ultimatrix_arena.py --race-all
+```
+
+### Verification & Testing
+
+```powershell
+pytest tests/                                           # Full test suite
 pytest tests/test_copilot_cli_adapter.py -v             # Adapter verification
 pytest tests/test_copilot_headless.py -v                # Headless adapter tests
+pytest tests/test_ultimatrix_splicer.py -v              # Ultimatrix gene splicer verification
+pytest tests/test_ultimatrix_closed_loop.py -v          # End-to-end allele selection & arena racing
+pytest tests/test_azmuth_daemon.py -v                   # Azmuth daemon & RAM circuit breaker tests
 pytest tests/test_quota_reconciliation.py -v            # Credit ledger invariants
 pytest tests/test_antigravity_bridge.py -v              # Context bridge tests
 pytest tests/test_concurrency_stress.py -v              # Multi-worker race-freedom
