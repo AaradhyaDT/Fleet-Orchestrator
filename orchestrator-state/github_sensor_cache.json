@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-18T06:14:54.686316+00:00",
-  "timestamp_epoch": 1792304082.2184486,
+  "timestamp": "2026-10-18T07:47:00.460828+00:00",
+  "timestamp_epoch": 1792309608.3082929,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
@@ -152,11 +152,11 @@
       },
       {
         "repo": "vllm-project/vllm",
-        "tag": "v0.31.0",
-        "name": "v0.31.0",
-        "published_at": "2026-10-05T06:44:55Z",
-        "url": "https://github.com/vllm-project/vllm/releases/tag/v0.31.0",
-        "body_snippet": "# v0.31.0  ## Highlights  This release features 717 commits from 307 contributors (96 new)!  * **DeepSeek-V4.1-Flash performance**: FlashMLA mega attention with the V4.1 NVFP4 compressed KV cach"
+        "tag": "v0.32.0",
+        "name": "v0.32.0",
+        "published_at": "2026-10-18T06:50:48Z",
+        "url": "https://github.com/vllm-project/vllm/releases/tag/v0.32.0",
+        "body_snippet": "# v0.32.0  ## Highlights  This release features 814 commits from 363 contributors (121 new)!  * **Structured decisions and generic parsers**: the new `POST /v1/systemone` endpoint answers `choic"
       },
       {
         "repo": "fairlearn/fairlearn",
@@ -186,11 +186,11 @@
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3573,
+        "stars": 3572,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-18T00:44:40Z"
+        "updated_at": "2026-10-18T06:14:54Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -221,7 +221,7 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-18T03:20:47Z",
+        "pushed_at": "2026-10-18T06:57:41Z",
         "stars": 0,
         "forks": 0
       },

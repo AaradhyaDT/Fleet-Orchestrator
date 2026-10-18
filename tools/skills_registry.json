@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 99,
-  "total_skill_instances": 168,
+  "total_distinct_skills": 100,
+  "total_skill_instances": 169,
   "domain_counts": {
     "AI_ENGINEERING_ML": 12,
     "SWARM_ORCHESTRATION": 4,
@@ -9,14 +9,14 @@
     "DOMAIN_HARDWARE": 7,
     "SYSADMIN_SECURITY": 3,
     "RESEARCH_ACADEMIC": 6,
-    "FRONTEND_PRODUCT": 14,
+    "FRONTEND_PRODUCT": 15,
     "PLATFORM_INTERNAL": 9,
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
     "INSTALLED": 62,
     "VERIFIED": 10,
-    "ACCESSIBLE": 27
+    "ACCESSIBLE": 28
   },
   "skills": {
     "academic-notebook-architect": {
@@ -46,15 +46,15 @@
       "name": "adaptive-workflow",
       "domain": "SWARM_ORCHESTRATION",
       "availability_tier": "VERIFIED",
-      "description": "Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, routes tasks across a 2D matrix, executes zero-AI fast paths, solves CPM DAGs mathematically, marshals 27 pooled Copilot workers, and drives Fleet Master Brain (3B/7B), Agent-Reflex self-healing, and Colab GPU accelerators.",
+      "description": "Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, 2D matrix routing, zero-AI fast paths, CPM DAGs, 31 Copilot workers, 30 Gemini keys, Azmuth Foresight (U0-U5), 3B/7B brain, Agent-Reflex, and Colab GPU accelerators.",
       "triggers": [
         "adaptive-workflow"
       ],
       "dependencies": [
         "tools/adaptive_engine.py"
       ],
-      "byte_size": 8121,
-      "line_count": 131,
+      "byte_size": 7956,
+      "line_count": 134,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -850,19 +850,37 @@
       "name": "design-taste-frontend",
       "domain": "FRONTEND_PRODUCT",
       "availability_tier": "ACCESSIBLE",
-      "description": "Master frontend design system. Use when building high-agency interfaces with strict design taste, calibrated color, typography, Material Design 3 fluidity, 3D spatial transforms, and motion physics. Overrides generic AI styling defaults, purple glows, and Inter overuse.",
+      "description": "Master frontend design system. Use when building high-agency interfaces with strict design taste, calibrated color harmonization, editorial typography, Material Design 3 fluidity, Anthropic CDS/Glasswing patterns, Fuse.ai participatory artifacts, and zero-distraction UX architecture. Overrides generic AI styling defaults, purple glows, and Inter overuse.",
       "triggers": [
         "design-taste-frontend"
       ],
-      "dependencies": [],
-      "byte_size": 5809,
-      "line_count": 112,
+      "dependencies": [
+        "scripts/verify.py"
+      ],
+      "byte_size": 13479,
+      "line_count": 325,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\design-taste-frontend",
       "ssot_role": "SSOT_USER",
       "mirrors": [
         "C:\\Users\\Aaradhya\\.agents\\skills\\design-taste-frontend"
       ],
       "mirror_count": 1
+    },
+    "design-taste-gui": {
+      "name": "design-taste-gui",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "Master native desktop, mobile, and client application GUI design system embodying Aaradhya's signature design language (The ADT Application Standard). Enforces high-craft visual ergonomics, calm telemetry palettes, anti-emoji policy, 3-tier AI-slop disqualification gate, dynamic theme switching, self-healing geometry and font cascades, and OS shell integration.",
+      "triggers": [
+        "design-taste-gui"
+      ],
+      "dependencies": [],
+      "byte_size": 18231,
+      "line_count": 316,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\design-taste-gui",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [],
+      "mirror_count": 0
     },
     "discover-azure-skills": {
       "name": "discover-azure-skills",
@@ -1095,16 +1113,22 @@
         "start worker daemon"
       ],
       "dependencies": [
+        ".\\fleet.bat",
         "scripts/dispatch_iv_ii_tasks.py",
         "scripts/sync_drive.py",
         "tools/copilot_fleet.py",
         "tools/copilot_queue_worker.py",
         "tools/fast_intent_router.py",
         "tools/fleet_commander.py",
-        "tools/fleet_gui.py"
+        "tools/fleet_env.py",
+        "tools/npu_engine.py",
+        "tools/ultimatrix_arena.py",
+        "tools/ultimatrix_mutator.py",
+        "tools/ultimatrix_splicer.py",
+        "tools/unified_fleet_cli.py"
       ],
-      "byte_size": 17749,
-      "line_count": 258,
+      "byte_size": 33380,
+      "line_count": 421,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\fleet-orchestrator",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1118,19 +1142,13 @@
       "name": "fluid-wordmark-collapse",
       "domain": "FRONTEND_PRODUCT",
       "availability_tier": "ACCESSIBLE",
-      "description": "This skill should be used when the user asks to \"collapse logo to initials\", \"collapse name to ADT\", \"implement Anthropic style logo collapse\", \"create collapsible brand wordmark\", \"prevent navbar layout shift on scroll\", \"fix jumping navbar links\", \"lock navbar elements in place\", or mentions fluid wordmark contraction into monograms.",
+      "description": "This skill has been unified and absorbed into the master frontend design system `design-taste-frontend`. Use `design-taste-frontend` for collapsible wordmarks, anti-displacement navigation grids, Anthropic Glasswing patterns, Fuse.ai editorial materiality, and Google M3 motion physics.",
       "triggers": [
-        "collapse logo to initials",
-        "collapse name to ADT",
-        "implement Anthropic style logo collapse",
-        "create collapsible brand wordmark",
-        "prevent navbar layout shift on scroll",
-        "fix jumping navbar links",
-        "lock navbar elements in place"
+        "fluid-wordmark-collapse"
       ],
       "dependencies": [],
-      "byte_size": 7579,
-      "line_count": 213,
+      "byte_size": 1258,
+      "line_count": 17,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\fluid-wordmark-collapse",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1603,10 +1621,11 @@
         "problem-dissector"
       ],
       "dependencies": [
-        "cli/dissect.py"
+        "cli/dissect.py",
+        "tools/ultimatrix_splicer.py"
       ],
-      "byte_size": 3763,
-      "line_count": 92,
+      "byte_size": 4667,
+      "line_count": 105,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\problem-dissector",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1642,8 +1661,8 @@
         "reverse-engineer-anything"
       ],
       "dependencies": [],
-      "byte_size": 23523,
-      "line_count": 356,
+      "byte_size": 25052,
+      "line_count": 368,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\reverse-engineer-anything",
       "ssot_role": "SSOT_USER",
       "mirrors": [

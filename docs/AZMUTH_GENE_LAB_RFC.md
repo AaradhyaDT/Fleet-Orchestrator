@@ -175,5 +175,11 @@ To provide visual observability into Azmuth's continuous cognitive work without 
 3. **Interactive Capability Card & Mutation Diff Inspector**:
    - Inspects Big-O time/space asymptotic bounds, environmental triggers (`N<=2e5`, `avx2`), formal mathematical invariants, empirical runtime/RAM fitness bars, and syntax-highlighted code templates with mutation additions highlighted.
    - One-click **"⚡ Mutate & Race in Arena Now"** trigger applies genetic operators live and dynamically animates new branch growth on the phylogenetic tree.
+4. **High-DPI Adaptation, Interactive Zoom Ladder & Dynamic Theme Switching**:
+   - **High-DPI Display Scaling**: Queries display DPI scaling via Win32 `GetDpiForWindow` / Tkinter scaling, computing dynamic `scale` factor.
+   - **Center-Bounded Layout Geometry**: Bounds max layout width (`min(w * 0.90, 1050 * scale)`) centered horizontally to prevent wide-screen dispersal on 4K/ultra-wide displays.
+   - **Interactive Zoom Ladder**: Supports keyboard shortcuts (`Ctrl+=`, `Ctrl+-`, `Ctrl+0`, `Ctrl+MouseWheel`) stepping across 8 zoom levels from $75\%$ to $200\%$.
+   - **Dynamic Theme Engine**: Toggleable between Dark Mode (`#090b0e`) and Light Mode (`#f8fafc` / `#ffffff`) via `Ctrl+T` or header button, dynamically updating widget palettes and Windows 11 DWM titlebar frames.
+
 
 

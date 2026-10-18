@@ -417,6 +417,15 @@ class AzmuthCommandCenterGUI:
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
         self.selected_node_id: Optional[str] = None
 
+        # 4b. Virtual Camera & Canvas Viewport Transform
+        self.cam_x: float = 640.0   # World center X
+        self.cam_y: float = 380.0   # World center Y
+        self.cam_zoom: float = 1.0  # Camera magnification (0.5x to 2.5x)
+        self.pan_start: Optional[Tuple[float, float]] = None
+        self.is_panning: bool = False
+        self.press_pos: Tuple[float, float] = (0.0, 0.0)
+        self.action_buttons: List[Tuple[tk.Button, str]] = []
+
         # 5. Cached Subsystems Data
         self.gh_sensor = AzmuthGitHubSensor()
         self.gh_cache_data: Dict[str, Any] = {}
@@ -461,17 +470,29 @@ class AzmuthCommandCenterGUI:
 
     @property
     def scale(self) -> float:
-        """Returns total effective scaling factor combining display DPI and user zoom level."""
-        return max(0.5, round(self.system_dpi * self.zoom_level, 2))
+        """Returns effective scaling factor combining display DPI and camera zoom."""
+        return max(0.5, round(self.system_dpi * self.cam_zoom, 2))
 
     def s(self, px: float) -> int:
-        """Scales a pixel dimension by total effective scale."""
-        return max(1, int(round(px * self.scale)))
+        """Scales a pixel dimension by camera zoom."""
+        return max(1, int(round(px * self.cam_zoom)))
 
     def font(self, family: str = "Segoe UI", base_pt: int = 9, weight: str = "normal") -> tuple:
-        """Returns a scaled font specification."""
-        scaled_pt = max(7, int(round(base_pt * self.zoom_level)))
+        """Returns a system-DPI scaled font specification for UI chrome."""
+        scaled_pt = max(7, int(round(base_pt * self.system_dpi)))
         return (family, scaled_pt, weight) if weight != "normal" else (family, scaled_pt)
+
+    def w2s(self, wx: float, wy: float, cw: float, ch: float) -> Tuple[float, float]:
+        """Transforms logical World coordinates to screen Canvas pixels."""
+        sx = (wx - self.cam_x) * self.cam_zoom + cw / 2.0
+        sy = (wy - self.cam_y) * self.cam_zoom + ch / 2.0
+        return sx, sy
+
+    def s2w(self, sx: float, sy: float, cw: float, ch: float) -> Tuple[float, float]:
+        """Transforms screen Canvas pixels to logical World coordinates."""
+        wx = (sx - cw / 2.0) / max(0.01, self.cam_zoom) + self.cam_x
+        wy = (sy - ch / 2.0) / max(0.01, self.cam_zoom) + self.cam_y
+        return wx, wy
 
     # ------------------------------------------------------------------------
     # Zoom Controls & Keyboard Shortcuts
@@ -509,28 +530,37 @@ class AzmuthCommandCenterGUI:
         if self.zoom_idx < len(ZOOM_LEVELS) - 1:
             self.zoom_idx += 1
             self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+            self.cam_zoom = self.zoom_level
             self._apply_zoom_and_layout()
 
     def zoom_out(self) -> None:
         if self.zoom_idx > 0:
             self.zoom_idx -= 1
             self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+            self.cam_zoom = self.zoom_level
             self._apply_zoom_and_layout()
 
     def zoom_reset(self) -> None:
         self.zoom_idx = ZOOM_LEVELS.index(1.0) if 1.0 in ZOOM_LEVELS else 3
         self.zoom_level = ZOOM_LEVELS[self.zoom_idx]
+        self.cam_zoom = self.zoom_level
+        self.cam_x = 640.0
+        self.cam_y = 380.0
         self._apply_zoom_and_layout()
 
     def _apply_zoom_and_layout(self) -> None:
         """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
+        self.cam_zoom = self.zoom_level
         pct_str = f"{int(self.zoom_level * 100)}%"
         self.btn_zoom_reset.configure(text=pct_str)
         self.lbl_footer_zoom.configure(text=f"Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
 
-        # Update panel widths
-        self.left_panel.configure(width=max(220, int(round(300 * self.scale))))
-        self.right_panel.configure(width=max(280, int(round(390 * self.scale))))
+        # Proportional Viewport Clamping (Guarantees >= 50% width for central canvas)
+        win_w = max(1000, self.root.winfo_width())
+        left_w = min(int(win_w * 0.22), max(220, int(260 * self.system_dpi)))
+        right_w = min(int(win_w * 0.28), max(280, int(340 * self.system_dpi)))
+        self.left_panel.configure(width=left_w)
+        self.right_panel.configure(width=right_w)
 
         # Update font on core labels
         self.lbl_title.configure(font=self.font("Segoe UI Semibold", 11))
@@ -627,6 +657,42 @@ class AzmuthCommandCenterGUI:
         self.footer.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
         self.lbl_footer_right.configure(bg=t.bg_panel, fg=t.text_muted)
         self.lbl_footer_zoom.configure(bg=t.bg_panel, fg=t.text_muted)
+        self.lbl_footer_job.configure(bg=t.bg_panel)
+
+        # Header Zoom and Theme Controls Re-theming
+        if hasattr(self, "ctrl_header_frame"):
+            self.ctrl_header_frame.configure(bg=t.bg_panel)
+            self.zoom_row.configure(bg=t.bg_panel)
+            self.btn_zoom_out.configure(bg=t.bg_card, fg=t.text_primary)
+            self.btn_zoom_reset.configure(bg=t.bg_card, fg=t.accent_cyan)
+            self.btn_zoom_in.configure(bg=t.bg_card, fg=t.text_primary)
+            self.btn_theme_toggle.configure(bg=t.bg_card, fg=t.text_primary)
+
+        # Action Buttons Re-theming (Eliminate black box artifacts in light mode)
+        for b, color in self.action_buttons:
+            b.configure(
+                bg=t.bg_panel,
+                fg=color,
+                highlightbackground=color,
+                activebackground=color,
+                activeforeground=t.bg_void,
+            )
+
+        # Daemon Gear Controls Re-theming
+        for g_k, g_b in self.gear_buttons.items():
+            g_b.configure(bg=t.bg_card, fg=t.text_secondary)
+        if hasattr(self, "btn_pause"):
+            self.btn_pause.configure(bg=t.bg_card, fg=t.text_secondary)
+        self._highlight_selected_gear()
+
+        # View Buttons Re-theming
+        for v_id, v_btn in self.view_buttons.items():
+            if v_id == self.active_view:
+                v_btn.configure(bg=t.accent_blue, fg=t.text_primary)
+            else:
+                v_btn.configure(bg=t.bg_panel, fg=t.text_secondary)
+
+        self.lbl_canvas_mode.configure(bg=t.bg_main)
 
         # Update text syntax highlight tags
         self.inspector_text.tag_configure("h1", font=self.font("Segoe UI Semibold", 10), foreground=t.text_primary)
@@ -829,33 +895,33 @@ class AzmuthCommandCenterGUI:
             self.kpi_labels[k_id] = lbl
 
         # 5. Zoom & Theme Controls in Header (Far Right)
-        ctrl_header_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
-        ctrl_header_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        self.ctrl_header_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
+        self.ctrl_header_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
-        zoom_row = tk.Frame(ctrl_header_frame, bg=t.bg_panel)
-        zoom_row.pack(anchor="e")
+        self.zoom_row = tk.Frame(self.ctrl_header_frame, bg=t.bg_panel)
+        self.zoom_row.pack(anchor="e")
 
-        btn_zoom_out = tk.Button(
-            zoom_row, text=" - ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
+        self.btn_zoom_out = tk.Button(
+            self.zoom_row, text=" - ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
             relief=tk.FLAT, padx=4, pady=1, cursor="hand2", command=self.zoom_out
         )
-        btn_zoom_out.pack(side=tk.LEFT, padx=1)
+        self.btn_zoom_out.pack(side=tk.LEFT, padx=1)
 
         self.btn_zoom_reset = tk.Button(
-            zoom_row, text="100%", font=self.font("Consolas", 8), bg=t.bg_card, fg=t.accent_cyan,
+            self.zoom_row, text="100%", font=self.font("Consolas", 8), bg=t.bg_card, fg=t.accent_cyan,
             relief=tk.FLAT, padx=6, pady=1, cursor="hand2", command=self.zoom_reset
         )
         self.btn_zoom_reset.pack(side=tk.LEFT, padx=1)
 
-        btn_zoom_in = tk.Button(
-            zoom_row, text=" + ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
+        self.btn_zoom_in = tk.Button(
+            self.zoom_row, text=" + ", font=self.font("Consolas", 8, "bold"), bg=t.bg_card, fg=t.text_primary,
             relief=tk.FLAT, padx=4, pady=1, cursor="hand2", command=self.zoom_in
         )
-        btn_zoom_in.pack(side=tk.LEFT, padx=1)
+        self.btn_zoom_in.pack(side=tk.LEFT, padx=1)
 
         # Light / Dark Theme Toggle Pill
         self.btn_theme_toggle = tk.Button(
-            ctrl_header_frame,
+            self.ctrl_header_frame,
             text="☼ Light Mode" if not t.is_light else "☾ Dark Mode",
             font=self.font("Segoe UI", 8),
             bg=t.bg_card,
@@ -953,6 +1019,7 @@ class AzmuthCommandCenterGUI:
             ("☷ Harvest Task", t.accent_emerald, self._trigger_harvest_task),
             ("↻ Verify Cycle", t.accent_gold, self._trigger_full_cycle),
         ]
+        self.action_buttons.clear()
         for label, color, cmd in actions:
             b = tk.Button(
                 self.act_frame,
@@ -971,6 +1038,7 @@ class AzmuthCommandCenterGUI:
                 command=cmd,
             )
             b.pack(side=tk.LEFT, padx=2)
+            self.action_buttons.append((b, color))
 
     def _build_main_workspace(self) -> None:
         t = self.theme
