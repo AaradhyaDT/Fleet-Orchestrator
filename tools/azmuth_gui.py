@@ -526,6 +526,11 @@ class AzmuthCommandCenterGUI:
         self.root.bind("<Control-t>", lambda e: self.toggle_theme())
         self.root.bind("<Control-T>", lambda e: self.toggle_theme())
 
+        # Reset / Refresh DAG Layout: Ctrl + R / F5
+        self.root.bind("<Control-r>", lambda e: self.reset_layout())
+        self.root.bind("<Control-R>", lambda e: self.reset_layout())
+        self.root.bind("<F5>", lambda e: self.reset_layout())
+
         # MouseWheel Zooming with Control held down
         self.root.bind("<Control-MouseWheel>", self._on_ctrl_mousewheel)
 
@@ -558,11 +563,19 @@ class AzmuthCommandCenterGUI:
         self._apply_zoom_and_layout()
 
     def reset_layout(self) -> None:
-        """Clears user manual node dragging offsets and restores default camera view."""
+        """Clears user manual node dragging offsets and restores default camera view and DAG render."""
         self.custom_node_positions.clear()
         self.dragged_node_id = None
         self.is_node_dragging = False
+        self.pan_start = None
+        self.is_panning = False
         self.zoom_reset()
+        if hasattr(self, "lbl_footer_job"):
+            self.lbl_footer_job.configure(
+                text="● Status: DAG layout reset to default schematic render",
+                fg=self.theme.accent_cyan,
+            )
+        self._spawn_pulse_wave(color=self.theme.accent_cyan, count=6)
 
     def _apply_zoom_and_layout(self) -> None:
         """Refreshes layout widths, widget font sizes, and canvas nodes for current zoom level."""
@@ -1046,6 +1059,7 @@ class AzmuthCommandCenterGUI:
             ("✦ Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
             ("▶ Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
             ("☷ Harvest Task", t.accent_emerald, self._trigger_harvest_task),
+            ("🔄 Reset DAG", t.accent_cyan, self.reset_layout),
             ("↻ Verify Cycle", t.accent_gold, self._trigger_full_cycle),
         ]
         self.action_buttons.clear()
@@ -1240,14 +1254,14 @@ class AzmuthCommandCenterGUI:
 
         self.btn_reset_layout = tk.Button(
             self.canvas_bar,
-            text="↺ Reset Layout",
-            font=self.font("Segoe UI", 8),
+            text="🔄 Reset DAG Layout",
+            font=self.font("Segoe UI", 8, "bold"),
             bg=t.bg_panel,
             fg=t.accent_cyan,
             activebackground=t.accent_cyan,
             activeforeground=t.bg_void,
             relief=tk.FLAT,
-            padx=6,
+            padx=8,
             pady=1,
             cursor="hand2",
             command=self.reset_layout,
@@ -1256,7 +1270,7 @@ class AzmuthCommandCenterGUI:
 
         self.lbl_canvas_hint = tk.Label(
             self.canvas_bar,
-            text="Drag Node: Move • Drag Canvas: Pan • Zoom: Wheel",
+            text="Drag Node: Move • Canvas: Pan • Zoom: Wheel • Reset: Ctrl+R / F5",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_main,
@@ -1268,6 +1282,7 @@ class AzmuthCommandCenterGUI:
         self.canvas.bind("<ButtonPress-1>", self._on_canvas_press)
         self.canvas.bind("<B1-Motion>", self._on_canvas_motion)
         self.canvas.bind("<ButtonRelease-1>", self._on_canvas_release)
+        self.canvas.bind("<Double-Button-1>", self._on_canvas_double_click)
         self.canvas.bind("<ButtonPress-2>", self._on_pan_start)
         self.canvas.bind("<B2-Motion>", self._on_pan_motion)
         self.canvas.bind("<ButtonRelease-2>", self._on_pan_end)
@@ -1305,7 +1320,7 @@ class AzmuthCommandCenterGUI:
 
         self.lbl_footer_right = tk.Label(
             self.footer,
-            text="Theme: Ctrl+T | Subsystem: Win32 GUI",
+            text="Reset DAG: Ctrl+R / F5 | Theme: Ctrl+T | Subsystem: Win32 GUI",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_panel,
@@ -1589,8 +1604,15 @@ class AzmuthCommandCenterGUI:
         x1, y1 = sx - nw / 2.0, sy - nh / 2.0
         x2, y2 = sx + nw / 2.0, sy + nh / 2.0
 
-        # Frustum culling
-        if x2 < -120 or x1 > cw + 120 or y2 < -120 or y1 > ch + 120:
+        # Frustum culling margin (generous to allow smooth panning and off-screen selection)
+        cull_margin = max(cw, 800.0)
+        if x2 < -cull_margin or x1 > cw + cull_margin or y2 < -cull_margin or y1 > ch + cull_margin:
+            self._register_clickable_node(
+                node_id, x1, y1, x2, y2,
+                payload or {"id": node_id, "title": title},
+                world_pos=(wx, wy),
+                world_dim=(nw / self.cam_zoom, nh / self.cam_zoom)
+            )
             return
 
         is_sel = self.selected_node_id == node_id
@@ -1643,6 +1665,70 @@ class AzmuthCommandCenterGUI:
             world_dim=(nw / self.cam_zoom, nh / self.cam_zoom)
         )
 
+    def _compute_smart_anchor(
+        self,
+        src_id: str,
+        dst_id: str,
+        pos1: Tuple[float, float],
+        size1: Tuple[float, float],
+        pos2: Tuple[float, float],
+        size2: Tuple[float, float],
+    ) -> Tuple[Tuple[float, float], Tuple[float, float], str]:
+        """Calculates dynamic node edge anchor coordinates and flow orientation ('h' or 'v')."""
+        x1, y1 = pos1
+        w1, h1 = size1
+        x2, y2 = pos2
+        w2, h2 = size2
+
+        dx = x2 - x1
+        dy = y2 - y1
+
+        is_src_circle = (src_id == "STAGE_PAT_RING")
+        is_dst_circle = (dst_id == "STAGE_PAT_RING")
+
+        r1 = w1 / 2.0
+        r2 = w2 / 2.0
+        hw1, hh1 = w1 / 2.0, h1 / 2.0
+        hw2, hh2 = w2 / 2.0, h2 / 2.0
+
+        # Determine dominant flow axis
+        if abs(dx) >= abs(dy) * 0.75:
+            orientation = "h"
+            if dx >= 0:
+                ax = x1 + (r1 if is_src_circle else hw1)
+                ay = y1
+                bx = x2 - (r2 if is_dst_circle else hw2)
+                by = y2
+            else:
+                ax = x1 - (r1 if is_src_circle else hw1)
+                ay = y1
+                bx = x2 + (r2 if is_dst_circle else hw2)
+                by = y2
+        else:
+            orientation = "v"
+            if dy >= 0:
+                ax = x1
+                ay = y1 + (r1 if is_src_circle else hh1)
+                bx = x2
+                by = y2 - (r2 if is_dst_circle else hh2)
+            else:
+                ax = x1
+                ay = y1 - (r1 if is_src_circle else hh1)
+                bx = x2
+                by = y2 + (r2 if is_dst_circle else hh2)
+
+        # For circular nodes, compute radial angle towards anchor for smooth radial fanning
+        if is_src_circle:
+            ang1 = math.atan2(by - y1, bx - x1)
+            ax = x1 + r1 * math.cos(ang1)
+            ay = y1 + r1 * math.sin(ang1)
+        if is_dst_circle:
+            ang2 = math.atan2(ay - y2, ax - x2)
+            bx = x2 + r2 * math.cos(ang2)
+            by = y2 + r2 * math.sin(ang2)
+
+        return (ax, ay), (bx, by), orientation
+
     def _draw_directed_edge(
         self,
         wx1: float,
@@ -1653,6 +1739,7 @@ class AzmuthCommandCenterGUI:
         label: str = "",
         dashed: bool = False,
         base_width: int = 2,
+        orientation: str = "h",
     ) -> None:
         t = self.theme
         cw = max(self.canvas.winfo_width(), 680)
@@ -1660,8 +1747,9 @@ class AzmuthCommandCenterGUI:
         x1, y1 = self.w2s(wx1, wy1, cw, ch)
         x2, y2 = self.w2s(wx2, wy2, cw, ch)
 
-        # Frustum culling
-        if max(x1, x2) < -120 or min(x1, x2) > cw + 120 or max(y1, y2) < -120 or min(y1, y2) > ch + 120:
+        # Frustum culling margin (generous to allow smooth panning)
+        cull_margin = max(cw, 800.0)
+        if max(x1, x2) < -cull_margin or min(x1, x2) > cw + cull_margin or max(y1, y2) < -cull_margin or min(y1, y2) > ch + cull_margin:
             return
 
         dash_pat = (4, 4) if dashed else None
@@ -1669,9 +1757,16 @@ class AzmuthCommandCenterGUI:
         arr_len = max(5, int(round(8 * self.cam_zoom)))
 
         # Smooth cubic Bezier spline control points
-        dx = max(24.0 * self.cam_zoom, abs(x2 - x1) * 0.45)
-        cp1_x, cp1_y = x1 + dx, y1
-        cp2_x, cp2_y = x2 - dx, y2
+        if orientation == "v":
+            dy = max(24.0 * self.cam_zoom, abs(y2 - y1) * 0.45)
+            sign_y = 1.0 if y2 >= y1 else -1.0
+            cp1_x, cp1_y = x1, y1 + dy * sign_y
+            cp2_x, cp2_y = x2, y2 - dy * sign_y
+        else:
+            dx = max(24.0 * self.cam_zoom, abs(x2 - x1) * 0.45)
+            sign_x = 1.0 if x2 >= x1 else -1.0
+            cp1_x, cp1_y = x1 + dx * sign_x, y1
+            cp2_x, cp2_y = x2 - dx * sign_x, y2
 
         self.canvas.create_line(
             x1, y1, cp1_x, cp1_y, cp2_x, cp2_y, x2, y2,
@@ -1711,37 +1806,86 @@ class AzmuthCommandCenterGUI:
         cp_cnt = len(tel.get("cp_archives", []))
         eco_cnt = len(tel.get("ecosystem", []))
 
-        # World Coordinate Schematic Layout
+        # World Coordinate Schematic Default Layout
         col1_wx = 190.0
-        pat_wx, pat_wy = 540.0, 240.0
-        thal_wx, thal_wy = 540.0, 540.0
-        cortex_wx, cortex_wy = 880.0, 240.0
-        gene_wx, gene_wy = 880.0, 540.0
-        arena_wx, arena_wy = 1200.0, 390.0
+        def_pat_wx, def_pat_wy = 540.0, 240.0
+        def_thal_wx, def_thal_wy = 540.0, 540.0
+        def_cortex_wx, def_cortex_wy = 880.0, 240.0
+        def_gene_wx, def_gene_wy = 880.0, 540.0
+        def_arena_wx, def_arena_wy = 1200.0, 390.0
 
         box_w = 175.0
         box_h = 48.0
-        half_bw = box_w / 2.0
+        ring_world_r = 52.0
+        ring_diam = (ring_world_r + 10.0) * 2.0
 
-        streams = [
+        stream_defs = [
             ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", t.accent_cyan, 140.0),
             ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", t.accent_blue, 300.0),
             ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, 460.0),
             ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, 620.0),
         ]
 
-        # Check custom node positions for pipeline stages
-        if "STAGE_PAT_RING" in self.custom_node_positions:
-            pat_wx, pat_wy = self.custom_node_positions["STAGE_PAT_RING"]
+        # Resolve effective positions (custom drag override or default layout)
+        stage_positions: Dict[str, Tuple[float, float]] = {}
+        stage_sizes: Dict[str, Tuple[float, float]] = {}
 
-        for s_id, s_title, s_sub, s_col, sy in streams:
-            self._draw_directed_edge(col1_wx + half_bw, sy, pat_wx - 60.0, pat_wy, color=s_col, base_width=1)
-            self._draw_node_box(
-                s_id, col1_wx, sy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
+        for s_id, s_title, s_sub, s_col, def_sy in stream_defs:
+            stage_positions[s_id] = self.custom_node_positions.get(s_id, (col1_wx, def_sy))
+            stage_sizes[s_id] = (box_w, box_h)
+
+        stage_positions["STAGE_PAT_RING"] = self.custom_node_positions.get("STAGE_PAT_RING", (def_pat_wx, def_pat_wy))
+        stage_sizes["STAGE_PAT_RING"] = (ring_diam, ring_diam)
+
+        stage_positions["STAGE_THALAMIC"] = self.custom_node_positions.get("STAGE_THALAMIC", (def_thal_wx, def_thal_wy))
+        stage_sizes["STAGE_THALAMIC"] = (185.0, 58.0)
+
+        stage_positions["STAGE_CORTEX"] = self.custom_node_positions.get("STAGE_CORTEX", (def_cortex_wx, def_cortex_wy))
+        stage_sizes["STAGE_CORTEX"] = (185.0, 58.0)
+
+        stage_positions["STAGE_ULTIMATRIX"] = self.custom_node_positions.get("STAGE_ULTIMATRIX", (def_gene_wx, def_gene_wy))
+        stage_sizes["STAGE_ULTIMATRIX"] = (185.0, 58.0)
+
+        stage_positions["STAGE_ARENA_SSOT"] = self.custom_node_positions.get("STAGE_ARENA_SSOT", (def_arena_wx, def_arena_wy))
+        stage_sizes["STAGE_ARENA_SSOT"] = (180.0, 64.0)
+
+        # 1. Draw all connecting directed edges first (so nodes sit cleanly on top)
+        pipeline_edges = [
+            ("STREAM_U3_LABS", "STAGE_PAT_RING", t.accent_cyan, "", False, 1),
+            ("STREAM_U1_RELEASES", "STAGE_PAT_RING", t.accent_blue, "", False, 1),
+            ("STREAM_CODON_CP", "STAGE_PAT_RING", t.accent_purple, "", False, 1),
+            ("STREAM_U0_ECO", "STAGE_PAT_RING", t.accent_emerald, "", False, 1),
+            ("STAGE_PAT_RING", "STAGE_THALAMIC", t.accent_cyan, "150k req/hr", False, 2),
+            ("STAGE_THALAMIC", "STAGE_CORTEX", t.accent_blue, "Salient Spikes", False, 2),
+            ("STAGE_THALAMIC", "STAGE_ULTIMATRIX", t.accent_purple, "Codon Feed", False, 2),
+            ("STAGE_CORTEX", "STAGE_ARENA_SSOT", t.accent_blue, "Foresight Directives", False, 2),
+            ("STAGE_ULTIMATRIX", "STAGE_ARENA_SSOT", t.accent_purple, "Evolved Alleles", False, 2),
+        ]
+
+        for src_id, dst_id, e_col, e_lbl, e_dash, e_width in pipeline_edges:
+            p1 = stage_positions[src_id]
+            s1 = stage_sizes[src_id]
+            p2 = stage_positions[dst_id]
+            s2 = stage_sizes[dst_id]
+            (ax, ay), (bx, by), orient = self._compute_smart_anchor(src_id, dst_id, p1, s1, p2, s2)
+            self._draw_directed_edge(
+                ax, ay, bx, by,
+                color=e_col,
+                label=e_lbl,
+                dashed=e_dash,
+                base_width=e_width,
+                orientation=orient,
             )
 
-        # 30-PAT Ring in World Coordinates
-        ring_world_r = 52.0
+        # 2. Draw 4 Sensory Stream Stage Boxes
+        for s_id, s_title, s_sub, s_col, def_sy in stream_defs:
+            swx, swy = stage_positions[s_id]
+            self._draw_node_box(
+                s_id, swx, swy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
+            )
+
+        # 3. Draw 30-PAT Ring in World Coordinates
+        pat_wx, pat_wy = stage_positions["STAGE_PAT_RING"]
         pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
         screen_r = ring_world_r * self.cam_zoom
         ring_pad = 10.0 * self.cam_zoom
@@ -1784,8 +1928,8 @@ class AzmuthCommandCenterGUI:
             world_dim=((ring_world_r + 10.0) * 2, (ring_world_r + 10.0) * 2),
         )
 
-        self._draw_directed_edge(pat_wx, pat_wy + ring_world_r + 6.0, thal_wx, thal_wy - 30.0, color=t.accent_cyan, label="150k req/hr")
-
+        # 4. Thalamic Salience Gate
+        thal_wx, thal_wy = stage_positions["STAGE_THALAMIC"]
         z_gate = self.thalamic_z_threshold.get()
         self._draw_node_box(
             "STAGE_THALAMIC",
@@ -1800,13 +1944,8 @@ class AzmuthCommandCenterGUI:
             payload={"type": "pipeline_stage", "id": "STAGE_THALAMIC"},
         )
 
-        self._draw_directed_edge(
-            thal_wx + half_bw, thal_wy - 10.0, cortex_wx - half_bw, cortex_wy + 10.0, color=t.accent_blue, label="Salient Spikes"
-        )
-        self._draw_directed_edge(
-            thal_wx + half_bw, thal_wy + 10.0, gene_wx - half_bw, gene_wy, color=t.accent_purple, label="Codon Feed"
-        )
-
+        # 5. U0-U5 Cortical Foresight
+        cortex_wx, cortex_wy = stage_positions["STAGE_CORTEX"]
         self._draw_node_box(
             "STAGE_CORTEX",
             cortex_wx,
@@ -1820,6 +1959,8 @@ class AzmuthCommandCenterGUI:
             payload={"type": "pipeline_stage", "id": "STAGE_CORTEX"},
         )
 
+        # 6. Ultimatrix Gene Sequencer
+        gene_wx, gene_wy = stage_positions["STAGE_ULTIMATRIX"]
         mut_cnt = self.mutation_ledger_data.get("mutations_applied", 0)
         self._draw_node_box(
             "STAGE_ULTIMATRIX",
@@ -1834,9 +1975,8 @@ class AzmuthCommandCenterGUI:
             payload={"type": "pipeline_stage", "id": "STAGE_ULTIMATRIX"},
         )
 
-        self._draw_directed_edge(cortex_wx + half_bw, cortex_wy, arena_wx - half_bw, arena_wy - 16.0, color=t.accent_blue)
-        self._draw_directed_edge(gene_wx + half_bw, gene_wy, arena_wx - half_bw, arena_wy + 16.0, color=t.accent_purple)
-
+        # 7. Arena & SSOT Ledgers
+        arena_wx, arena_wy = stage_positions["STAGE_ARENA_SSOT"]
         races = self.arena_ledger_data.get("tournaments_run", 0)
         promos = self.arena_ledger_data.get("promotions", 0)
         self._draw_node_box(
@@ -1894,11 +2034,10 @@ class AzmuthCommandCenterGUI:
             base_y = 380.0 - (total_h / 2.0)
             for r_idx, n in enumerate(layer):
                 ly = base_y + r_idx * v_step
-                positions[n["id"]] = (lx, ly)
+                positions[n["id"]] = self.custom_node_positions.get(n["id"], (lx, ly))
 
         node_bw = 160.0
         node_bh = 50.0
-        half_bw = node_bw / 2.0
 
         for s in synapses:
             src, tgt = s["source"], s["target"]
@@ -1910,14 +2049,18 @@ class AzmuthCommandCenterGUI:
                 edge_col = t.accent_emerald if weight >= 0 else t.accent_crimson
                 if tgt in self.shock_overlay:
                     edge_col = t.accent_gold
+                (ax, ay), (bx, by), orient = self._compute_smart_anchor(
+                    src, tgt, (wx1, wy1), (node_bw, node_bh), (wx2, wy2), (node_bw, node_bh)
+                )
                 self._draw_directed_edge(
-                    wx1 + half_bw,
-                    wy1,
-                    wx2 - half_bw,
-                    wy2,
+                    ax,
+                    ay,
+                    bx,
+                    by,
                     color=edge_col,
                     label=f"w={weight:+.2f} ({lag}d)",
                     base_width=2 if abs(weight) >= 0.5 else 1,
+                    orientation=orient,
                 )
 
         z_thresh = self.thalamic_z_threshold.get()
@@ -2562,6 +2705,15 @@ class AzmuthCommandCenterGUI:
         self.is_panning = False
         self.is_node_dragging = False
         self.dragged_node_id = None
+
+    def _on_canvas_double_click(self, event: Any) -> None:
+        """Double clicking empty canvas resets layout and camera view to default alignment."""
+        for nid, info in self.canvas_nodes.items():
+            x1, y1, x2, y2 = info["bbox"]
+            if x1 <= event.x <= x2 and y1 <= event.y <= y2:
+                # Clicked on an existing node
+                return
+        self.reset_layout()
 
     def _on_pan_start(self, event: Any) -> None:
         self.pan_start = (event.x, event.y)

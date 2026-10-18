@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-18T12:30:17.521489+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-18T13:03:51.799271+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 5, Salience: 2.0)
@@ -19,7 +19,7 @@
 - **[huggingface/transformers]** Tag `v5.20.1` - *Release v5.20.1* ([Release](https://github.com/huggingface/transformers/releases/tag/v5.20.1))
 
 ## 3. Algorithmic Codon Archive Targets (`CP`)
-- **[ShahjalalShohag/code-library]** ⭐ 3729 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
+- **[ShahjalalShohag/code-library]** ⭐ 3730 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
 - **[kth-competitive-programming/kactl]** ⭐ 3573 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1767 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
 - **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))

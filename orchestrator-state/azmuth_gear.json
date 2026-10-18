@@ -1,6 +1,6 @@
 {
-  "gear": "turbo",
-  "name": "Turbo / Warp (High Throughput)",
-  "set_at": "2026-10-18T08:23:29.183223+00:00",
+  "gear": "balanced",
+  "name": "Balanced (Auto-Managed)",
+  "set_at": "2026-10-18T12:50:23.503382+00:00",
   "reason": "Azmuth Command Center GUI"
 }

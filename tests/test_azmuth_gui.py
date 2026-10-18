@@ -253,3 +253,95 @@ def test_azmuth_gui_view3_multi_column_operator_lanes():
             pass
 
 
+def test_azmuth_gui_dynamic_anchors_and_pipeline_stages_drag():
+    """Verifies that all pipeline stages in View 1 dynamically update anchors when dragged."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        app.switch_view("pipeline")
+        app._redraw_active_canvas()
+
+        # Test smart anchor math between circle and box
+        p1 = (540.0, 240.0)
+        s1 = (124.0, 124.0)  # Circle
+        p2 = (540.0, 540.0)
+        s2 = (185.0, 58.0)   # Box below circle
+        (ax, ay), (bx, by), orient = app._compute_smart_anchor(
+            "STAGE_PAT_RING", "STAGE_THALAMIC", p1, s1, p2, s2
+        )
+        assert orient == "v"
+        assert abs(ax - 540.0) < 1e-3
+        assert ay > 240.0  # Leaves bottom rim of circle
+        assert abs(bx - 540.0) < 1e-3
+        assert by < 540.0  # Enters top face of box
+
+        # Move multiple stages simultaneously to simulate user drag
+        app.custom_node_positions["STAGE_THALAMIC"] = (600.0, 620.0)
+        app.custom_node_positions["STAGE_CORTEX"] = (920.0, 260.0)
+        app.custom_node_positions["STAGE_ULTIMATRIX"] = (920.0, 580.0)
+        app.custom_node_positions["STAGE_ARENA_SSOT"] = (1250.0, 420.0)
+        app._redraw_active_canvas()
+
+        # Verify all dragged nodes have their overridden world positions
+        assert app.canvas_nodes["STAGE_THALAMIC"]["world_pos"] == (600.0, 620.0)
+        assert app.canvas_nodes["STAGE_CORTEX"]["world_pos"] == (920.0, 260.0)
+        assert app.canvas_nodes["STAGE_ULTIMATRIX"]["world_pos"] == (920.0, 580.0)
+        assert app.canvas_nodes["STAGE_ARENA_SSOT"]["world_pos"] == (1250.0, 420.0)
+
+        # Trigger reset layout
+        app.reset_layout()
+        assert len(app.custom_node_positions) == 0
+
+        # After reset, redraw and verify default positions restored
+        app._redraw_active_canvas()
+        assert app.canvas_nodes["STAGE_THALAMIC"]["world_pos"] == (540.0, 540.0)
+        assert app.canvas_nodes["STAGE_CORTEX"]["world_pos"] == (880.0, 240.0)
+        assert app.canvas_nodes["STAGE_ULTIMATRIX"]["world_pos"] == (880.0, 540.0)
+        assert app.canvas_nodes["STAGE_ARENA_SSOT"]["world_pos"] == (1200.0, 390.0)
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+
+
+def test_azmuth_gui_canvas_double_click_reset_and_action_button():
+    """Verifies double-clicking empty canvas and clicking Reset DAG button resets layout."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+    except tk.TclError:
+        pytest.skip("Tkinter display not available in this environment")
+
+    try:
+        app = AzmuthCommandCenterGUI(root)
+        app.switch_view("pipeline")
+        app._redraw_active_canvas()
+
+        # Set custom positions
+        app.custom_node_positions["STAGE_PAT_RING"] = (400.0, 200.0)
+        assert len(app.custom_node_positions) == 1
+
+        # Simulate double-click on empty canvas at (10, 10)
+        class DummyEvent:
+            x = 10
+            y = 10
+        app._on_canvas_double_click(DummyEvent())
+        assert len(app.custom_node_positions) == 0
+
+        # Check action button presence
+        reset_action_btns = [b for b, col in app.action_buttons if "Reset DAG" in b.cget("text")]
+        assert len(reset_action_btns) == 1
+    finally:
+        try:
+            app._on_close()
+        except Exception:
+            pass
+
+
+
