@@ -7,7 +7,7 @@
       "drive_file_id": "1IPM7NtGMqOxrpvCwJ9uOtF0h3jjoAayWfP57rgq6cgc",
       "drive_file_name": "fleet-orchestrator_README.md",
       "description": "Fleet Orchestrator \u2014 Headless Autonomous Copilot Fleet Engine",
-      "sha256": "0a3db7bac696ec47"
+      "sha256": "94d59376dc876eaa"
     },
     "HANDOFF_FLEET_ORCHESTRATOR.md": {
       "drive_file_id": "17-KjT6qlQkYjBWPkMC1BtgFUNPFzFvuvnA-sZ3v0BdM",
@@ -31,19 +31,19 @@
       "drive_file_id": "1bjXQ4K6hTtOevmG6XFih-AVGP0UlXGEK",
       "drive_file_name": "qwen_intent_router_q4_k_m.gguf",
       "description": "Fine-Tuned Qwen2.5-0.5B-Instruct Intent, Skill & Task Time Allocation Router (Q4_K_M GGUF)",
-      "sha256": "58473aca2106e275fe29636be6e078da4721a11f24dc5c8925b468454d5a5b81"
+      "sha256": "4268123a517491c3"
     },
     "models/fleet_master_brain_3b_q4km.gguf": {
       "drive_file_id": "1kZ7hIAeVM6T0AVDwU1bruWRtIaNMLTzR",
       "drive_file_name": "fleet_master_brain_3b_q4km.gguf",
       "description": "Fine-Tuned Qwen2.5-Coder-3B-Instruct Fleet Master Brain Daily Driver (Q4_K_M GGUF, 1.8 GB)",
-      "sha256": "0768e459c7b44e76377eff1e2325208aa80938e7e88352a5ef361812cdfb31ea"
+      "sha256": "02b48d4b11facea0"
     },
     "models/fleet_master_brain_7b_q4km.gguf": {
       "drive_file_id": "1XnqLXF6F7-ibDrJdcZzw-XGRneVQ02Rd",
       "drive_file_name": "fleet_master_brain_7b_q4km.gguf",
       "description": "Fine-Tuned Qwen2.5-Coder-7B-Instruct Fleet Master Brain Powerhouse (Q4_K_M GGUF, 4.36 GB)",
-      "sha256": "cloud_persisted_a100_7b"
+      "sha256": "6152544a9e7cbcea"
     },
     "notebooks/fleet_master_brain_forge.ipynb": {
       "drive_file_id": "1VdTGqTDY32NM_yDchErn01c5fnvFA_uv",

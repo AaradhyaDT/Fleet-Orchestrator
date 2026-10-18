@@ -72,3 +72,10 @@ Before finalizing changes or executing `.\sync.bat`:
 - **Scratch & Test Isolation**: Store ephemeral runner scripts in `<appDataDir>\brain\<conversation-id>/scratch/`. Repository `scratch/` is strictly git-ignored and never committed to Git.
 - **Zero Credential Commits**: Never commit `.env`, `.env.fleet`, `*.db`, session files, cookies, or raw tokens.
 - **Process Isolation**: Each worker subprocess driving `copilot.exe` must receive its own isolated `COPILOT_GITHUB_TOKEN` and `COPILOT_HOME` directory.
+- **Background Task & Subprocess Governance (`background-task-governance`)**:
+  - Automatically enforce the [`background-task-governance`](file:///C:/Users/Aaradhya/.gemini/config/skills/background-task-governance/SKILL.md) skill across all orchestrator and worker executions.
+  - **Zero Interactive CLIs Headlessly**: Never invoke CLI utilities that prompt for unattached stdin or confirmation without non-interactive flags (e.g., `diskpart`, interactive WSL commands, unflagged package managers).
+  - **Zero Elevated UAC Headlessly**: Commands requiring administrator elevation must never be dispatched headlessly; instruct the user to run them in an external elevated terminal.
+  - **PowerShell Script-File First**: Never pass multi-pipe expressions or complex PowerShell blocks via inline `-Command "..."` strings. Write to a `.ps1` in the scratch directory and invoke with `-ExecutionPolicy Bypass -File`.
+  - **Proactive Watchdog**: If any background task produces no output or progress for >60s, inspect process CPU/IO immediately and kill deadlocked tasks.
+
