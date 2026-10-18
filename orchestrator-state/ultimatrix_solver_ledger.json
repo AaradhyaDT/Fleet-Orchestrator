@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 245,
-  "tasks_solved": 245,
+  "tasks_attempted": 322,
+  "tasks_solved": 322,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -247,316 +247,391 @@
     "dranei",
     "editor",
     "max-or-subarray",
-    "t-shapes"
+    "t-shapes",
+    "and-closure",
+    "array-removal",
+    "bfs-dfs",
+    "black-white-tree",
+    "build-the-towers",
+    "circular_shift_sort",
+    "counting-quests",
+    "crossing-tree",
+    "dogs",
+    "driveaway",
+    "electric-cars",
+    "encipherment",
+    "enemy",
+    "epic-marble-battles",
+    "equidistant-points",
+    "escape-the-matrix",
+    "escaping-courses",
+    "etianap",
+    "even-subset",
+    "expected-lcp",
+    "expected-merge",
+    "experience",
+    "fiicode-2022-b1",
+    "fiicode-2022-c2",
+    "fiicode-2022-d1",
+    "fiicode-2022-e1",
+    "fiicode-2022-e2",
+    "final-a",
+    "final-b",
+    "finalc",
+    "find-binary-array",
+    "find-remainder",
+    "flip-game",
+    "fold-polygon",
+    "force_graph",
+    "game",
+    "gerrymandering",
+    "ginas-necklace",
+    "global-warming",
+    "grade-system",
+    "graph-game",
+    "groups",
+    "growing-segment",
+    "growing-trees",
+    "hamming-distances",
+    "hill-skateboarding",
+    "infinity-war",
+    "integer-coords",
+    "ioi-selection",
+    "k-inversions",
+    "late-edges",
+    "least-even-digits",
+    "license-plates",
+    "lights-out",
+    "losing-nim",
+    "lottery",
+    "love-story",
+    "lynx",
+    "manhattan-center",
+    "many-zeros",
+    "marbles-graph-game",
+    "matching-substrings",
+    "matrix-balls",
+    "max-substring",
+    "maximize-profit",
+    "maxor",
+    "metal-examination",
+    "milk-and-bread",
+    "min-distances",
+    "min-races",
+    "minimize-max-diff",
+    "money-savings",
+    "necromancer",
+    "nitesh-and-the-green-research-card",
+    "no-repeat",
+    "num-cube-sets",
+    "overlapping-matrices"
   ],
-  "last_solve_at": "2026-10-18T08:47:28.286875+00:00",
+  "last_solve_at": "2026-10-18T11:35:21.795328+00:00",
   "history": [
     {
-      "timestamp": "2026-10-18T03:30:45.799541+00:00",
-      "slug": "binary-isomorphism",
+      "timestamp": "2026-10-18T10:09:58.245868+00:00",
+      "slug": "final-a",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:31:26.070126+00:00",
-      "slug": "bitwise-and-queries",
+      "timestamp": "2026-10-18T10:10:44.881556+00:00",
+      "slug": "final-b",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:32:55.379968+00:00",
-      "slug": "boaty-mcboatface",
+      "timestamp": "2026-10-18T10:11:48.803209+00:00",
+      "slug": "finalc",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:34:07.041771+00:00",
-      "slug": "bob-tree",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T03:34:44.152812+00:00",
-      "slug": "boring-operation",
+      "timestamp": "2026-10-18T10:12:31.364384+00:00",
+      "slug": "find-binary-array",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:35:23.701120+00:00",
-      "slug": "boss-fight",
+      "timestamp": "2026-10-18T10:13:52.882809+00:00",
+      "slug": "find-remainder",
       "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
+      "samples_passed": 3
     },
     {
-      "timestamp": "2026-10-18T03:36:45.417540+00:00",
-      "slug": "brain-rot-outbreak",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T03:37:22.387391+00:00",
-      "slug": "bst-fixed-height",
+      "timestamp": "2026-10-18T10:16:36.084548+00:00",
+      "slug": "flip-game",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 4
     },
     {
-      "timestamp": "2026-10-18T03:37:59.408765+00:00",
-      "slug": "build-correct-brackets",
+      "timestamp": "2026-10-18T10:19:52.391756+00:00",
+      "slug": "fold-polygon",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:41:17.914265+00:00",
-      "slug": "card-groups",
+      "timestamp": "2026-10-18T10:20:39.845772+00:00",
+      "slug": "force_graph",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T10:21:32.694188+00:00",
+      "slug": "game",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:22:16.742006+00:00",
+      "slug": "gerrymandering",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:23:18.238746+00:00",
+      "slug": "ginas-necklace",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T10:24:34.380293+00:00",
+      "slug": "global-warming",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:25:11.410019+00:00",
+      "slug": "grade-system",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
     },
     {
-      "timestamp": "2026-10-18T03:41:54.149374+00:00",
-      "slug": "cats-and-dogs",
+      "timestamp": "2026-10-18T10:25:49.124370+00:00",
+      "slug": "graph-game",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:26:58.866832+00:00",
+      "slug": "groups",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:28:13.882897+00:00",
+      "slug": "growing-segment",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:28:58.873777+00:00",
+      "slug": "growing-trees",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:30:02.840688+00:00",
+      "slug": "hamming-distances",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T10:32:23.679270+00:00",
+      "slug": "hill-skateboarding",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:34:38.337924+00:00",
+      "slug": "infinity-war",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:35:19.905598+00:00",
+      "slug": "integer-coords",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T10:36:03.843288+00:00",
+      "slug": "ioi-selection",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
     },
     {
-      "timestamp": "2026-10-18T03:42:31.376657+00:00",
-      "slug": "celsius-to-fahrenheit",
+      "timestamp": "2026-10-18T10:38:02.979409+00:00",
+      "slug": "k-inversions",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-18T10:40:11.862509+00:00",
+      "slug": "late-edges",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-18T10:40:56.016470+00:00",
+      "slug": "least-even-digits",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-18T10:41:33.356236+00:00",
+      "slug": "license-plates",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:42:19.559084+00:00",
+      "slug": "lights-out",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-18T10:43:58.909143+00:00",
+      "slug": "losing-nim",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 4
     },
     {
-      "timestamp": "2026-10-18T03:44:43.345213+00:00",
-      "slug": "chromatic-number",
+      "timestamp": "2026-10-18T10:44:51.368318+00:00",
+      "slug": "lottery",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:45:20.648490+00:00",
-      "slug": "circle-kingdom",
+      "timestamp": "2026-10-18T10:45:28.525880+00:00",
+      "slug": "love-story",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:46:00.469695+00:00",
-      "slug": "circuits",
+      "timestamp": "2026-10-18T10:46:13.424638+00:00",
+      "slug": "lynx",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:47:00.608435+00:00",
-      "slug": "cities-robbery",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T03:47:52.361484+00:00",
-      "slug": "city-attractions",
+      "timestamp": "2026-10-18T10:47:02.865572+00:00",
+      "slug": "manhattan-center",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:49:20.426176+00:00",
-      "slug": "city-break",
+      "timestamp": "2026-10-18T10:48:36.310750+00:00",
+      "slug": "many-zeros",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:51:41.656055+00:00",
-      "slug": "clown-fiesta",
+      "timestamp": "2026-10-18T10:49:17.004227+00:00",
+      "slug": "marbles-graph-game",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 2
     },
     {
-      "timestamp": "2026-10-18T03:52:21.688580+00:00",
-      "slug": "clubs",
+      "timestamp": "2026-10-18T10:50:04.829130+00:00",
+      "slug": "matching-substrings",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 5
+    },
+    {
+      "timestamp": "2026-10-18T10:50:43.647877+00:00",
+      "slug": "matrix-balls",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:53:40.007579+00:00",
-      "slug": "cntgigelmat",
+      "timestamp": "2026-10-18T10:53:11.540366+00:00",
+      "slug": "max-substring",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
     },
     {
-      "timestamp": "2026-10-18T03:55:20.175662+00:00",
-      "slug": "concatenated-string",
+      "timestamp": "2026-10-18T10:53:51.041609+00:00",
+      "slug": "maximize-profit",
       "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 4
+      "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:56:27.139348+00:00",
-      "slug": "confused-robot",
+      "timestamp": "2026-10-18T10:54:55.036861+00:00",
+      "slug": "maxor",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:55:52.955965+00:00",
+      "slug": "metal-examination",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T10:57:26.529316+00:00",
+      "slug": "milk-and-bread",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 2
     },
     {
-      "timestamp": "2026-10-18T03:57:09.106801+00:00",
-      "slug": "connecting-the-graph",
+      "timestamp": "2026-10-18T10:58:19.101518+00:00",
+      "slug": "min-distances",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T03:58:11.978076+00:00",
-      "slug": "consecutive-digit-signs",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T03:58:54.755153+00:00",
-      "slug": "consecutive-remainders",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T03:59:43.263627+00:00",
-      "slug": "cookie-clicker",
+      "timestamp": "2026-10-18T11:02:00.182824+00:00",
+      "slug": "min-races",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T04:01:36.007272+00:00",
-      "slug": "cosmological-nightmare",
+      "timestamp": "2026-10-18T11:04:40.238346+00:00",
+      "slug": "minimize-max-diff",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
     },
     {
-      "timestamp": "2026-10-18T04:02:19.085134+00:00",
-      "slug": "count-4-cycles",
+      "timestamp": "2026-10-18T11:05:18.029150+00:00",
+      "slug": "money-savings",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T04:03:07.015153+00:00",
-      "slug": "count-squares",
+      "timestamp": "2026-10-18T11:07:31.402566+00:00",
+      "slug": "necromancer",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T11:08:24.584005+00:00",
+      "slug": "nitesh-and-the-green-research-card",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-18T11:09:29.876397+00:00",
+      "slug": "no-repeat",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 2
     },
     {
-      "timestamp": "2026-10-18T04:06:30.976210+00:00",
-      "slug": "crypto",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T04:08:47.215728+00:00",
-      "slug": "cuinelo",
+      "timestamp": "2026-10-18T11:10:25.423292+00:00",
+      "slug": "num-cube-sets",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
     },
     {
-      "timestamp": "2026-10-18T04:11:35.558662+00:00",
-      "slug": "cut-the-trees",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:14:24.498597+00:00",
-      "slug": "dacian-array",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:17:36.860671+00:00",
-      "slug": "dazzling-trams",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T04:18:15.736504+00:00",
-      "slug": "deja-vu-1-3",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:18:58.221313+00:00",
-      "slug": "diesel-train",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 4
-    },
-    {
-      "timestamp": "2026-10-18T04:19:37.196583+00:00",
-      "slug": "digit-function",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:20:13.359111+00:00",
-      "slug": "digit-holes",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T04:21:57.763975+00:00",
-      "slug": "digits-permutation",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T04:23:02.235064+00:00",
-      "slug": "direct-the-graph",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 4
-    },
-    {
-      "timestamp": "2026-10-18T04:23:47.245565+00:00",
-      "slug": "disjoint-tree-paths",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:24:24.787351+00:00",
-      "slug": "disk-mechanism",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:28:28.205811+00:00",
-      "slug": "distinct_rotations",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:32:02.812526+00:00",
-      "slug": "dominant-free-sets",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T04:41:02.452872+00:00",
-      "slug": "douchebag-parking",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:48:43.842669+00:00",
-      "slug": "dranei",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T04:49:46.962922+00:00",
-      "slug": "editor",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T08:43:47.280971+00:00",
-      "slug": "max-or-subarray",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T08:44:33.905055+00:00",
-      "slug": "t-shapes",
+      "timestamp": "2026-10-18T11:11:06.492582+00:00",
+      "slug": "overlapping-matrices",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 2
     }
   ],
   "attempted_slugs": {
-    "connect-the-graph": "VERIFICATION_FAILED",
-    "equal-sums": "VERIFICATION_FAILED",
-    "find-edge-list": "VERIFICATION_FAILED",
-    "tennis-tournament": "VERIFICATION_FAILED"
+    "connect-the-graph": "UNSUPPORTED_ARCHETYPE",
+    "equal-sums": "VERIFICATION_FAILED"
   },
-  "gemini_circuit_breaker_until": "2026-10-18T00:00:01.343989+00:00"
+  "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

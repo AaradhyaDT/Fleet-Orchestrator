@@ -97,6 +97,8 @@ logger = logging.getLogger("azmuth_gui")
 STATE_DIR = ROOT / "orchestrator-state"
 ARENA_LEDGER = STATE_DIR / "ultimatrix_arena_ledger.json"
 MACRO_BRIEF_JSON = STATE_DIR / "macro_foresight_brief.json"
+SWEEP_JSON = STATE_DIR / "macro_foresight_sweep.json"
+INGESTION_FEED = STATE_DIR / "azmuth_ingestion_feed.jsonl"
 RUN_LOG_JSON = STATE_DIR / "azmuth_run.json"
 
 
@@ -973,6 +975,7 @@ class AzmuthCommandCenterGUI:
             ("pipeline", "1 • Pipeline & PAT Flow"),
             ("dag", "2 • U0–U5 Causal DAG"),
             ("genes", "3 • Gene Lab & Evolution Tree"),
+            ("ingestion", "4 • Live Ingestion & Ledger"),
         ]
         for v_id, v_text in views:
             btn = tk.Button(
@@ -1038,6 +1041,7 @@ class AzmuthCommandCenterGUI:
         self.act_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
         actions = [
+            ("☁️ A100 Burst", t.accent_crimson, self._trigger_colab_cloud_burst),
             ("◈ Scan GitHub", t.accent_cyan, self._trigger_github_scan),
             ("✦ Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
             ("▶ Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
@@ -1343,6 +1347,12 @@ class AzmuthCommandCenterGUI:
                 text="VIEW [3] — PHYLOGENETIC GENE EVOLUTION TREE & ALLELE ARENA", fg=t.accent_purple
             )
             self.btn_contextual_action.configure(text="▶ Mutate & Race", bg=t.accent_purple, fg=t.text_primary)
+        elif view_name == "ingestion":
+            self.left_header_lbl.configure(text="INGESTION & TELEMETRY STREAM")
+            self.lbl_canvas_mode.configure(
+                text="VIEW [4] — LIVE INGESTION FUNNEL & MULTI-UNIVERSE RADAR", fg=t.accent_emerald
+            )
+            self.btn_contextual_action.configure(text="☁️ A100 Burst", bg=t.accent_crimson, fg=t.text_primary)
 
         self._populate_left_panel()
         self._redraw_active_canvas()
@@ -1435,6 +1445,20 @@ class AzmuthCommandCenterGUI:
                     self.left_listbox.insert(tk.END, lbl)
                     self.left_items_meta.append({"type": "gene", "gene_id": gid})
 
+        elif self.active_view == "ingestion":
+            events = self._load_recent_ingestion_events(limit=100)
+            if not events:
+                self.left_listbox.insert(tk.END, "  [i] No ingestion events recorded yet.")
+            for ev in events:
+                etype = ev.get("event_type", "EVENT")
+                src = ev.get("source", "System")
+                title = ev.get("title", ev.get("item_id", ""))
+                ts = ev.get("timestamp", "")[11:19]
+                lbl = f" [{ts}] {etype[:12]:<12} • {title[:28]}"
+                if not q or q in etype.lower() or q in src.lower() or q in title.lower():
+                    self.left_listbox.insert(tk.END, lbl)
+                    self.left_items_meta.append({"type": "ingestion_event", "data": ev})
+
     def _on_left_list_select(self, event: Any) -> None:
         sel = self.left_listbox.curselection()
         if not sel:
@@ -1466,6 +1490,8 @@ class AzmuthCommandCenterGUI:
             self.selected_allele_id = None
             self._inspect_gene_or_allele(self.selected_gene_id, None)
             self._redraw_active_canvas()
+        elif mtype == "ingestion_event":
+            self._inspect_ingestion_event(meta["data"])
 
     # ------------------------------------------------------------------------
     # Scaled Canvas Rendering (with Zoom & Resolution Adaptation)
@@ -1491,6 +1517,8 @@ class AzmuthCommandCenterGUI:
             self._draw_causal_dag_view(w, h)
         elif self.active_view == "genes":
             self._draw_gene_phylogeny_view(w, h)
+        elif self.active_view == "ingestion":
+            self._draw_ingestion_view(w, h)
 
         self._draw_active_pulses()
 
@@ -2114,6 +2142,111 @@ class AzmuthCommandCenterGUI:
             self.selected_node_id = f"GENE_ROOT::{phylo['gene_id']}"
             self._inspect_gene_or_allele(phylo["gene_id"], self.selected_allele_id)
 
+    def _draw_ingestion_view(self, cw: float, ch: float) -> None:
+        """Renders View [4]: Live Ingestion Funnel, Universe Touch Radar & Activity Ledger."""
+        t = self.theme
+        cx, cy = cw / 2.0, ch / 2.0
+
+        # Load sweep telemetry
+        sweep_data: dict[str, Any] = {}
+        if SWEEP_JSON.exists():
+            try:
+                sweep_data = json.loads(SWEEP_JSON.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        universes = sweep_data.get("universes", {})
+
+        # Top Pipeline Funnel Cards
+        funnel_items = [
+            ("INDEXED PROBLEMS", f"{self.corpus_ledger_data.get('tasks_indexed', 696)}+ Tasks", t.accent_cyan),
+            ("VERIFIED SOLVES", f"{self.arena_ledger_data.get('tournaments_run', 266)}+ Solved", t.accent_blue),
+            ("SEQUENCED GENES", f"{len(self.genes_catalog)} Loci", t.accent_purple),
+            ("ALLELE MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 711)}+ Mutated", t.accent_emerald),
+            ("ARENA PROMOTIONS", f"{self.mutation_ledger_data.get('promotions_won', 213)}+ Won", t.accent_gold),
+        ]
+
+        card_w = 110.0
+        card_h = 55.0
+        spacing = 125.0
+        start_wx = cx - ((len(funnel_items) - 1) * spacing) / 2.0
+        top_wy = cy - 160.0
+
+        for i, (f_title, f_val, f_col) in enumerate(funnel_items):
+            wx = start_wx + (i * spacing)
+            self._draw_node_box(
+                f"FUNNEL_{i}",
+                wx,
+                top_wy,
+                card_w,
+                card_h,
+                f_title,
+                f_val,
+                f_col,
+                badge="FUNNEL",
+                payload={"type": "ingestion_funnel", "title": f_title, "value": f_val},
+            )
+            if i < len(funnel_items) - 1:
+                next_wx = start_wx + ((i + 1) * spacing)
+                self._draw_directed_edge(
+                    wx + card_w / 2.0,
+                    top_wy,
+                    next_wx - card_w / 2.0,
+                    top_wy,
+                    color=t.border_active,
+                    dashed=True,
+                )
+
+        # Bottom 6 Universe Lobes Matrix (U0-U5)
+        u_lobes = [
+            ("u0_ecosystem_mesh", "U0: Ecosystem Mesh", "28 Modules • Swarm Mesh", t.accent_cyan),
+            ("u1_research_arbitrage", "U1: Research Arbitrage", "SOTA AI • Fellowship Lab", t.accent_blue),
+            ("u2_ai_compute_frontier", "U2: Compute Frontier", "16GB RAM • Colab A100", t.accent_purple),
+            ("u3_career_opportunity_alpha", "U3: Career Alpha", "KU Faculty • Grants", t.accent_emerald),
+            ("u4_macro_capital_markets", "U4: Capital Markets", "Foundry Supply • NEPSE", t.accent_gold),
+            ("u5_hardware_physics_bom", "U5: Physical BOM", "ESP32-S3 • 200Hz IMU", t.accent_crimson),
+        ]
+
+        u_cols = 3
+        u_spacing_x = 220.0
+        u_spacing_y = 90.0
+        u_start_wx = cx - u_spacing_x
+        u_start_wy = cy + 20.0
+
+        for idx, (u_id, u_label, u_sub, u_col) in enumerate(u_lobes):
+            col_idx = idx % u_cols
+            row_idx = idx // u_cols
+            wx = u_start_wx + (col_idx * u_spacing_x)
+            wy = u_start_wy + (row_idx * u_spacing_y)
+
+            u_meta = universes.get(u_id, {})
+            spikes = u_meta.get("spikes_count", 0)
+            choke = u_meta.get("top_chokepoint", "None")
+            status_badge = f"{spikes} Spikes" if spikes > 0 else "EQ (0σ)"
+
+            self._draw_node_box(
+                f"UNIVERSE_LOBE_{u_id}",
+                wx,
+                wy,
+                195.0,
+                68.0,
+                u_label,
+                f"{u_sub}\nChokepoint: {choke}",
+                u_col,
+                badge=status_badge,
+                payload={"type": "universe_status", "universe_id": u_id, "meta": u_meta},
+            )
+
+        # Center connector from Funnel to Universes
+        self._draw_directed_edge(
+            cx,
+            top_wy + card_h / 2.0,
+            cx,
+            u_start_wy - 34.0,
+            color=t.accent_emerald,
+            label="Continuous Sensory Grounding",
+            dashed=True,
+        )
+
     # ------------------------------------------------------------------------
     # Inspector Population
     # ------------------------------------------------------------------------
@@ -2485,6 +2618,10 @@ class AzmuthCommandCenterGUI:
                 elif ptype == "allele":
                     self.selected_allele_id = payload["allele_id"]
                     self._inspect_gene_or_allele(payload["gene_id"], payload["allele_id"])
+                elif ptype == "universe_status":
+                    self._inspect_dag_node(payload.get("meta", {}).get("top_chokepoint", payload["universe_id"]))
+                elif ptype == "ingestion_funnel":
+                    self._inspect_pipeline_stage("STAGE_ULTIMATRIX")
                 elif ptype == "trigger_mutate":
                     self._trigger_mutate_selected_gene()
 
@@ -2636,6 +2773,87 @@ class AzmuthCommandCenterGUI:
 
     def _trigger_full_cycle(self) -> None:
         self._run_background_job("Full Sentinel Verification Cycle", self.theme.accent_gold, execute_cycle)
+
+    def _trigger_colab_cloud_burst(self) -> None:
+        """Launches the A100 High-RAM Cloud Hyper-Burst in background thread."""
+        def job():
+            import subprocess
+            cmd = [sys.executable, str(ROOT / "tools" / "azmuth_colab_burst.py"), "--tier", "a100-highmem", "--sync-drive"]
+            logger.info(f"Executing Cloud Hyper-Burst: {' '.join(cmd)}")
+            res = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
+            if res.returncode != 0:
+                logger.error(f"Cloud Hyper-Burst returned error: {res.stderr}")
+            else:
+                logger.info(f"Cloud Hyper-Burst completed successfully:\n{res.stdout[-1000:]}")
+
+        self._run_background_job("A100-SXM4-80GB High-RAM Cloud Hyper-Burst", self.theme.accent_crimson, job)
+
+    def _load_recent_ingestion_events(self, limit: int = 100) -> list[dict[str, Any]]:
+        """Loads latest ingestion events from azmuth_ingestion_feed.jsonl in reverse chronological order."""
+        if not INGESTION_FEED.exists():
+            return []
+        try:
+            lines = INGESTION_FEED.read_text(encoding="utf-8").splitlines()
+            events = []
+            for line in reversed(lines):
+                if line.strip():
+                    try:
+                        events.append(json.loads(line))
+                        if len(events) >= limit:
+                            break
+                    except Exception:
+                        pass
+            return events
+        except Exception:
+            return []
+
+    def _inspect_ingestion_event(self, event_data: dict[str, Any]) -> None:
+        """Renders rich details of an ingestion/activity event into the right inspector."""
+        self._clear_inspector_badges()
+        self.inspector_text.delete("1.0", tk.END)
+        t = self.theme
+
+        etype = event_data.get("event_type", "EVENT")
+        src = event_data.get("source", "System")
+        title = event_data.get("title", "")
+        ts = event_data.get("timestamp", "")
+        status = event_data.get("status", "SUCCESS")
+        details = event_data.get("details", {})
+
+        row1 = tk.Frame(self.cap_summary_frame, bg=t.bg_panel)
+        row1.pack(fill=tk.X, pady=(0, 4))
+        tk.Label(
+            row1,
+            text=f"TYPE: {etype}",
+            font=self.font("Consolas", 8, "bold"),
+            fg=t.accent_emerald if status == "SUCCESS" else t.accent_amber,
+            bg=t.bg_card,
+            padx=6,
+            pady=2,
+        ).pack(side=tk.LEFT, padx=(0, 4))
+        tk.Label(
+            row1,
+            text=f"SRC: {src}",
+            font=self.font("Consolas", 8),
+            fg=t.accent_cyan,
+            bg=t.bg_card,
+            padx=6,
+            pady=2,
+        ).pack(side=tk.LEFT, padx=2)
+
+        self.inspector_text.insert(tk.END, f"ACTIVITY INGESTION EVENT\n", "h1")
+        self.inspector_text.insert(tk.END, f"{title}\n\n", "h2")
+        self.inspector_text.insert(
+            tk.END,
+            f"Timestamp:   {ts}\n"
+            f"Source Engine: {src}\n"
+            f"Status:      {status}\n\n",
+            "gold" if status == "SUCCESS" else "crimson",
+        )
+
+        self.inspector_text.insert(tk.END, "STRUCTURED EVENT PAYLOAD & METRICS:\n", "h2")
+        formatted_json = json.dumps(details, indent=2)
+        self.inspector_text.insert(tk.END, f"{formatted_json}\n", "code")
 
     def _on_select_gear(self, gear_name: str) -> None:
         set_current_gear(gear_name, reason="Azmuth Command Center GUI")

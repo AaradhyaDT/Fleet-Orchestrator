@@ -9,8 +9,7 @@ import argparse
 import collections
 import json
 import math
-import os
-import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -572,6 +571,76 @@ def render_markdown_brief(brief: Dict[str, Any], universe_id: str, lobe_name: st
             lines.append(f"  - **Directive:** {g['action']}")
 
     return "\n".join(lines)
+
+
+def sweep_all_universes(cartridge_dir: Path = DEFAULT_CARTRIDGE_DIR, z_threshold: float = 0.8) -> dict[str, Any]:
+    """Sweeps all 6 cortical cartridges (U0 through U5) in parallel/sequence.
+    Evaluates SpikingMacroGraph and ForesightAlphaEngine across each lobe,
+    returning a unified multi-universe telemetry matrix.
+    """
+    cartridges = CorticalCartridgeLoader.list_available_cartridges(cartridge_dir)
+    results: dict[str, Any] = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "total_cartridges": len(cartridges),
+        "universes": {},
+        "systemic_spikes": [],
+        "critical_chokepoints": [],
+    }
+
+    for c in cartridges:
+        c_path = c["path"]
+        try:
+            c_data = CorticalCartridgeLoader.load_cartridge(c_path)
+            u_id = c_data.get("universe_id", c["id"])
+            lobe = c_data.get("cortical_lobe", c["name"])
+
+            graph = SpikingMacroGraph(
+                c_data.get("nodes", []),
+                c_data.get("synapses", []),
+                habituate_threshold=z_threshold,
+            )
+            engine = ForesightAlphaEngine(graph, c_data.get("engrams", []))
+            brief = engine.generate_brief()
+
+            spikes = [
+                {"node_id": nid, "z_score": n["z_score"], "state": n["state_label"]}
+                for nid, n in graph.nodes.items()
+                if abs(n["z_score"]) >= z_threshold
+            ]
+
+            chokepoints = graph.detect_systemic_chokepoints(top_k=3)
+            top_choke = chokepoints[0]["node_id"] if chokepoints else None
+
+            results["universes"][u_id] = {
+                "id": u_id,
+                "name": lobe,
+                "node_count": len(graph.nodes),
+                "synapse_count": len(c_data.get("synapses", [])),
+                "spikes_count": len(spikes),
+                "top_chokepoint": top_choke,
+                "engram_matches": len(brief.get("engram_matches", [])),
+                "last_swept_at": datetime.now(timezone.utc).isoformat(),
+            }
+
+            for s in spikes:
+                results["systemic_spikes"].append({"universe_id": u_id, **s})
+
+            if top_choke:
+                results["critical_chokepoints"].append({"universe_id": u_id, "node_id": top_choke})
+
+        except Exception as exc:
+            results["universes"][c["id"]] = {"error": str(exc)}
+
+    # Persist multi-universe sweep summary
+    DEFAULT_STATE_DIR.mkdir(parents=True, exist_ok=True)
+    sweep_path = DEFAULT_STATE_DIR / "macro_foresight_sweep.json"
+    try:
+        with open(sweep_path, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2)
+    except Exception:
+        pass
+
+    return results
 
 
 def main():

@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-18T08:40:05.804316+00:00",
-  "timestamp_epoch": 1792312793.9344265,
+  "timestamp": "2026-10-18T11:28:13.733098+00:00",
+  "timestamp_epoch": 1792322881.2906158,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
@@ -64,6 +64,24 @@
         "salience": 2.0
       },
       {
+        "id": "optiqor/kerno#50",
+        "title": "Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule",
+        "repo": "optiqor/kerno",
+        "url": "https://github.com/optiqor/kerno/issues/50",
+        "labels": [
+          "documentation",
+          "good first issue",
+          "help wanted",
+          "P2",
+          "area/community",
+          "claimed"
+        ],
+        "comments": 58,
+        "created_at": "2026-05-10T13:00:29Z",
+        "updated_at": "2026-10-18T09:22:42Z",
+        "salience": 2.0
+      },
+      {
         "id": "Nobayprotocol/Nobay-Protocol#3",
         "title": "Add Hardhat test suite for ListingRegistry.sol",
         "repo": "Nobayprotocol/Nobay-Protocol",
@@ -113,23 +131,6 @@
         "created_at": "2026-06-06T13:20:26Z",
         "updated_at": "2026-10-17T17:29:02Z",
         "salience": 1.4
-      },
-      {
-        "id": "kubestellar/kubestellar#3791",
-        "title": "[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3791",
-        "labels": [
-          "kind/feature",
-          "help wanted",
-          "good first issue",
-          "stage/010-actionable",
-          "stage/stalled"
-        ],
-        "comments": 1,
-        "created_at": "2026-06-06T13:20:27Z",
-        "updated_at": "2026-10-17T17:28:59Z",
-        "salience": 1.2
       }
     ],
     "releases": [
@@ -185,11 +186,11 @@
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3572,
+        "stars": 3573,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-18T06:14:54Z"
+        "updated_at": "2026-10-18T08:56:35Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -220,7 +221,7 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-18T06:57:41Z",
+        "pushed_at": "2026-10-18T10:30:34Z",
         "stars": 0,
         "forks": 0
       },

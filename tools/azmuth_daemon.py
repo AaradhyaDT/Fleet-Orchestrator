@@ -42,6 +42,7 @@ PAUSE_FILE = STATE_DIR / "azmuth.pause"
 LOCK_FILE = STATE_DIR / "azmuth.pid.lock"
 GEAR_FILE = STATE_DIR / "azmuth_gear.json"
 BURST_HISTORY = STATE_DIR / "azmuth_burst_history.jsonl"
+INGESTION_FEED = STATE_DIR / "azmuth_ingestion_feed.jsonl"
 DIRTY_GATE_FILE = STATE_DIR / "azmuth_skills_fingerprint.json"
 
 GEARS: dict[str, dict[str, Any]] = {
@@ -541,6 +542,39 @@ def record_burst_history(entry: dict[str, Any]) -> None:
         logger.debug(f"Could not record burst history: {e}")
 
 
+def record_ingestion_event(
+    event_type: str,
+    source: str,
+    item_id: str,
+    title: str = "",
+    status: str = "SUCCESS",
+    details: Optional[dict[str, Any]] = None,
+) -> None:
+    """Appends a structured ingestion / activity event to azmuth_ingestion_feed.jsonl.
+    Retains the latest 500 records for zero-disk-bloat 60FPS UI visualization.
+    """
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event_type": event_type,  # e.g. "TASK_HARVEST", "MUTATION", "ARENA_RACE", "UNIVERSE_SWEEP", "GITHUB_RADAR", "SOLVE"
+        "source": source,          # e.g. "CSAcademy", "HackerRank", "LanguageHarvester", "UltimatrixMutator", "MacroForesight"
+        "item_id": item_id,
+        "title": title or item_id,
+        "status": status,
+        "details": details or {},
+    }
+    try:
+        lines: list[str] = []
+        if INGESTION_FEED.exists():
+            lines = INGESTION_FEED.read_text(encoding="utf-8").splitlines()
+        lines.append(json.dumps(payload))
+        if len(lines) > 500:
+            lines = lines[-500:]
+        INGESTION_FEED.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    except Exception as exc:
+        logger.debug(f"Could not record ingestion feed event: {exc}")
+
+
 # --- Dynamic Module Hot-Reloading Guard ---
 
 MODULE_MTIMES: dict[str, int] = {}
@@ -652,12 +686,20 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
                 task_label = harvest_res.get("task", "task")
                 if "genes_created" in harvest_res:
                     task_label += f"_{harvest_res['genes_created']}genes"
+                    record_ingestion_event("GENE_SEQUENCED", "CodonStream", harvest_res.get("task", "gene"), f"Sequenced {harvest_res['genes_created']} new codon genes", details=harvest_res)
                 elif "problems_indexed" in harvest_res:
                     task_label += f"_{harvest_res['problems_indexed']}probs"
+                    record_ingestion_event("PROBLEMS_INDEXED", "CompetitiveProgramming", "IndexBatch", f"Indexed {harvest_res['problems_indexed']} problem constraints", details=harvest_res)
                 elif "solve_result" in harvest_res:
-                    task_label += f"_solved_{harvest_res['solve_result'].get('tasks_solved', 0)}"
+                    s_cnt = harvest_res['solve_result'].get('tasks_solved', 0)
+                    task_label += f"_solved_{s_cnt}"
+                    record_ingestion_event("TASK_SOLVED", "UltimatrixSolver", "SolveBatch", f"Solved & sample-verified {s_cnt} tasks", details=harvest_res['solve_result'])
                 elif "mutation_result" in harvest_res:
-                    task_label += f"_mutated_{harvest_res['mutation_result'].get('genes_mutated', 0)}"
+                    m_cnt = harvest_res['mutation_result'].get('genes_mutated', 0)
+                    task_label += f"_mutated_{m_cnt}"
+                    record_ingestion_event("MUTATION_EVOLVED", "UltimatrixMutator", "MutateBatch", f"Evolved {m_cnt} allele mutations", details=harvest_res['mutation_result'])
+                elif "arena_result" in harvest_res:
+                    record_ingestion_event("ARENA_RACE", "UltimatrixArena", "ArenaBatch", "Ran tournament race across competing alleles", details=harvest_res['arena_result'])
                 burst_result["tasks_executed"].append(f"ultimatrix_{task_label}")
             else:
                 break
@@ -680,8 +722,35 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
             opps = len(gh_telemetry.get("opportunities", []))
             rels = len(gh_telemetry.get("releases", []))
             burst_result["tasks_executed"].append(f"github_radar_harvest_{opps}opps_{rels}rels")
+            record_ingestion_event("GITHUB_RADAR_SWEEP", "AzmuthGitHubSensor", "30-PAT-Pool", f"Scanned 4 streams: {opps} opportunities, {rels} releases", details={"opps": opps, "rels": rels})
     except Exception as e:
         logger.debug(f"[Burst-Steal] GitHub sensor harvest error: {e}")
+
+    # Subtask 4: U0-U5 Multi-Universe Neuromorphic Foresight Sweep
+    try:
+        sweep_file = STATE_DIR / "macro_foresight_sweep.json"
+        should_sweep_universes = True
+        if sweep_file.exists():
+            age = time.time() - sweep_file.stat().st_mtime
+            if age < 900.0:  # 15 min TTL
+                should_sweep_universes = False
+
+        if should_sweep_universes and is_system_idle(threshold_seconds=10.0):
+            check_and_enforce_gear_safety()
+            from tools.azmuth_macro_graph import sweep_all_universes
+            sweep_data = sweep_all_universes()
+            u_cnt = sweep_data.get("total_cartridges", 0)
+            spikes_cnt = len(sweep_data.get("systemic_spikes", []))
+            burst_result["tasks_executed"].append(f"u0_u5_universe_sweep_{u_cnt}lobes_{spikes_cnt}spikes")
+            record_ingestion_event(
+                "UNIVERSE_SWEEP",
+                "MacroForesight",
+                "U0-U5-All-Lobes",
+                f"Swept {u_cnt} cortical cartridges: {spikes_cnt} active spikes detected",
+                details={"universes_swept": list(sweep_data.get("universes", {}).keys()), "spikes": spikes_cnt},
+            )
+    except Exception as e:
+        logger.debug(f"[Burst-Steal] Universe sweep error: {e}")
 
     elapsed = time.time() - start_time
     burst_result["elapsed_sec"] = round(elapsed, 2)
