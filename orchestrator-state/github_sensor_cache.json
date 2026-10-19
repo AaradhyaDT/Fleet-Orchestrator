@@ -1,9 +1,24 @@
 {
-  "timestamp": "2026-10-19T05:09:58.867627+00:00",
-  "timestamp_epoch": 1792386587.0852478,
+  "timestamp": "2026-10-19T05:42:07.303109+00:00",
+  "timestamp_epoch": 1792388515.0029893,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "huggingface/peft#2310",
+        "title": "Comparison of Different Fine-Tuning Techniques for Conversational AI",
+        "repo": "huggingface/peft",
+        "url": "https://github.com/huggingface/peft/issues/2310",
+        "labels": [
+          "good first issue",
+          "help wanted",
+          "contributions-welcome"
+        ],
+        "comments": 168,
+        "created_at": "2025-01-07T07:07:50Z",
+        "updated_at": "2026-10-19T05:32:44Z",
+        "salience": 2.0
+      },
       {
         "id": "patrickkellyyoung-ai/swarm-agora-mcp#4",
         "title": "[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark",
@@ -48,20 +63,6 @@
         "comments": 6,
         "created_at": "2026-08-25T19:17:18Z",
         "updated_at": "2026-10-19T01:29:20Z",
-        "salience": 2.0
-      },
-      {
-        "id": "0xShug0/audio.cpp#34",
-        "title": "Roadmap: From More Models to Better Models (and Model Waiting List)",
-        "repo": "0xShug0/audio.cpp",
-        "url": "https://github.com/0xShug0/audio.cpp/issues/34",
-        "labels": [
-          "help wanted",
-          "announcement"
-        ],
-        "comments": 12,
-        "created_at": "2026-07-07T03:33:46Z",
-        "updated_at": "2026-10-19T00:58:52Z",
         "salience": 2.0
       },
       {

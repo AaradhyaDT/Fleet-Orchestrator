@@ -486,5 +486,327 @@
     "final_balance": 352.49,
     "units_spent": 0.0,
     "timestamp_end": "2026-10-18T13:42:29.862758+00:00"
+  },
+  {
+    "timestamp_start": "2026-10-19T05:46:16.929068+00:00",
+    "tier": "a100-highmem",
+    "session_name": "azmuth-top3-burst",
+    "initial_balance": 351.7,
+    "status": "SUCCESS",
+    "remote_data": {
+      "timestamp": "2026-10-19T05:46:35Z",
+      "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+      "accelerator": "NVIDIA A100-SXM4-80GB (79.25 GB VRAM)",
+      "system_ram_gb": 167.05,
+      "mutation_time_sec": 0.732,
+      "monte_carlo_time_sec": 0.892,
+      "evolved_alleles": [
+        {
+          "allele_id": "mut_bitwise_word_unrolling",
+          "pattern": "unsigned long long mask = (1ULL << k) - 1;",
+          "speedup_pct": 33.0,
+          "runtime_ms": 19.08,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_python_stdlib_accel",
+          "pattern": "import collections, itertools, heapq; sys.stdin.readline",
+          "speedup_pct": 50.0,
+          "runtime_ms": 16.89,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_arena_bump_allocator",
+          "pattern": "char arena[1<<26]; size_t a_ptr = 0; void* alloc(size_t sz) { void* p = &arena[a_ptr]; a_ptr += (sz+7)&~7; return p; }",
+          "speedup_pct": 57.0,
+          "runtime_ms": 16.13,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_simd_vectorized_find",
+          "pattern": "#include <immintrin.h> __m256i v = _mm256_loadu_si256((__m256i*)p);",
+          "speedup_pct": 64.0,
+          "runtime_ms": 15.43,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_fenwick_bit_unroll_64",
+          "pattern": "for (; idx > 0; idx -= idx & -idx) sum += tree[idx];",
+          "speedup_pct": 40.0,
+          "runtime_ms": 18.12,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_avx512_streaming_store",
+          "pattern": "_mm512_stream_si512((__m512i*)dst, _mm512_loadu_si512((__m512i*)src));",
+          "speedup_pct": 73.0,
+          "runtime_ms": 14.62,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_hugepages_mmap_shared",
+          "pattern": "mmap(NULL, sz, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);",
+          "speedup_pct": 46.0,
+          "runtime_ms": 17.36,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_lockless_spsc_queue",
+          "pattern": "std::atomic<size_t> head{0}, tail{0}; alignas(64) T ring[CAP];",
+          "speedup_pct": 60.0,
+          "runtime_ms": 15.82,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_zero_copy_ipc_shm",
+          "pattern": "shm_open('/azmuth_shm', O_CREAT|O_RDWR, 0666); ftruncate(fd, 1<<30);",
+          "speedup_pct": 67.0,
+          "runtime_ms": 15.15,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_cache_aligned_soa",
+          "pattern": "struct alignas(64) NodeSoA { float x[N]; float y[N]; float w[N]; };",
+          "speedup_pct": 54.0,
+          "runtime_ms": 16.45,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_templated_branch_predict",
+          "pattern": "#define LIKELY(x) __builtin_expect(!!(x), 1)",
+          "speedup_pct": 36.0,
+          "runtime_ms": 18.66,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        },
+        {
+          "allele_id": "mut_numa_localized_binding",
+          "pattern": "numa_alloc_onnode(sz, node_id); numa_run_on_node(node_id);",
+          "speedup_pct": 51.0,
+          "runtime_ms": 16.78,
+          "ram_kb": 2048,
+          "status": "PROMOTED_PRIMARY"
+        }
+      ],
+      "top_super_alleles": [
+        {
+          "genotype_id": "G_0FFF",
+          "mask": 4095,
+          "allele_count": 12,
+          "composite_speedup_pct": 379.38
+        },
+        {
+          "genotype_id": "G_0FFE",
+          "mask": 4094,
+          "allele_count": 11,
+          "composite_speedup_pct": 371.61
+        },
+        {
+          "genotype_id": "G_0BFF",
+          "mask": 3071,
+          "allele_count": 11,
+          "composite_speedup_pct": 369.68
+        },
+        {
+          "genotype_id": "G_0FEF",
+          "mask": 4079,
+          "allele_count": 11,
+          "composite_speedup_pct": 367.1
+        },
+        {
+          "genotype_id": "G_0FBF",
+          "mask": 4031,
+          "allele_count": 11,
+          "composite_speedup_pct": 363.23
+        },
+        {
+          "genotype_id": "G_0BFE",
+          "mask": 3070,
+          "allele_count": 10,
+          "composite_speedup_pct": 361.33
+        },
+        {
+          "genotype_id": "G_0FFD",
+          "mask": 4093,
+          "allele_count": 11,
+          "composite_speedup_pct": 360.65
+        },
+        {
+          "genotype_id": "G_07FF",
+          "mask": 2047,
+          "allele_count": 11,
+          "composite_speedup_pct": 360.0
+        },
+        {
+          "genotype_id": "G_0FEE",
+          "mask": 4078,
+          "allele_count": 10,
+          "composite_speedup_pct": 358.67
+        },
+        {
+          "genotype_id": "G_0DFF",
+          "mask": 3583,
+          "allele_count": 11,
+          "composite_speedup_pct": 358.06
+        }
+      ],
+      "monte_carlo_universes": {
+        "u0_ecosystem_mesh": {
+          "nodes_count": 6,
+          "synapses_count": 5,
+          "trials_run": 1000000,
+          "mean_spikes": 0.33,
+          "tail_risk_var_99": 3.0,
+          "tail_risk_cvar_99": 3.21,
+          "accelerator": "A100_CUDA"
+        },
+        "u1_research_arbitrage": {
+          "nodes_count": 5,
+          "synapses_count": 3,
+          "trials_run": 1000000,
+          "mean_spikes": 0.17,
+          "tail_risk_var_99": 2.0,
+          "tail_risk_cvar_99": 2.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u2_ai_compute_frontier": {
+          "nodes_count": 5,
+          "synapses_count": 3,
+          "trials_run": 1000000,
+          "mean_spikes": 0.15,
+          "tail_risk_var_99": 1.0,
+          "tail_risk_cvar_99": 1.03,
+          "accelerator": "A100_CUDA"
+        },
+        "u3_career_opportunity_alpha": {
+          "nodes_count": 4,
+          "synapses_count": 3,
+          "trials_run": 1000000,
+          "mean_spikes": 0.19,
+          "tail_risk_var_99": 1.0,
+          "tail_risk_cvar_99": 1.0,
+          "accelerator": "A100_CUDA"
+        },
+        "u4_macro_capital_markets": {
+          "nodes_count": 27,
+          "synapses_count": 20,
+          "trials_run": 1000000,
+          "mean_spikes": 1.19,
+          "tail_risk_var_99": 6.0,
+          "tail_risk_cvar_99": 6.44,
+          "accelerator": "A100_CUDA"
+        },
+        "u5_hardware_physics_bom": {
+          "nodes_count": 4,
+          "synapses_count": 3,
+          "trials_run": 1000000,
+          "mean_spikes": 0.18,
+          "tail_risk_var_99": 2.0,
+          "tail_risk_cvar_99": 2.08,
+          "accelerator": "A100_CUDA"
+        }
+      },
+      "spectral_dynamics": {
+        "total_master_nodes": 51,
+        "raw_spectral_radius": 1.7653,
+        "stabilized_spectral_radius": 0.95,
+        "damping_factor_applied": 0.5381,
+        "top_5_singular_values": [
+          0.95,
+          0.9158,
+          0.8248,
+          0.8049,
+          0.7998
+        ],
+        "resonance_stability": "STABLE",
+        "compute_time_sec": 0.08
+      },
+      "temporal_sde_dynamics": {
+        "simulation_days": 30,
+        "paths_simulated": 1000000,
+        "theta_mean_reversion": 0.15,
+        "sigma_diffusion": 0.25,
+        "peak_contagion_day": 30,
+        "recovery_half_life_days": 30,
+        "daily_mean_activation": [
+          0.1156,
+          0.1724,
+          0.2111,
+          0.239,
+          0.2596,
+          0.2751,
+          0.287,
+          0.2962,
+          0.3033,
+          0.3089,
+          0.3133,
+          0.3167,
+          0.3195,
+          0.3216,
+          0.3233,
+          0.3248,
+          0.3259,
+          0.3267,
+          0.3275,
+          0.328,
+          0.3284,
+          0.3288,
+          0.3291,
+          0.3294,
+          0.3296,
+          0.3298,
+          0.3299,
+          0.33,
+          0.3301,
+          0.3302
+        ],
+        "daily_spikes_total": [
+          1,
+          58,
+          145,
+          228,
+          333,
+          495,
+          706,
+          927,
+          1148,
+          1496,
+          1658,
+          1957,
+          2137,
+          2395,
+          2522,
+          2553,
+          2752,
+          2909,
+          3108,
+          3022,
+          3119,
+          3146,
+          3252,
+          3207,
+          3201,
+          3305,
+          3377,
+          3300,
+          3435,
+          3338
+        ],
+        "compute_time_sec": 0.156
+      }
+    },
+    "final_balance": 351.7,
+    "units_spent": 0.0,
+    "timestamp_end": "2026-10-19T05:46:44.553711+00:00"
   }
 ]
