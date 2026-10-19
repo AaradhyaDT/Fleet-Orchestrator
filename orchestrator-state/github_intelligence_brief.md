@@ -1,8 +1,8 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-19T11:02:30.133946+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-19T12:44:36.969283+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[xaviercallens/HiveMind]** [[HM-S3-02] Native Custom CUDA/Triton INT4 + FP8 Fused MoE Router Kernel in swarm_fabric.py](https://github.com/xaviercallens/HiveMind/issues/15) (Comments: 0, Salience: 1.0)
+- **[xaviercallens/HiveMind]** [[HM-S3-02] Native Custom CUDA/Triton INT4 + FP8 Fused MoE Router Kernel in swarm_fabric.py](https://github.com/xaviercallens/HiveMind/issues/15) (Comments: 1, Salience: 1.2)
 - **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 11, Salience: 2.0)
 - **[vllm-project/vllm-omni]** [[Perf] Onboard omni encoder stages to the upstream multimodal encoder CUDA Graph framework](https://github.com/vllm-project/vllm-omni/issues/7452) (Comments: 26, Salience: 2.0)
 - **[MakazhanAlpamys/Soup]** [Fast-LoRA autograd, correctness half: hand-written backward for the LoRA projections, behind training.fast_lora](https://github.com/MakazhanAlpamys/Soup/issues/792) (Comments: 5, Salience: 2.0)
@@ -26,7 +26,7 @@
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-19T07:19:02Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-19T12:20:03Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
 - **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-18T02:35:47Z`

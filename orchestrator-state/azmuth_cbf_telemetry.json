@@ -1,0 +1,9 @@
+{
+  "status": "SAFE",
+  "total_nodes_evaluated": 0,
+  "breached_nodes_count": 0,
+  "system_invariance_satisfied": true,
+  "min_barrier_h_value": 0.0,
+  "active_mitigation_actions": [],
+  "evaluations_sample": []
+}

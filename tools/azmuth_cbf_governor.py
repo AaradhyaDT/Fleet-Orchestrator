@@ -159,31 +159,29 @@ class AzmuthCBFGovernor:
         return telemetry
 
 
-def run_cbf_governor_cli() -> None:
+def run_cbf_governor_cli(argv: list[str] | None = None) -> None:
     """CLI entrypoint to run CBF sweep on local state."""
     import argparse
-    from tools.azmuth_macro_graph import AzmuthMultiUniverseForesightEngine
+    from tools.azmuth_macro_graph import sweep_all_universes
 
     parser = argparse.ArgumentParser(description="Azmuth CBF Governor Sweep")
     parser.add_argument("--gain", type=float, default=1.0, help="CBF Alpha Gain")
     parser.add_argument(
         "--z-limit", type=float, default=3.0, help="Maximum safe Z-score bound"
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    engine = AzmuthMultiUniverseForesightEngine()
-    engine.load_all_universes()
-    sweep_results = engine.run_multi_universe_sweep()
+    sweep_results = sweep_all_universes()
 
     governor = AzmuthCBFGovernor(
         alpha_gain=args.gain, z_safety_limit=args.z_limit
     )
     telemetry = governor.audit_and_govern(
-        sweep_results.get("universes_detail", {})
+        sweep_results.get("universes", {})
     )
 
     print("=" * 80)
-    print("  🛡️ AZMUTH CONTROL BARRIER FUNCTION (CBF) GOVERNOR AUDIT")
+    print("  AZMUTH CONTROL BARRIER FUNCTION (CBF) GOVERNOR AUDIT")
     print("=" * 80)
     print(f"- System Status:           {telemetry['status']}")
     print(f"- Nodes Evaluated:         {telemetry['total_nodes_evaluated']}")

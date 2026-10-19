@@ -133,34 +133,38 @@ class AzmuthMultiScaleSDESimulator:
 
 def run_multiscale_cli() -> None:
     """CLI to run multi-scale SDE simulation on current macro graph."""
-    from tools.azmuth_macro_graph import AzmuthMultiUniverseForesightEngine
+    from tools.azmuth_macro_graph import CorticalCartridgeLoader, DEFAULT_CARTRIDGE_DIR
 
-    engine = AzmuthMultiUniverseForesightEngine()
-    engine.load_all_universes()
-    sweep = engine.run_multi_universe_sweep()
+    cartridges = CorticalCartridgeLoader.list_available_cartridges(DEFAULT_CARTRIDGE_DIR)
 
     nodes_list = []
-    for u_id, u_info in sweep.get("universes_detail", {}).items():
-        for n_id, n_data in u_info.get("nodes", {}).items():
-            nodes_list.append({"id": f"{u_id}::{n_id}", "z_score": n_data.get("z_score", 0.0)})
+    for c in cartridges:
+        try:
+            c_data = CorticalCartridgeLoader.load_cartridge(c["path"])
+            u_id = c_data.get("universe_id", c["id"])
+            for n in c_data.get("nodes", []):
+                n_id = n.get("id", "unknown")
+                nodes_list.append({"id": f"{u_id}::{n_id}", "z_score": float(n.get("z_score", 0.0))})
+        except Exception:
+            pass
 
     n = len(nodes_list)
     # Fast identity/sparse adjacency mock for local testing
-    adj = np.eye(n) * 0.02
+    adj = np.eye(n) * 0.02 if n > 0 else np.zeros((1, 1))
 
     sim = AzmuthMultiScaleSDESimulator()
     telemetry = sim.simulate_stratified_horizons(nodes_list, adj, num_trials=2000)
 
     print("=" * 80)
-    print("  📈 AZMUTH MULTI-SCALE SDE HORIZON PROJECTIONS")
+    print("  AZMUTH MULTI-SCALE SDE HORIZON PROJECTIONS")
     print("=" * 80)
     print(f"- Total Nodes: {telemetry['num_nodes']}")
     print(f"- Trials/Horizon: {telemetry['trials_per_horizon']}")
     print("-" * 80)
     for p in telemetry["projections"]:
         print(f"[{p['horizon_label']}] {p['horizon_days']} Days:")
-        print(f"  • Survival: {p['survival_probability_pct']}% ({p['asymptotic_status']})")
-        print(f"  • Mean Drift: {p['mean_drift']} | Volatility: {p['volatility']} | VaR(95%): {p['var_95']}")
+        print(f"  - Survival: {p['survival_probability_pct']}% ({p['asymptotic_status']})")
+        print(f"  - Mean Drift: {p['mean_drift']} | Volatility: {p['volatility']} | VaR(95%): {p['var_95']}")
     print("=" * 80)
 
 
