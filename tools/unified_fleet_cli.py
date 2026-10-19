@@ -216,7 +216,13 @@ def cmd_submit(args: argparse.Namespace) -> None:
         task["time_allocation"] = ta
 
     if getattr(args, "target_repo", None):
-        task["target_repo"] = str(Path(args.target_repo).resolve())
+        from tools.ecosystem_resolver import EcosystemResolver
+        resolved = EcosystemResolver().resolve(args.target_repo)
+        if resolved:
+            task["target_repo"] = str(resolved.local_path)
+            task["canonical_target"] = resolved.canonical_name
+        else:
+            task["target_repo"] = str(Path(args.target_repo).resolve())
 
     tid = task["id"]
     task_path = tasks_dir / f"{tid}.json"
@@ -226,7 +232,8 @@ def cmd_submit(args: argparse.Namespace) -> None:
     print(f"[OK] Dispatched task {tid} ({args.kind}) | Auto-Tier: {task['auto_tier']} | Model: {task.get('model') or 'auto'}")
     print(f"     Spec: {args.spec}")
     if task.get("target_repo"):
-        print(f"     Target Repo: {task['target_repo']}")
+        canon_tag = f" [{task.get('canonical_target')}]" if task.get("canonical_target") else ""
+        print(f"     Target Repo: {task['target_repo']}{canon_tag}")
     print(f"     Queue: {task_path}")
 
 

@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Authoritative Canonical Name Mapping and Indirection Registry for Aaradhya's Tool Ecosystem",
+  "root_directory": "F:\\Aaradhya-Dev-Tamrakar",
+  "canonical_registry": {
+    "fleet-orchestrator": {
+      "canonical_name": "fleet-orchestrator",
+      "display_name": "Fleet-Orchestrator",
+      "aliases": ["fleet", "fleet_orchestrator", "Fleet-Orchestrator", "fleet-orchestrator-engine"],
+      "default_folder_name": "Fleet-Orchestrator",
+      "github_repo": "AaradhyaDT/Fleet-Orchestrator",
+      "category": "core_orchestration",
+      "azmuth_universe": "u0_ecosystem_mesh"
+    },
+    "brainstorm": {
+      "canonical_name": "brainstorm",
+      "display_name": "Brainstorm R&D Incubator",
+      "aliases": ["brainstorm", "brain", "brl", "Brainstorm"],
+      "default_folder_name": "brainstorm",
+      "github_repo": "Aaradhya-Dev-Tamrakar/brainstorm",
+      "category": "core_orchestration",
+      "azmuth_universe": "u0_ecosystem_mesh"
+    },
+    "spark": {
+      "canonical_name": "spark",
+      "display_name": "SPARK Wearable Edge AI",
+      "aliases": ["spark-edge", "SPARK", "spark_wearable", "spark-wearable", "spark"],
+      "default_folder_name": "SPARK",
+      "github_repo": "Aaradhya-Dev-Tamrakar/SPARK",
+      "category": "edge_ai_hardware",
+      "azmuth_universe": "u10_spark_edge_ai_telemetry"
+    },
+    "bias-aperture": {
+      "canonical_name": "bias-aperture",
+      "display_name": "BiasAperture Vision Fairness",
+      "aliases": ["biasaperture", "BiasAperture", "bias_aperture", "bias-aperture"],
+      "default_folder_name": "BiasAperture",
+      "github_repo": "Aaradhya-Dev-Tamrakar/BiasAperture",
+      "category": "computer_vision_fairness",
+      "azmuth_universe": "u11_bias_aperture_vision_audit"
+    },
+    "cyber-forensics": {
+      "canonical_name": "cyber-forensics",
+      "display_name": "Cyber-Forensics DFIR Engine",
+      "aliases": ["cyber_forensics", "Cyber-Forensics", "cyber-forensics", "forensics"],
+      "default_folder_name": "Cyber-Forensics",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Cyber-Forensics",
+      "category": "security_dfir",
+      "azmuth_universe": "u7_cyber_resilience_dfir"
+    },
+    "problem-dissector": {
+      "canonical_name": "problem-dissector",
+      "display_name": "Problem-Dissector CP Engine",
+      "aliases": ["problem_dissector", "Problem-Dissector", "problem-dissector", "dissector"],
+      "default_folder_name": "Problem-Dissector",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Problem-Dissector",
+      "category": "algorithms_cp",
+      "azmuth_universe": "u8_algorithmic_complexity_cp"
+    },
+    "competitive-programming": {
+      "canonical_name": "competitive-programming",
+      "display_name": "Competitive-Programming Codon Archive",
+      "aliases": ["cp", "Competitive-Programming", "competitive_programming", "competitive-programming"],
+      "default_folder_name": "Competitive-Programming",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Competitive-Programming",
+      "category": "algorithms_cp",
+      "azmuth_universe": "u8_algorithmic_complexity_cp"
+    },
+    "super-nlm": {
+      "canonical_name": "super-nlm",
+      "display_name": "Super-NLM Hub",
+      "aliases": ["super_nlm", "super-nlm", "supernlm", "notebooklm-fleet"],
+      "default_folder_name": "super-nlm",
+      "github_repo": "Aaradhya-Dev-Tamrakar/super-nlm",
+      "category": "knowledge_retrieval",
+      "azmuth_universe": "u1_research_arbitrage"
+    },
+    "system-optimizer": {
+      "canonical_name": "system-optimizer",
+      "display_name": "NovaOptimizer (System-Optimizer)",
+      "aliases": ["system_optimizer", "system-optimizer", "nova-optimizer", "NovaOptimizer"],
+      "default_folder_name": "system-optimizer",
+      "github_repo": "Aaradhya-Dev-Tamrakar/system-optimizer",
+      "category": "systems_performance",
+      "azmuth_universe": "u6_energy_thermal_power"
+    },
+    "win-vault": {
+      "canonical_name": "win-vault",
+      "display_name": "Win-Vault Privacy & ACL Lock",
+      "aliases": ["win_vault", "Win-Vault", "win-vault", "vault"],
+      "default_folder_name": "Win-Vault",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Win-Vault",
+      "category": "security_dfir",
+      "azmuth_universe": "u7_cyber_resilience_dfir"
+    },
+    "agent-customization-sync": {
+      "canonical_name": "agent-customization-sync",
+      "display_name": "Agent-Customization-Sync",
+      "aliases": ["customization-sync", "Agent-Customization-Sync", "agent_customization_sync"],
+      "default_folder_name": "Agent-Customization-Sync",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Agent-Customization-Sync",
+      "category": "developer_experience",
+      "azmuth_universe": "u0_ecosystem_mesh"
+    },
+    "fusion360-mcp": {
+      "canonical_name": "fusion360-mcp",
+      "display_name": "Fusion 360 MCP Bridge",
+      "aliases": ["fusion-mcp", "fusion360", "AEC-MCP Suite/fusion360-mcp", "fusion360-mcp"],
+      "default_folder_name": "AEC-MCP Suite\\fusion360-mcp",
+      "github_repo": "Aaradhya-Dev-Tamrakar/Autodesk-Fusion-360-MCP-Server",
+      "category": "aec_cad",
+      "azmuth_universe": "u5_hardware_physics_bom"
+    },
+    "freecad-mcp": {
+      "canonical_name": "freecad-mcp",
+      "display_name": "FreeCAD MCP Bridge",
+      "aliases": ["freecad", "freecad-mcp", "FreeCAD-MCP"],
+      "default_folder_name": "freecad-mcp",
+      "github_repo": "Aaradhya-Dev-Tamrakar/freecad-mcp",
+      "category": "aec_cad",
+      "azmuth_universe": "u5_hardware_physics_bom"
+    },
+    "portfolio-website": {
+      "canonical_name": "portfolio-website",
+      "display_name": "AaradhyaDT.github.io Portfolio",
+      "aliases": ["portfolio", "AaradhyaDT.github.io", "Aaradhya-Dev-Tamrakar.github.io"],
+      "default_folder_name": "AaradhyaDT.github.io",
+      "github_repo": "AaradhyaDT/AaradhyaDT.github.io",
+      "category": "presentation_hub",
+      "azmuth_universe": "u3_career_opportunity_alpha"
+    }
+  }
+}
