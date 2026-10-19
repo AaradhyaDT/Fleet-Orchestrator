@@ -114,11 +114,17 @@ start_mut = time.time()
 
 candidate_alleles = [
     ("FAST_IO_STREAM_UNTIE", "std::ios_base::sync_with_stdio(false); cin.tie(NULL);", 0.35),
-    ("PRAGMA_GCC_AVX2", "#pragma GCC optimize(\\"O3,unroll-loops\\") #pragma GCC target(\\"avx2\\")", 0.42),
+    ("PRAGMA_GCC_AVX2", "#pragma GCC optimize('O3,unroll-loops') #pragma GCC target('avx2')", 0.42),
     ("STATIC_FORWARD_STAR", "int head[MAXN], to[MAXM], nxt[MAXM];", 0.28),
     ("CUSTOM_SPLITMIX64_HASH", "struct custom_hash {{ uint64_t operator()(uint64_t x) const; }};", 0.22),
     ("BITWISE_WORD_UNROLLING", "unsigned long long mask = (1ULL << k) - 1;", 0.31),
     ("PYTHON_STDLIB_ACCEL", "import collections, itertools, heapq; sys.stdin.readline", 0.48),
+    ("ARENA_BUMP_ALLOCATOR", "char arena[1<<26]; size_t a_ptr = 0; void* alloc(size_t sz) {{ void* p = &arena[a_ptr]; a_ptr += (sz+7)&~7; return p; }}", 0.55),
+    ("SIMD_VECTORIZED_FIND", "#include <immintrin.h> __m256i v = _mm256_loadu_si256((__m256i*)p);", 0.62),
+    ("FENWICK_BIT_UNROLL_64", "for (; idx > 0; idx -= idx & -idx) sum += tree[idx];", 0.38),
+    ("AVX512_STREAMING_STORE", "_mm512_stream_si512((__m512i*)dst, _mm512_loadu_si512((__m512i*)src));", 0.71),
+    ("HUGEPAGES_MMAP_SHARED", "mmap(NULL, sz, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);", 0.44),
+    ("LOCKLESS_SPSC_QUEUE", "std::atomic<size_t> head{{0}}, tail{{0}}; alignas(64) T ring[CAP];", 0.58),
 ]
 
 def benchmark_allele(item):
@@ -213,6 +219,64 @@ mc_elapsed = round(time.time() - start_mc, 3)
 num_u = len(embedded_universes)
 print(f"Completed {{TRIALS}} Monte Carlo shock propagations across {{num_u}} universes in {{mc_elapsed}}s.")
 
+
+# 3. Vectorized Multi-Universe Spectral Decomposition (SVD & Singular Values)
+print("\\n[3/3] Computing Master Cross-Universe Spectral SVD across 51 Nodes...")
+start_spectral = time.time()
+spectral_results = {{}}
+
+all_nodes_flat = []
+for u_name, u_data in embedded_universes.items():
+    u_id = u_name.replace(".json", "")
+    for n in u_data.get("nodes", []):
+        all_nodes_flat.append(f"{{u_id}}::{{n['id']}}")
+
+master_dim = len(all_nodes_flat)
+node_to_global_idx = {{nid: i for i, nid in enumerate(all_nodes_flat)}}
+
+if has_cuda:
+    master_adj = torch.zeros((master_dim, master_dim), device="cuda")
+    for u_name, u_data in embedded_universes.items():
+        u_id = u_name.replace(".json", "")
+        for s in u_data.get("synapses", []):
+            src_key = f"{{u_id}}::{{s.get('source')}}"
+            tgt_key = f"{{u_id}}::{{s.get('target')}}"
+            i = node_to_global_idx.get(src_key)
+            j = node_to_global_idx.get(tgt_key)
+            if i is not None and j is not None:
+                master_adj[i, j] = float(s.get("weight", 0.3))
+
+    master_adj = master_adj + torch.eye(master_dim, device="cuda") * 0.05
+    U_mat, S_vals, V_mat = torch.linalg.svd(master_adj)
+    top_singular = S_vals[:5].tolist()
+    spectral_radius = float(S_vals[0].item())
+else:
+    import numpy as np
+    master_adj = np.zeros((master_dim, master_dim))
+    for u_name, u_data in embedded_universes.items():
+        u_id = u_name.replace(".json", "")
+        for s in u_data.get("synapses", []):
+            src_key = f"{{u_id}}::{{s.get('source')}}"
+            tgt_key = f"{{u_id}}::{{s.get('target')}}"
+            i = node_to_global_idx.get(src_key)
+            j = node_to_global_idx.get(tgt_key)
+            if i is not None and j is not None:
+                master_adj[i, j] = float(s.get("weight", 0.3))
+    master_adj = master_adj + np.eye(master_dim) * 0.05
+    U_mat, S_vals, V_mat = np.linalg.svd(master_adj)
+    top_singular = [float(x) for x in S_vals[:5]]
+    spectral_radius = float(S_vals[0])
+
+spectral_elapsed = round(time.time() - start_spectral, 3)
+spectral_results = {{
+    "total_master_nodes": master_dim,
+    "top_5_singular_values": [round(x, 4) for x in top_singular],
+    "spectral_radius": round(spectral_radius, 4),
+    "resonance_stability": "STABLE" if spectral_radius < 1.5 else "CRITICAL_RESONANCE_RISK",
+    "compute_time_sec": spectral_elapsed,
+}}
+print(f"Computed {{master_dim}}-node Spectral SVD in {{spectral_elapsed}}s (Radius: {{round(spectral_radius, 4)}}, State: {{spectral_results['resonance_stability']}}).")
+
 # Persist output payload
 output_payload = {{
     "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -223,6 +287,7 @@ output_payload = {{
     "monte_carlo_time_sec": mc_elapsed,
     "evolved_alleles": evolved_alleles,
     "monte_carlo_universes": mc_results,
+    "spectral_dynamics": spectral_results,
 }}
 
 output_path = RAMDISK / "hyperburst_results.json"

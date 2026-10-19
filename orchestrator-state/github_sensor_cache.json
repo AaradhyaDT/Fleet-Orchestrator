@@ -1,28 +1,9 @@
 {
-  "timestamp": "2026-10-19T04:44:51.908494+00:00",
-  "timestamp_epoch": 1792385079.0831006,
+  "timestamp": "2026-10-19T05:09:58.867627+00:00",
+  "timestamp_epoch": 1792386587.0852478,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
-      {
-        "id": "atomantic/PortOS#12326",
-        "title": "Validate inference-time LTX adapters on Apple Silicon Q4 and CUDA hardware",
-        "repo": "atomantic/PortOS",
-        "url": "https://github.com/atomantic/PortOS/issues/12326",
-        "labels": [
-          "help wanted",
-          "plan",
-          "tests",
-          "area:media",
-          "model:medium",
-          "effort:low",
-          "planner:opus-5-5"
-        ],
-        "comments": 0,
-        "created_at": "2026-10-19T01:48:30Z",
-        "updated_at": "2026-10-19T04:44:28Z",
-        "salience": 1.0
-      },
       {
         "id": "patrickkellyyoung-ai/swarm-agora-mcp#4",
         "title": "[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark",
@@ -67,6 +48,20 @@
         "comments": 6,
         "created_at": "2026-08-25T19:17:18Z",
         "updated_at": "2026-10-19T01:29:20Z",
+        "salience": 2.0
+      },
+      {
+        "id": "0xShug0/audio.cpp#34",
+        "title": "Roadmap: From More Models to Better Models (and Model Waiting List)",
+        "repo": "0xShug0/audio.cpp",
+        "url": "https://github.com/0xShug0/audio.cpp/issues/34",
+        "labels": [
+          "help wanted",
+          "announcement"
+        ],
+        "comments": 12,
+        "created_at": "2026-07-07T03:33:46Z",
+        "updated_at": "2026-10-19T00:58:52Z",
         "salience": 2.0
       },
       {
@@ -239,7 +234,7 @@
       {
         "repo": "AaradhyaDT/BiasAperture",
         "open_issues_count": 9,
-        "pushed_at": "2026-10-19T04:37:35Z",
+        "pushed_at": "2026-10-19T04:53:35Z",
         "stars": 1,
         "forks": 1
       },

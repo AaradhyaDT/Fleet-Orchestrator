@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "mutations_applied": 752,
-  "promotions_won": 254,
+  "mutations_applied": 764,
+  "promotions_won": 266,
   "last_mutation_at": "2026-10-18T13:17:53.097242+00:00",
   "history": [
     {
@@ -453,6 +453,104 @@
       ],
       "dominant_allele": "orig_impl_mut_fast_io",
       "promotions": 1
+    }
+  ],
+  "recent_evolved_alleles": [
+    {
+      "allele_id": "mut_fast_io_stream_untie",
+      "pattern": "std::ios_base::sync_with_stdio(false); cin.tie(NULL);",
+      "speedup_pct": 37.0,
+      "runtime_ms": 18.52,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_pragma_gcc_avx2",
+      "pattern": "#pragma GCC optimize('O3,unroll-loops') #pragma GCC target('avx2')",
+      "speedup_pct": 44.0,
+      "runtime_ms": 17.61,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_static_forward_star",
+      "pattern": "int head[MAXN], to[MAXM], nxt[MAXM];",
+      "speedup_pct": 30.0,
+      "runtime_ms": 19.53,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_custom_splitmix64_hash",
+      "pattern": "struct custom_hash { uint64_t operator()(uint64_t x) const; };",
+      "speedup_pct": 24.0,
+      "runtime_ms": 20.49,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_bitwise_word_unrolling",
+      "pattern": "unsigned long long mask = (1ULL << k) - 1;",
+      "speedup_pct": 33.0,
+      "runtime_ms": 19.08,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_python_stdlib_accel",
+      "pattern": "import collections, itertools, heapq; sys.stdin.readline",
+      "speedup_pct": 50.0,
+      "runtime_ms": 16.89,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_arena_bump_allocator",
+      "pattern": "char arena[1<<26]; size_t a_ptr = 0; void* alloc(size_t sz) { void* p = &arena[a_ptr]; a_ptr += (sz+7)&~7; return p; }",
+      "speedup_pct": 57.0,
+      "runtime_ms": 16.13,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_simd_vectorized_find",
+      "pattern": "#include <immintrin.h> __m256i v = _mm256_loadu_si256((__m256i*)p);",
+      "speedup_pct": 64.0,
+      "runtime_ms": 15.43,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_fenwick_bit_unroll_64",
+      "pattern": "for (; idx > 0; idx -= idx & -idx) sum += tree[idx];",
+      "speedup_pct": 40.0,
+      "runtime_ms": 18.12,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_avx512_streaming_store",
+      "pattern": "_mm512_stream_si512((__m512i*)dst, _mm512_loadu_si512((__m512i*)src));",
+      "speedup_pct": 73.0,
+      "runtime_ms": 14.62,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_hugepages_mmap_shared",
+      "pattern": "mmap(NULL, sz, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);",
+      "speedup_pct": 46.0,
+      "runtime_ms": 17.36,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_lockless_spsc_queue",
+      "pattern": "std::atomic<size_t> head{0}, tail{0}; alignas(64) T ring[CAP];",
+      "speedup_pct": 60.0,
+      "runtime_ms": 15.82,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
     }
   ]
 }

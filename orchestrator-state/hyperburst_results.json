@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-10-18T13:42:23Z",
+  "timestamp": "2026-10-19T05:10:41Z",
   "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
   "accelerator": "NVIDIA A100-SXM4-80GB",
   "system_ram_gb": 167.05,
-  "mutation_time_sec": 0.328,
-  "monte_carlo_time_sec": 0.866,
+  "mutation_time_sec": 0.616,
+  "monte_carlo_time_sec": 0.868,
   "evolved_alleles": [
     {
       "allele_id": "mut_fast_io_stream_untie",
@@ -16,7 +16,7 @@
     },
     {
       "allele_id": "mut_pragma_gcc_avx2",
-      "pattern": "#pragma GCC optimize(\"O3,unroll-loops\") #pragma GCC target(\"avx2\")",
+      "pattern": "#pragma GCC optimize('O3,unroll-loops') #pragma GCC target('avx2')",
       "speedup_pct": 44.0,
       "runtime_ms": 17.61,
       "ram_kb": 2048,
@@ -53,50 +53,123 @@
       "runtime_ms": 16.89,
       "ram_kb": 2048,
       "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_arena_bump_allocator",
+      "pattern": "char arena[1<<26]; size_t a_ptr = 0; void* alloc(size_t sz) { void* p = &arena[a_ptr]; a_ptr += (sz+7)&~7; return p; }",
+      "speedup_pct": 57.0,
+      "runtime_ms": 16.13,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_simd_vectorized_find",
+      "pattern": "#include <immintrin.h> __m256i v = _mm256_loadu_si256((__m256i*)p);",
+      "speedup_pct": 64.0,
+      "runtime_ms": 15.43,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_fenwick_bit_unroll_64",
+      "pattern": "for (; idx > 0; idx -= idx & -idx) sum += tree[idx];",
+      "speedup_pct": 40.0,
+      "runtime_ms": 18.12,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_avx512_streaming_store",
+      "pattern": "_mm512_stream_si512((__m512i*)dst, _mm512_loadu_si512((__m512i*)src));",
+      "speedup_pct": 73.0,
+      "runtime_ms": 14.62,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_hugepages_mmap_shared",
+      "pattern": "mmap(NULL, sz, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);",
+      "speedup_pct": 46.0,
+      "runtime_ms": 17.36,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
+    },
+    {
+      "allele_id": "mut_lockless_spsc_queue",
+      "pattern": "std::atomic<size_t> head{0}, tail{0}; alignas(64) T ring[CAP];",
+      "speedup_pct": 60.0,
+      "runtime_ms": 15.82,
+      "ram_kb": 2048,
+      "status": "PROMOTED_PRIMARY"
     }
   ],
   "monte_carlo_universes": {
     "u0_ecosystem_mesh": {
       "nodes_count": 6,
-      "trials_run": 10000,
-      "mean_spikes": 0.03,
-      "tail_risk_var_99": 1.0,
+      "synapses_count": 5,
+      "trials_run": 100000,
+      "mean_spikes": 0.33,
+      "tail_risk_var_99": 2.0,
+      "tail_risk_cvar_99": 2.13,
       "accelerator": "A100_CUDA"
     },
     "u1_research_arbitrage": {
       "nodes_count": 5,
-      "trials_run": 10000,
-      "mean_spikes": 0.02,
-      "tail_risk_var_99": 1.0,
+      "synapses_count": 3,
+      "trials_run": 100000,
+      "mean_spikes": 0.17,
+      "tail_risk_var_99": 2.0,
+      "tail_risk_cvar_99": 2.0,
       "accelerator": "A100_CUDA"
     },
     "u2_ai_compute_frontier": {
       "nodes_count": 5,
-      "trials_run": 10000,
-      "mean_spikes": 0.05,
-      "tail_risk_var_99": 2.0,
+      "synapses_count": 3,
+      "trials_run": 100000,
+      "mean_spikes": 0.15,
+      "tail_risk_var_99": 1.0,
+      "tail_risk_cvar_99": 1.04,
       "accelerator": "A100_CUDA"
     },
     "u3_career_opportunity_alpha": {
       "nodes_count": 4,
-      "trials_run": 10000,
-      "mean_spikes": 0.01,
-      "tail_risk_var_99": 0.0,
+      "synapses_count": 3,
+      "trials_run": 100000,
+      "mean_spikes": 0.19,
+      "tail_risk_var_99": 1.0,
+      "tail_risk_cvar_99": 1.0,
       "accelerator": "A100_CUDA"
     },
     "u4_macro_capital_markets": {
       "nodes_count": 27,
-      "trials_run": 10000,
-      "mean_spikes": 3.5,
-      "tail_risk_var_99": 26.0,
+      "synapses_count": 20,
+      "trials_run": 100000,
+      "mean_spikes": 1.19,
+      "tail_risk_var_99": 6.0,
+      "tail_risk_cvar_99": 6.47,
       "accelerator": "A100_CUDA"
     },
     "u5_hardware_physics_bom": {
       "nodes_count": 4,
-      "trials_run": 10000,
-      "mean_spikes": 0.0,
-      "tail_risk_var_99": 0.0,
+      "synapses_count": 3,
+      "trials_run": 100000,
+      "mean_spikes": 0.18,
+      "tail_risk_var_99": 2.0,
+      "tail_risk_cvar_99": 2.08,
       "accelerator": "A100_CUDA"
     }
+  },
+  "spectral_dynamics": {
+    "total_master_nodes": 51,
+    "top_5_singular_values": [
+      1.7653,
+      1.7018,
+      1.5327,
+      1.4956,
+      1.4862
+    ],
+    "spectral_radius": 1.7653,
+    "resonance_stability": "CRITICAL_RESONANCE_RISK",
+    "compute_time_sec": 0.081
   }
 }

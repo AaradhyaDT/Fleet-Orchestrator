@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T04:45:29.731579+00:00",
+  "timestamp": "2026-10-19T05:12:12.157213+00:00",
   "total_cartridges": 6,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -10,7 +10,7 @@
       "spikes_count": 2,
       "top_chokepoint": "Fleet-Orchestrator",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T04:45:29.731919+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.157541+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -20,7 +20,7 @@
       "spikes_count": 5,
       "top_chokepoint": "FALL_DETECTION_SOTA",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T04:45:29.732213+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.157803+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -30,7 +30,7 @@
       "spikes_count": 2,
       "top_chokepoint": "SLM_ROUTER_LATENCY_MS",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T04:45:29.732435+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.158031+00:00"
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -40,7 +40,7 @@
       "spikes_count": 4,
       "top_chokepoint": "KU_RESEARCH_LAB",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T04:45:29.732642+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.158248+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -50,7 +50,7 @@
       "spikes_count": 6,
       "top_chokepoint": "TSM",
       "engram_matches": 6,
-      "last_swept_at": "2026-10-19T04:45:29.733528+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.159112+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -60,7 +60,7 @@
       "spikes_count": 2,
       "top_chokepoint": "TENSOR_ARENA_SIZE_KB",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T04:45:29.733753+00:00"
+      "last_swept_at": "2026-10-19T05:12:12.159343+00:00"
     }
   },
   "systemic_spikes": [
