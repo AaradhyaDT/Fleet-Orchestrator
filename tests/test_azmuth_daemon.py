@@ -128,6 +128,7 @@ def test_idle_burst_clean_skips_refresh():
 
 def test_execute_cycle_all_healthy():
     with patch("tools.azmuth_daemon.is_paused", return_value=False), \
+         patch("tools.azmuth_daemon.has_sufficient_ram", return_value=True), \
          patch("tools.azmuth_daemon.reconcile_mirrors_and_registry", return_value=True), \
          patch("tools.azmuth_daemon.sense_capability_gaps", return_value={"total_gaps": 0, "gaps": []}), \
          patch("tools.azmuth_daemon.run_verification_suite", return_value=(True, "")):

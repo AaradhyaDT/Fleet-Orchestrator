@@ -475,8 +475,8 @@ class CorticalCartridgeLoader:
     """Loads, validates, and mounts CorticalCartridgeV1 files."""
 
     @staticmethod
-    def load_cartridge(cartridge_path: Path) -> Dict[str, Any]:
-        target = cartridge_path
+    def load_cartridge(cartridge_path: Path | str) -> Dict[str, Any]:
+        target = Path(cartridge_path)
         if not target.exists():
             # Check local data/universes
             alt_local = LOCAL_BUNDLED_CARTRIDGES / cartridge_path.name
@@ -653,11 +653,24 @@ def main():
     parser.add_argument("--foresight", action="store_true", help="Execute 4-signal foresight alpha engine")
     parser.add_argument("--extremes", action="store_true", help="Render allostatic stretch vs nociceptive extremes table")
     parser.add_argument("--chokepoints", action="store_true", help="Compute systemic chokepoint betweenness centrality")
+    parser.add_argument("--sweep-all", action="store_true", help="Sweep and evaluate all 6 cortical cartridges (U0..U5)")
     parser.add_argument("--shock", type=str, default=None, help="Simulate shock propagation from a source node")
     parser.add_argument("--magnitude", type=float, default=-0.40, help="Shock magnitude (-1.0 to 1.0)")
     parser.add_argument("--inject", nargs="*", default=[], help="Inject telemetry overrides (e.g. --inject NVDA=8.5 TSM=2.1)")
 
     args = parser.parse_args()
+
+    if args.sweep_all:
+        sweep_data = sweep_all_universes()
+        print(f"\n=== AZMUTH MULTI-UNIVERSE SWEEP (U0..U5) ===")
+        print(f"Timestamp: {sweep_data['timestamp']} | Total Cartridges: {sweep_data['total_cartridges']}")
+        for uid, uinfo in sweep_data.get("universes", {}).items():
+            if "error" in uinfo:
+                print(f"  * [{uid}] ERROR: {uinfo['error']}")
+            else:
+                print(f"  * [{uid}] {uinfo['name']}: {uinfo['node_count']} nodes, {uinfo['synapse_count']} synapses, {uinfo['spikes_count']} spikes (Top Choke: {uinfo['top_chokepoint']})")
+        print(f"\n[OK] Summary updated in orchestrator-state/macro_foresight_sweep.json")
+        return
 
     if args.list_universes:
         cartridges = CorticalCartridgeLoader.list_available_cartridges()

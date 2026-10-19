@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-18T19:13:52Z",
-  "timestamp_epoch": 1792330132.3844404,
+  "timestamp": "2026-10-19T10:30:29Z",
+  "timestamp_epoch": 1792385129.0182734,
   "readings": {
     "NVDA": {
       "current_value": -6.61,
@@ -17,14 +17,14 @@
   },
   "events": [
     {
-      "timestamp": "2026-10-18T19:13:52Z",
+      "timestamp": "2026-10-19T10:30:29Z",
       "keyword": "HBM capacity",
       "affected_node": "SK_HYNIX",
       "sentiment_shock": 0.85,
       "headline": "HBM3e and HBM4 allocations booked through 2026 across major hyperscalers"
     },
     {
-      "timestamp": "2026-10-18T19:13:52Z",
+      "timestamp": "2026-10-19T10:30:29Z",
       "keyword": "lead time",
       "affected_node": "ASML",
       "sentiment_shock": 0.6,

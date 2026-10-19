@@ -156,31 +156,56 @@ for u_name, u_data in embedded_universes.items():
         nodes = u_data.get("nodes", [])
         num_nodes = max(len(nodes), 1)
 
+        synapses = u_data.get("synapses", [])
+        node_id_to_idx = {{n["id"]: idx for idx, n in enumerate(nodes)}}
+
         if has_cuda:
-            # GPU Tensorized Spiking Simulation
+            # GPU Tensorized Spiking Simulation with exact graph structure
+            adj_weights = torch.zeros((num_nodes, num_nodes), device="cuda")
+            for s in synapses:
+                src_i = node_id_to_idx.get(s.get("source"))
+                tgt_i = node_id_to_idx.get(s.get("target"))
+                if src_i is not None and tgt_i is not None:
+                    adj_weights[src_i, tgt_i] = float(s.get("weight", 0.3))
+
+            # If sparse, inject small ambient baseline coupling
+            adj_weights = adj_weights + torch.eye(num_nodes, device="cuda") * 0.1
+
             shocks = torch.randn(TRIALS, num_nodes, device="cuda") * 1.5
-            adj_weights = torch.rand(num_nodes, num_nodes, device="cuda") * 0.4
             propagated = torch.matmul(shocks, adj_weights)
             max_spikes = (propagated > 2.0).sum(dim=1).float()
             var_99 = torch.quantile(max_spikes, 0.99).item()
+            # Conditional Value at Risk (Expected Shortfall)
+            cvar_99 = max_spikes[max_spikes >= var_99].mean().item() if (max_spikes >= var_99).any() else var_99
             mean_spikes = max_spikes.mean().item()
         else:
             import numpy as np
+            adj_weights = np.zeros((num_nodes, num_nodes))
+            for s in synapses:
+                src_i = node_id_to_idx.get(s.get("source"))
+                tgt_i = node_id_to_idx.get(s.get("target"))
+                if src_i is not None and tgt_i is not None:
+                    adj_weights[src_i, tgt_i] = float(s.get("weight", 0.3))
+            adj_weights = adj_weights + np.eye(num_nodes) * 0.1
+
             shocks = np.random.randn(TRIALS, num_nodes) * 1.5
-            adj_weights = np.random.rand(num_nodes, num_nodes) * 0.4
             propagated = np.dot(shocks, adj_weights)
             max_spikes = np.sum(propagated > 2.0, axis=1)
             var_99 = float(np.percentile(max_spikes, 99))
+            tail_slice = max_spikes[max_spikes >= var_99]
+            cvar_99 = float(np.mean(tail_slice)) if len(tail_slice) > 0 else var_99
             mean_spikes = float(np.mean(max_spikes))
 
         mc_results[u_id] = {{
             "nodes_count": num_nodes,
+            "synapses_count": len(synapses),
             "trials_run": TRIALS,
             "mean_spikes": round(mean_spikes, 2),
             "tail_risk_var_99": round(var_99, 2),
+            "tail_risk_cvar_99": round(cvar_99, 2),
             "accelerator": "A100_CUDA" if has_cuda else "CPU_SIMD",
         }}
-        print(f"  - {{u_id}}: {{num_nodes}} nodes -> mean spikes: {{round(mean_spikes, 2)}}, VaR-99: {{round(var_99, 2)}}")
+        print(f"  - {{u_id}}: {{num_nodes}} nodes, {{len(synapses)}} synapses -> mean: {{round(mean_spikes, 2)}}, VaR-99: {{round(var_99, 2)}}, CVaR-99: {{round(cvar_99, 2)}}")
     except Exception as e:
         mc_results[u_id] = {{"error": str(e)}}
 

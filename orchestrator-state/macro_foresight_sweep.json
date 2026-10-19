@@ -1,26 +1,220 @@
 {
-  "timestamp": "2026-10-18T13:28:52.998795+00:00",
+  "timestamp": "2026-10-19T04:45:29.731579+00:00",
   "total_cartridges": 6,
   "universes": {
     "u0_ecosystem_mesh": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u0_ecosystem_mesh",
+      "name": "Ecosystem Autonomic Mesh",
+      "node_count": 6,
+      "synapse_count": 5,
+      "spikes_count": 2,
+      "top_chokepoint": "Fleet-Orchestrator",
+      "engram_matches": 1,
+      "last_swept_at": "2026-10-19T04:45:29.731919+00:00"
     },
     "u1_research_arbitrage": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u1_research_arbitrage",
+      "name": "Research & Publication Arbitrage Cortex",
+      "node_count": 5,
+      "synapse_count": 3,
+      "spikes_count": 5,
+      "top_chokepoint": "FALL_DETECTION_SOTA",
+      "engram_matches": 1,
+      "last_swept_at": "2026-10-19T04:45:29.732213+00:00"
     },
     "u2_ai_compute_frontier": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u2_ai_compute_frontier",
+      "name": "AI & Silicon Compute Cortex",
+      "node_count": 5,
+      "synapse_count": 3,
+      "spikes_count": 2,
+      "top_chokepoint": "SLM_ROUTER_LATENCY_MS",
+      "engram_matches": 1,
+      "last_swept_at": "2026-10-19T04:45:29.732435+00:00"
     },
     "u3_career_opportunity_alpha": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u3_career_opportunity_alpha",
+      "name": "Career & Opportunity Alpha Cortex",
+      "node_count": 4,
+      "synapse_count": 3,
+      "spikes_count": 4,
+      "top_chokepoint": "KU_RESEARCH_LAB",
+      "engram_matches": 1,
+      "last_swept_at": "2026-10-19T04:45:29.732642+00:00"
     },
     "u4_macro_capital_markets": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u4_macro_capital_markets",
+      "name": "Macro & Capital Markets Cortex",
+      "node_count": 27,
+      "synapse_count": 20,
+      "spikes_count": 6,
+      "top_chokepoint": "TSM",
+      "engram_matches": 6,
+      "last_swept_at": "2026-10-19T04:45:29.733528+00:00"
     },
     "u5_hardware_physics_bom": {
-      "error": "'str' object has no attribute 'exists'"
+      "id": "u5_hardware_physics_bom",
+      "name": "Hardware & Physics Sensorimotor Cortex",
+      "node_count": 4,
+      "synapse_count": 3,
+      "spikes_count": 2,
+      "top_chokepoint": "TENSOR_ARENA_SIZE_KB",
+      "engram_matches": 1,
+      "last_swept_at": "2026-10-19T04:45:29.733753+00:00"
     }
   },
-  "systemic_spikes": [],
-  "critical_chokepoints": []
+  "systemic_spikes": [
+    {
+      "universe_id": "u0_ecosystem_mesh",
+      "node_id": "Competitive-Programming",
+      "z_score": 0.9,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u0_ecosystem_mesh",
+      "node_id": "Super-NLM",
+      "z_score": 1.0,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "FALL_DETECTION_SOTA",
+      "z_score": 2.1333,
+      "state": "NOCICEPTIVE_WARNING"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "SPARK_TINYML_ACCURACY",
+      "z_score": 2.0667,
+      "state": "NOCICEPTIVE_WARNING"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "SHAP_ATTRIBUTION_LATENCY",
+      "z_score": -1.35,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "BIAS_APERTURE_PARITY",
+      "z_score": -1.1,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "NEPALI_OCR_CER",
+      "z_score": -1.28,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u2_ai_compute_frontier",
+      "node_id": "SLM_ROUTER_LATENCY_MS",
+      "z_score": -0.8125,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u2_ai_compute_frontier",
+      "node_id": "COPILOT_CREDIT_BURN_PCT",
+      "z_score": -1.36,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u3_career_opportunity_alpha",
+      "node_id": "KU_RESEARCH_LAB",
+      "z_score": 1.0,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u3_career_opportunity_alpha",
+      "node_id": "AI_FELLOWSHIP_FUSEMACHINES",
+      "z_score": 1.9,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u3_career_opportunity_alpha",
+      "node_id": "GLOBAL_AI_SYSTEMS_LABS",
+      "z_score": 1.0,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u3_career_opportunity_alpha",
+      "node_id": "OPEN_SOURCE_MAINTAINER_PIPELINE",
+      "z_score": 1.5,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "COPPER_HG",
+      "z_score": 1.0,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "GOLD_GC",
+      "z_score": 1.92,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "TAIWAN_GRID",
+      "z_score": -0.9333,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "NRB_POLICY_RATE",
+      "z_score": -1.25,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "CD_RATIO",
+      "z_score": -1.0222,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "NEPSE_INDEX",
+      "z_score": 1.0667,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u5_hardware_physics_bom",
+      "node_id": "ESP32_S3_SRAM_ALLOCATED_KB",
+      "z_score": 0.8,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u5_hardware_physics_bom",
+      "node_id": "BLE_TX_POWER_MA",
+      "z_score": 0.8333,
+      "state": "ALLOSTATIC_STRETCH"
+    }
+  ],
+  "critical_chokepoints": [
+    {
+      "universe_id": "u0_ecosystem_mesh",
+      "node_id": "Fleet-Orchestrator"
+    },
+    {
+      "universe_id": "u1_research_arbitrage",
+      "node_id": "FALL_DETECTION_SOTA"
+    },
+    {
+      "universe_id": "u2_ai_compute_frontier",
+      "node_id": "SLM_ROUTER_LATENCY_MS"
+    },
+    {
+      "universe_id": "u3_career_opportunity_alpha",
+      "node_id": "KU_RESEARCH_LAB"
+    },
+    {
+      "universe_id": "u4_macro_capital_markets",
+      "node_id": "TSM"
+    },
+    {
+      "universe_id": "u5_hardware_physics_bom",
+      "node_id": "TENSOR_ARENA_SIZE_KB"
+    }
+  ]
 }

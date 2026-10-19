@@ -1,9 +1,61 @@
 {
-  "timestamp": "2026-10-18T13:42:51.761975+00:00",
-  "timestamp_epoch": 1792330956.9156783,
+  "timestamp": "2026-10-19T04:44:51.908494+00:00",
+  "timestamp_epoch": 1792385079.0831006,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "atomantic/PortOS#12326",
+        "title": "Validate inference-time LTX adapters on Apple Silicon Q4 and CUDA hardware",
+        "repo": "atomantic/PortOS",
+        "url": "https://github.com/atomantic/PortOS/issues/12326",
+        "labels": [
+          "help wanted",
+          "plan",
+          "tests",
+          "area:media",
+          "model:medium",
+          "effort:low",
+          "planner:opus-5-5"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-19T01:48:30Z",
+        "updated_at": "2026-10-19T04:44:28Z",
+        "salience": 1.0
+      },
+      {
+        "id": "patrickkellyyoung-ai/swarm-agora-mcp#4",
+        "title": "[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark",
+        "repo": "patrickkellyyoung-ai/swarm-agora-mcp",
+        "url": "https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4",
+        "labels": [
+          "help wanted",
+          "good first issue",
+          "bounty",
+          "bot-task"
+        ],
+        "comments": 3,
+        "created_at": "2026-10-19T04:11:43Z",
+        "updated_at": "2026-10-19T04:13:53Z",
+        "salience": 1.6
+      },
+      {
+        "id": "vllm-project/vllm-omni#8173",
+        "title": "[RFC]: Helios performance optimization ? ultra-low-latency and high-throughput serving tracks",
+        "repo": "vllm-project/vllm-omni",
+        "url": "https://github.com/vllm-project/vllm-omni/issues/8173",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "high priority",
+          "diffusion",
+          "RFC"
+        ],
+        "comments": 12,
+        "created_at": "2026-09-26T09:33:29Z",
+        "updated_at": "2026-10-19T02:15:44Z",
+        "salience": 2.0
+      },
       {
         "id": "microsoft/PyRIT#2489",
         "title": "FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix",
@@ -12,125 +64,84 @@
         "labels": [
           "help wanted"
         ],
-        "comments": 5,
+        "comments": 6,
         "created_at": "2026-08-25T19:17:18Z",
-        "updated_at": "2026-10-18T08:10:51Z",
+        "updated_at": "2026-10-19T01:29:20Z",
         "salience": 2.0
       },
       {
-        "id": "torch-spyre/spyre-inference#259",
-        "title": "[FP8] Support block-wise FP8 quantization",
-        "repo": "torch-spyre/spyre-inference",
-        "url": "https://github.com/torch-spyre/spyre-inference/issues/259",
+        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#363",
+        "title": "[Docs] No end-to-end tutorial",
+        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
+        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363",
         "labels": [
-          "enhancement",
           "help wanted",
-          "stage/010-actionable"
+          "docs",
+          "community",
+          "Maybe Rewarded",
+          "GrantFox OSS",
+          "intermediate",
+          "Third Campaign"
         ],
-        "comments": 1,
-        "created_at": "2026-06-09T19:10:15Z",
-        "updated_at": "2026-10-17T17:42:55Z",
-        "salience": 1.2
-      },
-      {
-        "id": "torch-spyre/spyre-inference#257",
-        "title": "[FP8] Support online FP8 quantization (W8A16 dynamic)",
-        "repo": "torch-spyre/spyre-inference",
-        "url": "https://github.com/torch-spyre/spyre-inference/issues/257",
-        "labels": [
-          "enhancement",
-          "help wanted",
-          "stage/010-actionable"
-        ],
-        "comments": 0,
-        "created_at": "2026-06-09T19:08:53Z",
-        "updated_at": "2026-10-17T17:42:54Z",
-        "salience": 1.0
-      },
-      {
-        "id": "vllm-project/vllm-omni#8586",
-        "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
-        "repo": "vllm-project/vllm-omni",
-        "url": "https://github.com/vllm-project/vllm-omni/issues/8586",
-        "labels": [
-          "enhancement",
-          "help wanted",
-          "diffusion",
-          "RFC"
-        ],
-        "comments": 31,
-        "created_at": "2026-10-07T14:16:56Z",
-        "updated_at": "2026-10-17T11:42:23Z",
+        "comments": 8,
+        "created_at": "2026-08-25T06:29:32Z",
+        "updated_at": "2026-10-18T15:34:08Z",
         "salience": 2.0
       },
       {
-        "id": "optiqor/kerno#50",
-        "title": "Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule",
-        "repo": "optiqor/kerno",
-        "url": "https://github.com/optiqor/kerno/issues/50",
+        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#328",
+        "title": "[CLI] Key handling with no secret ever printed",
+        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
+        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328",
         "labels": [
-          "documentation",
-          "good first issue",
           "help wanted",
-          "P2",
-          "area/community",
-          "claimed"
+          "security",
+          "Maybe Rewarded",
+          "GrantFox OSS",
+          "cli",
+          "advanced",
+          "Third Campaign"
         ],
-        "comments": 58,
-        "created_at": "2026-05-10T13:00:29Z",
-        "updated_at": "2026-10-18T09:22:42Z",
+        "comments": 4,
+        "created_at": "2026-08-24T20:34:22Z",
+        "updated_at": "2026-10-18T15:34:06Z",
+        "salience": 1.8
+      },
+      {
+        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#388",
+        "title": "[Epic] Governance and multi-sig across every contract",
+        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
+        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388",
+        "labels": [
+          "help wanted",
+          "contracts",
+          "feature",
+          "security",
+          "advanced",
+          "epic"
+        ],
+        "comments": 5,
+        "created_at": "2026-08-25T10:33:58Z",
+        "updated_at": "2026-10-18T15:34:01Z",
         "salience": 2.0
       },
       {
-        "id": "Nobayprotocol/Nobay-Protocol#3",
-        "title": "Add Hardhat test suite for ListingRegistry.sol",
-        "repo": "Nobayprotocol/Nobay-Protocol",
-        "url": "https://github.com/Nobayprotocol/Nobay-Protocol/issues/3",
+        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#380",
+        "title": "[Epic] Build the whole CLI ? from a single console.log to a working tool",
+        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
+        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/380",
         "labels": [
           "help wanted",
-          "Solidity",
-          "Bounty",
-          "Testing"
-        ],
-        "comments": 18,
-        "created_at": "2025-05-20T17:37:48Z",
-        "updated_at": "2026-10-18T03:48:57Z",
-        "salience": 2.0
-      },
-      {
-        "id": "kubestellar/kubestellar#3827",
-        "title": "[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3827",
-        "labels": [
-          "help wanted",
-          "lifecycle/stale",
-          "stage/010-actionable",
-          "stage/stalled",
-          "agent/outreach"
+          "feature",
+          "dx",
+          "cli",
+          "advanced",
+          "epic"
         ],
         "comments": 3,
-        "created_at": "2026-06-08T13:25:17Z",
-        "updated_at": "2026-10-17T17:30:03Z",
+        "created_at": "2026-08-25T10:33:17Z",
+        "updated_at": "2026-10-18T15:33:58Z",
         "salience": 1.6
-      },
-      {
-        "id": "kubestellar/kubestellar#3789",
-        "title": "[outreach] KubeCon NA 2026 talk proposal ? AI-Maintained Open Source at Scale",
-        "repo": "kubestellar/kubestellar",
-        "url": "https://github.com/kubestellar/kubestellar/issues/3789",
-        "labels": [
-          "help wanted",
-          "priority/medium",
-          "lifecycle/rotten",
-          "conference",
-          "stage/010-actionable",
-          "stage/stalled"
-        ],
-        "comments": 2,
-        "created_at": "2026-06-06T13:20:26Z",
-        "updated_at": "2026-10-17T17:29:02Z",
-        "salience": 1.4
       }
     ],
     "releases": [
@@ -186,11 +197,11 @@
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3573,
+        "stars": 3574,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-18T08:56:35Z"
+        "updated_at": "2026-10-18T15:04:21Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -221,14 +232,14 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-18T10:30:34Z",
+        "pushed_at": "2026-10-18T15:28:43Z",
         "stars": 0,
         "forks": 0
       },
       {
         "repo": "AaradhyaDT/BiasAperture",
         "open_issues_count": 9,
-        "pushed_at": "2026-10-16T18:33:05Z",
+        "pushed_at": "2026-10-19T04:37:35Z",
         "stars": 1,
         "forks": 1
       },

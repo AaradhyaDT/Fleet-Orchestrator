@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 100,
-  "total_skill_instances": 169,
+  "total_distinct_skills": 101,
+  "total_skill_instances": 172,
   "domain_counts": {
     "AI_ENGINEERING_ML": 12,
     "SWARM_ORCHESTRATION": 4,
-    "ENGINEERING_DEV": 16,
+    "ENGINEERING_DEV": 17,
     "DOMAIN_HARDWARE": 7,
     "SYSADMIN_SECURITY": 3,
     "RESEARCH_ACADEMIC": 6,
@@ -14,7 +14,7 @@
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
-    "INSTALLED": 62,
+    "INSTALLED": 63,
     "VERIFIED": 10,
     "ACCESSIBLE": 28
   },
@@ -125,8 +125,8 @@
       "dependencies": [
         "scripts/fuse_cli.py"
       ],
-      "byte_size": 7490,
-      "line_count": 93,
+      "byte_size": 7657,
+      "line_count": 94,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\ai-engineering-fellowship",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -630,6 +630,25 @@
       "mirrors": [],
       "mirror_count": 0
     },
+    "background-task-governance": {
+      "name": "background-task-governance",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": "Prevents background tasks and CLI commands from hanging, freezing, or blocking execution in Antigravity/agent sessions on Windows. Enforces non-interactive execution guards, elevated UAC command bans, PowerShell escaping rules, wait timeout calibration, and proactive watchdog monitoring.",
+      "triggers": [
+        "background-task-governance"
+      ],
+      "dependencies": [],
+      "byte_size": 6192,
+      "line_count": 95,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\background-task-governance",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\background-task-governance",
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\background-task-governance"
+      ],
+      "mirror_count": 2
+    },
     "bitwarden": {
       "name": "bitwarden",
       "domain": "SYSADMIN_SECURITY",
@@ -751,8 +770,8 @@
         "compliance-report-harmonizer"
       ],
       "dependencies": [],
-      "byte_size": 12287,
-      "line_count": 251,
+      "byte_size": 14718,
+      "line_count": 280,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\compliance-report-harmonizer",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1401,8 +1420,8 @@
         "scripts/compile_thesis.py",
         "scripts/scaffold_thesis.py"
       ],
-      "byte_size": 9782,
-      "line_count": 137,
+      "byte_size": 10350,
+      "line_count": 140,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\latex-thesis-architect",
       "ssot_role": "SSOT_USER",
       "mirrors": [
