@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-10-19T05:10:41Z",
+  "timestamp": "2026-10-19T05:26:50Z",
   "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
   "accelerator": "NVIDIA A100-SXM4-80GB",
   "system_ram_gb": 167.05,
-  "mutation_time_sec": 0.616,
-  "monte_carlo_time_sec": 0.868,
+  "mutation_time_sec": 0.634,
+  "monte_carlo_time_sec": 1.006,
   "evolved_alleles": [
     {
       "allele_id": "mut_fast_io_stream_untie",
@@ -107,16 +107,16 @@
     "u0_ecosystem_mesh": {
       "nodes_count": 6,
       "synapses_count": 5,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 0.33,
-      "tail_risk_var_99": 2.0,
-      "tail_risk_cvar_99": 2.13,
+      "tail_risk_var_99": 3.0,
+      "tail_risk_cvar_99": 3.22,
       "accelerator": "A100_CUDA"
     },
     "u1_research_arbitrage": {
       "nodes_count": 5,
       "synapses_count": 3,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 0.17,
       "tail_risk_var_99": 2.0,
       "tail_risk_cvar_99": 2.0,
@@ -125,16 +125,16 @@
     "u2_ai_compute_frontier": {
       "nodes_count": 5,
       "synapses_count": 3,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 0.15,
       "tail_risk_var_99": 1.0,
-      "tail_risk_cvar_99": 1.04,
+      "tail_risk_cvar_99": 1.03,
       "accelerator": "A100_CUDA"
     },
     "u3_career_opportunity_alpha": {
       "nodes_count": 4,
       "synapses_count": 3,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 0.19,
       "tail_risk_var_99": 1.0,
       "tail_risk_cvar_99": 1.0,
@@ -143,16 +143,16 @@
     "u4_macro_capital_markets": {
       "nodes_count": 27,
       "synapses_count": 20,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 1.19,
       "tail_risk_var_99": 6.0,
-      "tail_risk_cvar_99": 6.47,
+      "tail_risk_cvar_99": 6.43,
       "accelerator": "A100_CUDA"
     },
     "u5_hardware_physics_bom": {
       "nodes_count": 4,
       "synapses_count": 3,
-      "trials_run": 100000,
+      "trials_run": 50000000,
       "mean_spikes": 0.18,
       "tail_risk_var_99": 2.0,
       "tail_risk_cvar_99": 2.08,
@@ -170,6 +170,6 @@
     ],
     "spectral_radius": 1.7653,
     "resonance_stability": "CRITICAL_RESONANCE_RISK",
-    "compute_time_sec": 0.081
+    "compute_time_sec": 0.077
   }
 }

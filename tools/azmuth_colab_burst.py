@@ -177,12 +177,29 @@ for u_name, u_data in embedded_universes.items():
             # If sparse, inject small ambient baseline coupling
             adj_weights = adj_weights + torch.eye(num_nodes, device="cuda") * 0.1
 
-            shocks = torch.randn(TRIALS, num_nodes, device="cuda") * 1.5
-            propagated = torch.matmul(shocks, adj_weights)
-            max_spikes = (propagated > 2.0).sum(dim=1).float()
-            var_99 = torch.quantile(max_spikes, 0.99).item()
+            # Chunked evaluation to prevent 32-bit integer indexing limit on ultra-large runs (e.g. 50M)
+            chunk_size = min(TRIALS, 10000000)
+            num_chunks = (TRIALS + chunk_size - 1) // chunk_size
+            spikes_list = []
+
+            for _ in range(num_chunks):
+                cur_trials = min(chunk_size, TRIALS - len(spikes_list) * chunk_size)
+                shocks = torch.randn(cur_trials, num_nodes, device="cuda") * 1.5
+                propagated = torch.matmul(shocks, adj_weights)
+                cur_max_spikes = (propagated > 2.0).sum(dim=1).float()
+                spikes_list.append(cur_max_spikes)
+
+            max_spikes = torch.cat(spikes_list) if len(spikes_list) > 1 else spikes_list[0]
+            # PyTorch torch.quantile has an internal CUDA sort limit of 16M elements (2^24)
+            if max_spikes.numel() > 10000000:
+                sub_indices = torch.randint(0, max_spikes.numel(), (10000000,), device="cuda")
+                eval_slice = max_spikes[sub_indices]
+            else:
+                eval_slice = max_spikes
+
+            var_99 = torch.quantile(eval_slice, 0.99).item()
             # Conditional Value at Risk (Expected Shortfall)
-            cvar_99 = max_spikes[max_spikes >= var_99].mean().item() if (max_spikes >= var_99).any() else var_99
+            cvar_99 = eval_slice[eval_slice >= var_99].mean().item() if (eval_slice >= var_99).any() else var_99
             mean_spikes = max_spikes.mean().item()
         else:
             import numpy as np
@@ -194,9 +211,17 @@ for u_name, u_data in embedded_universes.items():
                     adj_weights[src_i, tgt_i] = float(s.get("weight", 0.3))
             adj_weights = adj_weights + np.eye(num_nodes) * 0.1
 
-            shocks = np.random.randn(TRIALS, num_nodes) * 1.5
-            propagated = np.dot(shocks, adj_weights)
-            max_spikes = np.sum(propagated > 2.0, axis=1)
+            chunk_size = min(TRIALS, 100000)
+            num_chunks = (TRIALS + chunk_size - 1) // chunk_size
+            spikes_list = []
+            for _ in range(num_chunks):
+                cur_trials = min(chunk_size, TRIALS - len(spikes_list) * chunk_size)
+                shocks = np.random.randn(cur_trials, num_nodes) * 1.5
+                propagated = np.dot(shocks, adj_weights)
+                cur_max_spikes = np.sum(propagated > 2.0, axis=1)
+                spikes_list.append(cur_max_spikes)
+
+            max_spikes = np.concatenate(spikes_list) if len(spikes_list) > 1 else spikes_list[0]
             var_99 = float(np.percentile(max_spikes, 99))
             tail_slice = max_spikes[max_spikes >= var_99]
             cvar_99 = float(np.mean(tail_slice)) if len(tail_slice) > 0 else var_99
