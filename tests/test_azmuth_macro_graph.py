@@ -141,6 +141,10 @@ def test_all_six_cortical_cartridges():
         "u3_career_opportunity_alpha",
         "u4_macro_capital_markets",
         "u5_hardware_physics_bom",
+        "u6_energy_thermal_power",
+        "u7_cyber_resilience_dfir",
+        "u8_algorithmic_complexity_cp",
+        "u9_regulatory_epistemic_audit",
     ]
 
     for c_id in cartridges:
@@ -155,6 +159,9 @@ def test_all_six_cortical_cartridges():
         graph = SpikingMacroGraph(cart["nodes"], cart["synapses"])
         assert len(graph.nodes) == len(cart["nodes"])
         assert len(graph.synapses) == len(cart["synapses"])
+
+    from tools.azmuth_macro_graph import CROSS_UNIVERSE_BRIDGE_SYNAPSES
+    assert len(CROSS_UNIVERSE_BRIDGE_SYNAPSES) >= 8
 
 
 def test_market_sensor_cache_integration():

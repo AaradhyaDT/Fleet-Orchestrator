@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u6_energy_thermal_power",
+  "cortical_lobe": "Energy, Thermal & Power Dynamics Cortex",
+  "sensory_adapter": "hardware_thermal_power_sensor",
+  "description": "Sensory cortex monitoring system thermal dissipation, quiescent standby draw, dynamic peak current, battery degradation curves, and cloud watt-hour carbon intensity.",
+  "nodes": [
+    {
+      "id": "ESP32_DEEP_SLEEP_UA",
+      "label": "ESP32-S3 Deep Sleep Quiescent Current",
+      "node_type": "POWER_SUBSYSTEM",
+      "unit": "current_microamps",
+      "current_value": 14.2,
+      "layer1_homeostatic": { "mu0": 15.0, "sigma0": 3.0, "iqr": 4.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 8.0, "p95": 25.0 },
+      "layer3_nociceptive": { "abs_min": 5.0, "abs_max": 100.0, "survival_limit": 50.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "ACTIVE_BURST_POWER_MW",
+      "label": "Active Radio Burst Power Draw (BLE/Wi-Fi)",
+      "node_type": "POWER_SUBSYSTEM",
+      "unit": "power_milliwatts",
+      "current_value": 285.0,
+      "layer1_homeostatic": { "mu0": 260.0, "sigma0": 35.0, "iqr": 40.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 180.0, "p95": 380.0 },
+      "layer3_nociceptive": { "abs_min": 100.0, "abs_max": 600.0, "survival_limit": 500.0 },
+      "reflex_limiters": { "max_action_step": 30.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "LIPO_VOLTAGE_SAG_V",
+      "label": "LiPo Battery Terminal Voltage Sag Under Burst",
+      "node_type": "POWER_SUBSYSTEM",
+      "unit": "terminal_volts",
+      "current_value": 3.65,
+      "layer1_homeostatic": { "mu0": 3.70, "sigma0": 0.10, "iqr": 0.12, "tau0_days": 2 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 3.40, "p95": 4.15 },
+      "layer3_nociceptive": { "abs_min": 3.0, "abs_max": 4.35, "survival_limit": 3.20 },
+      "reflex_limiters": { "max_action_step": 0.10, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "HOST_CPU_PACKAGE_TEMP_C",
+      "label": "Host Workstation CPU Package Thermal Envelope",
+      "node_type": "THERMAL_TELEMETRY",
+      "unit": "temperature_celsius",
+      "current_value": 54.0,
+      "layer1_homeostatic": { "mu0": 52.0, "sigma0": 8.0, "iqr": 10.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 40.0, "p95": 78.0 },
+      "layer3_nociceptive": { "abs_min": 30.0, "abs_max": 100.0, "survival_limit": 90.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "CLOUD_A100_TDP_WATTS",
+      "label": "Cloud A100 SXM4 Thermal Design Power Load",
+      "node_type": "ACCELERATOR_ENERGY",
+      "unit": "tdp_watts",
+      "current_value": 240.0,
+      "layer1_homeostatic": { "mu0": 250.0, "sigma0": 50.0, "iqr": 60.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 100.0, "p95": 380.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 450.0, "survival_limit": 420.0 },
+      "reflex_limiters": { "max_action_step": 40.0, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "ACTIVE_BURST_POWER_MW", "target": "LIPO_VOLTAGE_SAG_V", "edge_type": "INDUCES_SAG", "weight": -0.84, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "ESP32_DEEP_SLEEP_UA", "target": "LIPO_VOLTAGE_SAG_V", "edge_type": "SLOW_DISCHARGE", "weight": -0.42, "lag_days": 7, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "CLOUD_A100_TDP_WATTS", "target": "HOST_CPU_PACKAGE_TEMP_C", "edge_type": "OFFLOAD_THERMAL_HEADROOM", "weight": -0.65, "lag_days": 1, "evidence_tier": "STATISTICALLY_OBSERVED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_THERMAL_THROTTLE_EVENT",
+      "name": "Local Package Thermal Throttling Signature",
+      "pattern_type": "THERMAL_SPIKE",
+      "trigger_nodes": ["HOST_CPU_PACKAGE_TEMP_C"],
+      "damping_action": "OFFLOAD_TO_COLAB_BURST",
+      "historical_severity": 0.78
+    }
+  ]
+}

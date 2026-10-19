@@ -2353,20 +2353,36 @@ class AzmuthCommandCenterGUI:
                     dashed=True,
                 )
 
-        # Bottom 6 Universe Lobes Matrix (U0-U5)
-        u_lobes = [
+        # Dynamic Universe Lobes Matrix (U0-U9+)
+        u_lobes_catalog = [
             ("u0_ecosystem_mesh", "U0: Ecosystem Mesh", "28 Modules • Swarm Mesh", t.accent_cyan),
             ("u1_research_arbitrage", "U1: Research Arbitrage", "SOTA AI • Fellowship Lab", t.accent_blue),
             ("u2_ai_compute_frontier", "U2: Compute Frontier", "16GB RAM • Colab A100", t.accent_purple),
             ("u3_career_opportunity_alpha", "U3: Career Alpha", "KU Faculty • Grants", t.accent_emerald),
             ("u4_macro_capital_markets", "U4: Capital Markets", "Foundry Supply • NEPSE", t.accent_gold),
             ("u5_hardware_physics_bom", "U5: Physical BOM", "ESP32-S3 • 200Hz IMU", t.accent_crimson),
+            ("u6_energy_thermal_power", "U6: Energy & Thermal", "TDP • LiPo Sag • μA Sleep", t.accent_gold),
+            ("u7_cyber_resilience_dfir", "U7: Cyber Resilience", "Zero-Trust • ADS • CVSS", t.accent_cyan),
+            ("u8_algorithmic_complexity_cp", "U8: CP Complexity", "Big-O • Z3 SMT • Codons", t.accent_purple),
+            ("u9_regulatory_epistemic_audit", "U9: Regulatory Audit", "EU AI Act • Bias Parity", t.accent_blue),
         ]
 
-        u_cols = 3
-        u_spacing_x = 220.0
-        u_spacing_y = 90.0
-        u_start_wx = cx - u_spacing_x
+        # Filter or load dynamically from sweep metadata if available
+        available_ids = list(universes.keys()) if universes else [u[0] for u in u_lobes_catalog]
+        u_lobes = []
+        catalog_dict = {u[0]: u for u in u_lobes_catalog}
+        for u_id in available_ids:
+            if u_id in catalog_dict:
+                u_lobes.append(catalog_dict[u_id])
+            else:
+                u_name = universes.get(u_id, {}).get("name", u_id)
+                u_lobes.append((u_id, u_name[:20], "Dynamic Cartridge", t.accent_cyan))
+
+        u_cols = 4 if len(u_lobes) >= 8 else 3
+        u_spacing_x = 210.0
+        u_spacing_y = 85.0
+        total_grid_w = (u_cols - 1) * u_spacing_x
+        u_start_wx = cx - (total_grid_w / 2.0)
         u_start_wy = cy + 20.0
 
         for idx, (u_id, u_label, u_sub, u_col) in enumerate(u_lobes):

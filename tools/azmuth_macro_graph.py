@@ -20,6 +20,27 @@ SIBLING_CP_CARTRIDGES = Path(__file__).resolve().parent.parent.parent / "Competi
 DEFAULT_CARTRIDGE_DIR = LOCAL_BUNDLED_CARTRIDGES if LOCAL_BUNDLED_CARTRIDGES.exists() else SIBLING_CP_CARTRIDGES
 DEFAULT_STATE_DIR = Path(__file__).resolve().parent.parent / "orchestrator-state"
 
+# Cross-Universe Inter-Lobe Synaptic Bridge Matrix
+# Maps causal, regulatory, power, and algorithmic dependencies across universe boundaries
+CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
+    # U4 (Macro Capital / Foundries) -> U5 (Physical MCU BOM)
+    {"source": "u4_macro_capital_markets::TSM", "target": "u5_hardware_physics_bom::ESP32_S3_SRAM_ALLOCATED_KB", "weight": -0.75, "lag_days": 14, "edge_type": "FOUNDRY_SUPPLY_CONSTRAINT"},
+    # U5 (Physical MCU BOM) -> U6 (Energy / Thermal Dynamics)
+    {"source": "u5_hardware_physics_bom::IMU_SAMPLING_FREQ_HZ", "target": "u6_energy_thermal_power::ACTIVE_BURST_POWER_MW", "weight": 0.88, "lag_days": 1, "edge_type": "TRANSDUCER_POWER_DRAW"},
+    {"source": "u5_hardware_physics_bom::BLE_TX_POWER_MA", "target": "u6_energy_thermal_power::LIPO_VOLTAGE_SAG_V", "weight": -0.82, "lag_days": 1, "edge_type": "CURRENT_SAG_COUPLING"},
+    # U6 (Energy / Thermal) -> U2 (AI Compute Frontier)
+    {"source": "u6_energy_thermal_power::HOST_CPU_PACKAGE_TEMP_C", "target": "u2_ai_compute_frontier::LOCAL_16GB_RAM_PRESSURE", "weight": 0.70, "lag_days": 1, "edge_type": "THERMAL_THROTTLING_PRESSURE"},
+    # U7 (Cyber Resilience) -> U0 (Ecosystem Autonomic Mesh)
+    {"source": "u7_cyber_resilience_dfir::SECRET_LEAK_PROBABILITY_SCORE", "target": "u0_ecosystem_mesh::Fleet-Orchestrator", "weight": -0.92, "lag_days": 1, "edge_type": "SECURITY_HALT_QUARANTINE"},
+    {"source": "u7_cyber_resilience_dfir::HEADLESS_ELEVATION_ATTEMPTS", "target": "u0_ecosystem_mesh::Fleet-Orchestrator", "weight": -0.99, "lag_days": 1, "edge_type": "UAC_HEADLESS_PROHIBITION"},
+    # U8 (Algorithmic Complexity) -> U0 (Ecosystem Autonomic Mesh) & U1 (Research Arbitrage)
+    {"source": "u8_algorithmic_complexity_cp::GENE_MUTATION_PROMOTION_RATE_PCT", "target": "u0_ecosystem_mesh::Competitive-Programming", "weight": 0.85, "lag_days": 2, "edge_type": "CODON_SYNTHESIS_PIPELINE"},
+    {"source": "u8_algorithmic_complexity_cp::ASYMPTOTIC_BIG_O_LATENCY_NS", "target": "u1_research_arbitrage::SPARK_TINYML_ACCURACY", "weight": -0.68, "lag_days": 3, "edge_type": "INFERENCE_BUDGET_PRESSURE"},
+    # U9 (Regulatory & Epistemic Audit) -> U1 (Research Arbitrage) & U0 (BiasAperture)
+    {"source": "u9_regulatory_epistemic_audit::BIAS_DISPARITY_MAX_DEVIATION", "target": "u0_ecosystem_mesh::BiasAperture", "weight": 0.94, "lag_days": 1, "edge_type": "AUDIT_PARITY_VERIFICATION"},
+    {"source": "u9_regulatory_epistemic_audit::EPISTEMIC_UNBACKED_CLAIMS_COUNT", "target": "u1_research_arbitrage::BRL_LAB_ARXIV", "weight": -0.90, "lag_days": 1, "edge_type": "EPISTEMIC_GATE_BLOCK"},
+]
+
 
 class HomeostaticBaselineNormalizer:
     """Evaluates raw observations against 4-layer homeostatic, allostatic, and nociceptive bounds."""
@@ -631,6 +652,9 @@ def sweep_all_universes(cartridge_dir: Path = DEFAULT_CARTRIDGE_DIR, z_threshold
 
         except Exception as exc:
             results["universes"][c["id"]] = {"error": str(exc)}
+
+    # Attach Cross-Universe Bridge Synapses
+    results["cross_universe_bridges"] = CROSS_UNIVERSE_BRIDGE_SYNAPSES
 
     # Persist multi-universe sweep summary
     DEFAULT_STATE_DIR.mkdir(parents=True, exist_ok=True)

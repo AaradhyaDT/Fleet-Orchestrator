@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u7_cyber_resilience_dfir",
+  "cortical_lobe": "Cyber Resilience & Zero-Trust Forensics Cortex",
+  "sensory_adapter": "dfir_integrity_scanner",
+  "description": "Autonomic zero-trust and digital forensics cortex hunting NTFS alternate data streams, entropy anomalies, headless elevation attempts, and credential leaks.",
+  "nodes": [
+    {
+      "id": "SECRET_LEAK_PROBABILITY_SCORE",
+      "label": "Continuous Secret Leak & Token Entropy Score",
+      "node_type": "INTEGRITY_INDEX",
+      "unit": "leak_probability",
+      "current_value": 0.0,
+      "layer1_homeostatic": { "mu0": 0.0, "sigma0": 0.01, "iqr": 0.01, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 1.0, "z_critical": 2.0, "p05": 0.0, "p95": 0.05 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 1.0, "survival_limit": 0.10 },
+      "reflex_limiters": { "max_action_step": 0.05, "collateral_harm_ceiling": 0.99 }
+    },
+    {
+      "id": "NTFS_ADS_ZONE_IDENTIFIER_COUNT",
+      "label": "NTFS Alternate Data Streams (Zone.Identifier)",
+      "node_type": "FORENSIC_INDICATOR",
+      "unit": "untrusted_streams",
+      "current_value": 0.0,
+      "layer1_homeostatic": { "mu0": 0.0, "sigma0": 0.5, "iqr": 1.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.0, "p95": 3.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 50.0, "survival_limit": 10.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "HEADLESS_ELEVATION_ATTEMPTS",
+      "label": "Headless Windows UAC Elevation Invocations",
+      "node_type": "GOVERNANCE_GATE",
+      "unit": "elevation_events",
+      "current_value": 0.0,
+      "layer1_homeostatic": { "mu0": 0.0, "sigma0": 0.01, "iqr": 0.01, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 1.0, "z_critical": 2.0, "p05": 0.0, "p95": 0.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 5.0, "survival_limit": 1.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 1.0 }
+    },
+    {
+      "id": "DEPENDENCY_CVSS_RISK_SCORE",
+      "label": "Upstream Dependency Composite CVSS Score",
+      "node_type": "VULNERABILITY_SCORE",
+      "unit": "cvss_base",
+      "current_value": 1.2,
+      "layer1_homeostatic": { "mu0": 1.0, "sigma0": 0.5, "iqr": 0.6, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.0, "p95": 4.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 10.0, "survival_limit": 7.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "CRYPTO_CHAIN_OF_CUSTODY_VALIDITY",
+      "label": "Evidence Ledger Cryptographic Hash Parity",
+      "node_type": "CHAIN_OF_CUSTODY",
+      "unit": "hash_integrity_ratio",
+      "current_value": 1.0,
+      "layer1_homeostatic": { "mu0": 1.0, "sigma0": 0.01, "iqr": 0.01, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": -1.0, "z_critical": -2.0, "p05": 0.99, "p95": 1.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 1.0, "survival_limit": 0.95 },
+      "reflex_limiters": { "max_action_step": 0.01, "collateral_harm_ceiling": 0.99 }
+    }
+  ],
+  "synapses": [
+    { "source": "NTFS_ADS_ZONE_IDENTIFIER_COUNT", "target": "SECRET_LEAK_PROBABILITY_SCORE", "edge_type": "INCREASES_ATTACK_SURFACE", "weight": 0.72, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "DEPENDENCY_CVSS_RISK_SCORE", "target": "SECRET_LEAK_PROBABILITY_SCORE", "edge_type": "SUPPLY_CHAIN_RISK", "weight": 0.85, "lag_days": 2, "evidence_tier": "STATISTICALLY_OBSERVED" },
+    { "source": "HEADLESS_ELEVATION_ATTEMPTS", "target": "CRYPTO_CHAIN_OF_CUSTODY_VALIDITY", "edge_type": "COMPROMISES_TRUST", "weight": -0.95, "lag_days": 1, "evidence_tier": "FORMALLY_PROVEN" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_ZERO_TRUST_QUARANTINE",
+      "name": "Instant Subprocess Quarantine on Elevated Call",
+      "pattern_type": "SECURITY_EXPLOIT",
+      "trigger_nodes": ["HEADLESS_ELEVATION_ATTEMPTS"],
+      "damping_action": "ENFORCE_BACKGROUND_TASK_GOVERNANCE_KILL",
+      "historical_severity": 0.99
+    }
+  ]
+}

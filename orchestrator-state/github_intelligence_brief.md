@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-19T05:42:07.303109+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-19T06:03:37.707366+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[MakazhanAlpamys/Soup]** [Fast-LoRA autograd, correctness half: hand-written backward for the LoRA projections, behind training.fast_lora](https://github.com/MakazhanAlpamys/Soup/issues/792) (Comments: 5, Salience: 2.0)
 - **[huggingface/peft]** [Comparison of Different Fine-Tuning Techniques for Conversational AI](https://github.com/huggingface/peft/issues/2310) (Comments: 168, Salience: 2.0)
 - **[patrickkellyyoung-ai/swarm-agora-mcp]** [[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark](https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4) (Comments: 3, Salience: 1.6)
 - **[vllm-project/vllm-omni]** [[RFC]: Helios performance optimization ? ultra-low-latency and high-throughput serving tracks](https://github.com/vllm-project/vllm-omni/issues/8173) (Comments: 12, Salience: 2.0)
-- **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 6, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Docs] No end-to-end tutorial](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363) (Comments: 8, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[CLI] Key handling with no secret ever printed](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328) (Comments: 4, Salience: 1.8)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Governance and multi-sig across every contract](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388) (Comments: 5, Salience: 2.0)
@@ -27,6 +27,6 @@
 
 ## 4. Public Ecosystem Health (`U0`)
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-18T15:28:43Z`
-- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T04:53:35Z`
+- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T05:46:11Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
 - **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-18T02:35:47Z`

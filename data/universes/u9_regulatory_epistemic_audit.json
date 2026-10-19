@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u9_regulatory_epistemic_audit",
+  "cortical_lobe": "Regulatory, Epistemic Provenance & Audit Cortex",
+  "sensory_adapter": "epistemic_provenance_auditor",
+  "description": "Epistemic governance and regulatory compliance cortex tracking ARCH-RFC-001 evidence tiers (FORMALLY_PROVEN vs HEURISTIC), demographic parity bounds, and EU/US AI compliance.",
+  "nodes": [
+    {
+      "id": "BIAS_DISPARITY_MAX_DEVIATION",
+      "label": "Inter-Subgroup Fairness Maximum Disparity Ratio",
+      "node_type": "FAIRNESS_INDEX",
+      "unit": "disparity_ratio",
+      "current_value": 0.038,
+      "layer1_homeostatic": { "mu0": 0.04, "sigma0": 0.01, "iqr": 0.012, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.01, "p95": 0.08 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 0.25, "survival_limit": 0.10 },
+      "reflex_limiters": { "max_action_step": 0.02, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "EPISTEMIC_UNBACKED_CLAIMS_COUNT",
+      "label": "Research Documents Missing Formal/Empirical Provenance",
+      "node_type": "PROVENANCE_COUNTER",
+      "unit": "unbacked_assertions",
+      "current_value": 0.0,
+      "layer1_homeostatic": { "mu0": 0.0, "sigma0": 0.1, "iqr": 0.1, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 1.0, "z_critical": 2.0, "p05": 0.0, "p95": 1.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 20.0, "survival_limit": 3.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.99 }
+    },
+    {
+      "id": "REGULATORY_EU_ACT_COMPLIANCE_SCORE",
+      "label": "EU AI Act High-Risk System Technical File Conformity",
+      "node_type": "REGULATORY_INDEX",
+      "unit": "conformity_pct",
+      "current_value": 98.5,
+      "layer1_homeostatic": { "mu0": 98.0, "sigma0": 1.5, "iqr": 2.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": -2.0, "z_critical": -3.0, "p05": 92.0, "p95": 100.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 85.0 },
+      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "CITATION_MEDIAN_RECENCY_DAYS",
+      "label": "Foundation SOTA Citations Age in Days",
+      "node_type": "CITATION_METRIC",
+      "unit": "age_days",
+      "current_value": 142.0,
+      "layer1_homeostatic": { "mu0": 130.0, "sigma0": 25.0, "iqr": 30.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 30.0, "p95": 240.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 730.0, "survival_limit": 365.0 },
+      "reflex_limiters": { "max_action_step": 15.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "DATASET_LABEL_NOISE_RATE_PCT",
+      "label": "Empirical Training Set Verified Ground Truth Noise",
+      "node_type": "DATASET_QUALITY",
+      "unit": "percentage",
+      "current_value": 0.8,
+      "layer1_homeostatic": { "mu0": 0.7, "sigma0": 0.3, "iqr": 0.4, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.1, "p95": 2.5 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 15.0, "survival_limit": 5.0 },
+      "reflex_limiters": { "max_action_step": 0.5, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "DATASET_LABEL_NOISE_RATE_PCT", "target": "BIAS_DISPARITY_MAX_DEVIATION", "edge_type": "AMPLIFIES_FAIRNESS_GAP", "weight": 0.78, "lag_days": 2, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "EPISTEMIC_UNBACKED_CLAIMS_COUNT", "target": "REGULATORY_EU_ACT_COMPLIANCE_SCORE", "edge_type": "VIOLATES_CONFORMITY", "weight": -0.89, "lag_days": 1, "evidence_tier": "FORMALLY_PROVEN" },
+    { "source": "CITATION_MEDIAN_RECENCY_DAYS", "target": "EPISTEMIC_UNBACKED_CLAIMS_COUNT", "edge_type": "OBSOLETE_SURVEY_RISK", "weight": 0.64, "lag_days": 5, "evidence_tier": "STATISTICALLY_OBSERVED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_EPISTEMIC_CORRUPTION",
+      "name": "Unproven Speculative Claim Injection",
+      "pattern_type": "PROVENANCE_BREACH",
+      "trigger_nodes": ["EPISTEMIC_UNBACKED_CLAIMS_COUNT"],
+      "damping_action": "ENFORCE_ARCH_RFC_001_GROUNDING_GATE",
+      "historical_severity": 0.95
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Azmuth Cortical Cartridge Index (`CorticalCartridgeV1`)
 
-This directory houses the 6 modular **Cortical Cartridge Lobes** (`U0` through `U5`) powering the Azmuth Neuromorphic, Temporal-Triad & 6-Universe Foresight Engine.
+This directory houses the 10 modular **Cortical Cartridge Lobes** (`U0` through `U9`) powering the Azmuth Neuromorphic, Temporal-Triad & 10-Universe Foresight Engine.
 
 Each universe is defined by a strictly typed schema containing:
 1. `metadata`: Universe identifier, name, version, and natural frequency timescale $\tau_{\text{universe}}$.
@@ -20,6 +20,10 @@ Each universe is defined by a strictly typed schema containing:
 | **`u3_career_opportunity_alpha`** | Career & Opportunity Alpha | Kathmandu University faculty networks, AI fellowship admissions, international grants, core maintainer status | `KU_ACADEMIC_FACULTY_SPONSOR`, `FUSEMACHINES_AI_FELLOWSHIP`, `KAUST_AI_RESEARCH_GRANT`, `COMMUNITY_MAINTAINER_AUTHORITY`, `INDUSTRY_AI_RESIDENCY` |
 | **`u4_macro_capital_markets`** | Macro Capital & Silicon Geopolitics | Global semiconductor supply chain (TSMC, ASML, NVDA), central banks, crude energy, Nepal NEPSE liquidity | `ASML_LITHOGRAPHY`, `TSMC_ADVANCED_FOUNDRY`, `NVDA_GPU_DEMAND`, `FED_FUNDS_RATE`, `BRENT_CRUDE_BARREL`, `NEPSE_INDEX` |
 | **`u5_hardware_physics_bom`** | Embedded Hardware & Physics BOM | Edge AI microcontrollers (ESP32-S3), IMU sensor calibration, TFLite Micro tensor arenas, battery discharge profiles | `ESP32_S3_PSRAM_8MB`, `MPU6050_IMU_DRIFT`, `TFLITE_MICRO_TENSOR_ARENA`, `LIPO_3S_DISCHARGE_CURVE`, `BLE_TELEMETRY_DUTY_CYCLE` |
+| **`u6_energy_thermal_power`** | Energy, Thermal & Power Dynamics | Quiescent deep sleep draw, dynamic burst consumption, LiPo voltage sag, host CPU thermal envelope, A100 TDP | `ESP32_DEEP_SLEEP_UA`, `ACTIVE_BURST_POWER_MW`, `LIPO_VOLTAGE_SAG_V`, `HOST_CPU_PACKAGE_TEMP_C`, `CLOUD_A100_TDP_WATTS` |
+| **`u7_cyber_resilience_dfir`** | Cyber Resilience & Zero-Trust | Continuous secret leak entropy, NTFS Zone.Identifier streams, headless UAC prevention, dependency CVSS | `SECRET_LEAK_PROBABILITY_SCORE`, `NTFS_ADS_ZONE_IDENTIFIER_COUNT`, `HEADLESS_ELEVATION_ATTEMPTS`, `DEPENDENCY_CVSS_RISK_SCORE` |
+| **`u8_algorithmic_complexity_cp`** | Algorithmic Complexity & CP Codons | Big-O inner-loop nanoseconds, Z3 SMT formal proof runtime, codon mutation promotion rates, branch mispredicts | `ASYMPTOTIC_BIG_O_LATENCY_NS`, `Z3_SMT_SOLVE_TIME_MS`, `GENE_MUTATION_PROMOTION_RATE_PCT`, `CP_INGESTED_STATEMENT_COUNT` |
+| **`u9_regulatory_epistemic_audit`** | Regulatory & Epistemic Audit | ARCH-RFC-001 epistemic tiers, demographic parity bounds, EU AI Act conformity files, citation recency | `BIAS_DISPARITY_MAX_DEVIATION`, `EPISTEMIC_UNBACKED_CLAIMS_COUNT`, `REGULATORY_EU_ACT_COMPLIANCE_SCORE`, `CITATION_MEDIAN_RECENCY_DAYS` |
 
 ---
 

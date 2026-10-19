@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u8_algorithmic_complexity_cp",
+  "cortical_lobe": "Algorithmic Complexity & CP Codon Cortex",
+  "sensory_adapter": "codon_dissector_adapter",
+  "description": "Algorithmic problem dissector and competitive programming complexity cortex tracking Big-O asymptotic limits, SMT/Z3 formal correctness, codon streaming, and memory arena allocations.",
+  "nodes": [
+    {
+      "id": "ASYMPTOTIC_BIG_O_LATENCY_NS",
+      "label": "Algorithmic Inner-Loop Asymptotic Cost per Element",
+      "node_type": "COMPLEXITY_METRIC",
+      "unit": "nanoseconds_per_op",
+      "current_value": 4.2,
+      "layer1_homeostatic": { "mu0": 4.0, "sigma0": 1.0, "iqr": 1.2, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1.5, "p95": 8.0 },
+      "layer3_nociceptive": { "abs_min": 0.5, "abs_max": 100.0, "survival_limit": 25.0 },
+      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "Z3_SMT_SOLVE_TIME_MS",
+      "label": "Z3 SMT Formal Invariant Proof Duration",
+      "node_type": "FORMAL_PROOF",
+      "unit": "milliseconds",
+      "current_value": 145.0,
+      "layer1_homeostatic": { "mu0": 120.0, "sigma0": 30.0, "iqr": 35.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 50.0, "p95": 250.0 },
+      "layer3_nociceptive": { "abs_min": 10.0, "abs_max": 2000.0, "survival_limit": 1000.0 },
+      "reflex_limiters": { "max_action_step": 50.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "GENE_MUTATION_PROMOTION_RATE_PCT",
+      "label": "Ultimatrix Allele Mutation Win/Promotion Ratio",
+      "node_type": "EVOLUTION_TELEMETRY",
+      "unit": "percentage",
+      "current_value": 42.5,
+      "layer1_homeostatic": { "mu0": 40.0, "sigma0": 8.0, "iqr": 10.0, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 20.0, "p95": 65.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 100.0, "survival_limit": 10.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "CP_INGESTED_STATEMENT_COUNT",
+      "label": "Harvested Competitive Programming Problem Corpus",
+      "node_type": "CORPUS_METRIC",
+      "unit": "parsed_problems",
+      "current_value": 312.0,
+      "layer1_homeostatic": { "mu0": 300.0, "sigma0": 25.0, "iqr": 30.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 250.0, "p95": 450.0 },
+      "layer3_nociceptive": { "abs_min": 100.0, "abs_max": 2000.0, "survival_limit": 150.0 },
+      "reflex_limiters": { "max_action_step": 20.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "BRANCH_MISPREDICTION_RATE_PCT",
+      "label": "CPU Instruction Pipeline Branch Misprediction",
+      "node_type": "SYSTEMS_PERF",
+      "unit": "percentage",
+      "current_value": 2.1,
+      "layer1_homeostatic": { "mu0": 2.0, "sigma0": 0.5, "iqr": 0.6, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.5, "p95": 5.0 },
+      "layer3_nociceptive": { "abs_min": 0.1, "abs_max": 20.0, "survival_limit": 12.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "BRANCH_MISPREDICTION_RATE_PCT", "target": "ASYMPTOTIC_BIG_O_LATENCY_NS", "edge_type": "DEGRADES_THROUGHPUT", "weight": 0.81, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "GENE_MUTATION_PROMOTION_RATE_PCT", "target": "ASYMPTOTIC_BIG_O_LATENCY_NS", "edge_type": "ACCELERATES_INNER_LOOP", "weight": -0.74, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "CP_INGESTED_STATEMENT_COUNT", "target": "GENE_MUTATION_PROMOTION_RATE_PCT", "edge_type": "EXPANDS_SYNTHESIS_DATASET", "weight": 0.68, "lag_days": 2, "evidence_tier": "STATISTICALLY_OBSERVED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_COMPLEXITY_BLOWUP",
+      "name": "Super-Linear Asymptotic Cost Escalation",
+      "pattern_type": "ASYMPTOTIC_REGRESSION",
+      "trigger_nodes": ["ASYMPTOTIC_BIG_O_LATENCY_NS"],
+      "damping_action": "FORCE_ULTIMATRIX_SIMD_SPLICING",
+      "historical_severity": 0.82
+    }
+  ]
+}
