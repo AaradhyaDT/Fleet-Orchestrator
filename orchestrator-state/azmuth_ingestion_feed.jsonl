@@ -60,3 +60,6 @@
 {"timestamp": "2026-10-19T06:10:13.611215+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-19T06:12:21.442079+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-19T06:13:00.960385+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
+{"timestamp": "2026-10-19T06:27:35.929163+00:00", "event_type": "GITHUB_RADAR_SWEEP", "source": "AzmuthGitHubSensor", "item_id": "30-PAT-Pool", "title": "Scanned 4 streams: 8 opportunities, 5 releases", "status": "SUCCESS", "details": {"opps": 8, "rels": 5}}
+{"timestamp": "2026-10-19T06:27:39.118609+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
+{"timestamp": "2026-10-19T06:33:58.067152+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}

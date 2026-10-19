@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-19T06:03:37.707366+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-19T06:27:35.927615+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[vllm-project/vllm-omni]** [[Perf] Onboard omni encoder stages to the upstream multimodal encoder CUDA Graph framework](https://github.com/vllm-project/vllm-omni/issues/7452) (Comments: 26, Salience: 2.0)
 - **[MakazhanAlpamys/Soup]** [Fast-LoRA autograd, correctness half: hand-written backward for the LoRA projections, behind training.fast_lora](https://github.com/MakazhanAlpamys/Soup/issues/792) (Comments: 5, Salience: 2.0)
 - **[huggingface/peft]** [Comparison of Different Fine-Tuning Techniques for Conversational AI](https://github.com/huggingface/peft/issues/2310) (Comments: 168, Salience: 2.0)
 - **[patrickkellyyoung-ai/swarm-agora-mcp]** [[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark](https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4) (Comments: 3, Salience: 1.6)
-- **[vllm-project/vllm-omni]** [[RFC]: Helios performance optimization ? ultra-low-latency and high-throughput serving tracks](https://github.com/vllm-project/vllm-omni/issues/8173) (Comments: 12, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Docs] No end-to-end tutorial](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363) (Comments: 8, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[CLI] Key handling with no secret ever printed](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328) (Comments: 4, Salience: 1.8)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Governance and multi-sig across every contract](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388) (Comments: 5, Salience: 2.0)
