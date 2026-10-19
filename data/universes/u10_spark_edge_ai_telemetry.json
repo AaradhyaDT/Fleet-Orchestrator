@@ -1,0 +1,80 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u10_spark_edge_ai_telemetry",
+  "cortical_lobe": "SPARK Edge AI Wearable & Telemetry Cortex",
+  "sensory_adapter": "spark_wearable_telemetry_monitor",
+  "description": "Dedicated cortical lobe for SPARK edge AI fall detection wearable, tracking 200Hz 6-axis IMU jerk, FreeRTOS queue depth, INT8 TFLite Micro latency, fall recall safety, and BLE power burn.",
+  "nodes": [
+    {
+      "id": "IMU_ACCEL_JERK_MAGNITUDE",
+      "label": "6-Axis Accelerometer Jerk Shock Rate (g/s)",
+      "node_type": "SENSOR_TRANSDUCER",
+      "unit": "g_per_second",
+      "current_value": 0.98,
+      "layer1_homeostatic": { "mu0": 0.95, "sigma0": 0.15, "iqr": 0.18, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.60, "p95": 2.50 },
+      "layer3_nociceptive": { "abs_min": 0.10, "abs_max": 8.00, "survival_limit": 5.00 },
+      "reflex_limiters": { "max_action_step": 0.50, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "TINYML_INFERENCE_LATENCY_MS",
+      "label": "ESP32-S3 INT8 Quantized CNN Inference Latency",
+      "node_type": "TINYML_PERFORMANCE",
+      "unit": "milliseconds",
+      "current_value": 18.5,
+      "layer1_homeostatic": { "mu0": 18.0, "sigma0": 2.5, "iqr": 3.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 12.0, "p95": 28.0 },
+      "layer3_nociceptive": { "abs_min": 5.0, "abs_max": 60.0, "survival_limit": 35.0 },
+      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "FREERTOS_SENSOR_QUEUE_WATERMARK",
+      "label": "FreeRTOS High-Watermark Available Ring Slots",
+      "node_type": "RTOS_SYSTEMS",
+      "unit": "available_slots",
+      "current_value": 32.0,
+      "layer1_homeostatic": { "mu0": 32.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": -2.0, "z_critical": -3.0, "p05": 12.0, "p95": 64.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 128.0, "survival_limit": 4.0 },
+      "reflex_limiters": { "max_action_step": 4.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "FALL_RECALL_SAFETY_RATIO",
+      "label": "Safety-Critical Fall Detection Recall Metric",
+      "node_type": "SAFETY_METRIC",
+      "unit": "recall_ratio",
+      "current_value": 0.985,
+      "layer1_homeostatic": { "mu0": 0.985, "sigma0": 0.005, "iqr": 0.006, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": -2.0, "z_critical": -3.0, "p05": 0.965, "p95": 1.0 },
+      "layer3_nociceptive": { "abs_min": 0.80, "abs_max": 1.0, "survival_limit": 0.95 },
+      "reflex_limiters": { "max_action_step": 0.01, "collateral_harm_ceiling": 0.99 }
+    },
+    {
+      "id": "SPARK_BATTERY_RESERVE_PCT",
+      "label": "Wearable LiPo Residual Energy Capacity",
+      "node_type": "POWER_TELEMETRY",
+      "unit": "percentage",
+      "current_value": 85.0,
+      "layer1_homeostatic": { "mu0": 80.0, "sigma0": 10.0, "iqr": 12.0, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": -2.0, "z_critical": -3.0, "p05": 25.0, "p95": 100.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 100.0, "survival_limit": 15.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.90 }
+    }
+  ],
+  "synapses": [
+    { "source": "IMU_ACCEL_JERK_MAGNITUDE", "target": "FREERTOS_SENSOR_QUEUE_WATERMARK", "edge_type": "BURST_QUEUE_PRESSURE", "weight": -0.84, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "FREERTOS_SENSOR_QUEUE_WATERMARK", "target": "TINYML_INFERENCE_LATENCY_MS", "edge_type": "DISPATCH_LATENCY_COUPLING", "weight": -0.72, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "TINYML_INFERENCE_LATENCY_MS", "target": "FALL_RECALL_SAFETY_RATIO", "edge_type": "DEADLINE_MISS_PENALTY", "weight": -0.91, "lag_days": 1, "evidence_tier": "FORMALLY_PROVEN" },
+    { "source": "TINYML_INFERENCE_LATENCY_MS", "target": "SPARK_BATTERY_RESERVE_PCT", "edge_type": "COMPUTE_ENERGY_DISCHARGE", "weight": -0.78, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_SPARK_FALL_CASCADE",
+      "name": "High-G Shock Wave with Post-Impact Inactivity",
+      "pattern_type": "FALL_EVENT",
+      "trigger_nodes": ["IMU_ACCEL_JERK_MAGNITUDE"],
+      "damping_action": "TRIGGER_EMERGENCY_BLE_ALARM",
+      "historical_severity": 0.96
+    }
+  ]
+}

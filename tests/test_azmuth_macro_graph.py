@@ -145,6 +145,8 @@ def test_all_six_cortical_cartridges():
         "u7_cyber_resilience_dfir",
         "u8_algorithmic_complexity_cp",
         "u9_regulatory_epistemic_audit",
+        "u10_spark_edge_ai_telemetry",
+        "u11_bias_aperture_vision_audit",
     ]
 
     for c_id in cartridges:
@@ -161,7 +163,7 @@ def test_all_six_cortical_cartridges():
         assert len(graph.synapses) == len(cart["synapses"])
 
     from tools.azmuth_macro_graph import CROSS_UNIVERSE_BRIDGE_SYNAPSES
-    assert len(CROSS_UNIVERSE_BRIDGE_SYNAPSES) >= 8
+    assert len(CROSS_UNIVERSE_BRIDGE_SYNAPSES) >= 12
 
 
 def test_market_sensor_cache_integration():

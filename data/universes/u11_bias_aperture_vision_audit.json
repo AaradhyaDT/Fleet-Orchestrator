@@ -1,0 +1,79 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u11_bias_aperture_vision_audit",
+  "cortical_lobe": "BiasAperture Vision Fairness & Audit Cortex",
+  "sensory_adapter": "bias_aperture_audit_sensor",
+  "description": "Dedicated cortical lobe for BiasAperture vision audit engine, tracking equal opportunity disparity, demographic parity gap, 95% bootstrap CI spread, intersectional minority error rate, and Blink-engine report rendering latency.",
+  "nodes": [
+    {
+      "id": "EQUAL_OPPORTUNITY_DISPARITY",
+      "label": "Inter-Subgroup True Positive Rate Disparity",
+      "node_type": "FAIRNESS_METRIC",
+      "unit": "disparity_ratio",
+      "current_value": 0.035,
+      "layer1_homeostatic": { "mu0": 0.035, "sigma0": 0.010, "iqr": 0.012, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.010, "p95": 0.075 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 0.25, "survival_limit": 0.08 },
+      "reflex_limiters": { "max_action_step": 0.01, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "DEMOGRAPHIC_PARITY_GAP",
+      "label": "Selection Rate Demographic Parity Disparity",
+      "node_type": "FAIRNESS_METRIC",
+      "unit": "parity_gap",
+      "current_value": 0.042,
+      "layer1_homeostatic": { "mu0": 0.040, "sigma0": 0.012, "iqr": 0.014, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.010, "p95": 0.080 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 0.30, "survival_limit": 0.10 },
+      "reflex_limiters": { "max_action_step": 0.02, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "BOOTSTRAP_CI_SPREAD",
+      "label": "95% Non-Parametric Bootstrap CI Confidence Band",
+      "node_type": "UNCERTAINTY_METRIC",
+      "unit": "ci_spread",
+      "current_value": 0.015,
+      "layer1_homeostatic": { "mu0": 0.014, "sigma0": 0.003, "iqr": 0.004, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.005, "p95": 0.025 },
+      "layer3_nociceptive": { "abs_min": 0.001, "abs_max": 0.10, "survival_limit": 0.04 },
+      "reflex_limiters": { "max_action_step": 0.005, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "INTERSECTIONAL_MINORITY_ERROR_RATE",
+      "label": "Intersectional Protected Subgroup Error Rate",
+      "node_type": "ERROR_RATE",
+      "unit": "percentage",
+      "current_value": 4.2,
+      "layer1_homeostatic": { "mu0": 4.0, "sigma0": 0.8, "iqr": 1.0, "tau0_days": 3 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1.5, "p95": 7.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 25.0, "survival_limit": 10.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.95 }
+    },
+    {
+      "id": "HTML_AUDIT_REPORT_LATENCY_S",
+      "label": "Blink-Engine Dynamic Compliance HTML Report Build",
+      "node_type": "REPORT_ENGINE",
+      "unit": "seconds",
+      "current_value": 1.8,
+      "layer1_homeostatic": { "mu0": 1.7, "sigma0": 0.4, "iqr": 0.5, "tau0_days": 1 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.8, "p95": 3.5 },
+      "layer3_nociceptive": { "abs_min": 0.2, "abs_max": 15.0, "survival_limit": 8.0 },
+      "reflex_limiters": { "max_action_step": 0.5, "collateral_harm_ceiling": 0.85 }
+    }
+  ],
+  "synapses": [
+    { "source": "INTERSECTIONAL_MINORITY_ERROR_RATE", "target": "EQUAL_OPPORTUNITY_DISPARITY", "edge_type": "DRIVES_DISPARITY", "weight": 0.86, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" },
+    { "source": "BOOTSTRAP_CI_SPREAD", "target": "DEMOGRAPHIC_PARITY_GAP", "edge_type": "UNCERTAINTY_AMPLIFICATION", "weight": 0.65, "lag_days": 2, "evidence_tier": "STATISTICALLY_OBSERVED" },
+    { "source": "EQUAL_OPPORTUNITY_DISPARITY", "target": "HTML_AUDIT_REPORT_LATENCY_S", "edge_type": "TRIGGERS_DEEP_EXPLANATION", "weight": 0.72, "lag_days": 1, "evidence_tier": "EMPIRICALLY_VERIFIED" }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_FAIRNESS_DRIFT",
+      "name": "Intersectional Demographic Parity Breach",
+      "pattern_type": "FAIRNESS_BREACH",
+      "trigger_nodes": ["EQUAL_OPPORTUNITY_DISPARITY", "DEMOGRAPHIC_PARITY_GAP"],
+      "damping_action": "ENFORCE_BOOTSTRAP_RESAMPLING_AUDIT",
+      "historical_severity": 0.92
+    }
+  ]
+}

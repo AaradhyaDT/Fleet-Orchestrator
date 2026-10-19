@@ -1,6 +1,6 @@
 # Azmuth Cortical Cartridge Index (`CorticalCartridgeV1`)
 
-This directory houses the 10 modular **Cortical Cartridge Lobes** (`U0` through `U9`) powering the Azmuth Neuromorphic, Temporal-Triad & 10-Universe Foresight Engine.
+This directory houses the 12 modular **Cortical Cartridge Lobes** (`U0` through `U11`) powering the Azmuth Neuromorphic, Temporal-Triad & 12-Universe Foresight Engine.
 
 Each universe is defined by a strictly typed schema containing:
 1. `metadata`: Universe identifier, name, version, and natural frequency timescale $\tau_{\text{universe}}$.
@@ -24,6 +24,8 @@ Each universe is defined by a strictly typed schema containing:
 | **`u7_cyber_resilience_dfir`** | Cyber Resilience & Zero-Trust | Continuous secret leak entropy, NTFS Zone.Identifier streams, headless UAC prevention, dependency CVSS | `SECRET_LEAK_PROBABILITY_SCORE`, `NTFS_ADS_ZONE_IDENTIFIER_COUNT`, `HEADLESS_ELEVATION_ATTEMPTS`, `DEPENDENCY_CVSS_RISK_SCORE` |
 | **`u8_algorithmic_complexity_cp`** | Algorithmic Complexity & CP Codons | Big-O inner-loop nanoseconds, Z3 SMT formal proof runtime, codon mutation promotion rates, branch mispredicts | `ASYMPTOTIC_BIG_O_LATENCY_NS`, `Z3_SMT_SOLVE_TIME_MS`, `GENE_MUTATION_PROMOTION_RATE_PCT`, `CP_INGESTED_STATEMENT_COUNT` |
 | **`u9_regulatory_epistemic_audit`** | Regulatory & Epistemic Audit | ARCH-RFC-001 epistemic tiers, demographic parity bounds, EU AI Act conformity files, citation recency | `BIAS_DISPARITY_MAX_DEVIATION`, `EPISTEMIC_UNBACKED_CLAIMS_COUNT`, `REGULATORY_EU_ACT_COMPLIANCE_SCORE`, `CITATION_MEDIAN_RECENCY_DAYS` |
+| **`u10_spark_edge_ai_telemetry`** | SPARK Edge AI Wearable Telemetry | 200Hz 6-axis IMU jerk, FreeRTOS queue depth, INT8 TinyML inference, fall recall ($\ge 0.95$), BLE power | `IMU_ACCEL_JERK_MAGNITUDE`, `TINYML_INFERENCE_LATENCY_MS`, `FREERTOS_SENSOR_QUEUE_WATERMARK`, `FALL_RECALL_SAFETY_RATIO` |
+| **`u11_bias_aperture_vision_audit`** | BiasAperture Vision Fairness Audit | Intersectional minority error rate, equal opportunity disparity, demographic parity gap, 95% bootstrap CI spread | `EQUAL_OPPORTUNITY_DISPARITY`, `DEMOGRAPHIC_PARITY_GAP`, `BOOTSTRAP_CI_SPREAD`, `INTERSECTIONAL_MINORITY_ERROR_RATE` |
 
 ---
 

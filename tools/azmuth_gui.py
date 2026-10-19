@@ -2365,6 +2365,8 @@ class AzmuthCommandCenterGUI:
             ("u7_cyber_resilience_dfir", "U7: Cyber Resilience", "Zero-Trust • ADS • CVSS", t.accent_cyan),
             ("u8_algorithmic_complexity_cp", "U8: CP Complexity", "Big-O • Z3 SMT • Codons", t.accent_purple),
             ("u9_regulatory_epistemic_audit", "U9: Regulatory Audit", "EU AI Act • Bias Parity", t.accent_blue),
+            ("u10_spark_edge_ai_telemetry", "U10: SPARK Wearable", "200Hz IMU • TinyML • BLE", t.accent_gold),
+            ("u11_bias_aperture_vision_audit", "U11: BiasAperture", "Fairness Audit • Parity CI", t.accent_cyan),
         ]
 
         # Filter or load dynamically from sweep metadata if available

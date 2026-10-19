@@ -39,6 +39,13 @@ CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
     # U9 (Regulatory & Epistemic Audit) -> U1 (Research Arbitrage) & U0 (BiasAperture)
     {"source": "u9_regulatory_epistemic_audit::BIAS_DISPARITY_MAX_DEVIATION", "target": "u0_ecosystem_mesh::BiasAperture", "weight": 0.94, "lag_days": 1, "edge_type": "AUDIT_PARITY_VERIFICATION"},
     {"source": "u9_regulatory_epistemic_audit::EPISTEMIC_UNBACKED_CLAIMS_COUNT", "target": "u1_research_arbitrage::BRL_LAB_ARXIV", "weight": -0.90, "lag_days": 1, "edge_type": "EPISTEMIC_GATE_BLOCK"},
+    # U10 (SPARK Edge AI Telemetry) -> U5, U6, and U1
+    {"source": "u5_hardware_physics_bom::MPU6050_IMU_DRIFT", "target": "u10_spark_edge_ai_telemetry::IMU_ACCEL_JERK_MAGNITUDE", "weight": -0.78, "lag_days": 1, "edge_type": "SENSOR_NOISE_INJECTION"},
+    {"source": "u10_spark_edge_ai_telemetry::TINYML_INFERENCE_LATENCY_MS", "target": "u6_energy_thermal_power::ACTIVE_BURST_POWER_MW", "weight": 0.85, "lag_days": 1, "edge_type": "COMPUTE_ENERGY_BURN"},
+    {"source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO", "target": "u1_research_arbitrage::SPARK_TINYML_ACCURACY", "weight": 0.92, "lag_days": 2, "edge_type": "BENCHMARK_GROUNDING"},
+    # U11 (BiasAperture Vision Fairness Audit) -> U9 and U0
+    {"source": "u11_bias_aperture_vision_audit::EQUAL_OPPORTUNITY_DISPARITY", "target": "u9_regulatory_epistemic_audit::BIAS_DISPARITY_MAX_DEVIATION", "weight": 0.95, "lag_days": 1, "edge_type": "REGULATORY_METRIC_FEED"},
+    {"source": "u11_bias_aperture_vision_audit::DEMOGRAPHIC_PARITY_GAP", "target": "u0_ecosystem_mesh::BiasAperture", "weight": 0.88, "lag_days": 1, "edge_type": "AUDIT_FEEDBACK_LOOP"},
 ]
 
 

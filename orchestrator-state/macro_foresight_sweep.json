@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-19T06:03:40.357979+00:00",
-  "total_cartridges": 10,
+  "timestamp": "2026-10-19T06:10:13.600754+00:00",
+  "total_cartridges": 12,
   "universes": {
     "u0_ecosystem_mesh": {
       "id": "u0_ecosystem_mesh",
@@ -10,7 +10,27 @@
       "spikes_count": 2,
       "top_chokepoint": "Fleet-Orchestrator",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T06:03:40.358566+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.601096+00:00"
+    },
+    "u10_spark_edge_ai_telemetry": {
+      "id": "u10_spark_edge_ai_telemetry",
+      "name": "SPARK Edge AI Wearable & Telemetry Cortex",
+      "node_count": 5,
+      "synapse_count": 4,
+      "spikes_count": 0,
+      "top_chokepoint": "TINYML_INFERENCE_LATENCY_MS",
+      "engram_matches": 0,
+      "last_swept_at": "2026-10-19T06:10:13.601378+00:00"
+    },
+    "u11_bias_aperture_vision_audit": {
+      "id": "u11_bias_aperture_vision_audit",
+      "name": "BiasAperture Vision Fairness & Audit Cortex",
+      "node_count": 5,
+      "synapse_count": 3,
+      "spikes_count": 0,
+      "top_chokepoint": "EQUAL_OPPORTUNITY_DISPARITY",
+      "engram_matches": 0,
+      "last_swept_at": "2026-10-19T06:10:13.601626+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -20,7 +40,7 @@
       "spikes_count": 5,
       "top_chokepoint": "FALL_DETECTION_SOTA",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T06:03:40.358912+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.602011+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -30,7 +50,7 @@
       "spikes_count": 2,
       "top_chokepoint": "SLM_ROUTER_LATENCY_MS",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T06:03:40.359178+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.602433+00:00"
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -40,7 +60,7 @@
       "spikes_count": 4,
       "top_chokepoint": "KU_RESEARCH_LAB",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T06:03:40.359395+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.602732+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -50,7 +70,7 @@
       "spikes_count": 6,
       "top_chokepoint": "TSM",
       "engram_matches": 6,
-      "last_swept_at": "2026-10-19T06:03:40.360268+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.604071+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -60,7 +80,7 @@
       "spikes_count": 2,
       "top_chokepoint": "TENSOR_ARENA_SIZE_KB",
       "engram_matches": 1,
-      "last_swept_at": "2026-10-19T06:03:40.360499+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.604491+00:00"
     },
     "u6_energy_thermal_power": {
       "id": "u6_energy_thermal_power",
@@ -70,7 +90,7 @@
       "spikes_count": 0,
       "top_chokepoint": "CLOUD_A100_TDP_WATTS",
       "engram_matches": 0,
-      "last_swept_at": "2026-10-19T06:03:40.360701+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.604866+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -80,7 +100,7 @@
       "spikes_count": 0,
       "top_chokepoint": "HEADLESS_ELEVATION_ATTEMPTS",
       "engram_matches": 0,
-      "last_swept_at": "2026-10-19T06:03:40.360902+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.605243+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -90,7 +110,7 @@
       "spikes_count": 1,
       "top_chokepoint": "CP_INGESTED_STATEMENT_COUNT",
       "engram_matches": 0,
-      "last_swept_at": "2026-10-19T06:03:40.361111+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.605759+00:00"
     },
     "u9_regulatory_epistemic_audit": {
       "id": "u9_regulatory_epistemic_audit",
@@ -100,7 +120,7 @@
       "spikes_count": 0,
       "top_chokepoint": "EPISTEMIC_UNBACKED_CLAIMS_COUNT",
       "engram_matches": 0,
-      "last_swept_at": "2026-10-19T06:03:40.361316+00:00"
+      "last_swept_at": "2026-10-19T06:10:13.606026+00:00"
     }
   },
   "systemic_spikes": [
@@ -243,6 +263,14 @@
       "node_id": "Fleet-Orchestrator"
     },
     {
+      "universe_id": "u10_spark_edge_ai_telemetry",
+      "node_id": "TINYML_INFERENCE_LATENCY_MS"
+    },
+    {
+      "universe_id": "u11_bias_aperture_vision_audit",
+      "node_id": "EQUAL_OPPORTUNITY_DISPARITY"
+    },
+    {
       "universe_id": "u1_research_arbitrage",
       "node_id": "FALL_DETECTION_SOTA"
     },
@@ -349,6 +377,41 @@
       "weight": -0.9,
       "lag_days": 1,
       "edge_type": "EPISTEMIC_GATE_BLOCK"
+    },
+    {
+      "source": "u5_hardware_physics_bom::MPU6050_IMU_DRIFT",
+      "target": "u10_spark_edge_ai_telemetry::IMU_ACCEL_JERK_MAGNITUDE",
+      "weight": -0.78,
+      "lag_days": 1,
+      "edge_type": "SENSOR_NOISE_INJECTION"
+    },
+    {
+      "source": "u10_spark_edge_ai_telemetry::TINYML_INFERENCE_LATENCY_MS",
+      "target": "u6_energy_thermal_power::ACTIVE_BURST_POWER_MW",
+      "weight": 0.85,
+      "lag_days": 1,
+      "edge_type": "COMPUTE_ENERGY_BURN"
+    },
+    {
+      "source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO",
+      "target": "u1_research_arbitrage::SPARK_TINYML_ACCURACY",
+      "weight": 0.92,
+      "lag_days": 2,
+      "edge_type": "BENCHMARK_GROUNDING"
+    },
+    {
+      "source": "u11_bias_aperture_vision_audit::EQUAL_OPPORTUNITY_DISPARITY",
+      "target": "u9_regulatory_epistemic_audit::BIAS_DISPARITY_MAX_DEVIATION",
+      "weight": 0.95,
+      "lag_days": 1,
+      "edge_type": "REGULATORY_METRIC_FEED"
+    },
+    {
+      "source": "u11_bias_aperture_vision_audit::DEMOGRAPHIC_PARITY_GAP",
+      "target": "u0_ecosystem_mesh::BiasAperture",
+      "weight": 0.88,
+      "lag_days": 1,
+      "edge_type": "AUDIT_FEEDBACK_LOOP"
     }
   ]
 }
