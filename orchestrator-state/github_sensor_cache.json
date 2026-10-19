@@ -1,9 +1,23 @@
 {
-  "timestamp": "2026-10-19T07:56:26.137768+00:00",
-  "timestamp_epoch": 1792396573.0137062,
+  "timestamp": "2026-10-19T11:02:30.133946+00:00",
+  "timestamp_epoch": 1792407737.5323718,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "xaviercallens/HiveMind#15",
+        "title": "[HM-S3-02] Native Custom CUDA/Triton INT4 + FP8 Fused MoE Router Kernel in swarm_fabric.py",
+        "repo": "xaviercallens/HiveMind",
+        "url": "https://github.com/xaviercallens/HiveMind/issues/15",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-19T10:41:50Z",
+        "updated_at": "2026-10-19T10:41:50Z",
+        "salience": 1.0
+      },
       {
         "id": "MakazhanAlpamys/Soup#797",
         "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
@@ -48,21 +62,6 @@
         "comments": 5,
         "created_at": "2026-09-11T11:07:30Z",
         "updated_at": "2026-10-19T05:54:13Z",
-        "salience": 2.0
-      },
-      {
-        "id": "huggingface/peft#2310",
-        "title": "Comparison of Different Fine-Tuning Techniques for Conversational AI",
-        "repo": "huggingface/peft",
-        "url": "https://github.com/huggingface/peft/issues/2310",
-        "labels": [
-          "good first issue",
-          "help wanted",
-          "contributions-welcome"
-        ],
-        "comments": 168,
-        "created_at": "2025-01-07T07:07:50Z",
-        "updated_at": "2026-10-19T05:32:44Z",
         "salience": 2.0
       },
       {
@@ -185,19 +184,19 @@
     "cp_archives": [
       {
         "repo": "ShahjalalShohag/code-library",
-        "stars": 3730,
+        "stars": 3731,
         "url": "https://github.com/ShahjalalShohag/code-library",
         "description": "Templates, algorithms and data structures implemented and collected for programming contests.",
         "default_branch": "main",
-        "updated_at": "2026-10-18T12:33:03Z"
+        "updated_at": "2026-10-19T10:19:06Z"
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3574,
+        "stars": 3575,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-18T15:04:21Z"
+        "updated_at": "2026-10-19T08:04:57Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -235,7 +234,7 @@
       {
         "repo": "AaradhyaDT/BiasAperture",
         "open_issues_count": 9,
-        "pushed_at": "2026-10-19T07:51:14Z",
+        "pushed_at": "2026-10-19T08:00:25Z",
         "stars": 1,
         "forks": 1
       },
