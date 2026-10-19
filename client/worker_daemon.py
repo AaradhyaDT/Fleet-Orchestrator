@@ -14,6 +14,7 @@ from client.adapters.lmstudio_local_adapter import LMStudioLocalAdapter
 from client.adapters.claude_desktop_proxy import ClaudeDesktopProxyAdapter
 from client.adapters.claude_desktop_cdp import ClaudeDesktopCDPAdapter
 from client.adapters.base_adapter import BaseWorkerAdapter
+from tools.slm_intent_router import SLMIntentRouter
 
 ORCHESTRATOR_URL = os.getenv("ORCHESTRATOR_URL", "http://localhost:8000/api/v1")
 NODE_ID = os.getenv("NODE_ID", "local-node-01")
@@ -198,7 +199,23 @@ async def main_loop():
                             renew_task_lease_periodically(client, task_id, claim_token, lease_stop)
                         )
                         try:
-                            exec_res = await adapter.execute_task(task_id, task_info.get("spec", ""), stage, {})
+                            # Fast-path intent classification (<50ms)
+                            router = SLMIntentRouter()
+                            spec_text = task_info.get("spec", "")
+                            routing_res = router.classify_intent(spec_text)
+                            context = {
+                                "intent_codon": routing_res.intent_codon,
+                                "target_skill": routing_res.target_skill,
+                                "router_confidence": routing_res.confidence,
+                                "router_latency_ms": routing_res.latency_ms,
+                                "router_source": routing_res.router_source,
+                            }
+                            print(
+                                f"[SLM-ROUTER] Codon: {routing_res.intent_codon} -> Skill: {routing_res.target_skill} "
+                                f"({routing_res.latency_ms:.2f}ms via {routing_res.router_source})"
+                            )
+
+                            exec_res = await adapter.execute_task(task_id, spec_text, stage, context)
 
                             if exec_res.get("success"):
                                 # Submit checkpoint
@@ -209,6 +226,8 @@ async def main_loop():
                                     "result_text": exec_res.get("result_text", ""),
                                     "submitted_by": WORKER_ID,
                                     "claim_token": claim_token,
+                                    "intent_codon": routing_res.intent_codon,
+                                    "target_skill": routing_res.target_skill,
                                 }
                                 checkpoint_r = await client.post(f"{ORCHESTRATOR_URL}/tasks/{task_id}/checkpoint", json=cp_payload)
                                 checkpoint_r.raise_for_status()

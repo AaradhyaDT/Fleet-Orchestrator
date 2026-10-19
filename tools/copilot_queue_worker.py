@@ -1110,6 +1110,14 @@ class CopilotQueueWorker:
         if exec_route == "LOCAL_SLM":
             logger.info(f"Task {task_id} has route LOCAL_SLM - executing via local SLM engine...")
             try:
+                from tools.slm_intent_router import SLMIntentRouter
+                router = SLMIntentRouter()
+                routing_res = router.classify_intent(spec)
+                task["intent_codon"] = routing_res.intent_codon
+                task["target_skill"] = routing_res.target_skill
+                task["router_confidence"] = routing_res.confidence
+                task["router_latency_ms"] = routing_res.latency_ms
+
                 from tools.fast_intent_router import _call_lm_studio
                 local_resp = _call_lm_studio(spec)
                 if local_resp:
@@ -1122,6 +1130,21 @@ class CopilotQueueWorker:
                         "tokens_used": 150,
                         "model_used": "local-slm-qwen",
                         "raw_output": str(local_resp),
+                        "intent_codon": routing_res.intent_codon,
+                        "target_skill": routing_res.target_skill,
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "summary": f"Fast-Path Classified via SLM: {routing_res.intent_codon} -> {routing_res.target_skill}",
+                        "commit_sha": None,
+                        "branch_name": f"task/{task_id}",
+                        "credits_used": 0.0,
+                        "tokens_used": 50,
+                        "model_used": "local-slm-heuristic",
+                        "raw_output": f"Classified in {routing_res.latency_ms:.2f}ms",
+                        "intent_codon": routing_res.intent_codon,
+                        "target_skill": routing_res.target_skill,
                     }
             except Exception as e:
                 logger.warning(f"LOCAL_SLM execution failed, falling back to Copilot: {e}")

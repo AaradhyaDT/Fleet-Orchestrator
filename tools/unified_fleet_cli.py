@@ -178,6 +178,16 @@ def cmd_submit(args: argparse.Namespace) -> None:
     auto_tier = getattr(args, "auto_tier", None)
     model = getattr(args, "model", None)
     try:
+        from tools.slm_intent_router import SLMIntentRouter
+        slm_res = SLMIntentRouter().classify_intent(args.spec)
+        task["intent_codon"] = slm_res.intent_codon
+        task["target_skill"] = slm_res.target_skill
+        task["router_confidence"] = slm_res.confidence
+        task["router_latency_ms"] = slm_res.latency_ms
+    except Exception:
+        pass
+
+    try:
         from tools.fast_intent_router import route_intent
         r_info = route_intent(args.spec)
         if not auto_tier:
@@ -261,6 +271,16 @@ def cmd_run_task(args: argparse.Namespace) -> None:
     auto_tier = getattr(args, "auto_tier", None)
     model = getattr(args, "model", None)
     try:
+        from tools.slm_intent_router import SLMIntentRouter
+        slm_res = SLMIntentRouter().classify_intent(args.spec)
+        task["intent_codon"] = slm_res.intent_codon
+        task["target_skill"] = slm_res.target_skill
+        task["router_confidence"] = slm_res.confidence
+        task["router_latency_ms"] = slm_res.latency_ms
+    except Exception:
+        pass
+
+    try:
         from tools.fast_intent_router import route_intent
         r_info = route_intent(args.spec)
         if not auto_tier:
@@ -339,18 +359,18 @@ def cmd_tasks(args: argparse.Namespace) -> None:
 def cmd_daemon(args: argparse.Namespace) -> None:
     """Runs standing background queue worker daemon."""
     state_dir = resolve_state_dir(args.state_dir)
-    from tools.copilot_queue_worker import CopilotQueueWorker
+    from tools.fleet_daemon import FleetDaemon
 
     concurrency = getattr(args, "concurrency", 1)
     dry_run = getattr(args, "dry_run", False)
     exit_when_empty = getattr(args, "exit_when_empty", False)
     idle_timeout = getattr(args, "idle_timeout", None)
-    worker = CopilotQueueWorker(
+    worker = FleetDaemon(
         state_dir=state_dir,
         concurrency=concurrency,
         dry_run=dry_run,
     )
-    print(f"[DAEMON] Starting Copilot Queue Worker (Concurrency: {concurrency}, Dry-run: {dry_run}, Drain: {exit_when_empty}, IdleTimeout: {idle_timeout}s)...", flush=True)
+    print(f"[DAEMON] Starting Fleet Queue Worker Daemon with SLM Fast-Path (Concurrency: {concurrency}, Dry-run: {dry_run}, Drain: {exit_when_empty}, IdleTimeout: {idle_timeout}s)...", flush=True)
     asyncio.run(worker.run(exit_when_empty=exit_when_empty, idle_timeout=idle_timeout))
 
 
