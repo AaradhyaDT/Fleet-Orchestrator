@@ -47,3 +47,4 @@
 {"timestamp": "2026-10-19T05:12:12.163043+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-19T05:24:41.990385+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
 {"timestamp": "2026-10-19T05:26:18.201673+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}
+{"timestamp": "2026-10-19T05:36:01.541585+00:00", "event_type": "TEST_EVENT", "source": "TestRunner", "item_id": "test_item_001", "title": "Test Ingestion Item", "status": "SUCCESS", "details": {"accuracy": 0.99}}

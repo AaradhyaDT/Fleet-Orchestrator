@@ -177,30 +177,33 @@ for u_name, u_data in embedded_universes.items():
             # If sparse, inject small ambient baseline coupling
             adj_weights = adj_weights + torch.eye(num_nodes, device="cuda") * 0.1
 
-            # Chunked evaluation to prevent 32-bit integer indexing limit on ultra-large runs (e.g. 50M)
-            chunk_size = min(TRIALS, 10000000)
+            # Chunked streaming evaluation to support 1 Billion trials without OOM
+            chunk_size = min(TRIALS, 25000000)
             num_chunks = (TRIALS + chunk_size - 1) // chunk_size
-            spikes_list = []
+            total_sum_spikes = 0.0
+            reservoir_samples = []
+            reservoir_target = 10000000
 
-            for _ in range(num_chunks):
-                cur_trials = min(chunk_size, TRIALS - len(spikes_list) * chunk_size)
+            for c_idx in range(num_chunks):
+                cur_trials = min(chunk_size, TRIALS - c_idx * chunk_size)
                 shocks = torch.randn(cur_trials, num_nodes, device="cuda") * 1.5
                 propagated = torch.matmul(shocks, adj_weights)
                 cur_max_spikes = (propagated > 2.0).sum(dim=1).float()
-                spikes_list.append(cur_max_spikes)
+                total_sum_spikes += cur_max_spikes.sum().item()
 
-            max_spikes = torch.cat(spikes_list) if len(spikes_list) > 1 else spikes_list[0]
-            # PyTorch torch.quantile has an internal CUDA sort limit of 16M elements (2^24)
-            if max_spikes.numel() > 10000000:
-                sub_indices = torch.randint(0, max_spikes.numel(), (10000000,), device="cuda")
-                eval_slice = max_spikes[sub_indices]
-            else:
-                eval_slice = max_spikes
+                # Subsample proportionally for tail evaluation
+                samples_to_take = max(1, min(cur_trials, reservoir_target // num_chunks))
+                sub_idx = torch.randint(0, cur_trials, (samples_to_take,), device="cuda")
+                reservoir_samples.append(cur_max_spikes[sub_idx])
 
+                del shocks, propagated, cur_max_spikes
+                torch.cuda.empty_cache()
+
+            eval_slice = torch.cat(reservoir_samples)
             var_99 = torch.quantile(eval_slice, 0.99).item()
             # Conditional Value at Risk (Expected Shortfall)
             cvar_99 = eval_slice[eval_slice >= var_99].mean().item() if (eval_slice >= var_99).any() else var_99
-            mean_spikes = max_spikes.mean().item()
+            mean_spikes = total_sum_spikes / float(TRIALS)
         else:
             import numpy as np
             adj_weights = np.zeros((num_nodes, num_nodes))
