@@ -1,18 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 800,
-  "promotions_won": 302,
-  "last_mutation_at": "2026-10-18T13:17:53.097242+00:00",
+  "mutations_applied": 801,
+  "promotions_won": 303,
+  "last_mutation_at": "2026-10-19T07:57:57.096600+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T03:43:29.794682+00:00",
-      "gene_id": "TASK_CARD_GROUPS",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-18T03:43:50.040580+00:00",
       "gene_id": "TASK_RECURSIVE_STRING",
@@ -447,6 +438,15 @@
     },
     {
       "timestamp": "2026-10-18T13:17:53.097079+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-19T07:57:57.096527+00:00",
       "gene_id": "TEST_MUT_GENE",
       "mutant_created": [
         "orig_impl_mut_fast_io"

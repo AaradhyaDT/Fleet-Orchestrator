@@ -79,3 +79,14 @@ Before finalizing changes or executing `.\sync.bat`:
   - **PowerShell Script-File First**: Never pass multi-pipe expressions or complex PowerShell blocks via inline `-Command "..."` strings. Write to a `.ps1` in the scratch directory and invoke with `-ExecutionPolicy Bypass -File`.
   - **Proactive Watchdog**: If any background task produces no output or progress for >60s, inspect process CPU/IO immediately and kill deadlocked tasks.
 
+---
+
+## 4. Token Density & Anti-Degradation Invariants
+
+To prevent softmax attention dispersion, multi-byte tokenizer fragmentation, and KV cache pollution:
+- **Zero Decorative Emojis**: Strictly ban decorative symbols (lightning, sparkles, rocket, brain, lightbulb, fire, pushpin, target) from technical documentation, prompt templates, commit messages, and agent instructions.
+- **Thinking Trace Isolation**: All multi-turn agent dispatchers must strip internal thinking traces (`<think>` blocks) prior to appending assistant responses back into conversation history.
+- **Stdout Truncation**: Terminal tool outputs injected into agent contexts must never exceed 30 lines (top 10 lines, truncation ellipsis, bottom 20 lines) to preserve token Signal-to-Noise Ratio (SNR).
+- **Automated Screening**: Run `python tools/screen_token_degradation.py --all` to audit documentation and prompts before finalizing releases.
+
+

@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-19T07:07:44.761842+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-19T07:56:26.137768+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 11, Salience: 2.0)
 - **[vllm-project/vllm-omni]** [[Perf] Onboard omni encoder stages to the upstream multimodal encoder CUDA Graph framework](https://github.com/vllm-project/vllm-omni/issues/7452) (Comments: 26, Salience: 2.0)
 - **[MakazhanAlpamys/Soup]** [Fast-LoRA autograd, correctness half: hand-written backward for the LoRA projections, behind training.fast_lora](https://github.com/MakazhanAlpamys/Soup/issues/792) (Comments: 5, Salience: 2.0)
 - **[huggingface/peft]** [Comparison of Different Fine-Tuning Techniques for Conversational AI](https://github.com/huggingface/peft/issues/2310) (Comments: 168, Salience: 2.0)
-- **[patrickkellyyoung-ai/swarm-agora-mcp]** [[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark](https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4) (Comments: 3, Salience: 1.6)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Docs] No end-to-end tutorial](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363) (Comments: 8, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[CLI] Key handling with no secret ever printed](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328) (Comments: 4, Salience: 1.8)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Governance and multi-sig across every contract](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388) (Comments: 5, Salience: 2.0)
@@ -26,7 +26,7 @@
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-18T15:28:43Z`
-- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T05:46:11Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-19T07:19:02Z`
+- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T07:51:14Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
 - **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-18T02:35:47Z`

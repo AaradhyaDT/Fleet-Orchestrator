@@ -327,7 +327,7 @@
     "overlapping-matrices",
     "aa-tree"
   ],
-  "last_solve_at": "2026-10-19T04:56:34.173015+00:00",
+  "last_solve_at": "2026-10-19T07:57:56.860749+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:10:44.881556+00:00",
@@ -630,13 +630,6 @@
       "samples_passed": 3
     }
   ],
-  "attempted_slugs": {
-    "connect-the-graph": "UNSUPPORTED_ARCHETYPE",
-    "equal-sums": "VERIFICATION_FAILED",
-    "find-edge-list": "UNSUPPORTED_ARCHETYPE",
-    "tennis-tournament": "UNSUPPORTED_ARCHETYPE",
-    "alice-tree": "VERIFICATION_FAILED",
-    "array-elimination": "VERIFICATION_FAILED"
-  },
+  "attempted_slugs": {},
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
