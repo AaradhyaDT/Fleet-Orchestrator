@@ -288,10 +288,12 @@ def handle_resume(args) -> int:
     vault_path = STATE_DIR / "cognitive_vault.jsonl"
 
     break_info = None
+    started_at = None
     if telemetry_path.exists():
         try:
             with open(telemetry_path, "r", encoding="utf-8") as f:
                 break_info = json.load(f)
+            started_at = break_info.get("started_at")
             break_info["break_active"] = False
             with open(telemetry_path, "w", encoding="utf-8") as f:
                 json.dump(break_info, f, indent=2)
@@ -308,32 +310,91 @@ def handle_resume(args) -> int:
         except Exception:
             pass
 
+    # Filter ideas captured during THIS break if timestamp available
+    break_ideas = []
+    if started_at:
+        try:
+            t_start = datetime.fromisoformat(started_at)
+            for it in ideas:
+                t_it = datetime.fromisoformat(it.get("timestamp", ""))
+                if t_it >= t_start:
+                    break_ideas.append(it)
+        except Exception:
+            break_ideas = ideas[-5:]
+    if not break_ideas:
+        break_ideas = ideas[-5:]
+
+    target = getattr(args, "target", None)
+
+    # 1. Direct Selection Mode (azmuth resume <index> or <issue>)
+    if target:
+        selected = None
+        # Check if numeric index (e.g. "1", "2")
+        if target.isdigit():
+            idx = int(target) - 1
+            if 0 <= idx < len(break_ideas):
+                selected = break_ideas[idx]
+        # Check if matching issue number directly (e.g. "23" or "#23")
+        target_clean = target.lstrip("#")
+        if not selected and target_clean.isdigit():
+            for it in break_ideas:
+                if it.get("issue_url", "").endswith(f"/{target_clean}"):
+                    selected = it
+                    break
+
+        if selected:
+            t_text = selected.get("thought") or selected.get("raw_thought", "Untitled")
+            url = selected.get("issue_url")
+            rfc_path = selected.get("rfc_file")
+            print("=" * 80)
+            print(f"  AZMUTH FOCUS ENGINE: ACTIVATING TARGET [{target}]")
+            print("=" * 80)
+            print(f"[*] Title       : {t_text}")
+            if url:
+                print(f"[*] Issue Link  : {url}")
+            if rfc_path and Path(rfc_path).exists():
+                print(f"[*] RFC Path    : {rfc_path}")
+                print("-" * 80)
+                # Print First 30 lines of RFC
+                lines = Path(rfc_path).read_text(encoding="utf-8").splitlines()
+                for l in lines[:25]:
+                    print(l)
+                if len(lines) > 25:
+                    print("... [Full RFC available at path above]")
+            print("=" * 80)
+            print(f"[+] Focus locked on {target}. Ready to execute.\n")
+            return 0
+        else:
+            print(f"[!] Target '{target}' not found in active break queue.")
+
+    # 2. General Menu / Session Summary Mode
     print("=" * 80)
     print("  AZMUTH COGNITIVE ENGINE -- HUMAN SESSION RESUMED")
     print("=" * 80)
     print(f"Welcome back, Aaradhya. Local time: {datetime.now().strftime('%I:%M %p')}.")
 
-    if ideas:
-        print(f"\nYou captured {len(ideas)} thoughts during breaks:")
-        for idx, it in enumerate(ideas[-5:], 1):
+    if break_ideas:
+        print(f"\nCaptured during your rest cycle ({len(break_ideas)} thought{'s' if len(break_ideas) > 1 else ''}):")
+        for idx, it in enumerate(break_ideas, 1):
             t_text = it.get("thought") or it.get("raw_thought", "Untitled thought")
             url = it.get("issue_url")
             rfc_path = it.get("rfc_file")
-            print(f"\n  [{idx}] [{it.get('local_time', '')}] {t_text}")
+            issue_tag = f" [#{url.split('/')[-1]}]" if url else ""
+            print(f"\n  [{idx}]{issue_tag} {t_text}")
             if url:
                 print(f"      Issue Link : {url}")
             if rfc_path and Path(rfc_path).exists():
                 try:
                     rfc_text = Path(rfc_path).read_text(encoding="utf-8")
-                    # Extract Summary or Module if present
                     lines = [line.strip() for line in rfc_text.splitlines() if line.strip() and not line.startswith("#") and not line.startswith(">") and not line.startswith("-") and not line.startswith("=")]
                     if lines:
                         preview = lines[0][:140] + ("..." if len(lines[0]) > 140 else "")
                         print(f"      Decoded RFC: {preview}")
                 except Exception:
                     pass
-        if len(ideas) > 5:
-            print(f"\n  ... and {len(ideas) - 5} earlier thoughts stored in cognitive_vault.jsonl")
+        print("\n" + "-" * 80)
+        print("To focus immediately on an idea and print its full RFC, run:")
+        print("    azmuth resume 1          (or azmuth resume #23)")
     else:
         print("\nZero intrusive thoughts logged during rest. Pure cognitive recovery achieved!")
 
@@ -396,7 +457,8 @@ def main() -> int:
     dump_parser.add_argument("-v", "--verbose", action="store_true", help="Synchronously stream full structured Gemini RFC synthesis in terminal")
 
     # Resume subcommand
-    subparsers.add_parser("resume", help="Resume work session and review thoughts captured during breaks")
+    resume_parser = subparsers.add_parser("resume", help="Resume work session and select an issue/thought to focus on")
+    resume_parser.add_argument("target", nargs="?", default=None, help="Optional index [1, 2, ...] or issue number (#23) to immediately checkout/focus")
 
 
     args = parser.parse_args()
