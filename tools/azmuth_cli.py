@@ -318,10 +318,22 @@ def handle_resume(args) -> int:
         for idx, it in enumerate(ideas[-5:], 1):
             t_text = it.get("thought") or it.get("raw_thought", "Untitled thought")
             url = it.get("issue_url")
-            url_str = f" -> {url}" if url else ""
-            print(f"  [{idx}] [{it.get('local_time', '')}] {t_text}{url_str}")
+            rfc_path = it.get("rfc_file")
+            print(f"\n  [{idx}] [{it.get('local_time', '')}] {t_text}")
+            if url:
+                print(f"      Issue Link : {url}")
+            if rfc_path and Path(rfc_path).exists():
+                try:
+                    rfc_text = Path(rfc_path).read_text(encoding="utf-8")
+                    # Extract Summary or Module if present
+                    lines = [line.strip() for line in rfc_text.splitlines() if line.strip() and not line.startswith("#") and not line.startswith(">") and not line.startswith("-") and not line.startswith("=")]
+                    if lines:
+                        preview = lines[0][:140] + ("..." if len(lines[0]) > 140 else "")
+                        print(f"      Decoded RFC: {preview}")
+                except Exception:
+                    pass
         if len(ideas) > 5:
-            print(f"  ... and {len(ideas) - 5} earlier thoughts stored in cognitive_vault.jsonl")
+            print(f"\n  ... and {len(ideas) - 5} earlier thoughts stored in cognitive_vault.jsonl")
     else:
         print("\nZero intrusive thoughts logged during rest. Pure cognitive recovery achieved!")
 

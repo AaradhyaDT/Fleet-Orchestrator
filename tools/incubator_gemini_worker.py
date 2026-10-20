@@ -170,7 +170,20 @@ async def main_async(raw_thought: str, create_issue: bool = True) -> int:
     with open(VAULT_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(vault_record) + "\n")
 
-    print(f"[+] Incubator workflow complete. Issue: {issue_url or 'Local RFC only'}\n")
+    # 5. Formatted Executive Synthesis Display for CLI completion
+    print("\n" + "=" * 80)
+    print("  AZMUTH INCUBATOR: DECODED RESEARCH SYNTHESIS")
+    print("=" * 80)
+    print(f"[*] Raw Input Thought : \"{raw_thought}\"")
+    print(f"[*] Captured At       : {datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')} Local")
+    if issue_url:
+        print(f"[*] Tracked GitHub PR : {issue_url}")
+    print(f"[*] Local RFC File    : {rfc_file}")
+    print("-" * 80)
+    print(rfc_content.strip())
+    print("=" * 80)
+    print(f"[+] Issue live: {issue_url or 'Local RFC only'}")
+    print("[*] Return to rest, or execute with fresh focus!\n")
     return 0
 
 
