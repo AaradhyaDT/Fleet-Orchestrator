@@ -261,6 +261,20 @@ def handle_dump(args) -> int:
 
     print(f"[Vaulted] '{thought}' secured to cognitive vault.{remaining_msg}")
     print("[*] Thought captured. Do NOT write code right now. Return to your break!")
+
+    # Spawning background autonomous Gemini Fleet worker (detached, non-blocking)
+    worker_script = ROOT / "tools" / "incubator_gemini_worker.py"
+    if worker_script.exists():
+        try:
+            worker_cmd = [sys.executable, str(worker_script), thought]
+            flags = 0
+            if sys.platform == "win32":
+                flags = subprocess.CREATE_NO_WINDOW
+            subprocess.Popen(worker_cmd, creationflags=flags, close_fds=True)
+            print("[+] Gemini Fleet Worker dispatched headlessly. Research RFC & GitHub Issue generating in background.")
+        except Exception as e:
+            print(f"[Notice] Background incubator dispatch note: {e}")
+
     return 0
 
 
