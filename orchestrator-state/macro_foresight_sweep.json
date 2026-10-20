@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-20T03:28:50.962311+00:00",
+  "timestamp": "2026-10-20T04:02:34.050336+00:00",
   "total_cartridges": 14,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -210,7 +210,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.962665+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.050888+00:00"
     },
     "u10_spark_edge_ai_telemetry": {
       "id": "u10_spark_edge_ai_telemetry",
@@ -387,7 +387,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.962937+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.051162+00:00"
     },
     "u11_bias_aperture_vision_audit": {
       "id": "u11_bias_aperture_vision_audit",
@@ -564,14 +564,14 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.963166+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.051383+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
       "name": "Sovereign GCC & Dubai AI Opportunity Cortex",
-      "node_count": 5,
-      "synapse_count": 3,
-      "spikes_count": 2,
+      "node_count": 6,
+      "synapse_count": 4,
+      "spikes_count": 3,
       "top_chokepoint": "UAE_GOLDEN_VISA_CODER_READINESS",
       "engram_matches": 1,
       "nodes": {
@@ -580,7 +580,7 @@
           "label": "UAE 10-Year Golden Visa (AI & Coder Track) Eligibility Score",
           "node_type": "IMMIGRATION_PATHWAY",
           "unit": "eligibility_score_pct",
-          "current_value": 89.5,
+          "current_value": 78.5,
           "layer1_homeostatic": {
             "mu0": 88.0,
             "sigma0": 4.0,
@@ -602,11 +602,12 @@
             "max_action_step": 3.0,
             "collateral_harm_ceiling": 0.9
           },
-          "z_score": 0.375,
-          "abs_extreme_ratio": 79.0,
-          "habituated": true,
-          "spikes": 0,
-          "state_label": "HOMEOSTATIC_EQUILIBRIUM"
+          "description": "Tracks UAE 10-Year Golden Visa readiness. Active preparation runway (IV-II semester + NEC license exam). Technical portfolio ready (SPARK, BiasAperture, Fleet, Forensics); awaiting final degree attestation chain.",
+          "z_score": -2.375,
+          "abs_extreme_ratio": 57.0,
+          "habituated": false,
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         },
         "DFF_DUBAI_FUTURE_FOUNDATION_RFP": {
           "id": "DFF_DUBAI_FUTURE_FOUNDATION_RFP",
@@ -739,9 +740,42 @@
           "habituated": true,
           "spikes": 0,
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
+        },
+        "ACADEMIC_AND_ENGINEERING_COUNCIL_LICENSURE": {
+          "id": "ACADEMIC_AND_ENGINEERING_COUNCIL_LICENSURE",
+          "label": "IOE BEI Degree Completion & Nepal Engineering Council (NEC) Licensure",
+          "node_type": "QUALIFICATION_MILESTONE",
+          "unit": "completion_pct",
+          "current_value": 85.0,
+          "layer1_homeostatic": {
+            "mu0": 85.0,
+            "sigma0": 5.0,
+            "iqr": 6.0,
+            "tau0_days": 30
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 70.0,
+            "p95": 100.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 50.0,
+            "abs_max": 100.0,
+            "survival_limit": 100.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 5.0,
+            "collateral_harm_ceiling": 0.9
+          },
+          "z_score": 0.0,
+          "abs_extreme_ratio": 70.0,
+          "habituated": true,
+          "spikes": 0,
+          "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.963449+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.051680+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
@@ -984,7 +1018,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.963744+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.051964+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1161,7 +1195,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.964001+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.052325+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1338,7 +1372,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.964234+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.052837+00:00"
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -1482,7 +1516,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.964460+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.053377+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2385,7 +2419,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.965481+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.054807+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2529,7 +2563,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.965772+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.055059+00:00"
     },
     "u6_energy_thermal_power": {
       "id": "u6_energy_thermal_power",
@@ -2706,7 +2740,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.966004+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.055282+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -2883,7 +2917,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.966229+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.055491+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -3060,7 +3094,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.966461+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.055699+00:00"
     },
     "u9_regulatory_epistemic_audit": {
       "id": "u9_regulatory_epistemic_audit",
@@ -3237,7 +3271,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:28:50.966703+00:00"
+      "last_swept_at": "2026-10-20T04:02:34.055946+00:00"
     }
   },
   "systemic_spikes": [
@@ -3252,6 +3286,12 @@
       "node_id": "Super-NLM",
       "z_score": 1.0,
       "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u12_sovereign_gcc_dubai_radar",
+      "node_id": "UAE_GOLDEN_VISA_CODER_READINESS",
+      "z_score": -2.375,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u12_sovereign_gcc_dubai_radar",

@@ -10,7 +10,7 @@
       "label": "UAE 10-Year Golden Visa (AI & Coder Track) Eligibility Score",
       "node_type": "IMMIGRATION_PATHWAY",
       "unit": "eligibility_score_pct",
-      "current_value": 89.5,
+      "current_value": 78.5,
       "layer1_homeostatic": {
         "mu0": 88.0,
         "sigma0": 4.0,
@@ -31,7 +31,8 @@
       "reflex_limiters": {
         "max_action_step": 3.0,
         "collateral_harm_ceiling": 0.9
-      }
+      },
+      "description": "Tracks UAE 10-Year Golden Visa readiness. Active preparation runway (IV-II semester + NEC license exam). Technical portfolio ready (SPARK, BiasAperture, Fleet, Forensics); awaiting final degree attestation chain."
     },
     {
       "id": "DFF_DUBAI_FUTURE_FOUNDATION_RFP",
@@ -144,6 +145,34 @@
         "max_action_step": 0.05,
         "collateral_harm_ceiling": 0.95
       }
+    },
+    {
+      "id": "ACADEMIC_AND_ENGINEERING_COUNCIL_LICENSURE",
+      "label": "IOE BEI Degree Completion & Nepal Engineering Council (NEC) Licensure",
+      "node_type": "QUALIFICATION_MILESTONE",
+      "unit": "completion_pct",
+      "current_value": 85.0,
+      "layer1_homeostatic": {
+        "mu0": 85.0,
+        "sigma0": 5.0,
+        "iqr": 6.0,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 70.0,
+        "p95": 100.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 50.0,
+        "abs_max": 100.0,
+        "survival_limit": 100.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 5.0,
+        "collateral_harm_ceiling": 0.9
+      }
     }
   ],
   "synapses": [
@@ -170,6 +199,14 @@
       "weight": 0.94,
       "lag_days": 21,
       "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "ACADEMIC_AND_ENGINEERING_COUNCIL_LICENSURE",
+      "target": "UAE_GOLDEN_VISA_CODER_READINESS",
+      "edge_type": "PREREQUISITE_CREDENTIAL_UNLOCK",
+      "weight": 0.95,
+      "lag_days": 60,
+      "evidence_tier": "FORMALLY_PROVEN"
     }
   ],
   "engrams": [
