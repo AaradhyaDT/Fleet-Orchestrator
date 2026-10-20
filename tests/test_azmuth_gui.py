@@ -381,30 +381,17 @@ def test_azmuth_gui_pat_ring_reports_configured_count_without_fake_health():
         app.switch_view("pipeline")
         app._redraw_active_canvas()
 
-        # pat_ring_info should be recorded
-        assert app.pat_ring_info is not None
-        assert app.pat_ring_info[0] == 540.0
-        assert app.pat_ring_info[1] == 240.0
-
-        # Verify initial dots created
-        dot_items = app.canvas.find_withtag("pat_ring_dots")
-        assert len(dot_items) >= 30
-
-        # Pool state is represented as configured count, not a rotating-key claim.
-        app.is_job_running = True
-        app.anim_tick = 0
-        app._draw_pat_ring_dots()
-        subtext_item = app.canvas.find_withtag("pat_ring_subtext")
-        assert len(subtext_item) == 1
-        assert "health unknown" in app.canvas.itemcget(subtext_item[0], "text")
-        app.anim_tick = 8
-        app._draw_pat_ring_dots()
-        assert "health unknown" in app.canvas.itemcget(subtext_item[0], "text")
-
-        # When idle, displays pooled keys
-        app.is_job_running = False
-        app._draw_pat_ring_dots()
-        assert "configured" in app.canvas.itemcget(subtext_item[0], "text")
+        # Configuration is observed; health/capacity must not be inferred.
+        assert "STAGE_PAT_RING" in app.canvas_nodes
+        assert not app.canvas.find_withtag("pat_ring_dots")
+        for running in (False, True, False):
+            app.is_job_running = running
+            app._redraw_active_canvas()
+            app._inspect_pipeline_stage("STAGE_PAT_RING")
+            text = app.inspector_text.get("1.0", tk.END)
+            assert f"{len(app.gh_sensor.pool.tokens)} configured entries" in text
+            assert "health and usable capacity unknown" in text
+            assert "30-PAT" not in text and "req/hr" not in text
     finally:
         try:
             app._on_close()

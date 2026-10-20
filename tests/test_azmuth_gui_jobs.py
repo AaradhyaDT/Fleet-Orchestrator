@@ -347,7 +347,8 @@ def test_visible_views_and_key_controls_fit_supported_sizes(isolated_gui, size):
     """Exercise real Tk geometry asynchronously; scales emulate the app's DPI input."""
     instance = isolated_gui
     root = instance.root
-    root.geometry(f"{size[0]}x{size[1]}+0+0")
+    root.maxsize(10000, 10000)
+    root.geometry(f"{round(size[0] * instance.system_dpi)}x{round(size[1] * instance.system_dpi)}+0+0")
     root.deiconify()
     failures = []
     views = ("pipeline", "dag", "genes", "ingestion")
@@ -474,3 +475,136 @@ def test_view_switch_and_poll_preserve_user_camera(isolated_gui):
     assert (instance.cam_x, instance.cam_y, instance.cam_zoom) == (123.0, 456.0, 1.5)
     instance._schedule_telemetry_poll()
     assert (instance.cam_x, instance.cam_y, instance.cam_zoom) == (123.0, 456.0, 1.5)
+
+
+@pytest.mark.parametrize("scale,size", [(scale, size) for scale in (1.0, 1.5, 2.0) for size in ((980, 620), (1366, 768), (1920, 1080))])
+def test_default_panels_and_complete_drawing_bounds(isolated_gui, monkeypatch, scale, size):
+    """Untouched panels, first-open views, and Reset, with real Tk text metrics."""
+    import itertools
+    from tools.azmuth_gui_dpi import DisplayInfo
+    instance = isolated_gui
+    root = instance.root
+    gene = {"gene_id": "ALGORITHM_WITH_A_LONG_IDENTIFIER_AND_ROLLBACK_SUPPORT", "tier": 2,
+            "description": "Maintain connected components and compare implementation variants.", "category": "graph", "alleles": [
+                {"allele_id": f"long_implementation_variant_{i}", "dominance": "PRIMARY" if i == 0 else "ALTERNATIVE",
+                 "complexity_time": "O(N * alpha(N))", "complexity_space": "O(N)",
+                 "empirical_fitness": {"runtime_ms": 40 + i, "ram_kb": 2048}, "invariants": []} for i in range(4)]}
+    catalog = {f"ALGORITHM_{i:04d}": {**gene, "gene_id": f"ALGORITHM_{i:04d}", "tier": i % 6} for i in range(471)}
+    del catalog["ALGORITHM_0000"]
+    catalog[gene["gene_id"]] = {**gene, "tier": 0}
+    monkeypatch.setattr(gui, "load_all_genes", lambda: catalog)
+    instance.genes_catalog = catalog
+    target = tuple(round(value * scale) for value in size)
+    root.maxsize(10000, 10000)
+    instance._on_display_change(DisplayInfo(round(scale * 96), (0, 0, target[0] + 100, target[1] + 150)))
+    root.geometry(f"{target[0]}x{target[1]}+0+0")
+    root.deiconify()
+    failures = []
+
+    def verify():
+        try:
+            assert abs(root.winfo_width() - target[0]) <= 2
+            assert abs(root.winfo_height() - target[1]) <= 2
+            assert not instance.left_panel_collapsed and not instance.right_panel_collapsed
+            for view in ("pipeline", "dag", "genes", "ingestion"):
+                instance.switch_view(view)
+                root.update_idletasks()
+                # Test first-open geometry, then the explicit reset path.
+                for reset in (False, True):
+                    if reset:
+                        instance.reset_layout()
+                        root.update_idletasks()
+                    width, height = instance._canvas_size()
+                    bounds = instance.canvas.bbox("diagram")
+                    if bounds:
+                        assert bounds[0] >= -2 and bounds[1] >= instance._diagram_top - 3, (view, reset, bounds, instance._diagram_top, instance.cam_zoom, instance._fit_pending, instance._canvas_size())
+                        assert bounds[2] <= width + 2 and bounds[3] <= height + 2, (view, reset, bounds, width, height)
+                    for (a, x), (b, y) in itertools.combinations(instance.canvas_nodes.items(), 2):
+                        x, y = x["bbox"], y["bbox"]
+                        assert not (x[0] < y[2] - 1 and x[2] > y[0] + 1 and x[1] < y[3] - 1 and x[3] > y[1] + 1), (view, a, b, x, y)
+                controls = [instance.btn_cancel_job, instance.btn_job_details, instance.btn_technical_details,
+                            instance.btn_view_help, instance.spin_z, *instance.tier_pill_btns.values(), *instance.view_buttons.values()]
+                controls += [b for b, _ in instance.action_buttons if b.winfo_ismapped()]
+                for control in controls:
+                    parent = control.master
+                    assert control.winfo_ismapped(), (view, control)
+                    assert control.winfo_x() >= 0 and control.winfo_y() >= 0, (view, control)
+                    assert control.winfo_x() + control.winfo_width() <= parent.winfo_width() + 2, (view, control, control.cget("text"))
+                    assert control.winfo_y() + control.winfo_height() <= parent.winfo_height() + 2, (view, control)
+        except BaseException as exc:
+            failures.append(exc)
+        finally:
+            root.quit()
+    watchdog = root.after(8000, lambda: (failures.append(AssertionError("Default layout check timed out")), root.quit()))
+    root.after(450, verify)
+    try:
+        root.mainloop()
+    finally:
+        root.after_cancel(watchdog)
+    if failures:
+        raise failures[0]
+
+
+def test_layered_explanations_preserve_details_and_reset(isolated_gui):
+    instance = isolated_gui
+    instance._inspect_pipeline_stage("STAGE_PAT_RING")
+    text = instance.inspector_text.get("1.0", tk.END)
+    assert all(title in text for title in ("Purpose", "Current state", "Available action", "Technical details"))
+    assert "capacity unknown" in text and "30-PAT" not in text and "req/hr" not in text
+    assert instance.inspector_text.tag_cget("technical", "elide") in (1, "1")
+    instance._toggle_technical_details()
+    instance._inspect_pipeline_stage("STAGE_PAT_RING")
+    assert instance._details_expanded
+    assert instance.inspector_text.tag_cget("technical", "elide") in (0, "0")
+    camera = instance.cam_x, instance.cam_y, instance.cam_zoom
+    instance._schedule_telemetry_poll()
+    assert camera == (instance.cam_x, instance.cam_y, instance.cam_zoom)
+    instance.switch_view("ingestion")
+    assert not instance._details_expanded
+    assert "capacity unknown" not in instance.inspector_text.get("1.0", tk.END)
+    instance._inspect_ingestion_event({"title": "Long event " * 100, "source": "Local fixture"})
+    assert "Recorded outcome: unknown" in instance.inspector_text.get("1.0", tk.END)
+    assert "Status:      UNKNOWN" in instance.inspector_text.get("1.0", tk.END)
+    instance._inspect_ingestion_event({"id": "stable-event", "title": "Recorded event", "status": "RUNNING"})
+    instance._toggle_technical_details()
+    instance._inspect_ingestion_event({"id": "stable-event", "title": "Recorded event", "status": "FAILED", "details": {"error": "Updated externally"}})
+    assert instance._details_expanded
+    assert "FAILED" in instance.inspector_text.get("1.0", tk.END)
+    instance._show_view_help()
+    assert "apply generated repairs" in instance.inspector_text.get("1.0", tk.END)
+    assert str(instance.btn_technical_details.cget("state")) == "disabled"
+
+
+def test_edge_label_cleanup_and_long_badges_do_not_overlap(isolated_gui):
+    instance = isolated_gui
+    instance.switch_view("pipeline")
+    for zoom in (0.35, 0.8, 1.0):
+        instance.cam_zoom = zoom
+        instance._redraw_active_canvas()
+        for edge in instance.active_canvas_edges:
+            box = instance.canvas_nodes[edge["target_id"]]["bbox"]
+            x, y = edge["x2"], edge["y2"]
+            assert box[0] - 1 <= x <= box[2] + 1 and box[1] - 1 <= y <= box[3] + 1
+            assert min(abs(x - box[0]), abs(x - box[2]), abs(y - box[1]), abs(y - box[3])) < 1
+    instance.canvas.delete("all")
+    instance.canvas_nodes = {"obstacle": {"bbox": (-10000, -10000, 10000, 10000)}}
+    instance.cam_zoom = 1
+    instance.active_canvas_edges = []
+    instance._draw_directed_edge(100, 100, 400, 400, label="An unusually long secondary edge label")
+    instance._hide_colliding_edge_labels()
+    assert not instance.canvas.find_withtag("edge_label")
+
+
+def test_large_counts_keep_full_values_in_help_and_funnel_selection(isolated_gui):
+    instance = isolated_gui
+    count = 98765432109876543210
+    instance.arena_ledger_data = {"tournaments_run": count}
+    instance.mutation_ledger_data = {"mutations_applied": count}
+    instance._refresh_header_indicators()
+    assert len(instance.kpi_labels["arena"].cget("text")) <= 10
+    instance._show_view_help()
+    assert str(count) in instance.inspector_text.get("1.0", tk.END)
+    instance._inspect_ingestion_funnel({"title": "BENCHMARKS", "value": str(count)})
+    assert str(count) in instance.inspector_text.get("1.0", tk.END)
+    instance._inspect_universe_status({"universe_id": "u0_ecosystem_mesh", "title": "U0: Ecosystem Mesh", "meta": {}})
+    assert "unavailable" in instance.inspector_text.get("1.0", tk.END)

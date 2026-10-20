@@ -162,3 +162,53 @@ colab url -s router-forge --open
      ```powershell
      colab url -s <session-name> --open
      ```
+
+---
+
+## 6. First-CU Watchdog Protocol & Production Gotchas (Lessons Learned)
+
+### The First-CU Watchdog Teardown Engine (`tools/run_dense_matcher_a100.py`)
+When executing persistent runs where the user requests *"stop when first CUs are consumed"*, or to enforce strict micro-budget caps (e.g., $\le 0.20$ CU), wrap execution in a client-side watchdog:
+
+```mermaid
+flowchart TD
+    Start["Check Initial Balance\n(colab usage)"] --> Spawn["Spawn A100 VM\n(colab run --gpu A100 --keep)"]
+    Spawn --> Stream["Stream Remote Stdout"]
+    Stream --> Detect{"Target Output\nReport Flushed?"}
+    Detect -- Yes --> DL["colab download\n/content/artifact.json"]
+    DL --> Poll["Poll Balance (every 15-20s)"]
+    Detect -- No --> Poll
+    Poll --> Check{"Balance < Initial\nOR Target CU Hit?"}
+    Check -- Yes --> Stop["colab stop -s <session>\n(Enforce Teardown)"]
+    Check -- No --> Timeout{"Elapsed > MaxSec?"}
+    Timeout -- Yes --> Stop
+    Timeout -- No --> Stream
+```
+
+### Production Gotchas, Anti-Patterns & Manual Fixes:
+
+1. **Headless `HF_TOKEN` Vault Timeout**:
+   - *Failure*: In headless CLI mode (`colab run`), attempting to fetch secrets from the user vault triggers: `Error while fetching HF_TOKEN secret value: 'Requesting secret HF_TOKEN timed out. Secrets can only be fetched when running from the Colab UI.'`
+   - *Fix*: Do not rely on Colab UI secret injection in headless scripts. Public weights (`all-MiniLM-L6-v2`) download without auth. Suppress implicit vault tokens by setting `os.environ["HF_HUB_DISABLE_IMPLICIT_TOKEN"] = "1"` or passing `token=False`.
+
+2. **Silent Fallback from Missing Remote Packages (`sentence-transformers`)**:
+   - *Failure*: Standard Colab runtimes include PyTorch/CUDA, but omit `sentence-transformers`. Bare `try ... except ImportError` blocks silently fall back to keyword matching rather than utilizing A100 Tensor Cores.
+   - *Fix*: Explicitly auto-install inside remote scripts before importing:
+     ```python
+     try:
+         import sentence_transformers
+     except ImportError:
+         subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "sentence-transformers"])
+     ```
+
+3. **Colab Filesystem Download Flush Race**:
+   - *Failure*: Calling `colab download` the exact millisecond stdout reports completion can download a 0-byte or truncated file because the remote Linux filesystem hasn't flushed file buffers.
+   - *Fix*: Insert a mandatory 2-3 second delay after target stdout detection, verify `COLAB_OUTPUT_PATH.stat().st_size > 50`, and provide secondary path fallback (`/content/dense_opportunity_matrix.json`).
+
+4. **Cosine Similarity Range in Vector Unit Tests**:
+   - *Failure*: Asserting `0.0 <= sim <= 1.0` in unit tests fails when orthogonal/divergent embeddings produce slight negative similarity (e.g., `-0.01` or `-0.03`).
+   - *Fix*: Always assert mathematical cosine similarity within bounds `[-1.0, 1.0]`.
+
+5. **PowerShell Quote & Pipeline Mangling on CLI Tests**:
+   - *Failure*: Complex inline `python -c "import ...; [print(...) for ... if ...]" -Command "..."` strings fail with unescaped quote syntax errors on Windows PowerShell.
+   - *Fix*: Enforce Rule 4: Always write multi-step logic to a standalone `.py` or `.ps1` file rather than escaping quotes inline.

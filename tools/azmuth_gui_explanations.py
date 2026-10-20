@@ -3,6 +3,15 @@
 from functools import wraps
 
 
+def compact_count(value):
+    """Bound overview count width; full recorded totals remain in view help."""
+    try:
+        number = int(value)
+    except (ValueError, TypeError, OverflowError):
+        return "Unknown"
+    return str(number) if abs(number) < 10000 else f"{number:.3g}"
+
+
 VIEW_GUIDES = {
     "pipeline": (
         "Pipeline", "Follow sources through filtering, analysis, and benchmarking.",
@@ -44,7 +53,14 @@ def layered_inspector(renderer):
     """Keep existing tagged technical rendering behind a consistent summary."""
     @wraps(renderer)
     def render(self, *args, **kwargs):
-        key = (renderer.__name__, repr(args), repr(kwargs))
+        identity = args
+        if args and isinstance(args[-1], dict):
+            data = args[-1]
+            identifier = data.get("id") or data.get("url") or data.get("universe_id")
+            if identifier is None:
+                identifier = tuple(data.get(field) for field in ("timestamp", "source", "event_type", "repo", "title"))
+            identity = (*args[:-1], identifier)
+        key = (renderer.__name__, repr(identity), repr(kwargs))
         same = getattr(self, "_detail_key", None) == key
         scroll = self.inspector_text.yview()[0] if same else 0.0
         renderer(self, *args, **kwargs)

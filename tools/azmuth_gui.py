@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from tools.azmuth_gui_jobs import GUIJob, JobCancelled, run_managed_process, terminate_owned_process
-from tools.azmuth_gui_explanations import VIEW_GUIDES, OPERATIONS_GUIDE, layered_inspector
+from tools.azmuth_gui_explanations import VIEW_GUIDES, OPERATIONS_GUIDE, compact_count, layered_inspector
 from tools.azmuth_gui_dpi import DisplayInfo, DpiController, FontRegistry, LayoutScaler, LogicalCanvas, create_gui_root
 
 # Protect stdio under pythonw.exe and hide console if started via python.exe
@@ -407,7 +407,6 @@ class AzmuthCommandCenterGUI:
         self.pulses: List[Dict[str, Any]] = []
         self.active_canvas_edges: List[Dict[str, Any]] = []
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
-        self.pat_ring_info: Optional[Tuple[float, float, float]] = None
         self.selected_node_id: Optional[str] = None
         self._inspector_mode = "selection"
         self._detail_key = None
@@ -619,6 +618,11 @@ class AzmuthCommandCenterGUI:
         """Fit node bounds through the same camera used for drawing and hit testing."""
         if not hasattr(self, "canvas"):
             return
+        if not self.canvas.winfo_ismapped():
+            # DPI setup may run before deiconify. Do not accept placeholder
+            # canvas dimensions as the first real layout.
+            self._fit_pending = True
+            return
         cw, ch = self._canvas_size()
         if cw < 100 or ch < 100:
             return
@@ -684,7 +688,7 @@ class AzmuthCommandCenterGUI:
         self.right_title_lbl.configure(font=self.font("Segoe UI Semibold", 9))
         self.lbl_canvas_mode.configure(font=self.font("Segoe UI Semibold", 9))
         self.lbl_canvas_hint.configure(font=self.font("Segoe UI", 8))
-        self.inspector_text.configure(font=self.font("Consolas", 9))
+        self.inspector_text.configure(font=self.font("Segoe UI", 9))
         self.left_listbox.configure(font=self.font("Consolas", 8))
 
         # Re-render canvas
@@ -964,7 +968,7 @@ class AzmuthCommandCenterGUI:
 
         self.lbl_engine_sub = tk.Label(
             self.brand_frame,
-            text="U0-U5 Foresight • 30-PAT Sensory Radar • Ultimatrix Gene Lab",
+            text="Sources, signal analysis, and algorithm variants",
             font=self.font("Segoe UI", 8),
             fg=t.text_muted,
             bg=t.bg_panel,
@@ -1291,6 +1295,7 @@ class AzmuthCommandCenterGUI:
 
         self.tier_filter_row = tk.Frame(self.left_panel, bg=t.bg_panel, padx=4, pady=2)
         self.tier_filter_row.pack(fill=tk.X)
+        self.tier_filter_row.bind("<Configure>", self._on_tier_bounds)
         self.tier_pill_btns: Dict[int, tk.Button] = {}
         for t_idx, t_short in [(-1, "ALL"), (0, "T0"), (1, "T1"), (2, "T2"), (3, "T3"), (4, "T4"), (5, "T5")]:
             tb = tk.Button(
@@ -1383,6 +1388,7 @@ class AzmuthCommandCenterGUI:
         self.cap_summary_frame.bind("<Configure>", self._on_badge_bounds)
 
         insp_text_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=4)
+        self.insp_text_frame = insp_text_frame
         insp_text_frame.pack(fill=tk.BOTH, expand=True)
 
         insp_scroll = ttk.Scrollbar(insp_text_frame, orient=tk.VERTICAL)
@@ -1390,7 +1396,7 @@ class AzmuthCommandCenterGUI:
             insp_text_frame,
             bg=t.bg_void,
             fg=t.text_secondary,
-            font=self.font("Consolas", 8),
+            font=self.font("Segoe UI", 9),
             wrap=tk.WORD,
             relief=tk.FLAT,
             padx=8,
@@ -1496,6 +1502,16 @@ class AzmuthCommandCenterGUI:
                 if int(widget.cget("wraplength")) != width:
                     widget.configure(wraplength=width)
 
+    def _on_tier_bounds(self, event) -> None:
+        columns = max(1, min(7, int(event.width / self.system_dpi) // 40))
+        for button in self.tier_pill_btns.values():
+            if button.winfo_manager() == "pack":
+                button.pack_forget()
+        for index, button in enumerate(self.tier_pill_btns.values()):
+            button.grid(row=index // columns, column=index % columns, sticky="ew", padx=1, pady=1)
+        for column in range(7):
+            self.tier_filter_row.grid_columnconfigure(column, weight=1 if column < columns else 0)
+
     def _show_view_help(self) -> None:
         self._clear_inspector_badges()
         self._inspector_mode = "help"
@@ -1505,6 +1521,11 @@ class AzmuthCommandCenterGUI:
         self.inspector_text.delete("1.0", tk.END)
         self.inspector_text.insert(tk.END, title + "\n", "h1")
         self.inspector_text.insert(tk.END, f"Purpose\n{purpose}\n\nAvailable actions\n{guidance}\n\n")
+        self.inspector_text.insert(tk.END,
+            f"Current recorded totals\nConfigured tokens: {len(self.gh_sensor.pool.tokens)} (health unknown)\n"
+            f"Catalogue genes: {len(self.genes_catalog)}\n"
+            f"Mutations: {self.mutation_ledger_data.get('mutations_applied', 0)}\n"
+            f"Benchmarks: {self.arena_ledger_data.get('tournaments_run', 0)}\n\n")
         self.inspector_text.insert(tk.END, OPERATIONS_GUIDE)
 
     def _layer_inspector(self, key, args) -> None:
@@ -1527,8 +1548,16 @@ class AzmuthCommandCenterGUI:
             state += "\nBenchmarks measure recorded runs; they do not guarantee speed on other workloads."
         elif renderer == "_inspect_dag_node":
             node = self.current_macro_graph.nodes.get(name, {}) if self.current_macro_graph else {}
-            state = f"Signal: {name}\nValue: {node.get('current_value', 'unknown')} {node.get('unit', '')}\nState: {node.get('state_label', 'unknown')}"
+            state = f"Signal: {name}\nValue: {node.get('current_value', 'unknown')} {node.get('unit', '').replace('_', ' ')}\nState: {node.get('state_label', 'unknown').replace('_', ' ').capitalize()}"
             purpose = "Inspect a monitored signal and its incoming drivers and downstream relationships. Graph edges express the model's assumptions."
+        elif renderer == "_inspect_ingestion_funnel":
+            metric = args[0]
+            purpose = "A recorded ingestion or benchmark total, read from the local ledgers."
+            state = f"{metric['title']}: {metric['value']}"
+        elif renderer == "_inspect_universe_status":
+            domain = args[0]
+            purpose = "An analysis domain groups related signals. Its overview code is an identifier, not a rating."
+            state = f"Domain: {domain.get('universe_id', 'unknown')}\nRecorded sweep data: {'available' if domain.get('meta') else 'unavailable'}"
         elif renderer == "_inspect_ingestion_event":
             event = args[0]
             state = f"{event.get('title', 'Untitled event')}\nRecorded outcome: {event.get('status', 'unknown')}\nSource: {event.get('source', 'unknown')}\nTime: {event.get('timestamp', 'unknown')}"
@@ -1557,6 +1586,10 @@ class AzmuthCommandCenterGUI:
 
     def _apply_technical_visibility(self) -> None:
         self.inspector_text.tag_configure("technical", elide=not self._details_expanded)
+        if self._details_expanded:
+            self.cap_summary_frame.pack(fill=tk.X, before=self.insp_text_frame)
+        else:
+            self.cap_summary_frame.pack_forget()
         self.btn_technical_details.configure(
             state=tk.NORMAL,
             text="Hide technical details" if self._details_expanded else "Show technical details",
@@ -1728,7 +1761,7 @@ class AzmuthCommandCenterGUI:
             )
             self.btn_contextual_action.configure(text="◈ Scan Radar", bg=t.accent_cyan, fg=t.bg_void)
         elif view_name == "dag":
-            self.left_header_lbl.configure(text="Cortical cartridges")
+            self.left_header_lbl.configure(text="Analysis domains")
             self.lbl_canvas_mode.configure(
                 text="VIEW [2] — U0–U5 NEUROMORPHIC CAUSAL DAG & SHOCK PROPAGATION", fg=t.accent_blue
             )
@@ -1803,13 +1836,13 @@ class AzmuthCommandCenterGUI:
         if self.active_view == "pipeline":
             t = self.gh_cache_data.get("telemetry", {})
             streams = [
-                ("STREAM_U3_LABS", f"◈ [U3] Lab Alpha ({len(t.get('opportunities', []))} hits)"),
-                ("STREAM_U1_RELEASES", f"▶ [U1/U2] SOTA Releases ({len(t.get('releases', []))} tags)"),
-                ("STREAM_CODON_CP", f"✦ [Codon] CP Archives ({len(t.get('cp_archives', []))} repos)"),
-                ("STREAM_U0_ECO", f"● [U0] Ecosystem Health ({len(t.get('ecosystem', []))} repos)"),
-                ("STAGE_PAT_RING", f"◈ 30-PAT Token Pool ({len(self.gh_sensor.pool.tokens)} tokens)"),
-                ("STAGE_THALAMIC", f"⚡ Thalamic Sieve (|Z| >= {self.thalamic_z_threshold.get():.1f}σ)"),
-                ("STAGE_ULTIMATRIX", f"✦ Ultimatrix Arena ({self.arena_ledger_data.get('tournaments_run', 0)} races)"),
+                ("STREAM_U3_LABS", f"Research issues ({len(t.get('opportunities', []))} hits)"),
+                ("STREAM_U1_RELEASES", f"AI releases ({len(t.get('releases', []))} tags)"),
+                ("STREAM_CODON_CP", f"Algorithm archives ({len(t.get('cp_archives', []))} repos)"),
+                ("STREAM_U0_ECO", f"Repository activity ({len(t.get('ecosystem', []))} repos)"),
+                ("STAGE_PAT_RING", f"GitHub tokens (PAT) ({len(self.gh_sensor.pool.tokens)} tokens)"),
+                ("STAGE_THALAMIC", f"Signal filter (|Z| >= {self.thalamic_z_threshold.get():.1f}σ)"),
+                ("STAGE_ULTIMATRIX", f"Benchmark records ({self.arena_ledger_data.get('tournaments_run', 0)} races)"),
             ]
             for s_id, s_label in streams:
                 if not q or q in s_label.lower():
@@ -1995,8 +2028,6 @@ class AzmuthCommandCenterGUI:
             self._draw_gene_phylogeny_view(w, h)
         elif self.active_view == "ingestion":
             self._draw_ingestion_view(w, h)
-        if self.active_view == "pipeline":
-            self._draw_pat_ring_dots()
         for item in set(self.canvas.find_all()) - background_items:
             if "hud" not in self.canvas.gettags(item):
                 self.canvas.addtag_withtag("diagram", item)
@@ -2007,8 +2038,8 @@ class AzmuthCommandCenterGUI:
         accepted = []
         seen = set()
         for item in self.canvas.find_withtag("edge_label"):
-            group = next(tag for tag in self.canvas.gettags(item) if tag.startswith("edge_label_"))
-            if group in seen:
+            group = next((tag for tag in self.canvas.gettags(item) if tag.startswith("edge_label_")), None)
+            if group is None or group in seen:
                 continue
             seen.add(group)
             box = self.canvas.bbox(group)
@@ -2065,8 +2096,24 @@ class AzmuthCommandCenterGUI:
         if self.cam_zoom < 0.75:
             badge = None
         if self.cam_zoom < 0.65:
+            short_titles = {
+                "STREAM_U3_LABS": "Research issues", "STREAM_U1_RELEASES": "AI releases",
+                "STREAM_CODON_CP": "Algorithms", "STREAM_U0_ECO": "Repositories",
+                "STAGE_PAT_RING": "GitHub tokens", "STAGE_THALAMIC": "Signal filter",
+                "STAGE_CORTEX": "Analysis", "STAGE_ULTIMATRIX": "Variants",
+                "STAGE_ARENA_SSOT": "Benchmarks",
+                "FUNNEL_0": "Tasks", "FUNNEL_1": "Benchmarks", "FUNNEL_2": "Genes",
+                "FUNNEL_3": "Mutations", "FUNNEL_4": "Promotions",
+            }
+            title = short_titles.get(node_id, title)
+            if node_id.startswith("UNIVERSE_LOBE_"):
+                domain_names = ("Ecosystem", "Research", "Compute", "Careers", "Markets", "Hardware", "Energy", "Security", "Algorithms", "Audit", "Wearable", "Vision")
+                match = re.match(r"UNIVERSE_LOBE_u(\d+)_", node_id)
+                index = int(match.group(1)) if match else -1
+                if 0 <= index < len(domain_names):
+                    title = f"U{index}\n{domain_names[index]}"
             # Keep a readable primary identifier; full original is in the inspector.
-            title = title[:28] + ("…" if len(title) > 28 else "")
+            title = title if len(title) <= 24 else title[:12] + "…" + title[-8:]
             subtitle = ""
 
         # Scaled typography metrics (SVG-Style vector auto-fitting)
@@ -2080,16 +2127,24 @@ class AzmuthCommandCenterGUI:
 
         title_width = max(80, base_w * self.cam_zoom - 20)
         if self.cam_zoom < 0.65:
-            title_width = 100
+            title_width = 64
         lines = []
-        for original_line in title.splitlines() or [""]:
+        for original_line in title.replace("_", " ").splitlines() or [""]:
             line = ""
-            for char in original_line:
-                if line and f_title.measure(line + char) / self.system_dpi > title_width:
+            for word in original_line.split():
+                candidate = (line + " " + word).strip()
+                if line and f_title.measure(candidate) / self.system_dpi > title_width:
                     lines.append(line)
                     line = ""
-                line += char
-            lines.append(line)
+                for char in word:
+                    if line and f_title.measure(line + char) / self.system_dpi > title_width:
+                        lines.append(line)
+                        line = ""
+                    line += char
+                line += " "
+            lines.append(line.rstrip())
+        if self.cam_zoom < 0.65 and len(lines) > 2:
+            lines = [lines[0], lines[1][:-2] + "…"]
         title = "\n".join(lines)
         tw = max(f_title.measure(line) / self.system_dpi for line in lines)
         sw = max((f_sub.measure(line) / self.system_dpi for line in subtitle.splitlines()), default=0)
@@ -2098,7 +2153,7 @@ class AzmuthCommandCenterGUI:
         # Auto-fit width and height to comfortably enclose text
         stripe_w = max(3, int(5 * self.cam_zoom))
         text_w = max(tw, sw)
-        req_w = text_w + bw + stripe_w + int(24 * self.cam_zoom)
+        req_w = text_w + bw + stripe_w + 2 * max(4, int(8 * self.cam_zoom)) + 8
         title_h = f_title.metrics("linespace") * len(lines) / self.system_dpi
         sub_h = f_sub.metrics("linespace") * len(subtitle.splitlines()) / self.system_dpi
         req_h = title_h + sub_h + 14
@@ -2131,7 +2186,7 @@ class AzmuthCommandCenterGUI:
                 x1 - pad, y1 - pad, x2 + pad, y2 + pad, outline=accent, width=1, dash=(3, 3)
             )
 
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill=bg_col, outline=border_col, width=border_w)
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill=bg_col, outline=border_col, width=border_w, tags="node_card")
         # Left accent stripe
         self.canvas.create_rectangle(x1, y1, x1 + stripe_w, y2, fill=accent, outline="")
 
@@ -2188,49 +2243,18 @@ class AzmuthCommandCenterGUI:
         dx = x2 - x1
         dy = y2 - y1
 
-        is_src_circle = (src_id == "STAGE_PAT_RING")
-        is_dst_circle = (dst_id == "STAGE_PAT_RING")
-
-        r1 = w1 / 2.0
-        r2 = w2 / 2.0
         hw1, hh1 = w1 / 2.0, h1 / 2.0
         hw2, hh2 = w2 / 2.0, h2 / 2.0
-
-        # Determine dominant flow axis
         if abs(dx) >= abs(dy) * 0.75:
             orientation = "h"
-            if dx >= 0:
-                ax = x1 + (r1 if is_src_circle else hw1)
-                ay = y1
-                bx = x2 - (r2 if is_dst_circle else hw2)
-                by = y2
-            else:
-                ax = x1 - (r1 if is_src_circle else hw1)
-                ay = y1
-                bx = x2 + (r2 if is_dst_circle else hw2)
-                by = y2
+            sign = 1 if dx >= 0 else -1
+            ax, ay = x1 + sign * hw1, y1
+            bx, by = x2 - sign * hw2, y2
         else:
             orientation = "v"
-            if dy >= 0:
-                ax = x1
-                ay = y1 + (r1 if is_src_circle else hh1)
-                bx = x2
-                by = y2 - (r2 if is_dst_circle else hh2)
-            else:
-                ax = x1
-                ay = y1 - (r1 if is_src_circle else hh1)
-                bx = x2
-                by = y2 + (r2 if is_dst_circle else hh2)
-
-        # For circular nodes, compute radial angle towards anchor for smooth radial fanning
-        if is_src_circle:
-            ang1 = math.atan2(by - y1, bx - x1)
-            ax = x1 + r1 * math.cos(ang1)
-            ay = y1 + r1 * math.sin(ang1)
-        if is_dst_circle:
-            ang2 = math.atan2(ay - y2, ax - x2)
-            bx = x2 + r2 * math.cos(ang2)
-            by = y2 + r2 * math.sin(ang2)
+            sign = 1 if dy >= 0 else -1
+            ax, ay = x1, y1 + sign * hh1
+            bx, by = x2, y2 - sign * hh2
 
         return (ax, ay), (bx, by), orientation
 
@@ -2311,7 +2335,7 @@ class AzmuthCommandCenterGUI:
                 font=("Consolas", lbl_sz), tags=("edge_label", edge_tag),
             )
 
-    # --- VIEW 1: Pipeline & 30-PAT Ring Schematic ---
+    # --- VIEW 1: Source-to-benchmark pipeline ---
 
     def _draw_pipeline_flow_view(self, w: float, h: float) -> None:
         t = self.theme
@@ -2331,8 +2355,6 @@ class AzmuthCommandCenterGUI:
 
         box_w = 175.0
         box_h = 48.0
-        ring_world_r = 52.0
-        ring_diam = (ring_world_r + 10.0) * 2.0
 
         stream_defs = [
             ("STREAM_U3_LABS", "Research opportunities", f"{opp_cnt} Actionable Issues", t.accent_cyan, 140.0),
@@ -2343,54 +2365,19 @@ class AzmuthCommandCenterGUI:
 
         # Resolve effective positions (custom drag override or default layout)
         stage_positions: Dict[str, Tuple[float, float]] = {}
-        stage_sizes: Dict[str, Tuple[float, float]] = {}
 
         for s_id, s_title, s_sub, s_col, def_sy in stream_defs:
             stage_positions[s_id] = self.custom_node_positions.get(s_id, (col1_wx, def_sy))
-            stage_sizes[s_id] = (box_w, box_h)
 
         stage_positions["STAGE_PAT_RING"] = self.custom_node_positions.get("STAGE_PAT_RING", (def_pat_wx, def_pat_wy))
-        stage_sizes["STAGE_PAT_RING"] = (ring_diam, ring_diam)
 
         stage_positions["STAGE_THALAMIC"] = self.custom_node_positions.get("STAGE_THALAMIC", (def_thal_wx, def_thal_wy))
-        stage_sizes["STAGE_THALAMIC"] = (185.0, 58.0)
 
         stage_positions["STAGE_CORTEX"] = self.custom_node_positions.get("STAGE_CORTEX", (def_cortex_wx, def_cortex_wy))
-        stage_sizes["STAGE_CORTEX"] = (185.0, 58.0)
 
         stage_positions["STAGE_ULTIMATRIX"] = self.custom_node_positions.get("STAGE_ULTIMATRIX", (def_gene_wx, def_gene_wy))
-        stage_sizes["STAGE_ULTIMATRIX"] = (185.0, 58.0)
 
         stage_positions["STAGE_ARENA_SSOT"] = self.custom_node_positions.get("STAGE_ARENA_SSOT", (def_arena_wx, def_arena_wy))
-        stage_sizes["STAGE_ARENA_SSOT"] = (180.0, 64.0)
-
-        # 1. Draw all connecting directed edges first (so nodes sit cleanly on top)
-        pipeline_edges = [
-            ("STREAM_U3_LABS", "STAGE_PAT_RING", t.accent_cyan, "", False, 1),
-            ("STREAM_U1_RELEASES", "STAGE_PAT_RING", t.accent_blue, "", False, 1),
-            ("STREAM_CODON_CP", "STAGE_PAT_RING", t.accent_purple, "", False, 1),
-            ("STREAM_U0_ECO", "STAGE_PAT_RING", t.accent_emerald, "", False, 1),
-            ("STAGE_PAT_RING", "STAGE_THALAMIC", t.accent_cyan, "Token pool", False, 2),
-            ("STAGE_THALAMIC", "STAGE_CORTEX", t.accent_blue, "Salient Spikes", False, 2),
-            ("STAGE_THALAMIC", "STAGE_ULTIMATRIX", t.accent_purple, "Codon Feed", False, 2),
-            ("STAGE_CORTEX", "STAGE_ARENA_SSOT", t.accent_blue, "Foresight Directives", False, 2),
-            ("STAGE_ULTIMATRIX", "STAGE_ARENA_SSOT", t.accent_purple, "Evolved Alleles", False, 2),
-        ]
-
-        for src_id, dst_id, e_col, e_lbl, e_dash, e_width in pipeline_edges:
-            p1 = stage_positions[src_id]
-            s1 = stage_sizes[src_id]
-            p2 = stage_positions[dst_id]
-            s2 = stage_sizes[dst_id]
-            (ax, ay), (bx, by), orient = self._compute_smart_anchor(src_id, dst_id, p1, s1, p2, s2)
-            self._draw_directed_edge(
-                ax, ay, bx, by,
-                color=e_col,
-                label=e_lbl,
-                dashed=e_dash,
-                base_width=e_width,
-                orientation=orient,
-            )
 
         # 2. Draw 4 Sensory Stream Stage Boxes
         for s_id, s_title, s_sub, s_col, def_sy in stream_defs:
@@ -2401,7 +2388,6 @@ class AzmuthCommandCenterGUI:
 
         # The configured pool is not a measured capacity or health signal.
         pat_wx, pat_wy = stage_positions["STAGE_PAT_RING"]
-        self.pat_ring_info = None
         self._draw_node_box(
             "STAGE_PAT_RING", pat_wx, pat_wy, 180, 64,
             "GitHub tokens (PAT)", f"{len(self.gh_sensor.pool.tokens)} configured; health unknown",
@@ -2473,6 +2459,38 @@ class AzmuthCommandCenterGUI:
         )
 
 
+
+        # Connect measured cards after their text and bounds are known.
+        pipeline_edges = [
+            ("STREAM_U3_LABS", "STAGE_PAT_RING", t.accent_cyan, "", False, 1),
+            ("STREAM_U1_RELEASES", "STAGE_PAT_RING", t.accent_blue, "", False, 1),
+            ("STREAM_CODON_CP", "STAGE_PAT_RING", t.accent_purple, "", False, 1),
+            ("STREAM_U0_ECO", "STAGE_PAT_RING", t.accent_emerald, "", False, 1),
+            ("STAGE_PAT_RING", "STAGE_THALAMIC", t.accent_cyan, "Token pool", False, 2),
+            ("STAGE_THALAMIC", "STAGE_CORTEX", t.accent_blue, "Salient Spikes", False, 2),
+            ("STAGE_THALAMIC", "STAGE_ULTIMATRIX", t.accent_purple, "Codon Feed", False, 2),
+            ("STAGE_CORTEX", "STAGE_ARENA_SSOT", t.accent_blue, "Foresight Directives", False, 2),
+            ("STAGE_ULTIMATRIX", "STAGE_ARENA_SSOT", t.accent_purple, "Evolved Alleles", False, 2),
+        ]
+
+        for src_id, dst_id, e_col, e_lbl, e_dash, e_width in pipeline_edges:
+            p1 = stage_positions[src_id]
+            s1 = self.canvas_nodes[src_id]["world_dim"]
+            p2 = stage_positions[dst_id]
+            s2 = self.canvas_nodes[dst_id]["world_dim"]
+            (ax, ay), (bx, by), orient = self._compute_smart_anchor(src_id, dst_id, p1, s1, p2, s2)
+            previous_items = set(self.canvas.find_all())
+            self._draw_directed_edge(
+                ax, ay, bx, by,
+                color=e_col,
+                label=e_lbl,
+                dashed=e_dash,
+                base_width=e_width,
+                orientation=orient,
+            )
+            self.active_canvas_edges[-1].update(source_id=src_id, target_id=dst_id)
+            for item in set(self.canvas.find_all()) - previous_items:
+                self.canvas.tag_lower(item, "node_card")
 
     # --- VIEW 2: U0-U5 Neuromorphic Causal DAG ---
 
@@ -2630,7 +2648,7 @@ class AzmuthCommandCenterGUI:
             root_wy,
             root_bw,
             root_bh,
-            phylo["gene_id"][:18],
+            phylo["gene_id"],
             f"{phylo['tier_label'][:22]}",
             tier_col,
             badge=f"T{phylo['tier']}",
@@ -2667,7 +2685,7 @@ class AzmuthCommandCenterGUI:
                 wy,
                 allele_bw,
                 allele_bh,
-                aid[:20],
+                aid,
                 f"{comp} • {rt} ms • {ram} KB",
                 col,
                 badge="★ PRIMARY" if is_prim else "BASE",
@@ -2732,7 +2750,7 @@ class AzmuthCommandCenterGUI:
                         my,
                         allele_bw,
                         allele_bh,
-                        mid[-22:],
+                        mid,
                         f"Mutant • {rt} ms • {ram} KB",
                         col,
                         badge="★ CHAMPION" if is_prim else f"+{op_key[:8]}",
@@ -2848,7 +2866,7 @@ class AzmuthCommandCenterGUI:
 
         u_cols = 4 if len(u_lobes) >= 8 else 3
         u_spacing_x = 290.0
-        u_spacing_y = 85.0
+        u_spacing_y = 130.0
         total_grid_w = (u_cols - 1) * u_spacing_x
         u_start_wx = cx - (total_grid_w / 2.0)
         u_start_wy = cy + 20.0
@@ -2874,7 +2892,7 @@ class AzmuthCommandCenterGUI:
                 f"{u_sub}\nChokepoint: {choke}",
                 u_col,
                 badge=status_badge,
-                payload={"type": "universe_status", "universe_id": u_id, "meta": u_meta},
+                payload={"type": "universe_status", "universe_id": u_id, "title": u_label, "configured_context": u_sub, "meta": u_meta},
             )
 
         # Center connector from Funnel to Universes
@@ -3311,9 +3329,9 @@ class AzmuthCommandCenterGUI:
                     self.selected_allele_id = payload["allele_id"]
                     self._inspect_gene_or_allele(payload["gene_id"], payload["allele_id"])
                 elif ptype == "universe_status":
-                    self._inspect_dag_node(payload.get("meta", {}).get("top_chokepoint", payload["universe_id"]))
+                    self._inspect_universe_status(payload)
                 elif ptype == "ingestion_funnel":
-                    self._inspect_pipeline_stage("STAGE_ULTIMATRIX")
+                    self._inspect_ingestion_funnel(payload)
                 elif ptype == "trigger_mutate":
                     self._trigger_mutate_selected_gene()
 
@@ -3508,7 +3526,7 @@ class AzmuthCommandCenterGUI:
         def job():
             self.gh_sensor.get_cached_telemetry(force_refresh=True)
 
-        self._run_background_job("4-Stream GitHub Sensory Radar Scan (30-PAT Pool)", self.theme.accent_cyan, job)
+        self._run_background_job("GitHub source scan", self.theme.accent_cyan, job)
 
     def _trigger_macro_synthesis(self) -> None:
         self._load_selected_cartridge()
@@ -3622,6 +3640,20 @@ class AzmuthCommandCenterGUI:
         except OSError as exc:
             self.telemetry_error = f"Ingestion feed: {exc}"
             return getattr(self, "_ingestion_events", [])
+
+    @layered_inspector
+    def _inspect_ingestion_funnel(self, payload: dict[str, Any]) -> None:
+        self._clear_inspector_badges()
+        self.inspector_text.delete("1.0", tk.END)
+        self.inspector_text.insert(tk.END, f"{payload['title']}\nRecorded count: {payload['value']}\n", "h1")
+        self.inspector_text.insert(tk.END, "These totals come from the corpus, arena, and mutation ledgers. They are not a count of active jobs.")
+
+    @layered_inspector
+    def _inspect_universe_status(self, payload: dict[str, Any]) -> None:
+        self._clear_inspector_badges()
+        self.inspector_text.delete("1.0", tk.END)
+        self.inspector_text.insert(tk.END, payload.get("title", payload.get("universe_id", "Analysis domain")) + "\n", "h1")
+        self.inspector_text.insert(tk.END, json.dumps(payload, indent=2), "code")
 
     @layered_inspector
     def _inspect_ingestion_event(self, event_data: dict[str, Any]) -> None:
@@ -3747,34 +3779,6 @@ class AzmuthCommandCenterGUI:
         if len(pts) >= 4:
             self.osc_canvas.create_line(*pts, fill=line_col, width=1.5, smooth=True)
 
-    def _draw_pat_ring_dots(self) -> None:
-        """Renders configured pool size without implying token health."""
-        if self.active_view != "pipeline" or not self.pat_ring_info:
-            return
-        self.canvas.delete("pat_ring_dots")
-        pat_wx, pat_wy, ring_world_r = self.pat_ring_info
-        w = self._canvas_size()[0]
-        h = self._canvas_size()[1]
-        pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
-        screen_r = ring_world_r * self.cam_zoom
-        t = self.theme
-        tokens = self.gh_sensor.pool.tokens
-        n_tok = max(len(tokens), 30)
-        for i in range(n_tok):
-            angle = (2 * math.pi * i / n_tok) - math.pi / 2
-            tx = pat_sx + screen_r * math.cos(angle)
-            ty = pat_sy + screen_r * math.sin(angle)
-            dot_col = t.accent_cyan if i < len(tokens) else t.border_subtle
-            rd = max(2.0, 2.5 * self.cam_zoom)
-            self.canvas.create_oval(
-                tx - rd, ty - rd, tx + rd, ty + rd,
-                fill=dot_col,
-                outline="",
-                tags="pat_ring_dots",
-            )
-
-        self.canvas.itemconfigure("pat_ring_subtext", text=f"{len(tokens)} configured\nhealth unknown")
-
     def _schedule_animation_frame(self) -> None:
         if not self._running:
             return
@@ -3817,8 +3821,8 @@ class AzmuthCommandCenterGUI:
 
         self.kpi_labels["pat_pool"].configure(text=f"{len(self.gh_sensor.pool.tokens)} configured")
         self.kpi_labels["genes"].configure(text=f"{len(self.genes_catalog)} entries")
-        self.kpi_labels["mutations"].configure(text=f"{self.mutation_ledger_data.get('mutations_applied', 0)}")
-        self.kpi_labels["arena"].configure(text=f"{self.arena_ledger_data.get('tournaments_run', 0)}")
+        self.kpi_labels["mutations"].configure(text=compact_count(self.mutation_ledger_data.get("mutations_applied", 0)))
+        self.kpi_labels["arena"].configure(text=compact_count(self.arena_ledger_data.get("tournaments_run", 0)))
 
     def _schedule_telemetry_poll(self) -> None:
         if not self._running:
