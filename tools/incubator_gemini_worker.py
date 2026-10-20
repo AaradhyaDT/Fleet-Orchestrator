@@ -88,18 +88,18 @@ async def generate_incubator_rfc(raw_thought: str) -> str:
     """Uses Gemini Key Rotator with auto-retry and multi-slot rotation to synthesize structured RFC.
 
     Models prioritized:
-      1. gemini-3.5-flash (Standard frontier workhorse for active API accounts)
-      2. gemini-3.5-flash-lite (Ultra-fast low-latency tier)
-      3. gemini-3.8-flash (High-capability reasoning flash)
-      4. gemini-flash-lite-latest (Dynamic alias)
-      5. gemini-2.5-flash (Legacy fallback for grandfathered slots)
+      1. gemini-3.5-flash-lite (Ultra-fast low-latency tier, 500 RPD, 15 RPM)
+      2. gemini-3.1-flash-lite (High-capacity tier, 500 RPD, 15 RPM)
+      3. gemini-3.6-flash (Active frontier flash, 20 RPD, 5 RPM)
+      4. gemini-3.8-flash (High-capability reasoning flash, 20 RPD, 5 RPM)
+      5. gemini-2.5-flash (Legacy fallback)
     """
     rotator = GeminiKeyRotator()
     candidate_models = [
-        "gemini-3.5-flash",
         "gemini-3.5-flash-lite",
+        "gemini-3.1-flash-lite",
+        "gemini-3.6-flash",
         "gemini-3.8-flash",
-        "gemini-flash-lite-latest",
         "gemini-2.5-flash",
     ]
 
@@ -110,6 +110,7 @@ async def generate_incubator_rfc(raw_thought: str) -> str:
         slot = await rotator.get_next_slot()
         logger.info("Attempt %d/%d: Acquired Gemini key slot: %s", attempt + 1, max_attempts, slot.masked_key)
 
+        slot_success = False
         for model_name in candidate_models:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={slot.api_key}"
             payload = {
@@ -142,9 +143,9 @@ async def generate_incubator_rfc(raw_thought: str) -> str:
             except urllib.error.HTTPError as e:
                 last_err = e
                 if e.code == 429:
-                    logger.warning("Slot %s hit 429 on %s, marking burst cooldown", slot.masked_key, model_name)
-                    rotator.mark_burst_cooldown(slot.key_id, cooldown_seconds=60.0, error_msg=f"429 Rate Limit on {model_name}")
-                    break  # Key is rate limited across models, try next slot
+                    logger.warning("Slot %s hit 429 on %s, checking next candidate model on same slot", slot.masked_key, model_name)
+                    # Quotas in Google AI Studio free tier are per-model. Attempt remaining candidate models first.
+                    continue
                 elif e.code == 403:
                     logger.debug("Slot %s returned 403 PERMISSION_DENIED on %s, marking daily exhausted", slot.masked_key, model_name)
                     rotator.mark_daily_exhausted(slot.key_id, error_msg="403 Project Denied Access")
@@ -162,6 +163,9 @@ async def generate_incubator_rfc(raw_thought: str) -> str:
                 last_err = e
                 logger.warning("Error with slot %s on %s: %s", slot.masked_key, model_name, e)
                 break
+        else:
+            # All candidate models failed on this slot; trigger burst cooldown before next attempt
+            rotator.mark_burst_cooldown(slot.key_id, cooldown_seconds=60.0, error_msg=f"All candidate models failed: {last_err}")
 
     raise RuntimeError(f"All Gemini fleet slots failed to synthesize RFC. Last error: {last_err}")
 
