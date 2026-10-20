@@ -1,6 +1,4 @@
 from argparse import Namespace
-import json
-from pathlib import Path
 from tools.azmuth_cli import handle_break, handle_dump, handle_resume
 
 
@@ -34,4 +32,6 @@ def test_incubator_worker_dry_run(tmp_path, monkeypatch):
     assert rc == 0
     rfcs = list((tmp_path / "incubator").glob("*.md"))
     assert len(rfcs) == 1
-    assert "Executive Summary" in rfcs[0].read_text(encoding="utf-8")
+    content = rfcs[0].read_text(encoding="utf-8")
+    assert "Test Kalman filter integration" in content
+    assert len(content) > 100

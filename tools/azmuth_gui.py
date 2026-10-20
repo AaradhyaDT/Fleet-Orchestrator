@@ -23,6 +23,7 @@ import sys
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
+from types import SimpleNamespace
 
 
 # Anchor repository root
@@ -30,6 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from tools.azmuth_gui_jobs import GUIJob, JobCancelled, run_managed_process, terminate_owned_process
+from tools.azmuth_gui_explanations import VIEW_GUIDES, OPERATIONS_GUIDE, layered_inspector
 from tools.azmuth_gui_dpi import DisplayInfo, DpiController, FontRegistry, LayoutScaler, LogicalCanvas, create_gui_root
 
 # Protect stdio under pythonw.exe and hide console if started via python.exe
@@ -408,6 +410,8 @@ class AzmuthCommandCenterGUI:
         self.pat_ring_info: Optional[Tuple[float, float, float]] = None
         self.selected_node_id: Optional[str] = None
         self._inspector_mode = "selection"
+        self._detail_key = None
+        self._details_expanded = False
 
         # 4b. Virtual Camera & Canvas Viewport Transform
         self.cam_x: float = 640.0   # World center X
@@ -512,7 +516,7 @@ class AzmuthCommandCenterGUI:
         return (width / scale if width > 1 else 1280, height / scale if height > 1 else 760)
 
     def _resize_display_panes(self, ratio=None) -> None:
-        for panel, minimum, default in ((self.left_panel, 150, 260), (self.canvas.master, 300, 500), (self.right_panel, 180, 320)):
+        for panel, minimum, default in ((self.left_panel, 150, 190), (self.canvas.master, 300, 500), (self.right_panel, 180, 250)):
             if str(panel) not in tuple(map(str, self.workspace.panes())):
                 continue
             width = round(panel.winfo_width() * ratio) if ratio and panel.winfo_width() > 1 else round(default * self.system_dpi)
@@ -622,9 +626,12 @@ class AzmuthCommandCenterGUI:
         # panels were settling must not constrain a later fit to a tiny zoom.
         self.cam_zoom = 1.0
         self._redraw_active_canvas()
-        top = 100 if self.active_view == "genes" else 24
-        for _ in range(4):
+        top = getattr(self, "_diagram_top", 24)
+        for _ in range(10):
+            bounds = self.canvas.bbox("diagram")
             boxes = [node["bbox"] for node in self.canvas_nodes.values()]
+            if bounds:
+                boxes.append(bounds)
             if not boxes:
                 break
             x0, y0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
@@ -1031,9 +1038,9 @@ class AzmuthCommandCenterGUI:
         self.kpi_title_lbls: List[tk.Label] = []
         kpis = [
             ("pat_pool", "GITHUB PAT POOL", f"{len(self.gh_sensor.pool.tokens)} configured", t.accent_cyan),
-            ("genes", "GENES SEQUENCED", f"{len(self.genes_catalog)} Loci", t.accent_purple),
+            ("genes", "CATALOGUE GENES", f"{len(self.genes_catalog)} Loci", t.accent_purple),
             ("mutations", "MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 0)}", t.accent_emerald),
-            ("arena", "ARENA RACES", f"{self.arena_ledger_data.get('tournaments_run', 0)}", t.accent_gold),
+            ("arena", "BENCHMARKS", f"{self.arena_ledger_data.get('tournaments_run', 0)}", t.accent_gold),
         ]
         for k_id, k_title, k_val, k_color in kpis:
             card = tk.Frame(self.kpi_container, bg=t.bg_card, padx=8, pady=4, highlightthickness=1, highlightbackground=t.border_subtle)
@@ -1156,7 +1163,7 @@ class AzmuthCommandCenterGUI:
         self.tune_frame = tk.Frame(self.bar, bg=t.bg_card, padx=6, pady=4)
         self.tune_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        self.lbl_tune_z = tk.Label(self.tune_frame, text="Thalamic |Z| Gate:", font=self.font("Segoe UI", 8), fg=t.text_secondary, bg=t.bg_card)
+        self.lbl_tune_z = tk.Label(self.tune_frame, text="Signal threshold (|Z|):", font=self.font("Segoe UI", 8), fg=t.text_secondary, bg=t.bg_card)
         self.lbl_tune_z.pack(side=tk.LEFT, padx=(4, 2))
 
         self.spin_z = tk.Spinbox(
@@ -1196,7 +1203,7 @@ class AzmuthCommandCenterGUI:
             ("Mutate and race", t.accent_blue, self._trigger_mutate_selected_gene),
             ("Harvest task", t.accent_blue, self._trigger_harvest_task),
             ("Fit view", t.accent_blue, self.reset_layout),
-            ("Verify cycle", t.accent_blue, self._trigger_full_cycle),
+            ("Run upgrade cycle", t.accent_blue, self._trigger_full_cycle),
         ]
         self.action_buttons.clear()
         for idx, (label, color, cmd) in enumerate(actions):
@@ -1230,10 +1237,11 @@ class AzmuthCommandCenterGUI:
     def _update_view_actions(self) -> None:
         view_for_index = {1: "pipeline", 2: "dag", 3: "genes", 4: "ingestion"}
         column = 0
+        columns = max(1, min(4, int(self.root.winfo_width() / self.system_dpi) // 220))
         for index, (button, _color) in enumerate(self.action_buttons):
             button.grid_remove()
             if index not in view_for_index or view_for_index[index] == self.active_view:
-                button.grid(row=0, column=column, sticky="ew", padx=3, pady=2)
+                button.grid(row=column // columns, column=column % columns, sticky="ew", padx=3, pady=2)
                 column += 1
 
     def _build_main_workspace(self) -> None:
@@ -1343,7 +1351,8 @@ class AzmuthCommandCenterGUI:
             padx=10,
             pady=6,
         )
-        self.right_title_lbl.pack(side=tk.LEFT)
+        self.right_hdr.grid_columnconfigure(0, weight=1)
+        self.right_title_lbl.grid(row=0, column=0, sticky="w")
 
         self.btn_contextual_action = tk.Button(
             self.right_hdr,
@@ -1357,7 +1366,17 @@ class AzmuthCommandCenterGUI:
             cursor="hand2",
             command=self._on_contextual_inspector_action,
         )
-        self.btn_contextual_action.pack(side=tk.RIGHT, padx=6, pady=4)
+        self.btn_contextual_action.grid(row=1, column=0, sticky="ew", padx=6, pady=2)
+        self.btn_technical_details = tk.Button(
+            self.right_hdr, text="Show technical details", font=self.font(), relief=tk.FLAT,
+            bg=t.bg_card, fg=t.text_secondary, command=self._toggle_technical_details, state=tk.DISABLED,
+        )
+        self.btn_technical_details.grid(row=2, column=0, sticky="ew", padx=6, pady=2)
+        self.btn_view_help = tk.Button(
+            self.right_hdr, text="View and controls help", font=self.font(), relief=tk.FLAT,
+            bg=t.bg_card, fg=t.text_secondary, command=self._show_view_help,
+        )
+        self.btn_view_help.grid(row=3, column=0, sticky="ew", padx=6, pady=2)
 
         self.cap_summary_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=6)
         self.cap_summary_frame.pack(fill=tk.X)
@@ -1464,6 +1483,11 @@ class AzmuthCommandCenterGUI:
 
     def _on_badge_bounds(self, event) -> None:
         pending = list(self.cap_summary_frame.winfo_children())
+        for row in pending:
+            if isinstance(row, tk.Frame):
+                for child in row.winfo_children():
+                    if child.winfo_manager() == "pack":
+                        child.pack_configure(side=tk.TOP, anchor="w", fill=tk.X, padx=0)
         while pending:
             widget = pending.pop()
             pending.extend(widget.winfo_children())
@@ -1471,6 +1495,77 @@ class AzmuthCommandCenterGUI:
                 width = max(80, event.width - round(24 * self.system_dpi))
                 if int(widget.cget("wraplength")) != width:
                     widget.configure(wraplength=width)
+
+    def _show_view_help(self) -> None:
+        self._clear_inspector_badges()
+        self._inspector_mode = "help"
+        self._detail_key = None
+        self.btn_technical_details.configure(state=tk.DISABLED, text="Show technical details")
+        title, purpose, guidance = VIEW_GUIDES[self.active_view]
+        self.inspector_text.delete("1.0", tk.END)
+        self.inspector_text.insert(tk.END, title + "\n", "h1")
+        self.inspector_text.insert(tk.END, f"Purpose\n{purpose}\n\nAvailable actions\n{guidance}\n\n")
+        self.inspector_text.insert(tk.END, OPERATIONS_GUIDE)
+
+    def _layer_inspector(self, key, args) -> None:
+        """Prepend meaning and observed state; retain original tagged diagnostics."""
+        if self._detail_key != key:
+            self._details_expanded = False
+        self._detail_key = key
+        self._inspector_mode = "selection"
+        _title, purpose, action = VIEW_GUIDES[self.active_view]
+        name = str(args[0]) if args else "Selection"
+        state = "Recorded data; freshness follows the last successful telemetry refresh."
+        renderer = key[0]
+        if renderer == "_inspect_gene_or_allele":
+            gene = self.genes_catalog.get(name, {})
+            purpose = gene.get("description") or purpose
+            variant = args[1] if len(args) > 1 else None
+            state = f"Gene: {name}\nTier: T{gene.get('tier', '?')} (catalogue category)\nVariants: {len(gene.get('alleles', []))}"
+            if variant:
+                state += f"\nSelected variant: {variant}"
+            state += "\nBenchmarks measure recorded runs; they do not guarantee speed on other workloads."
+        elif renderer == "_inspect_dag_node":
+            node = self.current_macro_graph.nodes.get(name, {}) if self.current_macro_graph else {}
+            state = f"Signal: {name}\nValue: {node.get('current_value', 'unknown')} {node.get('unit', '')}\nState: {node.get('state_label', 'unknown')}"
+            purpose = "Inspect a monitored signal and its incoming drivers and downstream relationships. Graph edges express the model's assumptions."
+        elif renderer == "_inspect_ingestion_event":
+            event = args[0]
+            state = f"{event.get('title', 'Untitled event')}\nRecorded outcome: {event.get('status', 'unknown')}\nSource: {event.get('source', 'unknown')}\nTime: {event.get('timestamp', 'unknown')}"
+        elif renderer == "_inspect_github_item":
+            item = args[1]
+            state = f"Repository: {item.get('repo', 'unknown')}\n{item.get('title', item.get('name', 'Recorded GitHub item'))}"
+        elif renderer == "_inspect_pipeline_stage":
+            purpose = {
+                "STAGE_PAT_RING": "Configured GitHub access credentials (personal access tokens). Configuration alone does not establish health or usable quota.",
+                "STAGE_THALAMIC": "Filter signals by deviation magnitude (|Z|). Higher thresholds retain fewer signals; Z is not a confidence percentage.",
+                "STAGE_CORTEX": "Analyze recorded signals and their relationships using the selected causal graph.",
+                "STAGE_ULTIMATRIX": "Catalogue reusable algorithms as genes, with implementation variants called alleles.",
+                "STAGE_ARENA_SSOT": "Keep benchmark comparisons and recorded outcomes in local ledgers.",
+            }.get(name, purpose)
+            state = f"Stage: {name}"
+            if name == "STAGE_PAT_RING":
+                state += f"\n{len(self.gh_sensor.pool.tokens)} configured entries; health and usable capacity unknown."
+            elif name == "STAGE_THALAMIC":
+                state += f"\nCurrent signal threshold: |Z| ≥ {self.thalamic_z_threshold.get():.2f}"
+        prefix = f"Purpose\n{purpose}\n\nCurrent state\n{state}\n\nAvailable action\n{action}\n\nTechnical details\n"
+        self.inspector_text.tag_remove("technical", "1.0", tk.END)
+        self.inspector_text.insert("1.0", prefix, ())
+        self.inspector_text.tag_add("technical", f"1.0 + {len(prefix)} chars", "end-1c")
+        self._apply_technical_visibility()
+        self._on_badge_bounds(SimpleNamespace(width=self.cap_summary_frame.winfo_width()))
+
+    def _apply_technical_visibility(self) -> None:
+        self.inspector_text.tag_configure("technical", elide=not self._details_expanded)
+        self.btn_technical_details.configure(
+            state=tk.NORMAL,
+            text="Hide technical details" if self._details_expanded else "Show technical details",
+        )
+
+    def _toggle_technical_details(self) -> None:
+        if self._detail_key is not None and self._inspector_mode == "selection":
+            self._details_expanded = not self._details_expanded
+            self._apply_technical_visibility()
 
     def _build_status_footer(self) -> None:
         t = self.theme
@@ -1571,16 +1666,13 @@ class AzmuthCommandCenterGUI:
             self.ctrl_header_frame.grid(row=0, column=2)
             self.kpi_container.grid(row=1, column=0, columnspan=2)
             self.osc_frame.grid(row=1, column=2)
-        for side in ("left", "right"):
-            if compact and not getattr(self, f"{side}_panel_collapsed"):
-                self._toggle_side_panel(side)
-                self._auto_hidden_panels.add(side)
-            elif not compact and side in self._auto_hidden_panels:
-                self._auto_hidden_panels.discard(side)
-                if getattr(self, f"{side}_panel_collapsed"):
-                    self._toggle_side_panel(side)
+        # Narrow layouts retain both panels. Collapse is an explicit user action.
+        if first_layout:
+            self._resize_display_panes()
         self.lbl_canvas_hint.pack_forget()
         self.btn_reset_layout.pack_forget()
+        self._update_view_actions()
+        self.lbl_canvas_mode.configure(wraplength=max(80, self.canvas.winfo_width() - round(24 * self.system_dpi)))
         if first_layout:
             self.cam_x, self.cam_y, self.cam_zoom = 640.0, 380.0, 1.0
             self.zoom_level = 1.0
@@ -1654,10 +1746,14 @@ class AzmuthCommandCenterGUI:
             )
             self.btn_contextual_action.configure(text="☁️ A100 Burst", bg=t.accent_crimson, fg=t.text_primary)
 
+        self._detail_key = None
+        self._details_expanded = False
+        self.btn_technical_details.configure(state=tk.DISABLED, text="Show technical details")
+        self._show_view_help()
         self._populate_left_panel()
         self._update_view_actions()
         self._set_job_controls(not self.is_job_running)
-        self.lbl_canvas_mode.configure(text={"pipeline": "Pipeline", "dag": "Causal DAG", "genes": "Gene evolution", "ingestion": "Ingestion"}[view_name])
+        self.lbl_canvas_mode.configure(text=VIEW_GUIDES[view_name][0] + ": " + VIEW_GUIDES[view_name][1])
         self.right_title_lbl.configure(text="Inspector")
         self.btn_contextual_action.configure(text={"pipeline": "Scan", "dag": "Shock", "genes": "Mutate", "ingestion": "A100 burst"}[view_name])
         self.btn_contextual_action.configure(bg=self.theme.accent_blue, fg=self.theme.on_accent)
@@ -1876,6 +1972,7 @@ class AzmuthCommandCenterGUI:
 
     def _redraw_active_canvas(self) -> None:
         self.canvas.delete("all")
+        self._diagram_top = 24
         self.canvas_nodes.clear()
         self.active_canvas_edges = []
         w = self._canvas_size()[0]
@@ -1903,7 +2000,23 @@ class AzmuthCommandCenterGUI:
         for item in set(self.canvas.find_all()) - background_items:
             if "hud" not in self.canvas.gettags(item):
                 self.canvas.addtag_withtag("diagram", item)
+        self._hide_colliding_edge_labels()
         self._draw_active_pulses()
+
+    def _hide_colliding_edge_labels(self) -> None:
+        accepted = []
+        seen = set()
+        for item in self.canvas.find_withtag("edge_label"):
+            group = next(tag for tag in self.canvas.gettags(item) if tag.startswith("edge_label_"))
+            if group in seen:
+                continue
+            seen.add(group)
+            box = self.canvas.bbox(group)
+            obstacles = [node["bbox"] for node in self.canvas_nodes.values()] + accepted
+            if any(box[0] < other[2] + 4 and box[2] > other[0] - 4 and box[1] < other[3] + 4 and box[3] > other[1] - 4 for other in obstacles):
+                self.canvas.delete(group)
+            else:
+                accepted.append(box)
 
     def _register_clickable_node(
         self,
@@ -1952,7 +2065,8 @@ class AzmuthCommandCenterGUI:
         if self.cam_zoom < 0.75:
             badge = None
         if self.cam_zoom < 0.65:
-            title = title[:18] + ("…" if len(title) > 18 else "")
+            # Keep a readable primary identifier; full original is in the inspector.
+            title = title[:28] + ("…" if len(title) > 28 else "")
             subtitle = ""
 
         # Scaled typography metrics (SVG-Style vector auto-fitting)
@@ -1964,7 +2078,20 @@ class AzmuthCommandCenterGUI:
         f_sub = self._font_registry.get("Consolas", sub_sz)
         f_badge = self._font_registry.get("Consolas", badge_sz, "bold") if badge else None
 
-        tw = f_title.measure(title) / self.system_dpi
+        title_width = max(80, base_w * self.cam_zoom - 20)
+        if self.cam_zoom < 0.65:
+            title_width = 100
+        lines = []
+        for original_line in title.splitlines() or [""]:
+            line = ""
+            for char in original_line:
+                if line and f_title.measure(line + char) / self.system_dpi > title_width:
+                    lines.append(line)
+                    line = ""
+                line += char
+            lines.append(line)
+        title = "\n".join(lines)
+        tw = max(f_title.measure(line) / self.system_dpi for line in lines)
         sw = max((f_sub.measure(line) / self.system_dpi for line in subtitle.splitlines()), default=0)
         bw = (f_badge.measure(badge) / self.system_dpi + int(12 * self.cam_zoom)) if f_badge else 0
 
@@ -1972,7 +2099,9 @@ class AzmuthCommandCenterGUI:
         stripe_w = max(3, int(5 * self.cam_zoom))
         text_w = max(tw, sw)
         req_w = text_w + bw + stripe_w + int(24 * self.cam_zoom)
-        req_h = (f_title.metrics("linespace") + (f_sub.metrics("linespace") if subtitle else 0)) / self.system_dpi + int(14 * self.cam_zoom)
+        title_h = f_title.metrics("linespace") * len(lines) / self.system_dpi
+        sub_h = f_sub.metrics("linespace") * len(subtitle.splitlines()) / self.system_dpi
+        req_h = title_h + sub_h + 14
 
         nw = max(base_w * self.cam_zoom, float(req_w))
         nh = max(base_h * self.cam_zoom, float(req_h))
@@ -2009,7 +2138,7 @@ class AzmuthCommandCenterGUI:
         # Title & Subtitle with bounded scaled typography
         self.canvas.create_text(
             x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
-            y1 + nh * 0.33,
+            y1 + 7 + title_h / 2,
             text=title,
             fill=t.text_primary,
             font=("Segoe UI Semibold", title_sz),
@@ -2017,7 +2146,7 @@ class AzmuthCommandCenterGUI:
         )
         self.canvas.create_text(
             x1 + stripe_w + max(4, int(8 * self.cam_zoom)),
-            y1 + nh * 0.67,
+            y2 - 7 - sub_h / 2,
             text=subtitle,
             fill=t.text_muted,
             font=("Consolas", sub_sz),
@@ -2026,7 +2155,7 @@ class AzmuthCommandCenterGUI:
         if badge:
             self.canvas.create_text(
                 x2 - max(4, int(8 * self.cam_zoom)),
-                y1 + nh * 0.33,
+                y1 + 7 + title_h / 2,
                 text=badge,
                 fill=accent,
                 font=("Consolas", badge_sz, "bold"),
@@ -2164,20 +2293,22 @@ class AzmuthCommandCenterGUI:
         if label and self.cam_zoom >= 0.75:
             mx = 0.125 * x1 + 0.375 * cp1_x + 0.375 * cp2_x + 0.125 * x2
             my = 0.125 * y1 + 0.375 * cp1_y + 0.375 * cp2_y + 0.125 * y2
-            lbl_sz = max(6, min(10, int(round(7 * self.cam_zoom))))
-            bw = max(26, int(len(label) * lbl_sz * 0.44 + 8))
-            bh = max(10, int(lbl_sz * 1.5))
+            lbl_sz = max(8, min(10, int(round(7 * self.cam_zoom))))
+            label_font = self._font_registry.get("Consolas", lbl_sz)
+            bw = label_font.measure(label) / self.system_dpi / 2 + 8
+            bh = label_font.metrics("linespace") / self.system_dpi / 2 + 4
+            edge_tag = f"edge_label_{len(self.active_canvas_edges)}"
             self.canvas.create_rectangle(
                 mx - bw, my - bh, mx + bw, my + bh,
                 fill=t.bg_card,
                 outline=t.border_subtle,
-                width=1,
+                width=1, tags=("edge_label", edge_tag),
             )
             self.canvas.create_text(
                 mx, my,
                 text=label,
                 fill=color,
-                font=("Consolas", lbl_sz),
+                font=("Consolas", lbl_sz), tags=("edge_label", edge_tag),
             )
 
     # --- VIEW 1: Pipeline & 30-PAT Ring Schematic ---
@@ -2204,9 +2335,9 @@ class AzmuthCommandCenterGUI:
         ring_diam = (ring_world_r + 10.0) * 2.0
 
         stream_defs = [
-            ("STREAM_U3_LABS", "U3 Lab Opportunity Alpha", f"{opp_cnt} Actionable Issues", t.accent_cyan, 140.0),
-            ("STREAM_U1_RELEASES", "U1/U2 SOTA AI Releases", f"{rel_cnt} Upstream Tags", t.accent_blue, 300.0),
-            ("STREAM_CODON_CP", "Codon Stream CP Archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, 460.0),
+            ("STREAM_U3_LABS", "Research opportunities", f"{opp_cnt} Actionable Issues", t.accent_cyan, 140.0),
+            ("STREAM_U1_RELEASES", "AI releases", f"{rel_cnt} Upstream Tags", t.accent_blue, 300.0),
+            ("STREAM_CODON_CP", "Algorithm archives", f"{cp_cnt} Algorithmic Repos", t.accent_purple, 460.0),
             ("STREAM_U0_ECO", "U0 Public Ecosystem", f"{eco_cnt} Monitored Repos", t.accent_emerald, 620.0),
         ]
 
@@ -2268,49 +2399,16 @@ class AzmuthCommandCenterGUI:
                 s_id, swx, swy, box_w, box_h, s_title, s_sub, s_col, payload={"type": "pipeline_stage", "id": s_id}
             )
 
-        # 3. Draw 30-PAT Ring in World Coordinates
+        # The configured pool is not a measured capacity or health signal.
         pat_wx, pat_wy = stage_positions["STAGE_PAT_RING"]
-        self.pat_ring_info = (pat_wx, pat_wy, ring_world_r)
-        pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
-        screen_r = ring_world_r * self.cam_zoom
-        ring_pad = 10.0 * self.cam_zoom
+        self.pat_ring_info = None
+        self._draw_node_box(
+            "STAGE_PAT_RING", pat_wx, pat_wy, 180, 64,
+            "GitHub tokens (PAT)", f"{len(self.gh_sensor.pool.tokens)} configured; health unknown",
+            t.accent_cyan, payload={"type": "pipeline_stage", "id": "STAGE_PAT_RING"},
+        )
 
-        self.canvas.create_oval(
-            pat_sx - screen_r - ring_pad,
-            pat_sy - screen_r - ring_pad,
-            pat_sx + screen_r + ring_pad,
-            pat_sy + screen_r + ring_pad,
-            fill=t.bg_card,
-            outline=t.border_active,
-            width=1,
-        )
-        tokens = self.gh_sensor.pool.tokens
-        lbl_fnt_sz = max(5, min(10, int(9 * self.cam_zoom)))
-        sub_fnt_sz = max(4, min(9, int(8 * self.cam_zoom)))
-        self.canvas.create_text(
-            pat_sx, pat_sy - 20 * self.cam_zoom,
-            text="PAT pool", fill=t.text_primary,
-            font=("Segoe UI Semibold", lbl_fnt_sz)
-        )
-        self.canvas.create_text(
-            pat_sx, pat_sy + 15 * self.cam_zoom,
-            text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan,
-            font=("Consolas", sub_fnt_sz),
-            tags="pat_ring_subtext",
-        )
-        self._register_clickable_node(
-            "STAGE_PAT_RING",
-            pat_sx - screen_r - ring_pad,
-            pat_sy - screen_r - ring_pad,
-            pat_sx + screen_r + ring_pad,
-            pat_sy + screen_r + ring_pad,
-            {"type": "pipeline_stage", "id": "STAGE_PAT_RING"},
-            world_pos=(pat_wx, pat_wy),
-            world_dim=((ring_world_r + 10.0) * 2, (ring_world_r + 10.0) * 2),
-        )
-        self._draw_pat_ring_dots()
-
-        # 4. Thalamic Salience Gate
+        # 4. Signal filter (|Z|)
         thal_wx, thal_wy = stage_positions["STAGE_THALAMIC"]
         z_gate = self.thalamic_z_threshold.get()
         self._draw_node_box(
@@ -2319,7 +2417,7 @@ class AzmuthCommandCenterGUI:
             thal_wy,
             185.0,
             58.0,
-            "Thalamic Salience Gate",
+            "Signal filter (|Z|)",
             f"Prunes Noise |Z| < {z_gate:.2f}σ",
             t.accent_amber,
             badge="SIEVE",
@@ -2334,14 +2432,14 @@ class AzmuthCommandCenterGUI:
             cortex_wy,
             185.0,
             58.0,
-            "U0–U5 Cortical Foresight",
+            "Signal analysis (U0–U5)",
             f"6 Cartridges • {len(self.cartridges)} Lobes",
             t.accent_blue,
             badge="DAG",
             payload={"type": "pipeline_stage", "id": "STAGE_CORTEX"},
         )
 
-        # 6. Ultimatrix Gene Sequencer
+        # 6. Algorithm variants
         gene_wx, gene_wy = stage_positions["STAGE_ULTIMATRIX"]
         mut_cnt = self.mutation_ledger_data.get("mutations_applied", 0)
         self._draw_node_box(
@@ -2350,14 +2448,14 @@ class AzmuthCommandCenterGUI:
             gene_wy,
             185.0,
             58.0,
-            "Ultimatrix Gene Sequencer",
+            "Algorithm variants",
             f"{len(self.genes_catalog)} Genes • {mut_cnt} Muts",
             t.accent_purple,
             badge="T0-T5",
             payload={"type": "pipeline_stage", "id": "STAGE_ULTIMATRIX"},
         )
 
-        # 7. Arena & SSOT Ledgers
+        # 7. Benchmark records
         arena_wx, arena_wy = stage_positions["STAGE_ARENA_SSOT"]
         races = self.arena_ledger_data.get("tournaments_run", 0)
         promos = self.arena_ledger_data.get("promotions", 0)
@@ -2367,16 +2465,14 @@ class AzmuthCommandCenterGUI:
             arena_wy,
             180.0,
             64.0,
-            "Arena & SSOT Ledgers",
+            "Benchmark records",
             f"{races} Races • {promos} Promoted",
             t.accent_gold,
             badge="VERIFIED",
             payload={"type": "pipeline_stage", "id": "STAGE_ARENA_SSOT"},
         )
 
-        if not self.selected_node_id:
-            self.selected_node_id = "STAGE_THALAMIC"
-            self._inspect_pipeline_stage("STAGE_THALAMIC")
+
 
     # --- VIEW 2: U0-U5 Neuromorphic Causal DAG ---
 
@@ -2503,21 +2599,22 @@ class AzmuthCommandCenterGUI:
         phylo = build_gene_phylogeny(gene_data)
         tier_col = t.tier_colors.get(phylo["tier"], t.accent_cyan)
 
-        # Top Banner on canvas
-        banner_h = 72
-        self.canvas.create_rectangle(14, 10, w - 14, 10 + banner_h, fill=t.bg_card, outline=t.border_subtle, tags="hud")
-        self.canvas.create_text(
-            24,
-            20,
-            text=f"{phylo['gene_id']} / {phylo['tier_label']}",
-            fill=tier_col,
-            font=self.font("Segoe UI Semibold", 9),
+        # Fixed heading bounds are measured separately from the camera graph.
+        title = self.canvas.create_text(
+            24, 20, text=f"{phylo['gene_id']} / {phylo['tier_label']}",
+            fill=tier_col, font=self.font("Segoe UI Semibold", 9),
             anchor="nw", width=max(40, w - 48), tags="hud",
         )
-        speedup_txt = (
-            f"★ Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
+        title_bottom = self.canvas.bbox(title)[3]
+        summary = self.canvas.create_text(
+            24, title_bottom + 8,
+            text=f"Recorded speedup: {phylo['net_speedup_pct']:+.1f}% · {phylo['total_alleles']} variants",
+            fill=t.text_secondary, font=self.font(), anchor="nw", width=max(40, w - 48), tags="hud",
         )
-        self.canvas.create_text(24, 52, text=speedup_txt, fill=t.text_secondary, font=self.font("Segoe UI", 8), anchor="nw", width=max(40, w - 48), tags="hud")
+        banner_bottom = self.canvas.bbox(summary)[3] + 10
+        background = self.canvas.create_rectangle(14, 10, w - 14, banner_bottom, fill=t.bg_card, outline=t.border_subtle, tags="hud")
+        self.canvas.tag_lower(background, title)
+        self._diagram_top = banner_bottom + 18
 
         root_wx, root_wy = 240.0, 380.0
         wt_wx = 640.0
@@ -2685,7 +2782,7 @@ class AzmuthCommandCenterGUI:
         # Top Pipeline Funnel Cards
         funnel_items = [
             ("INDEXED PROBLEMS", f"{self.corpus_ledger_data.get('tasks_indexed', 0)}+ Tasks", t.accent_cyan),
-            ("ARENA RACES", f"{self.arena_ledger_data.get('tournaments_run', 0)} races", t.accent_blue),
+            ("BENCHMARKS", f"{self.arena_ledger_data.get('tournaments_run', 0)} races", t.accent_blue),
             ("SEQUENCED GENES", f"{len(self.genes_catalog)} Loci", t.accent_purple),
             ("ALLELE MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 0)}+ Mutated", t.accent_emerald),
             ("ARENA PROMOTIONS", f"{self.mutation_ledger_data.get('promotions_won', 0)}+ Won", t.accent_gold),
@@ -2796,9 +2893,12 @@ class AzmuthCommandCenterGUI:
     # ------------------------------------------------------------------------
 
     def _clear_inspector_badges(self) -> None:
+        self.inspector_text.tag_remove("technical", "1.0", tk.END)
+        self.btn_technical_details.configure(state=tk.DISABLED, text="Show technical details")
         for child in self.cap_summary_frame.winfo_children():
             child.destroy()
 
+    @layered_inspector
     def _inspect_pipeline_stage(self, stage_id: str) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
@@ -2807,27 +2907,19 @@ class AzmuthCommandCenterGUI:
 
         tk.Label(
             self.cap_summary_frame,
-            text=f"STAGE: {stage_id}",
+            text="Pipeline stage",
             font=self.font("Segoe UI Semibold", 9),
             fg=t.accent_cyan,
             bg=t.bg_panel,
         ).pack(anchor="w")
 
         if stage_id == "STAGE_PAT_RING":
-            self.inspector_text.insert(tk.END, "30-PAT ASYMMETRIC GITHUB TOKEN POOL\n", "h1")
+            self.inspector_text.insert(tk.END, "GitHub token pool (PAT)\n", "h1")
             self.inspector_text.insert(
-                tk.END,
-                f"Active Tokens Discovered: {len(self.gh_sensor.pool.tokens)}\n"
-                f"Combined Core Capacity: {len(self.gh_sensor.pool.tokens) * 5000:,} req/hr\n"
-                f"Combined Search Capacity: {len(self.gh_sensor.pool.tokens) * 30:,} req/min\n\n",
-                "emerald",
+                tk.END, f"Configured entries: {len(self.gh_sensor.pool.tokens)}\n"
+                "Health: unknown\nUsable capacity: unknown\n"
+                "Configured entries do not establish valid credentials or available quota.\n",
             )
-            for tok in self.gh_sensor.pool.tokens[:15]:
-                self.inspector_text.insert(
-                    tk.END,
-                    f"• [{tok['id']:<10}] {tok['status']} | Core: {tok['remaining_core']} | Search: {tok['remaining_search']}\n",
-                    "code",
-                )
         elif stage_id == "STREAM_U3_LABS":
             opps = tel.get("opportunities", [])
             self.inspector_text.insert(tk.END, f"U3 LAB OPPORTUNITY ALPHA ({len(opps)} Hits)\n", "h1")
@@ -2893,6 +2985,7 @@ class AzmuthCommandCenterGUI:
                 tk.END, json.dumps(data_to_show, indent=2)[:3500], "code"
             )
 
+    @layered_inspector
     def _inspect_github_item(self, stream: str, item_data: Dict[str, Any]) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
@@ -2907,6 +3000,7 @@ class AzmuthCommandCenterGUI:
         self.inspector_text.insert(tk.END, f"{item_data.get('repo', 'Repository')}\n", "h1")
         self.inspector_text.insert(tk.END, json.dumps(item_data, indent=2), "code")
 
+    @layered_inspector
     def _inspect_dag_node(self, node_id: str) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
@@ -2965,6 +3059,7 @@ class AzmuthCommandCenterGUI:
                 "code",
             )
 
+    @layered_inspector
     def _inspect_gene_or_allele(self, gene_id: str, allele_id: Optional[str] = None) -> None:
         self._clear_inspector_badges()
         self.inspector_text.delete("1.0", tk.END)
@@ -3528,6 +3623,7 @@ class AzmuthCommandCenterGUI:
             self.telemetry_error = f"Ingestion feed: {exc}"
             return getattr(self, "_ingestion_events", [])
 
+    @layered_inspector
     def _inspect_ingestion_event(self, event_data: dict[str, Any]) -> None:
         """Renders rich details of an ingestion/activity event into the right inspector."""
         self._clear_inspector_badges()
@@ -3538,7 +3634,7 @@ class AzmuthCommandCenterGUI:
         src = event_data.get("source", "System")
         title = event_data.get("title", "")
         ts = event_data.get("timestamp", "")
-        status = event_data.get("status", "SUCCESS")
+        status = event_data.get("status", "UNKNOWN")
         details = event_data.get("details", {})
 
         row1 = tk.Frame(self.cap_summary_frame, bg=t.bg_panel)
@@ -3720,7 +3816,7 @@ class AzmuthCommandCenterGUI:
                 btn.configure(bg=t.bg_card, fg=t.text_secondary)
 
         self.kpi_labels["pat_pool"].configure(text=f"{len(self.gh_sensor.pool.tokens)} configured")
-        self.kpi_labels["genes"].configure(text=f"{len(self.genes_catalog)} Loci")
+        self.kpi_labels["genes"].configure(text=f"{len(self.genes_catalog)} entries")
         self.kpi_labels["mutations"].configure(text=f"{self.mutation_ledger_data.get('mutations_applied', 0)}")
         self.kpi_labels["arena"].configure(text=f"{self.arena_ledger_data.get('tournaments_run', 0)}")
 

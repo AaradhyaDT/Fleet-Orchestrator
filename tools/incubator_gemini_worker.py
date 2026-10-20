@@ -19,6 +19,7 @@ Lifecycle:
 """
 
 from __future__ import annotations
+import re
 
 import argparse
 import asyncio
@@ -144,15 +145,33 @@ async def main_async(raw_thought: str, create_issue: bool = True, vault_id: str 
     # 1. Synthesize RFC via Gemini Fleet
     rfc_content = await generate_incubator_rfc(raw_thought)
 
-    # Extract clean title from thought
+    # Extract clean title and slug from thought
     clean_title = raw_thought.split("\n")[0][:70].strip()
+    slug_text = re.sub(r"[^a-zA-Z0-9]+", "_", clean_title.lower()).strip("_")[:40]
 
-    # 2. Save RFC markdown file
-    rfc_file = INCUBATOR_DIR / f"RFC_{timestamp_slug}.md"
-    full_markdown = f"# Incubator RFC: {clean_title}\n\n> **Raw Thought**: *\"{raw_thought}\"*\n> **Captured At**: `{datetime.now(timezone.utc).isoformat()}`\n\n---\n\n{rfc_content}\n"
+    # 2. Save RFC markdown file (Primary local copy in Fleet-Orchestrator)
+    rfc_file = INCUBATOR_DIR / f"RFC_{timestamp_slug}_{slug_text}.md"
+    full_markdown = (
+        f"# Incubator RFC: {clean_title}\n\n"
+        f"> **Raw Thought**: *\"{raw_thought}\"*\n"
+        f"> **Captured At**: `{datetime.now(timezone.utc).isoformat()}`\n"
+        f"> **Vault ID**: `{vault_id or 'UNKNOWN'}`\n\n"
+        f"---\n\n"
+        f"{rfc_content}\n"
+    )
     with open(rfc_file, "w", encoding="utf-8") as f:
         f.write(full_markdown)
     print(f"[+] Saved structured RFC artifact to: {rfc_file}")
+
+    # Dual-Sync: Mirror offline Markdown copy into brainstorm/research/incubator/
+    brainstorm_incubator = ROOT.parent / "brainstorm" / "research" / "incubator"
+    try:
+        brainstorm_incubator.mkdir(parents=True, exist_ok=True)
+        brainstorm_rfc_file = brainstorm_incubator / f"RFC_{timestamp_slug}_{slug_text}.md"
+        brainstorm_rfc_file.write_text(full_markdown, encoding="utf-8")
+        print(f"[+] Mirrored offline RFC copy to brainstorm: {brainstorm_rfc_file}")
+    except Exception as e:
+        logger.warning("Could not mirror RFC to brainstorm/research/incubator: %s", e)
 
     # 3. Dispatch GitHub Issue if requested
     issue_url = None
