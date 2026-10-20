@@ -1,6 +1,6 @@
 {
   "gear": "whisper",
   "name": "Whisper (Low Power)",
-  "set_at": "2026-10-20T02:28:23.572838+00:00",
-  "reason": "Azmuth Command Center GUI"
+  "set_at": "2026-10-20T13:28:19.591436+00:00",
+  "reason": "Circuit Breaker tripped: Avail RAM 2.98GB < 3.0GB or Load 81% > 80%"
 }
