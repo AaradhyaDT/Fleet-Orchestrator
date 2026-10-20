@@ -46,14 +46,14 @@
       "name": "adaptive-workflow",
       "domain": "SWARM_ORCHESTRATION",
       "availability_tier": "VERIFIED",
-      "description": "Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, 2D matrix routing, zero-AI fast paths, CPM DAGs, 31 Copilot workers, 30 Gemini keys, Azmuth Foresight (U0-U5), 3B/7B brain, Agent-Reflex, and Colab GPU accelerators.",
+      "description": "Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enforces context firebreaks, 2D matrix routing, zero-AI fast paths, CPM DAGs, 31 Copilot workers, 30 Gemini keys, Azmuth Foresight (U0-U14, 15 Universes), 3B/7B brain, Agent-Reflex, and Colab GPU accelerators.",
       "triggers": [
         "adaptive-workflow"
       ],
       "dependencies": [
         "tools/adaptive_engine.py"
       ],
-      "byte_size": 8042,
+      "byte_size": 8200,
       "line_count": 134,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
       "ssot_role": "SSOT_USER",
