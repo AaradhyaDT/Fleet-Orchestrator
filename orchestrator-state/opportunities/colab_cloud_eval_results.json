@@ -1,0 +1,106 @@
+{
+  "evaluated_at": "2026-10-20T03:35:37.039610+00:00",
+  "host": "SFG16",
+  "total_evaluated": 23,
+  "ingestion_latency_sec": 1.9994,
+  "tensor_scoring_latency_sec": 0.0031,
+  "exceptional_matches": 0,
+  "high_matches": 7,
+  "top_5": [
+    {
+      "id": "GCC-DFF-2026-01",
+      "title": "Founding Systems Architect - Frontier Autonomous Robotics & Edge AI",
+      "organization": "Dubai Future Foundation (DFF) / Area 2071",
+      "category": "SOVEREIGN_GCC",
+      "location": "Dubai, UAE",
+      "fit_score": 0.826,
+      "fit_tier": "HIGH_MATCH",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.922,
+        "BiasAperture": 0.05,
+        "Fleet_Orchestrator": 0.573,
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.05
+      },
+      "url": "https://www.dubaifuture.ae/initiatives/"
+    },
+    {
+      "id": "EMBASSY-EU-2026-07",
+      "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+      "organization": "Delegation of the European Union / EEAS",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Brussels, Belgium",
+      "fit_score": 0.826,
+      "fit_tier": "HIGH_MATCH",
+      "tax_status": "UN_EXEMPT",
+      "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+      "pillar_breakdown": {
+        "SPARK": 0.05,
+        "BiasAperture": 0.922,
+        "Fleet_Orchestrator": 0.05,
+        "Brainstorm_Formal_Logic": 0.573,
+        "Cyber_Forensics_ZeroTrust": 0.05
+      },
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en"
+    },
+    {
+      "id": "EMBASSY-US-2026-03",
+      "title": "Regional Information Management & Cybersecurity Specialist (USAID / US Embassy)",
+      "organization": "U.S. Embassy / USAID Foreign National Program",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Regional Diplomatic Missions",
+      "fit_score": 0.771,
+      "fit_tier": "HIGH_MATCH",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "pillar_breakdown": {
+        "SPARK": 0.05,
+        "BiasAperture": 0.05,
+        "Fleet_Orchestrator": 0.05,
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.999
+      },
+      "url": "https://careers.state.gov/"
+    },
+    {
+      "id": "GCC-MBZUAI-2026-08",
+      "title": "Research Engineer - TinyML & Ultra-Low-Power Neural Systems",
+      "organization": "Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)",
+      "category": "SOVEREIGN_GCC",
+      "location": "Abu Dhabi, UAE",
+      "fit_score": 0.768,
+      "fit_tier": "HIGH_MATCH",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.994,
+        "BiasAperture": 0.05,
+        "Fleet_Orchestrator": 0.05,
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.05
+      },
+      "url": "https://mbzuai.ac.ae/careers/"
+    },
+    {
+      "id": "GCC-TII-2026-04",
+      "title": "Senior AI Systems & Verification Engineer (Falcon LLM Infrastructure)",
+      "organization": "Technology Innovation Institute (TII Abu Dhabi) / ATRC",
+      "category": "SOVEREIGN_GCC",
+      "location": "Abu Dhabi, UAE",
+      "fit_score": 0.766,
+      "fit_tier": "HIGH_MATCH",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.573,
+        "BiasAperture": 0.05,
+        "Fleet_Orchestrator": 0.573,
+        "Brainstorm_Formal_Logic": 0.817,
+        "Cyber_Forensics_ZeroTrust": 0.05
+      },
+      "url": "https://www.tii.ae/careers"
+    }
+  ]
+}
