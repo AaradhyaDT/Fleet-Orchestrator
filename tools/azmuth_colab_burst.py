@@ -104,6 +104,8 @@ def run_cloud_hyper_burst(
     tier_flags = []
     if tier == "a100-highmem":
         tier_flags = ["--gpu", "A100", "--high-mem"]
+    elif tier == "a100":
+        tier_flags = ["--gpu", "A100"]
     elif tier == "t4":
         tier_flags = ["--gpu", "T4"]
     elif tier == "l4":
@@ -124,7 +126,16 @@ def run_cloud_hyper_burst(
         # 1. Provision VM
         new_cmd = [COLAB_BIN, "new", "-s", session_name] + tier_flags
         logger.info(f"Provisioning session: {' '.join(new_cmd)}")
-        subprocess.run(new_cmd, check=True, shell=IS_WIN)
+        try:
+            subprocess.run(new_cmd, check=True, shell=IS_WIN)
+        except subprocess.CalledProcessError:
+            if tier == "a100-highmem":
+                logger.warning("A100-HighMem shape busy. Automatically falling back to standard A100 GPU...")
+                tier_flags = ["--gpu", "A100"]
+                new_cmd = [COLAB_BIN, "new", "-s", session_name] + tier_flags
+                subprocess.run(new_cmd, check=True, shell=IS_WIN)
+            else:
+                raise
 
         # 2. Execute Worker script
         logger.info(f"Executing parallel hyper-burst worker on {tier.upper()}...")
