@@ -494,6 +494,10 @@ def test_default_panels_and_complete_drawing_bounds(isolated_gui, monkeypatch, s
     catalog[gene["gene_id"]] = {**gene, "tier": 0}
     monkeypatch.setattr(gui, "load_all_genes", lambda: catalog)
     instance.genes_catalog = catalog
+    gui.SWEEP_JSON.write_text(json.dumps({"universes": {
+        domain["stem"]: {"name": domain["cortical_lobe"], "spikes_count": 0, "top_chokepoint": "Long synthetic chokepoint identifier"}
+        for domain in instance.cartridges
+    }}), encoding="utf-8")
     target = tuple(round(value * scale) for value in size)
     root.maxsize(10000, 10000)
     instance._on_display_change(DisplayInfo(round(scale * 96), (0, 0, target[0] + 100, target[1] + 150)))
@@ -608,3 +612,178 @@ def test_large_counts_keep_full_values_in_help_and_funnel_selection(isolated_gui
     assert str(count) in instance.inspector_text.get("1.0", tk.END)
     instance._inspect_universe_status({"universe_id": "u0_ecosystem_mesh", "title": "U0: Ecosystem Mesh", "meta": {}})
     assert "unavailable" in instance.inspector_text.get("1.0", tk.END)
+
+
+def assert_gene_edge_borders(instance):
+    # Labels remain readable when edges are lowered behind the cards.
+    stacking = list(instance.canvas.find_all())
+    for item in instance.canvas.find_withtag("edge_label"):
+        if instance.canvas.type(item) != "rectangle":
+            continue
+        group = next(t for t in instance.canvas.gettags(item) if t.startswith("edge_label_"))
+        text = next(i for i in instance.canvas.find_withtag(group) if instance.canvas.type(i) == "text")
+        assert stacking.index(item) < stacking.index(text)
+    for edge in instance.active_canvas_edges:
+        for role, xkey, ykey in (("source_id", "x1", "y1"), ("target_id", "x2", "y2")):
+            node = instance.canvas_nodes[edge[role]]
+            x1, y1, x2, y2 = node["bbox"]
+            x, y = edge[xkey], edge[ykey]
+            assert x1 - 1 <= x <= x2 + 1 and y1 - 1 <= y <= y2 + 1
+            assert min(abs(x - x1), abs(x - x2), abs(y - y1), abs(y - y2)) < 1
+
+
+@pytest.mark.parametrize("tier", range(6))
+def test_gene_tiers_drag_root_base_nested_mutants_and_cta(isolated_gui, tier):
+    instance = isolated_gui
+    gene_id = f"TIER_{tier}"
+    instance.genes_catalog = {gene_id: {
+        "gene_id": gene_id, "tier": tier,
+        "alleles": [{"allele_id": aid, "empirical_fitness": {"runtime_ms": rt}}
+                    for aid, rt in (("base", 12), ("base_mut_fast", 10), ("base_mut_fast_mut_tuned", 8))],
+    }}
+    instance.selected_gene_id = gene_id
+    instance.switch_view("genes")
+    for page in (0, 1):
+        instance._gene_pages[gene_id] = page
+        instance._redraw_active_canvas()
+        if page == 0:
+            assert any(e["source_id"] == f"GENE_ROOT::{gene_id}" and e["target_id"].endswith("::base")
+                       for e in instance.active_canvas_edges)
+        else:
+            nested = next(e for e in instance.active_canvas_edges if e["target_id"].endswith("base_mut_fast_mut_tuned"))
+            assert nested["source_id"].endswith("::base_mut_fast")
+        for nid in list(instance.canvas_nodes):
+            x, y = instance.canvas_nodes[nid]["center"]
+            instance._on_canvas_press(SimpleNamespace(x=x, y=y))
+            instance._on_canvas_motion(SimpleNamespace(x=x + 41, y=y + 23))
+            instance._on_canvas_release(SimpleNamespace(x=x + 41, y=y + 23))
+            assert_gene_edge_borders(instance)
+    # A base-only gene exposes a real connected action card, also draggable.
+    instance.genes_catalog[gene_id]["alleles"] = [{"allele_id": "base"}]
+    instance._gene_pages[gene_id] = 0
+    instance._redraw_active_canvas()
+    cta = f"MUTATE_CTA::{gene_id}"
+    instance.custom_node_positions[cta] = (1100, 500)
+    instance._redraw_active_canvas()
+    assert any(e["target_id"] == cta for e in instance.active_canvas_edges)
+    assert_gene_edge_borders(instance)
+    instance.reset_layout()
+    assert not instance.custom_node_positions
+
+
+@pytest.mark.parametrize("tier", range(6))
+def test_dense_gene_pages_cover_every_variant_and_keep_parent_context(isolated_gui, tier):
+    instance = isolated_gui
+    bases = [{"allele_id": f"base_{i}"} for i in range(20)]
+    variants = [{"allele_id": f"base_{i}_mut_fast"} for i in range(20)]
+    variants += [{"allele_id": f"base_{i}_mut_fast_mut_tuned"} for i in range(19)]
+    gid = f"DENSE_T{tier}"
+    instance.genes_catalog = {gid: {"gene_id": gid, "tier": tier, "alleles": bases + variants}}
+    instance.selected_gene_id = gid
+    instance.switch_view("genes")
+    seen = set()
+    for page in range(30):
+        instance._gene_pages[gid] = page
+        instance._redraw_active_canvas()
+        shown = [n["payload"]["allele_id"] for n in instance.canvas_nodes.values() if n["payload"].get("type") == "allele"]
+        seen.update(shown)
+        assert len(shown) <= 4
+        assert_gene_edge_borders(instance)
+        assert instance._gene_pages[gid] == page
+        before = (instance.cam_x, instance.cam_y, instance.cam_zoom)
+        instance._redraw_active_canvas()
+        assert before == (instance.cam_x, instance.cam_y, instance.cam_zoom)
+    assert seen == {a["allele_id"] for a in bases + variants}
+    # Navigation uses the fixed HUD hit test, independent of camera/zoom.
+    bounds, direction = instance._gene_page_controls[0]
+    instance._handle_node_click((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
+    assert instance._gene_pages[gid] == 29 + direction
+    # Identical allele names from another gene must not inherit its drag offset.
+    instance.custom_node_positions[f"ALLELE::{gid}::base_0"] = (999, 999)
+    other = f"{gid}_OTHER"
+    instance.genes_catalog[other] = {"gene_id": other, "tier": tier, "alleles": bases[:1]}
+    instance.selected_gene_id = other
+    instance._redraw_active_canvas()
+    assert instance.canvas_nodes[f"ALLELE::{other}::base_0"]["world_pos"] != (999, 999)
+
+
+@pytest.mark.parametrize("scale,size", [(scale, size) for scale in (1.0, 1.5, 2.0) for size in ((980, 620), (1366, 768), (1920, 1080))])
+def test_dense_gene_default_bounds_at_supported_sizes(isolated_gui, monkeypatch, scale, size):
+    """Untouched panels, first-open views, and Reset, with real Tk text metrics."""
+    import itertools
+    from tools.azmuth_gui_dpi import DisplayInfo
+    instance = isolated_gui
+    root = instance.root
+    gene = {"gene_id": "ALGORITHM_WITH_A_LONG_IDENTIFIER_AND_ROLLBACK_SUPPORT", "tier": 2,
+            "description": "Maintain connected components and compare implementation variants.", "category": "graph", "alleles": [
+                {"allele_id": f"long_implementation_variant_{i}", "dominance": "PRIMARY" if i == 0 else "ALTERNATIVE",
+                 "complexity_time": "O(N * alpha(N))", "complexity_space": "O(N)",
+                 "empirical_fitness": {"runtime_ms": 40 + i, "ram_kb": 2048}, "invariants": []} for i in range(4)]}
+    catalog = {f"ALGORITHM_{i:04d}": {**gene, "gene_id": f"ALGORITHM_{i:04d}", "tier": i % 6} for i in range(471)}
+    del catalog["ALGORITHM_0000"]
+    catalog[gene["gene_id"]] = {**gene, "tier": 0}
+    monkeypatch.setattr(gui, "load_all_genes", lambda: catalog)
+    instance.genes_catalog = catalog
+    gene["alleles"] = [{"allele_id": f"long_implementation_variant_{i}"} for i in range(20)]
+    gene["alleles"] += [{"allele_id": f"long_implementation_variant_{i}_mut_fast"} for i in range(20)]
+    gene["alleles"] += [{"allele_id": f"long_implementation_variant_{i}_mut_fast_mut_tuned"} for i in range(19)]
+    catalog[gene["gene_id"]] = gene
+    instance.selected_gene_id = gene["gene_id"]
+    target = tuple(round(value * scale) for value in size)
+    root.maxsize(10000, 10000)
+    instance._on_display_change(DisplayInfo(round(scale * 96), (0, 0, target[0] + 100, target[1] + 150)))
+    root.geometry(f"{target[0]}x{target[1]}+0+0")
+    root.deiconify()
+    failures = []
+
+    def verify():
+        try:
+            assert abs(root.winfo_width() - target[0]) <= 2
+            assert abs(root.winfo_height() - target[1]) <= 2
+            assert not instance.left_panel_collapsed and not instance.right_panel_collapsed
+            for tier in range(6):
+                gene["tier"] = tier
+                view = "genes"
+                instance.switch_view(view)
+                root.update_idletasks()
+                # Test first-open geometry, then the explicit reset path.
+                for reset in (False, True):
+                    if reset:
+                        instance.reset_layout()
+                        root.update_idletasks()
+                    width, height = instance._canvas_size()
+                    bounds = instance.canvas.bbox("diagram")
+                    if bounds:
+                        assert bounds[0] >= -2 and bounds[1] >= instance._diagram_top - 3, (view, reset, bounds, instance._diagram_top, instance.cam_zoom, instance._fit_pending, instance._canvas_size())
+                        assert bounds[2] <= width + 2 and bounds[3] <= height + 2, (view, reset, bounds, width, height)
+                    for (a, x), (b, y) in itertools.combinations(instance.canvas_nodes.items(), 2):
+                        x, y = x["bbox"], y["bbox"]
+                        assert not (x[0] < y[2] - 1 and x[2] > y[0] + 1 and x[1] < y[3] - 1 and x[3] > y[1] + 1), (view, a, b, x, y)
+                instance._gene_pages[gene["gene_id"]] = 21
+                instance.zoom_reset()
+                root.update_idletasks()
+                assert_gene_edge_borders(instance)
+                bounds = instance.canvas.bbox("diagram")
+                assert bounds[0] >= -2 and bounds[1] >= instance._diagram_top - 3
+                assert bounds[2] <= width + 2 and bounds[3] <= height + 2
+                controls = [instance.btn_cancel_job, instance.btn_job_details, instance.btn_technical_details,
+                            instance.btn_view_help, instance.spin_z, *instance.tier_pill_btns.values(), *instance.view_buttons.values()]
+                controls += [b for b, _ in instance.action_buttons if b.winfo_ismapped()]
+                for control in controls:
+                    parent = control.master
+                    assert control.winfo_ismapped(), (view, control)
+                    assert control.winfo_x() >= 0 and control.winfo_y() >= 0, (view, control)
+                    assert control.winfo_x() + control.winfo_width() <= parent.winfo_width() + 2, (view, control, control.cget("text"))
+                    assert control.winfo_y() + control.winfo_height() <= parent.winfo_height() + 2, (view, control)
+        except BaseException as exc:
+            failures.append(exc)
+        finally:
+            root.quit()
+    watchdog = root.after(8000, lambda: (failures.append(AssertionError("Default layout check timed out")), root.quit()))
+    root.after(450, verify)
+    try:
+        root.mainloop()
+    finally:
+        root.after_cancel(watchdog)
+    if failures:
+        raise failures[0]
