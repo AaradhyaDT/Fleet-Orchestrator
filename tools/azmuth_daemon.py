@@ -25,6 +25,7 @@ from ctypes import wintypes
 import json
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -589,6 +590,25 @@ AZMUTH_TOOL_MODULE_NAMES: list[str] = [
     "tools.azmuth_github_sensor",
 ]
 
+# --- Ecosystem Memory Sync Bridge Constants ---
+
+MEMORY_SYNC_ENGINE = Path(r"F:\Aaradhya-Dev-Tamrakar\Agent-Customization-Sync\agent_customization_sync\sync_ecosystem_memory.py")
+MEMORY_SYNC_COOLDOWN_SEC = 300.0  # 5 min cooldown between memory syncs inside burst loop
+_last_memory_sync_time: float = 0.0
+MEMORY_DIGEST_DIR = Path.home() / ".gemini" / "config" / "codex-memories" / "extensions" / "ad_hoc" / "notes"
+GLOBAL_MEMORY_FILE = Path.home() / ".gemini" / "config" / "codex-memories" / "GLOBAL_MEMORY.md"
+CODEX_GLOBAL_MEMORY = Path.home() / ".codex" / "memories" / "GLOBAL_MEMORY.md"
+
+# Memory watcher state (for Phase 3: embedded watcher)
+_memory_watch_targets: list[Path] = [
+    Path.home() / ".codex" / "memories",
+    Path.home() / ".gemini" / "config" / "codex-memories",
+    Path(r"F:\Aaradhya-Dev-Tamrakar\Claude-Desktop\team-memory.md"),
+]
+_memory_fingerprint: dict[str, float] = {}
+_memory_debounce_timer: float = 0.0
+MEMORY_DEBOUNCE_SECONDS = 5.0
+
 
 def check_and_reload_tool_modules() -> list[str]:
     """Inspects file modification timestamps for Azmuth and Ultimatrix tool scripts.
@@ -618,6 +638,169 @@ def check_and_reload_tool_modules() -> list[str]:
     return reloaded
 
 
+# --- Ecosystem Memory Harmonization Subroutines ---
+
+def execute_memory_sync_subtask() -> dict[str, Any]:
+    """Phase 1: Opportunistically harmonizes memories across Codex, Gemini, Claude, and Drive."""
+    global _last_memory_sync_time
+    res: dict[str, Any] = {"status": "SKIPPED", "files_synced": 0}
+
+    now = time.time()
+    if now - _last_memory_sync_time < MEMORY_SYNC_COOLDOWN_SEC:
+        return res
+
+    if not MEMORY_SYNC_ENGINE.is_file():
+        logger.debug(f"Memory sync engine not found at {MEMORY_SYNC_ENGINE}")
+        return res
+
+    try:
+        proc = run_command([sys.executable, str(MEMORY_SYNC_ENGINE)], timeout=90.0)
+        _last_memory_sync_time = time.time()
+        if proc.returncode == 0:
+            res["status"] = "SUCCESS"
+            res["details"] = proc.stdout[-300:] if proc.stdout else ""
+            record_ingestion_event(
+                "MEMORY_SYNC",
+                "EcosystemMemory",
+                "Codex-Gemini-Claude-Drive",
+                "Opportunistic memory synchronization completed cleanly",
+                details=res,
+            )
+            logger.info("[Burst-Steal] Ecosystem memory sync completed successfully.")
+        else:
+            res["status"] = f"FAIL_{proc.returncode}"
+            res["error"] = proc.stderr[-200:] if proc.stderr else ""
+            logger.warning(f"[Burst-Steal] Ecosystem memory sync non-zero exit: {proc.returncode}")
+    except Exception as exc:
+        res["status"] = "ERROR"
+        res["error"] = str(exc)
+        logger.debug(f"[Burst-Steal] Ecosystem memory sync error: {exc}")
+
+    return res
+
+
+def generate_daily_azmuth_memory_digest() -> bool:
+    """Phase 2: Compiles a structured summary of Azmuth autonomous activity into a daily memory note."""
+    if not INGESTION_FEED.is_file():
+        return False
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    digest_filename = f"{today_str}-azmuth-autonomic-digest.md"
+    digest_file = MEMORY_DIGEST_DIR / digest_filename
+
+    # Only run once every 2 hours or if file doesn't exist
+    if digest_file.exists():
+        age_sec = time.time() - digest_file.stat().st_mtime
+        if age_sec < 7200.0:
+            return False
+
+    try:
+        lines = INGESTION_FEED.read_text(encoding="utf-8").splitlines()
+        events_today = []
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+                ev_time = ev.get("timestamp", "")
+                if ev_time.startswith(today_str):
+                    events_today.append(ev)
+            except Exception:
+                continue
+
+        if not events_today:
+            return False
+
+        # Group by event type
+        summary_counts: dict[str, int] = {}
+        for ev in events_today:
+            t = ev.get("event_type", "OTHER")
+            summary_counts[t] = summary_counts.get(t, 0) + 1
+
+        md_content = f"# Azmuth Autonomic Fleet Activity Digest ({today_str})\n\n"
+        md_content += f"**Generated At**: {datetime.now(timezone.utc).isoformat()}\n"
+        md_content += f"**Total Events Today**: {len(events_today)}\n\n"
+        md_content += "## Event Breakdown\n"
+        for ev_type, count in sorted(summary_counts.items(), key=lambda x: x[1], reverse=True):
+            md_content += f"- **{ev_type}**: {count} occurrences\n"
+
+        md_content += "\n## Recent Activity Log\n"
+        for ev in events_today[-10:]:
+            md_content += f"- `{ev.get('timestamp', '')[11:19]}` [{ev.get('source', '')}] **{ev.get('event_type', '')}**: {ev.get('title', '')}\n"
+
+        MEMORY_DIGEST_DIR.mkdir(parents=True, exist_ok=True)
+        digest_file.write_text(md_content, encoding="utf-8")
+
+        # Register in GLOBAL_MEMORY.md if not present
+        if GLOBAL_MEMORY_FILE.is_file():
+            g_content = GLOBAL_MEMORY_FILE.read_text(encoding="utf-8")
+            link_ref = f"@[azmuth-digest](extensions/ad_hoc/notes/{digest_filename})"
+            if link_ref not in g_content:
+                marker = "## 2. Chronological Modular Registry"
+                if marker in g_content:
+                    addition = f"\n- **{today_str}**: {link_ref}\n  * Azmuth autonomous telemetry digest ({len(events_today)} events logged)\n"
+                    g_content = g_content.replace(marker, marker + addition)
+                    GLOBAL_MEMORY_FILE.write_text(g_content, encoding="utf-8")
+                    if CODEX_GLOBAL_MEMORY.is_file():
+                        shutil.copy2(GLOBAL_MEMORY_FILE, CODEX_GLOBAL_MEMORY)
+
+        logger.info(f"[Azmuth-Memory] Compiled daily activity digest into {digest_filename}")
+        return True
+    except Exception as exc:
+        logger.debug(f"[Azmuth-Memory] Failed generating memory digest: {exc}")
+        return False
+
+
+def get_memory_fingerprint() -> dict[str, float]:
+    """Capture mtimes of all memory files across watch targets."""
+    mtimes: dict[str, float] = {}
+    for root_dir in _memory_watch_targets:
+        if not root_dir.exists():
+            continue
+        if root_dir.is_file():
+            try:
+                mtimes[str(root_dir)] = root_dir.stat().st_mtime
+            except OSError:
+                pass
+            continue
+        for p in root_dir.rglob("*"):
+            if p.is_file() and ".git" not in p.parts:
+                try:
+                    mtimes[str(p)] = p.stat().st_mtime
+                except OSError:
+                    pass
+    return mtimes
+
+
+def poll_embedded_memory_watcher() -> bool:
+    """Phase 3: Embedded memory watcher executed inside the daemon tick loop."""
+    global _memory_fingerprint, _memory_debounce_timer
+
+    if not _memory_fingerprint:
+        _memory_fingerprint = get_memory_fingerprint()
+        return False
+
+    now = time.time()
+    current_fp = get_memory_fingerprint()
+
+    # Detect file modifications
+    if current_fp != _memory_fingerprint:
+        _memory_fingerprint = current_fp
+        _memory_debounce_timer = now
+        logger.info(f"[Embedded-Watcher] Memory file change detected. Arming {MEMORY_DEBOUNCE_SECONDS}s debounce window...")
+        return False
+
+    # Check if debounce quiet window has expired
+    if _memory_debounce_timer > 0.0 and (now - _memory_debounce_timer) >= MEMORY_DEBOUNCE_SECONDS:
+        _memory_debounce_timer = 0.0
+        logger.info("[Embedded-Watcher] Debounce quiet window reached. Dispatching memory sync...")
+        execute_memory_sync_subtask()
+        return True
+
+    return False
+
+
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
     Bails immediately if user input is detected or available RAM is below safety floor.
@@ -638,6 +821,17 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     logger.info(f"[Burst-Steal:{gear_name.upper()}] System is IDLE and RAM is HEALTHY. Initiating burst...")
     burst_result: dict[str, Any] = {"tasks_executed": [], "aborted_due_to_activity": False, "aborted_due_to_ram": False, "gear": gear_name}
     start_time = time.time()
+
+    # Subtask 0: Ecosystem Memory Harmonization (Phase 1)
+    try:
+        mem_sync_res = execute_memory_sync_subtask()
+        if mem_sync_res.get("status") == "SUCCESS":
+            burst_result["tasks_executed"].append("ecosystem_memory_sync")
+        # Phase 2: Autonomous telemetry memory digest
+        if generate_daily_azmuth_memory_digest():
+            burst_result["tasks_executed"].append("azmuth_memory_digest")
+    except Exception as exc:
+        logger.debug(f"[Burst-Steal] Memory harmonization subtask error: {exc}")
 
     # Subtask 1: Refresh and verify skills registry ONLY IF DIRTY
     if check_and_update_skills_dirty():
@@ -900,6 +1094,12 @@ def run_daemon_loop(
                 if now - last_burst_time >= active_cooldown_sec:
                     execute_idle_burst()
                     last_burst_time = time.time()
+
+            # 3. Phase 3: Embedded Memory Watcher & Debounced Dispatch
+            try:
+                poll_embedded_memory_watcher()
+            except Exception as e_watch:
+                logger.debug(f"[Embedded-Watcher] Tick poll error: {e_watch}")
 
             # Quiet background sleep tick (5 seconds)
             time.sleep(5)
