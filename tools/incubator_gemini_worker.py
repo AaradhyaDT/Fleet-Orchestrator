@@ -85,9 +85,23 @@ Structure your response strictly in the following GitHub Markdown format:
 
 
 async def generate_incubator_rfc(raw_thought: str) -> str:
-    """Uses Gemini Key Rotator with auto-retry and multi-slot rotation to synthesize structured RFC."""
+    """Uses Gemini Key Rotator with auto-retry and multi-slot rotation to synthesize structured RFC.
+
+    Models prioritized:
+      1. gemini-3.5-flash (Standard frontier workhorse for active API accounts)
+      2. gemini-3.5-flash-lite (Ultra-fast low-latency tier)
+      3. gemini-3.8-flash (High-capability reasoning flash)
+      4. gemini-flash-lite-latest (Dynamic alias)
+      5. gemini-2.5-flash (Legacy fallback for grandfathered slots)
+    """
     rotator = GeminiKeyRotator()
-    candidate_models = ["gemini-flash-lite-latest", "gemini-2.5-flash"]
+    candidate_models = [
+        "gemini-3.5-flash",
+        "gemini-3.5-flash-lite",
+        "gemini-3.8-flash",
+        "gemini-flash-lite-latest",
+        "gemini-2.5-flash",
+    ]
 
     max_attempts = max(rotator.total_keys * 2, 6)
     last_err = None
@@ -123,20 +137,24 @@ async def generate_incubator_rfc(raw_thought: str) -> str:
                     data = json.loads(resp.read())
                     text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
                     slot.total_calls += 1
+                    logger.info("Successfully synthesized RFC using slot %s with model %s", slot.masked_key, model_name)
                     return text
             except urllib.error.HTTPError as e:
                 last_err = e
                 if e.code == 429:
                     logger.warning("Slot %s hit 429 on %s, marking burst cooldown", slot.masked_key, model_name)
                     rotator.mark_burst_cooldown(slot.key_id, cooldown_seconds=60.0, error_msg=f"429 Rate Limit on {model_name}")
-                    break  # Key is rate limited, try next key slot
+                    break  # Key is rate limited across models, try next slot
                 elif e.code == 403:
-                    logger.debug("Slot %s returned 403 on %s, marking daily exhausted", slot.masked_key, model_name)
-                    rotator.mark_daily_exhausted(slot.key_id, error_msg="403 Forbidden")
-                    break  # Key not authorized for this API, break to next slot
+                    logger.debug("Slot %s returned 403 PERMISSION_DENIED on %s, marking daily exhausted", slot.masked_key, model_name)
+                    rotator.mark_daily_exhausted(slot.key_id, error_msg="403 Project Denied Access")
+                    break  # Key project disabled across all models, skip to next slot immediately
                 elif e.code == 404:
-                    logger.debug("Model %s returned 404 for slot %s, falling back to next candidate model", model_name, slot.masked_key)
+                    logger.debug("Model %s returned 404 for slot %s, falling back to next model", model_name, slot.masked_key)
                     continue  # Try next model candidate on the same slot
+                elif e.code == 503:
+                    logger.warning("Model %s returned 503 on slot %s, trying next candidate model", model_name, slot.masked_key)
+                    continue
                 else:
                     logger.warning("HTTP %d error on slot %s: %s", e.code, slot.masked_key, e)
                     break
