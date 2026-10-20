@@ -61,19 +61,19 @@ MULTI_HUB_FEEDS = [
         "type": "rss"
     },
     {
-        "name": "WeWorkRemotely - DevOps & Sysadmin",
+        "name": "WeWorkRemotely - DevOps and Sysadmin",
         "url": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
         "category": "GLOBAL_AI_FRONTIER",
         "type": "rss"
     },
     {
-        "name": "WeWorkRemotely - Management & Finance",
+        "name": "WeWorkRemotely - Management and Finance",
         "url": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
         "category": "GLOBAL_AI_FRONTIER",
         "type": "rss"
     },
     {
-        "name": "RemoteOK Developer & AI Feed",
+        "name": "RemoteOK Developer and AI Feed",
         "url": "https://remoteok.com/api",
         "category": "GLOBAL_AI_FRONTIER",
         "type": "json_remoteok"
@@ -85,7 +85,7 @@ MULTI_HUB_FEEDS = [
         "type": "json_himalayas"
     },
     {
-        "name": "UN News & Global Initiatives Feed",
+        "name": "UN News and Global Initiatives Feed",
         "url": "https://feeds.feedburner.com/un/news",
         "category": "UN_MULTILATERAL",
         "type": "rss"
@@ -101,6 +101,78 @@ MULTI_HUB_FEEDS = [
         "url": "https://boards-api.greenhouse.io/v1/boards/scaleai/jobs",
         "category": "GLOBAL_AI_FRONTIER",
         "type": "json_greenhouse"
+    },
+    {
+        "name": "Figure AI Greenhouse Board",
+        "url": "https://boards-api.greenhouse.io/v1/boards/figure/jobs",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_greenhouse"
+    },
+    {
+        "name": "Waymo Greenhouse Board",
+        "url": "https://boards-api.greenhouse.io/v1/boards/waymo/jobs",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_greenhouse"
+    },
+    {
+        "name": "Anduril Autonomous Systems Board",
+        "url": "https://boards-api.greenhouse.io/v1/boards/andurilindustries/jobs",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_greenhouse"
+    },
+    {
+        "name": "Together AI Greenhouse Board",
+        "url": "https://boards-api.greenhouse.io/v1/boards/togetherai/jobs",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_greenhouse"
+    },
+    {
+        "name": "xAI Engineering Board",
+        "url": "https://boards-api.greenhouse.io/v1/boards/xai/jobs",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_greenhouse"
+    },
+    {
+        "name": "Perplexity AI Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/perplexity",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "Cohere Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/cohere",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "Cursor Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/cursor",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "Physical Intelligence Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/physicalintelligence",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "Skydio Autonomous Flight Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/skydio",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "1X Technologies Humanoid Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/1x",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
+    },
+    {
+        "name": "Harvey AI Ashby Board",
+        "url": "https://api.ashbyhq.com/posting-api/job-board/harvey",
+        "category": "GLOBAL_AI_FRONTIER",
+        "type": "json_ashby"
     },
     {
         "name": "Remotive Verified Tech Feed",
@@ -389,6 +461,28 @@ def fetch_hub_source(src: dict) -> list[dict]:
                             "url": job_url,
                             "description": f"Verified Greenhouse ATS posting: {title}."
                         })
+            elif src["type"] == "json_ashby":
+                data = json.loads(raw.decode("utf-8", errors="ignore"))
+                jobs = data.get("jobs", [])
+                for it in jobs[:120]:
+                    title = it.get("title", "")
+                    job_url = it.get("jobUrl", "") or it.get("applyUrl", "")
+                    loc = it.get("location", "Remote / Hybrid")
+                    desc = it.get("descriptionPlain", "") or it.get("descriptionHtml", "")
+                    if title:
+                        items.append({
+                            "id": f"ASH-{it.get('id', abs(hash(job_url)) % 100000)}",
+                            "title": f"{title} ({src['name'].split()[0]})",
+                            "organization": src["name"].replace(" Ashby Board", ""),
+                            "category": "GLOBAL_AI_FRONTIER",
+                            "location": loc,
+                            "compensation_est": "$160,000 - $320,000 USD",
+                            "tax_status": "LOCAL_TAX",
+                            "visa_pathway": "EMPLOYER_SPONSORED",
+                            "relevance_tags": ["frontier_ai", "ashby_verified", "systems", "machine_learning"],
+                            "url": job_url,
+                            "description": desc[:500] if desc else f"Ashby ATS role: {title}."
+                        })
             elif src["type"] == "json_remotive":
                 data = json.loads(raw.decode("utf-8", errors="ignore"))
                 for it in data.get("jobs", [])[:50]:
@@ -439,7 +533,7 @@ print("\n[Phase 1] High-Throughput Concurrent Multi-Hub Ingestion...")
 t_ingest_start = time.time()
 all_harvested = list(GOLDEN_RECORDS)
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
     futures = [executor.submit(fetch_hub_source, s) for s in MULTI_HUB_FEEDS]
     for fut in concurrent.futures.as_completed(futures):
         all_harvested.extend(fut.result())

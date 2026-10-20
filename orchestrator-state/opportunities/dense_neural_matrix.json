@@ -1,10 +1,10 @@
 {
-  "evaluated_at": "2026-10-20T04:18:07.044894+00:00",
-  "host": "4e8b00bc6cbb",
-  "total_opportunities": 224,
+  "evaluated_at": "2026-10-20T05:52:47.376692+00:00",
+  "host": "6b6c86d847d3",
+  "total_opportunities": 1396,
   "model_mode": "SentenceTransformer (all-MiniLM-L6-v2)",
-  "ingestion_latency_sec": 1.4209,
-  "scoring_latency_sec": 34.6846,
+  "ingestion_latency_sec": 1.2994,
+  "scoring_latency_sec": 36.4068,
   "exceptional_matches": 0,
   "high_matches": 0,
   "top_15": [
@@ -26,7 +26,24 @@
         "Brainstorm_Formal_Logic": 0.305,
         "Cyber_Forensics_ZeroTrust": 0.265
       },
-      "url": "https://aiforgood.itu.int/"
+      "url": "https://aiforgood.itu.int/",
+      "verifiable_sources": [
+        {
+          "name": "AI for Good Platform",
+          "url": "https://aiforgood.itu.int/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "ITU Recruitment ATS",
+          "url": "https://www.itu.int/careers/",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/itu/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
     },
     {
       "id": "EMBASSY-US-2026-03",
@@ -46,7 +63,61 @@
         "Brainstorm_Formal_Logic": 0.119,
         "Cyber_Forensics_ZeroTrust": 0.647
       },
-      "url": "https://careers.state.gov/"
+      "url": "https://careers.state.gov/",
+      "verifiable_sources": [
+        {
+          "name": "Embassy Vacancies Portal",
+          "url": "https://np.usembassy.gov/jobs/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "State Dept Electronic Recruitment Application (ERA)",
+          "url": "https://erajobs.state.gov/dos-era/npl/vacancysearch/searchVacancies.hms",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "Vacancy Status Tracker",
+          "url": "https://np.usembassy.gov/current-vacancy-status/",
+          "type": "GOVERNMENT_ATS"
+        }
+      ]
+    },
+    {
+      "id": "FRONTIER-SCALEAI-2026-02",
+      "title": "Senior AI Systems & Evaluation Engineer (Enterprise Foundation Models)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA / New York / Remote",
+      "fit_score": 0.515,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$190,000 - $280,000 USD / yr + Equity",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.129,
+        "BiasAperture": 0.535,
+        "Fleet_Orchestrator": 0.413,
+        "Brainstorm_Formal_Logic": 0.279,
+        "Cyber_Forensics_ZeroTrust": 0.183
+      },
+      "url": "https://scale.com/careers",
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Careers",
+          "url": "https://scale.com/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Greenhouse ATS Board",
+          "url": "https://job-boards.greenhouse.io/scaleai",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
     },
     {
       "id": "UN-UNICEF-2026-02",
@@ -66,7 +137,61 @@
         "Brainstorm_Formal_Logic": -0.03,
         "Cyber_Forensics_ZeroTrust": 0.083
       },
-      "url": "https://www.unicef.org/innovation/innovation-fund"
+      "url": "https://www.unicef.org/innovation/innovation-fund",
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.unicef.org/innovation/innovation-fund",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "UN Careers ATS",
+          "url": "https://careers.un.org",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/unicef/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
+    },
+    {
+      "id": "FRONTIER-ANTHROPIC-2026-01",
+      "title": "Systems & Alignment Research Engineer (Frontier Multi-Model Safety)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA / London, UK / Remote",
+      "fit_score": 0.449,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$220,000 - $350,000 USD / yr + Equity",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.152,
+        "BiasAperture": 0.378,
+        "Fleet_Orchestrator": 0.45,
+        "Brainstorm_Formal_Logic": 0.355,
+        "Cyber_Forensics_ZeroTrust": 0.254
+      },
+      "url": "https://www.anthropic.com/careers",
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Careers",
+          "url": "https://www.anthropic.com/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Greenhouse ATS Board",
+          "url": "https://job-boards.greenhouse.io/anthropic",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropicresearch/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
     },
     {
       "id": "GCC-TII-2026-04",
@@ -86,7 +211,87 @@
         "Brainstorm_Formal_Logic": 0.413,
         "Cyber_Forensics_ZeroTrust": 0.246
       },
-      "url": "https://www.tii.ae/careers"
+      "url": "https://www.tii.ae/careers",
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.tii.ae/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "ATRC Ecosystem",
+          "url": "https://www.atrc.ae",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/tiiuae/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
+    },
+    {
+      "id": "ASH-2d256112-b336-4539-8133-a0bf7f6698f0",
+      "title": "Forward Deployed Engineer, Agentic Platform (Europe) (Cohere)",
+      "organization": "Cohere",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Europe",
+      "fit_score": 0.412,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.256,
+        "BiasAperture": 0.324,
+        "Fleet_Orchestrator": 0.421,
+        "Brainstorm_Formal_Logic": 0.212,
+        "Cyber_Forensics_ZeroTrust": 0.208
+      },
+      "url": "https://jobs.ashbyhq.com/cohere/2d256112-b336-4539-8133-a0bf7f6698f0",
+      "verifiable_sources": []
+    },
+    {
+      "id": "ASH-e906188a-e089-4b86-85b9-aad0d4413c68",
+      "title": "Engineering Manager, FDE Agentic Platform (Cohere)",
+      "organization": "Cohere",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Toronto",
+      "fit_score": 0.411,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.242,
+        "BiasAperture": 0.308,
+        "Fleet_Orchestrator": 0.422,
+        "Brainstorm_Formal_Logic": 0.221,
+        "Cyber_Forensics_ZeroTrust": 0.232
+      },
+      "url": "https://jobs.ashbyhq.com/cohere/e906188a-e089-4b86-85b9-aad0d4413c68",
+      "verifiable_sources": []
+    },
+    {
+      "id": "ASH-031c2335-db85-4265-8a88-a54b911be36a",
+      "title": "Forward Deployed Engineer, Agentic Platform (Korea) (Cohere)",
+      "organization": "Cohere",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Korea",
+      "fit_score": 0.407,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.25,
+        "BiasAperture": 0.304,
+        "Fleet_Orchestrator": 0.417,
+        "Brainstorm_Formal_Logic": 0.251,
+        "Cyber_Forensics_ZeroTrust": 0.21
+      },
+      "url": "https://jobs.ashbyhq.com/cohere/031c2335-db85-4265-8a88-a54b911be36a",
+      "verifiable_sources": []
     },
     {
       "id": "EMBASSY-EU-2026-07",
@@ -106,7 +311,108 @@
         "Brainstorm_Formal_Logic": 0.229,
         "Cyber_Forensics_ZeroTrust": 0.312
       },
-      "url": "https://www.eeas.europa.eu/eeas/vacancies_en"
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+      "verifiable_sources": [
+        {
+          "name": "EEAS Vacancies Portal",
+          "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "EPSO EU Careers ATS",
+          "url": "https://epso.europa.eu/",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/european-external-action-service/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
+    },
+    {
+      "id": "ASH-75c0032c-7200-48bf-9d6d-355880dd93d9",
+      "title": "Forward Deployed Engineer, Agentic Platform (Cohere)",
+      "organization": "Cohere",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Middle East",
+      "fit_score": 0.404,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.246,
+        "BiasAperture": 0.282,
+        "Fleet_Orchestrator": 0.422,
+        "Brainstorm_Formal_Logic": 0.221,
+        "Cyber_Forensics_ZeroTrust": 0.212
+      },
+      "url": "https://jobs.ashbyhq.com/cohere/75c0032c-7200-48bf-9d6d-355880dd93d9",
+      "verifiable_sources": []
+    },
+    {
+      "id": "ASH-b0bcef37-1d20-414f-aade-c54942d63df9",
+      "title": "Forward Deployed Engineer, Agentic Platform (Cohere)",
+      "organization": "Cohere",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "United States",
+      "fit_score": 0.404,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.246,
+        "BiasAperture": 0.282,
+        "Fleet_Orchestrator": 0.422,
+        "Brainstorm_Formal_Logic": 0.221,
+        "Cyber_Forensics_ZeroTrust": 0.212
+      },
+      "url": "https://jobs.ashbyhq.com/cohere/b0bcef37-1d20-414f-aade-c54942d63df9",
+      "verifiable_sources": []
+    },
+    {
+      "id": "ASH-799df8d8-2d4c-459a-884b-61a7c9824ad8",
+      "title": "Legal Engineer Manager, Munich (Harvey)",
+      "organization": "Harvey AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Munich",
+      "fit_score": 0.402,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.129,
+        "BiasAperture": 0.418,
+        "Fleet_Orchestrator": 0.313,
+        "Brainstorm_Formal_Logic": 0.24,
+        "Cyber_Forensics_ZeroTrust": 0.156
+      },
+      "url": "https://jobs.ashbyhq.com/harvey/799df8d8-2d4c-459a-884b-61a7c9824ad8",
+      "verifiable_sources": []
+    },
+    {
+      "id": "ASH-a5cb058a-681c-4f72-8b4d-1429b154a182",
+      "title": "Senior Systems Engineer - Network (1X)",
+      "organization": "1X Technologies Humanoid",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Carlos, CA",
+      "fit_score": 0.397,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$160,000 - $320,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.21,
+        "BiasAperture": 0.238,
+        "Fleet_Orchestrator": 0.429,
+        "Brainstorm_Formal_Logic": 0.244,
+        "Cyber_Forensics_ZeroTrust": 0.109
+      },
+      "url": "https://jobs.ashbyhq.com/1x/a5cb058a-681c-4f72-8b4d-1429b154a182",
+      "verifiable_sources": []
     },
     {
       "id": "GCC-MBZUAI-2026-08",
@@ -126,187 +432,19 @@
         "Brainstorm_Formal_Logic": 0.15,
         "Cyber_Forensics_ZeroTrust": 0.044
       },
-      "url": "https://mbzuai.ac.ae/careers/"
-    },
-    {
-      "id": "ROK-1137498",
-      "title": "Senior Sales Executive Central Region (SimSpace Corporation)",
-      "organization": "SimSpace Corporation",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "",
-      "fit_score": 0.382,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$140,000 - $250,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.195,
-        "BiasAperture": 0.39,
-        "Fleet_Orchestrator": 0.292,
-        "Brainstorm_Formal_Logic": 0.249,
-        "Cyber_Forensics_ZeroTrust": 0.229
-      },
-      "url": "https://remoteOK.com/remote-jobs/remote-senior-sales-executive-central-region-simspace-corporation-1137498"
-    },
-    {
-      "id": "GCC-DFF-2026-01",
-      "title": "Founding Systems Architect - Frontier Autonomous Robotics & Edge AI",
-      "organization": "Dubai Future Foundation (DFF) / Area 2071",
-      "category": "SOVEREIGN_GCC",
-      "location": "Dubai, UAE",
-      "fit_score": 0.371,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$180,000 - $240,000 USD / yr (AED 660,000 - 880,000)",
-      "tax_status": "TAX_FREE",
-      "visa_pathway": "UAE_GOLDEN_VISA",
-      "pillar_breakdown": {
-        "SPARK": 0.364,
-        "BiasAperture": 0.304,
-        "Fleet_Orchestrator": 0.343,
-        "Brainstorm_Formal_Logic": 0.261,
-        "Cyber_Forensics_ZeroTrust": 0.035
-      },
-      "url": "https://www.dubaifuture.ae/initiatives/"
-    },
-    {
-      "id": "RSS-513621",
-      "title": "Expel: Senior Detection & Response Engineer",
-      "organization": "WeWorkRemotely - DevOps & Sysadmin",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "Remote / Global",
-      "fit_score": 0.366,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$130,000 - $220,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.188,
-        "BiasAperture": 0.212,
-        "Fleet_Orchestrator": 0.101,
-        "Brainstorm_Formal_Logic": 0.074,
-        "Cyber_Forensics_ZeroTrust": 0.407
-      },
-      "url": "https://weworkremotely.com/remote-jobs/expel-senior-detection-response-engineer"
-    },
-    {
-      "id": "EMBASSY-UK-2026-11",
-      "title": "Frontier Technology & Data Systems Lead (British Embassy / FCDO)",
-      "organization": "Foreign, Commonwealth & Development Office (FCDO) / British Embassy",
-      "category": "EMBASSY_DIPLOMATIC",
-      "location": "Kathmandu, Nepal / London, UK",
-      "fit_score": 0.36,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "GBP 42,000 - 65,000 / yr (Country-Based Staff Band C4)",
-      "tax_status": "TAX_FREE",
-      "visa_pathway": "DIPLOMATIC_A2_G1",
-      "pillar_breakdown": {
-        "SPARK": 0.127,
-        "BiasAperture": 0.276,
-        "Fleet_Orchestrator": 0.287,
-        "Brainstorm_Formal_Logic": 0.172,
-        "Cyber_Forensics_ZeroTrust": 0.367
-      },
-      "url": "https://fcdocareers.co.uk/"
-    },
-    {
-      "id": "ROK-1137394",
-      "title": "Sr Solutions Architect (ExtraHop)",
-      "organization": "ExtraHop",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "Remote",
-      "fit_score": 0.342,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$140,000 - $250,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.151,
-        "BiasAperture": 0.27,
-        "Fleet_Orchestrator": 0.333,
-        "Brainstorm_Formal_Logic": 0.28,
-        "Cyber_Forensics_ZeroTrust": 0.301
-      },
-      "url": "https://remoteOK.com/remote-jobs/remote-sr-solutions-architect-extrahop-1137394"
-    },
-    {
-      "id": "RSS-701619",
-      "title": "Huntress: Sales Development Representative - Service Provider",
-      "organization": "WeWorkRemotely - DevOps & Sysadmin",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "Remote / Global",
-      "fit_score": 0.33,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$130,000 - $220,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.064,
-        "BiasAperture": 0.242,
-        "Fleet_Orchestrator": 0.17,
-        "Brainstorm_Formal_Logic": 0.024,
-        "Cyber_Forensics_ZeroTrust": 0.39
-      },
-      "url": "https://weworkremotely.com/remote-jobs/huntress-sales-development-representative-service-provider"
-    },
-    {
-      "id": "HIM-57298",
-      "title": "Responsable CRM & Autonomisation Zoho  (H/F) - Business Evasion",
-      "organization": "Business Evasion",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "Remote / Worldwide",
-      "fit_score": 0.33,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$135,000 - $230,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": -0.006,
-        "BiasAperture": 0.303,
-        "Fleet_Orchestrator": 0.367,
-        "Brainstorm_Formal_Logic": 0.167,
-        "Cyber_Forensics_ZeroTrust": 0.218
-      },
-      "url": ""
-    },
-    {
-      "id": "ROK-1137463",
-      "title": "Federal Business Development Director (Fortanix)",
-      "organization": "Fortanix",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "",
-      "fit_score": 0.318,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$140,000 - $250,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.159,
-        "BiasAperture": 0.208,
-        "Fleet_Orchestrator": 0.228,
-        "Brainstorm_Formal_Logic": 0.093,
-        "Cyber_Forensics_ZeroTrust": 0.367
-      },
-      "url": "https://remoteOK.com/remote-jobs/remote-federal-business-development-director-fortanix-1137463"
-    },
-    {
-      "id": "ROK-1136796",
-      "title": "Staff Software Development Engineer SDM (Delinea)",
-      "organization": "Delinea",
-      "category": "GLOBAL_AI_FRONTIER",
-      "location": "Redwood City",
-      "fit_score": 0.316,
-      "fit_tier": "MODERATE_MATCH",
-      "compensation_est": "$140,000 - $250,000 USD",
-      "tax_status": "LOCAL_TAX",
-      "visa_pathway": "EMPLOYER_SPONSORED",
-      "pillar_breakdown": {
-        "SPARK": 0.242,
-        "BiasAperture": 0.259,
-        "Fleet_Orchestrator": 0.314,
-        "Brainstorm_Formal_Logic": 0.184,
-        "Cyber_Forensics_ZeroTrust": 0.209
-      },
-      "url": "https://remoteOK.com/remote-jobs/remote-staff-software-development-engineer-sdm-delinea-1136796"
+      "url": "https://mbzuai.ac.ae/careers/",
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://mbzuai.ac.ae/careers/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/school/mbzuai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ]
     }
   ]
 }

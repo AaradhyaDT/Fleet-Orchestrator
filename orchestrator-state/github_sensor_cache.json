@@ -1,9 +1,24 @@
 {
-  "timestamp": "2026-10-20T04:21:24.028544+00:00",
-  "timestamp_epoch": 1792470071.0345185,
+  "timestamp": "2026-10-20T05:17:52.589972+00:00",
+  "timestamp_epoch": 1792473461.1252315,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "Muesli-HQ/muesli#108",
+        "title": "Port Microsoft VibeVoice-ASR to Core ML and add as a transcription runtime",
+        "repo": "Muesli-HQ/muesli",
+        "url": "https://github.com/Muesli-HQ/muesli/issues/108",
+        "labels": [
+          "enhancement",
+          "help wanted",
+          "priority: backlog"
+        ],
+        "comments": 0,
+        "created_at": "2026-05-11T17:18:01Z",
+        "updated_at": "2026-10-20T05:15:10Z",
+        "salience": 1.0
+      },
       {
         "id": "vllm-project/router#393",
         "title": "[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan",
@@ -47,23 +62,6 @@
         "created_at": "2026-09-13T14:20:13Z",
         "updated_at": "2026-10-19T19:52:08Z",
         "salience": 2.0
-      },
-      {
-        "id": "MakazhanAlpamys/Soup#1698",
-        "title": "task: sft loads reasoning_effort, train_on_eot, use_flash_attn and use_liger on paths that never read them",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/1698",
-        "labels": [
-          "bug",
-          "help wanted",
-          "claimed",
-          "difficulty:4",
-          "area:training"
-        ],
-        "comments": 3,
-        "created_at": "2026-10-07T07:53:17Z",
-        "updated_at": "2026-10-19T18:57:36Z",
-        "salience": 1.6
       },
       {
         "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#363",

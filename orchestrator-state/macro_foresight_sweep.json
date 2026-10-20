@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-20T04:21:10.991628+00:00",
-  "total_cartridges": 14,
+  "timestamp": "2026-10-20T05:17:52.625895+00:00",
+  "total_cartridges": 15,
   "universes": {
     "u0_ecosystem_mesh": {
       "id": "u0_ecosystem_mesh",
@@ -210,7 +210,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.992145+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.626559+00:00"
     },
     "u10_spark_edge_ai_telemetry": {
       "id": "u10_spark_edge_ai_telemetry",
@@ -387,7 +387,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.992540+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.627034+00:00"
     },
     "u11_bias_aperture_vision_audit": {
       "id": "u11_bias_aperture_vision_audit",
@@ -564,7 +564,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.992890+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.627391+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
@@ -775,7 +775,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.993336+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.627833+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
@@ -1018,7 +1018,189 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.993832+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.628287+00:00"
+    },
+    "u14_frontier_talent_ats_radar": {
+      "id": "u14_frontier_talent_ats_radar",
+      "name": "Frontier Talent, ATS & Professional Social Networks Radar",
+      "node_count": 5,
+      "synapse_count": 3,
+      "spikes_count": 4,
+      "top_chokepoint": "WELLFOUND_SEED_EARLY_STAGE_INDEX",
+      "engram_matches": 1,
+      "nodes": {
+        "LINKEDIN_TALENT_GRAPH_VOLUME": {
+          "id": "LINKEDIN_TALENT_GRAPH_VOLUME",
+          "label": "LinkedIn Professional Network & Company Job Graph",
+          "node_type": "TALENT_NETWORK",
+          "unit": "postings_index",
+          "current_value": 6.0,
+          "layer1_homeostatic": {
+            "mu0": 25.0,
+            "sigma0": 6.0,
+            "iqr": 7.0,
+            "tau0_days": 7
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 12.0,
+            "p95": 45.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 0.0,
+            "abs_max": 100.0,
+            "survival_limit": 80.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 8.0,
+            "collateral_harm_ceiling": 0.85
+          },
+          "description": "Monitors LinkedIn company pages, official job postings, and recruiters for sovereign GCC entities, diplomatic missions, and frontier AI labs.",
+          "z_score": -3.1667,
+          "abs_extreme_ratio": 6.0,
+          "habituated": false,
+          "spikes": 3,
+          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+        },
+        "GREENHOUSE_LEVER_ATS_OPENINGS": {
+          "id": "GREENHOUSE_LEVER_ATS_OPENINGS",
+          "label": "Greenhouse & Lever Enterprise ATS Feeds",
+          "node_type": "ATS_PIPELINE",
+          "unit": "active_openings",
+          "current_value": 0.0,
+          "layer1_homeostatic": {
+            "mu0": 30.0,
+            "sigma0": 8.0,
+            "iqr": 9.0,
+            "tau0_days": 10
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 15.0,
+            "p95": 55.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 0.0,
+            "abs_max": 150.0,
+            "survival_limit": 120.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 10.0,
+            "collateral_harm_ceiling": 0.85
+          },
+          "description": "Monitors direct ATS board APIs (Greenhouse, Lever) for frontier technology employers (Anthropic, Scale AI, Hugging Face, etc.).",
+          "z_score": -3.75,
+          "abs_extreme_ratio": 0.0,
+          "habituated": false,
+          "spikes": 3,
+          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+        },
+        "ASHBY_FRONTIER_AI_RADAR": {
+          "id": "ASHBY_FRONTIER_AI_RADAR",
+          "label": "Ashby Next-Gen Frontier AI Job Boards",
+          "node_type": "ATS_PIPELINE",
+          "unit": "frontier_roles",
+          "current_value": 18.0,
+          "layer1_homeostatic": {
+            "mu0": 15.0,
+            "sigma0": 4.0,
+            "iqr": 4.5,
+            "tau0_days": 14
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 8.0,
+            "p95": 28.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 0.0,
+            "abs_max": 80.0,
+            "survival_limit": 60.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 5.0,
+            "collateral_harm_ceiling": 0.9
+          },
+          "description": "Tracks high-density AI infrastructure and research postings hosted on Ashby ATS (Mistral, Cohere, Perplexity, Cursor, xAI).",
+          "z_score": 0.75,
+          "abs_extreme_ratio": 22.5,
+          "habituated": true,
+          "spikes": 0,
+          "state_label": "HOMEOSTATIC_EQUILIBRIUM"
+        },
+        "WELLFOUND_SEED_EARLY_STAGE_INDEX": {
+          "id": "WELLFOUND_SEED_EARLY_STAGE_INDEX",
+          "label": "Wellfound & Seed-Stage Frontier AI Radar",
+          "node_type": "STARTUP_NETWORK",
+          "unit": "index_points",
+          "current_value": 22.0,
+          "layer1_homeostatic": {
+            "mu0": 18.0,
+            "sigma0": 5.0,
+            "iqr": 5.5,
+            "tau0_days": 14
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 10.0,
+            "p95": 32.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 0.0,
+            "abs_max": 90.0,
+            "survival_limit": 75.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 6.0,
+            "collateral_harm_ceiling": 0.85
+          },
+          "description": "Tracks early-stage seed/Series-A robotics, edge AI, and foundation model startups on Wellfound.",
+          "z_score": 0.8,
+          "abs_extreme_ratio": 24.44,
+          "habituated": false,
+          "spikes": 1,
+          "state_label": "ALLOSTATIC_STRETCH"
+        },
+        "ENTERPRISE_REMOTE_TECH_VOLUME": {
+          "id": "ENTERPRISE_REMOTE_TECH_VOLUME",
+          "label": "Verified Remote Tech & Systems Feed Stream",
+          "node_type": "SYNDICATED_FEED",
+          "unit": "verified_openings",
+          "current_value": 2.0,
+          "layer1_homeostatic": {
+            "mu0": 100.0,
+            "sigma0": 20.0,
+            "iqr": 22.0,
+            "tau0_days": 3
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 60.0,
+            "p95": 160.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 20.0,
+            "abs_max": 300.0,
+            "survival_limit": 250.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 25.0,
+            "collateral_harm_ceiling": 0.8
+          },
+          "description": "Syndicated remote technical opportunities with verified application URLs from Remotive, Jobicy, RemoteOK, and Himalayas.",
+          "z_score": -4.9,
+          "abs_extreme_ratio": 0.0,
+          "habituated": false,
+          "spikes": 3,
+          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+        }
+      },
+      "last_swept_at": "2026-10-20T05:17:52.628645+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1195,7 +1377,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.994275+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.629065+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1372,7 +1554,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.994697+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.629431+00:00"
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -1516,7 +1698,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.995198+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.629819+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2419,7 +2601,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.996653+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.631634+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2563,7 +2745,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.997003+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.632134+00:00"
     },
     "u6_energy_thermal_power": {
       "id": "u6_energy_thermal_power",
@@ -2740,7 +2922,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.997245+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.632531+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -2917,7 +3099,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.997471+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.632913+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -3094,7 +3276,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.997729+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.633291+00:00"
     },
     "u9_regulatory_epistemic_audit": {
       "id": "u9_regulatory_epistemic_audit",
@@ -3271,7 +3453,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T04:21:10.997957+00:00"
+      "last_swept_at": "2026-10-20T05:17:52.633651+00:00"
     }
   },
   "systemic_spikes": [
@@ -3321,6 +3503,30 @@
       "universe_id": "u13_un_multilateral_global_radar",
       "node_id": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
       "z_score": -3.0,
+      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+    },
+    {
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "node_id": "LINKEDIN_TALENT_GRAPH_VOLUME",
+      "z_score": -3.1667,
+      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+    },
+    {
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "node_id": "GREENHOUSE_LEVER_ATS_OPENINGS",
+      "z_score": -3.75,
+      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+    },
+    {
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "node_id": "WELLFOUND_SEED_EARLY_STAGE_INDEX",
+      "z_score": 0.8,
+      "state": "ALLOSTATIC_STRETCH"
+    },
+    {
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "node_id": "ENTERPRISE_REMOTE_TECH_VOLUME",
+      "z_score": -4.9,
       "state": "CRITICAL_NOCICEPTIVE_SPIKE"
     },
     {
@@ -3464,6 +3670,10 @@
     {
       "universe_id": "u13_un_multilateral_global_radar",
       "node_id": "ETHICAL_AI_MULTILATERAL_MANDATE"
+    },
+    {
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "node_id": "WELLFOUND_SEED_EARLY_STAGE_INDEX"
     },
     {
       "universe_id": "u1_research_arbitrage",
@@ -3663,6 +3873,34 @@
       "weight": 0.86,
       "lag_days": 21,
       "edge_type": "BILATERAL_CAREER_CORRIDOR"
+    },
+    {
+      "source": "u14_frontier_talent_ats_radar::ASHBY_FRONTIER_AI_RADAR",
+      "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS",
+      "weight": 0.93,
+      "lag_days": 7,
+      "edge_type": "FRONTIER_LAB_APPLICATION_CORRIDOR"
+    },
+    {
+      "source": "u14_frontier_talent_ats_radar::GREENHOUSE_LEVER_ATS_OPENINGS",
+      "target": "u3_career_opportunity_alpha::OPEN_SOURCE_MAINTAINER_PIPELINE",
+      "weight": 0.87,
+      "lag_days": 10,
+      "edge_type": "ATS_OSS_MAINTAINER_ARBITRAGE"
+    },
+    {
+      "source": "u14_frontier_talent_ats_radar::LINKEDIN_TALENT_GRAPH_VOLUME",
+      "target": "u12_sovereign_gcc_dubai_radar::FOUNDING_ML_SYSTEMS_MATCH_SCORE",
+      "weight": 0.85,
+      "lag_days": 7,
+      "edge_type": "SOCIAL_GRAPH_OPPORTUNITY_FEED"
+    },
+    {
+      "source": "u14_frontier_talent_ats_radar::ENTERPRISE_REMOTE_TECH_VOLUME",
+      "target": "u0_ecosystem_mesh::Fleet-Orchestrator",
+      "weight": 0.81,
+      "lag_days": 5,
+      "edge_type": "REMOTE_INFRASTRUCTURE_DEMAND"
     }
   ]
 }
