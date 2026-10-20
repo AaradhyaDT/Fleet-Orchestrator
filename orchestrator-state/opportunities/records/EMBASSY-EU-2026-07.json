@@ -21,5 +21,22 @@
     "SDG 10: Reduced Inequalities",
     "SDG 16: Peace, Justice and Strong Institutions"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803084+00:00"
+  "verifiable_sources": [
+    {
+      "name": "EEAS Vacancies Portal",
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "EPSO EU Careers ATS",
+      "url": "https://epso.europa.eu/",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/european-external-action-service/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108282+00:00"
 }

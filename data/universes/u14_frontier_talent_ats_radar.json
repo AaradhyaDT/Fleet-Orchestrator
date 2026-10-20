@@ -1,0 +1,195 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u14_frontier_talent_ats_radar",
+  "cortical_lobe": "Frontier Talent, ATS & Professional Social Networks Radar",
+  "sensory_adapter": "talent_ats_graph_sensor",
+  "description": "Dedicated cortical lobe monitoring external employment gateways, LinkedIn job graphs, applicant tracking systems (Greenhouse, Lever, Ashby, Workable), and startup hiring pools (Wellfound, Remotive, Jobicy) that capture high-yield opportunities omitted from static corporate sites.",
+  "nodes": [
+    {
+      "id": "LINKEDIN_TALENT_GRAPH_VOLUME",
+      "label": "LinkedIn Professional Network & Company Job Graph",
+      "node_type": "TALENT_NETWORK",
+      "unit": "postings_index",
+      "current_value": 6.0,
+      "layer1_homeostatic": {
+        "mu0": 25.0,
+        "sigma0": 6.0,
+        "iqr": 7.0,
+        "tau0_days": 7
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 12.0,
+        "p95": 45.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 100.0,
+        "survival_limit": 80.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 8.0,
+        "collateral_harm_ceiling": 0.85
+      },
+      "description": "Monitors LinkedIn company pages, official job postings, and recruiters for sovereign GCC entities, diplomatic missions, and frontier AI labs."
+    },
+    {
+      "id": "GREENHOUSE_LEVER_ATS_OPENINGS",
+      "label": "Greenhouse & Lever Enterprise ATS Feeds",
+      "node_type": "ATS_PIPELINE",
+      "unit": "active_openings",
+      "current_value": 0.0,
+      "layer1_homeostatic": {
+        "mu0": 30.0,
+        "sigma0": 8.0,
+        "iqr": 9.0,
+        "tau0_days": 10
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 15.0,
+        "p95": 55.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 150.0,
+        "survival_limit": 120.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 10.0,
+        "collateral_harm_ceiling": 0.85
+      },
+      "description": "Monitors direct ATS board APIs (Greenhouse, Lever) for frontier technology employers (Anthropic, Scale AI, Hugging Face, etc.)."
+    },
+    {
+      "id": "ASHBY_FRONTIER_AI_RADAR",
+      "label": "Ashby Next-Gen Frontier AI Job Boards",
+      "node_type": "ATS_PIPELINE",
+      "unit": "frontier_roles",
+      "current_value": 18.0,
+      "layer1_homeostatic": {
+        "mu0": 15.0,
+        "sigma0": 4.0,
+        "iqr": 4.5,
+        "tau0_days": 14
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 8.0,
+        "p95": 28.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 80.0,
+        "survival_limit": 60.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 5.0,
+        "collateral_harm_ceiling": 0.9
+      },
+      "description": "Tracks high-density AI infrastructure and research postings hosted on Ashby ATS (Mistral, Cohere, Perplexity, Cursor, xAI)."
+    },
+    {
+      "id": "WELLFOUND_SEED_EARLY_STAGE_INDEX",
+      "label": "Wellfound & Seed-Stage Frontier AI Radar",
+      "node_type": "STARTUP_NETWORK",
+      "unit": "index_points",
+      "current_value": 22.0,
+      "layer1_homeostatic": {
+        "mu0": 18.0,
+        "sigma0": 5.0,
+        "iqr": 5.5,
+        "tau0_days": 14
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 10.0,
+        "p95": 32.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 90.0,
+        "survival_limit": 75.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 6.0,
+        "collateral_harm_ceiling": 0.85
+      },
+      "description": "Tracks early-stage seed/Series-A robotics, edge AI, and foundation model startups on Wellfound."
+    },
+    {
+      "id": "ENTERPRISE_REMOTE_TECH_VOLUME",
+      "label": "Verified Remote Tech & Systems Feed Stream",
+      "node_type": "SYNDICATED_FEED",
+      "unit": "verified_openings",
+      "current_value": 2.0,
+      "layer1_homeostatic": {
+        "mu0": 100.0,
+        "sigma0": 20.0,
+        "iqr": 22.0,
+        "tau0_days": 3
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 60.0,
+        "p95": 160.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 20.0,
+        "abs_max": 300.0,
+        "survival_limit": 250.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 25.0,
+        "collateral_harm_ceiling": 0.8
+      },
+      "description": "Syndicated remote technical opportunities with verified application URLs from Remotive, Jobicy, RemoteOK, and Himalayas."
+    }
+  ],
+  "synapses": [
+    {
+      "source": "GREENHOUSE_LEVER_ATS_OPENINGS",
+      "target": "LINKEDIN_TALENT_GRAPH_VOLUME",
+      "edge_type": "ATS_SYNDICATION",
+      "weight": 0.91,
+      "lag_days": 2,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "ASHBY_FRONTIER_AI_RADAR",
+      "target": "LINKEDIN_TALENT_GRAPH_VOLUME",
+      "edge_type": "ATS_SYNDICATION",
+      "weight": 0.88,
+      "lag_days": 3,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "WELLFOUND_SEED_EARLY_STAGE_INDEX",
+      "target": "ENTERPRISE_REMOTE_TECH_VOLUME",
+      "edge_type": "VENTURE_PIPELINE",
+      "weight": 0.76,
+      "lag_days": 7,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_ATS_SYNDICATION_SURGE",
+      "label": "Frontier AI ATS & LinkedIn Cross-Syndication Surge",
+      "signature_z": {
+        "LINKEDIN_TALENT_GRAPH_VOLUME": 1.5,
+        "GREENHOUSE_LEVER_ATS_OPENINGS": 1.8,
+        "ASHBY_FRONTIER_AI_RADAR": 1.7,
+        "ENTERPRISE_REMOTE_TECH_VOLUME": 1.2
+      },
+      "forward_30d": "Rapid influx of systems, TinyML, and formal verification roles across ATS boards.",
+      "forward_90d": "Substantial premium for candidates presenting end-to-end provenance (SPARK + BiasAperture + Fleet).",
+      "actionable_directive": "Prioritize direct ATS portal application links (Greenhouse/Ashby) to bypass candidate queue bloat on LinkedIn."
+    }
+  ]
+}

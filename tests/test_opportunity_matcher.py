@@ -38,6 +38,27 @@ def test_matcher_evaluate_catalog():
         assert e.net_alpha_index_kusd > 0
         assert e.visa_pathway in ("UAE_GOLDEN_VISA", "UN_G4_DIPLOMATIC", "DIPLOMATIC_A2_G1", "EU_DIPLOMATIC_BLUE_CARD", "EMPLOYER_SPONSORED")
         assert len(e.gap_closure_actions) > 0
+        assert isinstance(e.verifiable_sources, list)
+
+
+def test_u14_cartridge_and_verifiable_sources():
+    """Ensure U14 Cortical Cartridge exists and top matches have verifiable net links."""
+    import json
+    u14_path = Path("data/universes/u14_frontier_talent_ats_radar.json")
+    assert u14_path.exists()
+    with open(u14_path, "r", encoding="utf-8") as f:
+        u14 = json.load(f)
+    assert u14["universe_id"] == "u14_frontier_talent_ats_radar"
+    assert len(u14["nodes"]) >= 5
+
+    matcher = SemanticOpportunityMatcher()
+    evaluations = matcher.evaluate_catalog(top_k=3)
+    for e in evaluations:
+        if e.verifiable_sources:
+            types = [s["type"] for s in e.verifiable_sources]
+            assert any(t in ("PRIMARY_PORTAL", "GOVERNMENT_ATS", "LINKEDIN_JOBS", "ATS_API") for t in types)
+            assert all(s["url"].startswith("http") for s in e.verifiable_sources)
+
 
 
 def test_matcher_edge_ai_opportunity_ranking():
@@ -68,3 +89,25 @@ def test_colab_evaluator_dry_run():
     assert report["status"] == "SUCCESS"
     assert report["cost_units_billed"] == 0.0
     assert "Simulated" in report["accelerator"]
+
+
+def test_dense_neural_matrix_artifact():
+    """Verifies that the A100 dense neural evaluation matrix was saved and structured."""
+    import json
+    matrix_path = Path("orchestrator-state/opportunities/dense_neural_matrix.json")
+    if not matrix_path.exists():
+        pytest.skip("dense_neural_matrix.json not yet generated")
+
+    with open(matrix_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    assert data["total_opportunities"] >= 200
+    assert "SentenceTransformer" in data["model_mode"]
+    assert "top_15" in data
+    assert len(data["top_15"]) == 15
+    top = data["top_15"][0]
+    assert "fit_score" in top
+    assert "pillar_breakdown" in top
+    assert len(top["pillar_breakdown"]) == 5
+    assert all(-1.0 <= s <= 1.0 for s in top["pillar_breakdown"].values() if isinstance(s, (int, float)))
+

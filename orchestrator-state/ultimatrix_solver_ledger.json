@@ -329,7 +329,7 @@
     "tennis-tournament",
     "array-elimination"
   ],
-  "last_solve_at": "2026-10-19T12:44:23.200088+00:00",
+  "last_solve_at": "2026-10-20T04:32:57.058686+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:12:31.364384+00:00",
@@ -636,7 +636,8 @@
     "connect-the-graph": "VERIFICATION_FAILED",
     "equal-sums": "VERIFICATION_FAILED",
     "find-edge-list": "VERIFICATION_FAILED",
-    "alice-tree": "VERIFICATION_FAILED"
+    "alice-tree": "VERIFICATION_FAILED",
+    "bad-triplet": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

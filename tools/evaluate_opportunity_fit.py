@@ -107,6 +107,7 @@ class MatchEvaluation:
     pillar_breakdown: Dict[str, float]
     gap_closure_actions: List[str]
     url: str
+    verifiable_sources: List[Dict[str, str]] = field(default_factory=list)
 
 
 class SemanticOpportunityMatcher:
@@ -268,6 +269,7 @@ class SemanticOpportunityMatcher:
                     pillar_breakdown=breakdown,
                     gap_closure_actions=actions,
                     url=opp.get("url", ""),
+                    verifiable_sources=opp.get("verifiable_sources", []),
                 )
             )
 

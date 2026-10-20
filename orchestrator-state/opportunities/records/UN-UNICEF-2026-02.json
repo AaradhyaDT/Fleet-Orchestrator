@@ -22,5 +22,22 @@
     "SDG 3: Good Health and Well-Being",
     "SDG 10: Reduced Inequalities"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803076+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://www.unicef.org/innovation/innovation-fund",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "UN Careers ATS",
+      "url": "https://careers.un.org",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/unicef/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108267+00:00"
 }

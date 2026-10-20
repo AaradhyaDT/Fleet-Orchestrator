@@ -21,5 +21,22 @@
     "SDG 10: Reduced Inequalities",
     "SDG 16: Peace, Justice and Strong Institutions"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803079+00:00"
+  "verifiable_sources": [
+    {
+      "name": "AI for Good Platform",
+      "url": "https://aiforgood.itu.int/",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "ITU Recruitment ATS",
+      "url": "https://www.itu.int/careers/",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/itu/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108271+00:00"
 }

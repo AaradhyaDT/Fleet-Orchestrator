@@ -1,0 +1,35 @@
+{
+  "id": "GH-ANTHROPIC-4461450008",
+  "title": "Account Executive, AI Native (Anthropic)",
+  "organization": "Anthropic",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "New York City, NY; San Francisco, CA | New York City, NY",
+  "compensation_est": "$180,000 - $320,000 USD / yr",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "frontier_ai",
+    "systems",
+    "machine_learning",
+    "ats_verified"
+  ],
+  "url": "https://job-boards.greenhouse.io/anthropic/jobs/4461450008",
+  "deadline": null,
+  "description": "Verified opening on Anthropic Greenhouse ATS board: Account Executive, AI Native.",
+  "sdg_alignment": [
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Anthropic Greenhouse ATS",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/4461450008",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/anthropic/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.048745+00:00"
+}

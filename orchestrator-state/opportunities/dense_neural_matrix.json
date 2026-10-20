@@ -1,0 +1,312 @@
+{
+  "evaluated_at": "2026-10-20T04:18:07.044894+00:00",
+  "host": "4e8b00bc6cbb",
+  "total_opportunities": 224,
+  "model_mode": "SentenceTransformer (all-MiniLM-L6-v2)",
+  "ingestion_latency_sec": 1.4209,
+  "scoring_latency_sec": 34.6846,
+  "exceptional_matches": 0,
+  "high_matches": 0,
+  "top_15": [
+    {
+      "id": "UN-ITU-2026-05",
+      "title": "AI Technical Officer (Algorithmic Fairness & Model Governance)",
+      "organization": "International Telecommunication Union (ITU) - AI for Good",
+      "category": "UN_MULTILATERAL",
+      "location": "Geneva, Switzerland",
+      "fit_score": 0.633,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$125,000 - $165,000 USD / yr (UN Tax-Exempt P-3 / P-4 Scale)",
+      "tax_status": "UN_EXEMPT",
+      "visa_pathway": "UN_G4_DIPLOMATIC",
+      "pillar_breakdown": {
+        "SPARK": 0.177,
+        "BiasAperture": 0.706,
+        "Fleet_Orchestrator": 0.339,
+        "Brainstorm_Formal_Logic": 0.305,
+        "Cyber_Forensics_ZeroTrust": 0.265
+      },
+      "url": "https://aiforgood.itu.int/"
+    },
+    {
+      "id": "EMBASSY-US-2026-03",
+      "title": "Regional Information Management & Cybersecurity Specialist (USAID / US Embassy)",
+      "organization": "U.S. Embassy / USAID Foreign National Program",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Regional Diplomatic Missions",
+      "fit_score": 0.563,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$45,000 - $75,000 USD / yr (FSN-10/11 Step Scale + Allowances)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "pillar_breakdown": {
+        "SPARK": 0.126,
+        "BiasAperture": 0.277,
+        "Fleet_Orchestrator": 0.149,
+        "Brainstorm_Formal_Logic": 0.119,
+        "Cyber_Forensics_ZeroTrust": 0.647
+      },
+      "url": "https://careers.state.gov/"
+    },
+    {
+      "id": "UN-UNICEF-2026-02",
+      "title": "Frontier Technology Fellow - Open Source Assistive Wearables & Edge AI",
+      "organization": "UNICEF Office of Innovation / Innovation Fund",
+      "category": "UN_MULTILATERAL",
+      "location": "Geneva, Switzerland / Remote Hybrid",
+      "fit_score": 0.506,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$110,000 - $145,000 USD / yr (UN Tax-Exempt P-3 Scale)",
+      "tax_status": "UN_EXEMPT",
+      "visa_pathway": "UN_G4_DIPLOMATIC",
+      "pillar_breakdown": {
+        "SPARK": 0.63,
+        "BiasAperture": 0.13,
+        "Fleet_Orchestrator": -0.01,
+        "Brainstorm_Formal_Logic": -0.03,
+        "Cyber_Forensics_ZeroTrust": 0.083
+      },
+      "url": "https://www.unicef.org/innovation/innovation-fund"
+    },
+    {
+      "id": "GCC-TII-2026-04",
+      "title": "Senior AI Systems & Verification Engineer (Falcon LLM Infrastructure)",
+      "organization": "Technology Innovation Institute (TII Abu Dhabi) / ATRC",
+      "category": "SOVEREIGN_GCC",
+      "location": "Abu Dhabi, UAE",
+      "fit_score": 0.431,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$200,000 - $275,000 USD / yr (AED 735,000 - 1,010,000)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.275,
+        "BiasAperture": 0.356,
+        "Fleet_Orchestrator": 0.402,
+        "Brainstorm_Formal_Logic": 0.413,
+        "Cyber_Forensics_ZeroTrust": 0.246
+      },
+      "url": "https://www.tii.ae/careers"
+    },
+    {
+      "id": "EMBASSY-EU-2026-07",
+      "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+      "organization": "Delegation of the European Union / EEAS",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Brussels, Belgium",
+      "fit_score": 0.405,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "EUR 55,000 - 85,000 / yr (Diplomatic Service Grade AL-III)",
+      "tax_status": "UN_EXEMPT",
+      "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+      "pillar_breakdown": {
+        "SPARK": 0.139,
+        "BiasAperture": 0.417,
+        "Fleet_Orchestrator": 0.278,
+        "Brainstorm_Formal_Logic": 0.229,
+        "Cyber_Forensics_ZeroTrust": 0.312
+      },
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en"
+    },
+    {
+      "id": "GCC-MBZUAI-2026-08",
+      "title": "Research Engineer - TinyML & Ultra-Low-Power Neural Systems",
+      "organization": "Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)",
+      "category": "SOVEREIGN_GCC",
+      "location": "Abu Dhabi, UAE",
+      "fit_score": 0.392,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$140,000 - $190,000 USD / yr (Tax-Free + Full Housing)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.466,
+        "BiasAperture": 0.098,
+        "Fleet_Orchestrator": 0.075,
+        "Brainstorm_Formal_Logic": 0.15,
+        "Cyber_Forensics_ZeroTrust": 0.044
+      },
+      "url": "https://mbzuai.ac.ae/careers/"
+    },
+    {
+      "id": "ROK-1137498",
+      "title": "Senior Sales Executive Central Region (SimSpace Corporation)",
+      "organization": "SimSpace Corporation",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "",
+      "fit_score": 0.382,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$140,000 - $250,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.195,
+        "BiasAperture": 0.39,
+        "Fleet_Orchestrator": 0.292,
+        "Brainstorm_Formal_Logic": 0.249,
+        "Cyber_Forensics_ZeroTrust": 0.229
+      },
+      "url": "https://remoteOK.com/remote-jobs/remote-senior-sales-executive-central-region-simspace-corporation-1137498"
+    },
+    {
+      "id": "GCC-DFF-2026-01",
+      "title": "Founding Systems Architect - Frontier Autonomous Robotics & Edge AI",
+      "organization": "Dubai Future Foundation (DFF) / Area 2071",
+      "category": "SOVEREIGN_GCC",
+      "location": "Dubai, UAE",
+      "fit_score": 0.371,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$180,000 - $240,000 USD / yr (AED 660,000 - 880,000)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "UAE_GOLDEN_VISA",
+      "pillar_breakdown": {
+        "SPARK": 0.364,
+        "BiasAperture": 0.304,
+        "Fleet_Orchestrator": 0.343,
+        "Brainstorm_Formal_Logic": 0.261,
+        "Cyber_Forensics_ZeroTrust": 0.035
+      },
+      "url": "https://www.dubaifuture.ae/initiatives/"
+    },
+    {
+      "id": "RSS-513621",
+      "title": "Expel: Senior Detection & Response Engineer",
+      "organization": "WeWorkRemotely - DevOps & Sysadmin",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Remote / Global",
+      "fit_score": 0.366,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$130,000 - $220,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.188,
+        "BiasAperture": 0.212,
+        "Fleet_Orchestrator": 0.101,
+        "Brainstorm_Formal_Logic": 0.074,
+        "Cyber_Forensics_ZeroTrust": 0.407
+      },
+      "url": "https://weworkremotely.com/remote-jobs/expel-senior-detection-response-engineer"
+    },
+    {
+      "id": "EMBASSY-UK-2026-11",
+      "title": "Frontier Technology & Data Systems Lead (British Embassy / FCDO)",
+      "organization": "Foreign, Commonwealth & Development Office (FCDO) / British Embassy",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / London, UK",
+      "fit_score": 0.36,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "GBP 42,000 - 65,000 / yr (Country-Based Staff Band C4)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "pillar_breakdown": {
+        "SPARK": 0.127,
+        "BiasAperture": 0.276,
+        "Fleet_Orchestrator": 0.287,
+        "Brainstorm_Formal_Logic": 0.172,
+        "Cyber_Forensics_ZeroTrust": 0.367
+      },
+      "url": "https://fcdocareers.co.uk/"
+    },
+    {
+      "id": "ROK-1137394",
+      "title": "Sr Solutions Architect (ExtraHop)",
+      "organization": "ExtraHop",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Remote",
+      "fit_score": 0.342,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$140,000 - $250,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.151,
+        "BiasAperture": 0.27,
+        "Fleet_Orchestrator": 0.333,
+        "Brainstorm_Formal_Logic": 0.28,
+        "Cyber_Forensics_ZeroTrust": 0.301
+      },
+      "url": "https://remoteOK.com/remote-jobs/remote-sr-solutions-architect-extrahop-1137394"
+    },
+    {
+      "id": "RSS-701619",
+      "title": "Huntress: Sales Development Representative - Service Provider",
+      "organization": "WeWorkRemotely - DevOps & Sysadmin",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Remote / Global",
+      "fit_score": 0.33,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$130,000 - $220,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.064,
+        "BiasAperture": 0.242,
+        "Fleet_Orchestrator": 0.17,
+        "Brainstorm_Formal_Logic": 0.024,
+        "Cyber_Forensics_ZeroTrust": 0.39
+      },
+      "url": "https://weworkremotely.com/remote-jobs/huntress-sales-development-representative-service-provider"
+    },
+    {
+      "id": "HIM-57298",
+      "title": "Responsable CRM & Autonomisation Zoho  (H/F) - Business Evasion",
+      "organization": "Business Evasion",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Remote / Worldwide",
+      "fit_score": 0.33,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$135,000 - $230,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": -0.006,
+        "BiasAperture": 0.303,
+        "Fleet_Orchestrator": 0.367,
+        "Brainstorm_Formal_Logic": 0.167,
+        "Cyber_Forensics_ZeroTrust": 0.218
+      },
+      "url": ""
+    },
+    {
+      "id": "ROK-1137463",
+      "title": "Federal Business Development Director (Fortanix)",
+      "organization": "Fortanix",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "",
+      "fit_score": 0.318,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$140,000 - $250,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.159,
+        "BiasAperture": 0.208,
+        "Fleet_Orchestrator": 0.228,
+        "Brainstorm_Formal_Logic": 0.093,
+        "Cyber_Forensics_ZeroTrust": 0.367
+      },
+      "url": "https://remoteOK.com/remote-jobs/remote-federal-business-development-director-fortanix-1137463"
+    },
+    {
+      "id": "ROK-1136796",
+      "title": "Staff Software Development Engineer SDM (Delinea)",
+      "organization": "Delinea",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Redwood City",
+      "fit_score": 0.316,
+      "fit_tier": "MODERATE_MATCH",
+      "compensation_est": "$140,000 - $250,000 USD",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "pillar_breakdown": {
+        "SPARK": 0.242,
+        "BiasAperture": 0.259,
+        "Fleet_Orchestrator": 0.314,
+        "Brainstorm_Formal_Logic": 0.184,
+        "Cyber_Forensics_ZeroTrust": 0.209
+      },
+      "url": "https://remoteOK.com/remote-jobs/remote-staff-software-development-engineer-sdm-delinea-1136796"
+    }
+  ]
+}

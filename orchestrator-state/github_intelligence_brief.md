@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-20T03:29:03.215980+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-20T04:21:24.028544+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[vllm-project/router]** [[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan](https://github.com/vllm-project/router/issues/393) (Comments: 0, Salience: 1.0)

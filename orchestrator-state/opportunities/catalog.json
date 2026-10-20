@@ -1,6 +1,6 @@
 {
-  "last_harvested_at": "2026-10-20T03:27:49.687165+00:00",
-  "total_opportunities": 9,
+  "last_harvested_at": "2026-10-20T04:38:49.763642+00:00",
+  "total_opportunities": 27,
   "sources": [
     "Dubai Future Foundation",
     "TII Abu Dhabi",
@@ -34,7 +34,24 @@
         "SDG 9: Industry, Innovation and Infrastructure",
         "SDG 11: Sustainable Cities"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803053+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.dubaifuture.ae/join-our-team/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Dubai Government ATS",
+          "url": "https://dubaicareers.ae",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/dubai-future-foundation/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108232+00:00"
     },
     {
       "id": "GCC-TII-2026-04",
@@ -58,7 +75,24 @@
       "sdg_alignment": [
         "SDG 9: Industry, Innovation and Infrastructure"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803070+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.tii.ae/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "ATRC Ecosystem",
+          "url": "https://www.atrc.ae",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/tiiuae/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108256+00:00"
     },
     {
       "id": "GCC-MBZUAI-2026-08",
@@ -84,7 +118,19 @@
         "SDG 3: Good Health and Well-Being",
         "SDG 9: Industry, Innovation and Infrastructure"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803074+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://mbzuai.ac.ae/careers/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/school/mbzuai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108263+00:00"
     },
     {
       "id": "UN-UNICEF-2026-02",
@@ -110,7 +156,24 @@
         "SDG 3: Good Health and Well-Being",
         "SDG 10: Reduced Inequalities"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803076+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.unicef.org/innovation/innovation-fund",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "UN Careers ATS",
+          "url": "https://careers.un.org",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/unicef/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108267+00:00"
     },
     {
       "id": "UN-ITU-2026-05",
@@ -135,7 +198,24 @@
         "SDG 10: Reduced Inequalities",
         "SDG 16: Peace, Justice and Strong Institutions"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803079+00:00"
+      "verifiable_sources": [
+        {
+          "name": "AI for Good Platform",
+          "url": "https://aiforgood.itu.int/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "ITU Recruitment ATS",
+          "url": "https://www.itu.int/careers/",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/itu/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108271+00:00"
     },
     {
       "id": "UN-UNDP-2026-09",
@@ -159,7 +239,24 @@
         "SDG 9: Industry, Innovation and Infrastructure",
         "SDG 17: Partnerships for the Goals"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803081+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://www.undp.org/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "UN Careers ATS",
+          "url": "https://careers.un.org",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/undp/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108274+00:00"
     },
     {
       "id": "EMBASSY-US-2026-03",
@@ -185,7 +282,24 @@
         "SDG 16: Peace, Justice and Strong Institutions",
         "SDG 9: Industry, Innovation and Infrastructure"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803083+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Embassy Vacancies Portal",
+          "url": "https://np.usembassy.gov/jobs/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "State Dept Electronic Recruitment Application (ERA)",
+          "url": "https://erajobs.state.gov/dos-era/npl/vacancysearch/searchVacancies.hms",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "Vacancy Status Tracker",
+          "url": "https://np.usembassy.gov/current-vacancy-status/",
+          "type": "GOVERNMENT_ATS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108277+00:00"
     },
     {
       "id": "EMBASSY-EU-2026-07",
@@ -210,7 +324,24 @@
         "SDG 10: Reduced Inequalities",
         "SDG 16: Peace, Justice and Strong Institutions"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803084+00:00"
+      "verifiable_sources": [
+        {
+          "name": "EEAS Vacancies Portal",
+          "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "EPSO EU Careers ATS",
+          "url": "https://epso.europa.eu/",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/european-external-action-service/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108282+00:00"
     },
     {
       "id": "EMBASSY-UK-2026-11",
@@ -235,7 +366,677 @@
         "SDG 9: Industry, Innovation and Infrastructure",
         "SDG 17: Partnerships for the Goals"
       ],
-      "ingested_at": "2026-10-20T03:27:48.803086+00:00"
+      "verifiable_sources": [
+        {
+          "name": "Primary Portal",
+          "url": "https://fcdocareers.co.uk/",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Civil Service Jobs ATS",
+          "url": "https://www.civilservicejobs.service.gov.uk/",
+          "type": "GOVERNMENT_ATS"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/foreign-commonwealth-and-development-office/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108285+00:00"
+    },
+    {
+      "id": "FRONTIER-ANTHROPIC-2026-01",
+      "title": "Systems & Alignment Research Engineer (Frontier Multi-Model Safety)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA / London, UK / Remote",
+      "compensation_est": "$220,000 - $350,000 USD / yr + Equity",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "multi_model",
+        "cbf",
+        "token_hygiene",
+        "formal_verification",
+        "distributed_systems"
+      ],
+      "url": "https://www.anthropic.com/careers",
+      "deadline": "2026-12-31",
+      "description": "Develop verifiable safety boundaries, Control Barrier Functions, and low-latency inference architectures for frontier Claude models.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Careers",
+          "url": "https://www.anthropic.com/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Greenhouse ATS Board",
+          "url": "https://job-boards.greenhouse.io/anthropic",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropicresearch/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108289+00:00"
+    },
+    {
+      "id": "FRONTIER-SCALEAI-2026-02",
+      "title": "Senior AI Systems & Evaluation Engineer (Enterprise Foundation Models)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA / New York / Remote",
+      "compensation_est": "$190,000 - $280,000 USD / yr + Equity",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "llm_eval",
+        "bias_mitigation",
+        "eu_ai_act",
+        "autonomous_swarms",
+        "rag_systems"
+      ],
+      "url": "https://scale.com/careers",
+      "deadline": "2026-12-31",
+      "description": "Build rigorous evaluation benchmarks and fairness diagnostics (aligning with BiasAperture and Fleet CBF engines) for foundation models.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Careers",
+          "url": "https://scale.com/careers",
+          "type": "PRIMARY_PORTAL"
+        },
+        {
+          "name": "Greenhouse ATS Board",
+          "url": "https://job-boards.greenhouse.io/scaleai",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:47.108292+00:00"
+    },
+    {
+      "id": "GH-ANTHROPIC-5456619008",
+      "title": "3P Revenue Accounting & Reporting (Anthropic)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA | Seattle, WA",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5456619008",
+      "deadline": null,
+      "description": "Verified opening on Anthropic Greenhouse ATS board: 3P Revenue Accounting & Reporting.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/anthropic/jobs/5456619008",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropic/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.048725+00:00"
+    },
+    {
+      "id": "GH-ANTHROPIC-4461450008",
+      "title": "Account Executive, AI Native (Anthropic)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "New York City, NY; San Francisco, CA | New York City, NY",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/4461450008",
+      "deadline": null,
+      "description": "Verified opening on Anthropic Greenhouse ATS board: Account Executive, AI Native.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/anthropic/jobs/4461450008",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropic/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.048745+00:00"
+    },
+    {
+      "id": "GH-ANTHROPIC-5391376008",
+      "title": "Account Executive - DNB (Anthropic)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Singapore",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5391376008",
+      "deadline": null,
+      "description": "Verified opening on Anthropic Greenhouse ATS board: Account Executive - DNB.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/anthropic/jobs/5391376008",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropic/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.048752+00:00"
+    },
+    {
+      "id": "GH-ANTHROPIC-5391381008",
+      "title": "Account Executive - Public Sector (ASEAN) (Anthropic)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Singapore",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5391381008",
+      "deadline": null,
+      "description": "Verified opening on Anthropic Greenhouse ATS board: Account Executive - Public Sector (ASEAN).",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/anthropic/jobs/5391381008",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropic/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.048756+00:00"
+    },
+    {
+      "id": "GH-ANTHROPIC-5400138008",
+      "title": "Account Executive, Startups (Anthropic)",
+      "organization": "Anthropic",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA | New York City, NY",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5400138008",
+      "deadline": null,
+      "description": "Verified opening on Anthropic Greenhouse ATS board: Account Executive, Startups.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Anthropic Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/anthropic/jobs/5400138008",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/anthropic/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.048759+00:00"
+    },
+    {
+      "id": "GH-SCALEAI-4739727005",
+      "title": "Account Based Marketing Lead (Scale AI)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA; New York, NY",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4739727005",
+      "deadline": null,
+      "description": "Verified opening on Scale AI Greenhouse ATS board: Account Based Marketing Lead.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/scaleai/jobs/4739727005",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.694706+00:00"
+    },
+    {
+      "id": "GH-SCALEAI-4715976005",
+      "title": "AI Advisory Principal (Scale AI)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA; New York, NY",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4715976005",
+      "deadline": null,
+      "description": "Verified opening on Scale AI Greenhouse ATS board: AI Advisory Principal.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/scaleai/jobs/4715976005",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.694726+00:00"
+    },
+    {
+      "id": "GH-SCALEAI-4609736005",
+      "title": "AI Product Manager (Coding/Multimodal) (Scale AI)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "San Francisco, CA",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4609736005",
+      "deadline": null,
+      "description": "Verified opening on Scale AI Greenhouse ATS board: AI Product Manager (Coding/Multimodal).",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/scaleai/jobs/4609736005",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.694731+00:00"
+    },
+    {
+      "id": "GH-SCALEAI-4413992005",
+      "title": "Applied AI Engineer, Global Public Sector (Scale AI)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Doha, Qatar; London, UK",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4413992005",
+      "deadline": null,
+      "description": "Verified opening on Scale AI Greenhouse ATS board: Applied AI Engineer, Global Public Sector.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/scaleai/jobs/4413992005",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.694735+00:00"
+    },
+    {
+      "id": "GH-SCALEAI-4720163005",
+      "title": "Chief of Staff, Public Sector Engineering & Security  (Scale AI)",
+      "organization": "Scale AI",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Washington, DC",
+      "compensation_est": "$180,000 - $320,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "frontier_ai",
+        "systems",
+        "machine_learning",
+        "ats_verified"
+      ],
+      "url": "https://job-boards.greenhouse.io/scaleai/jobs/4720163005",
+      "deadline": null,
+      "description": "Verified opening on Scale AI Greenhouse ATS board: Chief of Staff, Public Sector Engineering & Security .",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Scale AI Greenhouse ATS",
+          "url": "https://job-boards.greenhouse.io/scaleai/jobs/4720163005",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization",
+          "url": "https://www.linkedin.com/company/scaleai/jobs/",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.694740+00:00"
+    },
+    {
+      "id": "REMOTIVE-2091158",
+      "title": "Software Engineer, AI Coding Tasks - Askable",
+      "organization": "Askable",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Worldwide",
+      "compensation_est": "$1000 per task",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "C++",
+        "docker",
+        "git",
+        "go",
+        "java",
+        "python"
+      ],
+      "url": "https://remotive.com/remote-jobs/software-development/software-engineer-ai-coding-tasks-2091158",
+      "deadline": null,
+      "description": "Verified posting for Software Engineer, AI Coding Tasks at Askable via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/software-development/software-engineer-ai-coding-tasks-2091158",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=Askable",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815323+00:00"
+    },
+    {
+      "id": "REMOTIVE-2069746",
+      "title": "Tech Lead Full-Stack Rails Engineer - Mitre Media",
+      "organization": "Mitre Media",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "USA, Canada, USA timezones",
+      "compensation_est": "$170k - $200k",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "api",
+        "CSS",
+        "docker",
+        "elasticsearch",
+        "fullstack",
+        "html"
+      ],
+      "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+      "deadline": null,
+      "description": "Verified posting for Tech Lead Full-Stack Rails Engineer at Mitre Media via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=Mitre%20Media",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815379+00:00"
+    },
+    {
+      "id": "REMOTIVE-1680495",
+      "title": "Remote Office Assistant - Coalition Technologies ",
+      "organization": "Coalition Technologies ",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Worldwide",
+      "compensation_est": "$35,3k- $52k",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "CSS",
+        "excel",
+        "frontend",
+        "git",
+        "html",
+        "illustrator"
+      ],
+      "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+      "deadline": null,
+      "description": "Verified posting for Remote Office Assistant at Coalition Technologies  via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=Coalition%20Technologies%20",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815391+00:00"
+    },
+    {
+      "id": "REMOTIVE-2086540",
+      "title": "Inside Sales Contractor - Credit Wellness, LLC",
+      "organization": "Credit Wellness, LLC",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Worldwide",
+      "compensation_est": "OTE $25k - $35k",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "CRM",
+        "google sheets",
+        "financial services",
+        "Inside Sales"
+      ],
+      "url": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
+      "deadline": null,
+      "description": "Verified posting for Inside Sales Contractor at Credit Wellness, LLC via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=Credit%20Wellness%2C%20LLC",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815399+00:00"
+    },
+    {
+      "id": "REMOTIVE-2091045",
+      "title": "Tier III Service Desk Engineer - Unio Digital",
+      "organization": "Unio Digital",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Worldwide",
+      "compensation_est": "$140,000 - $220,000 USD / yr",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "azure",
+        "cisco",
+        "security",
+        "video",
+        "documentation",
+        "hardware"
+      ],
+      "url": "https://remotive.com/remote-jobs/information-technology/tier-iii-service-desk-engineer-2091045",
+      "deadline": null,
+      "description": "Verified posting for Tier III Service Desk Engineer at Unio Digital via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/information-technology/tier-iii-service-desk-engineer-2091045",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=Unio%20Digital",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815406+00:00"
+    },
+    {
+      "id": "REMOTIVE-1185979",
+      "title": "Freelance Writer - IAPWE",
+      "organization": "IAPWE",
+      "category": "GLOBAL_AI_FRONTIER",
+      "location": "Worldwide",
+      "compensation_est": "$50-$75 /hour",
+      "tax_status": "LOCAL_TAX",
+      "visa_pathway": "EMPLOYER_SPONSORED",
+      "relevance_tags": [
+        "REST"
+      ],
+      "url": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
+      "deadline": null,
+      "description": "Verified posting for Freelance Writer at IAPWE via Remotive.",
+      "sdg_alignment": [
+        "SDG 8: Decent Work",
+        "SDG 9: Innovation"
+      ],
+      "verifiable_sources": [
+        {
+          "name": "Remotive Verified Posting",
+          "url": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
+          "type": "ATS_API"
+        },
+        {
+          "name": "LinkedIn Organization Search",
+          "url": "https://www.linkedin.com/search/results/companies/?keywords=IAPWE",
+          "type": "LINKEDIN_JOBS"
+        }
+      ],
+      "ingested_at": "2026-10-20T04:38:48.815411+00:00"
     }
   ]
 }

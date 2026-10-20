@@ -21,5 +21,22 @@
     "SDG 9: Industry, Innovation and Infrastructure",
     "SDG 11: Sustainable Cities"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803053+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://www.dubaifuture.ae/join-our-team/",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "Dubai Government ATS",
+      "url": "https://dubaicareers.ae",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/dubai-future-foundation/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108232+00:00"
 }

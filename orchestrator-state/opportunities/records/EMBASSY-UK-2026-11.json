@@ -21,5 +21,22 @@
     "SDG 9: Industry, Innovation and Infrastructure",
     "SDG 17: Partnerships for the Goals"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803086+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://fcdocareers.co.uk/",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "Civil Service Jobs ATS",
+      "url": "https://www.civilservicejobs.service.gov.uk/",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/foreign-commonwealth-and-development-office/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108285+00:00"
 }

@@ -1,0 +1,33 @@
+{
+  "id": "REMOTIVE-1185979",
+  "title": "Freelance Writer - IAPWE",
+  "organization": "IAPWE",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "Worldwide",
+  "compensation_est": "$50-$75 /hour",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "REST"
+  ],
+  "url": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
+  "deadline": null,
+  "description": "Verified posting for Freelance Writer at IAPWE via Remotive.",
+  "sdg_alignment": [
+    "SDG 8: Decent Work",
+    "SDG 9: Innovation"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Remotive Verified Posting",
+      "url": "https://remotive.com/remote-jobs/writing/freelance-writer-1185979",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization Search",
+      "url": "https://www.linkedin.com/search/results/companies/?keywords=IAPWE",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.815411+00:00"
+}

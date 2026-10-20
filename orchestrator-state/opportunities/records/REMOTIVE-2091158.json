@@ -1,0 +1,38 @@
+{
+  "id": "REMOTIVE-2091158",
+  "title": "Software Engineer, AI Coding Tasks - Askable",
+  "organization": "Askable",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "Worldwide",
+  "compensation_est": "$1000 per task",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "C++",
+    "docker",
+    "git",
+    "go",
+    "java",
+    "python"
+  ],
+  "url": "https://remotive.com/remote-jobs/software-development/software-engineer-ai-coding-tasks-2091158",
+  "deadline": null,
+  "description": "Verified posting for Software Engineer, AI Coding Tasks at Askable via Remotive.",
+  "sdg_alignment": [
+    "SDG 8: Decent Work",
+    "SDG 9: Innovation"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Remotive Verified Posting",
+      "url": "https://remotive.com/remote-jobs/software-development/software-engineer-ai-coding-tasks-2091158",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization Search",
+      "url": "https://www.linkedin.com/search/results/companies/?keywords=Askable",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.815323+00:00"
+}

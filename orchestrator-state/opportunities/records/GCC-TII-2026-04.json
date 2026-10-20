@@ -20,5 +20,22 @@
   "sdg_alignment": [
     "SDG 9: Industry, Innovation and Infrastructure"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803070+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://www.tii.ae/careers",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "ATRC Ecosystem",
+      "url": "https://www.atrc.ae",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/tiiuae/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108256+00:00"
 }

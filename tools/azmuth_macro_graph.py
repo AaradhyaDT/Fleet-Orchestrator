@@ -56,6 +56,11 @@ CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
     {"source": "u13_un_multilateral_global_radar::UN_P_LEVEL_ROSTER_QUALIFICATION", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.88, "lag_days": 30, "edge_type": "MULTILATERAL_INSTITUTIONAL_ROSTER"},
     {"source": "u7_cyber_resilience_dfir::SECRET_LEAK_PROBABILITY_SCORE", "target": "u13_un_multilateral_global_radar::DIPLOMATIC_SECURE_CYBER_READINESS", "weight": -0.91, "lag_days": 1, "edge_type": "SECURE_FACILITY_ACCREDITATION"},
     {"source": "u13_un_multilateral_global_radar::EMBASSY_DIPLOMATIC_TECH_ROSTER", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.86, "lag_days": 21, "edge_type": "BILATERAL_CAREER_CORRIDOR"},
+    # U14 (Frontier Talent, ATS & Professional Social Networks) -> U3, U12, U0
+    {"source": "u14_frontier_talent_ats_radar::ASHBY_FRONTIER_AI_RADAR", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.93, "lag_days": 7, "edge_type": "FRONTIER_LAB_APPLICATION_CORRIDOR"},
+    {"source": "u14_frontier_talent_ats_radar::GREENHOUSE_LEVER_ATS_OPENINGS", "target": "u3_career_opportunity_alpha::OPEN_SOURCE_MAINTAINER_PIPELINE", "weight": 0.87, "lag_days": 10, "edge_type": "ATS_OSS_MAINTAINER_ARBITRAGE"},
+    {"source": "u14_frontier_talent_ats_radar::LINKEDIN_TALENT_GRAPH_VOLUME", "target": "u12_sovereign_gcc_dubai_radar::FOUNDING_ML_SYSTEMS_MATCH_SCORE", "weight": 0.85, "lag_days": 7, "edge_type": "SOCIAL_GRAPH_OPPORTUNITY_FEED"},
+    {"source": "u14_frontier_talent_ats_radar::ENTERPRISE_REMOTE_TECH_VOLUME", "target": "u0_ecosystem_mesh::Fleet-Orchestrator", "weight": 0.81, "lag_days": 5, "edge_type": "REMOTE_INFRASTRUCTURE_DEMAND"},
 ]
 
 

@@ -1,0 +1,38 @@
+{
+  "id": "REMOTIVE-1680495",
+  "title": "Remote Office Assistant - Coalition Technologies ",
+  "organization": "Coalition Technologies ",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "Worldwide",
+  "compensation_est": "$35,3k- $52k",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "CSS",
+    "excel",
+    "frontend",
+    "git",
+    "html",
+    "illustrator"
+  ],
+  "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+  "deadline": null,
+  "description": "Verified posting for Remote Office Assistant at Coalition Technologies  via Remotive.",
+  "sdg_alignment": [
+    "SDG 8: Decent Work",
+    "SDG 9: Innovation"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Remotive Verified Posting",
+      "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization Search",
+      "url": "https://www.linkedin.com/search/results/companies/?keywords=Coalition%20Technologies%20",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.815391+00:00"
+}

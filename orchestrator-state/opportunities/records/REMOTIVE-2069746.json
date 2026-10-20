@@ -1,0 +1,38 @@
+{
+  "id": "REMOTIVE-2069746",
+  "title": "Tech Lead Full-Stack Rails Engineer - Mitre Media",
+  "organization": "Mitre Media",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "USA, Canada, USA timezones",
+  "compensation_est": "$170k - $200k",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "api",
+    "CSS",
+    "docker",
+    "elasticsearch",
+    "fullstack",
+    "html"
+  ],
+  "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+  "deadline": null,
+  "description": "Verified posting for Tech Lead Full-Stack Rails Engineer at Mitre Media via Remotive.",
+  "sdg_alignment": [
+    "SDG 8: Decent Work",
+    "SDG 9: Innovation"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Remotive Verified Posting",
+      "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization Search",
+      "url": "https://www.linkedin.com/search/results/companies/?keywords=Mitre%20Media",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.815379+00:00"
+}

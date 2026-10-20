@@ -1,0 +1,41 @@
+{
+  "id": "FRONTIER-SCALEAI-2026-02",
+  "title": "Senior AI Systems & Evaluation Engineer (Enterprise Foundation Models)",
+  "organization": "Scale AI",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "San Francisco, CA / New York / Remote",
+  "compensation_est": "$190,000 - $280,000 USD / yr + Equity",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "llm_eval",
+    "bias_mitigation",
+    "eu_ai_act",
+    "autonomous_swarms",
+    "rag_systems"
+  ],
+  "url": "https://scale.com/careers",
+  "deadline": "2026-12-31",
+  "description": "Build rigorous evaluation benchmarks and fairness diagnostics (aligning with BiasAperture and Fleet CBF engines) for foundation models.",
+  "sdg_alignment": [
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Scale AI Careers",
+      "url": "https://scale.com/careers",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "Greenhouse ATS Board",
+      "url": "https://job-boards.greenhouse.io/scaleai",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/scaleai/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108292+00:00"
+}

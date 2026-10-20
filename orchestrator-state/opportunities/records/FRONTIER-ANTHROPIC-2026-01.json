@@ -1,0 +1,41 @@
+{
+  "id": "FRONTIER-ANTHROPIC-2026-01",
+  "title": "Systems & Alignment Research Engineer (Frontier Multi-Model Safety)",
+  "organization": "Anthropic",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "San Francisco, CA / London, UK / Remote",
+  "compensation_est": "$220,000 - $350,000 USD / yr + Equity",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "multi_model",
+    "cbf",
+    "token_hygiene",
+    "formal_verification",
+    "distributed_systems"
+  ],
+  "url": "https://www.anthropic.com/careers",
+  "deadline": "2026-12-31",
+  "description": "Develop verifiable safety boundaries, Control Barrier Functions, and low-latency inference architectures for frontier Claude models.",
+  "sdg_alignment": [
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Anthropic Careers",
+      "url": "https://www.anthropic.com/careers",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "Greenhouse ATS Board",
+      "url": "https://job-boards.greenhouse.io/anthropic",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/anthropicresearch/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108289+00:00"
+}

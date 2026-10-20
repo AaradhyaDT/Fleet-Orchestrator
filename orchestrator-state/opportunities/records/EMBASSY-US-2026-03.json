@@ -22,5 +22,22 @@
     "SDG 16: Peace, Justice and Strong Institutions",
     "SDG 9: Industry, Innovation and Infrastructure"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803083+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Embassy Vacancies Portal",
+      "url": "https://np.usembassy.gov/jobs/",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "State Dept Electronic Recruitment Application (ERA)",
+      "url": "https://erajobs.state.gov/dos-era/npl/vacancysearch/searchVacancies.hms",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "Vacancy Status Tracker",
+      "url": "https://np.usembassy.gov/current-vacancy-status/",
+      "type": "GOVERNMENT_ATS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108277+00:00"
 }

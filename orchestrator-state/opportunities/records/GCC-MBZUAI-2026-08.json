@@ -22,5 +22,17 @@
     "SDG 3: Good Health and Well-Being",
     "SDG 9: Industry, Innovation and Infrastructure"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803074+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://mbzuai.ac.ae/careers/",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/school/mbzuai/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108263+00:00"
 }

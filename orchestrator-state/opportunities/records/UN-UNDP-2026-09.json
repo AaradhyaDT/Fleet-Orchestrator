@@ -20,5 +20,22 @@
     "SDG 9: Industry, Innovation and Infrastructure",
     "SDG 17: Partnerships for the Goals"
   ],
-  "ingested_at": "2026-10-20T03:27:48.803081+00:00"
+  "verifiable_sources": [
+    {
+      "name": "Primary Portal",
+      "url": "https://www.undp.org/careers",
+      "type": "PRIMARY_PORTAL"
+    },
+    {
+      "name": "UN Careers ATS",
+      "url": "https://careers.un.org",
+      "type": "GOVERNMENT_ATS"
+    },
+    {
+      "name": "LinkedIn Organization",
+      "url": "https://www.linkedin.com/company/undp/jobs/",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:47.108274+00:00"
 }

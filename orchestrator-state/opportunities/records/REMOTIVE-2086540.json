@@ -1,0 +1,36 @@
+{
+  "id": "REMOTIVE-2086540",
+  "title": "Inside Sales Contractor - Credit Wellness, LLC",
+  "organization": "Credit Wellness, LLC",
+  "category": "GLOBAL_AI_FRONTIER",
+  "location": "Worldwide",
+  "compensation_est": "OTE $25k - $35k",
+  "tax_status": "LOCAL_TAX",
+  "visa_pathway": "EMPLOYER_SPONSORED",
+  "relevance_tags": [
+    "CRM",
+    "google sheets",
+    "financial services",
+    "Inside Sales"
+  ],
+  "url": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
+  "deadline": null,
+  "description": "Verified posting for Inside Sales Contractor at Credit Wellness, LLC via Remotive.",
+  "sdg_alignment": [
+    "SDG 8: Decent Work",
+    "SDG 9: Innovation"
+  ],
+  "verifiable_sources": [
+    {
+      "name": "Remotive Verified Posting",
+      "url": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
+      "type": "ATS_API"
+    },
+    {
+      "name": "LinkedIn Organization Search",
+      "url": "https://www.linkedin.com/search/results/companies/?keywords=Credit%20Wellness%2C%20LLC",
+      "type": "LINKEDIN_JOBS"
+    }
+  ],
+  "ingested_at": "2026-10-20T04:38:48.815399+00:00"
+}
