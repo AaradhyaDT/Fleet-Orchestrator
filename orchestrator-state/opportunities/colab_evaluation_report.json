@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-10-20T03:10:47.483141+00:00",
+  "accelerator": "NVIDIA A100-SXM4-80GB (Simulated)",
+  "mode": "DRY_RUN_SIMULATION",
+  "batch_opportunities_evaluated": 6,
+  "tensor_compute_latency_sec": 0.0412,
+  "cost_units_billed": 0.0,
+  "status": "SUCCESS",
+  "summary": "Simulated 6-opportunity batch tensor cross-encoding in 41.2ms (0.00 CU billed)."
+}

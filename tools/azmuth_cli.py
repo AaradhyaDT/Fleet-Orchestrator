@@ -165,6 +165,33 @@ def handle_harvest(args: argparse.Namespace) -> int:
     return 0
 
 
+def handle_match(args: argparse.Namespace) -> int:
+    """Executes semantic opportunity matching against portfolio pillars."""
+    from tools.evaluate_opportunity_fit import SemanticOpportunityMatcher, MATCH_REPORT_PATH
+
+    matcher = SemanticOpportunityMatcher()
+    evaluations = matcher.evaluate_catalog(top_k=args.top)
+
+    print("=" * 80)
+    print("  AZMUTH SEMANTIC OPPORTUNITY FIT & ALPHA EVALUATOR")
+    print("=" * 80)
+    print(f"- Total Evaluated: {len(evaluations)}")
+    print(f"- Report Cached:   {MATCH_REPORT_PATH}")
+    print("=" * 80)
+
+    for idx, e in enumerate(evaluations, 1):
+        print(f"\n[{idx}] {e.title}")
+        print(f"    Organization:    {e.organization} ({e.location})")
+        print(f"    Fit Tier:        {e.fit_tier} (Score: {e.overall_fit_ratio * 100:.1f}%)")
+        print(f"    Compensation:    ${e.net_alpha_index_kusd:.1f}k/yr Net ({e.tax_status})")
+        print(f"    Visa Pathway:    {e.visa_pathway} (Feasibility: {e.visa_feasibility_score * 100:.1f}%)")
+        print("    Pillar Overlap:  " + ", ".join(f"{k}: {v*100:.0f}%" for k, v in e.pillar_breakdown.items()))
+        print("    Actionable Gaps: " + e.gap_closure_actions[0])
+        print(f"    Target URL:      {e.url}")
+    print("\n" + "=" * 80)
+    return 0
+
+
 def main() -> int:
     # If no arguments provided in CLI/PowerShell, default directly to opening GUI
     if len(sys.argv) == 1:
@@ -206,6 +233,11 @@ def main() -> int:
     harvest_parser.add_argument("--source", type=str, choices=["all", "gcc", "un"], default="all", help="Target sector")
     harvest_parser.add_argument("--limit", type=int, default=None, help="Max records to index")
 
+    # Match
+    match_parser = subparsers.add_parser("match", help="Match harvested opportunities against your portfolio")
+    match_parser.add_argument("--top", type=int, default=5, help="Number of top matches to display")
+    match_parser.add_argument("--tier", type=str, choices=["all", "exceptional", "high"], default="all", help="Filter by tier")
+
     args = parser.parse_args()
 
     if args.subcommand == "gui":
@@ -224,6 +256,8 @@ def main() -> int:
         return handle_trigger(args)
     elif args.subcommand == "harvest":
         return handle_harvest(args)
+    elif args.subcommand == "match":
+        return handle_match(args)
     else:
         return launch_gui()
 

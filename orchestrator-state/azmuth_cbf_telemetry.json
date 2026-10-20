@@ -1,10 +1,23 @@
 {
-  "status": "SAFE",
+  "status": "NOCICEPTIVE_BREACH",
   "total_nodes_evaluated": 91,
-  "breached_nodes_count": 0,
-  "system_invariance_satisfied": true,
-  "min_barrier_h_value": 4.449,
-  "active_mitigation_actions": [],
+  "breached_nodes_count": 1,
+  "system_invariance_satisfied": false,
+  "min_barrier_h_value": -2.1109,
+  "active_mitigation_actions": [
+    {
+      "action_type": "BOOST_ALLOSTATIC_DRIVE",
+      "trigger_node": "UN_ITU_AI_FOR_GOOD_PIPELINE",
+      "universe_id": "u13_un_multilateral_global_radar",
+      "severity": "HIGH",
+      "description": "Safety barrier breach h(x)=-2.1109 on UN_ITU_AI_FOR_GOOD_PIPELINE (Z=-3.3333)",
+      "remedial_parameters": {
+        "z_score": -3.3333,
+        "h_value": -2.1109,
+        "alpha_gain": 1.0
+      }
+    }
+  ],
   "evaluations_sample": [
     {
       "node_id": "Fleet-Orchestrator",
