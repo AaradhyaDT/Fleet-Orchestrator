@@ -1949,9 +1949,9 @@ class AzmuthCommandCenterGUI:
 
         # At overview scale keep the identifier readable; full details remain in
         # the inspector and return on zoom, without boxes covering their neighbors.
-        if self.cam_zoom < 0.5:
+        if self.cam_zoom < 0.75:
             badge = None
-        if self.cam_zoom < 0.35:
+        if self.cam_zoom < 0.65:
             title = title[:18] + ("…" if len(title) > 18 else "")
             subtitle = ""
 

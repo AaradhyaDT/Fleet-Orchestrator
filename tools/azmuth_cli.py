@@ -236,7 +236,9 @@ def handle_dump(args) -> int:
 
     vault_path = STATE_DIR / "cognitive_vault.jsonl"
     STATE_DIR.mkdir(parents=True, exist_ok=True)
+    vault_id = f"VLT-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
     record = {
+        "vault_id": vault_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "local_time": datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"),
         "thought": thought
@@ -266,7 +268,7 @@ def handle_dump(args) -> int:
     worker_script = ROOT / "tools" / "incubator_gemini_worker.py"
     if worker_script.exists():
         try:
-            worker_cmd = [sys.executable, str(worker_script), thought]
+            worker_cmd = [sys.executable, str(worker_script), thought, "--vault-id", vault_id]
             if getattr(args, "verbose", False):
                 print("\n[*] [--verbose active] Streaming full Gemini Fleet RFC synthesis directly to terminal...")
                 res = subprocess.run(worker_cmd, timeout=40)
@@ -303,10 +305,31 @@ def handle_resume(args) -> int:
     ideas = []
     if vault_path.exists():
         try:
+            raw_entries = []
             with open(vault_path, "r", encoding="utf-8") as f:
                 for line in f:
                     if line.strip():
-                        ideas.append(json.loads(line))
+                        raw_entries.append(json.loads(line))
+
+            # Deduplicate & unify entries: if an entry has issue_url/rfc_file, it enriches/supersedes the raw stub
+            merged = {}
+            for e in raw_entries:
+                key = (e.get("thought") or e.get("raw_thought", "")).strip().lower()
+                if not key:
+                    continue
+                if key not in merged:
+                    merged[key] = dict(e)
+                else:
+                    # Enrich existing with decoded fields
+                    if e.get("rfc_file"):
+                        merged[key]["rfc_file"] = e["rfc_file"]
+                    if e.get("issue_url"):
+                        merged[key]["issue_url"] = e["issue_url"]
+                    if e.get("vault_id") and not merged[key].get("vault_id"):
+                        merged[key]["vault_id"] = e["vault_id"]
+                    if e.get("thought") and not merged[key].get("thought"):
+                        merged[key]["thought"] = e["thought"]
+            ideas = list(merged.values())
         except Exception:
             pass
 

@@ -130,7 +130,7 @@ def dispatch_github_issue(title: str, body_path: Path) -> str | None:
     return None
 
 
-async def main_async(raw_thought: str, create_issue: bool = True) -> int:
+async def main_async(raw_thought: str, create_issue: bool = True, vault_id: str | None = None) -> int:
     timestamp_slug = datetime.now().strftime("%Y%m%d_%H%M%S")
     INCUBATOR_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -159,16 +159,47 @@ async def main_async(raw_thought: str, create_issue: bool = True) -> int:
     if create_issue:
         issue_url = dispatch_github_issue(clean_title, rfc_file)
 
-    # 4. Update cognitive_vault.jsonl entry
-    vault_record = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "local_time": datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"),
-        "raw_thought": raw_thought,
-        "rfc_file": str(rfc_file),
-        "issue_url": issue_url
-    }
-    with open(VAULT_PATH, "a", encoding="utf-8") as f:
-        f.write(json.dumps(vault_record) + "\n")
+    # 4. Update cognitive_vault.jsonl in-place (Unify thought and RFC into single entity)
+    updated_records = []
+    matched = False
+    clean_raw = raw_thought.strip().lower()
+
+    if VAULT_PATH.exists():
+        try:
+            with open(VAULT_PATH, "r", encoding="utf-8") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    rec = json.loads(line)
+                    # Match by vault_id or matching thought text
+                    rec_id = rec.get("vault_id")
+                    rec_thought = (rec.get("thought") or rec.get("raw_thought", "")).strip().lower()
+
+                    if (vault_id and rec_id == vault_id) or (not matched and rec_thought == clean_raw):
+                        rec["rfc_file"] = str(rfc_file)
+                        rec["issue_url"] = issue_url
+                        if "thought" not in rec:
+                            rec["thought"] = raw_thought
+                        if vault_id and "vault_id" not in rec:
+                            rec["vault_id"] = vault_id
+                        matched = True
+                    updated_records.append(rec)
+        except Exception as e:
+            logger.warning("Error reading cognitive vault during in-place update: %s", e)
+
+    if not matched:
+        updated_records.append({
+            "vault_id": vault_id or f"VLT-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "local_time": datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"),
+            "thought": raw_thought,
+            "rfc_file": str(rfc_file),
+            "issue_url": issue_url
+        })
+
+    with open(VAULT_PATH, "w", encoding="utf-8") as f:
+        for rec in updated_records:
+            f.write(json.dumps(rec) + "\n")
 
     # 5. Formatted Executive Synthesis Display for CLI completion
     print("\n" + "=" * 80)
@@ -191,13 +222,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Autonomous Incubator Worker via Gemini Fleet")
     parser.add_argument("thought", type=str, nargs="+", help="The raw thought to process")
     parser.add_argument("--no-issue", action="store_true", help="Skip remote GitHub issue dispatch")
+    parser.add_argument("--vault-id", type=str, default=None, help="Associated vault ID to update in-place")
     args = parser.parse_args()
 
     raw_thought = " ".join(args.thought).strip()
     if not raw_thought:
         sys.exit(1)
 
-    sys.exit(asyncio.run(main_async(raw_thought, create_issue=not args.no_issue)))
+    sys.exit(asyncio.run(main_async(raw_thought, create_issue=not args.no_issue, vault_id=args.vault_id)))
 
 
 if __name__ == "__main__":

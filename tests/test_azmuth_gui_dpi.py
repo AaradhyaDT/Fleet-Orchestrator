@@ -171,7 +171,15 @@ try:
                     app.canvas.event_generate('<ButtonPress-1>',x=round(x*app.system_dpi),y=round(y*app.system_dpi))
                     app.canvas.event_generate('<ButtonRelease-1>',x=round(x*app.system_dpi),y=round(y*app.system_dpi))
                     assert app.selected_node_id==identifier
-                assert float(app.bar.cget('highlightthickness'))==padding
+                # Native borders round to whole pixels (notably at 225%).
+                assert abs(float(app.bar.cget('highlightthickness'))-padding)<=0.5
+                app._on_display_change(info)
+                app.switch_view('ingestion')
+                app._fit_active_view()
+                import itertools
+                for (name,a),(other,b) in itertools.combinations(app.canvas_nodes.items(),2):
+                    a,b=a['bbox'],b['bbox']
+                    assert min(a[2],b[2])-max(a[0],b[0])<=4 or min(a[3],b[3])-max(a[1],b[1])<=4,(name,other,a,b)
                 app._cancel_active_job()
                 root.after(100,finish)
             except BaseException:
