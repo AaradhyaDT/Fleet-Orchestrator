@@ -271,7 +271,7 @@ def handle_dump(args) -> int:
             worker_cmd = [sys.executable, str(worker_script), thought, "--vault-id", vault_id]
             if getattr(args, "verbose", False):
                 print("\n[*] [--verbose active] Streaming full Gemini Fleet RFC synthesis directly to terminal...")
-                res = subprocess.run(worker_cmd, timeout=40)
+                res = subprocess.run(worker_cmd, timeout=90)
             else:
                 flags = 0
                 if sys.platform == "win32":
