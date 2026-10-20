@@ -1,30 +1,30 @@
 {
-  "timestamp": "2026-10-19T12:52:47Z",
-  "timestamp_epoch": 1792393667.1595314,
+  "timestamp": "2026-10-20T07:46:05Z",
+  "timestamp_epoch": 1792461665.033774,
   "readings": {
     "NVDA": {
-      "current_value": -6.61,
-      "z_score": -1.061,
-      "abs_extreme_pct": 36.82,
+      "current_value": -4.08,
+      "z_score": -0.808,
+      "abs_extreme_pct": 38.57,
       "habituated": false
     },
     "TSM": {
-      "current_value": -8.98,
-      "z_score": -1.8431,
-      "abs_extreme_pct": 31.02,
+      "current_value": -5.43,
+      "z_score": -1.2969,
+      "abs_extreme_pct": 34.57,
       "habituated": false
     }
   },
   "events": [
     {
-      "timestamp": "2026-10-19T12:52:47Z",
+      "timestamp": "2026-10-20T07:46:05Z",
       "keyword": "HBM capacity",
       "affected_node": "SK_HYNIX",
       "sentiment_shock": 0.85,
       "headline": "HBM3e and HBM4 allocations booked through 2026 across major hyperscalers"
     },
     {
-      "timestamp": "2026-10-19T12:52:47Z",
+      "timestamp": "2026-10-20T07:46:05Z",
       "keyword": "lead time",
       "affected_node": "ASML",
       "sentiment_shock": 0.6,

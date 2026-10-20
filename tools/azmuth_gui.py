@@ -1,29 +1,8 @@
 #!/usr/bin/env python3
-"""tools/azmuth_gui.py
----------------------
-Azmuth Autonomous Neuromorphic Command Center & Phylogenetic Gene Explorer.
+"""Azmuth's four-view Tkinter operations workspace.
 
-High-agency desktop command center with:
-1. Dynamic Resolution & DPI Auto-Scaling with Interactive Zoom:
-   - Ctrl + = / Ctrl + + : Zoom In
-   - Ctrl + - / Ctrl + _ : Zoom Out
-   - Ctrl + 0            : Reset Zoom to Default (100%)
-   - Ctrl + MouseWheel   : Smooth Canvas Zooming
-2. Dynamic Dark / Light Theme Switching (Ctrl + T or Header Toggle):
-   - Seamlessly switches full window palette, canvas grid, code inspector, and Windows 11 titlebar.
-3. Unified Mission Control Layout:
-   - Top Telemetry Bar: Live Gear Switcher, 60FPS RAM Oscilloscope Sparkline with Circuit Breaker line,
-     30-PAT Ring indicator, live Thalamic |Z|-score threshold tuner, zoom controls, and theme toggle.
-4. Switchable 60FPS Graph & Flow Canvases:
-   - [1] End-to-End Pipeline & PAT Flow: Sensory streams -> 30-PAT ring -> Thalamic sieve -> Cortex -> Gene Sequencer -> SSOT.
-   - [2] U0-U5 Neuromorphic Causal DAG: Swappable cortical cartridges, homeostatic node colors, axonal synapses,
-         Egocentric First-Person View (FPV), and Multi-Hop Shock propagation (+2.0σ).
-   - [3] Phylogenetic Gene Evolution Tree & Allele Arena: 349+ genes across Tiers 0-5, branching Wild-Type ->
-         Mutator Edge (+fast_io, +pragma_tuning, +static_memory, +bitwise_unrolling, +python_stdlib_accel) ->
-         Mutated Daughter Allele -> Arena PRIMARY Champion, with live "Mutate & Race Now" execution.
-5. Interactive Capability & Code Diff Inspector:
-   - Big-O Time/Space bounds, Environmental Triggers, Mathematical Invariants, Empirical Fitness comparison bars,
-     and syntax-highlighted code template viewer.
+Managed jobs report explicit outcomes and captured diagnostics. Ledger-backed
+views refresh every two seconds; diagrams support fitting, zooming and panning.
 """
 
 from __future__ import annotations
@@ -34,6 +13,9 @@ import json
 import logging
 import math
 import os
+import queue
+import uuid
+from copy import deepcopy
 from pathlib import Path
 import re
 import subprocess
@@ -42,9 +24,13 @@ import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+
 # Anchor repository root
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+
+from tools.azmuth_gui_jobs import GUIJob, JobCancelled, run_managed_process, terminate_owned_process
+from tools.azmuth_gui_dpi import DisplayInfo, DpiController, FontRegistry, LayoutScaler, LogicalCanvas, create_gui_root
 
 # Protect stdio under pythonw.exe and hide console if started via python.exe
 if sys.platform == "win32":
@@ -60,7 +46,6 @@ if sys.platform == "win32":
         pass
 
 import tkinter as tk
-from tkinter import font as tkFont
 from tkinter import ttk
 
 from tools.azmuth_daemon import (
@@ -84,7 +69,7 @@ from tools.azmuth_macro_graph import (
     PreContactAvoidanceGate,
     SpikingMacroGraph,
 )
-from tools.ultimatrix_mutator import CODON_STREAM, MUTATION_LEDGER, load_mutation_ledger, mutate_gene_file
+from tools.ultimatrix_mutator import CODON_STREAM, MUTATION_LEDGER, mutate_gene_file
 from tools.ultimatrix_splicer import load_all_genes
 
 logging.basicConfig(
@@ -111,6 +96,7 @@ class GUITheme:
 
     def __init__(self, is_light: bool = False):
         self.is_light = is_light
+        self.on_accent = "#ffffff" if is_light else "#0d0f14"
         if is_light:
             self.bg_void = "#f8fafc"
             self.bg_main = "#f1f5f9"
@@ -122,20 +108,20 @@ class GUITheme:
             self.border_active = "#cbd5e1"
             self.text_primary = "#0f172a"
             self.text_secondary = "#334155"
-            self.text_muted = "#64748b"
+            self.text_muted = "#526071"
             self.grid_line = "#e2e8f0"
             self.code_bg = "#f1f5f9"
             self.code_fg = "#0f172a"
             self.code_diff_bg = "#dcfce7"
             self.code_diff_fg = "#15803d"
-            self.accent_cyan = "#0284c7"
-            self.accent_blue = "#2563eb"
-            self.accent_emerald = "#059669"
-            self.accent_amber = "#d97706"
-            self.accent_crimson = "#dc2626"
-            self.accent_indigo = "#4f46e5"
+            self.accent_cyan = "#167f94"
+            self.accent_blue = "#405db8"
+            self.accent_emerald = "#287c5c"
+            self.accent_amber = "#95611d"
+            self.accent_crimson = "#b43c42"
+            self.accent_indigo = "#6554ad"
             self.accent_purple = self.accent_indigo
-            self.accent_gold = "#b45309"
+            self.accent_gold = "#95611d"
         else:
             self.bg_void = "#090b0e"
             self.bg_main = "#0d0f14"
@@ -147,23 +133,23 @@ class GUITheme:
             self.border_active = "#384152"
             self.text_primary = "#f3f4f6"
             self.text_secondary = "#cbd5e1"
-            self.text_muted = "#64748b"
+            self.text_muted = "#a1acbd"
             self.grid_line = "#0e1218"
             self.code_bg = "#0b0e14"
             self.code_fg = "#e2e8f0"
             self.code_diff_bg = "#062e1e"
             self.code_diff_fg = "#4ade80"
-            self.accent_cyan = "#06b6d4"
-            self.accent_blue = "#3b82f6"
-            self.accent_emerald = "#10b981"
-            self.accent_amber = "#f59e0b"
-            self.accent_crimson = "#ef4444"
-            self.accent_indigo = "#6366f1"
+            self.accent_cyan = "#67b8c7"
+            self.accent_blue = "#8297e5"
+            self.accent_emerald = "#64bd98"
+            self.accent_amber = "#dfb16d"
+            self.accent_crimson = "#e37f84"
+            self.accent_indigo = "#a99bdd"
             self.accent_purple = self.accent_indigo
-            self.accent_gold = "#eab308"
+            self.accent_gold = "#dfb16d"
 
         self.tier_colors = {
-            0: "#f43f5e",  # T0 Hardware Substrate
+            0: self.accent_crimson,  # T0 Hardware Substrate
             1: self.accent_amber,  # T1 Language Runtime
             2: self.accent_cyan,   # T2 Primitives
             3: self.accent_indigo, # T3 Cubic Breakers
@@ -233,23 +219,6 @@ def set_window_dark_mode(root: tk.Tk, is_dark: bool) -> None:
             )
     except Exception:
         pass
-
-
-def enable_win32_dpi_and_dark_bar(root: Optional[tk.Tk] = None, is_dark: bool = True) -> None:
-    """Enables Windows 11/10 Per-Monitor High-DPI awareness and dark title bar."""
-    if sys.platform != "win32":
-        return
-    attach_default_desktop()
-    try:
-        ctypes.windll.user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4))
-    except Exception:
-        try:
-            ctypes.windll.shcore.SetProcessDpiAwareness(1)
-        except Exception:
-            pass
-
-    if root is not None:
-        set_window_dark_mode(root, is_dark)
 
 
 # ============================================================================
@@ -380,14 +349,20 @@ def list_available_cartridges() -> List[Dict[str, Any]]:
 # ============================================================================
 
 class AzmuthCommandCenterGUI:
-    """Industry-Grade Native Desktop Command Center & Visual Flow Graph for Azmuth."""
+    """Tkinter operations, telemetry, and graph views for Azmuth."""
 
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("Azmuth Autonomous Neuromorphic Command Center — Foresight & Ultimatrix Gene Lab")
+        self.root.title("Azmuth — Operations")
+        self._font_registry = FontRegistry(root)
+        self._layout_scaler = LayoutScaler()
+        self._dpi_controller = None
+        self._display_info = getattr(root, "_azmuth_display_info", None)
 
         # 1. Scaling & Resolution Setup
-        self.system_dpi: float = get_system_dpi_scale()
+        self.system_dpi: float = self._display_info.scale if self._display_info else get_system_dpi_scale()
+        if self._display_info is None:
+            self._display_info = DisplayInfo(round(96 * self.system_dpi), (0, 0, root.winfo_screenwidth(), root.winfo_screenheight()))
         self.zoom_idx: int = 3  # default 1.0x in ZOOM_LEVELS
         self.zoom_level: float = ZOOM_LEVELS[self.zoom_idx]
         self.theme: GUITheme = GUITheme(is_light=False)
@@ -395,24 +370,35 @@ class AzmuthCommandCenterGUI:
         # Base window geometry adapted to system DPI
         base_w = int(1440 * self.system_dpi)
         base_h = int(880 * self.system_dpi)
-        self.root.geometry(f"{min(base_w, 1920)}x{min(base_h, 1080)}")
-        self.root.minsize(980, 620)
+        left, top, right, bottom = self._display_info.work_area
+        maximum_w = max(1, right - left - round(16 * self.system_dpi))
+        maximum_h = max(1, bottom - top - round(48 * self.system_dpi))
+        self.root.geometry(f"{min(base_w, maximum_w)}x{min(base_h, maximum_h)}+{left}+{top}")
+        self.root.minsize(min(round(980 * self.system_dpi), maximum_w), min(round(620 * self.system_dpi), maximum_h))
         self.root.configure(bg=self.theme.bg_main)
 
-        enable_win32_dpi_and_dark_bar(self.root, is_dark=not self.theme.is_light)
+        set_window_dark_mode(self.root, is_dark=not self.theme.is_light)
 
         # 2. Runtime State & Tunable Parameters
         self.active_view: str = "pipeline"  # "pipeline" | "dag" | "genes"
         self.thalamic_z_threshold: tk.DoubleVar = tk.DoubleVar(value=0.80)
-        self.ram_circuit_limit_gb: tk.DoubleVar = tk.DoubleVar(value=3.00)
+        self.z_input_var = tk.StringVar(value="0.80")
         self.search_query_var: tk.StringVar = tk.StringVar(value="")
         self.selected_tier_filter: int = -1  # -1 = All Tiers
 
         # 3. Live Telemetry Buffers
-        self.ram_history: List[float] = [50.0] * 80
+        self.ram_history: List[float] = []
         self.avail_gb_history: List[float] = [8.0] * 80
         self.active_job_label: str = "IDLE — Monitoring Telemetry"
         self.is_job_running: bool = False
+        self.active_job: Optional[GUIJob] = None
+        self.job_results: queue.Queue[tuple[str, Any, Optional[BaseException]]] = queue.Queue()
+        self._closing = False
+        self._animation_after = None
+        self._telemetry_after = None
+        self._job_after = None
+        self._close_after = None
+        self.telemetry_last_updated: Optional[datetime] = None
 
         # 4. Animation & Canvas State
         self.anim_tick: int = 0
@@ -421,11 +407,17 @@ class AzmuthCommandCenterGUI:
         self.canvas_nodes: Dict[str, Dict[str, Any]] = {}
         self.pat_ring_info: Optional[Tuple[float, float, float]] = None
         self.selected_node_id: Optional[str] = None
+        self._inspector_mode = "selection"
 
         # 4b. Virtual Camera & Canvas Viewport Transform
         self.cam_x: float = 640.0   # World center X
         self.cam_y: float = 380.0   # World center Y
         self.cam_zoom: float = 1.0  # Camera magnification (0.5x to 2.5x)
+        self._view_cameras: Dict[str, Tuple[float, float, float]] = {}
+        self._fit_pending = True
+        self._resize_after = None
+        self._auto_hidden_panels: set[str] = set()
+        self._initial_layout_done = False
         self.pan_start: Optional[Tuple[float, float]] = None
         self.is_panning: bool = False
         self.press_pos: Tuple[float, float] = (0.0, 0.0)
@@ -462,18 +454,28 @@ class AzmuthCommandCenterGUI:
         self._build_tuning_and_action_bar()
         self._build_main_workspace()
         self._build_status_footer()
+        self._layout_scaler.apply(self.root, self.system_dpi)
+        self._resize_display_panes()
+        if self._display_info.warning:
+            self.lbl_display_warning.configure(text=self._display_info.warning)
+            self.lbl_display_warning.pack(fill=tk.X, before=self.top_header)
+        backend = getattr(root, "_azmuth_dpi_backend", None)
+        if backend is not None:
+            self._dpi_controller = DpiController(root, backend, self._display_info, self._on_display_change)
 
         # Bind Keybindings for Zoom & Theme
         self._bind_zoom_and_theme_shortcuts()
+        self.root.bind("<Configure>", self._on_window_configure, add="+")
 
         # Populate initial view
         self.switch_view("pipeline")
 
-        # 60FPS Canvas Animation Loop & 2s Telemetry Poller
+        # Activity rendering and 2s telemetry polling
         self._running = True
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
         self._schedule_animation_frame()
         self._schedule_telemetry_poll()
+        self._poll_job_results()
 
     # ------------------------------------------------------------------------
     # Dynamic Scaling & Font Helpers
@@ -481,17 +483,16 @@ class AzmuthCommandCenterGUI:
 
     @property
     def scale(self) -> float:
-        """Returns effective scaling factor combining display DPI and camera zoom."""
-        return max(0.5, round(self.system_dpi * self.cam_zoom, 2))
+        """Display density is independent of the user's diagram zoom."""
+        return self.system_dpi
 
     def s(self, px: float) -> int:
         """Scales a pixel dimension by camera zoom."""
         return max(1, int(round(px * self.cam_zoom)))
 
-    def font(self, family: str = "Segoe UI", base_pt: int = 9, weight: str = "normal") -> tuple:
-        """Returns a system-DPI scaled font specification for UI chrome."""
-        scaled_pt = max(7, int(round(base_pt * self.system_dpi)))
-        return (family, scaled_pt, weight) if weight != "normal" else (family, scaled_pt)
+    def font(self, family: str = "Segoe UI", base_pt: int = 9, weight: str = "normal"):
+        """Tk point sizes already follow display DPI; do not scale them twice."""
+        return self._font_registry.get(family, max(9, base_pt), weight)
 
     def w2s(self, wx: float, wy: float, cw: float, ch: float) -> Tuple[float, float]:
         """Transforms logical World coordinates to screen Canvas pixels."""
@@ -504,6 +505,50 @@ class AzmuthCommandCenterGUI:
         wx = (sx - cw / 2.0) / max(0.01, self.cam_zoom) + self.cam_x
         wy = (sy - ch / 2.0) / max(0.01, self.cam_zoom) + self.cam_y
         return wx, wy
+
+    def _canvas_size(self) -> Tuple[float, float]:
+        width, height = self.canvas.winfo_width(), self.canvas.winfo_height()
+        scale = self.canvas.device_scale
+        return (width / scale if width > 1 else 1280, height / scale if height > 1 else 760)
+
+    def _resize_display_panes(self, ratio=None) -> None:
+        for panel, minimum, default in ((self.left_panel, 150, 260), (self.canvas.master, 300, 500), (self.right_panel, 180, 320)):
+            if str(panel) not in tuple(map(str, self.workspace.panes())):
+                continue
+            width = round(panel.winfo_width() * ratio) if ratio and panel.winfo_width() > 1 else round(default * self.system_dpi)
+            self.workspace.paneconfigure(panel, minsize=round(minimum * self.system_dpi), width=width)
+
+    def _on_display_change(self, info: DisplayInfo) -> None:
+        previous_scale = self.system_dpi
+        self._display_info = info
+        self.system_dpi = info.scale
+        self.root.tk.call("tk", "scaling", info.dpi / 72.0)
+        self._font_registry.refresh()
+        self.canvas.device_scale = info.scale
+        self._layout_scaler.apply(self.root, info.scale)
+        self._resize_display_panes(info.scale / previous_scale)
+        left, top, right, bottom = info.work_area
+        self.root.minsize(min(round(980 * info.scale), max(1, right - left - round(16 * info.scale))), min(round(620 * info.scale), max(1, bottom - top - round(48 * info.scale))))
+        self._configure_ttk_styles()
+        if info.warning:
+            self.lbl_display_warning.configure(text=info.warning)
+            self.lbl_display_warning.pack(fill=tk.X, before=self.top_header)
+        else:
+            self.lbl_display_warning.pack_forget()
+        # Do not rebuild views or modify selections, camera state, or job controls.
+        self._reflow_workspace()
+        self._redraw_active_canvas()
+
+    def _show_display_details(self) -> None:
+        if self.right_panel_collapsed:
+            self._toggle_side_panel("right")
+        self._inspector_mode = "display"
+        self._clear_inspector_badges()
+        self.inspector_text.delete("1.0", tk.END)
+        info = self._display_info
+        mode = "Per-Monitor V2" if info.per_monitor_v2 else "Compatibility / unverified"
+        verification = "Native DPI awareness is verified." if info.per_monitor_v2 else "Native DPI awareness has not been verified for this window."
+        self.inspector_text.insert(tk.END, f"Display\n\nWindow DPI: {info.dpi}\nWindows scale: {info.scale:.0%}\nAwareness: {mode}\nTk points-to-pixels: {float(self.root.tk.call('tk', 'scaling')):.3f}\nWork area (physical pixels): {info.work_area}\n\n{info.warning or verification}")
 
     # ------------------------------------------------------------------------
     # Zoom Controls & Keyboard Shortcuts
@@ -562,7 +607,44 @@ class AzmuthCommandCenterGUI:
         self.cam_zoom = self.zoom_level
         self.cam_x = 640.0
         self.cam_y = 380.0
+        self._fit_pending = True
         self._apply_zoom_and_layout()
+        self.root.after_idle(self._fit_active_view)
+
+    def _fit_active_view(self) -> None:
+        """Fit node bounds through the same camera used for drawing and hit testing."""
+        if not hasattr(self, "canvas"):
+            return
+        cw, ch = self._canvas_size()
+        if cw < 100 or ch < 100:
+            return
+        # Always fit from the diagram's natural size. A fit performed while
+        # panels were settling must not constrain a later fit to a tiny zoom.
+        self.cam_zoom = 1.0
+        self._redraw_active_canvas()
+        top = 100 if self.active_view == "genes" else 24
+        for _ in range(4):
+            boxes = [node["bbox"] for node in self.canvas_nodes.values()]
+            if not boxes:
+                break
+            x0, y0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
+            x1, y1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
+            world_cx, world_cy = self.s2w((x0 + x1) / 2, (y0 + y1) / 2, cw, ch)
+            fit = min((cw - 48) / max(x1 - x0, 1), max(ch - top - 24, 1) / max(y1 - y0, 1), 1.0)
+            self.cam_zoom = max(0.1, self.cam_zoom * fit)
+            self.cam_x = world_cx
+            self.cam_y = world_cy - (((top + ch - 24) / 2) - ch / 2) / self.cam_zoom
+            self._redraw_active_canvas()
+            if fit >= 0.98:
+                break
+        self._fit_pending = False
+        self.zoom_level = self.cam_zoom
+        self._view_cameras[self.active_view] = (self.cam_x, self.cam_y, self.cam_zoom)
+        self.btn_zoom_reset.configure(text=f"{int(self.cam_zoom * 100)}%")
+        self.lbl_footer_zoom.configure(text=f"Zoom {int(self.cam_zoom * 100)}%")
+
+    def _on_canvas_configure(self, _event=None) -> None:
+        self._redraw_active_canvas()
 
     def reset_layout(self) -> None:
         """Clears user manual node dragging offsets and restores default camera view and DAG render."""
@@ -588,13 +670,6 @@ class AzmuthCommandCenterGUI:
         self.btn_zoom_reset.configure(text=pct_str)
         self.lbl_footer_zoom.configure(text=f"Zoom: {pct_str} (Ctrl+= / Ctrl+- / Ctrl+0)")
 
-        # Proportional Viewport Clamping (Guarantees >= 50% width for central canvas)
-        win_w = max(1000, self.root.winfo_width())
-        left_w = min(int(win_w * 0.22), max(220, int(260 * self.system_dpi)))
-        right_w = min(int(win_w * 0.28), max(280, int(340 * self.system_dpi)))
-        self.left_panel.configure(width=left_w)
-        self.right_panel.configure(width=right_w)
-
         # Update font on core labels
         self.lbl_title.configure(font=self.font("Segoe UI Semibold", 11))
         self.lbl_engine_sub.configure(font=self.font("Segoe UI", 8))
@@ -614,15 +689,44 @@ class AzmuthCommandCenterGUI:
 
     def toggle_theme(self) -> None:
         """Toggles between Dark and Light mode, updating colors and Windows 11 titlebar."""
+        previous = self.theme
         self.theme = GUITheme(is_light=not self.theme.is_light)
         set_window_dark_mode(self.root, is_dark=not self.theme.is_light)
+        # Translate old colors before applying named semantic styles. Some
+        # palette values overlap (light borders and dark text, for example).
+        self._remap_widget_theme(previous)
         self.btn_theme_toggle.configure(
-            text="☾ Dark Mode" if self.theme.is_light else "☼ Light Mode",
+            text="Dark theme" if self.theme.is_light else "Light theme",
             bg=self.theme.bg_card,
             fg=self.theme.text_primary,
         )
         self._apply_theme_colors()
+        for button in (self.btn_cancel_job, self.btn_job_details, self.btn_toggle_left, self.btn_toggle_right):
+            button.configure(bg=self.theme.bg_card, fg=self.theme.text_secondary)
+        self.workspace.configure(bg=self.theme.border_subtle)
+        self.lbl_tune_validation.configure(bg=self.theme.bg_card, fg=self.theme.accent_crimson)
+        self.btn_contextual_action.configure(bg=self.theme.accent_blue, fg=self.theme.on_accent)
+        self._configure_ttk_styles()
         self._redraw_active_canvas()
+
+    def _remap_widget_theme(self, previous: GUITheme) -> None:
+        """Update nested and dynamically created controls as well as named chrome."""
+        tokens = ("bg_void", "bg_main", "bg_panel", "bg_card", "bg_card_hover", "bg_input", "border_subtle", "border_active", "text_primary", "text_secondary", "text_muted", "accent_blue", "accent_cyan", "accent_emerald", "accent_amber", "accent_crimson", "accent_indigo", "accent_gold")
+        colors = {getattr(previous, key).lower(): getattr(self.theme, key) for key in tokens}
+        pending = [self.root]
+        options = ("background", "foreground", "activebackground", "activeforeground", "highlightbackground", "highlightcolor", "selectbackground", "selectforeground", "insertbackground")
+        while pending:
+            widget = pending.pop()
+            pending.extend(widget.winfo_children())
+            available = widget.keys()
+            for option in options:
+                if option not in available:
+                    continue
+                current = str(widget.cget(option)).lower()
+                if "foreground" in option and current == previous.on_accent:
+                    widget.configure(**{option: self.theme.on_accent})
+                elif current in colors:
+                    widget.configure(**{option: colors[current]})
 
     def _apply_theme_colors(self) -> None:
         t = self.theme
@@ -659,7 +763,6 @@ class AzmuthCommandCenterGUI:
         self.lbl_tune_z.configure(bg=t.bg_card, fg=t.text_secondary)
         self.lbl_tune_ram.configure(bg=t.bg_card, fg=t.text_secondary)
         self.spin_z.configure(bg=t.bg_input, fg=t.accent_cyan, buttonbackground=t.bg_panel)
-        self.spin_ram.configure(bg=t.bg_input, fg=t.accent_amber, buttonbackground=t.bg_panel)
 
         self.left_panel.configure(bg=t.bg_panel, highlightbackground=t.border_subtle)
         self.left_header_lbl.configure(bg=t.bg_card, fg=t.text_primary)
@@ -670,7 +773,7 @@ class AzmuthCommandCenterGUI:
             bg=t.bg_void,
             fg=t.text_secondary,
             selectbackground=t.accent_blue,
-            selectforeground=t.text_primary,
+            selectforeground=t.on_accent,
             highlightbackground=t.border_subtle,
         )
 
@@ -702,6 +805,7 @@ class AzmuthCommandCenterGUI:
             self.btn_theme_toggle.configure(bg=t.bg_card, fg=t.text_primary)
 
         # Action Buttons Re-theming (Eliminate black box artifacts in light mode)
+        self.action_buttons = [(button, t.accent_cyan if index == 1 else t.accent_blue) for index, (button, _) in enumerate(self.action_buttons)]
         for b, color in self.action_buttons:
             b.configure(
                 bg=t.bg_panel,
@@ -721,7 +825,7 @@ class AzmuthCommandCenterGUI:
         # View Buttons Re-theming
         for v_id, v_btn in self.view_buttons.items():
             if v_id == self.active_view:
-                v_btn.configure(bg=t.accent_blue, fg=t.text_primary)
+                v_btn.configure(bg=t.accent_blue, fg=t.on_accent)
             else:
                 v_btn.configure(bg=t.bg_panel, fg=t.text_secondary)
 
@@ -756,28 +860,31 @@ class AzmuthCommandCenterGUI:
     # ------------------------------------------------------------------------
 
     def _reload_all_telemetry(self) -> None:
-        if GH_CACHE_FILE.exists():
+        self.telemetry_error: Optional[str] = None
+        for path, attr, label in (
+            (GH_CACHE_FILE, "gh_cache_data", "GitHub cache"),
+            (CORPUS_LEDGER, "corpus_ledger_data", "Corpus ledger"),
+            (ARENA_LEDGER, "arena_ledger_data", "Arena ledger"),
+            (MUTATION_LEDGER, "mutation_ledger_data", "Mutation ledger"),
+        ):
             try:
-                self.gh_cache_data = json.loads(GH_CACHE_FILE.read_text(encoding="utf-8"))
-            except Exception:
-                self.gh_cache_data = {}
-
-        if CORPUS_LEDGER.exists():
-            try:
-                self.corpus_ledger_data = json.loads(CORPUS_LEDGER.read_text(encoding="utf-8"))
-            except Exception:
-                pass
-        if ARENA_LEDGER.exists():
-            try:
-                self.arena_ledger_data = json.loads(ARENA_LEDGER.read_text(encoding="utf-8"))
-            except Exception:
-                pass
-        self.mutation_ledger_data = load_mutation_ledger()
+                payload = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+                if not isinstance(payload, dict):
+                    raise ValueError("Expected a JSON object")
+                setattr(self, attr, payload)
+            except (OSError, ValueError) as exc:
+                self.telemetry_error = f"{label}: {exc}"
 
         self._load_selected_cartridge()
 
         try:
             self.genes_catalog = load_all_genes()
+            if self.selected_gene_id and self.selected_gene_id not in self.genes_catalog:
+                self.selected_gene_id = None
+                self.selected_allele_id = None
+                if hasattr(self, "inspector_text"):
+                    self.inspector_text.delete("1.0", tk.END)
+                    self._clear_inspector_badges()
             if not self.selected_gene_id and self.genes_catalog:
                 for gid, gdata in self.genes_catalog.items():
                     if any("_mut_" in a.get("allele_id", "") for a in gdata.get("alleles", [])):
@@ -786,7 +893,7 @@ class AzmuthCommandCenterGUI:
                 if not self.selected_gene_id:
                     self.selected_gene_id = sorted(self.genes_catalog.keys())[0]
         except Exception as e:
-            logger.debug(f"Error loading genes: {e}")
+            self.telemetry_error = f"Gene catalogue: {e}"
 
     def _load_selected_cartridge(self) -> None:
         if not self.cartridges:
@@ -824,6 +931,7 @@ class AzmuthCommandCenterGUI:
 
     def _build_top_telemetry_bar(self) -> None:
         t = self.theme
+        self.lbl_display_warning = tk.Label(self.root, text="", font=self.font(), bg=t.accent_amber, fg=t.bg_void, wraplength=900)
         self.top_header = tk.Frame(self.root, bg=t.bg_panel, highlightthickness=1, highlightbackground=t.border_subtle)
         self.top_header.pack(fill=tk.X, side=tk.TOP)
 
@@ -866,7 +974,7 @@ class AzmuthCommandCenterGUI:
         self.btn_row.pack(anchor="w", pady=(2, 0))
 
         self.gear_buttons: Dict[str, tk.Button] = {}
-        for g_key, g_label in [("whisper", "● Whisper"), ("balanced", "● Balanced"), ("turbo", "● Turbo")]:
+        for g_key, g_label in [("whisper", "Whisper"), ("balanced", "Balanced"), ("turbo", "Turbo")]:
             b = tk.Button(
                 self.btn_row,
                 text=g_label,
@@ -884,7 +992,7 @@ class AzmuthCommandCenterGUI:
 
         self.btn_pause = tk.Button(
             self.btn_row,
-            text="⏸ Pause",
+            text="Pause",
             font=self.font("Segoe UI", 8),
             bg=t.bg_card,
             fg=t.text_secondary,
@@ -896,7 +1004,7 @@ class AzmuthCommandCenterGUI:
         )
         self.btn_pause.pack(side=tk.LEFT, padx=(3, 0))
 
-        # 3. 60FPS RAM Oscilloscope Sparkline
+        # 3. RAM history sparkline
         self.osc_frame = tk.Frame(self.top_header, bg=t.bg_panel, padx=10, pady=8)
         self.osc_frame.pack(side=tk.LEFT, fill=tk.Y)
 
@@ -922,7 +1030,7 @@ class AzmuthCommandCenterGUI:
         self.kpi_cards: List[tk.Frame] = []
         self.kpi_title_lbls: List[tk.Label] = []
         kpis = [
-            ("pat_pool", "GITHUB PAT POOL", f"{len(self.gh_sensor.pool.tokens)} / 30 Ready", t.accent_cyan),
+            ("pat_pool", "GITHUB PAT POOL", f"{len(self.gh_sensor.pool.tokens)} configured", t.accent_cyan),
             ("genes", "GENES SEQUENCED", f"{len(self.genes_catalog)} Loci", t.accent_purple),
             ("mutations", "MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 0)}", t.accent_emerald),
             ("arena", "ARENA RACES", f"{self.arena_ledger_data.get('tournaments_run', 0)}", t.accent_gold),
@@ -977,6 +1085,40 @@ class AzmuthCommandCenterGUI:
             command=self.toggle_theme,
         )
         self.btn_theme_toggle.pack(anchor="e", pady=(4, 0))
+        # Separate identity/global controls from the compact daemon status row.
+        for widget in (self.brand_frame, self.gear_frame, self.osc_frame, self.kpi_container, self.ctrl_header_frame):
+            widget.pack_forget()
+        self.top_header.grid_columnconfigure(0, weight=1)
+        self.brand_frame.grid(row=0, column=0, sticky="w")
+        self.ctrl_header_frame.grid(row=0, column=1, sticky="e")
+        self.gear_frame.grid(row=1, column=0, sticky="w")
+        self.osc_frame.grid(row=1, column=1, sticky="e")
+        self.kpi_container.grid(row=2, column=0, columnspan=2, sticky="ew")
+        self.lbl_title.configure(text="Azmuth")
+        self.lbl_engine_sub.configure(text="Operations and model evolution")
+        self.lbl_osc_hdr.configure(text="RAM")
+        self.osc_canvas.pack_forget()
+        self.lbl_gear_hdr.pack_forget()
+        self.btn_theme_toggle.configure(text="Light theme")
+        self.zoom_row.pack_forget()
+        self.btn_theme_toggle.pack_forget()
+        self.zoom_row.pack(side=tk.LEFT)
+        self.btn_theme_toggle.pack(side=tk.LEFT, padx=(8, 0))
+        self.ctrl_header_frame.configure(pady=4)
+        self.gear_frame.configure(pady=3)
+        self.osc_frame.configure(pady=3)
+        self.btn_display = tk.Button(self.ctrl_header_frame, text="Display", font=self.font(), command=self._show_display_details,
+                                     bg=t.bg_card, fg=t.text_secondary, relief=tk.FLAT)
+        self.btn_display.pack(side=tk.LEFT, padx=(6, 0))
+        self.brand_frame.configure(pady=4)
+        self.kpi_container.configure(pady=3)
+        self.lbl_engine_sub.pack_forget()
+        for card, title, value in zip(self.kpi_cards, self.kpi_title_lbls, self.kpi_labels.values()):
+            card.configure(pady=2, highlightthickness=0)
+            title.pack_forget()
+            value.pack_forget()
+            title.pack(side=tk.LEFT, padx=(0, 6))
+            value.pack(side=tk.LEFT)
 
     def _build_tuning_and_action_bar(self) -> None:
         t = self.theme
@@ -989,10 +1131,10 @@ class AzmuthCommandCenterGUI:
 
         self.view_buttons: Dict[str, tk.Button] = {}
         views = [
-            ("pipeline", "1 • Pipeline & PAT Flow"),
-            ("dag", "2 • U0–U5 Causal DAG"),
-            ("genes", "3 • Gene Lab & Evolution Tree"),
-            ("ingestion", "4 • Live Ingestion & Ledger"),
+            ("pipeline", "Pipeline"),
+            ("dag", "Causal DAG"),
+            ("genes", "Gene lab"),
+            ("ingestion", "Ingestion"),
         ]
         for v_id, v_text in views:
             btn = tk.Button(
@@ -1022,7 +1164,7 @@ class AzmuthCommandCenterGUI:
             from_=0.1,
             to=3.0,
             increment=0.1,
-            textvariable=self.thalamic_z_threshold,
+            textvariable=self.z_input_var,
             width=5,
             font=self.font("Consolas", 8),
             bg=t.bg_input,
@@ -1033,41 +1175,31 @@ class AzmuthCommandCenterGUI:
         )
         self.spin_z.pack(side=tk.LEFT, padx=(0, 8))
         self.spin_z.bind("<Return>", lambda e: self._on_parameter_tuned())
+        self.spin_z.bind("<FocusOut>", lambda e: self._on_parameter_tuned())
 
-        self.lbl_tune_ram = tk.Label(self.tune_frame, text="RAM Breaker:", font=self.font("Segoe UI", 8), fg=t.text_secondary, bg=t.bg_card)
-        self.lbl_tune_ram.pack(side=tk.LEFT, padx=(4, 2))
-
-        self.spin_ram = tk.Spinbox(
-            self.tune_frame,
-            from_=1.5,
-            to=8.0,
-            increment=0.5,
-            textvariable=self.ram_circuit_limit_gb,
-            width=5,
-            font=self.font("Consolas", 8),
-            bg=t.bg_input,
-            fg=t.accent_amber,
-            buttonbackground=t.bg_panel,
-            relief=tk.FLAT,
-            command=self._on_parameter_tuned,
+        self.lbl_tune_ram = tk.Label(
+            self.tune_frame, text="RAM: free <3 GB or load >80%",
+            font=self.font("Segoe UI", 8), fg=t.text_muted, bg=t.bg_card,
         )
-        self.spin_ram.pack(side=tk.LEFT, padx=(0, 8))
+        self.lbl_tune_ram.pack(side=tk.LEFT, padx=(4, 8))
+        self.lbl_tune_validation = tk.Label(self.tune_frame, text="", font=self.font("Segoe UI", 8), bg=t.bg_card, fg=t.accent_crimson)
+        self.lbl_tune_validation.pack(side=tk.LEFT, padx=4)
 
         # Action Buttons (Right)
         self.act_frame = tk.Frame(self.bar, bg=t.bg_card, padx=8, pady=4)
         self.act_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
         actions = [
-            ("☁️ A100 Burst", t.accent_crimson, self._trigger_colab_cloud_burst),
-            ("◈ Scan GitHub", t.accent_cyan, self._trigger_github_scan),
-            ("✦ Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
-            ("▶ Mutate & Race", t.accent_purple, self._trigger_mutate_selected_gene),
-            ("☷ Harvest Task", t.accent_emerald, self._trigger_harvest_task),
-            ("🔄 Reset DAG", t.accent_cyan, self.reset_layout),
-            ("↻ Verify Cycle", t.accent_gold, self._trigger_full_cycle),
+            ("A100 burst", t.accent_blue, self._trigger_colab_cloud_burst),
+            ("Scan GitHub", t.accent_cyan, self._trigger_github_scan),
+            ("Synthesize DAG", t.accent_blue, self._trigger_macro_synthesis),
+            ("Mutate and race", t.accent_blue, self._trigger_mutate_selected_gene),
+            ("Harvest task", t.accent_blue, self._trigger_harvest_task),
+            ("Fit view", t.accent_blue, self.reset_layout),
+            ("Verify cycle", t.accent_blue, self._trigger_full_cycle),
         ]
         self.action_buttons.clear()
-        for label, color, cmd in actions:
+        for idx, (label, color, cmd) in enumerate(actions):
             b = tk.Button(
                 self.act_frame,
                 text=label,
@@ -1084,20 +1216,40 @@ class AzmuthCommandCenterGUI:
                 cursor="hand2",
                 command=cmd,
             )
-            b.pack(side=tk.LEFT, padx=2)
+            b.grid(row=idx // 4, column=idx % 4, padx=2, pady=1, sticky="ew")
             self.action_buttons.append((b, color))
+        for column in range(4):
+            self.act_frame.grid_columnconfigure(column, weight=1)
+        for widget in (self.view_frame, self.tune_frame, self.act_frame):
+            widget.pack_forget()
+        self.bar.grid_columnconfigure(0, weight=1)
+        self.view_frame.grid(row=0, column=0, sticky="ew")
+        self.tune_frame.grid(row=1, column=0, sticky="ew")
+        self.act_frame.grid(row=2, column=0, sticky="ew")
+
+    def _update_view_actions(self) -> None:
+        view_for_index = {1: "pipeline", 2: "dag", 3: "genes", 4: "ingestion"}
+        column = 0
+        for index, (button, _color) in enumerate(self.action_buttons):
+            button.grid_remove()
+            if index not in view_for_index or view_for_index[index] == self.active_view:
+                button.grid(row=0, column=column, sticky="ew", padx=3, pady=2)
+                column += 1
 
     def _build_main_workspace(self) -> None:
         t = self.theme
-        workspace = tk.Frame(self.root, bg=t.bg_main)
+        workspace = tk.PanedWindow(self.root, orient=tk.HORIZONTAL, bg=t.border_subtle, sashwidth=6, relief=tk.FLAT)
+        self.workspace = workspace
+        self.left_panel_collapsed = False
+        self.right_panel_collapsed = False
         workspace.pack(fill=tk.BOTH, expand=True)
 
         # 1. Left Sidebar
         self.left_panel = tk.Frame(
-            workspace, bg=t.bg_panel, width=max(220, int(round(300 * self.scale))),
+            workspace, bg=t.bg_panel, width=300,
             highlightthickness=1, highlightbackground=t.border_subtle
         )
-        self.left_panel.pack(side=tk.LEFT, fill=tk.Y)
+        workspace.add(self.left_panel, minsize=150, width=260, stretch="never")
         self.left_panel.pack_propagate(False)
 
         self.left_header_lbl = tk.Label(
@@ -1157,7 +1309,7 @@ class AzmuthCommandCenterGUI:
             bg=t.bg_void,
             fg=t.text_secondary,
             selectbackground=t.accent_blue,
-            selectforeground=t.text_primary,
+            selectforeground=t.on_accent,
             font=self.font("Consolas", 8),
             relief=tk.FLAT,
             highlightthickness=1,
@@ -1173,10 +1325,10 @@ class AzmuthCommandCenterGUI:
 
         # 2. Right Panel (Capability & Telemetry Inspector)
         self.right_panel = tk.Frame(
-            workspace, bg=t.bg_panel, width=max(280, int(round(390 * self.scale))),
+            workspace, bg=t.bg_panel, width=390,
             highlightthickness=1, highlightbackground=t.border_subtle
         )
-        self.right_panel.pack(side=tk.RIGHT, fill=tk.Y)
+        workspace.add(self.right_panel, minsize=180, width=320, stretch="never")
         self.right_panel.pack_propagate(False)
 
         self.right_hdr = tk.Frame(self.right_panel, bg=t.bg_card)
@@ -1209,6 +1361,7 @@ class AzmuthCommandCenterGUI:
 
         self.cap_summary_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=6)
         self.cap_summary_frame.pack(fill=tk.X)
+        self.cap_summary_frame.bind("<Configure>", self._on_badge_bounds)
 
         insp_text_frame = tk.Frame(self.right_panel, bg=t.bg_panel, padx=8, pady=4)
         insp_text_frame.pack(fill=tk.BOTH, expand=True)
@@ -1241,9 +1394,9 @@ class AzmuthCommandCenterGUI:
         self.inspector_text.tag_configure("mutation_add", foreground=t.code_diff_fg, background=t.code_diff_bg)
         self.inspector_text.tag_configure("code", foreground=t.code_fg, background=t.code_bg)
 
-        # 3. Central 60FPS Interactive Canvas
+        # 3. Central interactive canvas
         center_frame = tk.Frame(workspace, bg=t.bg_void)
-        center_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        workspace.add(center_frame, before=self.right_panel, minsize=300, stretch="always")
 
         self.canvas_bar = tk.Frame(center_frame, bg=t.bg_main, padx=10, pady=3)
         self.canvas_bar.pack(fill=tk.X, side=tk.TOP)
@@ -1255,6 +1408,19 @@ class AzmuthCommandCenterGUI:
             bg=t.bg_main,
         )
         self.lbl_canvas_mode.pack(side=tk.LEFT)
+
+        self.btn_toggle_left = tk.Button(
+            self.view_frame, text="Hide list", font=self.font("Segoe UI", 8),
+            bg=t.bg_panel, fg=t.text_secondary, relief=tk.FLAT,
+            command=lambda: self._toggle_side_panel("left"),
+        )
+        self.btn_toggle_left.pack(side=tk.RIGHT, padx=2)
+        self.btn_toggle_right = tk.Button(
+            self.view_frame, text="Hide inspector", font=self.font("Segoe UI", 8),
+            bg=t.bg_panel, fg=t.text_secondary, relief=tk.FLAT,
+            command=lambda: self._toggle_side_panel("right"),
+        )
+        self.btn_toggle_right.pack(side=tk.RIGHT, padx=2)
 
         self.btn_reset_layout = tk.Button(
             self.canvas_bar,
@@ -1281,7 +1447,7 @@ class AzmuthCommandCenterGUI:
         )
         self.lbl_canvas_hint.pack(side=tk.RIGHT)
 
-        self.canvas = tk.Canvas(center_frame, bg=t.bg_void, highlightthickness=0, cursor="fleur")
+        self.canvas = LogicalCanvas(center_frame, device_scale=self.system_dpi, fonts=self._font_registry, bg=t.bg_void, highlightthickness=0, cursor="fleur")
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas.bind("<ButtonPress-1>", self._on_canvas_press)
         self.canvas.bind("<B1-Motion>", self._on_canvas_motion)
@@ -1294,12 +1460,23 @@ class AzmuthCommandCenterGUI:
         self.canvas.bind("<B3-Motion>", self._on_pan_motion)
         self.canvas.bind("<ButtonRelease-3>", self._on_pan_end)
         self.canvas.bind("<MouseWheel>", self._on_canvas_mousewheel)
-        self.canvas.bind("<Configure>", lambda e: self._redraw_active_canvas())
+        self.canvas.bind("<Configure>", self._on_canvas_configure)
+
+    def _on_badge_bounds(self, event) -> None:
+        pending = list(self.cap_summary_frame.winfo_children())
+        while pending:
+            widget = pending.pop()
+            pending.extend(widget.winfo_children())
+            if isinstance(widget, tk.Label):
+                width = max(80, event.width - round(24 * self.system_dpi))
+                if int(widget.cget("wraplength")) != width:
+                    widget.configure(wraplength=width)
 
     def _build_status_footer(self) -> None:
         t = self.theme
         self.footer = tk.Frame(self.root, bg=t.bg_panel, height=26, highlightthickness=1, highlightbackground=t.border_subtle)
         self.footer.pack(fill=tk.X, side=tk.BOTTOM)
+        self.footer.pack_configure(before=self.workspace)
         self.footer.pack_propagate(False)
 
         self.lbl_footer_job = tk.Label(
@@ -1311,6 +1488,19 @@ class AzmuthCommandCenterGUI:
             padx=10,
         )
         self.lbl_footer_job.pack(side=tk.LEFT)
+
+        self.btn_cancel_job = tk.Button(
+            self.footer, text="Cancel job", font=self.font("Segoe UI", 8),
+            bg=t.bg_card, fg=t.accent_crimson, relief=tk.FLAT,
+            command=self._cancel_active_job, state=tk.DISABLED,
+        )
+        self.btn_cancel_job.pack(side=tk.LEFT, padx=8)
+        self.btn_job_details = tk.Button(
+            self.footer, text="Job details", font=self.font("Segoe UI", 8),
+            bg=t.bg_card, fg=t.text_secondary, relief=tk.FLAT,
+            command=self._show_job_details,
+        )
+        self.btn_job_details.pack(side=tk.LEFT, padx=4)
 
         self.lbl_footer_zoom = tk.Label(
             self.footer,
@@ -1331,14 +1521,102 @@ class AzmuthCommandCenterGUI:
             padx=10,
         )
         self.lbl_footer_right.pack(side=tk.RIGHT)
+        for widget in (self.lbl_footer_job, self.btn_cancel_job, self.btn_job_details, self.lbl_footer_zoom, self.lbl_footer_right):
+            widget.pack_forget()
+        self.footer.pack_propagate(True)
+        self.footer.grid_columnconfigure(0, weight=1)
+        self.lbl_footer_job.configure(text="Idle: monitoring telemetry", width=1, anchor="w")
+        self.lbl_footer_job.grid(row=0, column=0, sticky="ew")
+        self.btn_cancel_job.grid(row=0, column=2, padx=4, pady=2)
+        self.btn_job_details.grid(row=0, column=3, padx=4, pady=2)
+        self.lbl_footer_right.configure(text="Telemetry loading", anchor="w", width=18, cursor="hand2")
+        self.lbl_footer_right.grid(row=0, column=1, sticky="e")
+        self.lbl_footer_right.bind("<Button-1>", lambda _event: self._show_telemetry_details())
+        self.lbl_footer_zoom.configure(text="Zoom 100%")
+
+    def _show_telemetry_details(self) -> None:
+        if self.right_panel_collapsed:
+            self._toggle_side_panel("right")
+        self._clear_inspector_badges()
+        self._inspector_mode = "telemetry"
+        self.inspector_text.delete("1.0", tk.END)
+        stamp = self.telemetry_last_updated.isoformat() if self.telemetry_last_updated else "Not yet updated"
+        self.inspector_text.insert(tk.END, f"Telemetry\nLast successful refresh: {stamp}\n\n{self.telemetry_error or 'All available ledgers refreshed successfully.'}")
+
+    def _on_window_configure(self, event) -> None:
+        if event.widget is not self.root or self._closing:
+            return
+        if self._resize_after is not None:
+            self.root.after_cancel(self._resize_after)
+        self._resize_after = self.root.after(80, self._reflow_workspace)
+
+    def _reflow_workspace(self) -> None:
+        self._resize_after = None
+        if self._closing:
+            return
+        first_layout = not self._initial_layout_done
+        self._initial_layout_done = True
+        compact = self.root.winfo_width() / self.system_dpi < 1200
+        self.top_header.grid_columnconfigure(0, weight=1)
+        self.top_header.grid_columnconfigure(1, weight=0)
+        self.top_header.grid_columnconfigure(2, weight=0)
+        self.lbl_engine_sub.pack_forget()
+        if compact:
+            self.kpi_container.grid_remove()
+            self.ctrl_header_frame.grid(row=0, column=1)
+            self.gear_frame.grid(row=1, column=0)
+            self.osc_frame.grid(row=1, column=1)
+        else:
+            self.gear_frame.grid(row=0, column=1)
+            self.ctrl_header_frame.grid(row=0, column=2)
+            self.kpi_container.grid(row=1, column=0, columnspan=2)
+            self.osc_frame.grid(row=1, column=2)
+        for side in ("left", "right"):
+            if compact and not getattr(self, f"{side}_panel_collapsed"):
+                self._toggle_side_panel(side)
+                self._auto_hidden_panels.add(side)
+            elif not compact and side in self._auto_hidden_panels:
+                self._auto_hidden_panels.discard(side)
+                if getattr(self, f"{side}_panel_collapsed"):
+                    self._toggle_side_panel(side)
+        self.lbl_canvas_hint.pack_forget()
+        self.btn_reset_layout.pack_forget()
+        if first_layout:
+            self.cam_x, self.cam_y, self.cam_zoom = 640.0, 380.0, 1.0
+            self.zoom_level = 1.0
+            self._fit_pending = True
+            self._redraw_active_canvas()
+        self.root.after(120, self._fit_if_pending)
+
+    def _fit_if_pending(self) -> None:
+        if not self._closing:
+            if self._fit_pending:
+                self._fit_active_view()
+            else:
+                self._redraw_active_canvas()
 
     # ------------------------------------------------------------------------
     # View Switching & Left Panel
     # ------------------------------------------------------------------------
 
     def switch_view(self, view_name: str) -> None:
+        if self.active_view != view_name and not self._fit_pending:
+            self._view_cameras[self.active_view] = (self.cam_x, self.cam_y, self.cam_zoom)
+        if self.active_view != view_name:
+            camera = self._view_cameras.get(view_name)
+            self.cam_x, self.cam_y, self.cam_zoom = camera or (640.0, 380.0, 1.0)
+            self.zoom_level = self.cam_zoom
+            self._fit_pending = camera is None
         self.active_view = view_name
+        self._inspector_mode = "selection"
         self.selected_node_id = None
+        self.selected_gene_id = None
+        self.selected_allele_id = None
+        if hasattr(self, "inspector_text"):
+            self.inspector_text.delete("1.0", tk.END)
+            self._clear_inspector_badges()
+        if hasattr(self, "btn_contextual_action"):
+            self.btn_contextual_action.configure(state=tk.DISABLED)
         self.shock_overlay.clear()
         self.pulses.clear()
         if hasattr(self, "canvas"):
@@ -1347,36 +1625,61 @@ class AzmuthCommandCenterGUI:
 
         for v_id, btn in self.view_buttons.items():
             if v_id == view_name:
-                btn.configure(bg=t.accent_blue, fg=t.text_primary)
+                btn.configure(bg=t.accent_blue, fg=t.on_accent)
             else:
                 btn.configure(bg=t.bg_panel, fg=t.text_secondary)
 
         if view_name == "pipeline":
-            self.left_header_lbl.configure(text="4-STREAM RADAR & 30-PAT POOL")
+            self.left_header_lbl.configure(text="Sources and token pool")
             self.lbl_canvas_mode.configure(
                 text="VIEW [1] — END-TO-END SENSORY, THALAMIC & GENOMIC PIPELINE FLOW", fg=t.accent_cyan
             )
             self.btn_contextual_action.configure(text="◈ Scan Radar", bg=t.accent_cyan, fg=t.bg_void)
         elif view_name == "dag":
-            self.left_header_lbl.configure(text="CORTICAL CARTRIDGES (U0–U5)")
+            self.left_header_lbl.configure(text="Cortical cartridges")
             self.lbl_canvas_mode.configure(
                 text="VIEW [2] — U0–U5 NEUROMORPHIC CAUSAL DAG & SHOCK PROPAGATION", fg=t.accent_blue
             )
             self.btn_contextual_action.configure(text="⚡ Shock (+2.0σ)", bg=t.accent_crimson, fg=t.text_primary)
         elif view_name == "genes":
-            self.left_header_lbl.configure(text=f"GENOMIC TAXONOMY ({len(self.genes_catalog)} GENES)")
+            self.left_header_lbl.configure(text=f"Genes ({len(self.genes_catalog)})")
             self.lbl_canvas_mode.configure(
                 text="VIEW [3] — PHYLOGENETIC GENE EVOLUTION TREE & ALLELE ARENA", fg=t.accent_purple
             )
             self.btn_contextual_action.configure(text="▶ Mutate & Race", bg=t.accent_purple, fg=t.text_primary)
         elif view_name == "ingestion":
-            self.left_header_lbl.configure(text="INGESTION & TELEMETRY STREAM")
+            self.left_header_lbl.configure(text="Ingestion events")
             self.lbl_canvas_mode.configure(
                 text="VIEW [4] — LIVE INGESTION FUNNEL & MULTI-UNIVERSE RADAR", fg=t.accent_emerald
             )
             self.btn_contextual_action.configure(text="☁️ A100 Burst", bg=t.accent_crimson, fg=t.text_primary)
 
         self._populate_left_panel()
+        self._update_view_actions()
+        self._set_job_controls(not self.is_job_running)
+        self.lbl_canvas_mode.configure(text={"pipeline": "Pipeline", "dag": "Causal DAG", "genes": "Gene evolution", "ingestion": "Ingestion"}[view_name])
+        self.right_title_lbl.configure(text="Inspector")
+        self.btn_contextual_action.configure(text={"pipeline": "Scan", "dag": "Shock", "genes": "Mutate", "ingestion": "A100 burst"}[view_name])
+        self.btn_contextual_action.configure(bg=self.theme.accent_blue, fg=self.theme.on_accent)
+        self._redraw_active_canvas()
+        if self._fit_pending and self._initial_layout_done:
+            self._fit_active_view()
+
+    def _toggle_side_panel(self, side: str) -> None:
+        self._auto_hidden_panels.discard(side)
+        panel = self.left_panel if side == "left" else self.right_panel
+        collapsed_attr = f"{side}_panel_collapsed"
+        collapsed = getattr(self, collapsed_attr)
+        if collapsed:
+            if side == "left":
+                self.workspace.add(panel, before=self.canvas.master, minsize=round(150 * self.system_dpi), width=round(190 * self.system_dpi), stretch="never")
+            else:
+                self.workspace.add(panel, minsize=round(180 * self.system_dpi), width=round(230 * self.system_dpi), stretch="never")
+        else:
+            self.workspace.forget(panel)
+        setattr(self, collapsed_attr, not collapsed)
+        button = self.btn_toggle_left if side == "left" else self.btn_toggle_right
+        button.configure(text=f"Show {'list' if side == 'left' else 'inspector'}" if not collapsed else f"Hide {'list' if side == 'left' else 'inspector'}")
         self._redraw_active_canvas()
 
     def _set_tier_filter(self, tier_idx: int) -> None:
@@ -1384,15 +1687,19 @@ class AzmuthCommandCenterGUI:
         t = self.theme
         for ti, btn in self.tier_pill_btns.items():
             if ti == tier_idx:
-                btn.configure(bg=t.accent_blue, fg=t.text_primary)
+                btn.configure(bg=t.accent_blue, fg=t.on_accent)
             else:
                 btn.configure(bg=t.bg_card, fg=t.tier_colors.get(ti, t.text_secondary))
         if self.active_view != "genes":
             self.switch_view("genes")
         else:
             self._populate_left_panel()
+            self._redraw_active_canvas()
 
     def _populate_left_panel(self) -> None:
+        old_selection = self.left_listbox.curselection()
+        previous = deepcopy(self.left_items_meta[old_selection[0]]) if old_selection and old_selection[0] < len(self.left_items_meta) else None
+        old_scroll = self.left_listbox.yview()[0]
         self.left_listbox.delete(0, tk.END)
         self.left_items_meta.clear()
         q = self.search_query_var.get().strip().lower()
@@ -1481,7 +1788,49 @@ class AzmuthCommandCenterGUI:
                     self.left_listbox.insert(tk.END, lbl)
                     self.left_items_meta.append({"type": "ingestion_event", "data": ev})
 
+        if previous is not None:
+            key = self._left_item_key(previous)
+            for index, meta in enumerate(self.left_items_meta):
+                if self._left_item_key(meta) == key:
+                    self.left_listbox.selection_set(index)
+                    self.left_listbox.activate(index)
+                    if meta["type"] != "cartridge" and self._inspector_mode == "selection":
+                        self._on_left_list_select(None)
+                    break
+            else:
+                if self._inspector_mode == "selection":
+                    self._clear_inspector_badges()
+                    self.inspector_text.delete("1.0", tk.END)
+            self.left_listbox.yview_moveto(old_scroll)
+
+        if self.active_view == "genes":
+            visible = {meta["gene_id"]: index for index, meta in enumerate(self.left_items_meta)}
+            if self.selected_gene_id not in visible:
+                self.selected_gene_id = None
+                self.selected_allele_id = None
+                self.selected_node_id = None
+                self._clear_inspector_badges()
+                self.inspector_text.delete("1.0", tk.END)
+                self.btn_contextual_action.configure(state=tk.DISABLED)
+                if visible:
+                    self.left_listbox.selection_clear(0, tk.END)
+                    self.left_listbox.selection_set(0)
+                    self._on_left_list_select(None)
+            elif not self.left_listbox.curselection():
+                self.left_listbox.selection_set(visible[self.selected_gene_id])
+            self._redraw_active_canvas()
+
+    @staticmethod
+    def _left_item_key(meta: Dict[str, Any]) -> tuple:
+        kind = meta.get("type")
+        if kind in ("ingestion_event", "gh_item"):
+            data = meta.get("data", {})
+            identity = data.get("id") or data.get("url") or json.dumps([data.get(key) for key in ("timestamp", "source", "event_type", "repo", "title")])
+            return kind, meta.get("stream"), identity
+        return kind, meta.get("id"), meta.get("gene_id"), meta.get("index")
+
     def _on_left_list_select(self, event: Any) -> None:
+        self._inspector_mode = "selection"
         sel = self.left_listbox.curselection()
         if not sel:
             return
@@ -1508,10 +1857,16 @@ class AzmuthCommandCenterGUI:
             self._inspect_dag_node(meta["id"])
             self._redraw_active_canvas()
         elif mtype == "gene":
+            changed = self.selected_gene_id != meta["gene_id"]
             self.selected_gene_id = meta["gene_id"]
             self.selected_allele_id = None
+            if changed:
+                self.selected_node_id = None
             self._inspect_gene_or_allele(self.selected_gene_id, None)
+            self.btn_contextual_action.configure(state=tk.DISABLED if self.is_job_running else tk.NORMAL)
             self._redraw_active_canvas()
+            if changed:
+                self._fit_active_view()
         elif mtype == "ingestion_event":
             self._inspect_ingestion_event(meta["data"])
 
@@ -1523,16 +1878,17 @@ class AzmuthCommandCenterGUI:
         self.canvas.delete("all")
         self.canvas_nodes.clear()
         self.active_canvas_edges = []
-        w = max(self.canvas.winfo_width(), 680)
-        h = max(self.canvas.winfo_height(), 500)
+        w = self._canvas_size()[0]
+        h = self._canvas_size()[1]
         t = self.theme
 
-        # Technical grid lines scaled to zoom
+        # Background grid does not contribute to fit-to-view bounds.
         grid_step = max(24, int(round(36 * self.zoom_level)))
-        for gx in range(0, w, grid_step):
-            self.canvas.create_line(gx, 0, gx, h, fill=t.grid_line, width=1)
-        for gy in range(0, h, grid_step):
-            self.canvas.create_line(0, gy, w, gy, fill=t.grid_line, width=1)
+        for gx in range(0, int(w), grid_step):
+            self.canvas.create_line(gx, 0, gx, h, fill=t.grid_line, width=1, tags="background")
+        for gy in range(0, int(h), grid_step):
+            self.canvas.create_line(0, gy, w, gy, fill=t.grid_line, width=1, tags="background")
+        background_items = set(self.canvas.find_all())
 
         if self.active_view == "pipeline":
             self._draw_pipeline_flow_view(w, h)
@@ -1542,7 +1898,11 @@ class AzmuthCommandCenterGUI:
             self._draw_gene_phylogeny_view(w, h)
         elif self.active_view == "ingestion":
             self._draw_ingestion_view(w, h)
-
+        if self.active_view == "pipeline":
+            self._draw_pat_ring_dots()
+        for item in set(self.canvas.find_all()) - background_items:
+            if "hud" not in self.canvas.gettags(item):
+                self.canvas.addtag_withtag("diagram", item)
         self._draw_active_pulses()
 
     def _register_clickable_node(
@@ -1578,8 +1938,8 @@ class AzmuthCommandCenterGUI:
         payload: Optional[Dict[str, Any]] = None,
     ) -> None:
         t = self.theme
-        cw = max(self.canvas.winfo_width(), 680)
-        ch = max(self.canvas.winfo_height(), 500)
+        cw = self._canvas_size()[0]
+        ch = self._canvas_size()[1]
 
         # Check for user-dragged override in world space
         if node_id in self.custom_node_positions:
@@ -1587,24 +1947,32 @@ class AzmuthCommandCenterGUI:
 
         sx, sy = self.w2s(wx, wy, cw, ch)
 
+        # At overview scale keep the identifier readable; full details remain in
+        # the inspector and return on zoom, without boxes covering their neighbors.
+        if self.cam_zoom < 0.5:
+            badge = None
+        if self.cam_zoom < 0.35:
+            title = title[:18] + ("…" if len(title) > 18 else "")
+            subtitle = ""
+
         # Scaled typography metrics (SVG-Style vector auto-fitting)
-        title_sz = max(7, min(14, int(round(9 * self.cam_zoom))))
-        sub_sz = max(6, min(12, int(round(8 * self.cam_zoom))))
-        badge_sz = max(6, min(11, int(round(7 * self.cam_zoom))))
+        title_sz = max(8, min(14, int(round(9 * self.cam_zoom))))
+        sub_sz = max(8, min(12, int(round(8 * self.cam_zoom))))
+        badge_sz = max(8, min(11, int(round(7 * self.cam_zoom))))
 
-        f_title = tkFont.Font(family="Segoe UI Semibold", size=title_sz)
-        f_sub = tkFont.Font(family="Consolas", size=sub_sz)
-        f_badge = tkFont.Font(family="Consolas", size=badge_sz, weight="bold") if badge else None
+        f_title = self._font_registry.get("Segoe UI Semibold", title_sz)
+        f_sub = self._font_registry.get("Consolas", sub_sz)
+        f_badge = self._font_registry.get("Consolas", badge_sz, "bold") if badge else None
 
-        tw = f_title.measure(title)
-        sw = f_sub.measure(subtitle)
-        bw = (f_badge.measure(badge) + int(12 * self.cam_zoom)) if f_badge else 0
+        tw = f_title.measure(title) / self.system_dpi
+        sw = max((f_sub.measure(line) / self.system_dpi for line in subtitle.splitlines()), default=0)
+        bw = (f_badge.measure(badge) / self.system_dpi + int(12 * self.cam_zoom)) if f_badge else 0
 
         # Auto-fit width and height to comfortably enclose text
         stripe_w = max(3, int(5 * self.cam_zoom))
         text_w = max(tw, sw)
         req_w = text_w + bw + stripe_w + int(24 * self.cam_zoom)
-        req_h = f_title.metrics("linespace") + f_sub.metrics("linespace") + int(14 * self.cam_zoom)
+        req_h = (f_title.metrics("linespace") + (f_sub.metrics("linespace") if subtitle else 0)) / self.system_dpi + int(14 * self.cam_zoom)
 
         nw = max(base_w * self.cam_zoom, float(req_w))
         nh = max(base_h * self.cam_zoom, float(req_h))
@@ -1750,8 +2118,8 @@ class AzmuthCommandCenterGUI:
         orientation: str = "h",
     ) -> None:
         t = self.theme
-        cw = max(self.canvas.winfo_width(), 680)
-        ch = max(self.canvas.winfo_height(), 500)
+        cw = self._canvas_size()[0]
+        ch = self._canvas_size()[1]
         x1, y1 = self.w2s(wx1, wy1, cw, ch)
         x2, y2 = self.w2s(wx2, wy2, cw, ch)
 
@@ -1793,7 +2161,7 @@ class AzmuthCommandCenterGUI:
                 "x2": x2, "y2": y2,
                 "color": color,
             })
-        if label:
+        if label and self.cam_zoom >= 0.75:
             mx = 0.125 * x1 + 0.375 * cp1_x + 0.375 * cp2_x + 0.125 * x2
             my = 0.125 * y1 + 0.375 * cp1_y + 0.375 * cp2_y + 0.125 * y2
             lbl_sz = max(6, min(10, int(round(7 * self.cam_zoom))))
@@ -1871,7 +2239,7 @@ class AzmuthCommandCenterGUI:
             ("STREAM_U1_RELEASES", "STAGE_PAT_RING", t.accent_blue, "", False, 1),
             ("STREAM_CODON_CP", "STAGE_PAT_RING", t.accent_purple, "", False, 1),
             ("STREAM_U0_ECO", "STAGE_PAT_RING", t.accent_emerald, "", False, 1),
-            ("STAGE_PAT_RING", "STAGE_THALAMIC", t.accent_cyan, "150k req/hr", False, 2),
+            ("STAGE_PAT_RING", "STAGE_THALAMIC", t.accent_cyan, "Token pool", False, 2),
             ("STAGE_THALAMIC", "STAGE_CORTEX", t.accent_blue, "Salient Spikes", False, 2),
             ("STAGE_THALAMIC", "STAGE_ULTIMATRIX", t.accent_purple, "Codon Feed", False, 2),
             ("STAGE_CORTEX", "STAGE_ARENA_SSOT", t.accent_blue, "Foresight Directives", False, 2),
@@ -1917,15 +2285,15 @@ class AzmuthCommandCenterGUI:
             width=1,
         )
         tokens = self.gh_sensor.pool.tokens
-        lbl_fnt_sz = max(7, min(10, int(9 * self.cam_zoom)))
-        sub_fnt_sz = max(6, min(9, int(8 * self.cam_zoom)))
+        lbl_fnt_sz = max(5, min(10, int(9 * self.cam_zoom)))
+        sub_fnt_sz = max(4, min(9, int(8 * self.cam_zoom)))
         self.canvas.create_text(
-            pat_sx, pat_sy - 6 * self.cam_zoom,
-            text="30-PAT RING", fill=t.text_primary,
+            pat_sx, pat_sy - 20 * self.cam_zoom,
+            text="PAT pool", fill=t.text_primary,
             font=("Segoe UI Semibold", lbl_fnt_sz)
         )
         self.canvas.create_text(
-            pat_sx, pat_sy + 8 * self.cam_zoom,
+            pat_sx, pat_sy + 15 * self.cam_zoom,
             text=f"{len(tokens)} Pooled Keys", fill=t.accent_cyan,
             font=("Consolas", sub_fnt_sz),
             tags="pat_ring_subtext",
@@ -2124,10 +2492,11 @@ class AzmuthCommandCenterGUI:
     def _draw_gene_phylogeny_view(self, w: float, h: float) -> None:
         t = self.theme
         if not self.selected_gene_id or self.selected_gene_id not in self.genes_catalog:
-            if self.genes_catalog:
-                self.selected_gene_id = next(iter(self.genes_catalog.keys()))
+            visible = [meta["gene_id"] for meta in self.left_items_meta if meta.get("type") == "gene"]
+            if visible:
+                self.selected_gene_id = visible[0]
             else:
-                self.canvas.create_text(w / 2, h / 2, text="No Sequenced Genes Found", fill=t.text_muted, font=self.font("Segoe UI", 11))
+                self.canvas.create_text(w / 2, h / 2, text="No genes match the current filters", fill=t.text_muted, font=self.font("Segoe UI", 11))
                 return
 
         gene_data = self.genes_catalog[self.selected_gene_id]
@@ -2135,20 +2504,20 @@ class AzmuthCommandCenterGUI:
         tier_col = t.tier_colors.get(phylo["tier"], t.accent_cyan)
 
         # Top Banner on canvas
-        banner_h = max(32, int(42 * self.zoom_level))
-        self.canvas.create_rectangle(14, 10, w - 14, 10 + banner_h, fill=t.bg_card, outline=t.border_subtle)
+        banner_h = 72
+        self.canvas.create_rectangle(14, 10, w - 14, 10 + banner_h, fill=t.bg_card, outline=t.border_subtle, tags="hud")
         self.canvas.create_text(
             24,
-            10 + banner_h / 2,
-            text=f"GENE LOCUS: {phylo['gene_id']}  |  {phylo['tier_label']}  |  Category: {phylo['category'].upper()}",
+            20,
+            text=f"{phylo['gene_id']} / {phylo['tier_label']}",
             fill=tier_col,
             font=self.font("Segoe UI Semibold", 9),
-            anchor="w",
+            anchor="nw", width=max(40, w - 48), tags="hud",
         )
         speedup_txt = (
             f"★ Fitness Gain: +{phylo['net_speedup_pct']:.1f}% Speedup  ({phylo['total_alleles']} Alleles)"
         )
-        self.canvas.create_text(w - 24, 10 + banner_h / 2, text=speedup_txt, fill=t.accent_gold, font=self.font("Segoe UI Semibold", 9), anchor="e")
+        self.canvas.create_text(24, 52, text=speedup_txt, fill=t.text_secondary, font=self.font("Segoe UI", 8), anchor="nw", width=max(40, w - 48), tags="hud")
 
         root_wx, root_wy = 240.0, 380.0
         wt_wx = 640.0
@@ -2302,7 +2671,7 @@ class AzmuthCommandCenterGUI:
     def _draw_ingestion_view(self, cw: float, ch: float) -> None:
         """Renders View [4]: Live Ingestion Funnel, Universe Touch Radar & Activity Ledger."""
         t = self.theme
-        cx, cy = cw / 2.0, ch / 2.0
+        cx, cy = 640.0, 380.0
 
         # Load sweep telemetry
         sweep_data: dict[str, Any] = {}
@@ -2315,16 +2684,16 @@ class AzmuthCommandCenterGUI:
 
         # Top Pipeline Funnel Cards
         funnel_items = [
-            ("INDEXED PROBLEMS", f"{self.corpus_ledger_data.get('tasks_indexed', 696)}+ Tasks", t.accent_cyan),
-            ("VERIFIED SOLVES", f"{self.arena_ledger_data.get('tournaments_run', 266)}+ Solved", t.accent_blue),
+            ("INDEXED PROBLEMS", f"{self.corpus_ledger_data.get('tasks_indexed', 0)}+ Tasks", t.accent_cyan),
+            ("ARENA RACES", f"{self.arena_ledger_data.get('tournaments_run', 0)} races", t.accent_blue),
             ("SEQUENCED GENES", f"{len(self.genes_catalog)} Loci", t.accent_purple),
-            ("ALLELE MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 711)}+ Mutated", t.accent_emerald),
-            ("ARENA PROMOTIONS", f"{self.mutation_ledger_data.get('promotions_won', 213)}+ Won", t.accent_gold),
+            ("ALLELE MUTATIONS", f"{self.mutation_ledger_data.get('mutations_applied', 0)}+ Mutated", t.accent_emerald),
+            ("ARENA PROMOTIONS", f"{self.mutation_ledger_data.get('promotions_won', 0)}+ Won", t.accent_gold),
         ]
 
-        card_w = 110.0
+        card_w = 210.0
         card_h = 55.0
-        spacing = 125.0
+        spacing = 240.0
         start_wx = cx - ((len(funnel_items) - 1) * spacing) / 2.0
         top_wy = cy - 160.0
 
@@ -2381,7 +2750,7 @@ class AzmuthCommandCenterGUI:
                 u_lobes.append((u_id, u_name[:20], "Dynamic Cartridge", t.accent_cyan))
 
         u_cols = 4 if len(u_lobes) >= 8 else 3
-        u_spacing_x = 210.0
+        u_spacing_x = 290.0
         u_spacing_y = 85.0
         total_grid_w = (u_cols - 1) * u_spacing_x
         u_start_wx = cx - (total_grid_w / 2.0)
@@ -2396,13 +2765,13 @@ class AzmuthCommandCenterGUI:
             u_meta = universes.get(u_id, {})
             spikes = u_meta.get("spikes_count", 0)
             choke = u_meta.get("top_chokepoint", "None")
-            status_badge = f"{spikes} Spikes" if spikes > 0 else "EQ (0σ)"
+            status_badge = (f"{spikes} Spikes" if spikes > 0 else "EQ (0σ)") if u_meta else "No data"
 
             self._draw_node_box(
                 f"UNIVERSE_LOBE_{u_id}",
                 wx,
                 wy,
-                195.0,
+                250.0,
                 68.0,
                 u_label,
                 f"{u_sub}\nChokepoint: {choke}",
@@ -2620,35 +2989,38 @@ class AzmuthCommandCenterGUI:
 
         tk.Label(
             row1,
+            anchor="w", justify=tk.LEFT, wraplength=max(120, self.right_panel.winfo_width() - 40),
             text=f"T{phylo['tier']} • {phylo['category'].upper()}",
             font=self.font("Consolas", 8, "bold"),
             fg=tier_col,
             bg=t.bg_card,
             padx=6,
             pady=2,
-        ).pack(side=tk.LEFT, padx=(0, 4))
+        ).pack(anchor="w", fill=tk.X, pady=1)
 
         if target_allele:
             t_comp = target_allele.get("complexity_time", "O(N)")
             s_comp = target_allele.get("complexity_space", "O(N)")
             tk.Label(
                 row1,
+                anchor="w", justify=tk.LEFT, wraplength=max(120, self.right_panel.winfo_width() - 40),
                 text=f"Time: {t_comp}",
                 font=self.font("Consolas", 8, "bold"),
                 fg=t.accent_emerald,
                 bg=t.bg_card,
                 padx=6,
                 pady=2,
-            ).pack(side=tk.LEFT, padx=2)
+            ).pack(anchor="w", fill=tk.X, pady=1)
             tk.Label(
                 row1,
+                anchor="w", justify=tk.LEFT, wraplength=max(120, self.right_panel.winfo_width() - 40),
                 text=f"Space: {s_comp}",
                 font=self.font("Consolas", 8, "bold"),
                 fg=t.accent_cyan,
                 bg=t.bg_card,
                 padx=6,
                 pady=2,
-            ).pack(side=tk.LEFT, padx=2)
+            ).pack(anchor="w", fill=tk.X, pady=1)
 
         self.inspector_text.insert(tk.END, f"✦ {gene_id}\n", "h1")
         self.inspector_text.insert(tk.END, f"{phylo['description']}\n\n", "muted")
@@ -2723,8 +3095,8 @@ class AzmuthCommandCenterGUI:
         self.is_node_dragging = False
         self.dragged_node_id = None
 
-        cw = max(self.canvas.winfo_width(), 680)
-        ch = max(self.canvas.winfo_height(), 500)
+        cw = self._canvas_size()[0]
+        ch = self._canvas_size()[1]
 
         # Hit test nodes in reverse order (topmost node first)
         for nid, info in reversed(list(self.canvas_nodes.items())):
@@ -2746,8 +3118,8 @@ class AzmuthCommandCenterGUI:
         dy = event.y - self.pan_start[1]
         dist = math.hypot(event.x - self.press_pos[0], event.y - self.press_pos[1])
 
-        cw = max(self.canvas.winfo_width(), 680)
-        ch = max(self.canvas.winfo_height(), 500)
+        cw = self._canvas_size()[0]
+        ch = self._canvas_size()[1]
 
         if self.dragged_node_id:
             if not self.is_node_dragging and dist > 4:
@@ -2807,8 +3179,8 @@ class AzmuthCommandCenterGUI:
         self.is_panning = False
 
     def _on_canvas_mousewheel(self, event: Any) -> None:
-        cw = max(self.canvas.winfo_width(), 680)
-        ch = max(self.canvas.winfo_height(), 500)
+        cw = self._canvas_size()[0]
+        ch = self._canvas_size()[1]
         wx, wy = self.s2w(event.x, event.y, cw, ch)
 
         factor = 1.15 if event.delta > 0 else (1.0 / 1.15)
@@ -2858,14 +3230,32 @@ class AzmuthCommandCenterGUI:
         self._handle_node_click(event.x, event.y)
 
     def _on_contextual_inspector_action(self) -> None:
+        if self.is_job_running:
+            return
         if self.active_view == "pipeline":
             self._trigger_github_scan()
         elif self.active_view == "dag":
             self._trigger_shock_simulation()
         elif self.active_view == "genes":
             self._trigger_mutate_selected_gene()
+        elif self.active_view == "ingestion":
+            self._trigger_colab_cloud_burst()
 
     def _on_parameter_tuned(self) -> None:
+        try:
+            raw_value = self.spin_z.get().strip()
+            if not raw_value:
+                self.lbl_tune_validation.configure(text="Enter 0.1–3.0")
+                return
+            value = float(raw_value)
+            if not math.isfinite(value) or not 0.1 <= value <= 3.0:
+                raise ValueError("Z-score threshold must be between 0.1 and 3.0")
+        except (ValueError, tk.TclError) as exc:
+            self.lbl_tune_validation.configure(text="Use 0.1–3.0")
+            return
+        self.thalamic_z_threshold.set(value)
+        self.z_input_var.set(f"{value:.2f}")
+        self.lbl_tune_validation.configure(text="")
         if self.active_view == "dag":
             self._load_selected_cartridge()
         self._populate_left_panel()
@@ -2885,40 +3275,139 @@ class AzmuthCommandCenterGUI:
                 "color": edge_col,
             })
 
-    def _run_background_job(self, job_title: str, pulse_color: str, target_fn: Callable[[], None]) -> None:
-        if self.is_job_running:
+    def _run_background_job(
+        self, job_title: str, pulse_color: str, target_fn: Optional[Callable[[], Any]] = None,
+        *, managed_command: Optional[List[str]] = None, timeout_seconds: float = 600.0,
+    ) -> None:
+        if self.is_job_running or self._closing:
             return
+        job = GUIJob(job_id=uuid.uuid4().hex, title=job_title, managed=managed_command is not None)
+        self.active_job = job
         self.is_job_running = True
         self.active_job_label = job_title
-        self.lbl_footer_job.configure(text=f"⚡ EXECUTING: {job_title}...", fg=pulse_color)
-        self._spawn_pulse_wave(color=pulse_color, count=12)
+        self.lbl_footer_job.configure(text=f"Status: RUNNING — {job_title}", fg=pulse_color)
+        self.btn_cancel_job.configure(
+            state=tk.NORMAL,
+            text="Cancel" if job.managed else "Stop waiting",
+        )
+        self._set_job_controls(False)
 
         def worker():
+            result: Any = None
+            error: Optional[BaseException] = None
             try:
-                target_fn()
-            except Exception as e:
-                logger.error(f"Background job error ({job_title}): {e}")
+                if managed_command is not None:
+                    result = run_managed_process(job, managed_command, cwd=ROOT, timeout_seconds=timeout_seconds)
+                elif target_fn is not None:
+                    result = target_fn()
+                if isinstance(result, subprocess.CompletedProcess):
+                    job.stdout, job.stderr = result.stdout or "", result.stderr or ""
+                    job.output = (result.stdout or "") + (result.stderr or "")
+                    job.return_code = result.returncode
+                    if result.returncode:
+                        raise RuntimeError(f"Local process exited with code {result.returncode}.")
+            except BaseException as exc:
+                error = exc
             finally:
-                self.root.after(0, self._on_background_job_complete)
+                self.job_results.put((job.job_id, result, error))
+                job.worker_done.set()
 
         threading.Thread(target=worker, daemon=True).start()
 
-    def _on_background_job_complete(self) -> None:
-        self.is_job_running = False
+    def _poll_job_results(self) -> None:
+        if not self._running and not self._closing:
+            return
+        try:
+            while True:
+                job_id, result, error = self.job_results.get_nowait()
+                job = self.active_job
+                if job is None or job.job_id != job_id or job.outcome != "running":
+                    continue
+                if job.stop_waiting:
+                    job.notice = "You stopped waiting; the operation finished in the background."
+                    self._finish_job(job, "failed" if error else "succeeded", str(error) if error else None)
+                elif isinstance(error, JobCancelled):
+                    self._finish_job(job, "cancelled", str(error))
+                elif error:
+                    self._finish_job(job, "failed", str(error))
+                else:
+                    self._finish_job(job, "succeeded")
+        except queue.Empty:
+            pass
+        except Exception:
+            logger.exception("Job result presentation failed; keeping the result poller alive")
+        if not self._closing:
+            self._job_after = self.root.after(100, self._poll_job_results)
+
+    def _set_job_controls(self, enabled: bool) -> None:
+        state = tk.NORMAL if enabled else tk.DISABLED
+        for button, _ in getattr(self, "action_buttons", []):
+            button.configure(state=state)
+        if hasattr(self, "btn_contextual_action"):
+            self.btn_contextual_action.configure(state=state)
+
+    def _finish_job(self, job: GUIJob, outcome: str, error: Optional[str] = None) -> None:
+        if job.outcome != "running":
+            return
+        job.outcome = outcome
+        job.error = error
+        job.finished_at = datetime.now(timezone.utc)
+        self.is_job_running = job.process is not None and job.process.poll() is None
         self.pulses.clear()
         if hasattr(self, "canvas"):
             self.canvas.delete("pulse_particle")
         self.active_job_label = "IDLE — Monitoring Telemetry"
-        self.lbl_footer_job.configure(
-            text="● Status: IDLE — Work Complete & Ledgers Synchronized (60 FPS)", fg=self.theme.accent_emerald
-        )
+        colors = {"succeeded": self.theme.accent_emerald, "failed": self.theme.accent_crimson, "cancelled": self.theme.accent_amber}
+        detail = " / See job details" if (error or job.notice) else ""
+        self.lbl_footer_job.configure(text=f"{outcome.upper()}: {job.title}{detail}", fg=colors[outcome])
+        self.btn_cancel_job.configure(state=tk.DISABLED, text="Cancel job")
+        self._set_job_controls(not self.is_job_running)
+        if not self._closing:
+            if outcome == "failed":
+                self._show_job_details()
+            self._on_background_job_complete()
+
+    def _show_job_details(self) -> None:
+        job = self.active_job
+        if job is None or not hasattr(self, "inspector_text"):
+            return
+        if getattr(self, "right_panel_collapsed", False):
+            self._toggle_side_panel("right")
+        self._inspector_mode = "job"
+        self._clear_inspector_badges()
+        self.inspector_text.delete("1.0", tk.END)
+        self.inspector_text.insert(tk.END, f"{job.title}\n{job.outcome.upper()}\n\n", "h1")
+        self.inspector_text.insert(tk.END, f"Started: {job.started_at.isoformat()}\nFinished: {job.finished_at.isoformat() if job.finished_at else 'Running'}\nExit code: {job.return_code}\n\n")
+        if job.error or job.notice:
+            self.inspector_text.insert(tk.END, (job.error or job.notice) + "\n\n", "crimson" if job.error else "muted")
+        if len(job.output) > 32000:
+            self.inspector_text.insert(tk.END, "[Showing the last 32,000 characters of captured output]\n\n", "muted")
+        self.inspector_text.insert(tk.END, job.output[-32000:] or "No subprocess output.")
+
+    def _on_background_job_complete(self) -> None:
         self._reload_all_telemetry()
         self._populate_left_panel()
         self._redraw_active_canvas()
-        if self.active_view == "genes" and self.selected_gene_id:
+        if self.active_job and self.active_job.outcome == "failed":
+            self._show_job_details()
+        elif self.active_view == "genes" and self.selected_gene_id:
             self._inspect_gene_or_allele(self.selected_gene_id, self.selected_allele_id)
         elif self.active_view == "pipeline" and self.selected_node_id:
             self._inspect_pipeline_stage(self.selected_node_id)
+
+    def _cancel_active_job(self) -> None:
+        job = self.active_job
+        if job is None or job.outcome != "running":
+            return
+        if job.managed:
+            job.cancel_event.set()
+            self.lbl_footer_job.configure(text="CANCELLING: waiting for local process cleanup", fg=self.theme.accent_amber)
+        else:
+            job.stop_waiting = True
+            self.lbl_footer_job.configure(
+                text="Status: RUNNING — Stop waiting requested; operation continues until it exits",
+                fg=self.theme.accent_amber,
+            )
 
     def _trigger_github_scan(self) -> None:
         def job():
@@ -2927,11 +3416,15 @@ class AzmuthCommandCenterGUI:
         self._run_background_job("4-Stream GitHub Sensory Radar Scan (30-PAT Pool)", self.theme.accent_cyan, job)
 
     def _trigger_macro_synthesis(self) -> None:
+        self._load_selected_cartridge()
+        raw = deepcopy(self.current_cartridge_raw)
+        threshold = self.thalamic_z_threshold.get()
+
         def job():
-            self._load_selected_cartridge()
-            if self.current_macro_graph:
+            graph = SpikingMacroGraph(raw.get("nodes", []), raw.get("synapses", []), habituate_threshold=threshold)
+            if graph.nodes:
                 engine = ForesightAlphaEngine(
-                    self.current_macro_graph, self.current_cartridge_raw.get("engrams", [])
+                    graph, raw.get("engrams", [])
                 )
                 brief = engine.generate_brief()
                 STATE_DIR.mkdir(parents=True, exist_ok=True)
@@ -2970,13 +3463,14 @@ class AzmuthCommandCenterGUI:
         gid = self.selected_gene_id
         if not gid:
             return
+        selected_gene_data = deepcopy(self.genes_catalog.get(gid))
 
         def job():
             g_file = find_gene_file_on_disk(gid)
             if g_file:
                 mutate_gene_file(g_file)
             else:
-                g_data = self.genes_catalog.get(gid)
+                g_data = selected_gene_data
                 if g_data and CODON_STREAM.exists():
                     tier = int(g_data.get("tier", 2))
                     tier_folders = {
@@ -3002,22 +3496,17 @@ class AzmuthCommandCenterGUI:
         self._run_background_job("Full Sentinel Verification Cycle", self.theme.accent_gold, execute_cycle)
 
     def _trigger_colab_cloud_burst(self) -> None:
-        """Launches the A100 High-RAM Cloud Hyper-Burst in background thread."""
-        def job():
-            import subprocess
-            cmd = [sys.executable, str(ROOT / "tools" / "azmuth_colab_burst.py"), "--tier", "a100-highmem"]
-            logger.info(f"Executing Cloud Hyper-Burst: {' '.join(cmd)}")
-            res = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
-            if res.returncode != 0:
-                logger.error(f"Cloud Hyper-Burst returned error: {res.stderr}")
-            else:
-                logger.info(f"Cloud Hyper-Burst completed successfully:\n{res.stdout[-1000:]}")
-
-        self._run_background_job("A100-SXM4-80GB High-RAM Cloud Hyper-Burst", self.theme.accent_crimson, job)
+        """Launches a managed A100 process with bounded runtime and captured output."""
+        cmd = [sys.executable, str(ROOT / "tools" / "azmuth_colab_burst.py"), "--tier", "a100-highmem"]
+        self._run_background_job(
+            "A100 Cloud Burst", self.theme.accent_crimson,
+            managed_command=cmd, timeout_seconds=600.0,
+        )
 
     def _load_recent_ingestion_events(self, limit: int = 100) -> list[dict[str, Any]]:
         """Loads latest ingestion events from azmuth_ingestion_feed.jsonl in reverse chronological order."""
         if not INGESTION_FEED.exists():
+            self._ingestion_events = []
             return []
         try:
             lines = INGESTION_FEED.read_text(encoding="utf-8").splitlines()
@@ -3025,14 +3514,19 @@ class AzmuthCommandCenterGUI:
             for line in reversed(lines):
                 if line.strip():
                     try:
-                        events.append(json.loads(line))
+                        event = json.loads(line)
+                        if not isinstance(event, dict):
+                            raise ValueError("Expected an ingestion event object")
+                        events.append(event)
                         if len(events) >= limit:
                             break
-                    except Exception:
-                        pass
+                    except ValueError:
+                        self.telemetry_error = "Ingestion feed contains an incomplete or invalid event"
+            self._ingestion_events = events
             return events
-        except Exception:
-            return []
+        except OSError as exc:
+            self.telemetry_error = f"Ingestion feed: {exc}"
+            return getattr(self, "_ingestion_events", [])
 
     def _inspect_ingestion_event(self, event_data: dict[str, Any]) -> None:
         """Renders rich details of an ingestion/activity event into the right inspector."""
@@ -3091,7 +3585,7 @@ class AzmuthCommandCenterGUI:
         self._refresh_header_indicators()
 
     # ------------------------------------------------------------------------
-    # 60FPS Animation Loop
+    # Activity rendering loop
     # ------------------------------------------------------------------------
 
     def _draw_active_pulses(self) -> None:
@@ -3141,7 +3635,7 @@ class AzmuthCommandCenterGUI:
         t = self.theme
 
         total_gb, avail_gb, load_pct = get_memory_status_gb()
-        breaker_gb = float(self.ram_circuit_limit_gb.get())
+        breaker_gb = 3.0
         breaker_ratio = min(max(1.0 - (breaker_gb / max(total_gb, 1.0)), 0.1), 0.95)
         by = h * (1.0 - breaker_ratio)
         self.osc_canvas.create_line(0, by, w, by, fill=t.accent_crimson, dash=(2, 2), width=1)
@@ -3150,39 +3644,32 @@ class AzmuthCommandCenterGUI:
         n = len(self.ram_history)
         for i, val in enumerate(self.ram_history):
             x = (i / max(n - 1, 1)) * w
-            jitter = math.sin((self.anim_tick + i) * 0.25) * (2.2 if self.is_job_running else 0.5)
-            y = h - ((min(max(val + jitter, 5.0), 98.0) / 100.0) * (h - 4)) - 2
+            y = h - ((min(max(val, 0.0), 100.0) / 100.0) * (h - 4)) - 2
             pts.extend([x, y])
 
-        line_col = t.accent_crimson if avail_gb < breaker_gb else (t.accent_gold if self.is_job_running else t.accent_cyan)
+        line_col = t.accent_crimson if avail_gb < breaker_gb or load_pct > 80 else (t.accent_gold if self.is_job_running else t.accent_cyan)
         if len(pts) >= 4:
             self.osc_canvas.create_line(*pts, fill=line_col, width=1.5, smooth=True)
 
     def _draw_pat_ring_dots(self) -> None:
-        """Renders live rotating GitHub PAT pool indicator dots at 60 FPS."""
+        """Renders configured pool size without implying token health."""
         if self.active_view != "pipeline" or not self.pat_ring_info:
             return
         self.canvas.delete("pat_ring_dots")
         pat_wx, pat_wy, ring_world_r = self.pat_ring_info
-        w = max(self.canvas.winfo_width(), 680)
-        h = max(self.canvas.winfo_height(), 500)
+        w = self._canvas_size()[0]
+        h = self._canvas_size()[1]
         pat_sx, pat_sy = self.w2s(pat_wx, pat_wy, w, h)
         screen_r = ring_world_r * self.cam_zoom
         t = self.theme
         tokens = self.gh_sensor.pool.tokens
         n_tok = max(len(tokens), 30)
-        ptr = self.gh_sensor.pool._pointer % max(len(tokens), 1)
-
-        # Rotate gold indicator continuously when job/burst runs, or track pool pointer
-        active_idx = (self.anim_tick // 4) % n_tok if self.is_job_running else ptr
-
         for i in range(n_tok):
             angle = (2 * math.pi * i / n_tok) - math.pi / 2
             tx = pat_sx + screen_r * math.cos(angle)
             ty = pat_sy + screen_r * math.sin(angle)
-            is_active = (i == active_idx)
-            dot_col = t.accent_gold if is_active else (t.accent_cyan if i < len(tokens) else t.border_subtle)
-            rd = max(3.5, 4.5 * self.cam_zoom) if is_active else max(2.0, 2.5 * self.cam_zoom)
+            dot_col = t.accent_cyan if i < len(tokens) else t.border_subtle
+            rd = max(2.0, 2.5 * self.cam_zoom)
             self.canvas.create_oval(
                 tx - rd, ty - rd, tx + rd, ty + rd,
                 fill=dot_col,
@@ -3190,21 +3677,20 @@ class AzmuthCommandCenterGUI:
                 tags="pat_ring_dots",
             )
 
-        if self.is_job_running:
-            self.canvas.itemconfigure("pat_ring_subtext", text=f"Rotating Key #{active_idx + 1}")
-        else:
-            self.canvas.itemconfigure("pat_ring_subtext", text=f"{len(tokens)} Pooled Keys")
+        self.canvas.itemconfigure("pat_ring_subtext", text=f"{len(tokens)} configured\nhealth unknown")
 
     def _schedule_animation_frame(self) -> None:
         if not self._running:
             return
-        self.anim_tick += 1
-        self._draw_oscilloscope()
-        if self.active_view == "pipeline":
-            self._draw_pat_ring_dots()
-        if self.pulses or self.is_job_running:
-            self._draw_active_pulses()
-        self.root.after(16, self._schedule_animation_frame)
+        try:
+            self.anim_tick += 1
+            self._draw_oscilloscope()
+            if self.pulses:
+                self._draw_active_pulses()
+        except Exception:
+            logger.exception("Animation frame failed; retrying next frame")
+        finally:
+            self._animation_after = self.root.after(100, self._schedule_animation_frame)
 
     def _refresh_header_indicators(self) -> None:
         gear = get_current_gear()
@@ -3216,12 +3702,12 @@ class AzmuthCommandCenterGUI:
         self.ram_history = self.ram_history[-80:]
         self.lbl_ram_readout.configure(
             text=f"{avail_gb:.1f} GB Free ({load_pct}%)",
-            fg=t.accent_crimson if avail_gb < self.ram_circuit_limit_gb.get() else t.accent_cyan,
+            fg=t.accent_crimson if avail_gb < 3.0 or load_pct > 80 else t.accent_cyan,
         )
 
         self.status_dot.itemconfig("dot", fill=t.accent_amber if paused else t.accent_emerald)
         self.btn_pause.configure(
-            text="▶ Resume" if paused else "⏸ Pause",
+            text="Resume" if paused else "Pause",
             bg=t.accent_amber if paused else t.bg_card,
             fg=t.bg_void if paused else t.text_secondary,
         )
@@ -3229,12 +3715,11 @@ class AzmuthCommandCenterGUI:
         gear_colors = {"whisper": t.accent_emerald, "balanced": t.accent_blue, "turbo": t.accent_crimson}
         for g_key, btn in self.gear_buttons.items():
             if g_key == gear:
-                btn.configure(bg=gear_colors.get(g_key, t.accent_blue), fg=t.text_primary)
+                btn.configure(bg=gear_colors.get(g_key, t.accent_blue), fg=t.on_accent)
             else:
                 btn.configure(bg=t.bg_card, fg=t.text_secondary)
 
-        ready_toks = sum(1 for tok in self.gh_sensor.pool.tokens if tok.get("status") == "READY")
-        self.kpi_labels["pat_pool"].configure(text=f"{ready_toks} / {len(self.gh_sensor.pool.tokens)} Ready")
+        self.kpi_labels["pat_pool"].configure(text=f"{len(self.gh_sensor.pool.tokens)} configured")
         self.kpi_labels["genes"].configure(text=f"{len(self.genes_catalog)} Loci")
         self.kpi_labels["mutations"].configure(text=f"{self.mutation_ledger_data.get('mutations_applied', 0)}")
         self.kpi_labels["arena"].configure(text=f"{self.arena_ledger_data.get('tournaments_run', 0)}")
@@ -3244,19 +3729,98 @@ class AzmuthCommandCenterGUI:
             return
         try:
             check_and_enforce_gear_safety()
+            self._reload_all_telemetry()
             self._refresh_header_indicators()
-        except Exception:
-            pass
-        self.root.after(2000, self._schedule_telemetry_poll)
+            self._populate_left_panel()
+            self._redraw_active_canvas()
+            if self.telemetry_error:
+                if hasattr(self, "lbl_footer_right"):
+                    self.lbl_footer_right.configure(text="Telemetry stale", fg=self.theme.accent_crimson)
+            else:
+                self.telemetry_last_updated = datetime.now(timezone.utc)
+                if hasattr(self, "lbl_footer_right"):
+                    self.lbl_footer_right.configure(text=f"Updated {self.telemetry_last_updated.astimezone().strftime('%H:%M:%S')}", fg=self.theme.text_muted)
+        except Exception as exc:
+            logger.exception("Telemetry refresh failed")
+            self.telemetry_error = str(exc)
+            if hasattr(self, "lbl_footer_right"):
+                self.lbl_footer_right.configure(text="Telemetry stale", fg=self.theme.accent_crimson)
+        self._telemetry_after = self.root.after(2000, self._schedule_telemetry_poll)
 
     def _on_close(self) -> None:
+        if self._closing:
+            return
         self._running = False
+        self._closing = True
+        for attr in ("_animation_after", "_telemetry_after", "_job_after", "_resize_after"):
+            callback = getattr(self, attr, None)
+            if callback is not None:
+                self.root.after_cancel(callback)
+                setattr(self, attr, None)
+        job = self.active_job
+        if job and self.is_job_running:
+            if job.managed:
+                job.cancel_event.set()
+                if job.worker_done.is_set() and job.process is not None and job.process.poll() is None:
+                    job.worker_done.clear()
+                    job.outcome = "running"
+                    def retry_cleanup():
+                        error: BaseException = JobCancelled("Local process stopped while closing. Remote cleanup is unconfirmed.")
+                        try:
+                            terminate_owned_process(job.process, timeout=1.0)
+                        except Exception as exc:
+                            error = exc
+                        finally:
+                            self.job_results.put((job.job_id, None, error))
+                            job.worker_done.set()
+                    threading.Thread(target=retry_cleanup, daemon=True).start()
+            self.lbl_footer_job.configure(
+                text="Closing: waiting for local process cleanup" if job.managed else "Closing: waiting for the in-process operation to finish",
+                fg=self.theme.accent_amber,
+            )
+            self.btn_cancel_job.configure(state=tk.NORMAL, text="Keep window open", command=self._abort_close)
+            self._check_close()
+        else:
+            self._destroy_window()
+
+    def _check_close(self) -> None:
+        if not self._closing:
+            return
+        job = self.active_job
+        if job and not job.worker_done.is_set():
+            self._close_after = self.root.after(50, self._check_close)
+            return
+        self._poll_job_results()
+        if job and job.process is not None and job.process.poll() is None:
+            self._abort_close()
+            self.lbl_footer_job.configure(text="Close blocked: local child cleanup failed; retry closing to stop it.", fg=self.theme.accent_crimson)
+            return
+        self._destroy_window()
+
+    def _destroy_window(self) -> None:
+        if getattr(self, "_dpi_controller", None) is not None:
+            self._dpi_controller.close()
+        if hasattr(self.root, "tk"):
+            for callback in self.root.tk.call("after", "info"):
+                self.root.after_cancel(callback)
         self.root.destroy()
+
+    def _abort_close(self) -> None:
+        self._closing = False
+        self._running = True
+        if self._close_after is not None:
+            self.root.after_cancel(self._close_after)
+            self._close_after = None
+        self.btn_cancel_job.configure(command=self._cancel_active_job, text="Cancel" if self.active_job and self.active_job.managed else "Stop waiting")
+        self._schedule_animation_frame()
+        self._schedule_telemetry_poll()
+        self._poll_job_results()
 
 
 def main() -> None:
-    root = tk.Tk()
+    root = create_gui_root()
     app = AzmuthCommandCenterGUI(root)
+    root.deiconify()
     root.mainloop()
 
 

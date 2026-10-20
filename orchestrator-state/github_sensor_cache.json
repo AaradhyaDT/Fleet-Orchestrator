@@ -1,68 +1,72 @@
 {
-  "timestamp": "2026-10-19T12:44:36.969283+00:00",
-  "timestamp_epoch": 1792413863.204207,
+  "timestamp": "2026-10-20T02:00:05.395325+00:00",
+  "timestamp_epoch": 1792461593.3644624,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
       {
-        "id": "xaviercallens/HiveMind#15",
-        "title": "[HM-S3-02] Native Custom CUDA/Triton INT4 + FP8 Fused MoE Router Kernel in swarm_fabric.py",
-        "repo": "xaviercallens/HiveMind",
-        "url": "https://github.com/xaviercallens/HiveMind/issues/15",
+        "id": "patrickkellyyoung-ai/swarm-agora-mcp#4",
+        "title": "[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark",
+        "repo": "patrickkellyyoung-ai/swarm-agora-mcp",
+        "url": "https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4",
         "labels": [
-          "enhancement",
-          "help wanted"
+          "help wanted",
+          "good first issue",
+          "bounty",
+          "bot-task"
         ],
-        "comments": 1,
-        "created_at": "2026-10-19T10:41:50Z",
-        "updated_at": "2026-10-19T11:17:18Z",
-        "salience": 1.2
+        "comments": 4,
+        "created_at": "2026-10-19T04:11:43Z",
+        "updated_at": "2026-10-19T20:27:03Z",
+        "salience": 1.8
       },
       {
-        "id": "MakazhanAlpamys/Soup#797",
-        "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
+        "id": "ufal/atrium-translator#46",
+        "title": "Experiments with translator tool in production + functionality (replace-append question)",
+        "repo": "ufal/atrium-translator",
+        "url": "https://github.com/ufal/atrium-translator/issues/46",
+        "labels": [
+          "help wanted",
+          "question",
+          "integration"
+        ],
+        "comments": 10,
+        "created_at": "2026-09-13T14:20:13Z",
+        "updated_at": "2026-10-19T19:52:08Z",
+        "salience": 2.0
+      },
+      {
+        "id": "MakazhanAlpamys/Soup#1698",
+        "title": "task: sft loads reasoning_effort, train_on_eot, use_flash_attn and use_liger on paths that never read them",
         "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/797",
+        "url": "https://github.com/MakazhanAlpamys/Soup/issues/1698",
         "labels": [
           "bug",
           "help wanted",
           "claimed",
-          "difficulty:6",
+          "difficulty:4",
           "area:training"
         ],
-        "comments": 11,
-        "created_at": "2026-09-11T11:08:01Z",
-        "updated_at": "2026-10-19T07:35:21Z",
-        "salience": 2.0
+        "comments": 3,
+        "created_at": "2026-10-07T07:53:17Z",
+        "updated_at": "2026-10-19T18:57:36Z",
+        "salience": 1.6
       },
       {
-        "id": "vllm-project/vllm-omni#7452",
-        "title": "[Perf] Onboard omni encoder stages to the upstream multimodal encoder CUDA Graph framework",
-        "repo": "vllm-project/vllm-omni",
-        "url": "https://github.com/vllm-project/vllm-omni/issues/7452",
+        "id": "lilalittle/asymmetric-tensor#33",
+        "title": "Publish the actual formalization scope, assumptions, and completion status",
+        "repo": "lilalittle/asymmetric-tensor",
+        "url": "https://github.com/lilalittle/asymmetric-tensor/issues/33",
         "labels": [
-          "enhancement",
-          "help wanted"
-        ],
-        "comments": 26,
-        "created_at": "2026-09-12T07:48:05Z",
-        "updated_at": "2026-10-19T06:17:32Z",
-        "salience": 2.0
-      },
-      {
-        "id": "MakazhanAlpamys/Soup#792",
-        "title": "Fast-LoRA autograd, correctness half: hand-written backward for the LoRA projections, behind training.fast_lora",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/792",
-        "labels": [
-          "enhancement",
+          "documentation",
           "help wanted",
-          "difficulty:6"
+          "area:repo",
+          "priority:P1"
         ],
-        "comments": 5,
-        "created_at": "2026-09-11T11:07:30Z",
-        "updated_at": "2026-10-19T05:54:13Z",
-        "salience": 2.0
+        "comments": 1,
+        "created_at": "2026-10-15T16:40:04Z",
+        "updated_at": "2026-10-19T15:29:42Z",
+        "salience": 1.2
       },
       {
         "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#363",
@@ -142,11 +146,11 @@
     "releases": [
       {
         "repo": "unslothai/unsloth",
-        "tag": "v0.1.908-beta",
-        "name": "Meta Muse Spark Open + NVIDIA Nemotron 3.5",
-        "published_at": "2026-10-15T18:50:55Z",
-        "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.908-beta",
-        "body_snippet": "Run NVIDIA's new Nemotron 3.5 models and Meta's new Muse Spark Open locally in Unsloth. New: text-diffusion LLMs, DeepSpeed training and better prompt caching for coding agents.  ## Highlights  - "
+        "tag": "v0.1.909-beta",
+        "name": "DeepSeek-V4.1 & FLUX-3",
+        "published_at": "2026-10-19T16:21:58Z",
+        "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.909-beta",
+        "body_snippet": "DeepSeek-V4.1-Flash-1017 and FLUX.3 Image Klein are here! Run both locally in Unsloth. Also new: images and videos in chat, multi-GPU training with FSDP2 (alpha) and one-command MCP setup for coding a"
       },
       {
         "repo": "ggerganov/llama.cpp",
@@ -174,11 +178,11 @@
       },
       {
         "repo": "huggingface/transformers",
-        "tag": "v5.20.1",
-        "name": "Release v5.20.1",
-        "published_at": "2026-10-16T13:02:29Z",
-        "url": "https://github.com/huggingface/transformers/releases/tag/v5.20.1",
-        "body_snippet": "# Release v5.20.1  Special surprise including the new model Beam from Reflection AI :partying_face:   <img width=\"2912\" height=\"1440\" alt=\"Gemini_Generated_Image_ox4hjlox4hjlox4h\" src=\"https://git"
+        "tag": "v5.20.2",
+        "name": "Patch release v5.20.2",
+        "published_at": "2026-10-19T17:45:37Z",
+        "url": "https://github.com/huggingface/transformers/releases/tag/v5.20.2",
+        "body_snippet": "# Patch release: v5.20.2  This patch notably solves an issue where some inputs could loose their original type inside `prepare_inputs_for_generation` in `generate`, leading to problems with multimod"
       }
     ],
     "cp_archives": [
@@ -188,23 +192,23 @@
         "url": "https://github.com/ShahjalalShohag/code-library",
         "description": "Templates, algorithms and data structures implemented and collected for programming contests.",
         "default_branch": "main",
-        "updated_at": "2026-10-19T10:19:06Z"
+        "updated_at": "2026-10-19T13:04:46Z"
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3575,
+        "stars": 3576,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-19T08:04:57Z"
+        "updated_at": "2026-10-19T20:07:25Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
-        "stars": 1767,
+        "stars": 1769,
         "url": "https://github.com/manishbisht/Competitive-Programming",
         "description": ":pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more.",
         "default_branch": "master",
-        "updated_at": "2026-10-17T05:20:41Z"
+        "updated_at": "2026-10-19T19:57:20Z"
       },
       {
         "repo": "Priyansh19077/CP-Templates",

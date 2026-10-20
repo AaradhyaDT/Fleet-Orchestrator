@@ -1,0 +1,46 @@
+{
+  "num_nodes": 91,
+  "trials_per_horizon": 2000,
+  "projections": [
+    {
+      "horizon_days": 7,
+      "horizon_label": "7D_OPERATIONAL",
+      "steps_evaluated": 14,
+      "mean_drift": -0.0003,
+      "volatility": 0.0458,
+      "var_95": -0.0743,
+      "survival_probability_pct": 100.0,
+      "asymptotic_status": "ULTRA_ROBUST"
+    },
+    {
+      "horizon_days": 30,
+      "horizon_label": "30D_TACTICAL",
+      "steps_evaluated": 60,
+      "mean_drift": 0.0,
+      "volatility": 0.0496,
+      "var_95": -0.081,
+      "survival_probability_pct": 100.0,
+      "asymptotic_status": "ULTRA_ROBUST"
+    },
+    {
+      "horizon_days": 90,
+      "horizon_label": "90D_QUARTERLY",
+      "steps_evaluated": 100,
+      "mean_drift": -0.0009,
+      "volatility": 0.0495,
+      "var_95": -0.0834,
+      "survival_probability_pct": 100.0,
+      "asymptotic_status": "ULTRA_ROBUST"
+    },
+    {
+      "horizon_days": 365,
+      "horizon_label": "365D_STRATEGIC",
+      "steps_evaluated": 100,
+      "mean_drift": -0.0006,
+      "volatility": 0.0554,
+      "var_95": -0.0922,
+      "survival_probability_pct": 100.0,
+      "asymptotic_status": "ULTRA_ROBUST"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Azmuth Cortical Cartridge Index (`CorticalCartridgeV1`)
 
-This directory houses the 12 modular **Cortical Cartridge Lobes** (`U0` through `U11`) powering the Azmuth Neuromorphic, Temporal-Triad & 12-Universe Foresight Engine.
+This directory houses the 14 modular **Cortical Cartridge Lobes** (`U0` through `U13`) powering the Azmuth Neuromorphic, Temporal-Triad & 14-Universe Foresight Engine.
 
 Each universe is defined by a strictly typed schema containing:
 1. `metadata`: Universe identifier, name, version, and natural frequency timescale $\tau_{\text{universe}}$.
@@ -26,6 +26,8 @@ Each universe is defined by a strictly typed schema containing:
 | **`u9_regulatory_epistemic_audit`** | Regulatory & Epistemic Audit | ARCH-RFC-001 epistemic tiers, demographic parity bounds, EU AI Act conformity files, citation recency | `BIAS_DISPARITY_MAX_DEVIATION`, `EPISTEMIC_UNBACKED_CLAIMS_COUNT`, `REGULATORY_EU_ACT_COMPLIANCE_SCORE`, `CITATION_MEDIAN_RECENCY_DAYS` |
 | **`u10_spark_edge_ai_telemetry`** | SPARK Edge AI Wearable Telemetry | 200Hz 6-axis IMU jerk, FreeRTOS queue depth, INT8 TinyML inference, fall recall ($\ge 0.95$), BLE power | `IMU_ACCEL_JERK_MAGNITUDE`, `TINYML_INFERENCE_LATENCY_MS`, `FREERTOS_SENSOR_QUEUE_WATERMARK`, `FALL_RECALL_SAFETY_RATIO` |
 | **`u11_bias_aperture_vision_audit`** | BiasAperture Vision Fairness Audit | Intersectional minority error rate, equal opportunity disparity, demographic parity gap, 95% bootstrap CI spread | `EQUAL_OPPORTUNITY_DISPARITY`, `DEMOGRAPHIC_PARITY_GAP`, `BOOTSTRAP_CI_SPREAD`, `INTERSECTIONAL_MINORITY_ERROR_RATE` |
+| **`u12_sovereign_gcc_dubai_radar`** | Sovereign GCC & Dubai AI Opportunity | UAE 10-year Golden Visa eligibility (coder/AI track), DFF innovation challenges, TII/MBZUAI vacancies, tax-free compensation alpha ($150k-$350k+ USD) | `UAE_GOLDEN_VISA_CODER_READINESS`, `DFF_DUBAI_FUTURE_FOUNDATION_RFP`, `TII_FALCON_AI_SYSTEMS_VACANCIES`, `SOVEREIGN_TAX_FREE_COMP_INDEX`, `FOUNDING_ML_SYSTEMS_MATCH_SCORE` |
+| **`u13_un_multilateral_global_radar`** | UN & Multilateral Global Innovation | UN ITU AI for Good summit pipeline, UNDP Chief Digital Office grants, UNICEF Innovation Fund wearable calls, UN P-level consultancy qualification | `UN_ITU_AI_FOR_GOOD_PIPELINE`, `UNDP_CHIEF_DIGITAL_OFFICE_GRANTS`, `UNICEF_INNOVATION_FUND_EDGE_AI`, `UN_P_LEVEL_ROSTER_QUALIFICATION`, `ETHICAL_AI_MULTILATERAL_MANDATE` |
 
 ---
 

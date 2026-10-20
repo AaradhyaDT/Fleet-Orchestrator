@@ -65,7 +65,7 @@ def handle_sweep(args: argparse.Namespace) -> int:
 
     results = sweep_all_universes()
     print("=" * 80)
-    print("  AZMUTH MULTI-UNIVERSE 81-NODE SWEEP")
+    print("  AZMUTH MULTI-UNIVERSE FORESIGHT SWEEP")
     print("=" * 80)
     print(f"- Total Universes Mounted: {results.get('total_cartridges', 12)}")
     print(f"- Systemic Spikes Found:   {len(results.get('systemic_spikes', []))}")

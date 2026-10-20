@@ -8,7 +8,10 @@ from __future__ import annotations
 
 from pathlib import Path
 import tkinter as tk
+import time
+from types import SimpleNamespace
 import pytest
+from tools import azmuth_gui as gui
 
 from tools.azmuth_gui import (
     AzmuthCommandCenterGUI,
@@ -17,6 +20,18 @@ from tools.azmuth_gui import (
     list_available_cartridges,
 )
 from tools.azmuth_tray import AzmuthTrayApp
+
+
+@pytest.fixture(autouse=True)
+def isolate_gui_state(monkeypatch, tmp_path):
+    """GUI tests read temporary telemetry and never enforce live daemon safety."""
+    monkeypatch.setattr(gui, "check_and_enforce_gear_safety", lambda: ("whisper", {}))
+    for name in ("GH_CACHE_FILE", "CORPUS_LEDGER", "ARENA_LEDGER", "MUTATION_LEDGER", "INGESTION_FEED", "RUN_LOG_JSON", "SWEEP_JSON"):
+        source = getattr(gui, name)
+        target = tmp_path / source.name
+        if source.exists():
+            target.write_bytes(source.read_bytes())
+        monkeypatch.setattr(gui, name, target)
 
 
 def test_build_gene_phylogeny_lineage_and_speedup():
@@ -126,6 +141,15 @@ def test_azmuth_gui_views_and_inspectors():
         # Verify capability inspector populates text
         insp_content = app.inspector_text.get("1.0", tk.END)
         assert app.selected_gene_id in insp_content
+
+        app._toggle_side_panel("left")
+        assert str(app.left_panel) not in tuple(map(str, app.workspace.panes()))
+        app._toggle_side_panel("left")
+        assert str(app.left_panel) in tuple(map(str, app.workspace.panes()))
+        app._toggle_side_panel("right")
+        assert str(app.right_panel) not in tuple(map(str, app.workspace.panes()))
+        app._toggle_side_panel("right")
+        assert str(app.right_panel) in tuple(map(str, app.workspace.panes()))
     finally:
         try:
             app._on_close()
@@ -165,12 +189,12 @@ def test_azmuth_gui_zoom_and_theme_toggle():
         # Test Theme Toggle to Light
         app.toggle_theme()
         assert app.theme.is_light is True
-        assert "Dark Mode" in app.btn_theme_toggle.cget("text")
+        assert "Dark theme" in app.btn_theme_toggle.cget("text")
 
         # Test Theme Toggle back to Dark
         app.toggle_theme()
         assert app.theme.is_light is False
-        assert "Light Mode" in app.btn_theme_toggle.cget("text")
+        assert "Light theme" in app.btn_theme_toggle.cget("text")
     finally:
         try:
             app._on_close()
@@ -335,7 +359,7 @@ def test_azmuth_gui_canvas_double_click_reset_and_action_button():
         assert len(app.custom_node_positions) == 0
 
         # Check action button presence
-        reset_action_btns = [b for b, col in app.action_buttons if "Reset DAG" in b.cget("text")]
+        reset_action_btns = [b for b, col in app.action_buttons if "Fit view" in b.cget("text")]
         assert len(reset_action_btns) == 1
     finally:
         try:
@@ -344,8 +368,8 @@ def test_azmuth_gui_canvas_double_click_reset_and_action_button():
             pass
 
 
-def test_azmuth_gui_pat_ring_continuous_animation():
-    """Verifies that PAT ring dots update live during animation ticks without requiring dragging."""
+def test_azmuth_gui_pat_ring_reports_configured_count_without_fake_health():
+    """The PAT visualization never implies a rotating key or verified health."""
     try:
         root = tk.Tk()
         root.withdraw()
@@ -366,28 +390,75 @@ def test_azmuth_gui_pat_ring_continuous_animation():
         dot_items = app.canvas.find_withtag("pat_ring_dots")
         assert len(dot_items) >= 30
 
-        # Simulate job running and animation tick progression
+        # Pool state is represented as configured count, not a rotating-key claim.
         app.is_job_running = True
         app.anim_tick = 0
         app._draw_pat_ring_dots()
         subtext_item = app.canvas.find_withtag("pat_ring_subtext")
         assert len(subtext_item) == 1
-        assert "Rotating Key #1" in app.canvas.itemcget(subtext_item[0], "text")
-
-        # Advance tick by 8 (2 steps forward)
+        assert "health unknown" in app.canvas.itemcget(subtext_item[0], "text")
         app.anim_tick = 8
         app._draw_pat_ring_dots()
-        assert "Rotating Key #3" in app.canvas.itemcget(subtext_item[0], "text")
+        assert "health unknown" in app.canvas.itemcget(subtext_item[0], "text")
 
         # When idle, displays pooled keys
         app.is_job_running = False
         app._draw_pat_ring_dots()
-        assert "Pooled Keys" in app.canvas.itemcget(subtext_item[0], "text")
+        assert "configured" in app.canvas.itemcget(subtext_item[0], "text")
     finally:
         try:
             app._on_close()
         except Exception:
             pass
+
+
+class _FakeWidget:
+    def __init__(self):
+        self.options = {}
+
+    def configure(self, **kwargs):
+        self.options.update(kwargs)
+
+
+@pytest.mark.parametrize("target, expected", [
+    (lambda: (_ for _ in ()).throw(RuntimeError("simulated failure")), "failed"),
+    (lambda: __import__("subprocess").CompletedProcess(["fake"], 7, "out", "bad"), "failed"),
+    (lambda: None, "succeeded"),
+])
+def test_background_job_records_terminal_outcome(target, expected, monkeypatch):
+    """Worker completion is reported on the polling side and exceptions never succeed."""
+    import subprocess
+    import tkinter.messagebox
+
+    monkeypatch.setattr(tkinter.messagebox, "showerror", lambda *args, **kwargs: None)
+    app = object.__new__(AzmuthCommandCenterGUI)
+    app.is_job_running = False
+    app.active_job = None
+    app.job_results = __import__("queue").Queue()
+    app.theme = SimpleNamespace(
+        accent_emerald="green", accent_crimson="red", accent_amber="yellow"
+    )
+    app.lbl_footer_job = _FakeWidget()
+    app.btn_cancel_job = _FakeWidget()
+    app.btn_cancel_job.configure(state="normal")
+    app._running = True
+    app._closing = False
+    app.pulses = []
+    app.root = SimpleNamespace(after=lambda *_: None)
+    app._on_background_job_complete = lambda: None
+
+    app._run_background_job("test", "blue", target)
+    deadline = time.monotonic() + 2
+    while app.job_results.empty() and time.monotonic() < deadline:
+        time.sleep(0.01)
+    app._poll_job_results()
+
+    assert app.active_job.outcome == expected
+    assert app.is_job_running is False
+    assert app.active_job.finished_at is not None
+    if app.active_job.return_code is not None:
+        assert app.active_job.return_code == 7
+        assert "bad" in app.active_job.output
 
 
 

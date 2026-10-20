@@ -1,9 +1,110 @@
 {
   "status": "SAFE",
-  "total_nodes_evaluated": 0,
+  "total_nodes_evaluated": 91,
   "breached_nodes_count": 0,
   "system_invariance_satisfied": true,
-  "min_barrier_h_value": 0.0,
+  "min_barrier_h_value": 4.449,
   "active_mitigation_actions": [],
-  "evaluations_sample": []
+  "evaluations_sample": [
+    {
+      "node_id": "Fleet-Orchestrator",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 0.0,
+      "z_score": 0.0,
+      "h_value": 9.0,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "brainstorm",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 7028.0,
+      "z_score": 0.1867,
+      "h_value": 8.9651,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "Competitive-Programming",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 168.0,
+      "z_score": 0.9,
+      "h_value": 8.19,
+      "is_safe": true,
+      "state_label": "ALLOSTATIC_STRETCH",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "SPARK",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 84.5,
+      "z_score": 0.45,
+      "h_value": 8.7975,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "BiasAperture",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 0.042,
+      "z_score": -0.5333,
+      "h_value": 8.7156,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "Super-NLM",
+      "universe_id": "u0_ecosystem_mesh",
+      "current_value": 8.0,
+      "z_score": 1.0,
+      "h_value": 8.0,
+      "is_safe": true,
+      "state_label": "ALLOSTATIC_STRETCH",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "IMU_ACCEL_JERK_MAGNITUDE",
+      "universe_id": "u10_spark_edge_ai_telemetry",
+      "current_value": 0.98,
+      "z_score": 0.2,
+      "h_value": 8.96,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "TINYML_INFERENCE_LATENCY_MS",
+      "universe_id": "u10_spark_edge_ai_telemetry",
+      "current_value": 18.5,
+      "z_score": 0.2,
+      "h_value": 8.96,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "FREERTOS_SENSOR_QUEUE_WATERMARK",
+      "universe_id": "u10_spark_edge_ai_telemetry",
+      "current_value": 32.0,
+      "z_score": 0.0,
+      "h_value": 9.0,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    },
+    {
+      "node_id": "FALL_RECALL_SAFETY_RATIO",
+      "universe_id": "u10_spark_edge_ai_telemetry",
+      "current_value": 0.985,
+      "z_score": 0.0,
+      "h_value": 9.0,
+      "is_safe": true,
+      "state_label": "HOMEOSTATIC_EQUILIBRIUM",
+      "recommended_mitigation": null
+    }
+  ]
 }

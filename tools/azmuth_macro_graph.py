@@ -46,6 +46,14 @@ CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
     # U11 (BiasAperture Vision Fairness Audit) -> U9 and U0
     {"source": "u11_bias_aperture_vision_audit::EQUAL_OPPORTUNITY_DISPARITY", "target": "u9_regulatory_epistemic_audit::BIAS_DISPARITY_MAX_DEVIATION", "weight": 0.95, "lag_days": 1, "edge_type": "REGULATORY_METRIC_FEED"},
     {"source": "u11_bias_aperture_vision_audit::DEMOGRAPHIC_PARITY_GAP", "target": "u0_ecosystem_mesh::BiasAperture", "weight": 0.88, "lag_days": 1, "edge_type": "AUDIT_FEEDBACK_LOOP"},
+    # U12 (Sovereign GCC & Dubai AI Opportunity Cortex) -> U3, U4, U10
+    {"source": "u12_sovereign_gcc_dubai_radar::UAE_GOLDEN_VISA_CODER_READINESS", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.92, "lag_days": 14, "edge_type": "GLOBAL_RESIDENCY_ENABLEMENT"},
+    {"source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO", "target": "u12_sovereign_gcc_dubai_radar::FOUNDING_ML_SYSTEMS_MATCH_SCORE", "weight": 0.89, "lag_days": 7, "edge_type": "PORTFOLIO_PROVENANCE_COUPLING"},
+    {"source": "u12_sovereign_gcc_dubai_radar::DFF_DUBAI_FUTURE_FOUNDATION_RFP", "target": "u4_macro_capital_markets::NVDA_GPU_DEMAND", "weight": 0.72, "lag_days": 30, "edge_type": "SOVEREIGN_COMPUTE_ACCELERATION"},
+    # U13 (UN & Multilateral Global Innovation Radar) -> U10, U11, U3
+    {"source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO", "target": "u13_un_multilateral_global_radar::UNICEF_INNOVATION_FUND_EDGE_AI", "weight": 0.94, "lag_days": 14, "edge_type": "ASSISTIVE_TECH_VALIDATION"},
+    {"source": "u11_bias_aperture_vision_audit::EQUAL_OPPORTUNITY_DISPARITY", "target": "u13_un_multilateral_global_radar::ETHICAL_AI_MULTILATERAL_MANDATE", "weight": 0.96, "lag_days": 7, "edge_type": "FAIRNESS_FRAMEWORK_COMPLIANCE"},
+    {"source": "u13_un_multilateral_global_radar::UN_P_LEVEL_ROSTER_QUALIFICATION", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.88, "lag_days": 30, "edge_type": "MULTILATERAL_INSTITUTIONAL_ROSTER"},
 ]
 
 
@@ -648,6 +656,7 @@ def sweep_all_universes(cartridge_dir: Path = DEFAULT_CARTRIDGE_DIR, z_threshold
                 "spikes_count": len(spikes),
                 "top_chokepoint": top_choke,
                 "engram_matches": len(brief.get("engram_matches", [])),
+                "nodes": graph.nodes,
                 "last_swept_at": datetime.now(timezone.utc).isoformat(),
             }
 

@@ -1,0 +1,106 @@
+{
+  "schema_version": "cortical_cartridge.v1",
+  "universe_id": "u13_un_multilateral_global_radar",
+  "cortical_lobe": "UN & Multilateral Global Innovation Radar",
+  "sensory_adapter": "un_multilateral_opportunity_harvester",
+  "description": "Dedicated cortical lobe monitoring UN system agencies (ITU AI for Good, UNDP Chief Digital Office, UNICEF Innovation Fund), international consultancy rosters, G4/G5 multilateral visa pathways, and global public interest AI funding.",
+  "nodes": [
+    {
+      "id": "UN_ITU_AI_FOR_GOOD_PIPELINE",
+      "label": "UN ITU AI for Good Global Summit & Innovation Call",
+      "node_type": "MULTILATERAL_SUMMIT",
+      "unit": "active_roster_tracks",
+      "current_value": 6.0,
+      "layer1_homeostatic": { "mu0": 5.0, "sigma0": 1.5, "iqr": 2.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.0, "p95": 9.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 20.0, "survival_limit": 15.0 },
+      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS",
+      "label": "UNDP Digital Innovation & AI Global Public Goods Grants",
+      "node_type": "MULTILATERAL_GRANT",
+      "unit": "grant_windows_open",
+      "current_value": 4.5,
+      "layer1_homeostatic": { "mu0": 4.0, "sigma0": 1.2, "iqr": 1.5, "tau0_days": 45 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1.0, "p95": 7.0 },
+      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 15.0, "survival_limit": 12.0 },
+      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.85 }
+    },
+    {
+      "id": "UNICEF_INNOVATION_FUND_EDGE_AI",
+      "label": "UNICEF Innovation Fund Frontier Tech / Assistive Wearable Call",
+      "node_type": "FRONTIER_FUND",
+      "unit": "call_readiness_score",
+      "current_value": 92.0,
+      "layer1_homeostatic": { "mu0": 91.5, "sigma0": 3.5, "iqr": 4.0, "tau0_days": 14 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 82.0, "p95": 98.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 99.0 },
+      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "UN_P_LEVEL_ROSTER_QUALIFICATION",
+      "label": "UN Professional (P-2 / P-3 / P-4) & Consultancy Roster Eligibility",
+      "node_type": "MULTILATERAL_ROSTER",
+      "unit": "qualification_index",
+      "current_value": 87.5,
+      "layer1_homeostatic": { "mu0": 86.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 30 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 74.0, "p95": 96.0 },
+      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 98.0 },
+      "reflex_limiters": { "max_action_step": 4.0, "collateral_harm_ceiling": 0.90 }
+    },
+    {
+      "id": "ETHICAL_AI_MULTILATERAL_MANDATE",
+      "label": "Multilateral Global AI Ethics & Bias Audit Regulatory Demand",
+      "node_type": "REGULATORY_DEMAND",
+      "unit": "audit_mandate_urgency",
+      "current_value": 94.0,
+      "layer1_homeostatic": { "mu0": 93.0, "sigma0": 4.0, "iqr": 5.0, "tau0_days": 7 },
+      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 80.0, "p95": 99.0 },
+      "layer3_nociceptive": { "abs_min": 60.0, "abs_max": 100.0, "survival_limit": 99.0 },
+      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.95 }
+    }
+  ],
+  "synapses": [
+    {
+      "source": "UNICEF_INNOVATION_FUND_EDGE_AI",
+      "target": "UN_P_LEVEL_ROSTER_QUALIFICATION",
+      "edge_type": "EXPANDS_CONSULTANCY_TRACKS",
+      "weight": 0.88,
+      "lag_days": 30,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "ETHICAL_AI_MULTILATERAL_MANDATE",
+      "target": "UN_ITU_AI_FOR_GOOD_PIPELINE",
+      "edge_type": "DRIVES_SUMMIT_SHOWCASE",
+      "weight": 0.93,
+      "lag_days": 21,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS",
+      "target": "UN_P_LEVEL_ROSTER_QUALIFICATION",
+      "edge_type": "VALIDATES_FIELD_DEPLOYMENT",
+      "weight": 0.85,
+      "lag_days": 45,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    }
+  ],
+  "engrams": [
+    {
+      "engram_id": "REGIME_MULTILATERAL_AI_MANDATE",
+      "label": "UN Multilateral AI Innovation & Assistive Tech Deployment",
+      "signature_z": {
+        "UN_ITU_AI_FOR_GOOD_PIPELINE": 1.4,
+        "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS": 1.1,
+        "UNICEF_INNOVATION_FUND_EDGE_AI": 1.7,
+        "UN_P_LEVEL_ROSTER_QUALIFICATION": 1.3,
+        "ETHICAL_AI_MULTILATERAL_MANDATE": 1.9
+      },
+      "forward_30d": "Submit SPARK fall detection wearable to UNICEF Innovation Fund and ITU AI for Good project repository.",
+      "forward_90d": "Acceptance into UN Innovation Roster or funded country office assistive technology deployment.",
+      "actionable_directive": "Align SPARK and BiasAperture documentation with UN Sustainable Development Goals (SDG 3: Good Health & Well-being, SDG 10: Reduced Inequalities)."
+    }
+  ]
+}

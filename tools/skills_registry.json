@@ -1,20 +1,20 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 101,
-  "total_skill_instances": 172,
+  "total_distinct_skills": 102,
+  "total_skill_instances": 173,
   "domain_counts": {
     "AI_ENGINEERING_ML": 12,
     "SWARM_ORCHESTRATION": 4,
-    "ENGINEERING_DEV": 17,
+    "ENGINEERING_DEV": 18,
     "DOMAIN_HARDWARE": 7,
     "SYSADMIN_SECURITY": 3,
-    "RESEARCH_ACADEMIC": 6,
     "FRONTEND_PRODUCT": 15,
+    "RESEARCH_ACADEMIC": 6,
     "PLATFORM_INTERNAL": 9,
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
-    "INSTALLED": 63,
+    "INSTALLED": 64,
     "VERIFIED": 10,
     "ACCESSIBLE": 28
   },
@@ -125,8 +125,8 @@
       "dependencies": [
         "scripts/fuse_cli.py"
       ],
-      "byte_size": 7657,
-      "line_count": 94,
+      "byte_size": 11147,
+      "line_count": 130,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\ai-engineering-fellowship",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -159,6 +159,31 @@
       "ssot_role": "UNIVERSAL_HUB",
       "mirrors": [],
       "mirror_count": 0
+    },
+    "anti-slop-token-hygiene": {
+      "name": "anti-slop-token-hygiene",
+      "domain": "ENGINEERING_DEV",
+      "availability_tier": "INSTALLED",
+      "description": ">- This skill should be used when the user asks to \"audit context degradation\", \"strip AI slop\", \"sanitize prompt tokens\", \"clean thinking traces\", \"audit decorative emojis\", \"screen LLM output bloat\", \"calibrate reasoning budget\", \"optimize KV cache SNR\", or mentions preventing token degradation across frontier models (Gemini 3.8 Flash, Claude Opus 5.5, GPT-6 Astra, Gemini 4 Argon, Muse Wonder, DeepSeek-R1).",
+      "triggers": [
+        "audit context degradation",
+        "strip AI slop",
+        "sanitize prompt tokens",
+        "clean thinking traces",
+        "audit decorative emojis",
+        "screen LLM output bloat",
+        "calibrate reasoning budget",
+        "optimize KV cache SNR"
+      ],
+      "dependencies": [],
+      "byte_size": 5919,
+      "line_count": 100,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\anti-slop-token-hygiene",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\Fleet-Orchestrator\\.agents\\skills\\anti-slop-token-hygiene"
+      ],
+      "mirror_count": 1
     },
     "antigravity-guide": {
       "name": "antigravity-guide",
@@ -639,8 +664,8 @@
         "background-task-governance"
       ],
       "dependencies": [],
-      "byte_size": 6192,
-      "line_count": 95,
+      "byte_size": 8676,
+      "line_count": 111,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\background-task-governance",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -667,17 +692,44 @@
       ],
       "mirror_count": 1
     },
+    "calm-authority-writing": {
+      "name": "calm-authority-writing",
+      "domain": "FRONTEND_PRODUCT",
+      "availability_tier": "ACCESSIBLE",
+      "description": "This skill should be used when the user asks for \"calm authority writing\", \"calm engineering authority\", \"write an engineering blog post\", \"write a release report\", \"draft a system card\", \"create a technical announcement\", \"write a developer migration guide\", \"audit technical writing\", \"write a case study\", \"brainstorm an architecture spec\", or mentions drafting publications, benchmarks, hardware/ML specs, or safety/fairness dossiers in a calm-authority engineering voice.",
+      "triggers": [
+        "calm authority writing",
+        "calm engineering authority",
+        "write an engineering blog post",
+        "write a release report",
+        "draft a system card",
+        "create a technical announcement",
+        "write a developer migration guide",
+        "audit technical writing",
+        "write a case study",
+        "brainstorm an architecture spec"
+      ],
+      "dependencies": [],
+      "byte_size": 17786,
+      "line_count": 169,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\calm-authority-writing",
+      "ssot_role": "SSOT_USER",
+      "mirrors": [
+        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\calm-authority-writing"
+      ],
+      "mirror_count": 1
+    },
     "chat-archiver": {
       "name": "chat-archiver",
       "domain": "RESEARCH_ACADEMIC",
       "availability_tier": "ACCESSIBLE",
-      "description": ">- Universal AI chat archiver for downloading and archiving shared conversation links (such as ChatGPT, Google Gemini share URLs, etc.) as clean, structured Markdown history files directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
+      "description": ">- Universal AI chat archiver and transcript reader for reading, summarizing, and archiving conversations from Antigravity Brain (~/.gemini/antigravity/brain) and external AI share links (ChatGPT, Google Gemini) directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
       "triggers": [
         "chat-archiver"
       ],
       "dependencies": [],
-      "byte_size": 1788,
-      "line_count": 52,
+      "byte_size": 4391,
+      "line_count": 123,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\chat-archiver",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1420,7 +1472,7 @@
         "scripts/compile_thesis.py",
         "scripts/scaffold_thesis.py"
       ],
-      "byte_size": 10350,
+      "byte_size": 10351,
       "line_count": 140,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\latex-thesis-architect",
       "ssot_role": "SSOT_USER",
@@ -1458,15 +1510,15 @@
       "name": "microsoft-foundry",
       "domain": "CLOUD_ENTERPRISE",
       "availability_tier": "INSTALLED",
-      "description": "Build, deploy, evaluate, optimize, fine-tune, and manage Microsoft Foundry agents, models, and resources end to end. USE FOR: foundry, azd ai agent, azd provision/deploy, hosted agent scaffold/develop/run/deploy/troubleshoot, prompt agent create, create agent, update agent, add tool to agent, invoke agent, agent.yaml, agent insights, pull agent insights, evaluate agent, batch eval, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prompt, prompt optimizer, optimize agent instructions, Agent Optimizer scaffold, dataset curation from traces, deploy model, model fine-tuning (SFT/DPO/RFT), Foundry project, RBAC, role assignment, permissions, quota, capacity, region, deployment failure, AI Services, create Foundry resource, knowledge index, customize deployment, onboard, availability, training-data, grader, distillation, large file upload. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).",
+      "description": "Build, deploy, evaluate, optimize, fine-tune, and manage Microsoft Foundry agents, models, and resources end to end. USE FOR: foundry, azd ai agent, azd provision/deploy, hosted agent scaffold/develop/run/deploy/troubleshoot, prompt agent create, managed harness agent create, GitHub Copilot harness agent, create agent, update agent, add tool to agent, invoke agent, agent insights, evaluate agent, batch eval, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prompt, optimize agent instructions, Agent Optimizer scaffold, dataset curation from traces, deploy model, model fine-tuning (SFT/DPO/RFT), Foundry project, RBAC, role assignment, permissions, quota, capacity, region, deployment failure, AI Services, create Foundry resource, knowledge index, customize deployment, onboard, availability, training-data, grader, distillation, large file upload. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).",
       "triggers": [
         "microsoft-foundry"
       ],
       "dependencies": [
         "./scripts/check-and-setup-dependencies.sh"
       ],
-      "byte_size": 27222,
-      "line_count": 293,
+      "byte_size": 28558,
+      "line_count": 302,
       "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\microsoft-foundry",
       "ssot_role": "UNIVERSAL_HUB",
       "mirrors": [],
@@ -2002,32 +2054,6 @@
         "C:\\Users\\Aaradhya\\.agents\\skills\\winpilot"
       ],
       "mirror_count": 1
-    },
-    "writing-like-claude": {
-      "name": "writing-like-claude",
-      "domain": "FRONTEND_PRODUCT",
-      "availability_tier": "ACCESSIBLE",
-      "description": "This skill should be used when the user asks to \"write like claude\", \"write an engineering blog post\", \"write a model release report\", \"draft a system card\", \"create a technical announcement\", \"write a developer migration guide\", \"audit technical writing\", \"write a case study\", or mentions drafting publications, benchmarks, or safety dossiers in the calm-authority Anthropic voice.",
-      "triggers": [
-        "write like claude",
-        "write an engineering blog post",
-        "write a model release report",
-        "draft a system card",
-        "create a technical announcement",
-        "write a developer migration guide",
-        "audit technical writing",
-        "write a case study"
-      ],
-      "dependencies": [],
-      "byte_size": 9733,
-      "line_count": 122,
-      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\writing-like-claude",
-      "ssot_role": "SSOT_USER",
-      "mirrors": [
-        "F:\\Aaradhya-Dev-Tamrakar\\brainstorm\\.agents\\skills\\writing-like-claude",
-        "C:\\Users\\Aaradhya\\.agents\\skills\\writing-like-claude"
-      ],
-      "mirror_count": 2
     }
   }
 }

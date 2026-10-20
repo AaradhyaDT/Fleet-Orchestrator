@@ -12,27 +12,43 @@ from pathlib import Path
 import pytest
 import tkinter as tk
 
-from tools.azmuth_macro_graph import sweep_all_universes, DEFAULT_STATE_DIR
-from tools.azmuth_daemon import record_ingestion_event, INGESTION_FEED, STATE_DIR
+from tools import azmuth_daemon as daemon, azmuth_gui as gui, azmuth_macro_graph as macro
+from tools.azmuth_macro_graph import sweep_all_universes
+from tools.azmuth_daemon import record_ingestion_event
 from tools.azmuth_gui import AzmuthCommandCenterGUI
 from tools.azmuth_colab_burst import write_remote_worker_script
 
 
-def test_sweep_all_universes():
+@pytest.fixture(autouse=True)
+def isolate_state(monkeypatch, tmp_path):
+    """Legacy integration checks must not append to the operator's live feed."""
+    monkeypatch.setattr(macro, "DEFAULT_STATE_DIR", tmp_path)
+    monkeypatch.setattr(daemon, "STATE_DIR", tmp_path)
+    monkeypatch.setattr(daemon, "INGESTION_FEED", tmp_path / "azmuth_ingestion_feed.jsonl")
+    monkeypatch.setattr(gui, "check_and_enforce_gear_safety", lambda: ("whisper", {}))
+    for name in ("GH_CACHE_FILE", "CORPUS_LEDGER", "ARENA_LEDGER", "MUTATION_LEDGER", "INGESTION_FEED", "RUN_LOG_JSON", "SWEEP_JSON"):
+        source = getattr(gui, name)
+        target = tmp_path / source.name
+        if source.exists():
+            target.write_bytes(source.read_bytes())
+        monkeypatch.setattr(gui, name, target)
+
+
+def test_sweep_all_universes(tmp_path):
     res = sweep_all_universes()
     assert res.get("total_cartridges", 0) >= 6
     assert "universes" in res
     assert "u0_ecosystem_mesh" in res["universes"]
     assert "u4_macro_capital_markets" in res["universes"]
 
-    sweep_file = DEFAULT_STATE_DIR / "macro_foresight_sweep.json"
+    sweep_file = tmp_path / "macro_foresight_sweep.json"
     assert sweep_file.exists()
     saved = json.loads(sweep_file.read_text(encoding="utf-8"))
     assert saved.get("total_cartridges") >= 6
 
 
 def test_record_ingestion_event(tmp_path):
-    test_feed = STATE_DIR / "azmuth_ingestion_feed.jsonl"
+    test_feed = tmp_path / "azmuth_ingestion_feed.jsonl"
     record_ingestion_event(
         event_type="TEST_EVENT",
         source="TestRunner",
