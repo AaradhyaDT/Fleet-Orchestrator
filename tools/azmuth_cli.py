@@ -262,16 +262,21 @@ def handle_dump(args) -> int:
     print(f"[Vaulted] '{thought}' secured to cognitive vault.{remaining_msg}")
     print("[*] Thought captured. Do NOT write code right now. Return to your break!")
 
-    # Spawning background autonomous Gemini Fleet worker (detached, non-blocking)
+    # Incubator Gemini Fleet Worker
     worker_script = ROOT / "tools" / "incubator_gemini_worker.py"
     if worker_script.exists():
         try:
             worker_cmd = [sys.executable, str(worker_script), thought]
-            flags = 0
-            if sys.platform == "win32":
-                flags = subprocess.CREATE_NO_WINDOW
-            subprocess.Popen(worker_cmd, creationflags=flags, close_fds=True)
-            print("[+] Gemini Fleet Worker dispatched headlessly. Research RFC & GitHub Issue generating in background.")
+            if getattr(args, "verbose", False):
+                print("\n[*] [--verbose active] Streaming full Gemini Fleet RFC synthesis directly to terminal...")
+                res = subprocess.run(worker_cmd, timeout=40)
+            else:
+                flags = 0
+                if sys.platform == "win32":
+                    flags = subprocess.CREATE_NO_WINDOW
+                subprocess.Popen(worker_cmd, creationflags=flags, close_fds=True)
+                print("[+] Gemini Fleet Worker dispatched headlessly. Research RFC & GitHub Issue generating in background.")
+                print("    (Tip: Use 'azmuth dump -v <thought>' if you want the full decoded RFC printed live!)")
         except Exception as e:
             print(f"[Notice] Background incubator dispatch note: {e}")
 
@@ -311,7 +316,10 @@ def handle_resume(args) -> int:
     if ideas:
         print(f"\nYou captured {len(ideas)} thoughts during breaks:")
         for idx, it in enumerate(ideas[-5:], 1):
-            print(f"  [{idx}] [{it.get('local_time', '')}] {it.get('thought')}")
+            t_text = it.get("thought") or it.get("raw_thought", "Untitled thought")
+            url = it.get("issue_url")
+            url_str = f" -> {url}" if url else ""
+            print(f"  [{idx}] [{it.get('local_time', '')}] {t_text}{url_str}")
         if len(ideas) > 5:
             print(f"  ... and {len(ideas) - 5} earlier thoughts stored in cognitive_vault.jsonl")
     else:
@@ -373,6 +381,7 @@ def main() -> int:
     # Dump subcommand (instant thought vault)
     dump_parser = subparsers.add_parser("dump", help="Vault a breakthrough idea instantly during a break without writing code")
     dump_parser.add_argument("thought", type=str, nargs="+", help="The idea or insight to secure")
+    dump_parser.add_argument("-v", "--verbose", action="store_true", help="Synchronously stream full structured Gemini RFC synthesis in terminal")
 
     # Resume subcommand
     subparsers.add_parser("resume", help="Resume work session and review thoughts captured during breaks")
