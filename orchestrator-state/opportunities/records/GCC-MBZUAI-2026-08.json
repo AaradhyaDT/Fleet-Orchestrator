@@ -1,0 +1,26 @@
+{
+  "id": "GCC-MBZUAI-2026-08",
+  "title": "Research Engineer - TinyML & Ultra-Low-Power Neural Systems",
+  "organization": "Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)",
+  "category": "SOVEREIGN_GCC",
+  "location": "Abu Dhabi, UAE",
+  "compensation_est": "$140,000 - $190,000 USD / yr (Tax-Free + Full Housing)",
+  "tax_status": "TAX_FREE",
+  "visa_pathway": "UAE_GOLDEN_VISA",
+  "relevance_tags": [
+    "tinyml",
+    "esp32",
+    "quantization",
+    "kinematics",
+    "wearables",
+    "edge_ai"
+  ],
+  "url": "https://mbzuai.ac.ae/careers/",
+  "deadline": "2026-12-15",
+  "description": "Lead applied research on sub-100KB neural network architectures, INT8 MCU execution, and wearable biometric sensor processing for medical and industrial applications.",
+  "sdg_alignment": [
+    "SDG 3: Good Health and Well-Being",
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "ingested_at": "2026-10-20T02:59:28.126406+00:00"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "UN-ITU-2026-05",
+  "title": "AI Technical Officer (Algorithmic Fairness & Model Governance)",
+  "organization": "International Telecommunication Union (ITU) - AI for Good",
+  "category": "UN_MULTILATERAL",
+  "location": "Geneva, Switzerland",
+  "compensation_est": "$125,000 - $165,000 USD / yr (UN Tax-Exempt P-3 / P-4 Scale)",
+  "tax_status": "UN_EXEMPT",
+  "visa_pathway": "UN_G4_DIPLOMATIC",
+  "relevance_tags": [
+    "fairness_audit",
+    "bias_mitigation",
+    "eu_ai_act",
+    "computer_vision",
+    "demographic_parity"
+  ],
+  "url": "https://aiforgood.itu.int/",
+  "deadline": "2026-12-31",
+  "description": "Lead international technical standardization on algorithmic bias diagnostics (directly matching BiasAperture frameworks), fairness benchmarking, and compliance protocols.",
+  "sdg_alignment": [
+    "SDG 10: Reduced Inequalities",
+    "SDG 16: Peace, Justice and Strong Institutions"
+  ],
+  "ingested_at": "2026-10-20T02:59:01.342259+00:00"
+}

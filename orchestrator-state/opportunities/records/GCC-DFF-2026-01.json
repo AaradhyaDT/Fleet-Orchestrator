@@ -1,0 +1,25 @@
+{
+  "id": "GCC-DFF-2026-01",
+  "title": "Founding Systems Architect - Frontier Autonomous Robotics & Edge AI",
+  "organization": "Dubai Future Foundation (DFF) / Area 2071",
+  "category": "SOVEREIGN_GCC",
+  "location": "Dubai, UAE",
+  "compensation_est": "$180,000 - $240,000 USD / yr (AED 660,000 - 880,000)",
+  "tax_status": "TAX_FREE",
+  "visa_pathway": "UAE_GOLDEN_VISA",
+  "relevance_tags": [
+    "edge_ai",
+    "embedded_firmware",
+    "autonomous_swarms",
+    "freertos",
+    "tinyml"
+  ],
+  "url": "https://www.dubaifuture.ae/initiatives/",
+  "deadline": "2026-12-31",
+  "description": "Architect sub-millisecond edge AI inference and distributed multi-agent systems for autonomous municipal robotics and smart infrastructure in Dubai.",
+  "sdg_alignment": [
+    "SDG 9: Industry, Innovation and Infrastructure",
+    "SDG 11: Sustainable Cities"
+  ],
+  "ingested_at": "2026-10-20T02:59:28.126389+00:00"
+}

@@ -11,32 +11,83 @@
       "node_type": "IMMIGRATION_PATHWAY",
       "unit": "eligibility_score_pct",
       "current_value": 89.5,
-      "layer1_homeostatic": { "mu0": 88.0, "sigma0": 4.0, "iqr": 5.0, "tau0_days": 14 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 78.0, "p95": 97.0 },
-      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 98.0 },
-      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.90 }
+      "layer1_homeostatic": {
+        "mu0": 88.0,
+        "sigma0": 4.0,
+        "iqr": 5.0,
+        "tau0_days": 14
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 78.0,
+        "p95": 97.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 50.0,
+        "abs_max": 100.0,
+        "survival_limit": 98.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 3.0,
+        "collateral_harm_ceiling": 0.9
+      }
     },
     {
       "id": "DFF_DUBAI_FUTURE_FOUNDATION_RFP",
       "label": "Dubai Future Foundation & Area 2071 Innovation Challenges",
       "node_type": "SOVEREIGN_GRANT",
       "unit": "active_challenge_openings",
-      "current_value": 7.0,
-      "layer1_homeostatic": { "mu0": 6.0, "sigma0": 2.0, "iqr": 2.2, "tau0_days": 30 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.0, "p95": 11.0 },
-      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 25.0, "survival_limit": 20.0 },
-      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+      "current_value": 2.0,
+      "layer1_homeostatic": {
+        "mu0": 6.0,
+        "sigma0": 2.0,
+        "iqr": 2.2,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 2.0,
+        "p95": 11.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 25.0,
+        "survival_limit": 20.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 2.0,
+        "collateral_harm_ceiling": 0.85
+      }
     },
     {
       "id": "TII_FALCON_AI_SYSTEMS_VACANCIES",
       "label": "TII Abu Dhabi & MBZUAI Frontier Systems/LLM Roles",
       "node_type": "RESEARCH_VACANCIES",
       "unit": "relevant_open_positions",
-      "current_value": 9.0,
-      "layer1_homeostatic": { "mu0": 8.0, "sigma0": 2.5, "iqr": 3.0, "tau0_days": 21 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 3.0, "p95": 14.0 },
-      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 30.0, "survival_limit": 25.0 },
-      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+      "current_value": 4.0,
+      "layer1_homeostatic": {
+        "mu0": 8.0,
+        "sigma0": 2.5,
+        "iqr": 3.0,
+        "tau0_days": 21
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 3.0,
+        "p95": 14.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 30.0,
+        "survival_limit": 25.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 2.0,
+        "collateral_harm_ceiling": 0.85
+      }
     },
     {
       "id": "SOVEREIGN_TAX_FREE_COMP_INDEX",
@@ -44,10 +95,27 @@
       "node_type": "COMPENSATION_ALPHA",
       "unit": "kusd_annual_tax_free",
       "current_value": 215.0,
-      "layer1_homeostatic": { "mu0": 210.0, "sigma0": 35.0, "iqr": 40.0, "tau0_days": 30 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 140.0, "p95": 320.0 },
-      "layer3_nociceptive": { "abs_min": 80.0, "abs_max": 500.0, "survival_limit": 400.0 },
-      "reflex_limiters": { "max_action_step": 25.0, "collateral_harm_ceiling": 0.90 }
+      "layer1_homeostatic": {
+        "mu0": 210.0,
+        "sigma0": 35.0,
+        "iqr": 40.0,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 140.0,
+        "p95": 320.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 80.0,
+        "abs_max": 500.0,
+        "survival_limit": 400.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 25.0,
+        "collateral_harm_ceiling": 0.9
+      }
     },
     {
       "id": "FOUNDING_ML_SYSTEMS_MATCH_SCORE",
@@ -55,10 +123,27 @@
       "node_type": "TALENT_MATCH",
       "unit": "fit_ratio",
       "current_value": 0.935,
-      "layer1_homeostatic": { "mu0": 0.92, "sigma0": 0.04, "iqr": 0.05, "tau0_days": 7 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 0.82, "p95": 0.99 },
-      "layer3_nociceptive": { "abs_min": 0.50, "abs_max": 1.0, "survival_limit": 0.99 },
-      "reflex_limiters": { "max_action_step": 0.05, "collateral_harm_ceiling": 0.95 }
+      "layer1_homeostatic": {
+        "mu0": 0.92,
+        "sigma0": 0.04,
+        "iqr": 0.05,
+        "tau0_days": 7
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 0.82,
+        "p95": 0.99
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.5,
+        "abs_max": 1.0,
+        "survival_limit": 0.99
+      },
+      "reflex_limiters": {
+        "max_action_step": 0.05,
+        "collateral_harm_ceiling": 0.95
+      }
     }
   ],
   "synapses": [

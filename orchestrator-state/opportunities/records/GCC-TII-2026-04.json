@@ -1,0 +1,24 @@
+{
+  "id": "GCC-TII-2026-04",
+  "title": "Senior AI Systems & Verification Engineer (Falcon LLM Infrastructure)",
+  "organization": "Technology Innovation Institute (TII Abu Dhabi) / ATRC",
+  "category": "SOVEREIGN_GCC",
+  "location": "Abu Dhabi, UAE",
+  "compensation_est": "$200,000 - $275,000 USD / yr (AED 735,000 - 1,010,000)",
+  "tax_status": "TAX_FREE",
+  "visa_pathway": "UAE_GOLDEN_VISA",
+  "relevance_tags": [
+    "formal_verification",
+    "distributed_systems",
+    "llm_eval",
+    "smt_solvers",
+    "quantization"
+  ],
+  "url": "https://www.tii.ae/careers",
+  "deadline": "2026-11-30",
+  "description": "Design deterministic runtime verification and distributed inference pipelines for open-source Falcon foundation models and sovereign edge deployments.",
+  "sdg_alignment": [
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "ingested_at": "2026-10-20T02:59:28.126403+00:00"
+}

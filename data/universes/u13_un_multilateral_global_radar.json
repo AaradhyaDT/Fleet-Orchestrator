@@ -10,22 +10,56 @@
       "label": "UN ITU AI for Good Global Summit & Innovation Call",
       "node_type": "MULTILATERAL_SUMMIT",
       "unit": "active_roster_tracks",
-      "current_value": 6.0,
-      "layer1_homeostatic": { "mu0": 5.0, "sigma0": 1.5, "iqr": 2.0, "tau0_days": 30 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 2.0, "p95": 9.0 },
-      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 20.0, "survival_limit": 15.0 },
-      "reflex_limiters": { "max_action_step": 2.0, "collateral_harm_ceiling": 0.85 }
+      "current_value": 0.0,
+      "layer1_homeostatic": {
+        "mu0": 5.0,
+        "sigma0": 1.5,
+        "iqr": 2.0,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 2.0,
+        "p95": 9.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 20.0,
+        "survival_limit": 15.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 2.0,
+        "collateral_harm_ceiling": 0.85
+      }
     },
     {
       "id": "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS",
       "label": "UNDP Digital Innovation & AI Global Public Goods Grants",
       "node_type": "MULTILATERAL_GRANT",
       "unit": "grant_windows_open",
-      "current_value": 4.5,
-      "layer1_homeostatic": { "mu0": 4.0, "sigma0": 1.2, "iqr": 1.5, "tau0_days": 45 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 1.0, "p95": 7.0 },
-      "layer3_nociceptive": { "abs_min": 0.0, "abs_max": 15.0, "survival_limit": 12.0 },
-      "reflex_limiters": { "max_action_step": 1.0, "collateral_harm_ceiling": 0.85 }
+      "current_value": 1.0,
+      "layer1_homeostatic": {
+        "mu0": 4.0,
+        "sigma0": 1.2,
+        "iqr": 1.5,
+        "tau0_days": 45
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 1.0,
+        "p95": 7.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 15.0,
+        "survival_limit": 12.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 1.0,
+        "collateral_harm_ceiling": 0.85
+      }
     },
     {
       "id": "UNICEF_INNOVATION_FUND_EDGE_AI",
@@ -33,10 +67,27 @@
       "node_type": "FRONTIER_FUND",
       "unit": "call_readiness_score",
       "current_value": 92.0,
-      "layer1_homeostatic": { "mu0": 91.5, "sigma0": 3.5, "iqr": 4.0, "tau0_days": 14 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 82.0, "p95": 98.0 },
-      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 99.0 },
-      "reflex_limiters": { "max_action_step": 3.0, "collateral_harm_ceiling": 0.90 }
+      "layer1_homeostatic": {
+        "mu0": 91.5,
+        "sigma0": 3.5,
+        "iqr": 4.0,
+        "tau0_days": 14
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 82.0,
+        "p95": 98.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 50.0,
+        "abs_max": 100.0,
+        "survival_limit": 99.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 3.0,
+        "collateral_harm_ceiling": 0.9
+      }
     },
     {
       "id": "UN_P_LEVEL_ROSTER_QUALIFICATION",
@@ -44,10 +95,27 @@
       "node_type": "MULTILATERAL_ROSTER",
       "unit": "qualification_index",
       "current_value": 87.5,
-      "layer1_homeostatic": { "mu0": 86.0, "sigma0": 5.0, "iqr": 6.0, "tau0_days": 30 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 74.0, "p95": 96.0 },
-      "layer3_nociceptive": { "abs_min": 50.0, "abs_max": 100.0, "survival_limit": 98.0 },
-      "reflex_limiters": { "max_action_step": 4.0, "collateral_harm_ceiling": 0.90 }
+      "layer1_homeostatic": {
+        "mu0": 86.0,
+        "sigma0": 5.0,
+        "iqr": 6.0,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 74.0,
+        "p95": 96.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 50.0,
+        "abs_max": 100.0,
+        "survival_limit": 98.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 4.0,
+        "collateral_harm_ceiling": 0.9
+      }
     },
     {
       "id": "ETHICAL_AI_MULTILATERAL_MANDATE",
@@ -55,10 +123,27 @@
       "node_type": "REGULATORY_DEMAND",
       "unit": "audit_mandate_urgency",
       "current_value": 94.0,
-      "layer1_homeostatic": { "mu0": 93.0, "sigma0": 4.0, "iqr": 5.0, "tau0_days": 7 },
-      "layer2_allostatic": { "z_stretched": 2.0, "z_critical": 3.0, "p05": 80.0, "p95": 99.0 },
-      "layer3_nociceptive": { "abs_min": 60.0, "abs_max": 100.0, "survival_limit": 99.0 },
-      "reflex_limiters": { "max_action_step": 5.0, "collateral_harm_ceiling": 0.95 }
+      "layer1_homeostatic": {
+        "mu0": 93.0,
+        "sigma0": 4.0,
+        "iqr": 5.0,
+        "tau0_days": 7
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 80.0,
+        "p95": 99.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 60.0,
+        "abs_max": 100.0,
+        "survival_limit": 99.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 5.0,
+        "collateral_harm_ceiling": 0.95
+      }
     }
   ],
   "synapses": [

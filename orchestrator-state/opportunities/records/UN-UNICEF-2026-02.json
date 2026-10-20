@@ -1,0 +1,26 @@
+{
+  "id": "UN-UNICEF-2026-02",
+  "title": "Frontier Technology Fellow - Open Source Assistive Wearables & Edge AI",
+  "organization": "UNICEF Office of Innovation / Innovation Fund",
+  "category": "UN_MULTILATERAL",
+  "location": "Geneva, Switzerland / Remote Hybrid",
+  "compensation_est": "$110,000 - $145,000 USD / yr (UN Tax-Exempt P-3 Scale)",
+  "tax_status": "UN_EXEMPT",
+  "visa_pathway": "UN_G4_DIPLOMATIC",
+  "relevance_tags": [
+    "wearables",
+    "edge_ai",
+    "assistive_tech",
+    "tinyml",
+    "open_source_hardware",
+    "fall_detection"
+  ],
+  "url": "https://www.unicef.org/innovation/innovation-fund",
+  "deadline": "2026-11-15",
+  "description": "Evaluate and deploy low-cost wearable AI systems (such as SPARK fall detection architectures) for vulnerable populations and emergency health monitoring in emerging economies.",
+  "sdg_alignment": [
+    "SDG 3: Good Health and Well-Being",
+    "SDG 10: Reduced Inequalities"
+  ],
+  "ingested_at": "2026-10-20T02:59:01.342258+00:00"
+}

@@ -141,6 +141,30 @@ def handle_trigger(args: argparse.Namespace) -> int:
     return 0 if verdict.dispatch_success else 1
 
 
+def handle_harvest(args: argparse.Namespace) -> int:
+    """Executes sovereign & multilateral opportunity harvesting."""
+    from tools.harvest_sovereign_opportunities import SovereignOpportunityHarvester
+
+    harvester = SovereignOpportunityHarvester()
+    records = harvester.harvest(source_filter=args.source, limit=args.limit)
+    print("=" * 80)
+    print("  AZMUTH SOVEREIGN & MULTILATERAL OPPORTUNITY HARVESTER")
+    print("=" * 80)
+    print(f"- Total Harvested:     {len(records)} opportunities")
+    print(f"- GCC Sovereign Roles: {sum(1 for r in records if r.category == 'SOVEREIGN_GCC')}")
+    print(f"- UN Multilateral:     {sum(1 for r in records if r.category == 'UN_MULTILATERAL')}")
+    print(f"- Tax-Free Positions:  {sum(1 for r in records if r.tax_status in ('TAX_FREE', 'UN_EXEMPT'))}")
+    print(f"- Catalog Stored:      {harvester.catalog_path}")
+    print("-" * 80)
+    for r in records[:5]:
+        print(f"[{r.category}] {r.title}")
+        print(f"  Org: {r.organization} | Loc: {r.location}")
+        print(f"  Comp: {r.compensation_est} ({r.tax_status}) | Visa: {r.visa_pathway}")
+        print(f"  URL: {r.url}")
+    print("=" * 80)
+    return 0
+
+
 def main() -> int:
     # If no arguments provided in CLI/PowerShell, default directly to opening GUI
     if len(sys.argv) == 1:
@@ -177,6 +201,11 @@ def main() -> int:
     trigger_parser.add_argument("--dry-run", action="store_true", help="Simulate mitigation")
     trigger_parser.add_argument("--force", action="store_true", help="Force mitigation evaluation")
 
+    # Harvest
+    harvest_parser = subparsers.add_parser("harvest", help="Harvest GCC and UN multilateral opportunities")
+    harvest_parser.add_argument("--source", type=str, choices=["all", "gcc", "un"], default="all", help="Target sector")
+    harvest_parser.add_argument("--limit", type=int, default=None, help="Max records to index")
+
     args = parser.parse_args()
 
     if args.subcommand == "gui":
@@ -193,6 +222,8 @@ def main() -> int:
         return handle_gate(args)
     elif args.subcommand == "trigger":
         return handle_trigger(args)
+    elif args.subcommand == "harvest":
+        return handle_harvest(args)
     else:
         return launch_gui()
 
