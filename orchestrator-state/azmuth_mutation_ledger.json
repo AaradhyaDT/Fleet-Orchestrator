@@ -1,18 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 815,
-  "promotions_won": 317,
-  "last_mutation_at": "2026-10-20T04:32:57.211381+00:00",
+  "mutations_applied": 816,
+  "promotions_won": 318,
+  "last_mutation_at": "2026-10-20T06:01:51.147095+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T03:50:28.074460+00:00",
-      "gene_id": "TASK_SOCCER_FIELD",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-18T03:50:50.438451+00:00",
       "gene_id": "TASK_SQUARISH_RECTANGLE",
@@ -452,6 +443,15 @@
         "auto_solution_python_mut_python_stdlib_accel"
       ],
       "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-20T06:01:51.147023+00:00",
+      "gene_id": "TEST_MUT_GENE",
+      "mutant_created": [
+        "orig_impl_mut_fast_io"
+      ],
+      "dominant_allele": "orig_impl_mut_fast_io",
       "promotions": 1
     }
   ],

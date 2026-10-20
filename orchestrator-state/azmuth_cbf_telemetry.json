@@ -1,9 +1,9 @@
 {
   "status": "NOCICEPTIVE_BREACH",
-  "total_nodes_evaluated": 94,
-  "breached_nodes_count": 2,
+  "total_nodes_evaluated": 99,
+  "breached_nodes_count": 5,
   "system_invariance_satisfied": false,
-  "min_barrier_h_value": -2.1109,
+  "min_barrier_h_value": -15.01,
   "active_mitigation_actions": [
     {
       "action_type": "BOOST_ALLOSTATIC_DRIVE",
@@ -26,6 +26,42 @@
       "remedial_parameters": {
         "z_score": -3.0,
         "h_value": 0.0,
+        "alpha_gain": 1.0
+      }
+    },
+    {
+      "action_type": "BOOST_ALLOSTATIC_DRIVE",
+      "trigger_node": "LINKEDIN_TALENT_GRAPH_VOLUME",
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "severity": "HIGH",
+      "description": "Safety barrier breach h(x)=-1.028 on LINKEDIN_TALENT_GRAPH_VOLUME (Z=-3.1667)",
+      "remedial_parameters": {
+        "z_score": -3.1667,
+        "h_value": -1.028,
+        "alpha_gain": 1.0
+      }
+    },
+    {
+      "action_type": "BOOST_ALLOSTATIC_DRIVE",
+      "trigger_node": "GREENHOUSE_LEVER_ATS_OPENINGS",
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "severity": "CRITICAL",
+      "description": "Safety barrier breach h(x)=-5.0625 on GREENHOUSE_LEVER_ATS_OPENINGS (Z=-3.75)",
+      "remedial_parameters": {
+        "z_score": -3.75,
+        "h_value": -5.0625,
+        "alpha_gain": 1.0
+      }
+    },
+    {
+      "action_type": "BOOST_ALLOSTATIC_DRIVE",
+      "trigger_node": "ENTERPRISE_REMOTE_TECH_VOLUME",
+      "universe_id": "u14_frontier_talent_ats_radar",
+      "severity": "CRITICAL",
+      "description": "Safety barrier breach h(x)=-15.01 on ENTERPRISE_REMOTE_TECH_VOLUME (Z=-4.9)",
+      "remedial_parameters": {
+        "z_score": -4.9,
+        "h_value": -15.01,
         "alpha_gain": 1.0
       }
     }

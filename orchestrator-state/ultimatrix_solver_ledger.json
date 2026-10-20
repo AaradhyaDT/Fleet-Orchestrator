@@ -330,7 +330,7 @@
     "array-elimination",
     "building-bridges"
   ],
-  "last_solve_at": "2026-10-20T05:17:41.119076+00:00",
+  "last_solve_at": "2026-10-20T06:01:50.872700+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:13:52.882809+00:00",
@@ -633,12 +633,6 @@
       "samples_passed": 1
     }
   ],
-  "attempted_slugs": {
-    "connect-the-graph": "VERIFICATION_FAILED",
-    "equal-sums": "VERIFICATION_FAILED",
-    "find-edge-list": "VERIFICATION_FAILED",
-    "alice-tree": "VERIFICATION_FAILED",
-    "bad-triplet": "VERIFICATION_FAILED"
-  },
+  "attempted_slugs": {},
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
