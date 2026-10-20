@@ -1,0 +1,25 @@
+{
+  "id": "EMBASSY-EU-2026-07",
+  "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+  "organization": "Delegation of the European Union / EEAS",
+  "category": "EMBASSY_DIPLOMATIC",
+  "location": "Kathmandu, Nepal / Brussels, Belgium",
+  "compensation_est": "EUR 55,000 - 85,000 / yr (Diplomatic Service Grade AL-III)",
+  "tax_status": "UN_EXEMPT",
+  "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+  "relevance_tags": [
+    "eu_ai_act",
+    "bias_mitigation",
+    "fairness_audit",
+    "epistemic_governance",
+    "public_interest_ai"
+  ],
+  "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+  "deadline": "2026-12-15",
+  "description": "Coordinate bilateral technical cooperation on EU AI Act compliance, algorithmic fairness audits, and digital public infrastructure integrity.",
+  "sdg_alignment": [
+    "SDG 10: Reduced Inequalities",
+    "SDG 16: Peace, Justice and Strong Institutions"
+  ],
+  "ingested_at": "2026-10-20T03:27:48.803084+00:00"
+}

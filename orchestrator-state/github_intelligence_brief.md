@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-20T02:00:05.395325+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-20T03:29:03.215980+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[vllm-project/router]** [[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan](https://github.com/vllm-project/router/issues/393) (Comments: 0, Salience: 1.0)
 - **[patrickkellyyoung-ai/swarm-agora-mcp]** [[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark](https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4) (Comments: 4, Salience: 1.8)
 - **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 10, Salience: 2.0)
 - **[MakazhanAlpamys/Soup]** [task: sft loads reasoning_effort, train_on_eot, use_flash_attn and use_liger on paths that never read them](https://github.com/MakazhanAlpamys/Soup/issues/1698) (Comments: 3, Salience: 1.6)
-- **[lilalittle/asymmetric-tensor]** [Publish the actual formalization scope, assumptions, and completion status](https://github.com/lilalittle/asymmetric-tensor/issues/33) (Comments: 1, Salience: 1.2)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Docs] No end-to-end tutorial](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363) (Comments: 8, Salience: 2.0)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[CLI] Key handling with no secret ever printed](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328) (Comments: 4, Salience: 1.8)
 - **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Governance and multi-sig across every contract](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388) (Comments: 5, Salience: 2.0)

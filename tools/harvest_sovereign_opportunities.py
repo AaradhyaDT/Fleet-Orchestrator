@@ -53,11 +53,11 @@ class OpportunityRecord:
     id: str
     title: str
     organization: str
-    category: str  # "SOVEREIGN_GCC" | "UN_MULTILATERAL" | "GLOBAL_AI_FRONTIER"
+    category: str  # "SOVEREIGN_GCC" | "UN_MULTILATERAL" | "EMBASSY_DIPLOMATIC" | "GLOBAL_AI_FRONTIER"
     location: str
     compensation_est: str
     tax_status: str  # "TAX_FREE" | "UN_EXEMPT" | "LOCAL_TAX"
-    visa_pathway: str  # "UAE_GOLDEN_VISA" | "UN_G4_DIPLOMATIC" | "EMPLOYER_SPONSORED"
+    visa_pathway: str  # "UAE_GOLDEN_VISA" | "UN_G4_DIPLOMATIC" | "DIPLOMATIC_A2_G1" | "EU_DIPLOMATIC_BLUE_CARD" | "EMPLOYER_SPONSORED"
     relevance_tags: List[str]
     url: str
     deadline: Optional[str]
@@ -157,6 +157,51 @@ GOLDEN_OPPORTUNITIES: List[Dict[str, Any]] = [
         "deadline": "2026-10-31",
         "description": "Advise multilateral country offices on sovereign AI deployment, autonomous workflow orchestration, and verifiable digital public goods architectures.",
         "sdg_alignment": ["SDG 9: Industry, Innovation and Infrastructure", "SDG 17: Partnerships for the Goals"]
+    },
+    {
+        "id": "EMBASSY-US-2026-03",
+        "title": "Regional Information Management & Cybersecurity Specialist (USAID / US Embassy)",
+        "organization": "U.S. Embassy / USAID Foreign National Program",
+        "category": "EMBASSY_DIPLOMATIC",
+        "location": "Kathmandu, Nepal / Regional Diplomatic Missions",
+        "compensation_est": "$45,000 - $75,000 USD / yr (FSN-10/11 Step Scale + Allowances)",
+        "tax_status": "TAX_FREE",
+        "visa_pathway": "DIPLOMATIC_A2_G1",
+        "relevance_tags": ["cyber_forensics", "zero_trust", "air_gap", "ntfs_ads", "secure_systems", "pki"],
+        "url": "https://careers.state.gov/",
+        "deadline": "2026-11-15",
+        "description": "Direct DFIR investigations, cryptographic tamper-proofing, zero-trust perimeter telemetry, and NTFS forensic sweeps across diplomatic foreign service communications.",
+        "sdg_alignment": ["SDG 16: Peace, Justice and Strong Institutions", "SDG 9: Industry, Innovation and Infrastructure"]
+    },
+    {
+        "id": "EMBASSY-EU-2026-07",
+        "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+        "organization": "Delegation of the European Union / EEAS",
+        "category": "EMBASSY_DIPLOMATIC",
+        "location": "Kathmandu, Nepal / Brussels, Belgium",
+        "compensation_est": "EUR 55,000 - 85,000 / yr (Diplomatic Service Grade AL-III)",
+        "tax_status": "UN_EXEMPT",
+        "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+        "relevance_tags": ["eu_ai_act", "bias_mitigation", "fairness_audit", "epistemic_governance", "public_interest_ai"],
+        "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+        "deadline": "2026-12-15",
+        "description": "Coordinate bilateral technical cooperation on EU AI Act compliance, algorithmic fairness audits, and digital public infrastructure integrity.",
+        "sdg_alignment": ["SDG 10: Reduced Inequalities", "SDG 16: Peace, Justice and Strong Institutions"]
+    },
+    {
+        "id": "EMBASSY-UK-2026-11",
+        "title": "Frontier Technology & Data Systems Lead (British Embassy / FCDO)",
+        "organization": "Foreign, Commonwealth & Development Office (FCDO) / British Embassy",
+        "category": "EMBASSY_DIPLOMATIC",
+        "location": "Kathmandu, Nepal / London, UK",
+        "compensation_est": "GBP 42,000 - 65,000 / yr (Country-Based Staff Band C4)",
+        "tax_status": "TAX_FREE",
+        "visa_pathway": "DIPLOMATIC_A2_G1",
+        "relevance_tags": ["autonomous_swarms", "rag_systems", "embedded_firmware", "edge_ai", "cyber_forensics"],
+        "url": "https://fcdocareers.co.uk/",
+        "deadline": "2026-12-01",
+        "description": "Lead applied data systems, edge telemetry architecture, and secure automated workflows supporting bilateral development partnerships.",
+        "sdg_alignment": ["SDG 9: Industry, Innovation and Infrastructure", "SDG 17: Partnerships for the Goals"]
     }
 ]
 
@@ -203,6 +248,8 @@ class SovereignOpportunityHarvester:
             if source_filter == "gcc" and category != "SOVEREIGN_GCC":
                 continue
             if source_filter == "un" and category != "UN_MULTILATERAL":
+                continue
+            if source_filter == "embassy" and category != "EMBASSY_DIPLOMATIC":
                 continue
             record = OpportunityRecord(**seed)
             records.append(record)
@@ -259,8 +306,9 @@ class SovereignOpportunityHarvester:
             "gcc_sovereign_count": sum(1 for r in records if r.category == "SOVEREIGN_GCC"),
             "un_multilateral_count": sum(1 for r in records if r.category == "UN_MULTILATERAL"),
             "tax_free_positions": sum(1 for r in records if r.tax_status in ("TAX_FREE", "UN_EXEMPT")),
+            "embassy_diplomatic_count": sum(1 for r in records if r.category == "EMBASSY_DIPLOMATIC"),
             "golden_visa_eligible": sum(1 for r in records if r.visa_pathway == "UAE_GOLDEN_VISA"),
-            "un_diplomatic_eligible": sum(1 for r in records if r.visa_pathway == "UN_G4_DIPLOMATIC")
+            "un_diplomatic_eligible": sum(1 for r in records if r.visa_pathway in ("UN_G4_DIPLOMATIC", "DIPLOMATIC_A2_G1", "EU_DIPLOMATIC_BLUE_CARD"))
         }
         with open(self.summary_path, "w", encoding="utf-8") as f:
             json.dump(summary_payload, f, indent=2)
@@ -300,6 +348,8 @@ class SovereignOpportunityHarvester:
                         n["current_value"] = float(summary.get("un_multilateral_count", 3))
                     elif n["id"] == "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS":
                         n["current_value"] = float(max(1, summary.get("un_multilateral_count", 3) // 2))
+                    elif n["id"] == "EMBASSY_DIPLOMATIC_TECH_ROSTER":
+                        n["current_value"] = float(summary.get("embassy_diplomatic_count", 3))
                 with open(u13_path, "w", encoding="utf-8") as f:
                     json.dump(u13_data, f, indent=2)
             except Exception as e:
@@ -308,7 +358,7 @@ class SovereignOpportunityHarvester:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Azmuth Sovereign & Multilateral Opportunity Harvester")
-    parser.add_argument("--source", type=str, choices=["all", "gcc", "un"], default="all", help="Target sector")
+    parser.add_argument("--source", type=str, choices=["all", "gcc", "un", "embassy"], default="all", help="Target sector")
     parser.add_argument("--limit", type=int, default=None, help="Max records to index")
     args = parser.parse_args()
 
@@ -321,6 +371,7 @@ def main() -> None:
     print(f"- Total Harvested:     {len(records)} opportunities")
     print(f"- GCC Sovereign Roles: {sum(1 for r in records if r.category == 'SOVEREIGN_GCC')}")
     print(f"- UN Multilateral:     {sum(1 for r in records if r.category == 'UN_MULTILATERAL')}")
+    print(f"- Diplomatic Embassies:{sum(1 for r in records if r.category == 'EMBASSY_DIPLOMATIC')}")
     print(f"- Tax-Free Positions:  {sum(1 for r in records if r.tax_status in ('TAX_FREE', 'UN_EXEMPT'))}")
     print(f"- Output Catalog:      {harvester.catalog_path}")
     print("-" * 80)

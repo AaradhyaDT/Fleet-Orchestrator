@@ -20,6 +20,7 @@ def test_matcher_profile_vectors_structure():
     assert "BiasAperture" in PROFILE_COMPETENCY_VECTORS
     assert "Fleet_Orchestrator" in PROFILE_COMPETENCY_VECTORS
     assert "Brainstorm_Formal_Logic" in PROFILE_COMPETENCY_VECTORS
+    assert "Cyber_Forensics_ZeroTrust" in PROFILE_COMPETENCY_VECTORS
 
     total_weight = sum(p["weight"] for p in PROFILE_COMPETENCY_VECTORS.values())
     assert abs(total_weight - 1.0) < 1e-4
@@ -35,7 +36,7 @@ def test_matcher_evaluate_catalog():
         assert 0.0 <= e.overall_fit_ratio <= 1.0
         assert 0.0 <= e.visa_feasibility_score <= 1.0
         assert e.net_alpha_index_kusd > 0
-        assert e.visa_pathway in ("UAE_GOLDEN_VISA", "UN_G4_DIPLOMATIC", "EMPLOYER_SPONSORED")
+        assert e.visa_pathway in ("UAE_GOLDEN_VISA", "UN_G4_DIPLOMATIC", "DIPLOMATIC_A2_G1", "EU_DIPLOMATIC_BLUE_CARD", "EMPLOYER_SPONSORED")
         assert len(e.gap_closure_actions) > 0
 
 

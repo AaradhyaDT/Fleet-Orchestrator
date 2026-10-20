@@ -1,6 +1,6 @@
 {
-  "last_harvested_at": "2026-10-20T03:08:45.042332+00:00",
-  "total_opportunities": 6,
+  "last_harvested_at": "2026-10-20T03:27:49.687165+00:00",
+  "total_opportunities": 9,
   "sources": [
     "Dubai Future Foundation",
     "TII Abu Dhabi",
@@ -34,7 +34,7 @@
         "SDG 9: Industry, Innovation and Infrastructure",
         "SDG 11: Sustainable Cities"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434597+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803053+00:00"
     },
     {
       "id": "GCC-TII-2026-04",
@@ -58,7 +58,7 @@
       "sdg_alignment": [
         "SDG 9: Industry, Innovation and Infrastructure"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434618+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803070+00:00"
     },
     {
       "id": "GCC-MBZUAI-2026-08",
@@ -84,7 +84,7 @@
         "SDG 3: Good Health and Well-Being",
         "SDG 9: Industry, Innovation and Infrastructure"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434623+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803074+00:00"
     },
     {
       "id": "UN-UNICEF-2026-02",
@@ -110,7 +110,7 @@
         "SDG 3: Good Health and Well-Being",
         "SDG 10: Reduced Inequalities"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434627+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803076+00:00"
     },
     {
       "id": "UN-ITU-2026-05",
@@ -135,7 +135,7 @@
         "SDG 10: Reduced Inequalities",
         "SDG 16: Peace, Justice and Strong Institutions"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434630+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803079+00:00"
     },
     {
       "id": "UN-UNDP-2026-09",
@@ -159,7 +159,83 @@
         "SDG 9: Industry, Innovation and Infrastructure",
         "SDG 17: Partnerships for the Goals"
       ],
-      "ingested_at": "2026-10-20T03:08:43.434633+00:00"
+      "ingested_at": "2026-10-20T03:27:48.803081+00:00"
+    },
+    {
+      "id": "EMBASSY-US-2026-03",
+      "title": "Regional Information Management & Cybersecurity Specialist (USAID / US Embassy)",
+      "organization": "U.S. Embassy / USAID Foreign National Program",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Regional Diplomatic Missions",
+      "compensation_est": "$45,000 - $75,000 USD / yr (FSN-10/11 Step Scale + Allowances)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "relevance_tags": [
+        "cyber_forensics",
+        "zero_trust",
+        "air_gap",
+        "ntfs_ads",
+        "secure_systems",
+        "pki"
+      ],
+      "url": "https://careers.state.gov/",
+      "deadline": "2026-11-15",
+      "description": "Direct DFIR investigations, cryptographic tamper-proofing, zero-trust perimeter telemetry, and NTFS forensic sweeps across diplomatic foreign service communications.",
+      "sdg_alignment": [
+        "SDG 16: Peace, Justice and Strong Institutions",
+        "SDG 9: Industry, Innovation and Infrastructure"
+      ],
+      "ingested_at": "2026-10-20T03:27:48.803083+00:00"
+    },
+    {
+      "id": "EMBASSY-EU-2026-07",
+      "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+      "organization": "Delegation of the European Union / EEAS",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Brussels, Belgium",
+      "compensation_est": "EUR 55,000 - 85,000 / yr (Diplomatic Service Grade AL-III)",
+      "tax_status": "UN_EXEMPT",
+      "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+      "relevance_tags": [
+        "eu_ai_act",
+        "bias_mitigation",
+        "fairness_audit",
+        "epistemic_governance",
+        "public_interest_ai"
+      ],
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en",
+      "deadline": "2026-12-15",
+      "description": "Coordinate bilateral technical cooperation on EU AI Act compliance, algorithmic fairness audits, and digital public infrastructure integrity.",
+      "sdg_alignment": [
+        "SDG 10: Reduced Inequalities",
+        "SDG 16: Peace, Justice and Strong Institutions"
+      ],
+      "ingested_at": "2026-10-20T03:27:48.803084+00:00"
+    },
+    {
+      "id": "EMBASSY-UK-2026-11",
+      "title": "Frontier Technology & Data Systems Lead (British Embassy / FCDO)",
+      "organization": "Foreign, Commonwealth & Development Office (FCDO) / British Embassy",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / London, UK",
+      "compensation_est": "GBP 42,000 - 65,000 / yr (Country-Based Staff Band C4)",
+      "tax_status": "TAX_FREE",
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "relevance_tags": [
+        "autonomous_swarms",
+        "rag_systems",
+        "embedded_firmware",
+        "edge_ai",
+        "cyber_forensics"
+      ],
+      "url": "https://fcdocareers.co.uk/",
+      "deadline": "2026-12-01",
+      "description": "Lead applied data systems, edge telemetry architecture, and secure automated workflows supporting bilateral development partnerships.",
+      "sdg_alignment": [
+        "SDG 9: Industry, Innovation and Infrastructure",
+        "SDG 17: Partnerships for the Goals"
+      ],
+      "ingested_at": "2026-10-20T03:27:48.803086+00:00"
     }
   ]
 }

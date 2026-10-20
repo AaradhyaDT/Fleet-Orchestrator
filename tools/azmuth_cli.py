@@ -153,6 +153,7 @@ def handle_harvest(args: argparse.Namespace) -> int:
     print(f"- Total Harvested:     {len(records)} opportunities")
     print(f"- GCC Sovereign Roles: {sum(1 for r in records if r.category == 'SOVEREIGN_GCC')}")
     print(f"- UN Multilateral:     {sum(1 for r in records if r.category == 'UN_MULTILATERAL')}")
+    print(f"- Diplomatic Embassies:{sum(1 for r in records if r.category == 'EMBASSY_DIPLOMATIC')}")
     print(f"- Tax-Free Positions:  {sum(1 for r in records if r.tax_status in ('TAX_FREE', 'UN_EXEMPT'))}")
     print(f"- Catalog Stored:      {harvester.catalog_path}")
     print("-" * 80)
@@ -230,7 +231,7 @@ def main() -> int:
 
     # Harvest
     harvest_parser = subparsers.add_parser("harvest", help="Harvest GCC and UN multilateral opportunities")
-    harvest_parser.add_argument("--source", type=str, choices=["all", "gcc", "un"], default="all", help="Target sector")
+    harvest_parser.add_argument("--source", type=str, choices=["all", "gcc", "un", "embassy"], default="all", help="Target sector")
     harvest_parser.add_argument("--limit", type=int, default=None, help="Max records to index")
 
     # Match

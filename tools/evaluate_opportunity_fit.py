@@ -50,7 +50,7 @@ PROFILE_COMPETENCY_VECTORS: Dict[str, Dict[str, Any]] = {
             "fall_detection", "imu", "sensor", "quantization", "int8", "assistive_tech",
             "biometric", "embedded_firmware"
         ],
-        "weight": 0.35,
+        "weight": 0.30,
         "evidence_anchor": "F:\\Aaradhya-Dev-Tamrakar\\SPARK (200Hz IMU, FreeRTOS HAL, 1D CNN)"
     },
     "BiasAperture": {
@@ -59,7 +59,7 @@ PROFILE_COMPETENCY_VECTORS: Dict[str, Dict[str, Any]] = {
             "eu_ai_act", "computer_vision", "facial_analysis", "bootstrap_ci", "disparity",
             "algorithmic_governance", "model_governance"
         ],
-        "weight": 0.30,
+        "weight": 0.25,
         "evidence_anchor": "F:\\Aaradhya-Dev-Tamrakar\\BiasAperture (Intersectional Bias Diagnostic)"
     },
     "Fleet_Orchestrator": {
@@ -78,6 +78,14 @@ PROFILE_COMPETENCY_VECTORS: Dict[str, Dict[str, Any]] = {
         ],
         "weight": 0.15,
         "evidence_anchor": "F:\\Aaradhya-Dev-Tamrakar\\brainstorm (Dual-Layer SMT Verification)"
+    },
+    "Cyber_Forensics_ZeroTrust": {
+        "keywords": [
+            "cyber_forensics", "zero_trust", "air_gap", "ntfs_ads", "secure_systems", "pki",
+            "cryptographic", "tamper_proofing", "pe_headers", "security_clearance", "dfir"
+        ],
+        "weight": 0.10,
+        "evidence_anchor": "F:\\Aaradhya-Dev-Tamrakar\\Cyber-Forensics (Windows DFIR and Stealth Evasion Hunting)"
     }
 }
 
@@ -159,6 +167,11 @@ class SemanticOpportunityMatcher:
             feasibility = 0.880
             notes = "Direct institutional multilateral accreditation upon appointment (UN P-2/P-3 or International Consultant Level II)."
             return feasibility, "UN_G4_DIPLOMATIC", notes
+        elif pathway in ("DIPLOMATIC_A2_G1", "EU_DIPLOMATIC_BLUE_CARD") or category == "EMBASSY_DIPLOMATIC":
+            # Bilateral embassies and diplomatic missions provide A-2 diplomatic visa, EU Diplomatic Blue Card, or direct FSN/LES status
+            feasibility = 0.930
+            notes = "Direct Foreign Service / Embassy institutional diplomatic accreditation (A-2 visa, EU Diplomatic Blue Card, or FSN/LES contract)."
+            return feasibility, pathway, notes
         else:
             return 0.750, "EMPLOYER_SPONSORED", "Standard international skilled worker visa sponsorship."
 
@@ -200,6 +213,9 @@ class SemanticOpportunityMatcher:
         elif category == "UN_MULTILATERAL":
             actions.append("Explicitly map SPARK to UN SDG 3 (Good Health & Well-being) and BiasAperture to SDG 10 (Reduced Inequalities).")
             actions.append("Format application dossier matching UN Inspira competency-based indicators (Innovation, Planning, Technological Awareness).")
+        elif category == "EMBASSY_DIPLOMATIC":
+            actions.append("Highlight Cyber-Forensics zero-trust audit protocols, NTFS ADS inspection proofs, and air-gapped security safeguards.")
+            actions.append("Submit cryptographic tamper-proofing evidence ledger conforming to diplomatic communications security standards.")
 
         if not actions:
             actions.append("Portfolio is directly aligned (>=90th percentile). Submit tailored technical dossier and executive cover letter.")

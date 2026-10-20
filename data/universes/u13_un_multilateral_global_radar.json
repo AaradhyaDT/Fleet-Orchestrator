@@ -1,9 +1,9 @@
 {
   "schema_version": "cortical_cartridge.v1",
   "universe_id": "u13_un_multilateral_global_radar",
-  "cortical_lobe": "UN & Multilateral Global Innovation Radar",
+  "cortical_lobe": "UN, Embassies & Multilateral Global Innovation Radar",
   "sensory_adapter": "un_multilateral_opportunity_harvester",
-  "description": "Dedicated cortical lobe monitoring UN system agencies (ITU AI for Good, UNDP Chief Digital Office, UNICEF Innovation Fund), international consultancy rosters, G4/G5 multilateral visa pathways, and global public interest AI funding.",
+  "description": "Dedicated cortical lobe monitoring UN system agencies (ITU AI for Good, UNDP Chief Digital Office, UNICEF Innovation Fund), Bilateral Embassies & Foreign Missions (US Embassy, British Embassy, EU Delegation), diplomatic A-2/G-4 visa pathways, and secure cyber communications.",
   "nodes": [
     {
       "id": "UN_ITU_AI_FOR_GOOD_PIPELINE",
@@ -144,6 +144,62 @@
         "max_action_step": 5.0,
         "collateral_harm_ceiling": 0.95
       }
+    },
+    {
+      "id": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
+      "label": "Bilateral Embassy & Foreign Mission Technical Specialist Vacancies",
+      "node_type": "DIPLOMATIC_MISSION",
+      "unit": "active_embassy_vacancies",
+      "current_value": 0.0,
+      "layer1_homeostatic": {
+        "mu0": 3.0,
+        "sigma0": 1.0,
+        "iqr": 1.2,
+        "tau0_days": 30
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 1.0,
+        "p95": 6.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 0.0,
+        "abs_max": 15.0,
+        "survival_limit": 12.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 1.0,
+        "collateral_harm_ceiling": 0.85
+      }
+    },
+    {
+      "id": "DIPLOMATIC_SECURE_CYBER_READINESS",
+      "label": "Diplomatic Secure Comms, Air-Gap & Cyber Defense Readiness Index",
+      "node_type": "CYBER_DIPLOMACY",
+      "unit": "readiness_score_pct",
+      "current_value": 91.5,
+      "layer1_homeostatic": {
+        "mu0": 90.0,
+        "sigma0": 4.0,
+        "iqr": 5.0,
+        "tau0_days": 14
+      },
+      "layer2_allostatic": {
+        "z_stretched": 2.0,
+        "z_critical": 3.0,
+        "p05": 78.0,
+        "p95": 98.0
+      },
+      "layer3_nociceptive": {
+        "abs_min": 50.0,
+        "abs_max": 100.0,
+        "survival_limit": 99.0
+      },
+      "reflex_limiters": {
+        "max_action_step": 3.0,
+        "collateral_harm_ceiling": 0.9
+      }
     }
   ],
   "synapses": [
@@ -169,6 +225,14 @@
       "edge_type": "VALIDATES_FIELD_DEPLOYMENT",
       "weight": 0.85,
       "lag_days": 45,
+      "evidence_tier": "EMPIRICALLY_VERIFIED"
+    },
+    {
+      "source": "DIPLOMATIC_SECURE_CYBER_READINESS",
+      "target": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
+      "edge_type": "QUALIFIES_DIPLOMATIC_CLEARANCE",
+      "weight": 0.92,
+      "lag_days": 14,
       "evidence_tier": "EMPIRICALLY_VERIFIED"
     }
   ],

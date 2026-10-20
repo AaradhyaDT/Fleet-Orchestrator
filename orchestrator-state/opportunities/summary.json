@@ -1,9 +1,10 @@
 {
-  "timestamp": "2026-10-20T03:08:45.042670+00:00",
-  "total_active": 6,
+  "timestamp": "2026-10-20T03:27:49.687838+00:00",
+  "total_active": 9,
   "gcc_sovereign_count": 3,
   "un_multilateral_count": 3,
-  "tax_free_positions": 6,
+  "tax_free_positions": 9,
+  "embassy_diplomatic_count": 3,
   "golden_visa_eligible": 3,
-  "un_diplomatic_eligible": 3
+  "un_diplomatic_eligible": 6
 }

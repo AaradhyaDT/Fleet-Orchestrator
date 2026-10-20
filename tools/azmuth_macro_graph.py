@@ -50,10 +50,12 @@ CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
     {"source": "u12_sovereign_gcc_dubai_radar::UAE_GOLDEN_VISA_CODER_READINESS", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.92, "lag_days": 14, "edge_type": "GLOBAL_RESIDENCY_ENABLEMENT"},
     {"source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO", "target": "u12_sovereign_gcc_dubai_radar::FOUNDING_ML_SYSTEMS_MATCH_SCORE", "weight": 0.89, "lag_days": 7, "edge_type": "PORTFOLIO_PROVENANCE_COUPLING"},
     {"source": "u12_sovereign_gcc_dubai_radar::DFF_DUBAI_FUTURE_FOUNDATION_RFP", "target": "u4_macro_capital_markets::NVDA_GPU_DEMAND", "weight": 0.72, "lag_days": 30, "edge_type": "SOVEREIGN_COMPUTE_ACCELERATION"},
-    # U13 (UN & Multilateral Global Innovation Radar) -> U10, U11, U3
+    # U13 (UN & Multilateral Global Innovation Radar) -> U10, U11, U3, U7
     {"source": "u10_spark_edge_ai_telemetry::FALL_RECALL_SAFETY_RATIO", "target": "u13_un_multilateral_global_radar::UNICEF_INNOVATION_FUND_EDGE_AI", "weight": 0.94, "lag_days": 14, "edge_type": "ASSISTIVE_TECH_VALIDATION"},
     {"source": "u11_bias_aperture_vision_audit::EQUAL_OPPORTUNITY_DISPARITY", "target": "u13_un_multilateral_global_radar::ETHICAL_AI_MULTILATERAL_MANDATE", "weight": 0.96, "lag_days": 7, "edge_type": "FAIRNESS_FRAMEWORK_COMPLIANCE"},
     {"source": "u13_un_multilateral_global_radar::UN_P_LEVEL_ROSTER_QUALIFICATION", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.88, "lag_days": 30, "edge_type": "MULTILATERAL_INSTITUTIONAL_ROSTER"},
+    {"source": "u7_cyber_resilience_dfir::SECRET_LEAK_PROBABILITY_SCORE", "target": "u13_un_multilateral_global_radar::DIPLOMATIC_SECURE_CYBER_READINESS", "weight": -0.91, "lag_days": 1, "edge_type": "SECURE_FACILITY_ACCREDITATION"},
+    {"source": "u13_un_multilateral_global_radar::EMBASSY_DIPLOMATIC_TECH_ROSTER", "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS", "weight": 0.86, "lag_days": 21, "edge_type": "BILATERAL_CAREER_CORRIDOR"},
 ]
 
 

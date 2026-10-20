@@ -1,9 +1,9 @@
 {
-  "evaluated_at": "2026-10-20T03:10:46.979638+00:00",
+  "evaluated_at": "2026-10-20T03:28:40.764205+00:00",
   "total_evaluated": 5,
   "exceptional_matches_count": 1,
   "high_matches_count": 4,
-  "average_fit_ratio": 0.797,
+  "average_fit_ratio": 0.806,
   "top_matches": [
     {
       "opportunity_id": "GCC-DFF-2026-01",
@@ -22,7 +22,8 @@
         "SPARK": 0.967,
         "BiasAperture": 0.05,
         "Fleet_Orchestrator": 0.573,
-        "Brainstorm_Formal_Logic": 0.05
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.05
       },
       "gap_closure_actions": [
         "Provide one-page executive system card framing SPARK as sovereign-grade ultra-low-power telemetry for industrial/assistive deployment.",
@@ -36,7 +37,7 @@
       "organization": "Technology Innovation Institute (TII Abu Dhabi) / ATRC",
       "category": "SOVEREIGN_GCC",
       "location": "Abu Dhabi, UAE",
-      "overall_fit_ratio": 0.828,
+      "overall_fit_ratio": 0.818,
       "fit_tier": "HIGH_MATCH",
       "visa_feasibility_score": 0.915,
       "visa_pathway": "UAE_GOLDEN_VISA",
@@ -47,13 +48,40 @@
         "SPARK": 0.573,
         "BiasAperture": 0.05,
         "Fleet_Orchestrator": 0.817,
-        "Brainstorm_Formal_Logic": 0.817
+        "Brainstorm_Formal_Logic": 0.817,
+        "Cyber_Forensics_ZeroTrust": 0.05
       },
       "gap_closure_actions": [
         "Provide one-page executive system card framing SPARK as sovereign-grade ultra-low-power telemetry for industrial/assistive deployment.",
         "Format GitHub portfolio profile emphasizing UAE Coder Golden Visa eligibility criteria."
       ],
       "url": "https://www.tii.ae/careers"
+    },
+    {
+      "opportunity_id": "EMBASSY-EU-2026-07",
+      "title": "Digital Cooperation & AI Policy Specialist (EU Diplomatic Delegation)",
+      "organization": "Delegation of the European Union / EEAS",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / Brussels, Belgium",
+      "overall_fit_ratio": 0.814,
+      "fit_tier": "HIGH_MATCH",
+      "visa_feasibility_score": 0.93,
+      "visa_pathway": "EU_DIPLOMATIC_BLUE_CARD",
+      "visa_notes": "Direct Foreign Service / Embassy institutional diplomatic accreditation (A-2 visa, EU Diplomatic Blue Card, or FSN/LES contract).",
+      "net_alpha_index_kusd": 160.0,
+      "tax_status": "UN_EXEMPT",
+      "pillar_breakdown": {
+        "SPARK": 0.05,
+        "BiasAperture": 0.922,
+        "Fleet_Orchestrator": 0.05,
+        "Brainstorm_Formal_Logic": 0.817,
+        "Cyber_Forensics_ZeroTrust": 0.05
+      },
+      "gap_closure_actions": [
+        "Highlight Cyber-Forensics zero-trust audit protocols, NTFS ADS inspection proofs, and air-gapped security safeguards.",
+        "Submit cryptographic tamper-proofing evidence ledger conforming to diplomatic communications security standards."
+      ],
+      "url": "https://www.eeas.europa.eu/eeas/vacancies_en"
     },
     {
       "opportunity_id": "GCC-MBZUAI-2026-08",
@@ -72,7 +100,8 @@
         "SPARK": 1.0,
         "BiasAperture": 0.05,
         "Fleet_Orchestrator": 0.05,
-        "Brainstorm_Formal_Logic": 0.05
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.05
       },
       "gap_closure_actions": [
         "Provide one-page executive system card framing SPARK as sovereign-grade ultra-low-power telemetry for industrial/assistive deployment.",
@@ -81,54 +110,30 @@
       "url": "https://mbzuai.ac.ae/careers/"
     },
     {
-      "opportunity_id": "UN-ITU-2026-05",
-      "title": "AI Technical Officer (Algorithmic Fairness & Model Governance)",
-      "organization": "International Telecommunication Union (ITU) - AI for Good",
-      "category": "UN_MULTILATERAL",
-      "location": "Geneva, Switzerland",
-      "overall_fit_ratio": 0.762,
+      "opportunity_id": "EMBASSY-UK-2026-11",
+      "title": "Frontier Technology & Data Systems Lead (British Embassy / FCDO)",
+      "organization": "Foreign, Commonwealth & Development Office (FCDO) / British Embassy",
+      "category": "EMBASSY_DIPLOMATIC",
+      "location": "Kathmandu, Nepal / London, UK",
+      "overall_fit_ratio": 0.766,
       "fit_tier": "HIGH_MATCH",
-      "visa_feasibility_score": 0.88,
-      "visa_pathway": "UN_G4_DIPLOMATIC",
-      "visa_notes": "Direct institutional multilateral accreditation upon appointment (UN P-2/P-3 or International Consultant Level II).",
-      "net_alpha_index_kusd": 145.0,
-      "tax_status": "UN_EXEMPT",
+      "visa_feasibility_score": 0.93,
+      "visa_pathway": "DIPLOMATIC_A2_G1",
+      "visa_notes": "Direct Foreign Service / Embassy institutional diplomatic accreditation (A-2 visa, EU Diplomatic Blue Card, or FSN/LES contract).",
+      "net_alpha_index_kusd": 160.0,
+      "tax_status": "TAX_FREE",
       "pillar_breakdown": {
-        "SPARK": 0.05,
-        "BiasAperture": 0.986,
-        "Fleet_Orchestrator": 0.05,
-        "Brainstorm_Formal_Logic": 0.05
-      },
-      "gap_closure_actions": [
-        "Explicitly map SPARK to UN SDG 3 (Good Health & Well-being) and BiasAperture to SDG 10 (Reduced Inequalities).",
-        "Format application dossier matching UN Inspira competency-based indicators (Innovation, Planning, Technological Awareness)."
-      ],
-      "url": "https://aiforgood.itu.int/"
-    },
-    {
-      "opportunity_id": "UN-UNICEF-2026-02",
-      "title": "Frontier Technology Fellow - Open Source Assistive Wearables & Edge AI",
-      "organization": "UNICEF Office of Innovation / Innovation Fund",
-      "category": "UN_MULTILATERAL",
-      "location": "Geneva, Switzerland / Remote Hybrid",
-      "overall_fit_ratio": 0.762,
-      "fit_tier": "HIGH_MATCH",
-      "visa_feasibility_score": 0.88,
-      "visa_pathway": "UN_G4_DIPLOMATIC",
-      "visa_notes": "Direct institutional multilateral accreditation upon appointment (UN P-2/P-3 or International Consultant Level II).",
-      "net_alpha_index_kusd": 127.5,
-      "tax_status": "UN_EXEMPT",
-      "pillar_breakdown": {
-        "SPARK": 0.986,
+        "SPARK": 0.817,
         "BiasAperture": 0.05,
-        "Fleet_Orchestrator": 0.05,
-        "Brainstorm_Formal_Logic": 0.05
+        "Fleet_Orchestrator": 0.573,
+        "Brainstorm_Formal_Logic": 0.05,
+        "Cyber_Forensics_ZeroTrust": 0.573
       },
       "gap_closure_actions": [
-        "Explicitly map SPARK to UN SDG 3 (Good Health & Well-being) and BiasAperture to SDG 10 (Reduced Inequalities).",
-        "Format application dossier matching UN Inspira competency-based indicators (Innovation, Planning, Technological Awareness)."
+        "Highlight Cyber-Forensics zero-trust audit protocols, NTFS ADS inspection proofs, and air-gapped security safeguards.",
+        "Submit cryptographic tamper-proofing evidence ledger conforming to diplomatic communications security standards."
       ],
-      "url": "https://www.unicef.org/innovation/innovation-fund"
+      "url": "https://fcdocareers.co.uk/"
     }
   ]
 }

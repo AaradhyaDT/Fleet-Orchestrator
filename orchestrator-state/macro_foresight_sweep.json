@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-20T03:10:47.502424+00:00",
+  "timestamp": "2026-10-20T03:28:50.962311+00:00",
   "total_cartridges": 14,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -210,7 +210,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.502821+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.962665+00:00"
     },
     "u10_spark_edge_ai_telemetry": {
       "id": "u10_spark_edge_ai_telemetry",
@@ -387,7 +387,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.503081+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.962937+00:00"
     },
     "u11_bias_aperture_vision_audit": {
       "id": "u11_bias_aperture_vision_audit",
@@ -564,7 +564,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.503302+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.963166+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
@@ -741,14 +741,14 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.503546+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.963449+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
-      "name": "UN & Multilateral Global Innovation Radar",
-      "node_count": 5,
-      "synapse_count": 3,
-      "spikes_count": 2,
+      "name": "UN, Embassies & Multilateral Global Innovation Radar",
+      "node_count": 7,
+      "synapse_count": 4,
+      "spikes_count": 3,
       "top_chokepoint": "ETHICAL_AI_MULTILATERAL_MANDATE",
       "engram_matches": 1,
       "nodes": {
@@ -916,9 +916,75 @@
           "habituated": true,
           "spikes": 0,
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
+        },
+        "EMBASSY_DIPLOMATIC_TECH_ROSTER": {
+          "id": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
+          "label": "Bilateral Embassy & Foreign Mission Technical Specialist Vacancies",
+          "node_type": "DIPLOMATIC_MISSION",
+          "unit": "active_embassy_vacancies",
+          "current_value": 0.0,
+          "layer1_homeostatic": {
+            "mu0": 3.0,
+            "sigma0": 1.0,
+            "iqr": 1.2,
+            "tau0_days": 30
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 1.0,
+            "p95": 6.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 0.0,
+            "abs_max": 15.0,
+            "survival_limit": 12.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 1.0,
+            "collateral_harm_ceiling": 0.85
+          },
+          "z_score": -3.0,
+          "abs_extreme_ratio": 0.0,
+          "habituated": false,
+          "spikes": 3,
+          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+        },
+        "DIPLOMATIC_SECURE_CYBER_READINESS": {
+          "id": "DIPLOMATIC_SECURE_CYBER_READINESS",
+          "label": "Diplomatic Secure Comms, Air-Gap & Cyber Defense Readiness Index",
+          "node_type": "CYBER_DIPLOMACY",
+          "unit": "readiness_score_pct",
+          "current_value": 91.5,
+          "layer1_homeostatic": {
+            "mu0": 90.0,
+            "sigma0": 4.0,
+            "iqr": 5.0,
+            "tau0_days": 14
+          },
+          "layer2_allostatic": {
+            "z_stretched": 2.0,
+            "z_critical": 3.0,
+            "p05": 78.0,
+            "p95": 98.0
+          },
+          "layer3_nociceptive": {
+            "abs_min": 50.0,
+            "abs_max": 100.0,
+            "survival_limit": 99.0
+          },
+          "reflex_limiters": {
+            "max_action_step": 3.0,
+            "collateral_harm_ceiling": 0.9
+          },
+          "z_score": 0.375,
+          "abs_extreme_ratio": 83.0,
+          "habituated": true,
+          "spikes": 0,
+          "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.503789+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.963744+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1095,7 +1161,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.504034+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.964001+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1272,7 +1338,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.504347+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.964234+00:00"
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -1416,7 +1482,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.504577+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.964460+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2319,7 +2385,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.505489+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.965481+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2463,7 +2529,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.505754+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.965772+00:00"
     },
     "u6_energy_thermal_power": {
       "id": "u6_energy_thermal_power",
@@ -2640,7 +2706,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.505986+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.966004+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -2817,7 +2883,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.506215+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.966229+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -2994,7 +3060,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.506441+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.966461+00:00"
     },
     "u9_regulatory_epistemic_audit": {
       "id": "u9_regulatory_epistemic_audit",
@@ -3171,7 +3237,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T03:10:47.506682+00:00"
+      "last_swept_at": "2026-10-20T03:28:50.966703+00:00"
     }
   },
   "systemic_spikes": [
@@ -3210,6 +3276,12 @@
       "node_id": "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS",
       "z_score": -2.5,
       "state": "NOCICEPTIVE_WARNING"
+    },
+    {
+      "universe_id": "u13_un_multilateral_global_radar",
+      "node_id": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
+      "z_score": -3.0,
+      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
     },
     {
       "universe_id": "u1_research_arbitrage",
@@ -3537,6 +3609,20 @@
       "weight": 0.88,
       "lag_days": 30,
       "edge_type": "MULTILATERAL_INSTITUTIONAL_ROSTER"
+    },
+    {
+      "source": "u7_cyber_resilience_dfir::SECRET_LEAK_PROBABILITY_SCORE",
+      "target": "u13_un_multilateral_global_radar::DIPLOMATIC_SECURE_CYBER_READINESS",
+      "weight": -0.91,
+      "lag_days": 1,
+      "edge_type": "SECURE_FACILITY_ACCREDITATION"
+    },
+    {
+      "source": "u13_un_multilateral_global_radar::EMBASSY_DIPLOMATIC_TECH_ROSTER",
+      "target": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS",
+      "weight": 0.86,
+      "lag_days": 21,
+      "edge_type": "BILATERAL_CAREER_CORRIDOR"
     }
   ]
 }

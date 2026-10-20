@@ -1,0 +1,26 @@
+{
+  "id": "EMBASSY-US-2026-03",
+  "title": "Regional Information Management & Cybersecurity Specialist (USAID / US Embassy)",
+  "organization": "U.S. Embassy / USAID Foreign National Program",
+  "category": "EMBASSY_DIPLOMATIC",
+  "location": "Kathmandu, Nepal / Regional Diplomatic Missions",
+  "compensation_est": "$45,000 - $75,000 USD / yr (FSN-10/11 Step Scale + Allowances)",
+  "tax_status": "TAX_FREE",
+  "visa_pathway": "DIPLOMATIC_A2_G1",
+  "relevance_tags": [
+    "cyber_forensics",
+    "zero_trust",
+    "air_gap",
+    "ntfs_ads",
+    "secure_systems",
+    "pki"
+  ],
+  "url": "https://careers.state.gov/",
+  "deadline": "2026-11-15",
+  "description": "Direct DFIR investigations, cryptographic tamper-proofing, zero-trust perimeter telemetry, and NTFS forensic sweeps across diplomatic foreign service communications.",
+  "sdg_alignment": [
+    "SDG 16: Peace, Justice and Strong Institutions",
+    "SDG 9: Industry, Innovation and Infrastructure"
+  ],
+  "ingested_at": "2026-10-20T03:27:48.803083+00:00"
+}
