@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 """tools/incubator_gemini_worker.py
 -----------------------------------
-Autonomous Background Incubator Worker powered by Gemini API Fleet Key Rotator.
+Autonomous Background Incubator Worker powered by Gemini API Fleet Key Rotator
+with Copilot CLI (GitHub PAT) Tier-2 fallback.
+
+Tiered Synthesis Pipeline:
+  Tier 1: Gemini API Fleet (30-key round-robin, multi-model candidate list).
+  Tier 2: GitHub Copilot CLI via PAT pool (31 accounts from .env.fleet.copilot),
+          invoked headlessly when all Gemini keys are exhausted or throttled.
 
 Lifecycle:
 1. Receives raw thought text and metadata as arguments.
-2. Acquires healthy key from GeminiKeyRotator (30-key fleet).
-3. Queries Gemini (gemini-2.5-flash) to structure the raw idea into a formal BRL Incubator RFC:
-   - Target Ecosystem Module & Universe Lobe (SPARK, BiasAperture, Fleet, Brainstorm, U7, U14, etc.)
-   - Theoretical Invariant / Mathematical Formulation
-   - Empirical Falsifiable Hypothesis
-   - Boundary Conditions & Failure Modes
-   - 1-Line Immediate Next Step
-4. Saves structured RFC markdown to `orchestrator-state/incubator/`
-5. Dispatches a tracked GitHub Issue to `Aaradhya-Dev-Tamrakar/brainstorm` via `gh issue create --body-file`
+2. Tier 1: Acquires healthy key from GeminiKeyRotator (30-key fleet).
+3. Queries Gemini (gemini-flash-lite-latest / gemini-2.5-flash) with auto-retry and
+   multi-slot rotation to structure the raw idea into a formal BRL Incubator RFC.
+4. Tier 2 Fallback: If all Gemini fleet keys fail, discovers Copilot PATs from
+   .env.fleet.copilot and invokes `copilot -p` headlessly to synthesize the RFC
+   via GPT-4o / Claude 3.7 Sonnet / o3-mini (GitHub Copilot model catalog).
+5. Saves structured RFC markdown to `orchestrator-state/incubator/`
+6. Dispatches a tracked GitHub Issue to `Aaradhya-Dev-Tamrakar/brainstorm` via `gh issue create --body-file`
    adhering to canonical /github-workflow patterns.
-6. Updates `orchestrator-state/cognitive_vault.jsonl` with the structured card and issue URL.
+7. Updates `orchestrator-state/cognitive_vault.jsonl` with the structured card and issue URL.
 """
 
 from __future__ import annotations
@@ -29,6 +34,8 @@ import logging
 from pathlib import Path
 import subprocess
 import sys
+import shutil
+import tempfile
 import urllib.error
 import urllib.request
 
@@ -36,6 +43,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = ROOT / "orchestrator-state"
 INCUBATOR_DIR = STATE_DIR / "incubator"
 VAULT_PATH = STATE_DIR / "cognitive_vault.jsonl"
+COPILOT_ENV_PATH = ROOT / ".env.fleet.copilot"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [Incubator-Worker] %(message)s")
 logger = logging.getLogger("incubator_worker")
@@ -77,35 +85,187 @@ Structure your response strictly in the following GitHub Markdown format:
 
 
 async def generate_incubator_rfc(raw_thought: str) -> str:
-    """Uses Gemini Key Rotator to synthesize structured RFC."""
+    """Uses Gemini Key Rotator with auto-retry and multi-slot rotation to synthesize structured RFC."""
     rotator = GeminiKeyRotator()
-    slot = await rotator.get_next_slot()
-    logger.info("Acquired Gemini key slot: %s", slot.masked_key)
+    candidate_models = ["gemini-flash-lite-latest", "gemini-2.5-flash"]
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={slot.api_key}"
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": f"SYSTEM GUIDANCE:\n{SYSTEM_PROMPT}\n\nUSER RAW THOUGHT CAPTURED DURING BREAK:\n\"{raw_thought}\""}
-                ]
+    max_attempts = max(rotator.total_keys * 2, 6)
+    last_err = None
+
+    for attempt in range(max_attempts):
+        slot = await rotator.get_next_slot()
+        logger.info("Attempt %d/%d: Acquired Gemini key slot: %s", attempt + 1, max_attempts, slot.masked_key)
+
+        for model_name in candidate_models:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={slot.api_key}"
+            payload = {
+                "contents": [
+                    {
+                        "parts": [
+                            {"text": f"SYSTEM GUIDANCE:\n{SYSTEM_PROMPT}\n\nUSER RAW THOUGHT CAPTURED DURING BREAK:\n\"{raw_thought}\""}
+                        ]
+                    }
+                ],
+                "generationConfig": {
+                    "temperature": 0.2,
+                    "maxOutputTokens": 2048
+                }
             }
-        ],
-        "generationConfig": {
-            "temperature": 0.2,
-            "maxOutputTokens": 2048
-        }
-    }
 
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"}
+            )
+
+            try:
+                with urllib.request.urlopen(req, timeout=25) as resp:
+                    data = json.loads(resp.read())
+                    text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    slot.total_calls += 1
+                    return text
+            except urllib.error.HTTPError as e:
+                last_err = e
+                if e.code == 429:
+                    logger.warning("Slot %s hit 429 on %s, marking burst cooldown", slot.masked_key, model_name)
+                    rotator.mark_burst_cooldown(slot.key_id, cooldown_seconds=60.0, error_msg=f"429 Rate Limit on {model_name}")
+                    break  # Key is rate limited, try next key slot
+                elif e.code == 403:
+                    logger.debug("Slot %s returned 403 on %s, marking daily exhausted", slot.masked_key, model_name)
+                    rotator.mark_daily_exhausted(slot.key_id, error_msg="403 Forbidden")
+                    break  # Key not authorized for this API, break to next slot
+                elif e.code == 404:
+                    logger.debug("Model %s returned 404 for slot %s, falling back to next candidate model", model_name, slot.masked_key)
+                    continue  # Try next model candidate on the same slot
+                else:
+                    logger.warning("HTTP %d error on slot %s: %s", e.code, slot.masked_key, e)
+                    break
+            except Exception as e:
+                last_err = e
+                logger.warning("Error with slot %s on %s: %s", slot.masked_key, model_name, e)
+                break
+
+    raise RuntimeError(f"All Gemini fleet slots failed to synthesize RFC. Last error: {last_err}")
+
+
+def _discover_copilot_pats() -> list[dict[str, str]]:
+    """Discovers Copilot PATs from .env.fleet.copilot environment file.
+
+    Returns list of dicts with keys: name, token, index.
+    """
+    accounts: list[dict[str, str]] = []
+    if not COPILOT_ENV_PATH.exists():
+        return accounts
+
+    env_vars: dict[str, str] = {}
+    try:
+        with open(COPILOT_ENV_PATH, "r", encoding="utf-8", errors="replace") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                env_vars[k.strip()] = v.strip().strip('"').strip("'")
+    except Exception as e:
+        logger.debug("Could not parse %s: %s", COPILOT_ENV_PATH, e)
+        return accounts
+
+    for i in range(1, 65):
+        name_key = f"COPILOT_ACCOUNT_{i}_NAME"
+        token_key = f"COPILOT_ACCOUNT_{i}_TOKEN"
+        name = env_vars.get(name_key, "").strip()
+        token = env_vars.get(token_key, "").strip()
+        if token and not token.startswith("REPLACE_"):
+            accounts.append({"name": name or f"copilot-{i}", "token": token, "index": str(i)})
+
+    return accounts
+
+
+def _copilot_generate_rfc(raw_thought: str, token: str, account_name: str) -> str | None:
+    """Synthesizes RFC via GitHub Copilot CLI headless non-interactive execution.
+
+    Uses the given PAT for authentication via GITHUB_TOKEN env override.
+    Returns the trimmed text output or None on failure.
+    """
+    copilot_bin = shutil.which("copilot")
+    if not copilot_bin:
+        logger.warning("copilot binary not found on PATH")
+        return None
+
+    prompt = (
+        f"You are the Chief Research Architect of the BRL.\n"
+        f"Transform this raw thought into a structured BRL Incubator RFC using "
+        f"the exact markdown format with sections: "
+        f"1. Executive Summary, 2. Target Ecosystem Module & Universe Mapping, "
+        f"3. Theoretical Invariant & Mathematical Model, "
+        f"4. Falsifiable Hypothesis & Empirical Benchmark, "
+        f"5. Failure Modes & Boundary Conditions, 6. Immediate Next Step.\n\n"
+        f"Raw thought: \"{raw_thought}\""
     )
 
-    with urllib.request.urlopen(req, timeout=25) as resp:
-        data = json.loads(resp.read())
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    cmd = [
+        copilot_bin,
+        "-p", prompt,
+        "-s",
+        "--allow-all-tools",
+        "--no-ask-user",
+        "--no-color",
+        "--no-custom-instructions",
+        "--max-ai-credits", "15",
+        "--max-autopilot-continues", "3",
+    ]
+
+    env = {**dict(__import__("os").environ), "GITHUB_TOKEN": token}
+
+    try:
+        logger.info("[Tier-2] Invoking Copilot CLI via PAT account: %s", account_name)
+        flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=90,
+            env=env,
+            creationflags=flags,
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            return proc.stdout.strip()
+        else:
+            logger.warning("[Tier-2] Copilot CLI returned code %d for account %s: %s",
+                           proc.returncode, account_name, (proc.stderr or "")[:200])
+    except subprocess.TimeoutExpired:
+        logger.warning("[Tier-2] Copilot CLI timed out for account %s", account_name)
+    except Exception as e:
+        logger.warning("[Tier-2] Copilot CLI error for account %s: %s", account_name, e)
+
+    return None
+
+
+async def generate_incubator_rfc_tiered(raw_thought: str) -> str:
+    """Tiered RFC synthesis: Gemini Fleet (Tier 1) -> Copilot CLI PAT Pool (Tier 2)."""
+    # Tier 1: Gemini Fleet
+    try:
+        return await generate_incubator_rfc(raw_thought)
+    except RuntimeError:
+        logger.warning("[Tier-1] All Gemini fleet slots exhausted. Falling back to Tier-2 Copilot CLI.")
+
+    # Tier 2: Copilot CLI via GitHub PAT pool
+    pats = _discover_copilot_pats()
+    if not pats:
+        raise RuntimeError(
+            "Tier-1 (Gemini) exhausted and Tier-2 (Copilot) unavailable: "
+            "no PATs found in .env.fleet.copilot"
+        )
+
+    logger.info("[Tier-2] Discovered %d Copilot PAT accounts for fallback", len(pats))
+
+    for account in pats[:5]:  # Try up to 5 accounts before giving up
+        result = _copilot_generate_rfc(raw_thought, account["token"], account["name"])
+        if result:
+            logger.info("[Tier-2] Successfully synthesized RFC via Copilot account: %s", account["name"])
+            return result
+
+    raise RuntimeError("Both Tier-1 (Gemini Fleet) and Tier-2 (Copilot CLI) failed to synthesize RFC.")
 
 
 def dispatch_github_issue(title: str, body_path: Path) -> str | None:
@@ -142,8 +302,8 @@ async def main_async(raw_thought: str, create_issue: bool = True, vault_id: str 
     print(f"Timestamp:   {datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')}")
     print("=" * 80)
 
-    # 1. Synthesize RFC via Gemini Fleet
-    rfc_content = await generate_incubator_rfc(raw_thought)
+    # 1. Synthesize RFC via Tiered Pipeline (Gemini Fleet -> Copilot CLI PAT)
+    rfc_content = await generate_incubator_rfc_tiered(raw_thought)
 
     # Extract clean title and slug from thought
     clean_title = raw_thought.split("\n")[0][:70].strip()

@@ -1,15 +1,16 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-20T07:20:52.537710+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-20T08:02:09.475154+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[xaviercallens/HiveMind]** [[Season 5 Bounty HM-S5-02] 64-Expert Hierarchical Sparse MoE & FP8 Paged KV-Cache in <2.2 GB VRAM (+3,000 $HIVE)](https://github.com/xaviercallens/HiveMind/issues/44) (Comments: 0, Salience: 1.0)
 - **[Muesli-HQ/muesli]** [Port Microsoft VibeVoice-ASR to Core ML and add as a transcription runtime](https://github.com/Muesli-HQ/muesli/issues/108) (Comments: 0, Salience: 1.0)
 - **[vllm-project/router]** [[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan](https://github.com/vllm-project/router/issues/393) (Comments: 0, Salience: 1.0)
 - **[patrickkellyyoung-ai/swarm-agora-mcp]** [[BOUNTY #3] High-Throughput MoE KV-Cache Compression Benchmark](https://github.com/patrickkellyyoung-ai/swarm-agora-mcp/issues/4) (Comments: 4, Salience: 1.8)
-- **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 10, Salience: 2.0)
-- **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Docs] No end-to-end tutorial](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363) (Comments: 8, Salience: 2.0)
-- **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[CLI] Key handling with no secret ever printed](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328) (Comments: 4, Salience: 1.8)
-- **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Governance and multi-sig across every contract](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388) (Comments: 5, Salience: 2.0)
-- **[StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic]** [[Epic] Build the whole CLI ? from a single console.log to a working tool](https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/380) (Comments: 3, Salience: 1.6)
+- **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
+](https://github.com/spiralgang/aGi-TEAM-FSMbot-/issues/1) (Comments: 7, Salience: 2.0)
+- **[optiqor/kerno]** [Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule](https://github.com/optiqor/kerno/issues/50) (Comments: 58, Salience: 2.0)
+- **[Nobayprotocol/Nobay-Protocol]** [Add Hardhat test suite for ListingRegistry.sol](https://github.com/Nobayprotocol/Nobay-Protocol/issues/3) (Comments: 18, Salience: 2.0)
+- **[kubestellar/kubestellar]** [[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability](https://github.com/kubestellar/kubestellar/issues/3827) (Comments: 3, Salience: 1.6)
 
 ## 2. Trending SOTA AI & TinyML Releases (`U1` & `U2`)
 - **[unslothai/unsloth]** Tag `v0.1.909-beta` - *DeepSeek-V4.1 & FLUX-3* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.909-beta))

@@ -1,9 +1,23 @@
 {
-  "timestamp": "2026-10-20T07:20:52.537710+00:00",
-  "timestamp_epoch": 1792480840.7787423,
+  "timestamp": "2026-10-20T08:02:09.475154+00:00",
+  "timestamp_epoch": 1792483316.2437127,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "xaviercallens/HiveMind#44",
+        "title": "[Season 5 Bounty HM-S5-02] 64-Expert Hierarchical Sparse MoE & FP8 Paged KV-Cache in <2.2 GB VRAM (+3,000 $HIVE)",
+        "repo": "xaviercallens/HiveMind",
+        "url": "https://github.com/xaviercallens/HiveMind/issues/44",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-20T07:37:16Z",
+        "updated_at": "2026-10-20T07:37:16Z",
+        "salience": 1.0
+      },
       {
         "id": "Muesli-HQ/muesli#108",
         "title": "Port Microsoft VibeVoice-ASR to Core ML and add as a transcription runtime",
@@ -49,92 +63,69 @@
         "salience": 1.8
       },
       {
-        "id": "ufal/atrium-translator#46",
-        "title": "Experiments with translator tool in production + functionality (replace-append question)",
-        "repo": "ufal/atrium-translator",
-        "url": "https://github.com/ufal/atrium-translator/issues/46",
+        "id": "spiralgang/aGi-TEAM-FSMbot-#1",
+        "title": "#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####\n",
+        "repo": "spiralgang/aGi-TEAM-FSMbot-",
+        "url": "https://github.com/spiralgang/aGi-TEAM-FSMbot-/issues/1",
         "labels": [
-          "help wanted",
-          "question",
-          "integration"
+          "documentation",
+          "enhancement",
+          "help wanted"
         ],
-        "comments": 10,
-        "created_at": "2026-09-13T14:20:13Z",
-        "updated_at": "2026-10-19T19:52:08Z",
+        "comments": 7,
+        "created_at": "2025-10-04T22:13:46Z",
+        "updated_at": "2026-10-20T07:55:28Z",
         "salience": 2.0
       },
       {
-        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#363",
-        "title": "[Docs] No end-to-end tutorial",
-        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
-        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/363",
+        "id": "optiqor/kerno#50",
+        "title": "Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule",
+        "repo": "optiqor/kerno",
+        "url": "https://github.com/optiqor/kerno/issues/50",
         "labels": [
+          "documentation",
+          "good first issue",
           "help wanted",
-          "docs",
-          "community",
-          "Maybe Rewarded",
-          "GrantFox OSS",
-          "intermediate",
-          "Third Campaign"
+          "P2",
+          "area/community",
+          "claimed"
         ],
-        "comments": 8,
-        "created_at": "2026-08-25T06:29:32Z",
-        "updated_at": "2026-10-18T15:34:08Z",
+        "comments": 58,
+        "created_at": "2026-05-10T13:00:29Z",
+        "updated_at": "2026-10-18T09:22:42Z",
         "salience": 2.0
       },
       {
-        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#328",
-        "title": "[CLI] Key handling with no secret ever printed",
-        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
-        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/328",
+        "id": "Nobayprotocol/Nobay-Protocol#3",
+        "title": "Add Hardhat test suite for ListingRegistry.sol",
+        "repo": "Nobayprotocol/Nobay-Protocol",
+        "url": "https://github.com/Nobayprotocol/Nobay-Protocol/issues/3",
         "labels": [
           "help wanted",
-          "security",
-          "Maybe Rewarded",
-          "GrantFox OSS",
-          "cli",
-          "advanced",
-          "Third Campaign"
+          "Solidity",
+          "Bounty",
+          "Testing"
         ],
-        "comments": 4,
-        "created_at": "2026-08-24T20:34:22Z",
-        "updated_at": "2026-10-18T15:34:06Z",
-        "salience": 1.8
-      },
-      {
-        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#388",
-        "title": "[Epic] Governance and multi-sig across every contract",
-        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
-        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/388",
-        "labels": [
-          "help wanted",
-          "contracts",
-          "feature",
-          "security",
-          "advanced",
-          "epic"
-        ],
-        "comments": 5,
-        "created_at": "2026-08-25T10:33:58Z",
-        "updated_at": "2026-10-18T15:34:01Z",
+        "comments": 18,
+        "created_at": "2025-05-20T17:37:48Z",
+        "updated_at": "2026-10-18T03:48:57Z",
         "salience": 2.0
       },
       {
-        "id": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic#380",
-        "title": "[Epic] Build the whole CLI ? from a single console.log to a working tool",
-        "repo": "StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic",
-        "url": "https://github.com/StellarAgent-AI-Agent-Payment-Rails/Stellar-agentic/issues/380",
+        "id": "kubestellar/kubestellar#3827",
+        "title": "[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability",
+        "repo": "kubestellar/kubestellar",
+        "url": "https://github.com/kubestellar/kubestellar/issues/3827",
         "labels": [
           "help wanted",
-          "feature",
-          "dx",
-          "cli",
-          "advanced",
-          "epic"
+          "lifecycle/stale",
+          "stage/010-actionable",
+          "stage/stalled",
+          "agent/outreach"
         ],
         "comments": 3,
-        "created_at": "2026-08-25T10:33:17Z",
-        "updated_at": "2026-10-18T15:33:58Z",
+        "created_at": "2026-06-08T13:25:17Z",
+        "updated_at": "2026-10-17T17:30:03Z",
         "salience": 1.6
       }
     ],
