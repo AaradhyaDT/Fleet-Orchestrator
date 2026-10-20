@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-20T11:09:04.060602+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-20T14:57:37.523344+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[kernc/backtesting.py]** [CGPT5 proposed enhancements](https://github.com/kernc/backtesting.py/issues/1318) (Comments: 5, Salience: 2.0)
+- **[Leosolid28/open-ldac-windows]** [Validate bidirectional Windows endpoint volume and headphone controls](https://github.com/Leosolid28/open-ldac-windows/issues/3) (Comments: 0, Salience: 1.0)
 - **[shayann07/liquidglass]** [Path-field cache reuses stale geometry when size and pad change but padded dimensions match](https://github.com/shayann07/liquidglass/issues/82) (Comments: 3, Salience: 1.6)
-- **[xaviercallens/HiveMind]** [[Season 5 Bounty HM-S5-02] 64-Expert Hierarchical Sparse MoE & FP8 Paged KV-Cache in <2.2 GB VRAM (+3,000 $HIVE)](https://github.com/xaviercallens/HiveMind/issues/44) (Comments: 0, Salience: 1.0)
 - **[Muesli-HQ/muesli]** [Port Microsoft VibeVoice-ASR to Core ML and add as a transcription runtime](https://github.com/Muesli-HQ/muesli/issues/108) (Comments: 0, Salience: 1.0)
-- **[vllm-project/router]** [[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan](https://github.com/vllm-project/router/issues/393) (Comments: 0, Salience: 1.0)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
 ](https://github.com/spiralgang/aGi-TEAM-FSMbot-/issues/1) (Comments: 7, Salience: 2.0)
 - **[optiqor/kerno]** [Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule](https://github.com/optiqor/kerno/issues/50) (Comments: 58, Salience: 2.0)

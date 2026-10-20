@@ -1,9 +1,36 @@
 {
-  "timestamp": "2026-10-20T11:09:04.060602+00:00",
-  "timestamp_epoch": 1792494532.5683925,
+  "timestamp": "2026-10-20T14:57:37.523344+00:00",
+  "timestamp_epoch": 1792508241.9505484,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "kernc/backtesting.py#1318",
+        "title": "CGPT5 proposed enhancements",
+        "repo": "kernc/backtesting.py",
+        "url": "https://github.com/kernc/backtesting.py/issues/1318",
+        "labels": [
+          "help wanted",
+          "good first issue"
+        ],
+        "comments": 5,
+        "created_at": "2025-10-05T10:25:30Z",
+        "updated_at": "2026-10-20T14:55:34Z",
+        "salience": 2.0
+      },
+      {
+        "id": "Leosolid28/open-ldac-windows#3",
+        "title": "Validate bidirectional Windows endpoint volume and headphone controls",
+        "repo": "Leosolid28/open-ldac-windows",
+        "url": "https://github.com/Leosolid28/open-ldac-windows/issues/3",
+        "labels": [
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-20T11:55:31Z",
+        "updated_at": "2026-10-20T11:55:31Z",
+        "salience": 1.0
+      },
       {
         "id": "shayann07/liquidglass#82",
         "title": "Path-field cache reuses stale geometry when size and pad change but padded dimensions match",
@@ -19,20 +46,6 @@
         "salience": 1.6
       },
       {
-        "id": "xaviercallens/HiveMind#44",
-        "title": "[Season 5 Bounty HM-S5-02] 64-Expert Hierarchical Sparse MoE & FP8 Paged KV-Cache in <2.2 GB VRAM (+3,000 $HIVE)",
-        "repo": "xaviercallens/HiveMind",
-        "url": "https://github.com/xaviercallens/HiveMind/issues/44",
-        "labels": [
-          "enhancement",
-          "help wanted"
-        ],
-        "comments": 0,
-        "created_at": "2026-10-20T07:37:16Z",
-        "updated_at": "2026-10-20T07:37:16Z",
-        "salience": 1.0
-      },
-      {
         "id": "Muesli-HQ/muesli#108",
         "title": "Port Microsoft VibeVoice-ASR to Core ML and add as a transcription runtime",
         "repo": "Muesli-HQ/muesli",
@@ -45,19 +58,6 @@
         "comments": 0,
         "created_at": "2026-05-11T17:18:01Z",
         "updated_at": "2026-10-20T05:15:10Z",
-        "salience": 1.0
-      },
-      {
-        "id": "vllm-project/router#393",
-        "title": "[RFC]: Agent/Program-Aware Scheduling: An Explainable and Reproducible Research Plan",
-        "repo": "vllm-project/router",
-        "url": "https://github.com/vllm-project/router/issues/393",
-        "labels": [
-          "help wanted"
-        ],
-        "comments": 0,
-        "created_at": "2026-10-19T14:10:52Z",
-        "updated_at": "2026-10-20T02:52:08Z",
         "salience": 1.0
       },
       {

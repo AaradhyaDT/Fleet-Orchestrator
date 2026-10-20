@@ -330,7 +330,7 @@
     "array-elimination",
     "building-bridges"
   ],
-  "last_solve_at": "2026-10-20T08:12:23.136078+00:00",
+  "last_solve_at": "2026-10-20T14:57:21.558954+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:13:52.882809+00:00",
@@ -633,6 +633,8 @@
       "samples_passed": 1
     }
   ],
-  "attempted_slugs": {},
+  "attempted_slugs": {
+    "connect-the-graph": "VERIFICATION_FAILED"
+  },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
