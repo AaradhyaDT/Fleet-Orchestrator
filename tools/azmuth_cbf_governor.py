@@ -100,7 +100,7 @@ class AzmuthCBFGovernor:
             return "DAMP_SYNAPTIC_WEIGHTS" if z_score > 0 else "BOOST_ALLOSTATIC_DRIVE"
 
     def audit_and_govern(
-        self, universes_data: Dict[str, Dict[str, Any]]
+        self, universes_data: Dict[str, Dict[str, Any]], audit_memory_subsystem: bool = False
     ) -> Dict[str, Any]:
         """Perform a complete CBF sweep across all loaded universes and generate actions."""
         evaluations: List[BarrierEvaluation] = []
@@ -136,6 +136,28 @@ class AzmuthCBFGovernor:
                         )
                     )
 
+        # Phase 5: Audit Ecosystem Memory Subsystem Barrier Health (when ecosystem mesh is active or requested)
+        if audit_memory_subsystem or "u0_ecosystem_mesh" in universes_data:
+            memory_barrier_eval = self._audit_memory_subsystem_barrier()
+            evaluations.append(memory_barrier_eval)
+            total_nodes += 1
+            if not memory_barrier_eval.is_safe:
+                breached_nodes += 1
+                actions.append(
+                    GovernorMitigationAction(
+                        action_type=memory_barrier_eval.recommended_mitigation or "TRIGGER_EMERGENCY_MEMORY_SYNC",
+                        trigger_node=memory_barrier_eval.node_id,
+                        universe_id=memory_barrier_eval.universe_id,
+                        severity="HIGH",
+                        description=f"Ecosystem memory health barrier breach: h(x)={memory_barrier_eval.h_value} ({memory_barrier_eval.state_label})",
+                        remedial_parameters={
+                            "z_score": memory_barrier_eval.z_score,
+                            "h_value": memory_barrier_eval.h_value,
+                            "alpha_gain": self.alpha_gain,
+                        },
+                    )
+                )
+
         min_h = (
             min((e.h_value for e in evaluations), default=self.z_safety_limit**2)
             if evaluations
@@ -158,10 +180,63 @@ class AzmuthCBFGovernor:
 
         return telemetry
 
+    def _audit_memory_subsystem_barrier(self) -> BarrierEvaluation:
+        """Phase 5: Evaluates the Control Barrier Function for ecosystem memory synchronization."""
+        import hashlib
+        home = Path.home()
+        codex_mem = home / ".codex" / "memories" / "GLOBAL_MEMORY.md"
+        gemini_mem = home / ".gemini" / "config" / "codex-memories" / "GLOBAL_MEMORY.md"
+
+        # Check drift between Codex and Gemini mirrors
+        has_drift = False
+        if codex_mem.is_file() and gemini_mem.is_file():
+            def h_file(p: Path) -> str:
+                h = hashlib.sha256()
+                with open(p, "rb") as f:
+                    while chunk := f.read(65536):
+                        h.update(chunk)
+                return h.hexdigest()
+
+            try:
+                has_drift = h_file(codex_mem) != h_file(gemini_mem)
+            except Exception:
+                has_drift = False
+
+        if has_drift:
+            # Memory desynchronization breach
+            z_score = 3.2
+            h_val = round((self.z_safety_limit**2) - (z_score**2), 4)
+            return BarrierEvaluation(
+                node_id="u0_ecosystem_mesh::MEMORY_MIRROR_DRIFT",
+                universe_id="u0_ecosystem_mesh",
+                current_value=1.0,
+                z_score=z_score,
+                h_value=h_val,
+                is_safe=False,
+                state_label="CRITICAL_NOCICEPTIVE_SPIKE",
+                recommended_mitigation="CIRCUIT_BREAKER_SYNC_GATE",
+            )
+
+        # Normal homeostatic state
+        return BarrierEvaluation(
+            node_id="u0_ecosystem_mesh::MEMORY_MIRROR_HEALTH",
+            universe_id="u0_ecosystem_mesh",
+            current_value=0.0,
+            z_score=0.1,
+            h_value=round((self.z_safety_limit**2) - (0.1**2), 4),
+            is_safe=True,
+            state_label="HOMEOSTATIC_EQUILIBRIUM",
+            recommended_mitigation=None,
+        )
+
 
 def run_cbf_governor_cli(argv: list[str] | None = None) -> None:
     """CLI entrypoint to run CBF sweep on local state."""
     import argparse
+    import sys
+    ROOT = Path(__file__).resolve().parent.parent
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
     from tools.azmuth_macro_graph import sweep_all_universes
 
     parser = argparse.ArgumentParser(description="Azmuth CBF Governor Sweep")

@@ -1,6 +1,6 @@
 {
   "status": "NOCICEPTIVE_BREACH",
-  "total_nodes_evaluated": 99,
+  "total_nodes_evaluated": 100,
   "breached_nodes_count": 5,
   "system_invariance_satisfied": false,
   "min_barrier_h_value": -15.01,

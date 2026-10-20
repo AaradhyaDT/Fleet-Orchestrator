@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-20T16:05:53.108078+00:00",
+  "timestamp": "2026-10-20T16:23:54.582579+00:00",
   "total_cartridges": 15,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -210,7 +210,9 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.108801+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.582997+00:00",
+      "active_user_affinity": 2.0,
+      "grounded_in_user_memory": true
     },
     "u10_spark_edge_ai_telemetry": {
       "id": "u10_spark_edge_ai_telemetry",
@@ -387,7 +389,9 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.109111+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.583319+00:00",
+      "active_user_affinity": 0.25,
+      "grounded_in_user_memory": true
     },
     "u11_bias_aperture_vision_audit": {
       "id": "u11_bias_aperture_vision_audit",
@@ -564,7 +568,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.109360+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.583718+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
@@ -775,7 +779,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.109655+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.584072+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
@@ -1018,7 +1022,9 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.109958+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.584638+00:00",
+      "active_user_affinity": 0.5,
+      "grounded_in_user_memory": true
     },
     "u14_frontier_talent_ats_radar": {
       "id": "u14_frontier_talent_ats_radar",
@@ -1200,7 +1206,7 @@
           "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.110204+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.585174+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1377,7 +1383,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.110495+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.585521+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1554,7 +1560,9 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.111039+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.585995+00:00",
+      "active_user_affinity": 2.0,
+      "grounded_in_user_memory": true
     },
     "u3_career_opportunity_alpha": {
       "id": "u3_career_opportunity_alpha",
@@ -1698,7 +1706,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.111534+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.586500+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2601,7 +2609,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.112543+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.587728+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2745,7 +2753,9 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.112800+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.588331+00:00",
+      "active_user_affinity": 0.25,
+      "grounded_in_user_memory": true
     },
     "u6_energy_thermal_power": {
       "id": "u6_energy_thermal_power",
@@ -2922,7 +2932,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.113040+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.588918+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -3099,7 +3109,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.113268+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.589432+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -3276,7 +3286,9 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.113510+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.589980+00:00",
+      "active_user_affinity": 0.25,
+      "grounded_in_user_memory": true
     },
     "u9_regulatory_epistemic_audit": {
       "id": "u9_regulatory_epistemic_audit",
@@ -3453,7 +3465,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-20T16:05:53.113744+00:00"
+      "last_swept_at": "2026-10-20T16:23:54.590496+00:00"
     }
   },
   "systemic_spikes": [
@@ -3902,5 +3914,22 @@
       "lag_days": 5,
       "edge_type": "REMOTE_INFRASTRUCTURE_DEMAND"
     }
-  ]
+  ],
+  "memory_context": {
+    "active_keywords": [
+      "cp",
+      "fleet",
+      "spark",
+      "un"
+    ],
+    "recent_notes": [],
+    "universe_affinity": {
+      "u0_ecosystem_mesh": 2.0,
+      "u2_ai_compute_frontier": 2.0,
+      "u5_hardware_physics_bom": 0.25,
+      "u10_spark_edge_ai_telemetry": 0.25,
+      "u13_un_multilateral_global_radar": 0.5,
+      "u8_algorithmic_complexity_cp": 0.25
+    }
+  }
 }

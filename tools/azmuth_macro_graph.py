@@ -63,6 +63,64 @@ CROSS_UNIVERSE_BRIDGE_SYNAPSES = [
     {"source": "u14_frontier_talent_ats_radar::ENTERPRISE_REMOTE_TECH_VOLUME", "target": "u0_ecosystem_mesh::Fleet-Orchestrator", "weight": 0.81, "lag_days": 5, "edge_type": "REMOTE_INFRASTRUCTURE_DEMAND"},
 ]
 
+# --- Phase 4: Active User Context & Memory Grounding ---
+
+GLOBAL_MEMORY_PATH = Path.home() / ".gemini" / "config" / "codex-memories" / "GLOBAL_MEMORY.md"
+
+def extract_active_memory_context(max_recent_lines: int = 50) -> dict[str, Any]:
+    """Phase 4: Extracts active user focus and recent memory topics from GLOBAL_MEMORY.md.
+    Enables foresight sweeps to dynamically ground universe prior weights in live human work.
+    """
+    context: dict[str, Any] = {
+        "active_keywords": set(),
+        "recent_notes": [],
+        "universe_affinity": collections.defaultdict(float),
+    }
+
+    if not GLOBAL_MEMORY_PATH.is_file():
+        return context
+
+    try:
+        text = GLOBAL_MEMORY_PATH.read_text(encoding="utf-8")
+        lines = text.splitlines()
+
+        # Keyword to universe mapping heuristics
+        affinity_rules = {
+            "spark": ["u5_hardware_physics_bom", "u10_spark_edge_ai_telemetry"],
+            "imu": ["u5_hardware_physics_bom", "u10_spark_edge_ai_telemetry"],
+            "tinyml": ["u10_spark_edge_ai_telemetry", "u1_research_arbitrage"],
+            "bias": ["u11_bias_aperture_vision_audit", "u9_regulatory_epistemic_audit"],
+            "fairness": ["u11_bias_aperture_vision_audit", "u9_regulatory_epistemic_audit"],
+            "fleet": ["u0_ecosystem_mesh", "u2_ai_compute_frontier"],
+            "copilot": ["u0_ecosystem_mesh", "u2_ai_compute_frontier"],
+            "worker": ["u0_ecosystem_mesh", "u2_ai_compute_frontier"],
+            "competitive": ["u8_algorithmic_complexity_cp"],
+            "cp": ["u8_algorithmic_complexity_cp"],
+            "cyber": ["u7_cyber_resilience_dfir"],
+            "forensics": ["u7_cyber_resilience_dfir"],
+            "dubai": ["u12_sovereign_gcc_dubai_radar"],
+            "gcc": ["u12_sovereign_gcc_dubai_radar"],
+            "un": ["u13_un_multilateral_global_radar"],
+            "ats": ["u14_frontier_talent_ats_radar"],
+            "career": ["u3_career_opportunity_alpha", "u14_frontier_talent_ats_radar"],
+        }
+
+        # Inspect last lines for active signals
+        for line in lines[-max_recent_lines:]:
+            line_lower = line.lower()
+            for kw, universes in affinity_rules.items():
+                if kw in line_lower:
+                    context["active_keywords"].add(kw)
+                    for u in universes:
+                        context["universe_affinity"][u] += 0.25
+
+        context["active_keywords"] = sorted(list(context["active_keywords"]))
+        context["universe_affinity"] = dict(context["universe_affinity"])
+    except Exception as exc:
+        pass
+
+    return context
+
 
 class HomeostaticBaselineNormalizer:
     """Evaluates raw observations against 4-layer homeostatic, allostatic, and nociceptive bounds."""
@@ -678,6 +736,15 @@ def sweep_all_universes(cartridge_dir: Path = DEFAULT_CARTRIDGE_DIR, z_threshold
 
     # Attach Cross-Universe Bridge Synapses
     results["cross_universe_bridges"] = CROSS_UNIVERSE_BRIDGE_SYNAPSES
+
+    # Phase 4: Ground foresight sweep in active memory context
+    mem_ctx = extract_active_memory_context()
+    results["memory_context"] = mem_ctx
+    if mem_ctx.get("universe_affinity"):
+        for u_id, affinity_boost in mem_ctx["universe_affinity"].items():
+            if u_id in results["universes"] and isinstance(results["universes"][u_id], dict):
+                results["universes"][u_id]["active_user_affinity"] = round(affinity_boost, 2)
+                results["universes"][u_id]["grounded_in_user_memory"] = True
 
     # Persist multi-universe sweep summary
     DEFAULT_STATE_DIR.mkdir(parents=True, exist_ok=True)
