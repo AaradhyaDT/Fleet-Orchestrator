@@ -5,7 +5,7 @@ description: Universal meta-orchestrator for Aaradhya's 28-tool ecosystem. Enfor
 
 # Adaptive Workflow Orchestrator (`adaptive-workflow`)
 
-Universal meta-orchestrator for Aaradhya's ecosystem (28 modules, 35 branches). Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 31-worker Copilot pool (`INV-ASYM-FLEET`), 30 Gemini keys, Azmuth Foresight (`U0`–`U14` across 15 Universes), Colab accelerators, 9 archetypes, real-time grounding & zero-help loops.
+Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 31-worker Copilot pool (`INV-ASYM-FLEET`), 30 Gemini keys, Azmuth Foresight (`U0`–`U14` across 15 Universes), Colab accelerators, 9 archetypes, real-time grounding & zero-help loops.
 
 ---
 

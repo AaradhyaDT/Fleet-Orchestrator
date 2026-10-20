@@ -254,7 +254,7 @@ def build_gene_phylogeny(gene_data: Dict[str, Any]) -> Dict[str, Any]:
 
     for m in mutants:
         mid = m.get("allele_id", "")
-        parent_id, op_name = mid.split("_mut_", 1)
+        parent_id, op_name = mid.rsplit("_mut_", 1)
         if parent_id not in allele_map and wild_types:
             parent_id = wild_types[0].get("allele_id", "")
 
@@ -670,7 +670,7 @@ class AzmuthCommandCenterGUI:
         self.zoom_reset()
         if hasattr(self, "lbl_footer_job"):
             self.lbl_footer_job.configure(
-                text="● Status: DAG layout reset to default schematic render",
+                text=f"Status: {self.active_view.title()} layout reset",
                 fg=self.theme.accent_cyan,
             )
 
@@ -1783,6 +1783,7 @@ class AzmuthCommandCenterGUI:
         self._details_expanded = False
         self.btn_technical_details.configure(state=tk.DISABLED, text="Show technical details")
         self._show_view_help()
+        fit_requested = self._fit_pending
         self._populate_left_panel()
         self._update_view_actions()
         self._set_job_controls(not self.is_job_running)
@@ -1790,8 +1791,9 @@ class AzmuthCommandCenterGUI:
         self.right_title_lbl.configure(text="Inspector")
         self.btn_contextual_action.configure(text={"pipeline": "Scan", "dag": "Shock", "genes": "Mutate", "ingestion": "A100 burst"}[view_name])
         self.btn_contextual_action.configure(bg=self.theme.accent_blue, fg=self.theme.on_accent)
+        self.root.update_idletasks()
         self._redraw_active_canvas()
-        if self._fit_pending and self._initial_layout_done:
+        if fit_requested and self._initial_layout_done:
             self._fit_active_view()
 
     def _toggle_side_panel(self, side: str) -> None:
@@ -2149,6 +2151,13 @@ class AzmuthCommandCenterGUI:
         tw = max(f_title.measure(line) / self.system_dpi for line in lines)
         sw = max((f_sub.measure(line) / self.system_dpi for line in subtitle.splitlines()), default=0)
         bw = (f_badge.measure(badge) / self.system_dpi + int(12 * self.cam_zoom)) if f_badge else 0
+        # Point-size floors can make secondary content wider than its slot.
+        # Retain the primary name and defer metrics/badges to selection details.
+        available_text = max(64, base_w * self.cam_zoom - 24)
+        if max(tw, sw) + bw > available_text:
+            badge, bw = None, 0
+        if sw > available_text:
+            subtitle, sw = "", 0
 
         # Auto-fit width and height to comfortably enclose text
         stripe_w = max(3, int(5 * self.cam_zoom))
@@ -2418,8 +2427,8 @@ class AzmuthCommandCenterGUI:
             cortex_wy,
             185.0,
             58.0,
-            "Signal analysis (U0–U5)",
-            f"6 Cartridges • {len(self.cartridges)} Lobes",
+            "Signal analysis",
+            f"{len(self.cartridges)} domains",
             t.accent_blue,
             badge="DAG",
             payload={"type": "pipeline_stage", "id": "STAGE_CORTEX"},
@@ -2489,7 +2498,7 @@ class AzmuthCommandCenterGUI:
                 orientation=orient,
             )
             self.active_canvas_edges[-1].update(source_id=src_id, target_id=dst_id)
-            for item in set(self.canvas.find_all()) - previous_items:
+            for item in sorted(set(self.canvas.find_all()) - previous_items):
                 self.canvas.tag_lower(item, "node_card")
 
     # --- VIEW 2: U0-U5 Neuromorphic Causal DAG ---
@@ -2603,185 +2612,156 @@ class AzmuthCommandCenterGUI:
 
     # --- VIEW 3: Phylogenetic Gene Evolution Tree & Capabilities ---
 
+    def _connect_gene_nodes(self, source, target, **options) -> None:
+        """Anchor every redraw to the measured, possibly dragged card borders."""
+        if source not in self.canvas_nodes or target not in self.canvas_nodes:
+            return
+        src, dst = self.canvas_nodes[source], self.canvas_nodes[target]
+        (ax, ay), (bx, by), orientation = self._compute_smart_anchor(
+            source, target, src["world_pos"], src["world_dim"],
+            dst["world_pos"], dst["world_dim"],
+        )
+        before = set(self.canvas.find_all())
+        edge_count = len(self.active_canvas_edges)
+        self._draw_directed_edge(ax, ay, bx, by, orientation=orientation, **options)
+        if len(self.active_canvas_edges) > edge_count:
+            self.active_canvas_edges[-1].update(source_id=source, target_id=target)
+        for item in sorted(set(self.canvas.find_all()) - before):
+            self.canvas.tag_lower(item, "node_card")
+
+    def _change_gene_page(self, direction) -> None:
+        gene_id = self.selected_gene_id
+        self._gene_pages[gene_id] = max(0, self._gene_pages.get(gene_id, 0) + direction)
+        # Changing visible content is an explicit navigation action. Ordinary
+        # polling/redraws retain both the page and the user's camera/selection.
+        self.zoom_reset()
+
     def _draw_gene_phylogeny_view(self, w: float, h: float) -> None:
         t = self.theme
+        self._gene_page_controls = []
+        if not hasattr(self, "_gene_pages"):
+            self._gene_pages = {}
         if not self.selected_gene_id or self.selected_gene_id not in self.genes_catalog:
             visible = [meta["gene_id"] for meta in self.left_items_meta if meta.get("type") == "gene"]
-            if visible:
-                self.selected_gene_id = visible[0]
-            else:
-                self.canvas.create_text(w / 2, h / 2, text="No genes match the current filters", fill=t.text_muted, font=self.font("Segoe UI", 11))
+            if not visible:
+                self.canvas.create_text(w / 2, h / 2, text="No genes match the current filters", fill=t.text_muted, font=self.font())
                 return
-
-        gene_data = self.genes_catalog[self.selected_gene_id]
-        phylo = build_gene_phylogeny(gene_data)
+            self.selected_gene_id = visible[0]
+        phylo = build_gene_phylogeny(self.genes_catalog[self.selected_gene_id])
+        gid = phylo["gene_id"]
         tier_col = t.tier_colors.get(phylo["tier"], t.accent_cyan)
+        alleles = phylo["wild_types"] + phylo["mutants"]
+        allele_map = {a["allele_id"]: a for a in alleles}
+        parents = {e["target_allele"]: e for e in phylo["edges"]}
+        # Keep overview pages compact even for short catalogues. Each page has
+        # at most two focal variants plus their immediate parent context.
+        page_size = 2 if len(alleles) > 2 else max(1, len(alleles))
+        pages = max(1, (len(alleles) + page_size - 1) // page_size)
+        page = min(self._gene_pages.get(gid, 0), pages - 1)
+        self._gene_pages[gid] = page
+        focal = alleles[page * page_size:(page + 1) * page_size]
+        shown = {a["allele_id"]: a for a in focal}
+        for a in focal:
+            parent = parents.get(a["allele_id"], {}).get("source_allele")
+            if parent in allele_map:
+                shown.setdefault(parent, allele_map[parent])
 
-        # Fixed heading bounds are measured separately from the camera graph.
         title = self.canvas.create_text(
-            24, 20, text=f"{phylo['gene_id']} / {phylo['tier_label']}",
-            fill=tier_col, font=self.font("Segoe UI Semibold", 9),
-            anchor="nw", width=max(40, w - 48), tags="hud",
+            24, 20, text=f"{gid} / {phylo['tier_label']}", fill=tier_col,
+            font=self.font("Segoe UI Semibold", 9), anchor="nw",
+            width=max(40, w - 48), tags="hud",
         )
-        title_bottom = self.canvas.bbox(title)[3]
-        summary = self.canvas.create_text(
-            24, title_bottom + 8,
-            text=f"Recorded speedup: {phylo['net_speedup_pct']:+.1f}% · {phylo['total_alleles']} variants",
-            fill=t.text_secondary, font=self.font(), anchor="nw", width=max(40, w - 48), tags="hud",
+        summary = f"Recorded speedup: {phylo['net_speedup_pct']:+.1f}% · {len(alleles)} variants"
+        if pages > 1:
+            summary += f" · Showing {page * page_size + 1}–{min(len(alleles), (page + 1) * page_size)} plus parent context"
+        item = self.canvas.create_text(
+            24, self.canvas.bbox(title)[3] + 8, text=summary,
+            fill=t.text_secondary, font=self.font(), anchor="nw",
+            width=max(40, w - 48), tags="hud",
         )
-        banner_bottom = self.canvas.bbox(summary)[3] + 10
-        background = self.canvas.create_rectangle(14, 10, w - 14, banner_bottom, fill=t.bg_card, outline=t.border_subtle, tags="hud")
+        bottom = self.canvas.bbox(item)[3]
+        if pages > 1:
+            for label, x, direction, enabled in (
+                ("Previous", 24, -1, page > 0),
+                ("Next", 126, 1, page < pages - 1),
+            ):
+                button = self.canvas.create_text(
+                    x, bottom + 12, text=label, anchor="nw", font=self.font(),
+                    fill=t.accent_blue if enabled else t.text_muted, tags="hud",
+                )
+                if enabled:
+                    self._gene_page_controls.append((self.canvas.bbox(button), direction))
+            counter = self.canvas.create_text(
+                204, bottom + 12, text=f"Page {page + 1}/{pages}", anchor="nw",
+                fill=t.text_secondary, font=self.font(), tags="hud",
+            )
+            bottom = self.canvas.bbox(counter)[3]
+        background = self.canvas.create_rectangle(
+            14, 10, w - 14, bottom + 10, fill=t.bg_card,
+            outline=t.border_subtle, tags="hud",
+        )
         self.canvas.tag_lower(background, title)
-        self._diagram_top = banner_bottom + 18
-
-        root_wx, root_wy = 240.0, 380.0
-        wt_wx = 640.0
-        mut_wx = 1040.0
-
-        root_bw = 180.0
-        root_bh = 64.0
-        half_rbw = root_bw / 2.0
-
-        self._draw_node_box(
-            f"GENE_ROOT::{phylo['gene_id']}",
-            root_wx,
-            root_wy,
-            root_bw,
-            root_bh,
-            phylo["gene_id"],
-            f"{phylo['tier_label'][:22]}",
-            tier_col,
-            badge=f"T{phylo['tier']}",
-            payload={"type": "gene_root", "gene_id": phylo["gene_id"]},
-        )
-
-        wild_types = phylo["wild_types"]
-        wt_positions: Dict[str, Tuple[float, float]] = {}
-        allele_bw = 195.0
-        allele_bh = 56.0
-        half_abw = allele_bw / 2.0
-
-        n_wt = len(wild_types)
-        wt_vstep = max(110.0, 600.0 / max(n_wt + 1, 1))
-        wt_total_h = (n_wt - 1) * wt_vstep
-        wt_base_y = 380.0 - (wt_total_h / 2.0)
-
-        for idx, wt in enumerate(wild_types):
-            aid = wt.get("allele_id", f"wt_{idx}")
-            wy = wt_base_y + idx * wt_vstep
-            wt_positions[aid] = (wt_wx, wy)
-
-            is_prim = wt.get("dominance") == "PRIMARY"
-            col = t.accent_gold if is_prim else t.accent_cyan
-            fit = wt.get("empirical_fitness", {})
-            rt = fit.get("runtime_ms", "?")
-            ram = fit.get("ram_kb", "?")
-            comp = wt.get("complexity_time", "O(N)")
-
-            self._draw_directed_edge(root_wx + half_rbw, root_wy, wt_wx - half_abw, wy, color=tier_col, label="Wild-Type")
+        self._diagram_top = bottom + 28
+        root_id = f"GENE_ROOT::{gid}"
+        # Keep the gene summary in its own left column. The wider gap is
+        # intentional: at 150–200% DPI, point-sized text can keep cards wider
+        # than their zoomed world dimensions, especially in a narrow canvas.
+        self._draw_node_box(root_id, 0, 380, 180, 64, gid,
+                            phylo["tier_label"], tier_col, badge=f"T{phylo['tier']}",
+                            payload={"type": "gene_root", "gene_id": gid})
+        node_id = lambda aid: f"ALLELE::{gid}::{aid}"
+        # Topological columns support mutations of mutations. Parents outside
+        # this page are deliberately omitted rather than inventing root edges.
+        depths = {}
+        def depth(aid, trail=()):
+            if aid in depths:
+                return depths[aid]
+            parent = parents.get(aid, {}).get("source_allele")
+            value = 1 + depth(parent, (*trail, aid)) if parent in shown and parent not in (*trail, aid) else 0
+            depths[aid] = value
+            return value
+        columns = {}
+        for aid in shown:
+            columns.setdefault(depth(aid), []).append(aid)
+        for column, identifiers in sorted(columns.items()):
+            for row, aid in enumerate(identifiers):
+                allele = shown[aid]
+                mutant = aid in parents
+                primary = allele.get("dominance") == "PRIMARY"
+                fit = allele.get("empirical_fitness", {})
+                color = t.accent_gold if primary else t.accent_emerald if mutant else t.accent_cyan
+                self._draw_node_box(
+                    node_id(aid), 1000 + column * 900,
+                    380 + (row - (len(identifiers) - 1) / 2) * 460,
+                    195, 56, aid,
+                    f"{'Mutant' if mutant else 'Base'} · {fit.get('runtime_ms', '?')} ms · {fit.get('ram_kb', '?')} KB",
+                    color, badge="PRIMARY" if primary else "MUTANT" if mutant else "BASE",
+                    payload={"type": "allele", "gene_id": gid, "allele_id": aid},
+                )
+        for aid in shown:
+            edge = parents.get(aid)
+            if edge:
+                self._connect_gene_nodes(
+                    node_id(edge["source_allele"]), node_id(aid),
+                    color=t.accent_emerald,
+                    label=f"+{edge['operator']} ({edge['speedup_pct']:+.0f}%)",
+                )
+            else:
+                self._connect_gene_nodes(root_id, node_id(aid), color=tier_col, label="Base variant")
+        # Keep the action card on a roomy diagram. At overview zoom the fixed
+        # action bar and inspector already expose the same action; hiding this
+        # secondary card avoids squeezing readable cards into the same space.
+        if not phylo["mutants"] and self.cam_zoom >= 0.65:
+            cta_id = f"MUTATE_CTA::{gid}"
             self._draw_node_box(
-                f"ALLELE::{aid}",
-                wt_wx,
-                wy,
-                allele_bw,
-                allele_bh,
-                aid,
-                f"{comp} • {rt} ms • {ram} KB",
-                col,
-                badge="★ PRIMARY" if is_prim else "BASE",
-                payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": aid},
+                cta_id, 1500, 380, 195, 56, "Create a variant", "Mutate and benchmark locally",
+                t.accent_purple, badge="READY", payload={"type": "trigger_mutate", "gene_id": gid},
             )
-
-        mutants = phylo["mutants"]
-        edge_lookup = {e["target_allele"]: e for e in phylo["edges"]}
-
-        if mutants:
-            # Group mutants by operator into clean parallel lanes to prevent massive single-column vertical pileups
-            operator_lanes: Dict[str, List[Dict[str, Any]]] = {}
-            for mut in mutants:
-                mid = mut.get("allele_id", "")
-                e_info = edge_lookup.get(mid, {})
-                op_raw = e_info.get("operator", "mutation")
-                # Normalize operator key for lane grouping
-                op_key = op_raw.replace("operator_", "").replace("+", "").strip()
-                operator_lanes.setdefault(op_key, []).append(mut)
-
-            # Sort lanes so primary/fastest operators appear first
-            sorted_op_keys = sorted(operator_lanes.keys(), key=lambda k: ("pragma" not in k, "bitwise" not in k, k))
-            lane_base_x = 1040.0
-            lane_spacing = 380.0
-
-            for lane_idx, op_key in enumerate(sorted_op_keys):
-                lane_mutants = operator_lanes[op_key]
-                cur_lane_wx = lane_base_x + lane_idx * lane_spacing
-                n_lane_mut = len(lane_mutants)
-                mut_vstep = max(78.0, 560.0 / max(n_lane_mut + 1, 1))
-                mut_total_h = (n_lane_mut - 1) * mut_vstep
-                mut_base_y = 380.0 - (mut_total_h / 2.0)
-
-                for idx, mut in enumerate(lane_mutants):
-                    mid = mut.get("allele_id", f"mut_{idx}")
-                    my = mut_base_y + idx * mut_vstep
-                    e_info = edge_lookup.get(mid, {})
-                    parent_id = e_info.get("source_allele", "")
-                    op_name = e_info.get("operator", op_key)
-                    speedup = e_info.get("speedup_pct", 0.0)
-
-                    px, py = wt_positions.get(parent_id, (wt_wx, root_wy))
-                    is_prim = mut.get("dominance") == "PRIMARY"
-                    col = t.accent_gold if is_prim else t.accent_emerald
-
-                    fit = mut.get("empirical_fitness", {})
-                    rt = fit.get("runtime_ms", "?")
-                    ram = fit.get("ram_kb", "?")
-
-                    self._draw_directed_edge(
-                        px + half_abw,
-                        py,
-                        cur_lane_wx - half_abw,
-                        my,
-                        color=col,
-                        label=f"+{op_name} ({speedup:+.0f}%)",
-                        base_width=2,
-                    )
-                    self._draw_node_box(
-                        f"ALLELE::{mid}",
-                        cur_lane_wx,
-                        my,
-                        allele_bw,
-                        allele_bh,
-                        mid,
-                        f"Mutant • {rt} ms • {ram} KB",
-                        col,
-                        badge="★ CHAMPION" if is_prim else f"+{op_key[:8]}",
-                        payload={"type": "allele", "gene_id": phylo["gene_id"], "allele_id": mid},
-                    )
-        else:
-            self._draw_directed_edge(
-                wt_wx + half_abw,
-                root_wy,
-                mut_wx - half_abw,
-                root_wy,
-                color=t.border_active,
-                label="Click 'Mutate & Race'",
-                dashed=True,
-            )
-            self._draw_node_box(
-                "MUTATE_CTA",
-                mut_wx,
-                root_wy,
-                allele_bw,
-                allele_bh,
-                "⚡ Evolve Daughter Allele",
-                "Inject +fast_io / +pragma / +bitwise",
-                t.accent_purple,
-                badge="READY",
-                payload={"type": "trigger_mutate", "gene_id": phylo["gene_id"]},
-            )
-
+            source = node_id(next(iter(shown))) if shown else root_id
+            self._connect_gene_nodes(source, cta_id, color=t.border_active, dashed=True)
         if not self.selected_node_id:
-            self.selected_node_id = f"GENE_ROOT::{phylo['gene_id']}"
-            self._inspect_gene_or_allele(phylo["gene_id"], self.selected_allele_id)
+            self.selected_node_id = root_id
+            self._inspect_gene_or_allele(gid, self.selected_allele_id)
 
     def _draw_ingestion_view(self, cw: float, ch: float) -> None:
         """Renders View [4]: Live Ingestion Funnel, Universe Touch Radar & Activity Ledger."""
@@ -3311,6 +3291,12 @@ class AzmuthCommandCenterGUI:
         self._redraw_active_canvas()
 
     def _handle_node_click(self, cx: float, cy: float) -> None:
+        if self.active_view == "genes":
+            for bounds, direction in getattr(self, "_gene_page_controls", []):
+                x1, y1, x2, y2 = bounds
+                if x1 <= cx <= x2 and y1 <= cy <= y2:
+                    self._change_gene_page(direction)
+                    return
         for nid, info in self.canvas_nodes.items():
             x1, y1, x2, y2 = info["bbox"]
             if x1 <= cx <= x2 and y1 <= cy <= y2:
