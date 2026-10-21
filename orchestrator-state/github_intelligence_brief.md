@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-21T15:41:58.761792+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-21T16:28:23.195963+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[JONIMONI09/BestAI]** [Quality and stuff](https://github.com/JONIMONI09/BestAI/issues/46) (Comments: 0, Salience: 1.0)
@@ -31,3 +31,15 @@
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
 - **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-21T12:32:49Z`
+
+## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
+- **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
+- **[Anthropic]** [Staff Software Engineer, Infrastructure (Distributed Systems)](https://job-boards.greenhouse.io/anthropic/jobs/5387083008) (London, UK) — *Salience: 3.0*
+- **[Anthropic]** [Staff+ Software Engineer, Infrastructure (Distributed Systems)](https://job-boards.greenhouse.io/anthropic/jobs/4970314008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
+- **[OpenAI]** [Technical Program Manager, Compute Infrastructure](https://jobs.ashbyhq.com/openai/8fb1615c-34bf-47c4-a1d1-b7b2f836bbd3) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Software Engineer, Agent Infrastructure](https://jobs.ashbyhq.com/openai/c1316397-25bb-4add-9e9d-0e3ea8ba929a) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Software Engineer, Compute Foundations Systems](https://jobs.ashbyhq.com/openai/770d5c3f-4e72-4b49-aec4-d444e8ad7a64) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Critical Facilities Lead, Compute Infrastructure](https://jobs.ashbyhq.com/openai/13cdb1b1-8c21-4bff-8201-f7ca904e181d) (US - Remote) — *Salience: 2.0*
+- **[OpenAI]** [Software Engineer, GPU Infrastructure - HPC](https://jobs.ashbyhq.com/openai/f58cb1eb-9642-4a4d-a14d-d7a57d583a11) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Strategic Sourcing Manager,  Compute Infrastructure](https://jobs.ashbyhq.com/openai/debaf5f8-c166-4b35-81c1-5bda75124373) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Systems Generalist, GPT Infrastructure](https://jobs.ashbyhq.com/openai/78c2a68b-cc77-4c62-8891-96afb603650a) (San Francisco) — *Salience: 2.0*

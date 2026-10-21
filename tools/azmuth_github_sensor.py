@@ -451,6 +451,21 @@ class AzmuthGitHubSensor:
 
         # Materialize brief
         self._write_markdown_brief(payload)
+
+        # Notify top Github opportunities
+        try:
+            from tools.azmuth_notifier import notify_opportunity
+            for opp in filtered.get("opportunities", [])[:3]:
+                if opp.get("salience", 0.0) >= 2.0:
+                    notify_opportunity(
+                        title=f"🐙 Azmuth Lab Radar: {opp.get('repo')}",
+                        message=opp.get("title", ""),
+                        item_id=opp.get("id"),
+                        url=opp.get("url"),
+                    )
+        except Exception:
+            pass
+
         return filtered
 
     def _write_markdown_brief(self, payload: Dict[str, Any]) -> None:
@@ -486,6 +501,23 @@ class AzmuthGitHubSensor:
         ])
         for eco in t.get("ecosystem", []):
             lines.append(f"- **{eco['repo']}**: {eco['open_issues_count']} open issues | Last push: `{eco['pushed_at']}`")
+
+        # Section 5: Live Frontier ATS Opportunities (U14)
+        try:
+            ats_file = self.cache_file.parent / "ats_sensor_cache.json"
+            if ats_file.exists():
+                ats_data = json.loads(ats_file.read_text(encoding="utf-8"))
+                openings = ats_data.get("openings", [])
+                if openings:
+                    lines.extend([
+                        "",
+                        f"## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *{len(openings)} Indexed*",
+                    ])
+                    for op in openings[:10]:
+                        loc = f" ({op.get('location')})" if op.get("location") else ""
+                        lines.append(f"- **[{op.get('company')}]** [{op.get('title')}]({op.get('url')}){loc} — *Salience: {op.get('salience', 1.0):.1f}*")
+        except Exception:
+            pass
 
         lines.append("")
         try:

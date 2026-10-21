@@ -1218,6 +1218,29 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     except Exception as e:
         logger.debug(f"[Burst-Steal] Universe sweep error: {e}")
 
+    # Subtask 5: U14 Live ATS Sensory Harvester (Ashby, Greenhouse, Lever)
+    try:
+        from tools.azmuth_ats_sensor import harvest_ats_feed, ATS_CACHE_FILE
+        should_harvest_ats = True
+        if ATS_CACHE_FILE.exists():
+            ats_age = time.time() - ATS_CACHE_FILE.stat().st_mtime
+            if ats_age < 1800.0:  # 30 min TTL
+                should_harvest_ats = False
+
+        if should_harvest_ats and is_system_idle(threshold_seconds=10.0):
+            check_and_enforce_gear_safety()
+            ats_matches = harvest_ats_feed()
+            burst_result["tasks_executed"].append(f"ats_radar_harvest_{len(ats_matches)}matches")
+            record_ingestion_event(
+                "ATS_RADAR_SWEEP",
+                "AzmuthATSSensor",
+                "Ashby-Greenhouse-Lever",
+                f"Harvested {len(ats_matches)} high-signal engineering roles",
+                details={"matches_count": len(ats_matches)},
+            )
+    except Exception as e_ats:
+        logger.debug(f"[Burst-Steal] ATS sensor harvest error: {e_ats}")
+
     # Subtask 5: Guarded Autonomous Git State Sync (Phase 4)
     try:
         if is_system_idle(threshold_seconds=10.0):
