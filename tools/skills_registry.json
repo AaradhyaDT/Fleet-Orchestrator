@@ -800,8 +800,8 @@
         "offload training to cloud accelerator"
       ],
       "dependencies": [],
-      "byte_size": 10319,
-      "line_count": 164,
+      "byte_size": 11618,
+      "line_count": 189,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\colab-cloud-accelerator",
       "ssot_role": "SSOT_USER",
       "mirrors": [

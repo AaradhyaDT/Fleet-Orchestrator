@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import time
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -255,6 +256,7 @@ class WolframEngineDriver(SymbolicEngine):
 
         # Ensure output is formatted cleanly as JSON or text
         cmd = [self.binary_path, "-code", wl_code]
+        win_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
         try:
             proc = subprocess.run(
                 cmd,
@@ -262,6 +264,7 @@ class WolframEngineDriver(SymbolicEngine):
                 text=True,
                 timeout=timeout,
                 check=True,
+                creationflags=win_flags,
             )
             return proc.stdout.strip()
         except subprocess.TimeoutExpired:

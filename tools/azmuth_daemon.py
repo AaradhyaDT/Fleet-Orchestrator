@@ -500,6 +500,7 @@ def check_and_enforce_gear_safety() -> tuple[str, dict[str, Any]]:
 
 def run_command(cmd: list[str], cwd: Path = ROOT, timeout: float = 120.0) -> subprocess.CompletedProcess[str]:
     """Execute a local subprocess with deterministic timeout and output capture."""
+    win_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
     return subprocess.run(
         cmd,
         cwd=str(cwd),
@@ -507,6 +508,7 @@ def run_command(cmd: list[str], cwd: Path = ROOT, timeout: float = 120.0) -> sub
         text=True,
         timeout=timeout,
         check=False,
+        creationflags=win_flags,
     )
 
 
@@ -548,7 +550,16 @@ def run_verification_suite(target: Optional[str] = None) -> Tuple[bool, str]:
             "tests/test_copilot_cli_adapter.py",
             "tests/test_symbolic_math_adapter.py",
         ])
-    res = run_command(cmd, timeout=90.0)
+    win_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+    res = subprocess.run(
+        cmd,
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        timeout=90.0,
+        check=False,
+        creationflags=win_flags,
+    )
     output = f"{res.stdout}\n{res.stderr}".strip()
     return (res.returncode == 0, output)
 

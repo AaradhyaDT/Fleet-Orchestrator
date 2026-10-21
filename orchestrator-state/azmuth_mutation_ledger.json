@@ -1,27 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 910,
-  "promotions_won": 412,
-  "last_mutation_at": "2026-10-21T15:44:12.156695+00:00",
+  "mutations_applied": 912,
+  "promotions_won": 414,
+  "last_mutation_at": "2026-10-21T17:01:55.715404+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T03:55:12.488910+00:00",
-      "gene_id": "TASK_SUSPECT_INTERVAL",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:00:48.217250+00:00",
-      "gene_id": "TASK_CONSECUTIVE_REMAINDERS",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-18T04:04:48.362171+00:00",
       "gene_id": "TASK_COSMOLOGICAL_NIGHTMARE",
@@ -448,6 +430,24 @@
     {
       "timestamp": "2026-10-21T13:32:36.246694+00:00",
       "gene_id": "TASK_ALICE_TREE",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-21T17:00:48.759576+00:00",
+      "gene_id": "TASK_CHASE",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-21T17:01:55.715271+00:00",
+      "gene_id": "TASK_CLASSIC_TASK",
       "mutant_created": [
         "auto_solution_python_mut_python_stdlib_accel"
       ],
