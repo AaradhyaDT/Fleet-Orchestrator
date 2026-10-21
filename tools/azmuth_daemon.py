@@ -242,6 +242,144 @@ class MEMORYSTATUSEX(ctypes.Structure):
     ]
 
 
+class SYSTEM_POWER_STATUS(ctypes.Structure):
+    _fields_ = [
+        ("ACLineStatus", wintypes.BYTE),         # 0 = Offline (Battery), 1 = Online (AC), 255 = Unknown
+        ("BatteryFlag", wintypes.BYTE),          # 1 = High, 2 = Low, 4 = Critical, 8 = Charging, 128 = No battery, 255 = Unknown
+        ("BatteryLifePercent", wintypes.BYTE),   # 0-100%, 255 = Unknown
+        ("SystemStatusFlag", wintypes.BYTE),     # 1 = Battery saver on, 0 = off
+        ("BatteryLifeTime", wintypes.DWORD),
+        ("BatteryFullLifeTime", wintypes.DWORD),
+    ]
+
+
+def get_system_power_status() -> dict[str, Any]:
+    """Returns power telemetry (ac_line_status, on_battery, battery_pct, battery_saver)."""
+    default_status = {
+        "ac_line_status": 1,  # Assume AC online on non-windows / fallback
+        "on_battery": False,
+        "battery_pct": 100,
+        "battery_saver": False,
+    }
+    if sys.platform != "win32":
+        return default_status
+
+    try:
+        sps = SYSTEM_POWER_STATUS()
+        if ctypes.windll.kernel32.GetSystemPowerStatus(ctypes.byref(sps)):
+            ac_status = int(sps.ACLineStatus)
+            pct = int(sps.BatteryLifePercent) if sps.BatteryLifePercent != 255 else -1
+            saver = bool(sps.SystemStatusFlag == 1)
+            on_battery = (ac_status == 0)
+            return {
+                "ac_line_status": ac_status,
+                "on_battery": on_battery,
+                "battery_pct": pct,
+                "battery_saver": saver,
+            }
+    except Exception as e:
+        logger.debug(f"Error querying GetSystemPowerStatus: {e}")
+
+    return default_status
+
+
+def get_system_uptime_seconds() -> float:
+    """Returns Windows system uptime in seconds using GetTickCount64."""
+    if sys.platform != "win32":
+        return 86400.0
+    try:
+        millis = ctypes.windll.kernel32.GetTickCount64()
+        return max(0.0, millis / 1000.0)
+    except Exception as e:
+        logger.debug(f"Error querying GetTickCount64: {e}")
+        return 86400.0
+
+
+def is_network_available(host: str = "8.8.8.8", port: int = 53, timeout: float = 0.5) -> bool:
+    """Fast non-blocking socket probe to verify gateway connectivity in <500ms."""
+    import socket
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (OSError, TimeoutError):
+        # Fallback check on port 443 of cloudflare/google
+        try:
+            with socket.create_connection(("1.1.1.1", 53), timeout=timeout):
+                return True
+        except (OSError, TimeoutError):
+            return False
+
+
+def purge_stale_git_locks() -> bool:
+    """Safely cleans up stale .git/index.lock if no git processes are actively executing."""
+    git_lock = ROOT / ".git" / "index.lock"
+    if not git_lock.exists():
+        return False
+
+    # Check if any git.exe process is currently active on the system
+    git_active = False
+    if sys.platform == "win32":
+        try:
+            proc = subprocess.run(
+                ["tasklist", "/FI", "IMAGENAME eq git.exe", "/NH"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=5.0,
+            )
+            if "git.exe" in proc.stdout.lower():
+                git_active = True
+        except Exception:
+            pass
+
+    if not git_active:
+        try:
+            git_lock.unlink(missing_ok=True)
+            logger.info("[Boot-Hygiene] Removed orphaned stale .git/index.lock.")
+            return True
+        except Exception as e:
+            logger.warning(f"[Boot-Hygiene] Failed to unlink stale git lock: {e}")
+    else:
+        logger.debug("[Boot-Hygiene] Active git process found; leaving .git/index.lock intact.")
+
+    return False
+
+
+def run_boot_preflight_hygiene() -> dict[str, Any]:
+    """Phase 0 Preflight: Cleans orphaned locks, evaluates power status, uptime warmup, and connectivity."""
+    stale_lock_removed = purge_stale_git_locks()
+    power = get_system_power_status()
+    uptime_sec = get_system_uptime_seconds()
+    is_warmup = uptime_sec < 180.0  # Cold boot warmup window (first 3 minutes)
+    net_online = is_network_available()
+
+    preflight_report = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "uptime_sec": round(uptime_sec, 1),
+        "is_cold_boot_warmup": is_warmup,
+        "stale_git_lock_cleared": stale_lock_removed,
+        "power_status": power,
+        "network_online": net_online,
+    }
+
+    if is_warmup:
+        logger.info(
+            f"[Boot-Preflight] System cold-boot detected (uptime: {uptime_sec:.1f}s < 180s). "
+            "Engaging initial stabilization grace period."
+        )
+
+    if power.get("on_battery"):
+        logger.info(
+            f"[Boot-Preflight] Running on DC Battery ({power.get('battery_pct')}%%). "
+            "Enforcing power conservation floor."
+        )
+
+    if not net_online:
+        logger.warning("[Boot-Preflight] Offline / Air-Gapped environment detected. Cloud APIs will be bypassed.")
+
+    return preflight_report
+
+
 def get_memory_status_gb() -> tuple[float, float, int]:
     """Returns (total_phys_gb, avail_phys_gb, memory_load_percent)."""
     if sys.platform != "win32":
@@ -327,10 +465,23 @@ def set_current_gear(gear: str, reason: str = "") -> bool:
 
 
 def check_and_enforce_gear_safety() -> tuple[str, dict[str, Any]]:
-    """Inspects RAM pressure. If Turbo or Balanced exceeds safety limits, automatically downshifts gear."""
+    """Inspects RAM pressure and battery power status.
+    If Turbo or Balanced exceeds safety limits, or if the device is on battery, automatically downshifts gear.
+    """
     current_gear = get_current_gear()
     cfg = GEARS[current_gear]
     _, avail_gb, load_pct = get_memory_status_gb()
+    power = get_system_power_status()
+
+    # Battery Conservation Gate: Downshift to whisper if running on battery power
+    if power.get("on_battery") and current_gear in ("turbo", "balanced"):
+        logger.info(
+            f"[Power-Gate] Device on battery ({power.get('battery_pct')}%%). "
+            f"Auto-downshifting gear from '{current_gear}' to 'whisper' to conserve power."
+        )
+        set_current_gear("whisper", reason=f"Battery power gate: {power.get('battery_pct')}% battery")
+        current_gear = "whisper"
+        cfg = GEARS["whisper"]
 
     # Critical RAM circuit breaker: if RAM drops below 3.0GB or load > 80%
     if current_gear in ("turbo", "balanced") and (avail_gb < 3.0 or load_pct > 80):
@@ -1112,6 +1263,21 @@ def execute_cycle(dry_run: bool = False, use_ai: bool = True) -> dict[str, Any]:
         "actions_taken": [],
     }
 
+    # Phase 0: Boot & Startup Preflight Hygiene
+    preflight = run_boot_preflight_hygiene()
+    report["preflight"] = preflight
+    report["actions_taken"].append(f"preflight_uptime={preflight['uptime_sec']}s")
+    if preflight.get("stale_git_lock_cleared"):
+        report["actions_taken"].append("cleared_stale_git_lock")
+
+    # Cold-Start Memory Catch-Up (reconcile memory digests at startup)
+    try:
+        mem_sync_res = execute_memory_sync_subtask()
+        if mem_sync_res.get("status") == "SUCCESS":
+            report["actions_taken"].append("startup_memory_sync_success")
+    except Exception as e_mem:
+        logger.debug(f"[Boot] Startup memory catch-up error: {e_mem}")
+
     # 1. Reconcile
     reconciled = reconcile_mirrors_and_registry()
     report["actions_taken"].append(f"reconcile_registry_success={reconciled}")
@@ -1129,43 +1295,47 @@ def execute_cycle(dry_run: bool = False, use_ai: bool = True) -> dict[str, Any]:
         report["status"] = "GAPS_DETECTED"
 
         if use_ai and not dry_run:
-            for g in gap_data.get("gaps", []):
-                if g.get("severity") in ("HIGH", "CRITICAL"):
-                    logger.info(f"Synthesizing solution via Gemini 3.8 Flash for: {g.get('summary')}")
-                    solution = synthesize_gap_solution_with_gemini(g)
-                    if solution and "target_file" in solution and "code_content" in solution:
-                        target_path = ROOT / solution["target_file"]
-                        logger.info(f"Applying synthesized code to: {target_path}")
-                        target_path.parent.mkdir(parents=True, exist_ok=True)
-                        current_code = solution["code_content"]
-                        target_path.write_text(current_code, encoding="utf-8")
+            if not preflight.get("network_online"):
+                logger.warning("[+] Air-Gapped mode active: Skipping remote Gemini API gap synthesis.")
+                report["actions_taken"].append("skipped_ai_synthesis_air_gapped")
+            else:
+                for g in gap_data.get("gaps", []):
+                    if g.get("severity") in ("HIGH", "CRITICAL"):
+                        logger.info(f"Synthesizing solution via Gemini 3.8 Flash for: {g.get('summary')}")
+                        solution = synthesize_gap_solution_with_gemini(g)
+                        if solution and "target_file" in solution and "code_content" in solution:
+                            target_path = ROOT / solution["target_file"]
+                            logger.info(f"Applying synthesized code to: {target_path}")
+                            target_path.parent.mkdir(parents=True, exist_ok=True)
+                            current_code = solution["code_content"]
+                            target_path.write_text(current_code, encoding="utf-8")
 
-                        # Verify
-                        passed, output = run_verification_suite(str(target_path))
+                            # Verify
+                            passed, output = run_verification_suite(str(target_path))
 
-                        # Self-Healing Retry Loop (Up to 2 healing iterations)
-                        if not passed:
-                            for heal_attempt in range(1, 3):
-                                logger.warning(f"[-] Test failed (attempt {heal_attempt}/2). Triggering self-healing...")
-                                healed_code = self_heal_code(solution["target_file"], current_code, output)
-                                if healed_code:
-                                    current_code = healed_code
-                                    target_path.write_text(current_code, encoding="utf-8")
-                                    passed, output = run_verification_suite(str(target_path))
-                                    if passed:
-                                        logger.info(f"[+] Self-healed successfully on attempt {heal_attempt}!")
-                                        report["actions_taken"].append(f"self_healed_gap={g.get('summary')}")
+                            # Self-Healing Retry Loop (Up to 2 healing iterations)
+                            if not passed:
+                                for heal_attempt in range(1, 3):
+                                    logger.warning(f"[-] Test failed (attempt {heal_attempt}/2). Triggering self-healing...")
+                                    healed_code = self_heal_code(solution["target_file"], current_code, output)
+                                    if healed_code:
+                                        current_code = healed_code
+                                        target_path.write_text(current_code, encoding="utf-8")
+                                        passed, output = run_verification_suite(str(target_path))
+                                        if passed:
+                                            logger.info(f"[+] Self-healed successfully on attempt {heal_attempt}!")
+                                            report["actions_taken"].append(f"self_healed_gap={g.get('summary')}")
+                                            break
+                                    else:
                                         break
-                                else:
-                                    break
 
-                        if passed:
-                            logger.info(f"[+] Verification passed for {target_path}")
-                            report["actions_taken"].append(f"resolved_gap={g.get('summary')}")
-                        else:
-                            logger.error(f"[-] Verification failed after self-healing; rolling back {target_path}")
-                            target_path.unlink(missing_ok=True)
-                            report["actions_taken"].append(f"failed_resolution={g.get('summary')}")
+                            if passed:
+                                logger.info(f"[+] Verification passed for {target_path}")
+                                report["actions_taken"].append(f"resolved_gap={g.get('summary')}")
+                            else:
+                                logger.error(f"[-] Verification failed after self-healing; rolling back {target_path}")
+                                target_path.unlink(missing_ok=True)
+                                report["actions_taken"].append(f"failed_resolution={g.get('summary')}")
 
     # 3. Final Smoke Verification
     smoke_passed, _ = run_verification_suite()
@@ -1226,7 +1396,11 @@ def run_daemon_loop(
 
             # 2. Opportunistic Idle Burst Stealing
             elif is_system_idle(threshold_seconds=active_idle_thresh_sec):
-                if now - last_burst_time >= active_cooldown_sec:
+                # Cold boot warmup gate: Don't steal bursts during initial boot stabilization
+                uptime_sec = get_system_uptime_seconds()
+                if uptime_sec < 180.0:
+                    logger.debug(f"[Warmup-Gate] System uptime ({uptime_sec:.1f}s < 180s). Suppressing burst during boot stabilization.")
+                elif now - last_burst_time >= active_cooldown_sec:
                     execute_idle_burst()
                     last_burst_time = time.time()
 
@@ -1369,6 +1543,12 @@ def main() -> int:
         print(f"  Current User Idle : {idle_s:.1f}s ({idle_s/60.0:.2f}m)")
         print(f"  System RAM        : {avail_ram:.2f} GB free / {total_ram:.2f} GB total ({ram_load}% load)")
         print(f"  Gear RAM Floor    : >= {gear_cfg['min_avail_ram_gb']} GB free (<= {gear_cfg['max_ram_load']}% load)")
+        power = get_system_power_status()
+        uptime_m = get_system_uptime_seconds() / 60.0
+        net_on = is_network_available()
+        pwr_str = f"Battery ({power['battery_pct']}%)" if power.get("on_battery") else "AC Online"
+        print(f"  Power / Battery   : {pwr_str} | Saver: {'ON' if power.get('battery_saver') else 'OFF'}")
+        print(f"  System Uptime     : {uptime_m:.1f} min | Network: {'ONLINE' if net_on else 'AIR-GAPPED'}")
         print("----------------------------------------------------------")
         print(f"  ULTIMATRIX CODON STREAM (Phase 2 Graduated | Phase 3 Target: 250 Genes)")
         print(f"  Total Genes       : {total_genes} (Phase 2 Target: 100 [MET] | Phase 3: 250)")
