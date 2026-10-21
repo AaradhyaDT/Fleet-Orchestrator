@@ -1,0 +1,120 @@
+import json
+from pathlib import Path
+
+root = Path(__file__).resolve().parent.parent
+script_path = root / "scratch" / "azmuth_a100_v2.py"
+nb_path = root / "notebooks" / "azmuth_a100_v2_hyperburst.ipynb"
+
+code_content = script_path.read_text(encoding="utf-8")
+
+# Prepare self-contained notebook cells
+cells = [
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# Azmuth A100 High-RAM Hyper-Burst v2 (VRAM-Saturated 8-Phase Engine)\n",
+            "\n",
+            "This notebook executes the **VRAM-saturated 8-phase Azmuth foresight and genetic simulation engine** on an **NVIDIA A100-SXM4-80GB** with **High RAM (167 GB)**.\n",
+            "\n",
+            "### Architectural Scope:\n",
+            "- **Phase 1**: GPU-accelerated genotype tournament ($2^{20} = 1,048,576$ combinations across 32 alleles)\n",
+            "- **Phase 2**: 1 Billion Monte Carlo shock trials across all 15 universes in 150M chunks (71.8 GB VRAM saturation, 90.6% utilization)\n",
+            "- **Phase 3**: Full 99-node master cross-universe spectral SVD + 27 cross-bridges + condition number\n",
+            "- **Phase 4**: In-place 35M-path multi-horizon SDE (7D, 30D, 90D, 365D)\n",
+            "- **Phase 5**: Cross-universe contagion reachability matrix (15x15 apex with 35M paths)\n",
+            "- **Phase 6**: Systematic $N-1$ node knockout resilience analysis (99 nodes)\n",
+            "- **Phase 7**: Allele pairwise epistasis matrix (496 pairs)\n",
+            "- **Phase 8**: CBF breach remediation re-baselining U13/U14 nodes\n",
+            "\n",
+            "> **Persistence**: Results are automatically mounted and written to Google Drive under `Super-NLM / Fleet-Orchestrator` (`orchestrator-state/hyperburst_results_v2.json`) before auto-teardown.\n",
+        ],
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# 1. Hardware Inspection\n",
+            "import torch, psutil\n",
+            "print(f'CUDA Available: {torch.cuda.is_available()}')\n",
+            "if torch.cuda.is_available():\n",
+            "    props = torch.cuda.get_device_properties(0)\n",
+            "    print(f'GPU: {props.name} | VRAM: {round(props.total_memory / (1024**3), 2)} GB')\n",
+            "print(f'System RAM: {round(psutil.virtual_memory().total / (1024**3), 2)} GB | CPUs: {psutil.cpu_count()}')\n",
+        ],
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# 2. Google Drive Mounting\n",
+            "from google.colab import drive\n",
+            "import os\n",
+            "drive.mount('/content/drive')\n",
+            "DRIVE_TARGET = '/content/drive/MyDrive/Super-NLM/Fleet-Orchestrator/orchestrator-state'\n",
+            "os.makedirs(DRIVE_TARGET, exist_ok=True)\n",
+            "print(f'Drive Target Directory: {DRIVE_TARGET}')\n",
+        ],
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# 3. Execute Azmuth 8-Phase Cloud Hyper-Burst v2 Engine\n",
+            code_content,
+        ],
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# 4. Persist Artifacts to Google Drive & Finalize Teardown\n",
+            "import shutil, os\n",
+            "src = '/content/hyperburst_results.json'\n",
+            "dst = '/content/drive/MyDrive/Super-NLM/Fleet-Orchestrator/orchestrator-state/hyperburst_results_v2.json'\n",
+            "if os.path.exists(src):\n",
+            "    shutil.copy2(src, dst)\n",
+            "    print(f'[SUCCESS] Written {os.path.getsize(dst):,} bytes to {dst}')\n",
+            "else:\n",
+            "    print('[WARNING] Local hyperburst_results.json not found')\n",
+            "\n",
+            "# Enforce automatic compute-unit protection\n",
+            "from google.colab import runtime\n",
+            "print('Shutting down runtime to protect compute units...')\n",
+            "runtime.unassign()\n",
+        ],
+    },
+]
+
+notebook = {
+    "nbformat": 4,
+    "nbformat_minor": 0,
+    "metadata": {
+        "colab": {
+            "provenance": [],
+            "authorship_tag": "ABX9TyP/Aaradhya-Fleet",
+            "include_colab_link": True,
+            "gpuType": "A100",
+        },
+        "kernelspec": {
+            "name": "python3",
+            "display_name": "Python 3",
+        },
+        "language_info": {
+            "name": "python",
+        },
+        "accelerator": "GPU",
+    },
+    "cells": cells,
+}
+
+nb_path.write_text(json.dumps(notebook, indent=2), encoding="utf-8")
+print(f"Generated {nb_path} ({nb_path.stat().st_size:,} bytes)")

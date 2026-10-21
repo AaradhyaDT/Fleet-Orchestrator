@@ -3951,5 +3951,15 @@
     "final_balance": 351.03,
     "units_spent": 0.0,
     "timestamp_end": "2026-10-20T16:46:52.670324+00:00"
+  },
+  {
+    "timestamp_start": "2026-10-21T14:53:23.575401+00:00",
+    "tier": "a100-highmem",
+    "session_name": "azmuth-expansion-v2",
+    "initial_balance": 350.48,
+    "status": "FAILED",
+    "final_balance": 350.48,
+    "units_spent": 0.0,
+    "timestamp_end": "2026-10-21T14:56:30.837816+00:00"
   }
 ]

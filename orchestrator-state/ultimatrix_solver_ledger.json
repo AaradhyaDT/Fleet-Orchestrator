@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 330,
-  "tasks_solved": 330,
+  "tasks_attempted": 331,
+  "tasks_solved": 331,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -332,16 +332,11 @@
     "alice-tree",
     "chase",
     "chocolate",
-    "classic-task"
+    "classic-task",
+    "cloud-computing"
   ],
-  "last_solve_at": "2026-10-21T14:34:22.840029+00:00",
+  "last_solve_at": "2026-10-21T14:45:02.144390+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:21:32.694188+00:00",
-      "slug": "game",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-18T10:22:16.742006+00:00",
       "slug": "gerrymandering",
@@ -635,6 +630,12 @@
       "slug": "classic-task",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-21T14:45:02.144195+00:00",
+      "slug": "cloud-computing",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
     }
   ],
   "attempted_slugs": {
