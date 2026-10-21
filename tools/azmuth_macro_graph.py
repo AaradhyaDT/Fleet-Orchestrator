@@ -135,6 +135,8 @@ class HomeostaticBaselineNormalizer:
         sigma0 = max(float(l1.get("sigma0", 1.0)), 1e-6)
         abs_min = float(l3.get("abs_min", -100.0))
         abs_max = float(l3.get("abs_max", 100.0))
+        l2 = node.get("layer2_allostatic", {})
+        z_crit = float(l2.get("z_critical", 3.0))
 
         z_score = (val - mu0) / sigma0
         span = max(abs_max - abs_min, 1e-6)
@@ -147,7 +149,7 @@ class HomeostaticBaselineNormalizer:
         elif abs(z_score) < 2.0:
             spikes = 1
             state_label = "ALLOSTATIC_STRETCH"
-        elif abs(z_score) < 3.0:
+        elif abs(z_score) < z_crit:
             spikes = 2
             state_label = "NOCICEPTIVE_WARNING"
         else:

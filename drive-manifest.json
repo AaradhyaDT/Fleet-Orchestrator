@@ -65,10 +65,10 @@
       "sha256": "f895563de49a6985"
     },
     "notebooks/azmuth_a100_v2_hyperburst.ipynb": {
-      "drive_file_id": "16q0QmEV_k0reVzvGcQQZFopriJKL0CL2",
+      "drive_file_id": "1pDvqy_3me2OTJSoiqqelf1H3v0B_tG3j",
       "drive_file_name": "azmuth_a100_v2_hyperburst.ipynb",
       "description": "Azmuth A100 High-RAM Hyper-Burst v2 Notebook (1B MC, 60M SDE, 96% VRAM Apex)",
-      "sha256": "7ae573654cc1daa1"
+      "sha256": "98ccb9024418ce99"
     }
   }
 }

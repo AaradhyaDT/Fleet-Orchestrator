@@ -3961,5 +3961,1227 @@
     "final_balance": 350.48,
     "units_spent": 0.0,
     "timestamp_end": "2026-10-21T14:56:30.837816+00:00"
+  },
+  {
+    "timestamp_start": "2026-10-21T15:30:54Z",
+    "tier": "a100-highmem",
+    "session_name": "azmuth-expansion-v2",
+    "initial_balance": 350.48,
+    "status": "SUCCESS",
+    "final_balance": 348.56,
+    "units_spent": 1.92,
+    "timestamp_end": "2026-10-21T15:34:33Z",
+    "remote_data": {
+      "version": 2,
+      "timestamp": "2026-10-21T15:34:33Z",
+      "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+      "accelerator": "NVIDIA A100-SXM4-80GB (79.25 GB VRAM)",
+      "system_ram_gb": 167.05,
+      "execution_time_summary": {
+        "p1_genotypes_sec": 1.328,
+        "p2_monte_carlo_sec": 44.832,
+        "p3_spectral_sec": 0.02,
+        "p4_sde_sec": 121.153,
+        "p5_contagion_sec": 51.697,
+        "p6_knockout_sec": 0.376,
+        "p7_epistasis_sec": 0.002,
+        "p8_cbf_remediation_sec": 0.0,
+        "total_elapsed_sec": 219.41
+      },
+      "phase_1_genotype_tournament": {
+        "allele_count": 32,
+        "search_space": 1048576,
+        "top_20_genotypes": [
+          {
+            "genotype_id": "G_FFFFF",
+            "mask": 1048575,
+            "allele_count": 20,
+            "composite_speedup_pct": 563.0
+          },
+          {
+            "genotype_id": "G_FFFFE",
+            "mask": 1048574,
+            "allele_count": 19,
+            "composite_speedup_pct": 561.54
+          },
+          {
+            "genotype_id": "G_FFBFF",
+            "mask": 1047551,
+            "allele_count": 19,
+            "composite_speedup_pct": 560.0
+          },
+          {
+            "genotype_id": "G_FFBFE",
+            "mask": 1047550,
+            "allele_count": 18,
+            "composite_speedup_pct": 558.42
+          },
+          {
+            "genotype_id": "G_FFFEF",
+            "mask": 1048559,
+            "allele_count": 19,
+            "composite_speedup_pct": 557.95
+          },
+          {
+            "genotype_id": "G_FFFEE",
+            "mask": 1048558,
+            "allele_count": 18,
+            "composite_speedup_pct": 556.32
+          },
+          {
+            "genotype_id": "G_FFFBF",
+            "mask": 1048511,
+            "allele_count": 19,
+            "composite_speedup_pct": 554.87
+          },
+          {
+            "genotype_id": "G_FFBEF",
+            "mask": 1047535,
+            "allele_count": 18,
+            "composite_speedup_pct": 554.74
+          },
+          {
+            "genotype_id": "G_DFFFF",
+            "mask": 917503,
+            "allele_count": 19,
+            "composite_speedup_pct": 553.33
+          },
+          {
+            "genotype_id": "G_FFFBE",
+            "mask": 1048510,
+            "allele_count": 18,
+            "composite_speedup_pct": 553.16
+          },
+          {
+            "genotype_id": "G_FFBEE",
+            "mask": 1047534,
+            "allele_count": 17,
+            "composite_speedup_pct": 552.97
+          },
+          {
+            "genotype_id": "G_FFFFD",
+            "mask": 1048573,
+            "allele_count": 19,
+            "composite_speedup_pct": 552.82
+          },
+          {
+            "genotype_id": "G_FF7FF",
+            "mask": 1046527,
+            "allele_count": 19,
+            "composite_speedup_pct": 552.31
+          },
+          {
+            "genotype_id": "G_FFBBF",
+            "mask": 1047487,
+            "allele_count": 18,
+            "composite_speedup_pct": 551.58
+          },
+          {
+            "genotype_id": "G_DFFFE",
+            "mask": 917502,
+            "allele_count": 18,
+            "composite_speedup_pct": 551.58
+          },
+          {
+            "genotype_id": "G_FFFFC",
+            "mask": 1048572,
+            "allele_count": 18,
+            "composite_speedup_pct": 551.05
+          },
+          {
+            "genotype_id": "G_FFDFF",
+            "mask": 1048063,
+            "allele_count": 19,
+            "composite_speedup_pct": 550.77
+          },
+          {
+            "genotype_id": "G_FF7FE",
+            "mask": 1046526,
+            "allele_count": 18,
+            "composite_speedup_pct": 550.53
+          },
+          {
+            "genotype_id": "G_DFBFF",
+            "mask": 916479,
+            "allele_count": 18,
+            "composite_speedup_pct": 550.0
+          },
+          {
+            "genotype_id": "G_EFFFF",
+            "mask": 983039,
+            "allele_count": 19,
+            "composite_speedup_pct": 549.74
+          }
+        ],
+        "evolved_alleles": [
+          {
+            "allele_id": "mut_bitwise_word_unrolling",
+            "pattern": "unsigned long long mask = (1ULL << k) - 1;",
+            "speedup_pct": 35.0,
+            "runtime_ms": 19.08,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_python_stdlib_accel",
+            "pattern": "import collections, itertools, heapq; sys.stdin.readline",
+            "speedup_pct": 52.0,
+            "runtime_ms": 16.89,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_arena_bump_allocator",
+            "pattern": "char arena[1<<26]; size_t a_ptr = 0; void* alloc(size_t sz) { void* p = &arena[a_ptr]; a_ptr += (sz+7)&~7; return p; }",
+            "speedup_pct": 59.0,
+            "runtime_ms": 16.13,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_simd_vectorized_find",
+            "pattern": "#include <immintrin.h> __m256i v = _mm256_loadu_si256((__m256i*)p);",
+            "speedup_pct": 66.0,
+            "runtime_ms": 15.43,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_fenwick_bit_unroll_64",
+            "pattern": "for (; idx > 0; idx -= idx & -idx) sum += tree[idx];",
+            "speedup_pct": 42.0,
+            "runtime_ms": 18.12,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_avx512_streaming_store",
+            "pattern": "_mm512_stream_si512((__m512i*)dst, _mm512_loadu_si512((__m512i*)src));",
+            "speedup_pct": 75.0,
+            "runtime_ms": 14.62,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_hugepages_mmap_shared",
+            "pattern": "mmap(NULL, sz, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);",
+            "speedup_pct": 48.0,
+            "runtime_ms": 17.36,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_lockless_spsc_queue",
+            "pattern": "std::atomic<size_t> head{0}, tail{0}; alignas(64) T ring[CAP];",
+            "speedup_pct": 62.0,
+            "runtime_ms": 15.82,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_zero_copy_ipc_shm",
+            "pattern": "shm_open('/azmuth_shm', O_CREAT|O_RDWR, 0666); ftruncate(fd, 1<<30);",
+            "speedup_pct": 69.0,
+            "runtime_ms": 15.15,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_cache_aligned_soa",
+            "pattern": "struct alignas(64) NodeSoA { float x[N]; float y[N]; float w[N]; };",
+            "speedup_pct": 56.0,
+            "runtime_ms": 16.45,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_templated_branch_predict",
+            "pattern": "#define LIKELY(x) __builtin_expect(!!(x), 1)",
+            "speedup_pct": 38.0,
+            "runtime_ms": 18.66,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_numa_localized_binding",
+            "pattern": "numa_alloc_onnode(sz, node_id); numa_run_on_node(node_id);",
+            "speedup_pct": 53.0,
+            "runtime_ms": 16.78,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_persistent_segtree_cow",
+            "pattern": "int build(int l, int r); int update(int prev, int l, int r, int pos, int val);",
+            "speedup_pct": 71.0,
+            "runtime_ms": 14.97,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_centroid_decomp_hld",
+            "pattern": "void decompose(int u, int p); int get_centroid(int u, int p, int sz);",
+            "speedup_pct": 63.0,
+            "runtime_ms": 15.72,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_suffix_array_kasai",
+            "pattern": "void build_sa(); void build_lcp(); int rmq(int l, int r);",
+            "speedup_pct": 76.0,
+            "runtime_ms": 14.53,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_fft_ntt_convolution",
+            "pattern": "void ntt(vector<ll>& a, bool inv); vector<ll> multiply(vector<ll>& a, vector<ll>& b);",
+            "speedup_pct": 85.0,
+            "runtime_ms": 13.81,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_lichao_tree_convex_hull",
+            "pattern": "struct Line { ll m, c; }; void add_line(Line l); ll query(ll x);",
+            "speedup_pct": 58.0,
+            "runtime_ms": 16.23,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_sqrt_decomp_mo",
+            "pattern": "bool cmp(const Query& a, const Query& b) { return a.l / BLOCK != b.l / BLOCK ? a.l < b.l : a.r < b.r; }",
+            "speedup_pct": 51.0,
+            "runtime_ms": 17.01,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_link_cut_tree_splay",
+            "pattern": "void access(int x); void make_root(int x); void link(int x, int y); void cut(int x, int y);",
+            "speedup_pct": 80.0,
+            "runtime_ms": 14.2,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_pollard_rho_factor",
+            "pattern": "ll pollard_rho(ll n); vector<ll> factorize(ll n);",
+            "speedup_pct": 67.0,
+            "runtime_ms": 15.34,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_bitset_parallel_dp",
+            "pattern": "bitset<MAX_SUM> dp; dp[0] = 1; for (int w : weights) dp |= (dp << w);",
+            "speedup_pct": 73.0,
+            "runtime_ms": 14.79,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_monotone_queue_opt",
+            "pattern": "while (!dq.empty() && dq.back().val <= val) dq.pop_back(); dq.push_back({i, val});",
+            "speedup_pct": 46.0,
+            "runtime_ms": 17.61,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_persistent_trie_xor",
+            "pattern": "int insert(int prev, int val, int b); int max_xor(int root, int val, int b);",
+            "speedup_pct": 62.0,
+            "runtime_ms": 15.82,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_sparse_table_rmq",
+            "pattern": "int st[MAX_LOG][MAX_N]; void build() { ... } int query(int l, int r);",
+            "speedup_pct": 55.0,
+            "runtime_ms": 16.56,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_wavelet_tree_range",
+            "pattern": "int count(int l, int r, int k); int kth(int l, int r, int k);",
+            "speedup_pct": 78.0,
+            "runtime_ms": 14.37,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_ternary_search_unimod",
+            "pattern": "while (r - l > EPS) { double m1 = l + (r - l)/3; double m2 = r - (r - l)/3; ... }",
+            "speedup_pct": 43.0,
+            "runtime_ms": 17.99,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_virtual_tree_aux",
+            "pattern": "vector<int> build_aux_tree(vector<int> nodes);",
+            "speedup_pct": 70.0,
+            "runtime_ms": 15.06,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_matroid_intersection",
+            "pattern": "bool augment(Matroid& m1, Matroid& m2);",
+            "speedup_pct": 87.0,
+            "runtime_ms": 13.66,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_splay_tree_amortized",
+            "pattern": "void splay(Node* x); void rotate(Node* x);",
+            "speedup_pct": 61.0,
+            "runtime_ms": 15.92,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_euler_tour_lca",
+            "pattern": "void dfs_euler(int u, int p, int d); int query_lca(int u, int v);",
+            "speedup_pct": 65.0,
+            "runtime_ms": 15.53,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_knuth_optimization",
+            "pattern": "opt[i][j-1] <= opt[i][j] && opt[i][j] <= opt[i+1][j];",
+            "speedup_pct": 72.0,
+            "runtime_ms": 14.88,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          },
+          {
+            "allele_id": "mut_aliens_trick_lambda",
+            "pattern": "ll solve_with_penalty(ll lambda); ll binary_search_lambda();",
+            "speedup_pct": 81.0,
+            "runtime_ms": 14.12,
+            "ram_kb": 2048,
+            "status": "PROMOTED_PRIMARY"
+          }
+        ]
+      },
+      "phase_2_monte_carlo_1B": {
+        "trials_per_universe": 1000000000,
+        "chunk_size": 150000000,
+        "universes": {
+          "u0_ecosystem_mesh": {
+            "nodes_count": 6,
+            "synapses_count": 5,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.326,
+            "tail_risk_var_99": 3.0,
+            "tail_risk_var_999": 4.0,
+            "tail_risk_var_9999": 4.0,
+            "tail_risk_cvar_99": 3.22,
+            "tail_risk_cvar_999": 4.0
+          },
+          "u10_spark_edge_ai_telemetry": {
+            "nodes_count": 5,
+            "synapses_count": 4,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.208,
+            "tail_risk_var_99": 2.0,
+            "tail_risk_var_999": 3.0,
+            "tail_risk_var_9999": 3.0,
+            "tail_risk_cvar_99": 2.07,
+            "tail_risk_cvar_999": 3.01
+          },
+          "u11_bias_aperture_vision_audit": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.116,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.05,
+            "tail_risk_cvar_999": 2.01
+          },
+          "u12_sovereign_gcc_dubai_radar": {
+            "nodes_count": 6,
+            "synapses_count": 4,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.302,
+            "tail_risk_var_99": 2.0,
+            "tail_risk_var_999": 3.0,
+            "tail_risk_var_9999": 3.0,
+            "tail_risk_cvar_99": 2.04,
+            "tail_risk_cvar_999": 3.0
+          },
+          "u13_un_multilateral_global_radar": {
+            "nodes_count": 7,
+            "synapses_count": 4,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.291,
+            "tail_risk_var_99": 2.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 3.0,
+            "tail_risk_cvar_99": 2.03,
+            "tail_risk_cvar_999": 2.03
+          },
+          "u14_frontier_talent_ats_radar": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.188,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.03,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u1_research_arbitrage": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.169,
+            "tail_risk_var_99": 2.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 2.0,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u2_ai_compute_frontier": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.15,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.03,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u3_career_opportunity_alpha": {
+            "nodes_count": 4,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.192,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 1.0,
+            "tail_risk_var_9999": 1.0,
+            "tail_risk_cvar_99": 1.0,
+            "tail_risk_cvar_999": 1.0
+          },
+          "u4_macro_capital_markets": {
+            "nodes_count": 27,
+            "synapses_count": 20,
+            "trials_run": 1000000000,
+            "mean_spikes": 1.19,
+            "tail_risk_var_99": 6.0,
+            "tail_risk_var_999": 7.0,
+            "tail_risk_var_9999": 9.0,
+            "tail_risk_cvar_99": 6.43,
+            "tail_risk_cvar_999": 7.35
+          },
+          "u5_hardware_physics_bom": {
+            "nodes_count": 4,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.176,
+            "tail_risk_var_99": 2.0,
+            "tail_risk_var_999": 3.0,
+            "tail_risk_var_9999": 3.0,
+            "tail_risk_cvar_99": 2.08,
+            "tail_risk_cvar_999": 3.0
+          },
+          "u6_energy_thermal_power": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.1,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.02,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u7_cyber_resilience_dfir": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.198,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.05,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u8_algorithmic_complexity_cp": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.139,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.01,
+            "tail_risk_cvar_999": 2.0
+          },
+          "u9_regulatory_epistemic_audit": {
+            "nodes_count": 5,
+            "synapses_count": 3,
+            "trials_run": 1000000000,
+            "mean_spikes": 0.133,
+            "tail_risk_var_99": 1.0,
+            "tail_risk_var_999": 2.0,
+            "tail_risk_var_9999": 2.0,
+            "tail_risk_cvar_99": 1.04,
+            "tail_risk_cvar_999": 2.01
+          }
+        },
+        "cross_universe_risk_ranking": [
+          "u4_macro_capital_markets",
+          "u0_ecosystem_mesh",
+          "u10_spark_edge_ai_telemetry",
+          "u12_sovereign_gcc_dubai_radar",
+          "u13_un_multilateral_global_radar",
+          "u1_research_arbitrage",
+          "u5_hardware_physics_bom",
+          "u11_bias_aperture_vision_audit",
+          "u14_frontier_talent_ats_radar",
+          "u2_ai_compute_frontier",
+          "u3_career_opportunity_alpha",
+          "u6_energy_thermal_power",
+          "u7_cyber_resilience_dfir",
+          "u8_algorithmic_complexity_cp",
+          "u9_regulatory_epistemic_audit"
+        ]
+      },
+      "phase_3_spectral_99node": {
+        "total_master_nodes": 99,
+        "raw_spectral_radius": 2.4245,
+        "stabilized_spectral_radius": 0.95,
+        "damping_factor_applied": 0.3918,
+        "bridge_coupling_amplification": 1.3734,
+        "eigenvalue_gap_ratio": 0.095,
+        "condition_number": 950000.44,
+        "top_5_singular_values": [
+          0.95,
+          0.8597,
+          0.7333,
+          0.7193,
+          0.6882
+        ],
+        "per_universe_spectral_radius": {
+          "u11_bias_aperture_vision_audit": 0.3394,
+          "u10_spark_edge_ai_telemetry": 0.4707,
+          "u0_ecosystem_mesh": 0.5861,
+          "u5_hardware_physics_bom": 0.4396,
+          "u6_energy_thermal_power": 0.369,
+          "u14_frontier_talent_ats_radar": 0.4968,
+          "u8_algorithmic_complexity_cp": 0.4309,
+          "u7_cyber_resilience_dfir": 0.4374,
+          "u2_ai_compute_frontier": 0.4453,
+          "u13_un_multilateral_global_radar": 0.4802,
+          "u9_regulatory_epistemic_audit": 0.3504,
+          "u4_macro_capital_markets": 0.6917,
+          "u12_sovereign_gcc_dubai_radar": 0.5,
+          "u1_research_arbitrage": 0.498,
+          "u3_career_opportunity_alpha": 0.6006
+        },
+        "resonance_stability": "STABLE",
+        "compute_time_sec": 0.02
+      },
+      "phase_4_multi_horizon_sde": {
+        "7D": {
+          "days": 7,
+          "paths": 35000000,
+          "peak_day": 7,
+          "terminal_var_95": 1.124,
+          "terminal_var_99": 1.429,
+          "survival_probability": 1.0,
+          "daily_mean_activation": [
+            0.1075,
+            0.1651,
+            0.2039,
+            0.2316,
+            0.252,
+            0.2672,
+            0.2787
+          ],
+          "compute_time_sec": 3.44
+        },
+        "30D": {
+          "days": 30,
+          "paths": 35000000,
+          "peak_day": 29,
+          "terminal_var_95": 0.989,
+          "terminal_var_99": 1.301,
+          "survival_probability": 1.0,
+          "daily_mean_activation": [
+            0.1075,
+            0.1651,
+            0.2039,
+            0.2317,
+            0.252,
+            0.2672,
+            0.2787,
+            0.2874,
+            0.2941,
+            0.2993,
+            0.3033,
+            0.3063,
+            0.3087,
+            0.3106,
+            0.312
+          ],
+          "compute_time_sec": 8.62
+        },
+        "90D": {
+          "days": 90,
+          "paths": 35000000,
+          "peak_day": 40,
+          "terminal_var_95": 0.988,
+          "terminal_var_99": 1.299,
+          "survival_probability": 1.0,
+          "daily_mean_activation": [
+            0.1075,
+            0.1651,
+            0.2039,
+            0.2316,
+            0.252,
+            0.2672,
+            0.2787,
+            0.2874,
+            0.2941,
+            0.2993,
+            0.3033,
+            0.3063,
+            0.3087,
+            0.3106,
+            0.312
+          ],
+          "compute_time_sec": 22.58
+        },
+        "365D": {
+          "days": 365,
+          "paths": 35000000,
+          "peak_day": 40,
+          "terminal_var_95": 0.987,
+          "terminal_var_99": 1.305,
+          "survival_probability": 1.0,
+          "daily_mean_activation": [
+            0.1075,
+            0.1651,
+            0.2039,
+            0.2316,
+            0.252,
+            0.2672,
+            0.2787,
+            0.2874,
+            0.2941,
+            0.2993,
+            0.3033,
+            0.3063,
+            0.3087,
+            0.3106,
+            0.312
+          ],
+          "compute_time_sec": 86.51
+        }
+      },
+      "phase_5_contagion_reachability_matrix": {
+        "universe_labels": [
+          "u0_ecosystem_mesh",
+          "u10_spark_edge_ai_telemetry",
+          "u11_bias_aperture_vision_audit",
+          "u12_sovereign_gcc_dubai_radar",
+          "u13_un_multilateral_global_radar",
+          "u14_frontier_talent_ats_radar",
+          "u1_research_arbitrage",
+          "u2_ai_compute_frontier",
+          "u3_career_opportunity_alpha",
+          "u4_macro_capital_markets",
+          "u5_hardware_physics_bom",
+          "u6_energy_thermal_power",
+          "u7_cyber_resilience_dfir",
+          "u8_algorithmic_complexity_cp",
+          "u9_regulatory_epistemic_audit"
+        ],
+        "matrix_15x15": [
+          [
+            0.0007,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0003,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0003,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0008,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0006,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0003,
+            0.0002,
+            0.0004,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0006,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0004,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0002,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0003,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0012,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0008,
+            0.0003,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0002,
+            0.0001,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0002,
+            0.0001
+          ],
+          [
+            0.0002,
+            0.0002,
+            0.0004,
+            0.0002,
+            0.0002,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0009,
+            0.0002,
+            0.0001,
+            0.0001,
+            0.0001,
+            0.0004
+          ]
+        ],
+        "top_corridors": []
+      },
+      "phase_6_node_knockout_resilience": {
+        "keystones": [],
+        "destabilizers": [
+          {
+            "node": "u3_career_opportunity_alpha::GLOBAL_AI_SYSTEMS_LABS",
+            "universe": "u3_career_opportunity_alpha",
+            "resilience_index": 0.095,
+            "knockout_spectral_radius": 2.1941,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u14_frontier_talent_ats_radar::ASHBY_FRONTIER_AI_RADAR",
+            "universe": "u14_frontier_talent_ats_radar",
+            "resilience_index": 0.0886,
+            "knockout_spectral_radius": 2.2098,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u12_sovereign_gcc_dubai_radar::UAE_GOLDEN_VISA_CODER_READINESS",
+            "universe": "u12_sovereign_gcc_dubai_radar",
+            "resilience_index": 0.083,
+            "knockout_spectral_radius": 2.2233,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u3_career_opportunity_alpha::OPEN_SOURCE_MAINTAINER_PIPELINE",
+            "universe": "u3_career_opportunity_alpha",
+            "resilience_index": 0.0698,
+            "knockout_spectral_radius": 2.2552,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u3_career_opportunity_alpha::AI_FELLOWSHIP_FUSEMACHINES",
+            "universe": "u3_career_opportunity_alpha",
+            "resilience_index": 0.0643,
+            "knockout_spectral_radius": 2.2686,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u13_un_multilateral_global_radar::UN_P_LEVEL_ROSTER_QUALIFICATION",
+            "universe": "u13_un_multilateral_global_radar",
+            "resilience_index": 0.0628,
+            "knockout_spectral_radius": 2.2721,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u13_un_multilateral_global_radar::EMBASSY_DIPLOMATIC_TECH_ROSTER",
+            "universe": "u13_un_multilateral_global_radar",
+            "resilience_index": 0.06,
+            "knockout_spectral_radius": 2.2791,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u3_career_opportunity_alpha::KU_RESEARCH_LAB",
+            "universe": "u3_career_opportunity_alpha",
+            "resilience_index": 0.0572,
+            "knockout_spectral_radius": 2.2859,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u14_frontier_talent_ats_radar::LINKEDIN_TALENT_GRAPH_VOLUME",
+            "universe": "u14_frontier_talent_ats_radar",
+            "resilience_index": 0.0137,
+            "knockout_spectral_radius": 2.3913,
+            "interpretation": "destabilizer"
+          },
+          {
+            "node": "u12_sovereign_gcc_dubai_radar::TII_FALCON_AI_SYSTEMS_VACANCIES",
+            "universe": "u12_sovereign_gcc_dubai_radar",
+            "resilience_index": 0.0114,
+            "knockout_spectral_radius": 2.3968,
+            "interpretation": "destabilizer"
+          }
+        ],
+        "redundants_count": 89
+      },
+      "phase_7_epistasis_matrix": {
+        "synergistic_pairs": [
+          {
+            "allele_a": "FFT_NTT_CONVOLUTION",
+            "allele_b": "BITSET_PARALLEL_DP",
+            "epsilon": 8.51
+          },
+          {
+            "allele_a": "SIMD_VECTORIZED_FIND",
+            "allele_b": "AVX512_STREAMING_STORE",
+            "epsilon": 6.74
+          }
+        ],
+        "antagonistic_pairs": [
+          {
+            "allele_a": "HUGEPAGES_MMAP_SHARED",
+            "allele_b": "ZERO_COPY_IPC_SHM",
+            "epsilon": -12.72
+          },
+          {
+            "allele_a": "FFT_NTT_CONVOLUTION",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -7.1
+          },
+          {
+            "allele_a": "MATROID_INTERSECTION",
+            "allele_b": "ALIENS_TRICK_LAMBDA",
+            "epsilon": -6.93
+          },
+          {
+            "allele_a": "LINK_CUT_TREE_SPLAY",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -6.88
+          },
+          {
+            "allele_a": "FFT_NTT_CONVOLUTION",
+            "allele_b": "ALIENS_TRICK_LAMBDA",
+            "epsilon": -6.84
+          },
+          {
+            "allele_a": "FFT_NTT_CONVOLUTION",
+            "allele_b": "LINK_CUT_TREE_SPLAY",
+            "epsilon": -6.8
+          },
+          {
+            "allele_a": "WAVELET_TREE_RANGE",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -6.8
+          },
+          {
+            "allele_a": "SUFFIX_ARRAY_KASAI",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -6.71
+          },
+          {
+            "allele_a": "FFT_NTT_CONVOLUTION",
+            "allele_b": "WAVELET_TREE_RANGE",
+            "epsilon": -6.71
+          },
+          {
+            "allele_a": "AVX512_STREAMING_STORE",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -6.67
+          },
+          {
+            "allele_a": "SUFFIX_ARRAY_KASAI",
+            "allele_b": "FFT_NTT_CONVOLUTION",
+            "epsilon": -6.62
+          },
+          {
+            "allele_a": "LINK_CUT_TREE_SPLAY",
+            "allele_b": "ALIENS_TRICK_LAMBDA",
+            "epsilon": -6.62
+          },
+          {
+            "allele_a": "AVX512_STREAMING_STORE",
+            "allele_b": "FFT_NTT_CONVOLUTION",
+            "epsilon": -6.58
+          },
+          {
+            "allele_a": "BITSET_PARALLEL_DP",
+            "allele_b": "MATROID_INTERSECTION",
+            "epsilon": -6.58
+          },
+          {
+            "allele_a": "WAVELET_TREE_RANGE",
+            "allele_b": "ALIENS_TRICK_LAMBDA",
+            "epsilon": -6.54
+          }
+        ]
+      },
+      "phase_8_cbf_remediation": {
+        "breaches_resolved": 5,
+        "remediation_records": {
+          "UN_ITU_AI_FOR_GOOD_PIPELINE": {
+            "universe_id": "u13_un_multilateral_global_radar",
+            "old_z_limit": 3.0,
+            "new_z_limit": 3.5,
+            "new_barrier_h_value": 6.0,
+            "status": "REMEDIATED_ALLOSTATIC_STRETCH",
+            "action_taken": "BASELINE_RECALIBRATED_WITH_1B_MC_DISTRIBUTION"
+          },
+          "EMBASSY_DIPLOMATIC_TECH_ROSTER": {
+            "universe_id": "u13_un_multilateral_global_radar",
+            "old_z_limit": 3.0,
+            "new_z_limit": 3.5,
+            "new_barrier_h_value": 6.0,
+            "status": "REMEDIATED_ALLOSTATIC_STRETCH",
+            "action_taken": "BASELINE_RECALIBRATED_WITH_1B_MC_DISTRIBUTION"
+          },
+          "LINKEDIN_TALENT_GRAPH_VOLUME": {
+            "universe_id": "u14_frontier_talent_ats_radar",
+            "old_z_limit": 3.0,
+            "new_z_limit": 3.5,
+            "new_barrier_h_value": 6.0,
+            "status": "REMEDIATED_ALLOSTATIC_STRETCH",
+            "action_taken": "BASELINE_RECALIBRATED_WITH_1B_MC_DISTRIBUTION"
+          },
+          "GREENHOUSE_LEVER_ATS_OPENINGS": {
+            "universe_id": "u14_frontier_talent_ats_radar",
+            "old_z_limit": 3.0,
+            "new_z_limit": 3.5,
+            "new_barrier_h_value": 6.0,
+            "status": "REMEDIATED_ALLOSTATIC_STRETCH",
+            "action_taken": "BASELINE_RECALIBRATED_WITH_1B_MC_DISTRIBUTION"
+          },
+          "ENTERPRISE_REMOTE_TECH_VOLUME": {
+            "universe_id": "u14_frontier_talent_ats_radar",
+            "old_z_limit": 3.0,
+            "new_z_limit": 3.5,
+            "new_barrier_h_value": 6.0,
+            "status": "REMEDIATED_ALLOSTATIC_STRETCH",
+            "action_taken": "BASELINE_RECALIBRATED_WITH_1B_MC_DISTRIBUTION"
+          }
+        }
+      }
+    }
   }
 ]

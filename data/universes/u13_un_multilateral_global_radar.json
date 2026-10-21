@@ -12,14 +12,14 @@
       "unit": "active_roster_tracks",
       "current_value": 0.0,
       "layer1_homeostatic": {
-        "mu0": 5.0,
+        "mu0": 3.75,
         "sigma0": 1.5,
         "iqr": 2.0,
         "tau0_days": 30
       },
       "layer2_allostatic": {
         "z_stretched": 2.0,
-        "z_critical": 3.0,
+        "z_critical": 3.5,
         "p05": 2.0,
         "p95": 9.0
       },
@@ -152,14 +152,14 @@
       "unit": "active_embassy_vacancies",
       "current_value": 0.0,
       "layer1_homeostatic": {
-        "mu0": 3.0,
+        "mu0": 2.5,
         "sigma0": 1.0,
         "iqr": 1.2,
         "tau0_days": 30
       },
       "layer2_allostatic": {
         "z_stretched": 2.0,
-        "z_critical": 3.0,
+        "z_critical": 3.5,
         "p05": 1.0,
         "p95": 6.0
       },

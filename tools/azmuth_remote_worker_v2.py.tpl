@@ -301,8 +301,8 @@ if has_cuda:
     damped_adj = master_adj * damping_factor
     _, S_damped, _ = torch.linalg.svd(damped_adj)
     stabilized_radius = float(S_damped[0].item())
-    eigengap_ratio = round(float((S_damped[0] - S_damped[1]) / max(1e-6, S_damped[0])).item(), 4)
-    condition_num = round(float(S_damped[0] / max(1e-6, S_damped[-1])).item(), 2)
+    eigengap_ratio = round(float(((S_damped[0] - S_damped[1]) / max(1e-6, S_damped[0].item())).item()), 4)
+    condition_num = round(float((S_damped[0] / max(1e-6, S_damped[-1].item())).item()), 2)
     top_singular = [round(float(x), 4) for x in S_damped[:5].tolist()]
 
     # Per-universe sub-matrix spectral radius
@@ -377,12 +377,16 @@ if has_cuda:
             daily_mean.append(round(float(x_t.mean().item()), 4))
             daily_spikes.append(int((x_t > 2.0).sum().item()))
 
-        terminal_var_95 = float(torch.quantile(x_t, 0.95).item())
-        terminal_var_99 = float(torch.quantile(x_t, 0.99).item())
+        # 1D flattened 100K sample to safely compute quantiles within PyTorch limits
+        sample_size = min(100000, SDE_PATHS)
+        sample_idx = torch.randint(0, SDE_PATHS, (sample_size,), device="cuda")
+        x_sample = x_t[sample_idx, 0].contiguous() # Lead node distribution
+        terminal_var_95 = float(torch.quantile(x_sample, 0.95).item())
+        terminal_var_99 = float(torch.quantile(x_sample, 0.99).item())
         survival_prob = float((x_t < 3.0).all(dim=1).float().mean().item())
         peak_d = int(torch.tensor(daily_mean).argmax().item()) + 1
 
-        del x_t
+        del x_t, x_sample, sample_idx
         torch.cuda.empty_cache()
         sde_horizon_results[f"{days}D"] = {
             "days": days,

@@ -64,10 +64,12 @@ class AzmuthCBFGovernor:
         val = float(node_data.get("current_value", 0.0))
         z_score = float(node_data.get("z_score", 0.0))
         state_label = node_data.get("state_label", "HOMEOSTATIC_EQUILIBRIUM")
+        l2 = node_data.get("layer2_allostatic", {})
+        z_limit = max(self.z_safety_limit, float(l2.get("z_critical", self.z_safety_limit)))
 
         # h(x) > 0 inside safe set, = 0 on boundary, < 0 in unsafe set
-        h_val = round((self.z_safety_limit**2) - (z_score**2), 4)
-        is_safe = h_val >= 0.0 and abs(z_score) < self.z_safety_limit
+        h_val = round((z_limit**2) - (z_score**2), 4)
+        is_safe = h_val >= 0.0 and abs(z_score) < z_limit
 
         mitigation = None
         if not is_safe or state_label == "CRITICAL_NOCICEPTIVE_SPIKE":

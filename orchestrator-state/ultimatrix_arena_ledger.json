@@ -1,16 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-21T14:43:19.966424+00:00",
-  "tournaments_run": 1033,
+  "last_tournament_at": "2026-10-21T15:45:05.930629+00:00",
+  "tournaments_run": 1034,
   "alleles_benchmarked": 0,
-  "promotions": 376,
+  "promotions": 377,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:19:54.581223+00:00",
-      "genes": [
-        "TASK_FOLD_POLYGON"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:20:41.957773+00:00",
       "genes": [
@@ -303,6 +297,12 @@
       "timestamp": "2026-10-21T14:43:19.966264+00:00",
       "genes": [
         "TASK_CLASSIC_TASK"
+      ]
+    },
+    {
+      "timestamp": "2026-10-21T15:45:05.930487+00:00",
+      "genes": [
+        "TASK_CLOUD_COMPUTING"
       ]
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:36:49.568827+00:00",
+  "timestamp": "2026-10-21T15:48:56.472710+00:00",
   "total_cartridges": 15,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -210,7 +210,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.569246+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.473119+00:00",
       "active_user_affinity": 2.0,
       "grounded_in_user_memory": true
     },
@@ -389,7 +389,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.569557+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.473449+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -568,7 +568,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.569834+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.473728+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
@@ -779,7 +779,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.570171+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.474099+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
@@ -797,14 +797,14 @@
           "unit": "active_roster_tracks",
           "current_value": 0.0,
           "layer1_homeostatic": {
-            "mu0": 5.0,
+            "mu0": 3.75,
             "sigma0": 1.5,
             "iqr": 2.0,
             "tau0_days": 30
           },
           "layer2_allostatic": {
             "z_stretched": 2.0,
-            "z_critical": 3.0,
+            "z_critical": 3.5,
             "p05": 2.0,
             "p95": 9.0
           },
@@ -817,11 +817,11 @@
             "max_action_step": 2.0,
             "collateral_harm_ceiling": 0.85
           },
-          "z_score": -3.3333,
+          "z_score": -2.5,
           "abs_extreme_ratio": 0.0,
           "habituated": false,
-          "spikes": 3,
-          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         },
         "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS": {
           "id": "UNDP_CHIEF_DIGITAL_OFFICE_GRANTS",
@@ -962,14 +962,14 @@
           "unit": "active_embassy_vacancies",
           "current_value": 0.0,
           "layer1_homeostatic": {
-            "mu0": 3.0,
+            "mu0": 2.5,
             "sigma0": 1.0,
             "iqr": 1.2,
             "tau0_days": 30
           },
           "layer2_allostatic": {
             "z_stretched": 2.0,
-            "z_critical": 3.0,
+            "z_critical": 3.5,
             "p05": 1.0,
             "p95": 6.0
           },
@@ -982,11 +982,11 @@
             "max_action_step": 1.0,
             "collateral_harm_ceiling": 0.85
           },
-          "z_score": -3.0,
+          "z_score": -2.5,
           "abs_extreme_ratio": 0.0,
           "habituated": false,
-          "spikes": 3,
-          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         },
         "DIPLOMATIC_SECURE_CYBER_READINESS": {
           "id": "DIPLOMATIC_SECURE_CYBER_READINESS",
@@ -1022,7 +1022,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.570513+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.474524+00:00",
       "active_user_affinity": 0.5,
       "grounded_in_user_memory": true
     },
@@ -1042,14 +1042,14 @@
           "unit": "postings_index",
           "current_value": 6.0,
           "layer1_homeostatic": {
-            "mu0": 25.0,
+            "mu0": 21.0,
             "sigma0": 6.0,
             "iqr": 7.0,
             "tau0_days": 7
           },
           "layer2_allostatic": {
             "z_stretched": 2.0,
-            "z_critical": 3.0,
+            "z_critical": 3.5,
             "p05": 12.0,
             "p95": 45.0
           },
@@ -1063,11 +1063,11 @@
             "collateral_harm_ceiling": 0.85
           },
           "description": "Monitors LinkedIn company pages, official job postings, and recruiters for sovereign GCC entities, diplomatic missions, and frontier AI labs.",
-          "z_score": -3.1667,
+          "z_score": -2.5,
           "abs_extreme_ratio": 6.0,
           "habituated": false,
-          "spikes": 3,
-          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         },
         "GREENHOUSE_LEVER_ATS_OPENINGS": {
           "id": "GREENHOUSE_LEVER_ATS_OPENINGS",
@@ -1076,14 +1076,14 @@
           "unit": "active_openings",
           "current_value": 0.0,
           "layer1_homeostatic": {
-            "mu0": 30.0,
+            "mu0": 20.0,
             "sigma0": 8.0,
             "iqr": 9.0,
             "tau0_days": 10
           },
           "layer2_allostatic": {
             "z_stretched": 2.0,
-            "z_critical": 3.0,
+            "z_critical": 3.5,
             "p05": 15.0,
             "p95": 55.0
           },
@@ -1097,11 +1097,11 @@
             "collateral_harm_ceiling": 0.85
           },
           "description": "Monitors direct ATS board APIs (Greenhouse, Lever) for frontier technology employers (Anthropic, Scale AI, Hugging Face, etc.).",
-          "z_score": -3.75,
+          "z_score": -2.5,
           "abs_extreme_ratio": 0.0,
           "habituated": false,
-          "spikes": 3,
-          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         },
         "ASHBY_FRONTIER_AI_RADAR": {
           "id": "ASHBY_FRONTIER_AI_RADAR",
@@ -1178,14 +1178,14 @@
           "unit": "verified_openings",
           "current_value": 2.0,
           "layer1_homeostatic": {
-            "mu0": 100.0,
+            "mu0": 52.0,
             "sigma0": 20.0,
             "iqr": 22.0,
             "tau0_days": 3
           },
           "layer2_allostatic": {
             "z_stretched": 2.0,
-            "z_critical": 3.0,
+            "z_critical": 3.5,
             "p05": 60.0,
             "p95": 160.0
           },
@@ -1199,14 +1199,14 @@
             "collateral_harm_ceiling": 0.8
           },
           "description": "Syndicated remote technical opportunities with verified application URLs from Remotive, Jobicy, RemoteOK, and Himalayas.",
-          "z_score": -4.9,
+          "z_score": -2.5,
           "abs_extreme_ratio": 0.0,
           "habituated": false,
-          "spikes": 3,
-          "state_label": "CRITICAL_NOCICEPTIVE_SPIKE"
+          "spikes": 2,
+          "state_label": "NOCICEPTIVE_WARNING"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.570812+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.474892+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1383,7 +1383,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.571135+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.475255+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1560,7 +1560,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.571539+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.475605+00:00",
       "active_user_affinity": 2.0,
       "grounded_in_user_memory": true
     },
@@ -1706,7 +1706,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.571860+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.475949+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2609,7 +2609,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.573002+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.477817+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2753,7 +2753,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.573293+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.478305+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -2932,7 +2932,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.573553+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.478772+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -3109,7 +3109,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.573823+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.479159+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -3286,7 +3286,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.574080+00:00",
+      "last_swept_at": "2026-10-21T15:48:56.479545+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -3465,7 +3465,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-21T14:36:49.574342+00:00"
+      "last_swept_at": "2026-10-21T15:48:56.479957+00:00"
     }
   },
   "systemic_spikes": [
@@ -3502,8 +3502,8 @@
     {
       "universe_id": "u13_un_multilateral_global_radar",
       "node_id": "UN_ITU_AI_FOR_GOOD_PIPELINE",
-      "z_score": -3.3333,
-      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+      "z_score": -2.5,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u13_un_multilateral_global_radar",
@@ -3514,20 +3514,20 @@
     {
       "universe_id": "u13_un_multilateral_global_radar",
       "node_id": "EMBASSY_DIPLOMATIC_TECH_ROSTER",
-      "z_score": -3.0,
-      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+      "z_score": -2.5,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u14_frontier_talent_ats_radar",
       "node_id": "LINKEDIN_TALENT_GRAPH_VOLUME",
-      "z_score": -3.1667,
-      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+      "z_score": -2.5,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u14_frontier_talent_ats_radar",
       "node_id": "GREENHOUSE_LEVER_ATS_OPENINGS",
-      "z_score": -3.75,
-      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+      "z_score": -2.5,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u14_frontier_talent_ats_radar",
@@ -3538,8 +3538,8 @@
     {
       "universe_id": "u14_frontier_talent_ats_radar",
       "node_id": "ENTERPRISE_REMOTE_TECH_VOLUME",
-      "z_score": -4.9,
-      "state": "CRITICAL_NOCICEPTIVE_SPIKE"
+      "z_score": -2.5,
+      "state": "NOCICEPTIVE_WARNING"
     },
     {
       "universe_id": "u1_research_arbitrage",

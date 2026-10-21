@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-21T14:36:27.237995+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-21T15:41:58.761792+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[JONIMONI09/BestAI]** [Quality and stuff](https://github.com/JONIMONI09/BestAI/issues/46) (Comments: 0, Salience: 1.0)
 - **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 11, Salience: 2.0)
 - **[FluxML/Flux.jl]** [PyTorch feature parity](https://github.com/FluxML/Flux.jl/issues/1431) (Comments: 94, Salience: 2.0)
 - **[whn09/DeepInfer]** [[kernel] NKI FP8 block-scaled GEMM and FP4 grouped expert GEMM](https://github.com/whn09/DeepInfer/issues/10) (Comments: 0, Salience: 1.0)
-- **[huggingface/peft]** [Comparison of Different Fine-Tuning Techniques for Conversational AI](https://github.com/huggingface/peft/issues/2310) (Comments: 172, Salience: 2.0)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
 ](https://github.com/spiralgang/aGi-TEAM-FSMbot-/issues/1) (Comments: 7, Salience: 2.0)
 - **[optiqor/kerno]** [Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule](https://github.com/optiqor/kerno/issues/50) (Comments: 58, Salience: 2.0)
@@ -21,7 +21,7 @@
 
 ## 3. Algorithmic Codon Archive Targets (`CP`)
 - **[ShahjalalShohag/code-library]** ⭐ 3733 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
-- **[kth-competitive-programming/kactl]** ⭐ 3576 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
+- **[kth-competitive-programming/kactl]** ⭐ 3575 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1769 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
 - **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))

@@ -12,14 +12,14 @@
       "unit": "postings_index",
       "current_value": 6.0,
       "layer1_homeostatic": {
-        "mu0": 25.0,
+        "mu0": 21.0,
         "sigma0": 6.0,
         "iqr": 7.0,
         "tau0_days": 7
       },
       "layer2_allostatic": {
         "z_stretched": 2.0,
-        "z_critical": 3.0,
+        "z_critical": 3.5,
         "p05": 12.0,
         "p95": 45.0
       },
@@ -41,14 +41,14 @@
       "unit": "active_openings",
       "current_value": 0.0,
       "layer1_homeostatic": {
-        "mu0": 30.0,
+        "mu0": 20.0,
         "sigma0": 8.0,
         "iqr": 9.0,
         "tau0_days": 10
       },
       "layer2_allostatic": {
         "z_stretched": 2.0,
-        "z_critical": 3.0,
+        "z_critical": 3.5,
         "p05": 15.0,
         "p95": 55.0
       },
@@ -128,14 +128,14 @@
       "unit": "verified_openings",
       "current_value": 2.0,
       "layer1_homeostatic": {
-        "mu0": 100.0,
+        "mu0": 52.0,
         "sigma0": 20.0,
         "iqr": 22.0,
         "tau0_days": 3
       },
       "layer2_allostatic": {
         "z_stretched": 2.0,
-        "z_critical": 3.0,
+        "z_critical": 3.5,
         "p05": 60.0,
         "p95": 160.0
       },
