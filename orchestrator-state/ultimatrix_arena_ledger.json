@@ -1,22 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-21T13:27:42.493909+00:00",
-  "tournaments_run": 1030,
+  "last_tournament_at": "2026-10-21T14:33:09.069431+00:00",
+  "tournaments_run": 1032,
   "alleles_benchmarked": 0,
-  "promotions": 373,
+  "promotions": 375,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:13:03.628286+00:00",
-      "genes": [
-        "TASK_FIND_BINARY_ARRAY"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:14:25.241734+00:00",
-      "genes": [
-        "TASK_FIND_REMAINDER"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:16:38.262801+00:00",
       "genes": [
@@ -303,6 +291,18 @@
       "timestamp": "2026-10-21T13:27:42.493616+00:00",
       "genes": [
         "TASK_ALICE_TREE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-21T14:20:28.513428+00:00",
+      "genes": [
+        "TASK_CHASE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-21T14:33:09.069348+00:00",
+      "genes": [
+        "TASK_CHOCOLATE"
       ]
     }
   ]

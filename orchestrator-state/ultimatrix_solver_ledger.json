@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 327,
-  "tasks_solved": 327,
+  "tasks_attempted": 330,
+  "tasks_solved": 330,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -329,28 +329,13 @@
     "tennis-tournament",
     "array-elimination",
     "building-bridges",
-    "alice-tree"
+    "alice-tree",
+    "chase",
+    "chocolate",
+    "classic-task"
   ],
-  "last_solve_at": "2026-10-21T13:32:36.042557+00:00",
+  "last_solve_at": "2026-10-21T14:34:22.840029+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:16:36.084548+00:00",
-      "slug": "flip-game",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 4
-    },
-    {
-      "timestamp": "2026-10-18T10:19:52.391756+00:00",
-      "slug": "fold-polygon",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:20:39.845772+00:00",
-      "slug": "force_graph",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
     {
       "timestamp": "2026-10-18T10:21:32.694188+00:00",
       "slug": "game",
@@ -632,13 +617,32 @@
       "slug": "alice-tree",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-21T14:17:55.502724+00:00",
+      "slug": "chase",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-21T14:25:05.707102+00:00",
+      "slug": "chocolate",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-21T14:34:22.839884+00:00",
+      "slug": "classic-task",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
   "attempted_slugs": {
     "connect-the-graph": "VERIFICATION_FAILED",
     "equal-sums": "VERIFICATION_FAILED",
     "find-edge-list": "VERIFICATION_FAILED",
-    "bad-triplet": "VERIFICATION_FAILED"
+    "bad-triplet": "VERIFICATION_FAILED",
+    "candy-boxes": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
