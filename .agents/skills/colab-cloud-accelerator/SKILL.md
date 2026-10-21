@@ -131,7 +131,32 @@ colab url -s router-forge --open
 1. **Mandatory Teardown**: Always execute `colab stop -s <name>` or use `colab run` (which self-cleans) to prevent unattended compute unit burn.
 2. **Session Name Invariant**: Always provide explicit `-s <name>` on `colab new` to prevent ambiguous random hex session IDs.
 3. **No Interactive TTY in Headless Agents**: Never invoke `colab repl`, `colab console`, `colab auth`, or `colab drivemount` in non-interactive agent turns as they require a raw TTY.
-4. **Programmatic Notebook Auto-Teardown (`runtime.unassign()`)**: All autonomous Colab training notebooks must conclude with a dedicated final cell executing `from google.colab import runtime; runtime.unassign()` after artifacts are persisted to Google Drive. This immediately releases high-cost GPU/TPU VMs (A100, L4) and cuts compute burn to `0.00/hr` the instant training finishes.
+4. **Programmatic Notebook Auto-Teardown & FUSE Flush Invariant (`INV-COLAB-FUSE-FLUSH`)**:
+   All autonomous Colab training notebooks must enforce a strict two-stage teardown. Writing to `/content/drive/MyDrive/...` occurs via a Linux user-space FUSE filesystem (`google.colab.drive`). Calling `runtime.unassign()` immediately after `shutil.copy2()` or `file.write()` destroys the container before dirty FUSE write buffers sync to Google Drive servers, causing missing or 0-byte files on Google Drive even when local execution output reports success.
+   **Mandatory Persistence & Teardown Cell Pattern**:
+   ```python
+   # 1. Copy artifact to Google Drive FUSE mount
+   import shutil, os, time
+   src = '/content/hyperburst_results.json'
+   dst = '/content/drive/MyDrive/Super-NLM/Fleet-Orchestrator/orchestrator-state/hyperburst_results_v2.json'
+   if os.path.exists(src):
+       shutil.copy2(src, dst)
+       print(f'[SUCCESS] Written {os.path.getsize(dst):,} bytes to {dst}')
+
+   # 2. Mandatory FUSE buffer flush & unmount BEFORE container destruction
+   from google.colab import drive
+   try:
+       drive.flush_and_unmount()
+       print('[PERSISTENCE] Google Drive FUSE cache successfully flushed.')
+   except Exception as e:
+       print(f'[WARNING] Drive flush encountered: {e}')
+   time.sleep(2)
+
+   # 3. Clean cloud VM teardown to cut idle compute unit burn
+   from google.colab import runtime
+   print('Shutting down runtime to protect compute units...')
+   runtime.unassign()
+   ```
 5. **Dynamic Cell Appending & FIFO Execution Queue Safety**: Appending, editing, or creating new cells (such as appending a teardown cell `runtime.unassign()`) while an earlier cell is actively executing has **zero effect** on in-flight training loops. The Jupyter `ipykernel` operates on an asynchronous FIFO ZeroMQ execution queue. To guarantee an appended cell executes automatically after preceding cells finish, click Run (Play button or `Shift + Enter`); Colab queues it with a pending indicator (`[*]`), ensuring hands-free teardown without interrupting active CUDA kernels or VRAM allocations.
 6. **Unsloth GGUF Export Directory Suffix (`_gguf`)**: Unsloth's `model.save_pretrained_gguf(target_dir, ...)` automatically appends `_gguf` to the specified directory name (`target_dir_gguf/`). Cloud persistence code targeting mounted Google Drive must reference `f"{target_dir}_gguf"` or use dynamic glob discovery (`glob.glob("**/*.gguf", recursive=True)`) to eliminate `FileNotFoundError` upon training completion.
 7. **Public Reader Sharing & Resumable CLI Model Retrieval (`gdown`)**: After uploading multi-gigabyte models (`.gguf`) to Google Drive, set sharing permissions to `role: reader, type: anyone` via the Drive MCP `share_file` tool. This allows zero-friction, authenticated or unauthenticated terminal downloads across local machines or worker nodes using:
@@ -162,6 +187,35 @@ colab url -s router-forge --open
      ```powershell
      colab url -s <session-name> --open
      ```
+
+10. **Dual-Channel Zero-Loss Persistence Protocol (`INV-COLAB-DUAL-PERSIST`)**:
+    Never rely solely on cloud filesystem mounts or Drive syncing. Every Colab burst MUST serialize its output through two redundant channels:
+    - **Channel A (Deterministic Stdout Base64 Stream)**: Base64-encode the entire output JSON payload and stream it directly to cell stdout between explicit delimiters:
+      ```python
+      b64_res = base64.b64encode(json.dumps(output_payload).encode("utf-8")).decode("ascii")
+      print("\n<<<HYPERBURST_PAYLOAD_START>>>")
+      print(b64_res)
+      print("<<<HYPERBURST_PAYLOAD_END>>>\n")
+      ```
+      This guarantees 100% loss-free payload recovery directly from the notebook cell output or terminal logs, even if Drive mounting fails, credentials expire, or the VM is unassigned early.
+    - **Channel B (Flushed Drive Storage)**: Write to `/content/drive/MyDrive/...` followed by `drive.flush_and_unmount()`.
+
+11. **PyTorch GPU Quantile Sorting Ceilings (`INV-CUDA-QUANTILE-LIMITS`)**:
+    `torch.quantile()` has strict hardware and backend constraints on CUDA:
+    - **Dimension Element Ceiling**: Attempting to sort or quantile tensors with > 2^31 - 1 elements throws `RuntimeError: The dimension being sorted can not have more than INT_MAX elements`.
+    - **Internal Sorting Ceiling**: PyTorch's CUDA quantile implementation throws `RuntimeError: quantile() input tensor is too large` on tensors with > 16,777,216 elements (even if 1D).
+    **Mandatory Pattern**: Never quantile entire raw multi-horizon Monte Carlo tensors or flattened 35M x 99 grids directly. Always downsample or take a 1D slice of N=100,000 random paths on the lead shock node:
+    ```python
+    sample_size = min(100_000, SDE_PATHS)
+    sample_idx = torch.randint(0, SDE_PATHS, (sample_size,), device="cuda")
+    x_sample = x_t[sample_idx, 0] # 1D tensor of 100k elements
+    terminal_var_95 = float(torch.quantile(x_sample, 0.95).item())
+    terminal_var_99 = float(torch.quantile(x_sample, 0.99).item())
+    ```
+
+12. **Python Scalar Extraction & Variable Scope Hygiene**:
+    - **Scalar Extraction**: Always extract PyTorch scalar values with `float(tensor.item())` or `tensor.item()`. Never wrap `float(...)` around an uncalled expression that later invokes `.item()` (e.g., `float(...).item()` triggers `AttributeError: 'float' object has no attribute 'item'`).
+    - **Loop Cleanup Scope**: Never call `del variable` inside iterative loops on variables that need to persist across iterations, and avoid duplicate `del` statements that cause `NameError`. Guard manual deletions with `if 'var' in locals(): del var`.
 
 ---
 

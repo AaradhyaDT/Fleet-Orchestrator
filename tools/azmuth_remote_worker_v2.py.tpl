@@ -662,6 +662,14 @@ print("=" * 70)
 
 # Automatic Cloud Teardown
 try:
+    from google.colab import drive
+    drive.flush_and_unmount()
+    print("[PERSISTENCE] Google Drive FUSE buffer successfully flushed.")
+    time.sleep(2)
+except Exception:
+    pass
+
+try:
     from google.colab import runtime
     print("Initiating automatic cloud VM teardown via runtime.unassign()...")
     runtime.unassign()
