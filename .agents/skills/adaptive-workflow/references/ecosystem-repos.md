@@ -84,6 +84,7 @@ To ensure multi-device portability across laptops, external storage, and seconda
 ## 6. Local Utility Extras & Experimental Archives (Non-Registry)
 
 These utilities are tracked locally on disk but remain outside the formal 28-module ecosystem registry:
+- **`OutreachAssistant`** (`F:\AaradhyaDT\OutreachAssistant`): Intelligent Employee-to-Client CRM & Dual-Channel Mass Messaging Assistant (FastAPI, SQLite WAL, openpyxl, WhatsApp Cloud API + Sparrow SMS fallback). Verified on port 9000 with 100% test pass.
 - **`windows-pilot`** (`F:\Aaradhya-Dev-Tamrakar\Utility\windows-pilot`): Native UI Automation (UIA) tree inspector, screenshot perception, desktop driver.
 - **`IEEE-Xtreme-Archive`** (`F:\Aaradhya-Dev-Tamrakar\IEEE-Xtreme-Archive`): Competitive programming task and solution repository.
 - **`latex-engineering-report-template`** (`https://github.com/Aaradhya-Dev-Tamrakar/latex-engineering-report-template`): Pure-format IEEE engineering report class and template (`engineering-report.cls`).
