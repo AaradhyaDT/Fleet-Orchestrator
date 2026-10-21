@@ -1,9 +1,9 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 102,
-  "total_skill_instances": 173,
+  "total_distinct_skills": 103,
+  "total_skill_instances": 174,
   "domain_counts": {
-    "AI_ENGINEERING_ML": 12,
+    "AI_ENGINEERING_ML": 13,
     "SWARM_ORCHESTRATION": 4,
     "ENGINEERING_DEV": 18,
     "DOMAIN_HARDWARE": 7,
@@ -14,7 +14,7 @@
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
-    "INSTALLED": 64,
+    "INSTALLED": 65,
     "VERIFIED": 10,
     "ACCESSIBLE": 28
   },
@@ -53,8 +53,8 @@
       "dependencies": [
         "tools/adaptive_engine.py"
       ],
-      "byte_size": 8200,
-      "line_count": 134,
+      "byte_size": 8818,
+      "line_count": 137,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\adaptive-workflow",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -214,6 +214,22 @@
       "line_count": 78,
       "ssot_path": "C:\\Users\\Aaradhya\\.agents\\skills\\appinsights-instrumentation",
       "ssot_role": "UNIVERSAL_HUB",
+      "mirrors": [],
+      "mirror_count": 0
+    },
+    "asymmetric-leverage-guardrails": {
+      "name": "asymmetric-leverage-guardrails",
+      "domain": "AI_ENGINEERING_ML",
+      "availability_tier": "INSTALLED",
+      "description": ">- Strategic engineering leadership, collaboration governance, and anti-exploitation guardrails. Enforces enlightened self-interest, architectural IP sovereignty, reciprocal leverage accounting, and defense attribution boundaries for multi-member engineering initiatives.",
+      "triggers": [
+        "asymmetric-leverage-guardrails"
+      ],
+      "dependencies": [],
+      "byte_size": 7292,
+      "line_count": 109,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\asymmetric-leverage-guardrails",
+      "ssot_role": "SSOT_USER",
       "mirrors": [],
       "mirror_count": 0
     },

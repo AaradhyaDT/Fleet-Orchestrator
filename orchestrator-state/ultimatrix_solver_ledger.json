@@ -330,7 +330,7 @@
     "array-elimination",
     "building-bridges"
   ],
-  "last_solve_at": "2026-10-20T14:57:21.558954+00:00",
+  "last_solve_at": "2026-10-21T01:32:57.874341+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:13:52.882809+00:00",
@@ -634,7 +634,9 @@
     }
   ],
   "attempted_slugs": {
-    "connect-the-graph": "VERIFICATION_FAILED"
+    "connect-the-graph": "VERIFICATION_FAILED",
+    "equal-sums": "VERIFICATION_FAILED",
+    "find-edge-list": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }
