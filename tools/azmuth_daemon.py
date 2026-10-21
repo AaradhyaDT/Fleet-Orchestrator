@@ -801,6 +801,127 @@ def poll_embedded_memory_watcher() -> bool:
     return False
 
 
+# --- Ecosystem State Synchronization Bridge ---
+
+STATE_SYNC_COOLDOWN_SEC = 1800.0  # 30 min minimum cooldown between auto-syncs
+_last_state_sync_time: float = 0.0
+
+ALLOWED_AUTO_SYNC_PREFIXES: tuple[str, ...] = (
+    "orchestrator-state/",
+    "tools/skills_registry.json",
+    "team-memory.md",
+)
+
+
+def is_working_tree_pure_state() -> tuple[bool, list[str]]:
+    """Checks git status --porcelain.
+    Returns (True, list_of_files) ONLY IF all modified or untracked files
+    fall strictly under orchestrator-state/, tools/skills_registry.json, or team-memory.md.
+    If any code or developer working file is dirty, returns (False, dirty_files).
+    """
+    proc = run_command(["git", "status", "--porcelain"])
+    if proc.returncode != 0:
+        return False, []
+
+    lines = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+    if not lines:
+        return True, []  # Clean tree, nothing to sync
+
+    dirty_files: list[str] = []
+    for line in lines:
+        parts = line.split(maxsplit=1)
+        if len(parts) < 2:
+            continue
+        filepath = parts[1].strip('"')
+        if " -> " in filepath:
+            filepath = filepath.split(" -> ")[1].strip('"')
+        filepath = filepath.replace("\\", "/")
+        dirty_files.append(filepath)
+
+    for f in dirty_files:
+        is_allowed = any(
+            f.startswith(prefix) if prefix.endswith("/") else f == prefix
+            for prefix in ALLOWED_AUTO_SYNC_PREFIXES
+        )
+        if not is_allowed:
+            return False, dirty_files
+
+    return True, dirty_files
+
+
+def execute_guarded_state_sync(force: bool = False) -> dict[str, Any]:
+    """Phase 4: Opportunistically commits and syncs persistent orchestrator state to Git.
+    Strictly guarded to prevent race conditions or committing developer working code:
+    1. Cooldown >= STATE_SYNC_COOLDOWN_SEC (30 mins) unless force=True.
+    2. Zero git index locks (.git/index.lock).
+    3. Working tree is pure state: ONLY orchestrator-state/, skills_registry.json, or team-memory.md modified.
+    4. Passes -SkipCI so remote GitHub Actions quota is not consumed.
+    """
+    global _last_state_sync_time
+    res: dict[str, Any] = {"status": "SKIPPED"}
+
+    now = time.time()
+    if not force and (now - _last_state_sync_time < STATE_SYNC_COOLDOWN_SEC):
+        res["status"] = "SKIPPED_COOLDOWN"
+        return res
+
+    git_lock = ROOT / ".git" / "index.lock"
+    if git_lock.exists():
+        logger.debug("[State-Sync] .git/index.lock detected. Yielding sync.")
+        res["status"] = "SKIPPED_GIT_LOCKED"
+        return res
+
+    is_pure, dirty_files = is_working_tree_pure_state()
+    if not dirty_files:
+        res["status"] = "SKIPPED_NO_CHANGES"
+        return res
+
+    if not is_pure:
+        logger.info(
+            f"[State-Sync] Active developer edits detected outside orchestrator-state ({len(dirty_files)} files). "
+            "Deferring autonomous sync."
+        )
+        res["status"] = "SKIPPED_DIRTY_TREE"
+        res["dirty_sample"] = dirty_files[:5]
+        return res
+
+    sync_bat = ROOT / "sync.bat"
+    if not sync_bat.is_file():
+        logger.debug(f"[State-Sync] sync.bat not found at {sync_bat}")
+        res["status"] = "SKIPPED_NO_SYNC_SCRIPT"
+        return res
+
+    try:
+        logger.info(f"[State-Sync] Pure state changes detected ({len(dirty_files)} files). Triggering guarded sync...")
+        commit_msg = "chore(state): auto-sync azmuth telemetry and state [skip ci]"
+        proc = run_command(
+            ["cmd.exe", "/c", str(sync_bat), "-SkipCI", "-m", commit_msg],
+            timeout=180.0,
+        )
+        _last_state_sync_time = time.time()
+        if proc.returncode == 0:
+            res["status"] = "SUCCESS"
+            res["files_synced"] = len(dirty_files)
+            record_ingestion_event(
+                "STATE_SYNC",
+                "AzmuthDaemon",
+                "GitOrigin",
+                f"Autonomous state sync committed {len(dirty_files)} state files [skip ci]",
+                details={"files": dirty_files},
+            )
+            logger.info(f"[State-Sync] Successfully synchronized {len(dirty_files)} state files to repository.")
+        else:
+            res["status"] = f"FAIL_{proc.returncode}"
+            res["error"] = proc.stderr[-300:] if proc.stderr else (proc.stdout[-300:] if proc.stdout else "")
+            logger.warning(f"[State-Sync] sync.bat exited with code {proc.returncode}: {res['error']}")
+    except Exception as exc:
+        res["status"] = "ERROR"
+        res["error"] = str(exc)
+        logger.warning(f"[State-Sync] Error executing guarded state sync: {exc}")
+
+    return res
+
+
 def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     """Steal idle cycles for opportunistic background tasks (e.g. dataset refresh, deep gap audit).
     Bails immediately if user input is detected or available RAM is below safety floor.
@@ -946,6 +1067,15 @@ def execute_idle_burst(max_burst_seconds: float = 60.0) -> dict[str, Any]:
     except Exception as e:
         logger.debug(f"[Burst-Steal] Universe sweep error: {e}")
 
+    # Subtask 5: Guarded Autonomous Git State Sync (Phase 4)
+    try:
+        if is_system_idle(threshold_seconds=10.0):
+            state_sync_res = execute_guarded_state_sync()
+            if state_sync_res.get("status") == "SUCCESS":
+                burst_result["tasks_executed"].append(f"guarded_state_sync_{state_sync_res.get('files_synced', 0)}files")
+    except Exception as e_sync:
+        logger.debug(f"[Burst-Steal] Guarded state sync error: {e_sync}")
+
     elapsed = time.time() - start_time
     burst_result["elapsed_sec"] = round(elapsed, 2)
     burst_result["timestamp"] = datetime.now(timezone.utc).isoformat()
@@ -1048,6 +1178,11 @@ def execute_cycle(dry_run: bool = False, use_ai: bool = True) -> dict[str, Any]:
     except Exception as e:
         logger.warning(f"Could not persist run log: {e}")
 
+    # 5. Guarded Autonomous Git State Sync
+    if not dry_run:
+        state_sync_res = execute_guarded_state_sync()
+        report["actions_taken"].append(f"state_sync_status={state_sync_res.get('status')}")
+
     logger.info("=== Completed Azmuth Self-Upgrade Cycle ===")
     return report
 
@@ -1121,6 +1256,7 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true", help="Resume the background Azmuth Daemon")
     parser.add_argument("--gear", choices=["whisper", "balanced", "turbo"], help="Set the active speed gear")
     parser.add_argument("--status", action="store_true", help="Print current status (paused/idle/last run)")
+    parser.add_argument("--sync-state", action="store_true", help="Execute an immediate guarded state sync if working tree is pure")
     parser.add_argument("--dry-run", action="store_true", help="Audit without modifying state or calling API")
     parser.add_argument("--no-ai", action="store_true", help="Bypass external Gemini API calls")
     args = parser.parse_args()
@@ -1250,6 +1386,12 @@ def main() -> int:
         print("==========================================================")
         return 0
 
+    if args.sync_state:
+        res = execute_guarded_state_sync(force=True)
+        print(f"[+] Guarded State Sync result: {res.get('status')} (synced: {res.get('files_synced', 0)} files)")
+        if "error" in res:
+            print(f"[-] Details: {res['error']}")
+        return 0 if "FAIL" not in res.get("status", "") and res.get("status") != "ERROR" else 1
 
     if args.loop:
         run_daemon_loop(

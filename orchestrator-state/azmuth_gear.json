@@ -1,6 +1,6 @@
 {
-  "gear": "whisper",
-  "name": "Whisper (Low Power)",
-  "set_at": "2026-10-20T13:28:19.591436+00:00",
-  "reason": "Circuit Breaker tripped: Avail RAM 2.98GB < 3.0GB or Load 81% > 80%"
+  "gear": "turbo",
+  "name": "Turbo / Warp (High Throughput)",
+  "set_at": "2026-10-21T13:26:50.291850+00:00",
+  "reason": "Tray Menu Selection"
 }

@@ -19,6 +19,8 @@ from tools.azmuth_daemon import (
     get_windows_idle_seconds,
     is_system_idle,
     execute_idle_burst,
+    is_working_tree_pure_state,
+    execute_guarded_state_sync,
 )
 
 
@@ -137,3 +139,54 @@ def test_execute_cycle_all_healthy():
         assert report["status"] == "ALL_HEALTHY_ZERO_TOKENS"
         assert report["gaps_detected"] == 0
         assert report["smoke_suite_passed"] is True
+
+
+def test_is_working_tree_pure_state_true():
+    mock_porcelain = (
+        " M orchestrator-state/azmuth_run.json\n"
+        " M orchestrator-state/github_sensor_cache.json\n"
+        " M tools/skills_registry.json\n"
+    )
+    with patch("tools.azmuth_daemon.run_command") as mock_cmd:
+        mock_cmd.return_value = MagicMock(returncode=0, stdout=mock_porcelain)
+        is_pure, dirty_files = is_working_tree_pure_state()
+        assert is_pure is True
+        assert len(dirty_files) == 3
+
+
+def test_is_working_tree_pure_state_false_on_code_edit():
+    mock_porcelain = (
+        " M orchestrator-state/azmuth_run.json\n"
+        " M tools/azmuth_daemon.py\n"
+    )
+    with patch("tools.azmuth_daemon.run_command") as mock_cmd:
+        mock_cmd.return_value = MagicMock(returncode=0, stdout=mock_porcelain)
+        is_pure, dirty_files = is_working_tree_pure_state()
+        assert is_pure is False
+        assert "tools/azmuth_daemon.py" in dirty_files
+
+
+def test_execute_guarded_state_sync_locked():
+    with patch("pathlib.Path.exists", return_value=True):
+        res = execute_guarded_state_sync(force=True)
+        assert res["status"] == "SKIPPED_GIT_LOCKED"
+
+
+def test_execute_guarded_state_sync_dirty_tree():
+    with patch("tools.azmuth_daemon.is_working_tree_pure_state", return_value=(False, ["tools/azmuth_daemon.py"])), \
+         patch("pathlib.Path.exists", return_value=False):
+        res = execute_guarded_state_sync(force=True)
+        assert res["status"] == "SKIPPED_DIRTY_TREE"
+
+
+def test_execute_guarded_state_sync_success():
+    with patch("tools.azmuth_daemon.is_working_tree_pure_state", return_value=(True, ["orchestrator-state/azmuth_run.json"])), \
+         patch("pathlib.Path.exists", return_value=False), \
+         patch("pathlib.Path.is_file", return_value=True), \
+         patch("tools.azmuth_daemon.run_command") as mock_cmd, \
+         patch("tools.azmuth_daemon.record_ingestion_event"):
+        mock_cmd.return_value = MagicMock(returncode=0, stdout="Workspace synced successfully.")
+        res = execute_guarded_state_sync(force=True)
+        assert res["status"] == "SUCCESS"
+        assert res["files_synced"] == 1
+

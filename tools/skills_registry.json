@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "total_distinct_skills": 103,
-  "total_skill_instances": 174,
+  "total_distinct_skills": 104,
+  "total_skill_instances": 175,
   "domain_counts": {
     "AI_ENGINEERING_ML": 13,
     "SWARM_ORCHESTRATION": 4,
@@ -10,13 +10,13 @@
     "SYSADMIN_SECURITY": 3,
     "FRONTEND_PRODUCT": 15,
     "RESEARCH_ACADEMIC": 6,
-    "PLATFORM_INTERNAL": 9,
+    "PLATFORM_INTERNAL": 10,
     "CLOUD_ENTERPRISE": 28
   },
   "tier_counts": {
     "INSTALLED": 65,
     "VERIFIED": 10,
-    "ACCESSIBLE": 28
+    "ACCESSIBLE": 29
   },
   "skills": {
     "academic-notebook-architect": {
@@ -243,8 +243,8 @@
         "every Monday send me a to-do list"
       ],
       "dependencies": [],
-      "byte_size": 10249,
-      "line_count": 159,
+      "byte_size": 11717,
+      "line_count": 247,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\automation",
       "ssot_role": "BUILTIN_IDE",
       "mirrors": [],
@@ -1344,8 +1344,8 @@
         "github-workflow"
       ],
       "dependencies": [],
-      "byte_size": 25179,
-      "line_count": 451,
+      "byte_size": 26838,
+      "line_count": 460,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\github-workflow",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1793,6 +1793,22 @@
       ],
       "mirror_count": 1
     },
+    "run-workflow": {
+      "name": "run-workflow",
+      "domain": "PLATFORM_INTERNAL",
+      "availability_tier": "ACCESSIBLE",
+      "description": ">- How to write and run a dynamic workflow script with the `run_workflow` tool: a Python script that orchestrates many agents with `agent`, `parallel`, `pipeline`, and `phase`. Use when a task splits into many independent or staged pieces of agent work (fan out over files, modules, bugs, or review angles, then aggregate), or when the user asks for a workflow. Don't use for a single delegated task (use a subagent) or for legacy workflow files (see migrate-workflows).",
+      "triggers": [
+        "run-workflow"
+      ],
+      "dependencies": [],
+      "byte_size": 8081,
+      "line_count": 161,
+      "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\run-workflow",
+      "ssot_role": "BUILTIN_IDE",
+      "mirrors": [],
+      "mirror_count": 0
+    },
     "security-guidance": {
       "name": "security-guidance",
       "domain": "ENGINEERING_DEV",
@@ -2028,8 +2044,8 @@
         "ui-plugin-navigation"
       ],
       "dependencies": [],
-      "byte_size": 3580,
-      "line_count": 82,
+      "byte_size": 3811,
+      "line_count": 86,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\antigravity\\builtin\\skills\\ui-plugin-navigation",
       "ssot_role": "BUILTIN_IDE",
       "mirrors": [],

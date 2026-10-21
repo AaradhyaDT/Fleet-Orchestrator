@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 326,
-  "tasks_solved": 326,
+  "tasks_attempted": 327,
+  "tasks_solved": 327,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -328,16 +328,11 @@
     "aa-tree",
     "tennis-tournament",
     "array-elimination",
-    "building-bridges"
+    "building-bridges",
+    "alice-tree"
   ],
-  "last_solve_at": "2026-10-21T01:32:57.874341+00:00",
+  "last_solve_at": "2026-10-21T13:32:36.042557+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:13:52.882809+00:00",
-      "slug": "find-remainder",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-18T10:16:36.084548+00:00",
       "slug": "flip-game",
@@ -631,12 +626,19 @@
       "slug": "building-bridges",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-21T02:06:22.650406+00:00",
+      "slug": "alice-tree",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
   "attempted_slugs": {
     "connect-the-graph": "VERIFICATION_FAILED",
     "equal-sums": "VERIFICATION_FAILED",
-    "find-edge-list": "VERIFICATION_FAILED"
+    "find-edge-list": "VERIFICATION_FAILED",
+    "bad-triplet": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

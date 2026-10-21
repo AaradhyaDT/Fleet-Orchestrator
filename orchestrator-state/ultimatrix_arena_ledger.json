@@ -1,16 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-19T11:39:08.622965+00:00",
-  "tournaments_run": 1029,
+  "last_tournament_at": "2026-10-21T13:27:42.493909+00:00",
+  "tournaments_run": 1030,
   "alleles_benchmarked": 0,
-  "promotions": 372,
+  "promotions": 373,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:12:21.362495+00:00",
-      "genes": [
-        "TASK_FINALC"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:13:03.628286+00:00",
       "genes": [
@@ -303,6 +297,12 @@
       "timestamp": "2026-10-19T11:39:08.622801+00:00",
       "genes": [
         "TASK_TENNIS_TOURNAMENT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-21T13:27:42.493616+00:00",
+      "genes": [
+        "TASK_ALICE_TREE"
       ]
     }
   ]
