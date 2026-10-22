@@ -1,9 +1,26 @@
 {
-  "timestamp": "2026-10-22T08:49:23.860224+00:00",
-  "timestamp_epoch": 1792658951.5733316,
+  "timestamp": "2026-10-22T11:39:33.796169+00:00",
+  "timestamp_epoch": 1792669160.8246264,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "MakazhanAlpamys/Soup#797",
+        "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
+        "repo": "MakazhanAlpamys/Soup",
+        "url": "https://github.com/MakazhanAlpamys/Soup/issues/797",
+        "labels": [
+          "bug",
+          "help wanted",
+          "claimed",
+          "difficulty:6",
+          "area:training"
+        ],
+        "comments": 12,
+        "created_at": "2026-09-11T11:08:01Z",
+        "updated_at": "2026-10-22T09:10:00Z",
+        "salience": 2.0
+      },
       {
         "id": "dynalm-project/dynalm#18",
         "title": "NEON kernels for Q2_K, Q3_K and Q5_K (DynaCore exact mode)",
@@ -44,20 +61,6 @@
         "created_at": "2026-08-25T19:17:18Z",
         "updated_at": "2026-10-22T06:13:32Z",
         "salience": 2.0
-      },
-      {
-        "id": "pipe1os/modelinfo-cli#58",
-        "title": "[Feature]: Accept a local model directory",
-        "repo": "pipe1os/modelinfo-cli",
-        "url": "https://github.com/pipe1os/modelinfo-cli/issues/58",
-        "labels": [
-          "enhancement",
-          "help wanted"
-        ],
-        "comments": 0,
-        "created_at": "2026-10-22T05:47:22Z",
-        "updated_at": "2026-10-22T05:47:22Z",
-        "salience": 1.0
       },
       {
         "id": "sauravsingla/OligoArk#18",
@@ -169,11 +172,11 @@
     "cp_archives": [
       {
         "repo": "ShahjalalShohag/code-library",
-        "stars": 3733,
+        "stars": 3734,
         "url": "https://github.com/ShahjalalShohag/code-library",
         "description": "Templates, algorithms and data structures implemented and collected for programming contests.",
         "default_branch": "main",
-        "updated_at": "2026-10-21T07:38:14Z"
+        "updated_at": "2026-10-22T08:53:44Z"
       },
       {
         "repo": "kth-competitive-programming/kactl",
@@ -212,7 +215,7 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-22T07:05:34Z",
+        "pushed_at": "2026-10-22T11:16:34Z",
         "stars": 0,
         "forks": 0
       },
@@ -233,7 +236,7 @@
       {
         "repo": "AaradhyaDT/AaradhyaDT.github.io",
         "open_issues_count": 3,
-        "pushed_at": "2026-10-22T06:14:24Z",
+        "pushed_at": "2026-10-22T11:37:49Z",
         "stars": 1,
         "forks": 0
       }

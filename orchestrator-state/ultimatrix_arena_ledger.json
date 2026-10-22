@@ -1,52 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-22T08:52:39.304580+00:00",
-  "tournaments_run": 1040,
+  "last_tournament_at": "2026-10-22T09:23:38.910152+00:00",
+  "tournaments_run": 1047,
   "alleles_benchmarked": 0,
-  "promotions": 383,
+  "promotions": 390,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:25:51.532347+00:00",
-      "genes": [
-        "TASK_GRAPH_GAME"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:27:01.237557+00:00",
-      "genes": [
-        "TASK_GROUPS"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:28:16.777754+00:00",
-      "genes": [
-        "TASK_GROWING_SEGMENT"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:29:01.133462+00:00",
-      "genes": [
-        "TASK_GROWING_TREES"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:30:35.195373+00:00",
-      "genes": [
-        "TASK_HAMMING_DISTANCES"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:32:56.173419+00:00",
-      "genes": [
-        "TASK_HILL_SKATEBOARDING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:34:40.591789+00:00",
-      "genes": [
-        "TASK_INFINITY_WAR"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:35:22.193859+00:00",
       "genes": [
@@ -303,6 +261,48 @@
       "timestamp": "2026-10-22T08:52:39.304400+00:00",
       "genes": [
         "TASK_FANTASTIC_4"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:05:33.722919+00:00",
+      "genes": [
+        "TASK_FIND_PATH_UNION"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:07:15.393775+00:00",
+      "genes": [
+        "TASK_FIRESTARTER"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:09:41.663398+00:00",
+      "genes": [
+        "TASK_FLIP_THE_EDGES"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:15:14.962837+00:00",
+      "genes": [
+        "TASK_HOMECOMING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:18:56.956594+00:00",
+      "genes": [
+        "TASK_LIMITED_SWAPS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:19:57.223844+00:00",
+      "genes": [
+        "TASK_LONELY_POINTS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T09:23:38.909964+00:00",
+      "genes": [
+        "TASK_MAX_SCORE_TREE"
       ]
     }
   ]

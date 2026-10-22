@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 337,
-  "tasks_solved": 337,
+  "tasks_attempted": 344,
+  "tasks_solved": 344,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -339,52 +339,17 @@
     "digit-permutation",
     "enchained",
     "falling-balls",
-    "fantastic-4"
+    "fantastic-4",
+    "find-path-union",
+    "firestarter",
+    "flip-the-edges",
+    "homecoming",
+    "limited-swaps",
+    "lonely-points",
+    "max-score-tree"
   ],
-  "last_solve_at": "2026-10-22T09:04:09.683303+00:00",
+  "last_solve_at": "2026-10-22T11:39:20.701223+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:28:13.882897+00:00",
-      "slug": "growing-segment",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:28:58.873777+00:00",
-      "slug": "growing-trees",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:30:02.840688+00:00",
-      "slug": "hamming-distances",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T10:32:23.679270+00:00",
-      "slug": "hill-skateboarding",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:34:38.337924+00:00",
-      "slug": "infinity-war",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:35:19.905598+00:00",
-      "slug": "integer-coords",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T10:36:03.843288+00:00",
-      "slug": "ioi-selection",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-18T10:38:02.979409+00:00",
       "slug": "k-inversions",
@@ -642,6 +607,48 @@
       "slug": "fantastic-4",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T09:05:31.401184+00:00",
+      "slug": "find-path-union",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 4
+    },
+    {
+      "timestamp": "2026-10-22T09:07:12.896779+00:00",
+      "slug": "firestarter",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T09:09:39.287442+00:00",
+      "slug": "flip-the-edges",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-22T09:15:12.450275+00:00",
+      "slug": "homecoming",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T09:18:54.539554+00:00",
+      "slug": "limited-swaps",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T09:19:54.851429+00:00",
+      "slug": "lonely-points",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-22T09:23:36.423173+00:00",
+      "slug": "max-score-tree",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 4
     }
   ],
   "attempted_slugs": {
@@ -659,7 +666,26 @@
     "everything-is-random": "VERIFICATION_FAILED",
     "fiicode-2022-c1": "VERIFICATION_FAILED",
     "fiicode-2022-d2": "VERIFICATION_FAILED",
-    "final-d": "VERIFICATION_FAILED"
+    "final-d": "VERIFICATION_FAILED",
+    "flawed-olympiad": "VERIFICATION_FAILED",
+    "flipping-matrix": "VERIFICATION_FAILED",
+    "hallway": "VERIFICATION_FAILED",
+    "heroes": "VERIFICATION_FAILED",
+    "jetpack": "VERIFICATION_FAILED",
+    "khans": "VERIFICATION_FAILED",
+    "manhattan-distances": "VERIFICATION_FAILED",
+    "max-intersection-partition": "VERIFICATION_FAILED",
+    "min-ends-subsequence": "VERIFICATION_FAILED",
+    "min-swaps": "UNSUPPORTED_ARCHETYPE",
+    "mountain-time": "UNSUPPORTED_ARCHETYPE",
+    "no-prime-sum": "UNSUPPORTED_ARCHETYPE",
+    "paint-the-fence": "UNSUPPORTED_ARCHETYPE",
+    "palindromic-concatenation": "UNSUPPORTED_ARCHETYPE",
+    "palindromic-partitions": "UNSUPPORTED_ARCHETYPE",
+    "palindromic-tree": "UNSUPPORTED_ARCHETYPE",
+    "parallel-rectangles": "UNSUPPORTED_ARCHETYPE",
+    "parentrisis": "UNSUPPORTED_ARCHETYPE",
+    "partial-maximums": "UNSUPPORTED_ARCHETYPE"
   },
-  "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
+  "gemini_circuit_breaker_until": "2026-10-23T07:00:24.873146+00:00"
 }
