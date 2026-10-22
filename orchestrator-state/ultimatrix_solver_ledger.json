@@ -335,7 +335,7 @@
     "classic-task",
     "cloud-computing"
   ],
-  "last_solve_at": "2026-10-21T17:01:55.629590+00:00",
+  "last_solve_at": "2026-10-22T05:47:21.742062+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:22:16.742006+00:00",
@@ -644,7 +644,9 @@
     "find-edge-list": "VERIFICATION_FAILED",
     "bad-triplet": "VERIFICATION_FAILED",
     "candy-boxes": "VERIFICATION_FAILED",
-    "colored-forests": "VERIFICATION_FAILED"
+    "colored-forests": "VERIFICATION_FAILED",
+    "colorgraph": "VERIFICATION_FAILED",
+    "coprime": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

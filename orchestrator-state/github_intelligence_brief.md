@@ -1,16 +1,16 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-21T16:28:23.195963+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-22T05:47:34.025281+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[JONIMONI09/BestAI]** [Quality and stuff](https://github.com/JONIMONI09/BestAI/issues/46) (Comments: 0, Salience: 1.0)
-- **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 11, Salience: 2.0)
-- **[FluxML/Flux.jl]** [PyTorch feature parity](https://github.com/FluxML/Flux.jl/issues/1431) (Comments: 94, Salience: 2.0)
-- **[whn09/DeepInfer]** [[kernel] NKI FP8 block-scaled GEMM and FP4 grouped expert GEMM](https://github.com/whn09/DeepInfer/issues/10) (Comments: 0, Salience: 1.0)
+- **[h2non/imaginary]** [Can we allow palette param in resize API?](https://github.com/h2non/imaginary/issues/378) (Comments: 3, Salience: 1.6)
+- **[radialmonster/orf-cleanroom]** [GPU research: test bounded codec families with explicit state and held-out description length](https://github.com/radialmonster/orf-cleanroom/issues/298) (Comments: 8, Salience: 2.0)
+- **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 12, Salience: 2.0)
+- **[MakazhanAlpamys/Soup]** [[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)](https://github.com/MakazhanAlpamys/Soup/issues/275) (Comments: 11, Salience: 2.0)
+- **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
+- **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
 ](https://github.com/spiralgang/aGi-TEAM-FSMbot-/issues/1) (Comments: 7, Salience: 2.0)
 - **[optiqor/kerno]** [Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule](https://github.com/optiqor/kerno/issues/50) (Comments: 58, Salience: 2.0)
-- **[Nobayprotocol/Nobay-Protocol]** [Add Hardhat test suite for ListingRegistry.sol](https://github.com/Nobayprotocol/Nobay-Protocol/issues/3) (Comments: 18, Salience: 2.0)
-- **[kubestellar/kubestellar]** [[outreach] GitHub repository topics: add multicluster, platform-engineering, ai-infrastructure for discoverability](https://github.com/kubestellar/kubestellar/issues/3827) (Comments: 3, Salience: 1.6)
 
 ## 2. Trending SOTA AI & TinyML Releases (`U1` & `U2`)
 - **[unslothai/unsloth]** Tag `v0.1.909-beta` - *DeepSeek-V4.1 & FLUX-3* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.909-beta))
@@ -30,7 +30,7 @@
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-21T07:03:03Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-21T12:32:49Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-21T17:12:29Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
