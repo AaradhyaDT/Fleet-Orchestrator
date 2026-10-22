@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-22T05:47:34.038644+00:00",
+  "timestamp": "2026-10-22T08:32:45.416315+00:00",
   "total_cartridges": 15,
   "universes": {
     "u0_ecosystem_mesh": {
@@ -210,7 +210,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.038957+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.417479+00:00",
       "active_user_affinity": 2.0,
       "grounded_in_user_memory": true
     },
@@ -389,7 +389,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.039171+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.418379+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -568,7 +568,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.039355+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.419187+00:00"
     },
     "u12_sovereign_gcc_dubai_radar": {
       "id": "u12_sovereign_gcc_dubai_radar",
@@ -779,7 +779,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.039598+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.420160+00:00"
     },
     "u13_un_multilateral_global_radar": {
       "id": "u13_un_multilateral_global_radar",
@@ -1022,7 +1022,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.039857+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.421206+00:00",
       "active_user_affinity": 0.5,
       "grounded_in_user_memory": true
     },
@@ -1206,7 +1206,7 @@
           "state_label": "NOCICEPTIVE_WARNING"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.040076+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.422051+00:00"
     },
     "u1_research_arbitrage": {
       "id": "u1_research_arbitrage",
@@ -1383,7 +1383,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.040295+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.422933+00:00"
     },
     "u2_ai_compute_frontier": {
       "id": "u2_ai_compute_frontier",
@@ -1560,7 +1560,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.040502+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.423753+00:00",
       "active_user_affinity": 2.0,
       "grounded_in_user_memory": true
     },
@@ -1706,7 +1706,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.040688+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.424516+00:00"
     },
     "u4_macro_capital_markets": {
       "id": "u4_macro_capital_markets",
@@ -2609,7 +2609,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.041483+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.427554+00:00"
     },
     "u5_hardware_physics_bom": {
       "id": "u5_hardware_physics_bom",
@@ -2753,7 +2753,7 @@
           "state_label": "ALLOSTATIC_STRETCH"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.041684+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.428375+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -2932,7 +2932,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.041865+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.429136+00:00"
     },
     "u7_cyber_resilience_dfir": {
       "id": "u7_cyber_resilience_dfir",
@@ -3109,7 +3109,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.042041+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.429862+00:00"
     },
     "u8_algorithmic_complexity_cp": {
       "id": "u8_algorithmic_complexity_cp",
@@ -3286,7 +3286,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.042217+00:00",
+      "last_swept_at": "2026-10-22T08:32:45.430596+00:00",
       "active_user_affinity": 0.25,
       "grounded_in_user_memory": true
     },
@@ -3465,7 +3465,7 @@
           "state_label": "HOMEOSTATIC_EQUILIBRIUM"
         }
       },
-      "last_swept_at": "2026-10-22T05:47:34.042398+00:00"
+      "last_swept_at": "2026-10-22T08:32:45.431374+00:00"
     }
   },
   "systemic_spikes": [

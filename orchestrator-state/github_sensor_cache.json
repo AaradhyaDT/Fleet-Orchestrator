@@ -1,9 +1,50 @@
 {
-  "timestamp": "2026-10-22T05:47:34.025281+00:00",
-  "timestamp_epoch": 1792648041.8851008,
+  "timestamp": "2026-10-22T08:32:45.361606+00:00",
+  "timestamp_epoch": 1792657953.1212008,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "MakazhanAlpamys/Soup#275",
+        "title": "[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)",
+        "repo": "MakazhanAlpamys/Soup",
+        "url": "https://github.com/MakazhanAlpamys/Soup/issues/275",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 12,
+        "created_at": "2026-06-21T09:46:15Z",
+        "updated_at": "2026-10-22T08:18:33Z",
+        "salience": 2.0
+      },
+      {
+        "id": "microsoft/PyRIT#2489",
+        "title": "FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix",
+        "repo": "microsoft/PyRIT",
+        "url": "https://github.com/microsoft/PyRIT/issues/2489",
+        "labels": [
+          "help wanted"
+        ],
+        "comments": 7,
+        "created_at": "2026-08-25T19:17:18Z",
+        "updated_at": "2026-10-22T06:13:32Z",
+        "salience": 2.0
+      },
+      {
+        "id": "pipe1os/modelinfo-cli#58",
+        "title": "[Feature]: Accept a local model directory",
+        "repo": "pipe1os/modelinfo-cli",
+        "url": "https://github.com/pipe1os/modelinfo-cli/issues/58",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-22T05:47:22Z",
+        "updated_at": "2026-10-22T05:47:22Z",
+        "salience": 1.0
+      },
       {
         "id": "h2non/imaginary#378",
         "title": "Can we allow palette param in resize API?",
@@ -17,51 +58,6 @@
         "created_at": "2022-01-19T05:59:51Z",
         "updated_at": "2026-10-22T05:45:50Z",
         "salience": 1.6
-      },
-      {
-        "id": "radialmonster/orf-cleanroom#298",
-        "title": "GPU research: test bounded codec families with explicit state and held-out description length",
-        "repo": "radialmonster/orf-cleanroom",
-        "url": "https://github.com/radialmonster/orf-cleanroom/issues/298",
-        "labels": [
-          "help wanted",
-          "hypothesis",
-          "variant:unassigned",
-          "gpu"
-        ],
-        "comments": 8,
-        "created_at": "2026-10-22T00:08:37Z",
-        "updated_at": "2026-10-22T02:30:12Z",
-        "salience": 2.0
-      },
-      {
-        "id": "ufal/atrium-translator#46",
-        "title": "Experiments with translator tool in production + functionality (replace-append question)",
-        "repo": "ufal/atrium-translator",
-        "url": "https://github.com/ufal/atrium-translator/issues/46",
-        "labels": [
-          "help wanted",
-          "question",
-          "integration"
-        ],
-        "comments": 12,
-        "created_at": "2026-09-13T14:20:13Z",
-        "updated_at": "2026-10-21T23:52:30Z",
-        "salience": 2.0
-      },
-      {
-        "id": "MakazhanAlpamys/Soup#275",
-        "title": "[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/275",
-        "labels": [
-          "enhancement",
-          "help wanted"
-        ],
-        "comments": 11,
-        "created_at": "2026-06-21T09:46:15Z",
-        "updated_at": "2026-10-21T21:52:08Z",
-        "salience": 2.0
       },
       {
         "id": "sauravsingla/OligoArk#18",
@@ -216,7 +212,7 @@
       {
         "repo": "AaradhyaDT/brainstorm",
         "open_issues_count": 0,
-        "pushed_at": "2026-10-21T07:03:03Z",
+        "pushed_at": "2026-10-22T07:05:34Z",
         "stars": 0,
         "forks": 0
       },
@@ -236,8 +232,8 @@
       },
       {
         "repo": "AaradhyaDT/AaradhyaDT.github.io",
-        "open_issues_count": 4,
-        "pushed_at": "2026-10-21T17:12:29Z",
+        "open_issues_count": 3,
+        "pushed_at": "2026-10-22T06:14:24Z",
         "stars": 1,
         "forks": 0
       }

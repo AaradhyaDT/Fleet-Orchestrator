@@ -1,6 +1,6 @@
 {
-  "gear": "whisper",
-  "name": "Whisper (Low Power)",
-  "set_at": "2026-10-22T06:26:34.445490+00:00",
-  "reason": "Battery power gate: 42% battery"
+  "gear": "turbo",
+  "name": "Turbo / Warp (High Throughput)",
+  "set_at": "2026-10-22T08:28:52.184223+00:00",
+  "reason": "Tray Menu Selection"
 }

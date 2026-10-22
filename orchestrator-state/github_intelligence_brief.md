@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-22T05:47:34.025281+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-22T08:32:45.361606+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[MakazhanAlpamys/Soup]** [[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)](https://github.com/MakazhanAlpamys/Soup/issues/275) (Comments: 12, Salience: 2.0)
+- **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 7, Salience: 2.0)
+- **[pipe1os/modelinfo-cli]** [[Feature]: Accept a local model directory](https://github.com/pipe1os/modelinfo-cli/issues/58) (Comments: 0, Salience: 1.0)
 - **[h2non/imaginary]** [Can we allow palette param in resize API?](https://github.com/h2non/imaginary/issues/378) (Comments: 3, Salience: 1.6)
-- **[radialmonster/orf-cleanroom]** [GPU research: test bounded codec families with explicit state and held-out description length](https://github.com/radialmonster/orf-cleanroom/issues/298) (Comments: 8, Salience: 2.0)
-- **[ufal/atrium-translator]** [Experiments with translator tool in production + functionality (replace-append question)](https://github.com/ufal/atrium-translator/issues/46) (Comments: 12, Salience: 2.0)
-- **[MakazhanAlpamys/Soup]** [[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)](https://github.com/MakazhanAlpamys/Soup/issues/275) (Comments: 11, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
@@ -27,10 +27,10 @@
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-21T07:03:03Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-22T07:05:34Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-21T17:12:29Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-22T06:14:24Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
