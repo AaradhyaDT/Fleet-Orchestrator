@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#000000" />
+  <title>Screen Lens</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body, html { width: 100%; height: 100%; background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+
+    /* VIEW 1: CAMERA VIEWFINDER */
+    #viewfinder-container { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    video#camera-feed { width: 100%; height: 100%; object-fit: cover; }
+    .reticle { position: absolute; width: 75%; height: 45%; border: 2px dashed rgba(255,255,255,0.4); border-radius: 12px; pointer-events: none; }
+    .shutter-btn { position: absolute; bottom: 40px; width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 4px solid #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .shutter-inner { width: 54px; height: 54px; border-radius: 50%; background: #fff; transition: transform 0.1s; }
+    .shutter-btn:active .shutter-inner { transform: scale(0.88); }
+    .cam-status { position: absolute; top: 30px; font-size: 13px; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 20px; }
+
+    /* VIEW 2: STEALTH OLED HUD */
+    #hud-container { position: absolute; inset: 0; background: #000000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+    .giant-letter { font-size: 128px; font-weight: 800; line-height: 1; color: #4ade80; letter-spacing: -2px; margin-bottom: 16px; text-shadow: 0 0 30px rgba(74,222,128,0.2); }
+    .subtle-reason { font-size: 15px; line-height: 1.45; color: #a1a1aa; max-width: 320px; margin-bottom: 24px; }
+    .hud-actions { display: flex; gap: 12px; }
+    .hud-btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #27272a; background: #18181b; color: #f4f4f5; }
+    .hud-hint { position: absolute; bottom: 20px; font-size: 11px; color: #52525b; }
+
+    /* VIEW 3: PANIC CALCULATOR DISGUISE */
+    #calc-container { position: absolute; inset: 0; background: #000000; display: none; flex-direction: column; justify-content: flex-end; padding: 20px; }
+    .calc-screen { height: 120px; display: flex; align-items: flex-end; justify-content: flex-end; font-size: 64px; font-weight: 300; color: #fff; padding: 10px; word-break: break-all; }
+    .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .calc-btn { aspect-ratio: 1; border-radius: 50%; font-size: 26px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; }
+    .btn-num { background: #333333; }
+    .btn-num:active { background: #737373; }
+    .btn-fn { background: #a5a5a5; color: #000; }
+    .btn-fn:active { background: #d4d4d4; }
+    .btn-op { background: #f97316; font-size: 30px; }
+    .btn-op:active { background: #fb923c; }
+
+    /* SPINNER */
+    .spinner { display: none; width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; position: absolute; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- 1. CAMERA VIEWFINDER -->
+  <div id="viewfinder-container">
+    <video id="camera-feed" playsinline autoplay muted></video>
+    <div class="reticle"></div>
+    <div class="cam-status" id="camStatus">Point camera at screen question</div>
+    <div class="spinner" id="spinner"></div>
+    <div class="shutter-btn" id="shutterBtn">
+      <div class="shutter-inner"></div>
+    </div>
+  </div>
+
+  <!-- 2. STEALTH OLED HUD -->
+  <div id="hud-container">
+    <div class="giant-letter" id="optLetter">B</div>
+    <div class="subtle-reason" id="optReason">Loading explanation…</div>
+    <div class="hud-actions">
+      <button class="hud-btn" id="resnapBtn">Snap Next</button>
+      <button class="hud-btn" id="detailsBtn">Full Rationale</button>
+    </div>
+    <div class="hud-hint">Double-tap anywhere to open disguise calculator</div>
+  </div>
+
+  <!-- 3. PANIC CALCULATOR DISGUISE -->
+  <div id="calc-container">
+    <div class="calc-screen" id="calcDisplay">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn btn-fn" onclick="calcClear()">AC</button>
+      <button class="calc-btn btn-fn" onclick="calcToggleSign()">±</button>
+      <button class="calc-btn btn-fn" onclick="calcPercent()">%</button>
+      <button class="calc-btn btn-op" onclick="calcOp('/')">÷</button>
+
+      <button class="calc-btn btn-num" onclick="calcNum('7')">7</button>
+      <button class="calc-btn btn-num" onclick="calcNum('8')">8</button>
+      <button class="calc-btn btn-num" onclick="calcNum('9')">9</button>
+      <button class="calc-btn btn-op" onclick="calcOp('*')">×</button>
+
+      <button class="calc-btn btn-num" onclick="calcNum('4')">4</button>
+      <button class="calc-btn btn-num" onclick="calcNum('5')">5</button>
+      <button class="calc-btn btn-num" onclick="calcNum('6')">6</button>
+      <button class="calc-btn btn-op" onclick="calcOp('-')">−</button>
+
+      <button class="calc-btn btn-num" onclick="calcNum('1')">1</button>
+      <button class="calc-btn btn-num" onclick="calcNum('2')">2</button>
+      <button class="calc-btn btn-num" onclick="calcNum('3')">3</button>
+      <button class="calc-btn btn-op" onclick="calcOp('+')">+</button>
+
+      <button class="calc-btn btn-num" style="grid-column: span 2; border-radius: 40px; aspect-ratio: auto; padding-left: 28px; justify-content: flex-start;" onclick="calcNum('0')">0</button>
+      <button class="calc-btn btn-num" onclick="calcNum('.')">.</button>
+      <button class="calc-btn btn-op" onclick="calcEqual()">=</button>
+    </div>
+  </div>
+
+  <canvas id="offscreenCanvas" style="display:none;"></canvas>
+
+  <script>
+    const video = document.getElementById('camera-feed');
+    const shutter = document.getElementById('shutterBtn');
+    const spinner = document.getElementById('spinner');
+    const camStatus = document.getElementById('camStatus');
+    const viewContainer = document.getElementById('viewfinder-container');
+    const hudContainer = document.getElementById('hud-container');
+    const calcContainer = document.getElementById('calc-container');
+    const optLetter = document.getElementById('optLetter');
+    const optReason = document.getElementById('optReason');
+    const resnapBtn = document.getElementById('resnapBtn');
+    const detailsBtn = document.getElementById('detailsBtn');
+    const canvas = document.getElementById('offscreenCanvas');
+
+    let currentRationale = "";
+    let equalPressCount = 0;
+    let lastTapTime = 0;
+
+    // Start camera feed
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        camStatus.textContent = "Camera error: " + err.message;
+      }
+    }
+
+    // Capture frame and send to Fleet-Orchestrator
+    shutter.addEventListener('click', async () => {
+      if (!video.videoWidth) return;
+      spinner.style.display = 'block';
+      shutter.style.pointerEvents = 'none';
+      camStatus.textContent = "Analyzing screen question…";
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const base64Jpg = canvas.toDataURL('image/jpeg', 0.85);
+
+      try {
+        const res = await fetch('/api/v1/qa/lens', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image_base64: base64Jpg })
+        });
+        const data = await res.json();
+        if (data.option_letter) {
+          showHUD(data.option_letter, data.reason, data.full_text);
+        } else {
+          camStatus.textContent = "Could not parse question. Try again.";
+        }
+      } catch (err) {
+        camStatus.textContent = "Network error: " + err.message;
+      } finally {
+        spinner.style.display = 'none';
+        shutter.style.pointerEvents = 'auto';
+      }
+    });
+
+    function showHUD(letter, reason, full) {
+      optLetter.textContent = letter || "?";
+      optReason.textContent = reason || "";
+      currentRationale = full || reason;
+      viewContainer.style.display = 'none';
+      calcContainer.style.display = 'none';
+      hudContainer.style.display = 'flex';
+    }
+
+    resnapBtn.addEventListener('click', () => {
+      hudContainer.style.display = 'none';
+      calcContainer.style.display = 'none';
+      viewContainer.style.display = 'flex';
+      camStatus.textContent = "Point camera at screen question";
+    });
+
+    detailsBtn.addEventListener('click', () => {
+      alert(currentRationale);
+    });
+
+    // Double tap anywhere on screen toggles panic calculator
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTapTime < 300) {
+        togglePanicMask();
+      }
+      lastTapTime = now;
+    });
+
+    function togglePanicMask() {
+      if (calcContainer.style.display === 'flex') {
+        calcContainer.style.display = 'none';
+        hudContainer.style.display = 'flex';
+      } else {
+        viewContainer.style.display = 'none';
+        hudContainer.style.display = 'none';
+        calcContainer.style.display = 'flex';
+        equalPressCount = 0;
+      }
+    }
+
+    // WORKING SCIENTIFIC CALCULATOR
+    let calcVal = "0";
+    let pendingOp = null;
+    let prevVal = null;
+    const calcDisplay = document.getElementById('calcDisplay');
+
+    function updateCalcDisplay() {
+      calcDisplay.textContent = calcVal.length > 9 ? calcVal.slice(0, 9) : calcVal;
+    }
+
+    function calcNum(n) {
+      if (calcVal === "0" && n !== ".") { calcVal = n; }
+      else { calcVal += n; }
+      updateCalcDisplay();
+    }
+
+    function calcClear() {
+      calcVal = "0";
+      pendingOp = null;
+      prevVal = null;
+      equalPressCount = 0;
+      updateCalcDisplay();
+    }
+
+    function calcToggleSign() {
+      calcVal = String(-parseFloat(calcVal));
+      updateCalcDisplay();
+    }
+
+    function calcPercent() {
+      calcVal = String(parseFloat(calcVal) / 100);
+      updateCalcDisplay();
+    }
+
+    function calcOp(op) {
+      prevVal = parseFloat(calcVal);
+      pendingOp = op;
+      calcVal = "0";
+    }
+
+    function calcEqual() {
+      equalPressCount++;
+      if (equalPressCount >= 3) {
+        // Panic escape sequence: 3 equals returns to HUD
+        calcContainer.style.display = 'none';
+        hudContainer.style.display = 'flex';
+        equalPressCount = 0;
+        return;
+      }
+
+      if (pendingOp && prevVal !== null) {
+        const cur = parseFloat(calcVal);
+        let res = 0;
+        if (pendingOp === '+') res = prevVal + cur;
+        if (pendingOp === '-') res = prevVal - cur;
+        if (pendingOp === '*') res = prevVal * cur;
+        if (pendingOp === '/') res = cur !== 0 ? prevVal / cur : 0;
+        calcVal = String(res);
+        pendingOp = null;
+        prevVal = null;
+        updateCalcDisplay();
+      }
+    }
+
+    window.addEventListener('load', initCamera);
+  </script>
+</body>
+</html>

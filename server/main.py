@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from time import perf_counter
 from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from server.core.auth import authenticate_api_key
 from server.core.config import settings, validate_security_settings
@@ -16,6 +16,7 @@ from server.api.routes_tasks import router as tasks_router
 from server.api.routes_workers import router as workers_router
 from server.api.routes_memory import router as memory_router
 from server.api.routes_openai_proxy import router as openai_router
+from server.api.routes_qa import router as qa_router, STATIC_DIR
 from server.mcp_remote import mcp_server
 
 @asynccontextmanager
@@ -128,6 +129,14 @@ app.include_router(tasks_router, prefix=settings.API_V1_STR)
 app.include_router(workers_router, prefix=settings.API_V1_STR)
 app.include_router(memory_router, prefix=settings.API_V1_STR)
 app.include_router(openai_router)
+app.include_router(qa_router, prefix=settings.API_V1_STR)
+
+@app.get("/lens", response_class=HTMLResponse)
+async def serve_mobile_lens():
+    lens_path = STATIC_DIR / "lens.html"
+    if lens_path.exists():
+        return HTMLResponse(content=lens_path.read_text(encoding="utf-8"))
+    raise HTTPException(status_code=404, detail="Lens PWA not found")
 
 # Mount the Streamable HTTP / SSE MCP Server directly into FastAPI with auth enforcement
 app.mount(settings.MCP_PATH, MCPAuthMiddleware(mcp_server.sse_app()))
