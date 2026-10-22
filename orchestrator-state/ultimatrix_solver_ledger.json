@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 331,
-  "tasks_solved": 331,
+  "tasks_attempted": 337,
+  "tasks_solved": 337,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -333,46 +333,16 @@
     "chase",
     "chocolate",
     "classic-task",
-    "cloud-computing"
+    "cloud-computing",
+    "critical-cells",
+    "cycle_tree",
+    "digit-permutation",
+    "enchained",
+    "falling-balls",
+    "fantastic-4"
   ],
-  "last_solve_at": "2026-10-22T08:32:32.706302+00:00",
+  "last_solve_at": "2026-10-22T09:04:09.683303+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:22:16.742006+00:00",
-      "slug": "gerrymandering",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:23:18.238746+00:00",
-      "slug": "ginas-necklace",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T10:24:34.380293+00:00",
-      "slug": "global-warming",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:25:11.410019+00:00",
-      "slug": "grade-system",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
-    {
-      "timestamp": "2026-10-18T10:25:49.124370+00:00",
-      "slug": "graph-game",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
-    {
-      "timestamp": "2026-10-18T10:26:58.866832+00:00",
-      "slug": "groups",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-18T10:28:13.882897+00:00",
       "slug": "growing-segment",
@@ -636,6 +606,42 @@
       "slug": "cloud-computing",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:35:16.523569+00:00",
+      "slug": "critical-cells",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-22T08:37:34.500011+00:00",
+      "slug": "cycle_tree",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 2
+    },
+    {
+      "timestamp": "2026-10-22T08:39:47.891612+00:00",
+      "slug": "digit-permutation",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:46:53.028477+00:00",
+      "slug": "enchained",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-22T08:50:50.401807+00:00",
+      "slug": "falling-balls",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:52:36.861302+00:00",
+      "slug": "fantastic-4",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
     }
   ],
   "attempted_slugs": {
@@ -647,7 +653,13 @@
     "colored-forests": "VERIFICATION_FAILED",
     "colorgraph": "VERIFICATION_FAILED",
     "coprime": "VERIFICATION_FAILED",
-    "cover-the-tree": "VERIFICATION_FAILED"
+    "cover-the-tree": "VERIFICATION_FAILED",
+    "disproportionate-tree": "VERIFICATION_FAILED",
+    "distribute-candies": "VERIFICATION_FAILED",
+    "everything-is-random": "VERIFICATION_FAILED",
+    "fiicode-2022-c1": "VERIFICATION_FAILED",
+    "fiicode-2022-d2": "VERIFICATION_FAILED",
+    "final-d": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-19T00:00:00.047836+00:00"
 }

@@ -1,46 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-21T15:45:05.930629+00:00",
-  "tournaments_run": 1034,
+  "last_tournament_at": "2026-10-22T08:52:39.304580+00:00",
+  "tournaments_run": 1040,
   "alleles_benchmarked": 0,
-  "promotions": 377,
+  "promotions": 383,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:20:41.957773+00:00",
-      "genes": [
-        "TASK_FORCE_GRAPH"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:21:35.169220+00:00",
-      "genes": [
-        "TASK_GAME"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:22:18.900023+00:00",
-      "genes": [
-        "TASK_GERRYMANDERING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:23:20.381644+00:00",
-      "genes": [
-        "TASK_GINAS_NECKLACE"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:24:36.594235+00:00",
-      "genes": [
-        "TASK_GLOBAL_WARMING"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:25:13.580970+00:00",
-      "genes": [
-        "TASK_GRADE_SYSTEM"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:25:51.532347+00:00",
       "genes": [
@@ -303,6 +267,42 @@
       "timestamp": "2026-10-21T15:45:05.930487+00:00",
       "genes": [
         "TASK_CLOUD_COMPUTING"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:35:19.056129+00:00",
+      "genes": [
+        "TASK_CRITICAL_CELLS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:37:36.979695+00:00",
+      "genes": [
+        "TASK_CYCLE_TREE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:39:50.382002+00:00",
+      "genes": [
+        "TASK_DIGIT_PERMUTATION"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:47:26.517123+00:00",
+      "genes": [
+        "TASK_ENCHAINED"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:50:52.889787+00:00",
+      "genes": [
+        "TASK_FALLING_BALLS"
+      ]
+    },
+    {
+      "timestamp": "2026-10-22T08:52:39.304400+00:00",
+      "genes": [
+        "TASK_FANTASTIC_4"
       ]
     }
   ]

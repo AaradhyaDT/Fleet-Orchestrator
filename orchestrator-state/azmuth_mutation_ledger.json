@@ -1,54 +1,9 @@
 {
   "version": 1,
-  "mutations_applied": 912,
-  "promotions_won": 414,
-  "last_mutation_at": "2026-10-21T17:01:55.715404+00:00",
+  "mutations_applied": 917,
+  "promotions_won": 419,
+  "last_mutation_at": "2026-10-22T09:02:09.633364+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T04:04:48.362171+00:00",
-      "gene_id": "TASK_COSMOLOGICAL_NIGHTMARE",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:04:59.393448+00:00",
-      "gene_id": "TASK_COUNT_SQUARES",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:05:25.820392+00:00",
-      "gene_id": "TASK_TWO_GUARDS",
-      "mutant_created": [
-        "auto_solution_python_mut_bitwise_unrolling"
-      ],
-      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:06:22.582907+00:00",
-      "gene_id": "TASK_ALEX_CONCATENATES",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
-    {
-      "timestamp": "2026-10-18T04:13:08.839040+00:00",
-      "gene_id": "TASK_CRYPTO",
-      "mutant_created": [
-        "auto_solution_python_mut_python_stdlib_accel"
-      ],
-      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
-      "promotions": 1
-    },
     {
       "timestamp": "2026-10-18T04:21:09.164090+00:00",
       "gene_id": "TASK_B9I",
@@ -452,6 +407,51 @@
         "auto_solution_python_mut_python_stdlib_accel"
       ],
       "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:42:11.408130+00:00",
+      "gene_id": "TASK_CRITICAL_CELLS",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:45:24.353376+00:00",
+      "gene_id": "TASK_CYCLE_TREE",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:49:11.567256+00:00",
+      "gene_id": "TASK_DIGIT_PERMUTATION",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-22T08:56:18.663337+00:00",
+      "gene_id": "TASK_ENCHAINED",
+      "mutant_created": [
+        "auto_solution_python_mut_python_stdlib_accel"
+      ],
+      "dominant_allele": "auto_solution_python_mut_python_stdlib_accel",
+      "promotions": 1
+    },
+    {
+      "timestamp": "2026-10-22T09:02:09.633196+00:00",
+      "gene_id": "TASK_FALLING_BALLS",
+      "mutant_created": [
+        "auto_solution_python_mut_bitwise_unrolling"
+      ],
+      "dominant_allele": "auto_solution_python_mut_bitwise_unrolling",
       "promotions": 1
     }
   ],

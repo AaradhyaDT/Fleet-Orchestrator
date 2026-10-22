@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-22T08:32:45.361606+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-22T08:49:23.860224+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[dynalm-project/dynalm]** [NEON kernels for Q2_K, Q3_K and Q5_K (DynaCore exact mode)](https://github.com/dynalm-project/dynalm/issues/18) (Comments: 0, Salience: 1.0)
 - **[MakazhanAlpamys/Soup]** [[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)](https://github.com/MakazhanAlpamys/Soup/issues/275) (Comments: 12, Salience: 2.0)
 - **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 7, Salience: 2.0)
 - **[pipe1os/modelinfo-cli]** [[Feature]: Accept a local model directory](https://github.com/pipe1os/modelinfo-cli/issues/58) (Comments: 0, Salience: 1.0)
-- **[h2non/imaginary]** [Can we allow palette param in resize API?](https://github.com/h2non/imaginary/issues/378) (Comments: 3, Salience: 1.6)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####

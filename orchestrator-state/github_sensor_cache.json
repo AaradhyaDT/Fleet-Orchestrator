@@ -1,9 +1,23 @@
 {
-  "timestamp": "2026-10-22T08:32:45.361606+00:00",
-  "timestamp_epoch": 1792657953.1212008,
+  "timestamp": "2026-10-22T08:49:23.860224+00:00",
+  "timestamp_epoch": 1792658951.5733316,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "dynalm-project/dynalm#18",
+        "title": "NEON kernels for Q2_K, Q3_K and Q5_K (DynaCore exact mode)",
+        "repo": "dynalm-project/dynalm",
+        "url": "https://github.com/dynalm-project/dynalm/issues/18",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-22T08:48:26Z",
+        "updated_at": "2026-10-22T08:48:26Z",
+        "salience": 1.0
+      },
       {
         "id": "MakazhanAlpamys/Soup#275",
         "title": "[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)",
@@ -44,20 +58,6 @@
         "created_at": "2026-10-22T05:47:22Z",
         "updated_at": "2026-10-22T05:47:22Z",
         "salience": 1.0
-      },
-      {
-        "id": "h2non/imaginary#378",
-        "title": "Can we allow palette param in resize API?",
-        "repo": "h2non/imaginary",
-        "url": "https://github.com/h2non/imaginary/issues/378",
-        "labels": [
-          "help wanted",
-          "feature request"
-        ],
-        "comments": 3,
-        "created_at": "2022-01-19T05:59:51Z",
-        "updated_at": "2026-10-22T05:45:50Z",
-        "salience": 1.6
       },
       {
         "id": "sauravsingla/OligoArk#18",
