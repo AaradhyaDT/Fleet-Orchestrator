@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-10-22T12:24:05.871161+00:00",
+  "timestamp": "2026-10-22T15:11:34.437173+00:00",
   "status": "ALL_HEALTHY_ZERO_TOKENS",
   "tokens_spent": 0,
   "gaps_detected": 0,
   "actions_taken": [
-    "preflight_uptime=41.7s",
+    "preflight_uptime=42.2s",
     "startup_memory_sync_success",
     "reconcile_registry_success=True"
   ],
   "preflight": {
-    "timestamp": "2026-10-22T12:24:05.957633+00:00",
-    "uptime_sec": 41.7,
+    "timestamp": "2026-10-22T15:11:34.496071+00:00",
+    "uptime_sec": 42.2,
     "is_cold_boot_warmup": true,
     "stale_git_lock_cleared": false,
     "power_status": {
-      "ac_line_status": 0,
-      "on_battery": true,
-      "battery_pct": 79,
+      "ac_line_status": 1,
+      "on_battery": false,
+      "battery_pct": 78,
       "battery_saver": false
     },
     "network_online": true

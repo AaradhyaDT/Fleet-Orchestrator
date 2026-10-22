@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-22T11:39:33.796169+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-22T12:37:25.667989+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 12, Salience: 2.0)
@@ -30,7 +30,7 @@
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-22T11:16:34Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-22T11:37:49Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-22T11:57:49Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
