@@ -93,11 +93,21 @@ async def ask_ambient_qa(req: QAPromptRequest) -> dict[str, Any]:
                 max_output_tokens=512,
                 system_instruction=sys_inst,
             )
-            return await cl.aio.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt_stem,
-                config=config,
-            )
+            try:
+                return await cl.aio.models.generate_content(
+                    model="gemini-3.8-flash",
+                    contents=prompt_stem,
+                    config=config,
+                )
+            except Exception as m_err:
+                # Fallback model cascade if 3.8-flash is temporarily unavailable/503
+                if "503" in str(m_err) or "UNAVAILABLE" in str(m_err) or "404" in str(m_err):
+                    return await cl.aio.models.generate_content(
+                        model="gemini-flash-latest",
+                        contents=prompt_stem,
+                        config=config,
+                    )
+                raise
 
         try:
             res = await rotator.execute_with_retry(_call_fast_gemini)
@@ -109,7 +119,19 @@ async def ask_ambient_qa(req: QAPromptRequest) -> dict[str, Any]:
                 "mode": "fast_hud",
             }
         except Exception as e:
-            logger.error(f"[Fast HUD Error] {e}")
+            logger.warning(f"[Fast HUD Gemini Exhausted/Error: {e}] Failing over to Copilot...")
+            try:
+                from tools.ultimatrix_autonomous_solver import query_copilot_or_local_fallback
+                fallback_ans = query_copilot_or_local_fallback(prompt_stem, task_slug="fast_hud")
+                if fallback_ans:
+                    return {
+                        "answer": fallback_ans,
+                        "confidence": 0.92,
+                        "provenance": ["copilot_headless_fallback", "fast_hud"],
+                        "mode": "fast_hud",
+                    }
+            except Exception as fb_err:
+                logger.error(f"[Fast HUD Copilot Fallback Failed] {fb_err}")
             raise HTTPException(status_code=500, detail=str(e))
 
     # 2. Deep Consensus Path (2.0–3.5s)

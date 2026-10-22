@@ -253,9 +253,19 @@ class GeminiKeyRotator:
                 code = getattr(api_err, "code", None)
                 msg = str(api_err)
                 
-                # Check for rate limit or quota exhaustion
-                if code == 429 or "RESOURCE_EXHAUSTED" in msg or "quota" in msg.lower():
-                    if "daily" in msg.lower() or "per day" in msg.lower():
+                # Check for rate limit, temporary overload, invalid key, or quota exhaustion
+                if (
+                    code in (429, 503, 401, 403)
+                    or "RESOURCE_EXHAUSTED" in msg
+                    or "UNAVAILABLE" in msg
+                    or "PERMISSION_DENIED" in msg
+                    or "quota" in msg.lower()
+                    or "high demand" in msg.lower()
+                ):
+                    if code in (401, 403) or "PERMISSION_DENIED" in msg:
+                        slot.status = "DISABLED"
+                        slot.last_error = f"Disabled_{code}: {msg[:100]}"
+                    elif "daily" in msg.lower() or "per day" in msg.lower():
                         self.mark_daily_exhausted(slot.key_id, msg)
                     else:
                         self.mark_burst_cooldown(slot.key_id, self.DEFAULT_BURST_COOLDOWN, msg)
