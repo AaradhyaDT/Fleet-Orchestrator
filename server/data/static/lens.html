@@ -11,28 +11,238 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body, html { width: 100%; height: 100%; background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
 
-    /* VIEW 1: CAMERA VIEWFINDER */
-    #viewfinder-container { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    video#camera-feed { width: 100%; height: 100%; object-fit: cover; }
-    .reticle { position: absolute; width: 75%; height: 45%; border: 2px dashed rgba(255,255,255,0.4); border-radius: 12px; pointer-events: none; }
-    .shutter-btn { position: absolute; bottom: 40px; width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 4px solid #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .shutter-inner { width: 54px; height: 54px; border-radius: 50%; background: #fff; transition: transform 0.1s; }
-    .shutter-btn:active .shutter-inner { transform: scale(0.88); }
-    .cam-status { position: absolute; top: 30px; font-size: 13px; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 20px; }
+    /* VIEW 1: STEALTH OLED HUD (PRIMARY / DEFAULT) */
+    #hud-container {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 20px 24px 20px;
+      text-align: center;
+    }
+    .hud-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 400px;
+    }
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #71717a;
+      background: #18181b;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #27272a;
+    }
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #eab308;
+      box-shadow: 0 0 6px #eab308;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .sync-dot.connected {
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .hud-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 360px;
+      flex: 1;
+    }
+    .giant-letter {
+      font-size: 112px;
+      font-weight: 800;
+      line-height: 1;
+      color: #4ade80;
+      letter-spacing: -3px;
+      margin-bottom: 18px;
+      text-shadow: 0 0 35px rgba(74, 222, 128, 0.25);
+      transition: transform 0.15s ease-out;
+    }
+    .giant-letter.waiting {
+      font-size: 48px;
+      color: #3f3f46;
+      letter-spacing: 2px;
+      text-shadow: none;
+    }
+    .subtle-reason {
+      font-size: 15px;
+      line-height: 1.45;
+      color: #d4d4d8;
+      max-width: 320px;
+      min-height: 44px;
+      word-break: break-word;
+    }
+    .hud-mode-tag {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #52525b;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .hud-actions {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 360px;
+      justify-content: center;
+    }
+    .hud-btn {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #27272a;
+      background: #18181b;
+      color: #f4f4f5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hud-btn:active {
+      background: #27272a;
+      transform: scale(0.98);
+    }
+    .hud-hint {
+      font-size: 11px;
+      color: #3f3f46;
+      margin-top: 10px;
+    }
 
-    /* VIEW 2: STEALTH OLED HUD */
-    #hud-container { position: absolute; inset: 0; background: #000000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
-    .giant-letter { font-size: 128px; font-weight: 800; line-height: 1; color: #4ade80; letter-spacing: -2px; margin-bottom: 16px; text-shadow: 0 0 30px rgba(74,222,128,0.2); }
-    .subtle-reason { font-size: 15px; line-height: 1.45; color: #a1a1aa; max-width: 320px; margin-bottom: 24px; }
-    .hud-actions { display: flex; gap: 12px; }
-    .hud-btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #27272a; background: #18181b; color: #f4f4f5; }
-    .hud-hint { position: absolute; bottom: 20px; font-size: 11px; color: #52525b; }
+    /* VIEW 2: CAMERA VIEWFINDER (SECONDARY / MANUAL SNAP) */
+    #viewfinder-container {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    video#camera-feed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .reticle {
+      position: absolute;
+      width: 78%;
+      height: 48%;
+      border: 2px dashed rgba(255,255,255,0.4);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+    .shutter-btn {
+      position: absolute;
+      bottom: 40px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 4px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .shutter-inner {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.1s;
+    }
+    .shutter-btn:active .shutter-inner {
+      transform: scale(0.88);
+    }
+    .cam-status {
+      position: absolute;
+      top: 30px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      background: rgba(0,0,0,0.65);
+      padding: 5px 14px;
+      border-radius: 20px;
+      max-width: 80%;
+      text-align: center;
+    }
+    .close-cam-btn {
+      position: absolute;
+      top: 28px;
+      right: 20px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #3f3f46;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
     /* VIEW 3: PANIC CALCULATOR DISGUISE */
-    #calc-container { position: absolute; inset: 0; background: #000000; display: none; flex-direction: column; justify-content: flex-end; padding: 20px; }
-    .calc-screen { height: 120px; display: flex; align-items: flex-end; justify-content: flex-end; font-size: 64px; font-weight: 300; color: #fff; padding: 10px; word-break: break-all; }
-    .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-    .calc-btn { aspect-ratio: 1; border-radius: 50%; font-size: 26px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; }
+    #calc-container {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+    .calc-screen {
+      height: 120px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      font-size: 64px;
+      font-weight: 300;
+      color: #fff;
+      padding: 10px;
+      word-break: break-all;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .calc-btn {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      font-size: 26px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      -webkit-tap-highlight-color: transparent;
+    }
     .btn-num { background: #333333; }
     .btn-num:active { background: #737373; }
     .btn-fn { background: #a5a5a5; color: #000; }
@@ -41,35 +251,59 @@
     .btn-op:active { background: #fb923c; }
 
     /* SPINNER */
-    .spinner { display: none; width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; position: absolute; }
+    .spinner {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      border-top-color: #4ade80;
+      animation: spin 0.8s linear infinite;
+      position: absolute;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- 1. CAMERA VIEWFINDER -->
+  <!-- VIEW 1: STEALTH OLED HUD (PRIMARY / DEFAULT VIEW) -->
+  <div id="hud-container">
+    <div class="hud-topbar">
+      <div class="sync-badge">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">CONNECTING...</span>
+      </div>
+      <button class="hud-btn" id="calcToggleBtn" style="flex: 0; padding: 6px 12px; font-size: 11px;">123</button>
+    </div>
+
+    <div class="hud-center">
+      <div class="giant-letter waiting" id="optLetter">READY</div>
+      <div class="subtle-reason" id="optReason">Listening for questions from PC extension...</div>
+      <div class="hud-mode-tag" id="hudModeTag">Fleet Ambient HUD</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div class="hud-actions">
+        <button class="hud-btn" id="snapBtn">Snap Photo</button>
+        <button class="hud-btn" id="detailsBtn">Full Rationale</button>
+      </div>
+      <div class="hud-hint">Double-tap anywhere to open disguise calculator</div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: CAMERA VIEWFINDER (MANUAL SNAP MODE) -->
   <div id="viewfinder-container">
     <video id="camera-feed" playsinline autoplay muted></video>
     <div class="reticle"></div>
     <div class="cam-status" id="camStatus">Point camera at screen question</div>
     <div class="spinner" id="spinner"></div>
+    <div class="close-cam-btn" id="closeCamBtn">&times;</div>
     <div class="shutter-btn" id="shutterBtn">
       <div class="shutter-inner"></div>
     </div>
   </div>
 
-  <!-- 2. STEALTH OLED HUD -->
-  <div id="hud-container">
-    <div class="giant-letter" id="optLetter">B</div>
-    <div class="subtle-reason" id="optReason">Loading explanation…</div>
-    <div class="hud-actions">
-      <button class="hud-btn" id="resnapBtn">Snap Next</button>
-      <button class="hud-btn" id="detailsBtn">Full Rationale</button>
-    </div>
-    <div class="hud-hint">Double-tap anywhere to open disguise calculator</div>
-  </div>
-
-  <!-- 3. PANIC CALCULATOR DISGUISE -->
+  <!-- VIEW 3: PANIC CALCULATOR DISGUISE -->
   <div id="calc-container">
     <div class="calc-screen" id="calcDisplay">0</div>
     <div class="calc-grid">
@@ -99,42 +333,204 @@
     </div>
   </div>
 
+  <!-- Offscreen canvas & HTTP Native Camera File Input -->
   <canvas id="offscreenCanvas" style="display:none;"></canvas>
+  <input type="file" accept="image/*" capture="environment" id="fileSnapInput" style="display:none;" />
 
   <script>
+    const hudContainer = document.getElementById('hud-container');
+    const viewContainer = document.getElementById('viewfinder-container');
+    const calcContainer = document.getElementById('calc-container');
+
+    const optLetter = document.getElementById('optLetter');
+    const optReason = document.getElementById('optReason');
+    const hudModeTag = document.getElementById('hudModeTag');
+    const syncDot = document.getElementById('syncDot');
+    const syncText = document.getElementById('syncText');
+
+    const snapBtn = document.getElementById('snapBtn');
+    const detailsBtn = document.getElementById('detailsBtn');
+    const calcToggleBtn = document.getElementById('calcToggleBtn');
+
     const video = document.getElementById('camera-feed');
     const shutter = document.getElementById('shutterBtn');
     const spinner = document.getElementById('spinner');
     const camStatus = document.getElementById('camStatus');
-    const viewContainer = document.getElementById('viewfinder-container');
-    const hudContainer = document.getElementById('hud-container');
-    const calcContainer = document.getElementById('calc-container');
-    const optLetter = document.getElementById('optLetter');
-    const optReason = document.getElementById('optReason');
-    const resnapBtn = document.getElementById('resnapBtn');
-    const detailsBtn = document.getElementById('detailsBtn');
+    const closeCamBtn = document.getElementById('closeCamBtn');
     const canvas = document.getElementById('offscreenCanvas');
+    const fileSnapInput = document.getElementById('fileSnapInput');
 
     let currentRationale = "";
+    let currentFullAnswer = "";
     let equalPressCount = 0;
     let lastTapTime = 0;
+    let activeStream = null;
+    let lastAnswerId = null;
 
-    // Start camera feed
-    async function initCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false
-        });
-        video.srcObject = stream;
-      } catch (err) {
-        camStatus.textContent = "Camera error: " + err.message;
+    // Check if secure context allows navigator.mediaDevices
+    const hasMediaDevices = Boolean(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function');
+
+    // Display QA result on OLED HUD
+    function renderQAResult(data) {
+      if (!data) return;
+      if (data.id && data.id === lastAnswerId) return; // Deduplicate
+      lastAnswerId = data.id || Date.now();
+
+      const letter = data.option_letter || "?";
+      const reason = data.reason || data.answer || "Answer computed.";
+      currentRationale = reason;
+      currentFullAnswer = data.answer || reason;
+
+      optLetter.textContent = letter;
+      optLetter.classList.remove('waiting');
+      optReason.textContent = reason;
+      hudModeTag.textContent = `${data.mode || 'FAST HUD'} · ${Math.round((data.confidence || 0.95) * 100)}% CONFIDENCE`;
+
+      // Subtly vibrate if supported so user knows answer arrived
+      if (typeof navigator.vibrate === 'function') {
+        try { navigator.vibrate([40]); } catch (e) {}
+      }
+
+      // Ensure HUD view is visible if not in calculator
+      if (calcContainer.style.display !== 'flex') {
+        viewContainer.style.display = 'none';
+        hudContainer.style.display = 'flex';
       }
     }
 
-    // Capture frame and send to Fleet-Orchestrator
+    // Set connection status
+    function setConnectionStatus(connected, label) {
+      if (connected) {
+        syncDot.classList.add('connected');
+        syncText.textContent = label || "PC SYNCED";
+      } else {
+        syncDot.classList.remove('connected');
+        syncText.textContent = label || "OFFLINE";
+      }
+    }
+
+    // Connect to Server-Sent Events stream for zero-latency push from PC
+    function setupRealtimeStream() {
+      if (typeof EventSource !== 'undefined') {
+        const sse = new EventSource('/api/v1/qa/stream');
+
+        sse.onopen = () => {
+          setConnectionStatus(true, "PC SYNCED");
+        };
+
+        sse.addEventListener('qa_update', (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            renderQAResult(data);
+          } catch (err) {
+            console.error("SSE parse error", err);
+          }
+        });
+
+        sse.onerror = () => {
+          setConnectionStatus(false, "RECONNECTING");
+          // Fallback to active polling if SSE disconnects
+          startPollingFallback();
+        };
+      } else {
+        startPollingFallback();
+      }
+    }
+
+    let pollInterval = null;
+    function startPollingFallback() {
+      if (pollInterval) return;
+      pollInterval = setInterval(async () => {
+        try {
+          const res = await fetch('/api/v1/qa/latest');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'active') {
+              setConnectionStatus(true, "PC SYNCED");
+              renderQAResult(data);
+            } else {
+              setConnectionStatus(true, "LISTENING");
+            }
+          }
+        } catch (e) {
+          setConnectionStatus(false, "OFFLINE");
+        }
+      }, 1200);
+    }
+
+    // PHOTO SNAP ACTION (Handles both HTTPS live-stream and HTTP native file capture)
+    snapBtn.addEventListener('click', () => {
+      if (hasMediaDevices) {
+        openCameraView();
+      } else {
+        // Plain HTTP on LAN IP (e.g. 192.168.1.5) — launch native mobile camera via file input
+        fileSnapInput.click();
+      }
+    });
+
+    fileSnapInput.addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      optLetter.textContent = "…";
+      optLetter.classList.add('waiting');
+      optReason.textContent = "Analyzing screen photo with Vision model…";
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64Data = reader.result;
+        try {
+          const res = await fetch('/api/v1/qa/lens', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_base64: base64Data })
+          });
+          const data = await res.json();
+          renderQAResult(data);
+        } catch (err) {
+          optReason.textContent = "Network error: " + err.message;
+        } finally {
+          fileSnapInput.value = "";
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Camera view for secure contexts (HTTPS / localhost)
+    async function openCameraView() {
+      hudContainer.style.display = 'none';
+      calcContainer.style.display = 'none';
+      viewContainer.style.display = 'flex';
+      camStatus.textContent = "Point camera at screen question";
+
+      try {
+        activeStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = activeStream;
+      } catch (err) {
+        camStatus.textContent = "Camera error. Tap shutter to use system camera.";
+      }
+    }
+
+    function closeCameraView() {
+      if (activeStream) {
+        activeStream.getTracks().forEach(t => t.stop());
+        activeStream = null;
+      }
+      viewContainer.style.display = 'none';
+      hudContainer.style.display = 'flex';
+    }
+
+    closeCamBtn.addEventListener('click', closeCameraView);
+
+    // Shutter button (acts as stream snapshot on HTTPS or fallback to native picker)
     shutter.addEventListener('click', async () => {
-      if (!video.videoWidth) return;
+      if (!video.videoWidth || !activeStream) {
+        fileSnapInput.click();
+        return;
+      }
       spinner.style.display = 'block';
       shutter.style.pointerEvents = 'none';
       camStatus.textContent = "Analyzing screen question…";
@@ -152,11 +548,8 @@
           body: JSON.stringify({ image_base64: base64Jpg })
         });
         const data = await res.json();
-        if (data.option_letter) {
-          showHUD(data.option_letter, data.reason, data.full_text);
-        } else {
-          camStatus.textContent = "Could not parse question. Try again.";
-        }
+        closeCameraView();
+        renderQAResult(data);
       } catch (err) {
         camStatus.textContent = "Network error: " + err.message;
       } finally {
@@ -165,28 +558,21 @@
       }
     });
 
-    function showHUD(letter, reason, full) {
-      optLetter.textContent = letter || "?";
-      optReason.textContent = reason || "";
-      currentRationale = full || reason;
-      viewContainer.style.display = 'none';
-      calcContainer.style.display = 'none';
-      hudContainer.style.display = 'flex';
-    }
-
-    resnapBtn.addEventListener('click', () => {
-      hudContainer.style.display = 'none';
-      calcContainer.style.display = 'none';
-      viewContainer.style.display = 'flex';
-      camStatus.textContent = "Point camera at screen question";
+    detailsBtn.addEventListener('click', () => {
+      if (currentFullAnswer) {
+        alert(currentFullAnswer);
+      } else {
+        alert("No question answered yet. Take a photo or scan question from PC.");
+      }
     });
 
-    detailsBtn.addEventListener('click', () => {
-      alert(currentRationale);
+    calcToggleBtn.addEventListener('click', () => {
+      togglePanicMask();
     });
 
     // Double tap anywhere on screen toggles panic calculator
     document.addEventListener('touchend', (e) => {
+      if (e.target.closest('button') || e.target.closest('.calc-btn')) return;
       const now = Date.now();
       if (now - lastTapTime < 300) {
         togglePanicMask();
@@ -249,7 +635,6 @@
     function calcEqual() {
       equalPressCount++;
       if (equalPressCount >= 3) {
-        // Panic escape sequence: 3 equals returns to HUD
         calcContainer.style.display = 'none';
         hudContainer.style.display = 'flex';
         equalPressCount = 0;
@@ -270,7 +655,10 @@
       }
     }
 
-    window.addEventListener('load', initCamera);
+    // Initialize real-time receiver stream on load
+    window.addEventListener('load', () => {
+      setupRealtimeStream();
+    });
   </script>
 </body>
 </html>
