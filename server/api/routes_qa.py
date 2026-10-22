@@ -58,7 +58,7 @@ def _extract_option_and_reason(text: str) -> tuple[str, str]:
                 break
     if option_letter == "?":
         for char in ["A", "B", "C", "D"]:
-            if re.search(rf"\b(Option\s+{char}|\({char}\)|\*\*{char}\*\*|^{char}[\.\:\—\-])", text, re.IGNORECASE):
+            if re.search(rf"(?:Option\s+{char}|\({char}\)|\*\*{char}\*\*|^{char}[\.\:\—\-\)])", text, re.IGNORECASE):
                 option_letter = char
                 break
     for line in lines:
@@ -151,7 +151,7 @@ class CopilotFleetManager:
                 cmd,
                 env=child_env,
                 capture_output=True,
-                text=True,
+                text=False,
                 timeout=timeout,
             )
 
@@ -160,8 +160,10 @@ class CopilotFleetManager:
         except subprocess.TimeoutExpired:
             raise TimeoutError(f"Copilot CLI timed out after {timeout}s on worker {acc['worker_id']}")
 
-        stdout_str = (res.stdout or "").strip()
-        stderr_str = (res.stderr or "").strip()
+        stdout_bytes = res.stdout or b""
+        stderr_bytes = res.stderr or b""
+        stdout_str = stdout_bytes.decode("utf-8", errors="replace").strip()
+        stderr_str = stderr_bytes.decode("utf-8", errors="replace").strip()
 
         if res.returncode != 0:
             raise RuntimeError(f"Copilot CLI error (exit {res.returncode}): {stderr_str or stdout_str}")

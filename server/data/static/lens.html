@@ -283,11 +283,14 @@
     </div>
 
     <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-      <div class="hud-actions">
+      <div class="hud-actions" style="margin-bottom: 8px;">
+        <button class="hud-btn" id="prevBtn" style="flex: 0 0 54px; font-size: 16px;">◀</button>
         <button class="hud-btn" id="snapBtn">Snap Photo</button>
         <button class="hud-btn" id="detailsBtn">Full Rationale</button>
+        <button class="hud-btn" id="nextBtn" style="flex: 0 0 54px; font-size: 16px;">▶</button>
       </div>
-      <div class="hud-hint">Double-tap anywhere to open disguise calculator</div>
+      <div style="font-size: 11px; color: #71717a; margin-bottom: 4px;" id="historyCounter">1 / 1</div>
+      <div class="hud-hint">Swipe left/right to view previous answers · Double-tap for calculator</div>
     </div>
   </div>
 
@@ -351,6 +354,9 @@
     const snapBtn = document.getElementById('snapBtn');
     const detailsBtn = document.getElementById('detailsBtn');
     const calcToggleBtn = document.getElementById('calcToggleBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const historyCounter = document.getElementById('historyCounter');
 
     const video = document.getElementById('camera-feed');
     const shutter = document.getElementById('shutterBtn');
@@ -360,6 +366,8 @@
     const canvas = document.getElementById('offscreenCanvas');
     const fileSnapInput = document.getElementById('fileSnapInput');
 
+    let qaHistory = [];
+    let currentHistoryIndex = -1;
     let currentRationale = "";
     let currentFullAnswer = "";
     let equalPressCount = 0;
@@ -370,11 +378,17 @@
     // Check if secure context allows navigator.mediaDevices
     const hasMediaDevices = Boolean(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function');
 
-    // Display QA result on OLED HUD
-    function renderQAResult(data) {
-      if (!data) return;
-      if (data.id && data.id === lastAnswerId) return; // Deduplicate
-      lastAnswerId = data.id || Date.now();
+    function updateHistoryUI() {
+      if (!historyCounter || qaHistory.length === 0) return;
+      historyCounter.textContent = `${currentHistoryIndex + 1} / ${qaHistory.length}`;
+      if (prevBtn) prevBtn.disabled = currentHistoryIndex <= 0;
+      if (nextBtn) nextBtn.disabled = currentHistoryIndex >= qaHistory.length - 1;
+    }
+
+    function displayHistoryItem(idx) {
+      if (idx < 0 || idx >= qaHistory.length) return;
+      currentHistoryIndex = idx;
+      const data = qaHistory[idx];
 
       const letter = data.option_letter || "?";
       const reason = data.reason || data.answer || "Answer computed.";
@@ -385,6 +399,20 @@
       optLetter.classList.remove('waiting');
       optReason.textContent = reason;
       hudModeTag.textContent = `${data.mode || 'FAST HUD'} · ${Math.round((data.confidence || 0.95) * 100)}% CONFIDENCE`;
+      updateHistoryUI();
+    }
+
+    // Display QA result on OLED HUD
+    function renderQAResult(data) {
+      if (!data) return;
+      if (data.id && data.id === lastAnswerId) return; // Deduplicate
+      lastAnswerId = data.id || Date.now();
+
+      qaHistory.push(data);
+      if (qaHistory.length > 50) qaHistory.shift();
+      currentHistoryIndex = qaHistory.length - 1;
+
+      displayHistoryItem(currentHistoryIndex);
 
       // Subtly vibrate if supported so user knows answer arrived
       if (typeof navigator.vibrate === 'function') {
@@ -397,6 +425,39 @@
         hudContainer.style.display = 'flex';
       }
     }
+
+    prevBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentHistoryIndex > 0) {
+        displayHistoryItem(currentHistoryIndex - 1);
+      }
+    });
+
+    nextBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentHistoryIndex < qaHistory.length - 1) {
+        displayHistoryItem(currentHistoryIndex + 1);
+      }
+    });
+
+    // Touch swipe left/right for quick paging through answer history
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      if (calcContainer.style.display === 'flex' || viewContainer.style.display === 'flex') return;
+      const touchEndX = e.changedTouches[0].screenX;
+      const diffX = touchEndX - touchStartX;
+      if (diffX > 60) {
+        // Swipe right -> previous answer
+        if (currentHistoryIndex > 0) displayHistoryItem(currentHistoryIndex - 1);
+      } else if (diffX < -60) {
+        // Swipe left -> next answer
+        if (currentHistoryIndex < qaHistory.length - 1) displayHistoryItem(currentHistoryIndex + 1);
+      }
+    }, { passive: true });
 
     // Set connection status
     function setConnectionStatus(connected, label) {
