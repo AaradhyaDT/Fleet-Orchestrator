@@ -19,8 +19,8 @@ async def test_qa_status_endpoint():
         response = await client.get("/api/v1/qa/status")
         assert response.status_code == 200
         data = response.json()
-        assert data["provider"] == "google_gemini_fleet"
-        assert "healthy_keys" in data
+        assert data["provider"] in ("copilot_cli_fleet", "google_gemini_fleet")
+        assert "healthy_keys" in data or "healthy_workers" in data
 
 
 @pytest.mark.asyncio

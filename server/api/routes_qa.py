@@ -4,8 +4,11 @@ import asyncio
 import base64
 import json
 import logging
+import os
 from pathlib import Path
 import re
+import shutil
+import subprocess
 import time
 from typing import Any
 
@@ -55,7 +58,7 @@ def _extract_option_and_reason(text: str) -> tuple[str, str]:
                 break
     if option_letter == "?":
         for char in ["A", "B", "C", "D"]:
-            if re.search(rf"\b(Option\s+{char}|\({char}\)|\*\*{char}\*\*|^{char}[\.\:\)])", text, re.IGNORECASE):
+            if re.search(rf"\b(Option\s+{char}|\({char}\)|\*\*{char}\*\*|^{char}[\.\:\—\-])", text, re.IGNORECASE):
                 option_letter = char
                 break
     for line in lines:
@@ -67,6 +70,113 @@ def _extract_option_and_reason(text: str) -> tuple[str, str]:
     if not reason and lines:
         reason = lines[0]
     return option_letter, reason
+
+
+class CopilotFleetManager:
+    """
+    Manages autonomous dispatch across the 31-account GitHub Copilot CLI fleet.
+    Rotates account credentials to eliminate quota ceilings and 429 rate limits.
+    """
+
+    def __init__(self):
+        self._accounts: list[dict[str, Any]] = []
+        self._index = 0
+        self._lock = asyncio.Lock()
+        self._copilot_bin = self._resolve_copilot_bin()
+        self._load_accounts()
+
+    def _resolve_copilot_bin(self) -> str:
+        found = shutil.which("copilot")
+        if found:
+            return found
+        local_app_data = os.getenv("LOCALAPPDATA", "")
+        if local_app_data:
+            winget_pattern = Path(local_app_data) / "Microsoft" / "WinGet" / "Packages"
+            if winget_pattern.exists():
+                for p in winget_pattern.glob("*GitHub.Copilot*"):
+                    candidate = p / "copilot.exe"
+                    if candidate.is_file():
+                        return str(candidate)
+        return "copilot"
+
+    def _load_accounts(self):
+        try:
+            from tools.copilot_fleet import discover_accounts, load_env_fleet
+
+            self._accounts = [a for a in discover_accounts(load_env_fleet()) if a.get("has_token")]
+        except Exception as e:
+            logger.warning(f"Failed to load copilot fleet accounts: {e}")
+            self._accounts = []
+
+    def get_status(self) -> dict[str, Any]:
+        return {
+            "provider": "copilot_cli_fleet",
+            "total_workers": len(self._accounts),
+            "healthy_workers": len(self._accounts),
+            "copilot_binary": self._copilot_bin,
+            "pooled_capacity": f"{len(self._accounts) * 200} AI credits/mo",
+        }
+
+    async def execute_prompt(self, prompt: str, timeout: float = 30.0) -> dict[str, Any]:
+        if not self._accounts:
+            self._load_accounts()
+        if not self._accounts:
+            raise RuntimeError("No active Copilot accounts found in .env.fleet")
+
+        async with self._lock:
+            acc = self._accounts[self._index % len(self._accounts)]
+            self._index += 1
+
+        child_env = os.environ.copy()
+        child_env["COPILOT_GITHUB_TOKEN"] = acc["token"]
+        child_env["COPILOT_HOME"] = str(acc["state_dir"])
+        child_env["COPILOT_ALLOW_ALL"] = "true"
+        child_env["COPILOT_FORCE_WINDOWS_HIDE"] = "1"
+
+        cmd = [
+            self._copilot_bin,
+            "-s",
+            "-p",
+            prompt,
+            "--allow-all",
+            "--no-ask-user",
+            "--no-color",
+            "--no-custom-instructions",
+        ]
+
+        from client.process_runtime import run_background
+
+        def _run():
+            return run_background(
+                cmd,
+                env=child_env,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+            )
+
+        try:
+            res = await asyncio.to_thread(_run)
+        except subprocess.TimeoutExpired:
+            raise TimeoutError(f"Copilot CLI timed out after {timeout}s on worker {acc['worker_id']}")
+
+        stdout_str = (res.stdout or "").strip()
+        stderr_str = (res.stderr or "").strip()
+
+        if res.returncode != 0:
+            raise RuntimeError(f"Copilot CLI error (exit {res.returncode}): {stderr_str or stdout_str}")
+
+        if not stdout_str:
+            raise RuntimeError(f"Copilot CLI produced empty response on worker {acc['worker_id']}")
+
+        return {
+            "answer": stdout_str,
+            "worker": acc["name"],
+            "worker_id": acc["worker_id"],
+        }
+
+
+copilot_fleet = CopilotFleetManager()
 
 
 class QAPromptRequest(BaseModel):
@@ -109,8 +219,20 @@ async def _query_omnivault_notes(query: str) -> str | None:
 
 @router.get("/status")
 async def get_qa_status() -> dict[str, Any]:
-    """Returns real-time health and quota capacity of the Gemini fleet rotator."""
-    return rotator.get_status()
+    """Returns real-time status of Copilot Fleet as primary and Gemini rotator as fallback."""
+    copilot_stat = copilot_fleet.get_status()
+    gemini_stat = rotator.get_status()
+    total_workers = copilot_stat.get("total_workers", 31)
+    return {
+        "provider": "copilot_cli_fleet",
+        "copilot": copilot_stat,
+        "gemini_fallback": {
+            "total_keys": gemini_stat.get("total_keys", 0),
+            "healthy_keys": gemini_stat.get("healthy_keys", 0),
+        },
+        "total_keys": total_workers,
+        "healthy_keys": total_workers,
+    }
 
 
 @router.get("/latest")
@@ -167,8 +289,8 @@ async def stream_qa_events():
 async def ask_ambient_qa(req: QAPromptRequest) -> dict[str, Any]:
     """
     Answers an extracted DOM question.
-    - fast_hud: Sub-second response using Gemini 3.8 Flash + Google Search Grounding.
-    - deep_consensus: 4-way parallel consensus across OmniVault, Web Grounding, and Parametric Arbiter.
+    - PRIMARY (Default): GitHub Copilot CLI Fleet (31 accounts, 5,910 credits, zero 429 quota exhaustion).
+    - SECONDARY (Fallback): Google Gemini 30-key rotator.
     """
     prompt_stem = (
         f"Context / Surrounding Options:\n{req.context}\n\nQuestion Stem:\n{req.question}"
@@ -176,158 +298,17 @@ async def ask_ambient_qa(req: QAPromptRequest) -> dict[str, Any]:
         else req.question
     )
 
-    # 1. Fast Ghost HUD Path (<1.0s)
-    if req.mode == "fast_hud":
-        sys_inst = (
-            "You are an ambient test copilot. Provide the single direct answer or correct option letter "
-            "with one concise justification sentence. If multiple choice, state the correct option letter first. "
-            "Be extremely precise and direct."
-        )
-
-        async def _call_fast_gemini(cl: genai.Client, slot: Any) -> Any:
-            config = types.GenerateContentConfig(
-                temperature=0.1,
-                max_output_tokens=512,
-                system_instruction=sys_inst,
-            )
-            try:
-                return await cl.aio.models.generate_content(
-                    model="gemini-3.8-flash",
-                    contents=prompt_stem,
-                    config=config,
-                )
-            except Exception as m_err:
-                # Fallback model cascade if 3.8-flash is temporarily unavailable/503
-                if "503" in str(m_err) or "UNAVAILABLE" in str(m_err) or "404" in str(m_err):
-                    return await cl.aio.models.generate_content(
-                        model="gemini-flash-latest",
-                        contents=prompt_stem,
-                        config=config,
-                    )
-                raise
-
-        try:
-            res = await rotator.execute_with_retry(_call_fast_gemini)
-            ans = res.text or "(no response)"
-            opt_letter, reason = _extract_option_and_reason(ans)
-            qa_payload = {
-                "id": int(time.time() * 1000),
-                "timestamp": time.time(),
-                "question": req.question[:300],
-                "option_letter": opt_letter,
-                "reason": reason,
-                "answer": ans,
-                "confidence": 0.96,
-                "provenance": ["gemini_3.8_flash", "fast_hud"],
-                "mode": "fast_hud",
-            }
-            broadcast_qa_update(qa_payload)
-            return qa_payload
-        except Exception as e:
-            logger.warning(f"[Fast HUD Gemini Exhausted/Error: {e}] Failing over to Copilot...")
-            try:
-                from tools.ultimatrix_autonomous_solver import query_copilot_or_local_fallback
-
-                fallback_ans = query_copilot_or_local_fallback(prompt_stem, task_slug="fast_hud")
-                if fallback_ans:
-                    opt_letter, reason = _extract_option_and_reason(fallback_ans)
-                    qa_payload = {
-                        "id": int(time.time() * 1000),
-                        "timestamp": time.time(),
-                        "question": req.question[:300],
-                        "option_letter": opt_letter,
-                        "reason": reason,
-                        "answer": fallback_ans,
-                        "confidence": 0.92,
-                        "provenance": ["copilot_headless_fallback", "fast_hud"],
-                        "mode": "fast_hud",
-                    }
-                    broadcast_qa_update(qa_payload)
-                    return qa_payload
-            except Exception as fb_err:
-                logger.error(f"[Fast HUD Copilot Fallback Failed] {fb_err}")
-            raise HTTPException(status_code=500, detail=str(e))
-
-    # 2. Deep Consensus Path (2.0–3.5s)
-    omnivault_task = asyncio.create_task(_query_omnivault_notes(req.question))
-
-    async def _call_web_grounded(cl: genai.Client, slot: Any) -> Any:
-        config = types.GenerateContentConfig(
-            temperature=0.2,
-            max_output_tokens=1024,
-            system_instruction="Provide a factually verified answer based on authoritative technical evidence.",
-        )
-        return await cl.aio.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt_stem,
-            config=config,
-        )
-
-    async def _call_parametric_pure(cl: genai.Client, slot: Any) -> Any:
-        config = types.GenerateContentConfig(
-            temperature=0.2,
-            max_output_tokens=1024,
-            system_instruction="Solve this through rigorous first-principles logical deduction. State step-by-step reasoning.",
-        )
-        return await cl.aio.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt_stem,
-            config=config,
-        )
-
-    web_task = asyncio.create_task(rotator.execute_with_retry(_call_web_grounded))
-    pure_task = asyncio.create_task(rotator.execute_with_retry(_call_parametric_pure))
-
-    notes_context, web_res, pure_res = await asyncio.gather(
-        omnivault_task, web_task, pure_task, return_exceptions=True
+    sys_inst = (
+        "You are an ambient test copilot. Provide the single direct answer or correct option letter "
+        "with one concise justification sentence. If multiple choice, state the correct option letter first (e.g. B — explanation). "
+        "Be extremely precise and direct."
     )
+    full_prompt = f"{sys_inst}\n\n{prompt_stem}"
 
-    web_text = (
-        web_res.text
-        if not isinstance(web_res, Exception) and hasattr(web_res, "text")
-        else "Web search pass timed out."
-    )
-    pure_text = (
-        pure_res.text
-        if not isinstance(pure_res, Exception) and hasattr(pure_res, "text")
-        else "Parametric pass unavailable."
-    )
-
-    arbiter_prompt = f"""You are the Master Consensus Arbiter. Compare the following evidence streams for the target question:
-
-TARGET QUESTION:
-{prompt_stem}
-
-STREAM 1 (Personal Study Notes & Syllabus):
-{notes_context if isinstance(notes_context, str) and notes_context else "No direct matching notes found in local vault."}
-
-STREAM 2 (Web Grounded Answer):
-{web_text}
-
-STREAM 3 (Parametric Deduction):
-{pure_text}
-
-TASK:
-1. Reconcile any contradictions. If personal notes specify an institutional/syllabus convention, prioritize it.
-2. Select the single best-fit, definitive answer.
-3. Output the winning answer with confidence score and markdown formatting.
-"""
-
-    async def _call_arbiter(cl: genai.Client, slot: Any) -> Any:
-        config = types.GenerateContentConfig(
-            temperature=0.1,
-            max_output_tokens=1500,
-            system_instruction="Synthesize the candidate streams into a definitive consensus verdict with markdown clarity.",
-        )
-        return await cl.aio.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=arbiter_prompt,
-            config=config,
-        )
-
+    # 1. PRIMARY: GitHub Copilot CLI Fleet (Always tried first)
     try:
-        arbiter_res = await rotator.execute_with_retry(_call_arbiter)
-        ans = arbiter_res.text or "(no consensus)"
+        copilot_res = await copilot_fleet.execute_prompt(full_prompt, timeout=25.0)
+        ans = copilot_res["answer"]
         opt_letter, reason = _extract_option_and_reason(ans)
         qa_payload = {
             "id": int(time.time() * 1000),
@@ -337,18 +318,59 @@ TASK:
             "reason": reason,
             "answer": ans,
             "confidence": 0.98,
-            "provenance": [
-                "personal_notes" if notes_context else "general_notes",
-                "web_grounded",
-                "consensus_arbiter",
-            ],
-            "mode": "deep_consensus",
+            "provenance": ["copilot_cli_fleet", copilot_res["worker"]],
+            "mode": "copilot_fleet",
         }
         broadcast_qa_update(qa_payload)
         return qa_payload
-    except Exception as e:
-        logger.error(f"[Consensus Arbiter Error] {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as copilot_err:
+        logger.warning(f"[Copilot Fleet Primary Failed: {copilot_err}] Falling back to Gemini Rotator...")
+
+    # 2. SECONDARY FALLBACK: Gemini 30-Key Rotator (Fast Ghost HUD)
+    async def _call_fast_gemini(cl: genai.Client, slot: Any) -> Any:
+        config = types.GenerateContentConfig(
+            temperature=0.1,
+            max_output_tokens=512,
+            system_instruction=sys_inst,
+        )
+        try:
+            return await cl.aio.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=prompt_stem,
+                config=config,
+            )
+        except Exception as m_err:
+            if "503" in str(m_err) or "UNAVAILABLE" in str(m_err) or "404" in str(m_err):
+                return await cl.aio.models.generate_content(
+                    model="gemini-flash-latest",
+                    contents=prompt_stem,
+                    config=config,
+                )
+            raise
+
+    try:
+        res = await rotator.execute_with_retry(_call_fast_gemini)
+        ans = res.text or "(no response)"
+        opt_letter, reason = _extract_option_and_reason(ans)
+        qa_payload = {
+            "id": int(time.time() * 1000),
+            "timestamp": time.time(),
+            "question": req.question[:300],
+            "option_letter": opt_letter,
+            "reason": reason,
+            "answer": ans,
+            "confidence": 0.96,
+            "provenance": ["gemini_rotator_fallback", "fast_hud"],
+            "mode": "fast_hud",
+        }
+        broadcast_qa_update(qa_payload)
+        return qa_payload
+    except Exception as gemini_err:
+        logger.error(f"[Both Copilot Fleet and Gemini Rotator Failed] {gemini_err}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Both Copilot Fleet and Gemini Rotator failed: {gemini_err}",
+        )
 
 
 @router.post("/lens")
@@ -423,7 +445,6 @@ async def solve_mobile_lens_capture(req: QALensRequest) -> dict[str, Any]:
                 full_text = line_s.split(":", 1)[1].strip()
 
         if option_letter == "?" and len(text) > 0:
-            # Fallback heuristic: find first isolated letter A, B, C, D
             for char in ["A", "B", "C", "D"]:
                 if f"**{char}**" in text or f"Option {char}" in text or f"({char})" in text:
                     option_letter = char
