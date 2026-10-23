@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 344,
-  "tasks_solved": 344,
+  "tasks_attempted": 345,
+  "tasks_solved": 345,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -346,16 +346,11 @@
     "homecoming",
     "limited-swaps",
     "lonely-points",
-    "max-score-tree"
+    "max-score-tree",
+    "penguin-dance"
   ],
-  "last_solve_at": "2026-10-23T12:00:09.183098+00:00",
+  "last_solve_at": "2026-10-23T12:34:53.202192+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:38:02.979409+00:00",
-      "slug": "k-inversions",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-18T10:40:11.862509+00:00",
       "slug": "late-edges",
@@ -649,6 +644,12 @@
       "slug": "max-score-tree",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 4
+    },
+    {
+      "timestamp": "2026-10-23T12:34:53.202131+00:00",
+      "slug": "penguin-dance",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
     }
   ],
   "attempted_slugs": {
