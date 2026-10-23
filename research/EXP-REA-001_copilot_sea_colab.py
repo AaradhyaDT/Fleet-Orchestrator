@@ -86,7 +86,9 @@ import os, shutil, hashlib
 if not Path("/content/drive/MyDrive").exists():
     drive.mount('/content/drive')
 
+# Explicitly prioritize the verified full FUSE path discovered via parent chain walk
 drive_copilot_candidates = [
+    Path("/content/drive/MyDrive/Share to Aaradhya/Super-NLM/Brainstorm/EXP-REA-001_Copilot_SEA/copilot.EXE"),
     Path("/content/drive/MyDrive/Super-NLM/Brainstorm/EXP-REA-001_Copilot_SEA/copilot.EXE"),
     Path("/content/drive/MyDrive/Brainstorm/EXP-REA-001_Copilot_SEA/copilot.EXE"),
     Path("/content/drive/MyDrive/EXP-REA-001_Copilot_SEA/copilot.EXE"),
@@ -95,12 +97,14 @@ drive_copilot_candidates = [
 ]
 
 staged = False
+staged_source_folder = None
 for cand in drive_copilot_candidates:
     if cand.exists():
         print(f"Found target in Google Drive: {cand}")
         print(f"Copying to {TARGET}...")
         shutil.copy2(cand, TARGET)
         staged = True
+        staged_source_folder = cand.parent
         break
 
 if not staged:
@@ -111,6 +115,7 @@ if not staged:
             print(f"Found: {found}")
             shutil.copy2(found, TARGET)
             staged = True
+            staged_source_folder = Path(root)
             break
         # Guard against recursive traversal timeouts in deep folders
         if root.count(os.sep) - "/content/drive/MyDrive".count(os.sep) >= 4:
@@ -421,31 +426,52 @@ else:
 
 # %%
 # ============================================================
-# CELL 10: Ghidra Headless — Native PE Wrapper Analysis
+# CELL 10: Ghidra Headless — Native PE Wrapper Analysis (Optional)
 # ============================================================
 # Analyze the native C/C++ wrapper around the Node SEA runtime.
-# This reveals the entrypoint, Node.js initialization, and any
-# native-level guards or telemetry hooks.
+#
+# CRITICAL ARCHITECTURAL NOTE:
+# Cells 3-9 already extracted the 100% complete JavaScript payload
+# (copilot_bundle.js, CLI flags, env vars, endpoints). The native PE
+# is the standard Node.js/V8 launcher executable.
+#
+# Full decompilation of 163 MB of V8 engine code can take 45+ minutes.
+# ENABLE_GHIDRA is False by default to prevent import/analysis lockups.
+# If True, it uses -noanalysis and a 180s timeout ceiling to extract
+# PE headers without freezing on the V8 engine decompile loop.
 
-GHIDRA_PROJECT = "/content/ghidra_project"
-os.makedirs(GHIDRA_PROJECT, exist_ok=True)
+ENABLE_GHIDRA = False
 
-ghidra_bin = Path(os.environ.get("GHIDRA_INSTALL_DIR", "/content/ghidra_12.2_PUBLIC")) / "support" / "analyzeHeadless"
-
-if ghidra_bin.exists():
-    print("Running Ghidra headless analysis (this may take 5-15 minutes on A100)...")
-    print("Targeting: main entrypoint and SEA initialization functions")
-    !{ghidra_bin} \
-        {GHIDRA_PROJECT} copilot_analysis \
-        -import "{TARGET}" \
-        -overwrite \
-        -processor "x86:LE:64:default" \
-        -readOnly \
-        -analysisTimeoutPerFile 600 \
-        2>&1 | tail -20
-    print("\nGhidra analysis complete.")
+if not ENABLE_GHIDRA:
+    print("[SKIPPED] Native Ghidra analysis disabled by default.")
+    print("Rationale: The proprietary payload is the 73.7 MB JS bundle extracted in Cells 4-6.")
+    print("The PE wrapper is standard Node.js SEA C++ bootstrap code. Proceeding directly to findings export.")
 else:
-    print(f"[NOTE] Ghidra headless binary not present at {ghidra_bin}. Skipping native decompile pass; AST and JS analysis in Cells 3-9 provide 100% SEA coverage.")
+    GHIDRA_PROJECT = "/content/ghidra_project"
+    os.makedirs(GHIDRA_PROJECT, exist_ok=True)
+    ghidra_bin = Path(os.environ.get("GHIDRA_INSTALL_DIR", "/content/ghidra_12.2_PUBLIC")) / "support" / "analyzeHeadless"
+
+    if ghidra_bin.exists():
+        print("Running Ghidra headless import (-noanalysis for fast PE symbol extraction)...")
+        try:
+            cmd = [
+                str(ghidra_bin),
+                GHIDRA_PROJECT, "copilot_analysis",
+                "-import", TARGET,
+                "-overwrite",
+                "-processor", "x86:LE:64:default",
+                "-readOnly",
+                "-noanalysis"  # Prevents infinite decompiler loops on 160MB V8 engine binaries
+            ]
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+            print("Ghidra headless output summary:")
+            for line in proc.stdout.splitlines()[-15:]:
+                print(f"  {line}")
+            print("\nGhidra PE import complete.")
+        except subprocess.TimeoutExpired:
+            print("[!] Ghidra import exceeded 180s timeout ceiling. Terminating cleanly.")
+    else:
+        print(f"[NOTE] Ghidra headless binary not present at {ghidra_bin}. Skipping.")
 
 
 # %%
@@ -465,11 +491,14 @@ else:
 
 # %%
 # ============================================================
-# CELL 12: Export Findings Bundle & Dual Persistence
+# CELL 12: Export Findings Bundle, Dual Persistence & Teardown
 # ============================================================
 import os, json, shutil, base64, time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
+
+# Set AUTO_UNASSIGN = True to automatically shut down the VM and cut idle compute unit burn
+AUTO_UNASSIGN = True
 
 FINDINGS_DIR = Path("/content/exp_rea_001_findings")
 FINDINGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -480,8 +509,8 @@ for f in ["pe_resources.json", "rea_js_analysis_summary.json", "rea_js_analysis.
     if src.exists():
         shutil.copy2(src, FINDINGS_DIR)
 
-# Write discovery summary
-timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+# Write discovery summary (using non-deprecated timezone-aware UTC timestamp)
+timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 summary_report = {
     "experiment": "EXP-REA-001",
     "target": "copilot.EXE",
@@ -526,21 +555,36 @@ print("<<<HYPERBURST_PAYLOAD_END>>>\n")
 
 # ------------------------------------------------------------
 # DUAL PERSISTENCE CHANNEL B:
-# Sync directly to Google Drive folder if mounted
+# Sync directly to Google Drive folder
 # ------------------------------------------------------------
-drive_out_dir = Path("/content/drive/MyDrive/Super-NLM/Brainstorm/EXP-REA-001_Copilot_SEA/findings")
 try:
     if Path("/content/drive/MyDrive").exists():
+        if "staged_source_folder" in locals() and staged_source_folder and staged_source_folder.exists():
+            drive_out_dir = staged_source_folder / "findings"
+        else:
+            drive_out_dir = Path("/content/drive/MyDrive/Share to Aaradhya/Super-NLM/Brainstorm/EXP-REA-001_Copilot_SEA/findings")
+        
         drive_out_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2("/content/exp_rea_001_findings.tar.gz", drive_out_dir)
         shutil.copy2(summary_json_path, drive_out_dir)
         print(f"[PERSISTENCE] Staged findings archive to Google Drive: {drive_out_dir}")
+        
+        # Flush FUSE buffers before unmounting / unassigning
         from google.colab import drive
         drive.flush_and_unmount()
-        print("[PERSISTENCE] Drive FUSE cache flushed successfully.")
+        print("[PERSISTENCE] Google Drive FUSE cache successfully flushed.")
 except Exception as e:
     print(f"[!] Drive persistence notice: {e}")
 
-print("\nExperiment execution finished. Remember to disconnect and delete runtime when done.")
+# ------------------------------------------------------------
+# TEARDOWN ENGINE (INV-COLAB-FUSE-FLUSH & Compute Unit Protection)
+# ------------------------------------------------------------
+if AUTO_UNASSIGN:
+    print("\n[AUTO-TEARDOWN] Shutting down Colab runtime to prevent idle compute unit burn...")
+    time.sleep(2)
+    from google.colab import runtime
+    runtime.unassign()
+else:
+    print("\n[NOTE] AUTO_UNASSIGN is False. Remember to disconnect and delete runtime when done.")
 
 

@@ -353,3 +353,36 @@ def find_file_bounded(root: str, target: str, max_depth: int = 4) -> str | None:
             return os.path.join(dirpath, target)
     return None
 ```
+
+
+### `INV-COLAB-UNASSIGN-MANDATORY`
+**Every batch, training, extraction, or research Colab notebook MUST include automatic container teardown (`runtime.unassign()`) by default in its final execution cell.**
+
+Leaving `runtime.unassign()` as a commented-out suggestion or manual reminder is **strictly forbidden**. On high-cost GPU/TPU instances (A100-HighMem @ 6.77 CU/hr), leaving the runtime active burns user capital with zero productive work.
+
+```python
+# Mandatory terminal cell structure
+AUTO_UNASSIGN = True
+
+# 1. Flush FUSE buffers to Google Drive
+from google.colab import drive
+drive.flush_and_unmount()
+
+# 2. Hard VM shutdown to prevent idle compute unit burn
+if AUTO_UNASSIGN:
+    import time
+    from google.colab import runtime
+    print("[TEARDOWN] Shutting down Colab runtime to prevent idle compute unit burn...")
+    time.sleep(2)
+    runtime.unassign()
+```
+
+### `INV-COLAB-ZERO-SILENT-PIPES`
+**Never pipe long-running CLI tools into buffering filters like `| tail -N`, `| head -N`, or `| grep` in Colab notebooks.**
+
+Piping stdout through `tail -N` creates a blocking buffer deadlock: zero log output is streamed to the browser until the entire upstream process closes stdout. If the command enters a long-running phase, deadlock, or prompt, the notebook appears permanently frozen with no diagnostic telemetry. All commands must stream directly or use real-time Python subprocess wrappers.
+
+### `INV-COLAB-NATIVE-DISASSEMBLY-GUARD`
+**Heavy native disassemblers (Ghidra, IDA, radare2) must never run full-program decompilation on Single Executable Applications (SEA, Electron, PyInstaller) without `-noanalysis` or an explicit Python subprocess timeout ceiling ($\le 180\text{s}$).**
+
+The proprietary application logic resides inside the embedded resource/bundle blob, which is cleanly extractable via native resource tools in seconds. Running full decompiler passes against 100MB+ native binaries (which consist of standard V8, Node.js, or Chromium C++ bootstrap engines) causes multi-hour CPU freezes and severe compute unit drain.

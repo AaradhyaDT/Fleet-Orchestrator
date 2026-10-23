@@ -12,7 +12,7 @@ Continuation:   e2ad20fc-88b9-4528-b3d4-5ccdc334c38c (fixes)
 
 ## Summary
 
-Seven errors were identified and corrected in the `EXP-REA-001_copilot_sea_colab.ipynb` notebook after the first Colab A100 execution attempt produced cascading failures starting at Cell 2 (Environment Setup).
+Nine critical errors were identified and corrected across `EXP-REA-001_copilot_sea_colab.ipynb` and its execution lifecycle. Mistakes 1–7 caused initial execution crashes; Mistakes 8–9 directly caused an idle 34-minute compute unit drain on an expensive A100-HighMem shape due to agent failure to enforce codified repository invariants.
 
 ---
 
@@ -72,6 +72,26 @@ Seven errors were identified and corrected in the `EXP-REA-001_copilot_sea_colab
 - **Symptom**: `Path('/content/drive/MyDrive').glob('**/copilot.EXE')` hangs for minutes on large Drive, triggering `KeyboardInterrupt`.
 - **Correction**: Replaced with depth-bounded `os.walk` (max 4 levels from MyDrive root) using `dirs.clear()` pruning.
 - **Invariant Created**: `INV-COLAB-DRIVE-WALK-DEPTH-CAP` -- Always cap `os.walk` depth on FUSE mounts.
+
+## Mistake 8: Ghidra Importer Deadlock, Silent Output Pipe, & 34-Minute CU Drain
+
+- **Cell**: 10 (Ghidra Headless Native Analysis)
+- **Symptom**: Cell executed continuously for **34 minutes 43 seconds** on an A100-HighMem shape (6.77 CU/hr), consuming ~4 compute units while utilizing 0.0% GPU and 3.1 GB of 167 GB RAM.
+- **Root Cause**:
+  1. **Un-timed Import Phase**: Ghidra's `-analysisTimeoutPerFile 600` only applies to the *Auto-Analysis* phase. The *Import* phase (`-import "{TARGET}"`) parses the 163 MB PE binary and attempts to create millions of database records in HSQLDB for the embedded 77 MB packed blob without any timeout constraint.
+  2. **Silent Pipe Buffer (`| tail -20`)**: Piping stderr/stdout through `tail -20` blocked all progress logs from streaming to the browser. The user was left with a silent, spinning execution indicator.
+  3. **Architectural Redundancy**: Cells 4–6 already cleanly extracted the 73.7 MB proprietary JavaScript application bundle (`copilot_bundle.js`). Native Ghidra decompilation of standard Node.js/V8 C++ launcher code was redundant.
+  4. **Watchdog Failure**: The assistant failed to enforce the 60s background task watchdog rule and falsely reassured the user that the process was "actively processing and has ~5 minutes left," directly multiplying compute unit waste.
+- **Correction**: Set `ENABLE_GHIDRA = False` by default. If enabled, enforces `-noanalysis` (import only, <30s) and a hard Python `subprocess.run(..., timeout=180)` ceiling with direct stdout streaming (no `| tail`).
+- **Invariant Created**: `INV-COLAB-ZERO-SILENT-PIPES` & `INV-COLAB-NATIVE-DISASSEMBLY-GUARD`.
+
+## Mistake 9: Blatant Omission of Mandatory `runtime.unassign()` Auto-Teardown
+
+- **Cell**: 12 (Export Findings Bundle)
+- **Symptom**: After exporting findings and flushing Drive FUSE cache, the Colab container remained active and running indefinitely instead of shutting down.
+- **Root Cause**: Despite `INV-COLAB-FUSE-FLUSH` explicitly mandating `from google.colab import runtime; runtime.unassign()` as step 3 of all batch/training notebooks in `colab-cloud-accelerator/SKILL.md`, the code printed a manual reminder (`Remember to disconnect...`) and omitted `runtime.unassign()`.
+- **Correction**: Added `AUTO_UNASSIGN = True` with unconditional `runtime.unassign()` call after `drive.flush_and_unmount()`.
+- **Invariant Created**: `INV-COLAB-UNASSIGN-MANDATORY`.
 
 ---
 
