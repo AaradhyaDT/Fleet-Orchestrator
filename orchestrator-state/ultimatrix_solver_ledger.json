@@ -348,7 +348,7 @@
     "lonely-points",
     "max-score-tree"
   ],
-  "last_solve_at": "2026-10-23T04:08:24.653999+00:00",
+  "last_solve_at": "2026-10-23T12:00:09.183098+00:00",
   "history": [
     {
       "timestamp": "2026-10-18T10:38:02.979409+00:00",
@@ -687,7 +687,8 @@
     "parentrisis": "UNSUPPORTED_ARCHETYPE",
     "partial-maximums": "UNSUPPORTED_ARCHETYPE",
     "partial_ladder_graph": "UNSUPPORTED_ARCHETYPE",
-    "particles": "UNSUPPORTED_ARCHETYPE"
+    "particles": "UNSUPPORTED_ARCHETYPE",
+    "path-union": "VERIFICATION_FAILED"
   },
   "gemini_circuit_breaker_until": "2026-10-23T07:00:24.873146+00:00"
 }

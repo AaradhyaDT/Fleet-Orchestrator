@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-23T04:08:41.030143+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-23T12:00:24.067785+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[vllm-project/vllm]** [[Feature]: Unify MoE "Oracles" with Class Structure](https://github.com/vllm-project/vllm/issues/37753) (Comments: 12, Salience: 2.0)
-- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 1, Salience: 1.2)
-- **[haoxiang-xu/PuPu]** [Source Ollama library metadata from the registry and move page parsing out of the renderer](https://github.com/haoxiang-xu/PuPu/issues/230) (Comments: 0, Salience: 1.0)
-- **[hsaghir/looplet]** [Document a verified llama-cpp-python local-model recipe](https://github.com/hsaghir/looplet/issues/6) (Comments: 2, Salience: 1.4)
+- **[vllm-project/vllm]** [[Feature]: Unify MoE "Oracles" with Class Structure](https://github.com/vllm-project/vllm/issues/37753) (Comments: 15, Salience: 2.0)
+- **[PocketLLM/pocketllm-lite]** [[R8] [device-evidence] Compatibility matrix drive: run + report on 3+ arm64 phones (no code)](https://github.com/PocketLLM/pocketllm-lite/issues/384) (Comments: 0, Salience: 1.0)
+- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 2, Salience: 1.4)
+- **[ggml-org/llama.cpp]** [GGUF convert support for Vibevoice](https://github.com/ggml-org/llama.cpp/issues/17488) (Comments: 7, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
@@ -20,26 +20,26 @@
 - **[huggingface/transformers]** Tag `v5.20.2` - *Patch release v5.20.2* ([Release](https://github.com/huggingface/transformers/releases/tag/v5.20.2))
 
 ## 3. Algorithmic Codon Archive Targets (`CP`)
-- **[ShahjalalShohag/code-library]** ⭐ 3734 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
+- **[ShahjalalShohag/code-library]** ⭐ 3735 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
 - **[kth-competitive-programming/kactl]** ⭐ 3576 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1769 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
 - **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-22T11:16:34Z`
-- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-19T08:00:25Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-23T06:57:31Z`
+- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-23T07:09:56Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-22T11:57:49Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-23T07:46:01Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
 - **[Anthropic]** [Staff Software Engineer, Infrastructure (Distributed Systems)](https://job-boards.greenhouse.io/anthropic/jobs/5387083008) (London, UK) — *Salience: 3.0*
 - **[Anthropic]** [Staff+ Software Engineer, Infrastructure (Distributed Systems)](https://job-boards.greenhouse.io/anthropic/jobs/4970314008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
-- **[OpenAI]** [Technical Program Manager, Compute Infrastructure](https://jobs.ashbyhq.com/openai/8fb1615c-34bf-47c4-a1d1-b7b2f836bbd3) (San Francisco) — *Salience: 2.0*
 - **[OpenAI]** [Software Engineer, Agent Infrastructure](https://jobs.ashbyhq.com/openai/c1316397-25bb-4add-9e9d-0e3ea8ba929a) (San Francisco) — *Salience: 2.0*
 - **[OpenAI]** [Software Engineer, Compute Foundations Systems](https://jobs.ashbyhq.com/openai/770d5c3f-4e72-4b49-aec4-d444e8ad7a64) (San Francisco) — *Salience: 2.0*
 - **[OpenAI]** [Critical Facilities Lead, Compute Infrastructure](https://jobs.ashbyhq.com/openai/13cdb1b1-8c21-4bff-8201-f7ca904e181d) (US - Remote) — *Salience: 2.0*
 - **[OpenAI]** [Software Engineer, GPU Infrastructure - HPC](https://jobs.ashbyhq.com/openai/f58cb1eb-9642-4a4d-a14d-d7a57d583a11) (San Francisco) — *Salience: 2.0*
 - **[OpenAI]** [Strategic Sourcing Manager,  Compute Infrastructure](https://jobs.ashbyhq.com/openai/debaf5f8-c166-4b35-81c1-5bda75124373) (San Francisco) — *Salience: 2.0*
 - **[OpenAI]** [Systems Generalist, GPT Infrastructure](https://jobs.ashbyhq.com/openai/78c2a68b-cc77-4c62-8891-96afb603650a) (San Francisco) — *Salience: 2.0*
+- **[OpenAI]** [Software Engineer, Platform Systems](https://jobs.ashbyhq.com/openai/5e4ed6d1-2417-4bf5-bae0-905931c488e3) (San Francisco) — *Salience: 2.0*
