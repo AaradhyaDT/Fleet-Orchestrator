@@ -362,6 +362,16 @@ This repository contains optional personal Google Drive and NotebookLM integrati
   - Zero third-party dependencies (pure standard library `urllib` with exponential backoff and jitter).
   - Tracked via [`drive-manifest.json`](drive-manifest.json) using SHA-256 change detection.
 
+- **High-Throughput A100 Academic Study Hub Synthesizer (`tools/colab_iv_ii_a100_synthesizer.py`)**:
+  - Parallel batch generation of master syllabus dossiers (`StudyHub.md`) across all 4 IV-II engineering subjects (EX 756 Telecommunications, CE 752 Engineering Professional Practice, EX 758 Energy Environment & Society, CT 751 Information Systems).
+  - Integrates with Google Colab A100 GPU (`colab.bat`) for rapid continuous batch synthesis with zero compute-unit waste.
+  - Generates official IOE exam mark allocations, canonical mathematical formulas ($...$ / $$...$$ KaTeX), and exam trap warnings.
+
+- **Nepal Engineering Council (NEC) 4-Year License Master Hub (`D:\Misc Aaradhya\NEC_License_Prep\`)**:
+  - Grounded mapping across all 8 semesters (Years 1 to 4) into the official 10-domain NEC examination matrix (100 MCQs, 50% pass mark).
+  - Anchored to Issue [#230](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/230) and governed under Issue [#227](https://github.com/AaradhyaDT/Fleet-Orchestrator/issues/227) academic autopilot gate.
+  - Domain 10 High-Yield Pack (`domain_10_professional_practice_mcq_pack.md`) covering NEC Act 2055, PPA 2063, FIDIC, Tort Liability, CPM/PERT and 20 verified MCQs.
+
 ---
 
 ## 7. License
