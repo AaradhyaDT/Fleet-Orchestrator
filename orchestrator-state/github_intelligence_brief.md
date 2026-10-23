@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-22T12:37:25.667989+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-23T04:08:41.030143+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 12, Salience: 2.0)
-- **[dynalm-project/dynalm]** [NEON kernels for Q2_K, Q3_K and Q5_K (DynaCore exact mode)](https://github.com/dynalm-project/dynalm/issues/18) (Comments: 0, Salience: 1.0)
-- **[MakazhanAlpamys/Soup]** [[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)](https://github.com/MakazhanAlpamys/Soup/issues/275) (Comments: 12, Salience: 2.0)
-- **[microsoft/PyRIT]** [FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix](https://github.com/microsoft/PyRIT/issues/2489) (Comments: 7, Salience: 2.0)
+- **[vllm-project/vllm]** [[Feature]: Unify MoE "Oracles" with Class Structure](https://github.com/vllm-project/vllm/issues/37753) (Comments: 12, Salience: 2.0)
+- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 1, Salience: 1.2)
+- **[haoxiang-xu/PuPu]** [Source Ollama library metadata from the registry and move page parsing out of the renderer](https://github.com/haoxiang-xu/PuPu/issues/230) (Comments: 0, Salience: 1.0)
+- **[hsaghir/looplet]** [Document a verified llama-cpp-python local-model recipe](https://github.com/hsaghir/looplet/issues/6) (Comments: 2, Salience: 1.4)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
@@ -21,7 +21,7 @@
 
 ## 3. Algorithmic Codon Archive Targets (`CP`)
 - **[ShahjalalShohag/code-library]** ⭐ 3734 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
-- **[kth-competitive-programming/kactl]** ⭐ 3575 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
+- **[kth-competitive-programming/kactl]** ⭐ 3576 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1769 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
 - **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))

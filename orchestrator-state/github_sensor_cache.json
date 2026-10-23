@@ -1,66 +1,70 @@
 {
-  "timestamp": "2026-10-22T12:37:25.667989+00:00",
-  "timestamp_epoch": 1792672632.4933944,
+  "timestamp": "2026-10-23T04:08:41.030143+00:00",
+  "timestamp_epoch": 1792728504.9958754,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
       {
-        "id": "MakazhanAlpamys/Soup#797",
-        "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/797",
+        "id": "vllm-project/vllm#37753",
+        "title": "[Feature]: Unify MoE \"Oracles\" with Class Structure",
+        "repo": "vllm-project/vllm",
+        "url": "https://github.com/vllm-project/vllm/issues/37753",
         "labels": [
-          "bug",
           "help wanted",
-          "claimed",
-          "difficulty:6",
-          "area:training"
+          "good first issue",
+          "feature request"
         ],
         "comments": 12,
-        "created_at": "2026-09-11T11:08:01Z",
-        "updated_at": "2026-10-22T09:10:00Z",
+        "created_at": "2026-03-21T17:29:49Z",
+        "updated_at": "2026-10-23T04:06:59Z",
         "salience": 2.0
       },
       {
-        "id": "dynalm-project/dynalm#18",
-        "title": "NEON kernels for Q2_K, Q3_K and Q5_K (DynaCore exact mode)",
-        "repo": "dynalm-project/dynalm",
-        "url": "https://github.com/dynalm-project/dynalm/issues/18",
+        "id": "XHToken/Spark-X2.6#16",
+        "title": "HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????",
+        "repo": "XHToken/Spark-X2.6",
+        "url": "https://github.com/XHToken/Spark-X2.6/issues/16",
         "labels": [
-          "enhancement",
+          "good first issue",
+          "help wanted",
+          "HER Hack-Astron",
+          "reward",
+          "bounty"
+        ],
+        "comments": 1,
+        "created_at": "2026-10-23T03:43:51Z",
+        "updated_at": "2026-10-23T04:02:11Z",
+        "salience": 1.2
+      },
+      {
+        "id": "haoxiang-xu/PuPu#230",
+        "title": "Source Ollama library metadata from the registry and move page parsing out of the renderer",
+        "repo": "haoxiang-xu/PuPu",
+        "url": "https://github.com/haoxiang-xu/PuPu/issues/230",
+        "labels": [
+          "improvement",
           "help wanted"
         ],
         "comments": 0,
-        "created_at": "2026-10-22T08:48:26Z",
-        "updated_at": "2026-10-22T08:48:26Z",
+        "created_at": "2026-08-23T15:47:55Z",
+        "updated_at": "2026-10-22T23:57:48Z",
         "salience": 1.0
       },
       {
-        "id": "MakazhanAlpamys/Soup#275",
-        "title": "[Tracking] Recipe task-variants for the 2026 model families (DPO / GRPO / pretrain)",
-        "repo": "MakazhanAlpamys/Soup",
-        "url": "https://github.com/MakazhanAlpamys/Soup/issues/275",
+        "id": "hsaghir/looplet#6",
+        "title": "Document a verified llama-cpp-python local-model recipe",
+        "repo": "hsaghir/looplet",
+        "url": "https://github.com/hsaghir/looplet/issues/6",
         "labels": [
-          "enhancement",
-          "help wanted"
+          "documentation",
+          "help wanted",
+          "provider",
+          "launch-ready"
         ],
-        "comments": 12,
-        "created_at": "2026-06-21T09:46:15Z",
-        "updated_at": "2026-10-22T08:18:33Z",
-        "salience": 2.0
-      },
-      {
-        "id": "microsoft/PyRIT#2489",
-        "title": "FEAT Add generic GCG model adapters and an open-weight SLM compatibility matrix",
-        "repo": "microsoft/PyRIT",
-        "url": "https://github.com/microsoft/PyRIT/issues/2489",
-        "labels": [
-          "help wanted"
-        ],
-        "comments": 7,
-        "created_at": "2026-08-25T19:17:18Z",
-        "updated_at": "2026-10-22T06:13:32Z",
-        "salience": 2.0
+        "comments": 2,
+        "created_at": "2026-04-22T04:11:27Z",
+        "updated_at": "2026-10-22T19:40:53Z",
+        "salience": 1.4
       },
       {
         "id": "sauravsingla/OligoArk#18",
@@ -176,15 +180,15 @@
         "url": "https://github.com/ShahjalalShohag/code-library",
         "description": "Templates, algorithms and data structures implemented and collected for programming contests.",
         "default_branch": "main",
-        "updated_at": "2026-10-22T08:53:44Z"
+        "updated_at": "2026-10-22T21:49:37Z"
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3575,
+        "stars": 3576,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-21T15:27:28Z"
+        "updated_at": "2026-10-22T23:18:45Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
