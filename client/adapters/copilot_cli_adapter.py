@@ -48,6 +48,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         allow_custom_instructions: bool = False,
         disallow_temp_dir: bool = True,
         headless: bool = False,
+        no_auto_update: bool = True,
     ):
         caps = capabilities or self.DEFAULT_CAPABILITIES
         super().__init__(worker_id, nickname, caps)
@@ -63,6 +64,7 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         self.allow_custom_instructions = allow_custom_instructions
         self.disallow_temp_dir = disallow_temp_dir
         self.headless = headless
+        self.no_auto_update = no_auto_update
 
     @staticmethod
     def _resolve_copilot_binary() -> str:
@@ -110,6 +112,9 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
             "--no-ask-user",
             "--no-color",
         ]
+
+        if self.no_auto_update:
+            cmd.append("--no-auto-update")
 
         if self.disallow_temp_dir:
             cmd.append("--disallow-temp-dir")
@@ -237,11 +242,16 @@ class CopilotCLIAdapter(BaseWorkerAdapter):
         if self.copilot_home:
             try:
                 self.copilot_home.mkdir(parents=True, exist_ok=True)
+                (self.copilot_home / "cache").mkdir(parents=True, exist_ok=True)
+                (self.copilot_home / "pkg_cache").mkdir(parents=True, exist_ok=True)
             except Exception:
                 pass
             child_env["COPILOT_HOME"] = str(self.copilot_home)
+            child_env["COPILOT_CACHE_HOME"] = str(self.copilot_home / "cache")
+            child_env["COPILOT_PKG_CACHE_HOME"] = str(self.copilot_home / "pkg_cache")
 
         # REA-discovered runtime hardening variables (EXP-REA-001)
+        child_env["COPILOT_AUTO_UPDATE"] = "0"
         child_env["COPILOT_ALLOW_ALL"] = "true"
         child_env["COPILOT_FORCE_WINDOWS_HIDE"] = "1"
         child_env["COPILOT_DEBUG_SKIP_LAUNCH_CHECKS"] = "1"

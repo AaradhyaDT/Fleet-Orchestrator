@@ -44,6 +44,7 @@ async def test_copilot_cli_build_command():
     assert "--autopilot" in cmd
     assert "--allow-all" in cmd
     assert "--no-ask-user" in cmd
+    assert "--no-auto-update" in cmd
     assert "--model" in cmd
     assert "claude-3.7-sonnet" in cmd
     assert "--usage-output-file" in cmd
@@ -157,7 +158,12 @@ async def test_copilot_cli_env_and_credits_isolation(tmp_path):
         env_passed = kwargs.get("env", {})
         assert env_passed.get("COPILOT_GITHUB_TOKEN") == dummy_tok
         assert env_passed.get("COPILOT_HOME") == str(copilot_home)
+        assert env_passed.get("COPILOT_AUTO_UPDATE") == "0"
+        assert env_passed.get("COPILOT_CACHE_HOME") == str(copilot_home / "cache")
+        assert env_passed.get("COPILOT_PKG_CACHE_HOME") == str(copilot_home / "pkg_cache")
         assert copilot_home.exists()
+        assert (copilot_home / "cache").exists()
+        assert (copilot_home / "pkg_cache").exists()
 
 
 @pytest.mark.asyncio

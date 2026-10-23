@@ -195,8 +195,9 @@ def inspect_local_cli(binary_name: str) -> Dict[str, Any]:
             "usage_json": "--usage-output-file",
             "win_powershell_safe": "--no-eager-powershell-resolution",
             "unattended": "--no-ask-user",
+            "no_auto_update": "--no-auto-update",
         }
-        result["canonical_headless_exec"] = 'copilot -p "{prompt}" --allow-all --no-ask-user --no-eager-powershell-resolution'
+        result["canonical_headless_exec"] = 'copilot -p "{prompt}" --allow-all --no-ask-user --no-auto-update --no-eager-powershell-resolution'
 
     cache = load_grounding_cache()
     cache.setdefault("cli_tools", {})[binary] = result

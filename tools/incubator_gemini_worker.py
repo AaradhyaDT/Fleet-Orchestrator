@@ -231,13 +231,18 @@ def _copilot_generate_rfc(raw_thought: str, token: str, account_name: str) -> st
         "-s",
         "--allow-all-tools",
         "--no-ask-user",
+        "--no-auto-update",
         "--no-color",
         "--no-custom-instructions",
         "--max-ai-credits", "15",
         "--max-autopilot-continues", "3",
     ]
 
-    env = {**dict(__import__("os").environ), "GITHUB_TOKEN": token}
+    env = {
+        **dict(__import__("os").environ),
+        "GITHUB_TOKEN": token,
+        "COPILOT_AUTO_UPDATE": "0",
+    }
 
     try:
         logger.info("[Tier-2] Invoking Copilot CLI via PAT account: %s", account_name)

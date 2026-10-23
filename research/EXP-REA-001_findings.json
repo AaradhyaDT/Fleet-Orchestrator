@@ -1,0 +1,115 @@
+{
+  "experiment_id": "EXP-REA-001",
+  "title": "Reverse Engineering GitHub Copilot CLI Standalone Binary (PE/Node.js SEA Deconstruction)",
+  "evidence_tier": "EMPIRICALLY_VERIFIED",
+  "executed_on": "Google Colab (NVIDIA A100-SXM4-80GB, 167.1 GB RAM)",
+  "target": {
+    "filename": "copilot.EXE",
+    "version": "1.0.102",
+    "sha256": "fba431339a5a9b790033f45fc976f7cc6206c344cffc64f3392d478ff3fa7e8b",
+    "size_bytes": 171363104,
+    "size_mb": 163.42,
+    "format": "PE32+ executable (console) x86-64, for MS Windows",
+    "packaging": "Node.js Single Executable Application (SEA)"
+  },
+  "extraction": {
+    "pe_resource_type": "RT_RCDATA",
+    "resource_name": "NODE_SEA_BLOB",
+    "file_offset": 94044194,
+    "sea_blob_bytes": 77301514,
+    "sea_blob_mb": 73.72,
+    "loader": "sea-loader.js (Microsoft Corporation)",
+    "js_bundle_offset": 38,
+    "js_bundle_bytes": 77301476,
+    "js_bundle_mb": 73.72,
+    "extracted_filename": "copilot_bundle.js"
+  },
+  "discovered_flags": [
+    {
+      "flag": "--no-auto-update",
+      "purpose": "Disables background auto-updater checks and mutations during headless batch execution"
+    },
+    {
+      "flag": "--binary-package-identity",
+      "purpose": "Controls package signing and provenance identity verification"
+    },
+    {
+      "flag": "--binary-version",
+      "purpose": "Overrides internal binary version reported to telemetry"
+    },
+    {
+      "flag": "--prefer-version",
+      "purpose": "Runtime version pinning flag"
+    },
+    {
+      "flag": "--version",
+      "purpose": "Standard version query"
+    }
+  ],
+  "discovered_env_vars": [
+    {
+      "var": "COPILOT_HOME",
+      "purpose": "Root directory for session SQLite database, authentication tokens, and worker configs"
+    },
+    {
+      "var": "COPILOT_AUTO_UPDATE",
+      "purpose": "Environment switch to disable automatic binary updates globally (0 or false)"
+    },
+    {
+      "var": "COPILOT_CACHE_HOME",
+      "purpose": "Redirects session and worker runtime cache away from default user profile"
+    },
+    {
+      "var": "COPILOT_PKG_CACHE_HOME",
+      "purpose": "Redirects package cache for sandboxed multi-worker process isolation"
+    },
+    {
+      "var": "COPILOT_CLI_DIST_DIR",
+      "purpose": "Distribution asset directory override"
+    },
+    {
+      "var": "COPILOT_CLI_RESOLVED_DIST_DIR",
+      "purpose": "Resolved distribution asset directory"
+    },
+    {
+      "var": "COPILOT_CLI_BINARY_VERSION",
+      "purpose": "Binary version string override"
+    },
+    {
+      "var": "COPILOT_CLI_VERSION",
+      "purpose": "CLI interface version override"
+    },
+    {
+      "var": "TESTING_TAR_FAKE_PLATFORM",
+      "purpose": "Internal GitHub test hook for platform mocking"
+    },
+    {
+      "var": "__FAKE_PLATFORM__",
+      "purpose": "Internal test hook for mocking host OS"
+    },
+    {
+      "var": "__FAKE_FS_O_FILENAME__",
+      "purpose": "Internal filesystem mocking hook"
+    }
+  ],
+  "discovered_endpoints": [
+    "http://oneocsp.microsoft.com/ocsp0",
+    "http://www.microsoft.com/pkiops/certs/Microsoft"
+  ],
+  "drive_storage": {
+    "folder_id": "13XkC6V_duMVKKobFchcC_4AMoZMERSvX",
+    "folder_path": "Super-NLM > Brainstorm > EXP-REA-001_Copilot_SEA > findings",
+    "artifacts": [
+      {
+        "filename": "exp_rea_001_findings.tar.gz",
+        "size_bytes": 76775816,
+        "contents": "copilot_bundle.js (73.7MB) and discovery metadata"
+      },
+      {
+        "filename": "discovery_summary.json",
+        "size_bytes": 1215,
+        "contents": "Raw JSON telemetry payload"
+      }
+    ]
+  }
+}
