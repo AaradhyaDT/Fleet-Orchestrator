@@ -9,6 +9,7 @@ exclude = [
     "mcp-servers",
     "scratch",
     ".gemini",
+    "research",
 ]
 
 [lint]
