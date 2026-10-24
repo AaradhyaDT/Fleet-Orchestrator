@@ -1,9 +1,23 @@
 {
-  "timestamp": "2026-10-24T05:52:22.742310+00:00",
-  "timestamp_epoch": 1792821130.4764223,
+  "timestamp": "2026-10-24T06:34:04.114116+00:00",
+  "timestamp_epoch": 1792823630.3568232,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "xaviercallens/HiveMind#130",
+        "title": "[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck",
+        "repo": "xaviercallens/HiveMind",
+        "url": "https://github.com/xaviercallens/HiveMind/issues/130",
+        "labels": [
+          "enhancement",
+          "help wanted"
+        ],
+        "comments": 0,
+        "created_at": "2026-10-24T06:30:45Z",
+        "updated_at": "2026-10-24T06:30:45Z",
+        "salience": 1.0
+      },
       {
         "id": "0xShug0/audio.cpp#34",
         "title": "Roadmap: From More Models to Better Models (and Model Waiting List)",
@@ -50,22 +64,6 @@
         "comments": 7,
         "created_at": "2026-10-23T03:43:51Z",
         "updated_at": "2026-10-23T21:27:33Z",
-        "salience": 2.0
-      },
-      {
-        "id": "vllm-project/vllm-omni#8586",
-        "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
-        "repo": "vllm-project/vllm-omni",
-        "url": "https://github.com/vllm-project/vllm-omni/issues/8586",
-        "labels": [
-          "enhancement",
-          "help wanted",
-          "diffusion",
-          "RFC"
-        ],
-        "comments": 34,
-        "created_at": "2026-10-07T14:16:56Z",
-        "updated_at": "2026-10-23T19:47:13Z",
         "salience": 2.0
       },
       {

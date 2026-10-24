@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 346,
-  "tasks_solved": 346,
+  "tasks_attempted": 347,
+  "tasks_solved": 347,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -348,16 +348,11 @@
     "lonely-points",
     "max-score-tree",
     "penguin-dance",
-    "permutation-shift"
+    "permutation-shift",
+    "piece-of-cake"
   ],
-  "last_solve_at": "2026-10-24T04:50:56.022681+00:00",
+  "last_solve_at": "2026-10-24T06:33:50.354863+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:40:56.016470+00:00",
-      "slug": "least-even-digits",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-18T10:41:33.356236+00:00",
       "slug": "license-plates",
@@ -651,6 +646,12 @@
       "slug": "permutation-shift",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-24T06:33:50.354793+00:00",
+      "slug": "piece-of-cake",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 4
     }
   ],
   "attempted_slugs": {

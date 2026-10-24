@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T05:52:22.742310+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T06:34:04.114116+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 0, Salience: 1.0)
 - **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
 - **[smusali/echoChain]** [[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)](https://github.com/smusali/echoChain/issues/15) (Comments: 0, Salience: 1.0)
 - **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 7, Salience: 2.0)
-- **[vllm-project/vllm-omni]** [[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving](https://github.com/vllm-project/vllm-omni/issues/8586) (Comments: 34, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
