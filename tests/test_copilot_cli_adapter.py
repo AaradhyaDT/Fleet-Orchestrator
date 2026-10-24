@@ -525,3 +525,99 @@ async def test_copilot_cli_execute_task_merges_sqlite_telemetry(tmp_path):
         assert res["session_telemetry"]["total_reasoning_tokens"] == 200
         assert res["rate_limit_kind"] is None
 
+
+@pytest.mark.asyncio
+async def test_copilot_cli_round_robin_pat_rotation(tmp_path):
+    from client.copilot_token_pool import CopilotTokenPool
+
+    tok_a = "mock_" + "pat_rotation_token_alpha"
+    tok_b = "mock_" + "pat_rotation_token_beta"
+
+    pool = CopilotTokenPool()
+    pool.add_account(token=tok_a, name="worker_alpha", worker_id="copilot-w1", copilot_home=tmp_path / "home_a")
+    pool.add_account(token=tok_b, name="worker_beta", worker_id="copilot-w2", copilot_home=tmp_path / "home_b")
+
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-pool-runner",
+        nickname="Pool Runner",
+        copilot_path="copilot.exe",
+        token_pool=pool,
+        rotate_pats=True,
+    )
+
+    captured_envs = []
+
+    mock_proc = AsyncMock()
+    mock_proc.returncode = 0
+    mock_proc.communicate.return_value = (b"Task prompt output", b"")
+
+    async def mock_spawn(*args, **kwargs):
+        captured_envs.append(kwargs.get("env", {}))
+        return mock_proc
+
+    with patch("client.adapters.copilot_cli_adapter.spawn_background", side_effect=mock_spawn):
+        # First call uses tok_a
+        r1 = await adapter.execute_prompt("Prompt 1")
+        assert r1["success"] is True
+        assert r1["pat_account_name"] == "worker_alpha"
+        assert captured_envs[0]["COPILOT_GITHUB_TOKEN"] == tok_a
+        assert captured_envs[0]["COPILOT_HOME"] == str(tmp_path / "home_a")
+
+        # Second call uses tok_b
+        r2 = await adapter.execute_prompt("Prompt 2")
+        assert r2["success"] is True
+        assert r2["pat_account_name"] == "worker_beta"
+        assert captured_envs[1]["COPILOT_GITHUB_TOKEN"] == tok_b
+        assert captured_envs[1]["COPILOT_HOME"] == str(tmp_path / "home_b")
+
+        # Third call rotates back to tok_a
+        r3 = await adapter.execute_prompt("Prompt 3")
+        assert r3["success"] is True
+        assert r3["pat_account_name"] == "worker_alpha"
+        assert captured_envs[2]["COPILOT_GITHUB_TOKEN"] == tok_a
+
+
+@pytest.mark.asyncio
+async def test_copilot_cli_pat_retry_on_429(tmp_path):
+    from client.copilot_token_pool import CopilotTokenPool
+
+    tok_fail = "mock_" + "pat_429_token_fail"
+    tok_pass = "mock_" + "pat_429_token_pass"
+
+    pool = CopilotTokenPool()
+    pool.add_account(token=tok_fail, name="failing_acc", worker_id="copilot-w1", copilot_home=tmp_path / "home_fail")
+    pool.add_account(token=tok_pass, name="passing_acc", worker_id="copilot-w2", copilot_home=tmp_path / "home_pass")
+
+    adapter = CopilotCLIAdapter(
+        worker_id="cli-retry-runner",
+        nickname="Retry Runner",
+        copilot_path="copilot.exe",
+        token_pool=pool,
+        rotate_pats=True,
+        max_retries_on_rate_limit=1,
+    )
+
+    call_count = 0
+
+    async def mock_spawn(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        proc = AsyncMock()
+        if call_count == 1:
+            proc.returncode = 1
+            proc.communicate.return_value = (b"", b"HTTP 429 Too Many Requests: user_model_rate_limited")
+        else:
+            proc.returncode = 0
+            proc.communicate.return_value = (b"Success on failover token", b"")
+        return proc
+
+    with patch("client.adapters.copilot_cli_adapter.spawn_background", side_effect=mock_spawn):
+        res = await adapter.execute_prompt("Prompt requiring failover")
+        assert res["success"] is True
+        assert res["pat_account_name"] == "passing_acc"
+        assert call_count == 2
+        # failing_acc should be marked in cooldown
+        summary = pool.get_summary()
+        assert summary["cooldown_accounts"] == 1
+
+

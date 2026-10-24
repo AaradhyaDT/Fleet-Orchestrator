@@ -684,12 +684,51 @@ def cmd_reconcile(args: argparse.Namespace) -> None:
     print("=" * 80 + "\n")
 
 
+async def cmd_prompt(args: argparse.Namespace) -> None:
+    """Executes prompt via Copilot CLI with round-robin PAT rotation outside chat windows."""
+    from client.copilot_token_pool import CopilotTokenPool
+
+    pool = CopilotTokenPool.from_env_fleet(PROJECT_ROOT)
+    adapter = CopilotCLIAdapter(
+        worker_id="copilot-fleet-prompt",
+        nickname="Fleet Prompt",
+        model=args.model,
+        auto_tier=args.auto_tier,
+        worktree=args.worktree,
+        timeout=args.timeout,
+        token_pool=pool,
+        rotate_pats=True,
+    )
+    result = await adapter.execute_prompt(args.prompt_text)
+    if getattr(args, "json", False):
+        print(json.dumps(result, indent=2))
+    else:
+        status_tag = "[SUCCESS]" if result.get("success") else "[FAILED]"
+        account_name = result.get("pat_account_name", "default")
+        model = result.get("model_used", args.model or "auto")
+        print(f"{status_tag} Account: {account_name} | Model: {model}")
+        print("-" * 60)
+        if result.get("result_text"):
+            print(result["result_text"])
+        if not result.get("success") and result.get("error"):
+            print(f"Error: {result['error']}", file=sys.stderr)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Copilot Multi-Account Fleet Controller")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("status", help="Show fleet account status and credit headroom")
     subparsers.add_parser("canary", help="Run concurrent canary ping across ready accounts")
+
+    # Prompt subparser
+    prompt_parser = subparsers.add_parser("prompt", help="Execute prompt directly with round-robin PAT rotation")
+    prompt_parser.add_argument("prompt_text", type=str, help="Prompt text to execute")
+    prompt_parser.add_argument("--model", type=str, default=None, help="Target model (e.g. claude-3.7-sonnet, gpt-5.4, auto)")
+    prompt_parser.add_argument("--auto-tier", choices=["speed", "quality"], default=None, help="Auto model selection tier")
+    prompt_parser.add_argument("--timeout", type=float, default=180.0, help="Execution timeout in seconds")
+    prompt_parser.add_argument("--worktree", type=str, default=None, help="Working directory / worktree path")
+    prompt_parser.add_argument("--json", action="store_true", help="Output execution results as JSON")
 
     # Dashboard subparser
     dash_parser = subparsers.add_parser("dashboard", help="Show real-time credit burn rate and quota telemetry dashboard")
@@ -756,6 +795,8 @@ def main() -> None:
         cmd_submit(args)
     elif args.command == "batch":
         asyncio.run(cmd_batch(args))
+    elif args.command == "prompt":
+        asyncio.run(cmd_prompt(args))
     elif args.command == "prune":
         asyncio.run(cmd_prune(args))
 
