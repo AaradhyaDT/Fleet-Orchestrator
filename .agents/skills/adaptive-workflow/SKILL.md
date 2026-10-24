@@ -9,6 +9,16 @@ Enforces context firebreak (`INV-CTX-FIREBREAK`), CPM DAGs (`INV-CPM-SOLVER`), 3
 
 ---
 
+## 0. Operating Invariant: Context Firebreak Default (`INV-FIREBREAK-DEFAULT`)
+
+> [!IMPORTANT]
+> **Default Execution Posture**:
+> 1. **Default Mode**: When invoking or operating under `/fleet-orchestrator` or worker fleet dispatch, the system **MUST default unconditionally to `Context Firebreak` mode**.
+> 2. **Token & Credit Preservation**: Zero conversational padding, interactive speculation, or in-turn polling loops in the main thread. Delegate tasks to background workers (`.\fleet.bat run-task`, `fleet_commander.py`, or `copilot_queue_worker.py`), output a concise manifest receipt ($\le 300$ words), and yield execution control.
+> 3. **Auto-Adaptation Gate**: Triage matrix calculations, 2D orthogonal walks, or multi-archetype adaptation routines run **ONLY if explicitly requested** by the user (e.g. "adapt workflow", "run triage", "how do I use the fleet?"). For normal task execution, bypass interactive meta-chatter and proceed directly to worker dispatch.
+
+---
+
 ## 1. Command Hierarchy & Context Firebreak
 
 ```mermaid
