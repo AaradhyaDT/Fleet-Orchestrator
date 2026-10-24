@@ -61,11 +61,14 @@ def _extract_option_and_reason(text: str) -> tuple[str, str]:
             if cand and cand[0].upper() in "ABCD":
                 option_letter = cand[0].upper()
                 break
+
     if option_letter == "?":
         for char in ["A", "B", "C", "D"]:
-            if re.search(rf"(?:Option\s+{char}|\({char}\)|\*\*{char}\*\*|^{char}[\.\:\—\-\)])", text, re.IGNORECASE):
+            # Match formats like: "C —", "C -", "C: ", "C. ", "(C)", "**C**", "Option C"
+            if re.search(rf"(?:Option\s+{char}|\({char}\)|\*\*{char}\*\*|^\s*{char}\s*[\.\:\—\-\–\)]|^\s*{char}\s+[A-Za-z])", text, re.IGNORECASE | re.MULTILINE):
                 option_letter = char
                 break
+
     for line in lines:
         if line.startswith(option_letter) and len(line) < 5:
             continue
@@ -416,6 +419,96 @@ def _send_localsend_payload_sync(req: QALocalSendRelayRequest, peer: dict[str, A
     }
 
 
+# Cache for fellowship syllabus reference chunks
+_FELLOWSHIP_KNOWLEDGE_CACHE: list[dict[str, str]] = []
+
+
+def _load_fellowship_knowledge_chunks() -> list[dict[str, str]]:
+    """Loads and caches syllabus snippets from FuseAIF2026 exam prep documents for instant RAG lookup."""
+    global _FELLOWSHIP_KNOWLEDGE_CACHE
+    if _FELLOWSHIP_KNOWLEDGE_CACHE:
+        return _FELLOWSHIP_KNOWLEDGE_CACHE
+
+    staged_dir = Path(r"F:\Aaradhya-Dev-Tamrakar\FuseAIF2026\docs\exam_prep\staged_sources")
+    if not staged_dir.exists():
+        return []
+
+    chunks: list[dict[str, str]] = []
+    target_files = [
+        "FELLOWSHIP_100_MCQ_EXAM_MASTER_BLUEPRINT.md",
+        "FELLOWSHIP_QUIZ_BANK_FULL.md",
+        "FELLOWSHIP_BEST_PRACTICES_INDEX.md",
+    ]
+
+    for fname in target_files:
+        p = staged_dir / fname
+        if not p.exists():
+            continue
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+            # Split into markdown sections
+            sections = text.split("\n## ")
+            for sec in sections:
+                sec_text = sec.strip()
+                if not sec_text:
+                    continue
+                lines = sec_text.splitlines()
+                title = lines[0].strip("# ").strip() if lines else "Section"
+                chunks.append({
+                    "title": title,
+                    "source": fname,
+                    "content": sec_text[:2000],
+                })
+        except Exception as exc:
+            logger.debug(f"[Fellowship Knowledge Load Warning] {fname}: {exc}")
+
+    _FELLOWSHIP_KNOWLEDGE_CACHE = chunks
+    return chunks
+
+
+def _retrieve_fellowship_grounding(query: str, top_k: int = 2) -> str | None:
+    """Performs token-overlap BM25-style keyword matching against syllabus exam references."""
+    chunks = _load_fellowship_knowledge_chunks()
+    if not chunks:
+        return None
+
+    # Extract alphanumeric query terms of length > 3
+    stop_words = {
+        "what", "which", "when", "where", "how", "with", "from", "that", "this",
+        "have", "more", "most", "about", "following", "correct", "statement", "true", "false",
+    }
+    raw_words = [
+        w.lower() for w in re.sub(r"[^a-zA-Z0-9_\-\.]", " ", query).split()
+        if len(w) > 3 and w.lower() not in stop_words
+    ]
+    if not raw_words:
+        return None
+
+    scores: list[tuple[float, dict[str, str]]] = []
+    for chunk in chunks:
+        text_lower = chunk["content"].lower()
+        title_lower = chunk["title"].lower()
+        match_count = 0
+        for w in raw_words:
+            if w in title_lower:
+                match_count += 3.0  # Header match weighted heavily
+            elif w in text_lower:
+                match_count += 1.0
+
+        if match_count > 0:
+            scores.append((match_count, chunk))
+
+    if not scores:
+        return None
+
+    scores.sort(key=lambda x: x[0], reverse=True)
+    selected = [s[1] for s in scores[:top_k]]
+    formatted = []
+    for s in selected:
+        formatted.append(f"### [Syllabus Reference: {s['title']} ({s['source']})]\n{s['content']}")
+    return "\n\n".join(formatted)
+
+
 async def _query_omnivault_notes(query: str) -> str | None:
     """Best-effort query against OmniVault's local SQLite FTS5 catalog if available."""
     try:
@@ -515,19 +608,30 @@ async def stream_qa_events():
 @router.post("/ask")
 async def ask_ambient_qa(req: QAPromptRequest) -> dict[str, Any]:
     """
-    Answers an extracted DOM question.
+    Answers an extracted DOM question with curriculum-exact syllabus RAG grounding.
     - PRIMARY (Default): GitHub Copilot CLI Fleet (31 accounts, 5,910 credits, zero 429 quota exhaustion).
     - SECONDARY (Fallback): Google Gemini 30-key rotator.
     """
+    # 0. Retrieve grounded context from Fellowship exam blueprint or OmniVault
+    grounding = _retrieve_fellowship_grounding(f"{req.question} {req.context or ''}")
+    omnivault_notes = await _query_omnivault_notes(req.question) if not grounding else None
+
+    grounding_block = ""
+    if grounding:
+        grounding_block = f"\n\n[Fusemachines AI Fellowship Ground Truth Reference]:\n{grounding}\n"
+    elif omnivault_notes:
+        grounding_block = f"\n\n[OmniVault Historical Notes]:\n{omnivault_notes}\n"
+
     prompt_stem = (
-        f"Context / Surrounding Options:\n{req.context}\n\nQuestion Stem:\n{req.question}"
+        f"Context / Surrounding Options:\n{req.context}\n\nQuestion Stem:\n{req.question}{grounding_block}"
         if req.context
-        else req.question
+        else f"{req.question}{grounding_block}"
     )
 
     sys_inst = (
         "You are an ambient test copilot. Provide the single direct answer or correct option letter "
         "with one concise justification sentence. If multiple choice, state the correct option letter first (e.g. B — explanation). "
+        "Prioritize the provided Fellowship Ground Truth Reference when available to avoid common syllabus traps. "
         "Be extremely precise and direct."
     )
     full_prompt = f"{sys_inst}\n\n{prompt_stem}"

@@ -1,6 +1,6 @@
 {
   "gear": "whisper",
   "name": "Whisper (Low Power)",
-  "set_at": "2026-10-24T04:04:28.582398+00:00",
-  "reason": "Circuit Breaker tripped: Avail RAM 2.87GB < 3.0GB or Load 81% > 80%"
+  "set_at": "2026-10-24T07:11:08.502549+00:00",
+  "reason": "Circuit Breaker tripped: Avail RAM 1.99GB < 3.0GB or Load 87% > 80%"
 }
