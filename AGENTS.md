@@ -79,6 +79,10 @@ Before finalizing changes or executing `.\sync.bat`:
 - **Google Drive Sync**: `scripts/sync_drive.py` (located in `scripts/`, not `tools/`).
 - **Scratch & Test Isolation**: Store ephemeral runner scripts in `<appDataDir>\brain\<conversation-id>/scratch/`. Repository `scratch/` is strictly git-ignored and never committed to Git.
 - **Zero Credential Commits**: Never commit `.env`, `.env.fleet`, `*.db`, session files, cookies, or raw tokens.
+- **Zero Idle Compute Burn & Unconditional Teardown Invariant (`INV-COLAB-UNASSIGN-MANDATORY`)**:
+  - In ALL batch, training, data processing, transcoding, or headless Google Colab notebooks, `runtime.unassign()` is **MANDATORY, UNCONDITIONAL, AND STRICTLY ENFORCED**.
+  - **Zero Conditional Teardown Guards**: NEVER gate container teardown behind `if AUTO_UNASSIGN:`, environment variables, or boolean checks that can silently default to `False`. The terminal cell MUST unconditionally flush storage (`drive.flush_and_unmount()`) and invoke `runtime.unassign()` to destroy the VM.
+  - Leaving a billable GPU/TPU VM running idle after batch execution is a severe operational violation. For interactive server instances (e.g. `llama-server`), explicit manual stop commands (`colab stop -s <name>`) or client-side idle timeouts must be actively enforced.
 - **Process Isolation**: Each worker subprocess driving `copilot.exe` must receive its own isolated `COPILOT_GITHUB_TOKEN` and `COPILOT_HOME` directory.
 - **Background Task & Subprocess Governance (`background-task-governance`)**:
   - Automatically enforce the [`background-task-governance`](file:///C:/Users/Aaradhya/.gemini/config/skills/background-task-governance/SKILL.md) skill across all orchestrator and worker executions.
