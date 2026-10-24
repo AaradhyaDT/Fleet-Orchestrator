@@ -62,4 +62,6 @@ Associated Tool: tools/a100_agent_bridge.py
 
 1. **Deterministic Bridge**: Provided `tools/a100_agent_bridge.py` supporting both `--test` connectivity ping and `--analyze <file>` automated disassembly streaming.
 2. **Persistence & Manifest Sync**: Registered in `drive-manifest.json` with file ID `1x_x1B-a8XNHtEPi54XRAikQ4heR7rtaD` and uploaded to Google Drive.
-3. **Continue.dev Integration**: Configured in `C:\Users\Aaradhya\.continue\config.yaml` with roles `[chat, edit, apply]` and 65K context window.
+3. **Continue.dev Integration**: Configured in `C:\Users\Aaradhya\.continue\config.yaml` with roles `[chat, edit, apply]` and 65K context window; verified end-to-end in Agent mode.
+4. **Cline Agent Integration**: Configured via OpenAI-compatible endpoint with model ID `./models/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-Q5_K_P.gguf`, high reasoning effort, and 65K–128K context window; confirmed operational in Act/Agent mode.
+5. **Runtime Stability**: Port binding settled cleanly on `127.0.0.1:8088` with `-fa on` FlashAttention-2 flag handling and automated orphaned process cleanup (`pkill -9`). Cloudflare tunnel latency measured at ~1.16s for reasoning + response generation.
