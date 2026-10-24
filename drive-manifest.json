@@ -69,6 +69,13 @@
       "drive_file_name": "azmuth_a100_v2_hyperburst.ipynb",
       "description": "Azmuth A100 High-RAM Hyper-Burst v2 Notebook (1B MC, 60M SDE, 96% VRAM Apex)",
       "sha256": "98ccb9024418ce99"
+    },
+    "notebooks/qwen38_27b_uncensored_server.ipynb": {
+      "drive_file_id": "1x_x1B-a8XNHtEPi54XRAikQ4heR7rtaD",
+      "drive_file_name": "qwen38_27b_uncensored_server.ipynb",
+      "description": "Qwen3.8-27B Uncensored (FastMTP) A100 Autonomous Agent & REA Server Notebook",
+      "colab_url": "https://colab.research.google.com/drive/1x_x1B-a8XNHtEPi54XRAikQ4heR7rtaD",
+      "sha256": "b19a8fb3a560acbe"
     }
   }
 }
