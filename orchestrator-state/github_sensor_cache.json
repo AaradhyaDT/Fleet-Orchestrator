@@ -1,39 +1,38 @@
 {
-  "timestamp": "2026-10-23T13:05:41.086760+00:00",
-  "timestamp_epoch": 1792760728.1829247,
+  "timestamp": "2026-10-24T04:51:08.077680+00:00",
+  "timestamp_epoch": 1792817456.0274692,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
       {
-        "id": "vllm-project/vllm#37753",
-        "title": "[Feature]: Unify MoE \"Oracles\" with Class Structure",
-        "repo": "vllm-project/vllm",
-        "url": "https://github.com/vllm-project/vllm/issues/37753",
+        "id": "0xShug0/audio.cpp#34",
+        "title": "Roadmap: From More Models to Better Models (and Model Waiting List)",
+        "repo": "0xShug0/audio.cpp",
+        "url": "https://github.com/0xShug0/audio.cpp/issues/34",
         "labels": [
           "help wanted",
-          "good first issue",
-          "feature request"
+          "announcement"
         ],
         "comments": 15,
-        "created_at": "2026-03-21T17:29:49Z",
-        "updated_at": "2026-10-23T11:32:05Z",
+        "created_at": "2026-07-07T03:33:46Z",
+        "updated_at": "2026-10-24T01:39:49Z",
         "salience": 2.0
       },
       {
-        "id": "PocketLLM/pocketllm-lite#384",
-        "title": "[R8] [device-evidence] Compatibility matrix drive: run + report on 3+ arm64 phones (no code)",
-        "repo": "PocketLLM/pocketllm-lite",
-        "url": "https://github.com/PocketLLM/pocketllm-lite/issues/384",
+        "id": "smusali/echoChain#15",
+        "title": "[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)",
+        "repo": "smusali/echoChain",
+        "url": "https://github.com/smusali/echoChain/issues/15",
         "labels": [
-          "good first issue",
+          "bug",
+          "documentation",
+          "enhancement",
           "help wanted",
-          "impact: high",
-          "area: qa",
-          "device-evidence"
+          "correctness"
         ],
         "comments": 0,
-        "created_at": "2026-10-23T11:10:52Z",
-        "updated_at": "2026-10-23T11:10:52Z",
+        "created_at": "2026-10-20T06:15:51Z",
+        "updated_at": "2026-10-23T23:30:59Z",
         "salience": 1.0
       },
       {
@@ -48,27 +47,25 @@
           "reward",
           "bounty"
         ],
-        "comments": 2,
+        "comments": 7,
         "created_at": "2026-10-23T03:43:51Z",
-        "updated_at": "2026-10-23T11:00:26Z",
-        "salience": 1.4
+        "updated_at": "2026-10-23T21:27:33Z",
+        "salience": 2.0
       },
       {
-        "id": "ggml-org/llama.cpp#17488",
-        "title": "GGUF convert support for Vibevoice",
-        "repo": "ggml-org/llama.cpp",
-        "url": "https://github.com/ggml-org/llama.cpp/issues/17488",
+        "id": "vllm-project/vllm-omni#8586",
+        "title": "[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving",
+        "repo": "vllm-project/vllm-omni",
+        "url": "https://github.com/vllm-project/vllm-omni/issues/8586",
         "labels": [
           "enhancement",
           "help wanted",
-          "good first issue",
-          "model",
-          "3rd party",
-          "tts"
+          "diffusion",
+          "RFC"
         ],
-        "comments": 7,
-        "created_at": "2025-11-25T07:29:13Z",
-        "updated_at": "2026-10-23T09:11:07Z",
+        "comments": 34,
+        "created_at": "2026-10-07T14:16:56Z",
+        "updated_at": "2026-10-23T19:47:13Z",
         "salience": 2.0
       },
       {
@@ -139,11 +136,11 @@
     "releases": [
       {
         "repo": "unslothai/unsloth",
-        "tag": "v0.1.909-beta",
-        "name": "DeepSeek-V4.1 & FLUX-3",
-        "published_at": "2026-10-19T16:21:58Z",
-        "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.909-beta",
-        "body_snippet": "DeepSeek-V4.1-Flash-1017 and FLUX.3 Image Klein are here! Run both locally in Unsloth. Also new: images and videos in chat, multi-GPU training with FSDP2 (alpha) and one-command MCP setup for coding a"
+        "tag": "v0.1.910-beta",
+        "name": "MOSS-Image, Flint & NVIDIA Bolt E4B",
+        "published_at": "2026-10-23T15:26:53Z",
+        "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.910-beta",
+        "body_snippet": "Recursive's Flint, MOSS-Image and NVIDIA's Nemotron Bolt 4B are here! Run them locally in Unsloth. Also new: a chat-only Unsloth Desktop install, MLX MoE models bigger than your Mac's memory and an Op"
       },
       {
         "repo": "ggerganov/llama.cpp",
@@ -189,11 +186,11 @@
       },
       {
         "repo": "kth-competitive-programming/kactl",
-        "stars": 3576,
+        "stars": 3578,
         "url": "https://github.com/kth-competitive-programming/kactl",
         "description": "KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp)",
         "default_branch": "main",
-        "updated_at": "2026-10-22T23:18:45Z"
+        "updated_at": "2026-10-24T02:55:46Z"
       },
       {
         "repo": "manishbisht/Competitive-Programming",
@@ -205,11 +202,11 @@
       },
       {
         "repo": "Priyansh19077/CP-Templates",
-        "stars": 1105,
+        "stars": 1104,
         "url": "https://github.com/Priyansh19077/CP-Templates",
         "description": "Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems",
         "default_branch": "master",
-        "updated_at": "2026-10-08T18:57:32Z"
+        "updated_at": "2026-10-23T15:31:04Z"
       },
       {
         "repo": "mochow13/competitive-programming-library",
@@ -245,7 +242,7 @@
       {
         "repo": "AaradhyaDT/AaradhyaDT.github.io",
         "open_issues_count": 3,
-        "pushed_at": "2026-10-23T12:07:41Z",
+        "pushed_at": "2026-10-23T15:49:44Z",
         "stars": 1,
         "forks": 0
       }

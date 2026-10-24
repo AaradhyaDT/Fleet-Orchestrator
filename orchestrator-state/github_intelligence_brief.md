@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-23T13:05:41.086760+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T04:51:08.077680+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[vllm-project/vllm]** [[Feature]: Unify MoE "Oracles" with Class Structure](https://github.com/vllm-project/vllm/issues/37753) (Comments: 15, Salience: 2.0)
-- **[PocketLLM/pocketllm-lite]** [[R8] [device-evidence] Compatibility matrix drive: run + report on 3+ arm64 phones (no code)](https://github.com/PocketLLM/pocketllm-lite/issues/384) (Comments: 0, Salience: 1.0)
-- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 2, Salience: 1.4)
-- **[ggml-org/llama.cpp]** [GGUF convert support for Vibevoice](https://github.com/ggml-org/llama.cpp/issues/17488) (Comments: 7, Salience: 2.0)
+- **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
+- **[smusali/echoChain]** [[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)](https://github.com/smusali/echoChain/issues/15) (Comments: 0, Salience: 1.0)
+- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 7, Salience: 2.0)
+- **[vllm-project/vllm-omni]** [[RFC]: Qwen-Image 2.1 performance optimization ? low-latency, high-throughput, and memory-efficient serving](https://github.com/vllm-project/vllm-omni/issues/8586) (Comments: 34, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
@@ -13,7 +13,7 @@
 - **[optiqor/kerno]** [Docs: `CONTRIBUTING.md` walkthrough ? how to add a doctor rule](https://github.com/optiqor/kerno/issues/50) (Comments: 58, Salience: 2.0)
 
 ## 2. Trending SOTA AI & TinyML Releases (`U1` & `U2`)
-- **[unslothai/unsloth]** Tag `v0.1.909-beta` - *DeepSeek-V4.1 & FLUX-3* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.909-beta))
+- **[unslothai/unsloth]** Tag `v0.1.910-beta` - *MOSS-Image, Flint & NVIDIA Bolt E4B* ([Release](https://github.com/unslothai/unsloth/releases/tag/v0.1.910-beta))
 - **[ggerganov/llama.cpp]** Tag `v0.7.0` - *v0.7.0* ([Release](https://github.com/ggml-org/llama.cpp/releases/tag/v0.7.0))
 - **[vllm-project/vllm]** Tag `v0.32.0` - *v0.32.0* ([Release](https://github.com/vllm-project/vllm/releases/tag/v0.32.0))
 - **[fairlearn/fairlearn]** Tag `v0.15.0` - *v0.15.0* ([Release](https://github.com/fairlearn/fairlearn/releases/tag/v0.15.0))
@@ -21,16 +21,16 @@
 
 ## 3. Algorithmic Codon Archive Targets (`CP`)
 - **[ShahjalalShohag/code-library]** ⭐ 3735 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
-- **[kth-competitive-programming/kactl]** ⭐ 3576 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
+- **[kth-competitive-programming/kactl]** ⭐ 3578 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1769 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
-- **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
+- **[Priyansh19077/CP-Templates]** ⭐ 1104 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-23T06:57:31Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-23T07:09:56Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-23T12:07:41Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-23T15:49:44Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*

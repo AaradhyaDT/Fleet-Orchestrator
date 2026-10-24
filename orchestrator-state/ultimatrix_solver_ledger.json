@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 345,
-  "tasks_solved": 345,
+  "tasks_attempted": 346,
+  "tasks_solved": 346,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -347,16 +347,11 @@
     "limited-swaps",
     "lonely-points",
     "max-score-tree",
-    "penguin-dance"
+    "penguin-dance",
+    "permutation-shift"
   ],
-  "last_solve_at": "2026-10-23T12:34:53.202192+00:00",
+  "last_solve_at": "2026-10-24T04:50:56.022681+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:40:11.862509+00:00",
-      "slug": "late-edges",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 3
-    },
     {
       "timestamp": "2026-10-18T10:40:56.016470+00:00",
       "slug": "least-even-digits",
@@ -650,6 +645,12 @@
       "slug": "penguin-dance",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-24T04:50:56.022613+00:00",
+      "slug": "permutation-shift",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
   "attempted_slugs": {
