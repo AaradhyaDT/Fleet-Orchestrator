@@ -1,6 +1,6 @@
 {
-  "gear": "turbo",
-  "name": "Turbo / Warp (High Throughput)",
-  "set_at": "2026-10-24T12:04:19.721666+00:00",
-  "reason": "CLI invocation --gear turbo"
+  "gear": "whisper",
+  "name": "Whisper (Low Power)",
+  "set_at": "2026-10-24T12:24:28.753884+00:00",
+  "reason": "Circuit Breaker tripped: Avail RAM 2.97GB < 3.0GB or Load 81% > 80%"
 }

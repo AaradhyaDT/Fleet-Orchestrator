@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 350,
-  "tasks_solved": 350,
+  "tasks_attempted": 351,
+  "tasks_solved": 351,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -351,16 +351,11 @@
     "permutation-shift",
     "piece-of-cake",
     "pinball",
-    "play-time"
+    "play-time",
+    "point-in-kgon"
   ],
-  "last_solve_at": "2026-10-24T12:17:44.815639+00:00",
+  "last_solve_at": "2026-10-24T12:23:20.226469+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:44:51.368318+00:00",
-      "slug": "lottery",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 1
-    },
     {
       "timestamp": "2026-10-18T10:45:28.525880+00:00",
       "slug": "love-story",
@@ -654,6 +649,12 @@
       "slug": "play-time",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-24T12:23:20.226379+00:00",
+      "slug": "point-in-kgon",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 1
     }
   ],
   "attempted_slugs": {

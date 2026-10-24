@@ -120,7 +120,21 @@ Envelope reference: [`references/dynamic-flight-envelope.md`](references/dynamic
 
 ---
 
-## 7. Supporting References & Verification
+## 7. Benchmark Architecture Invariants (`anthropic-quickstarts`, `OpenDevin`, `uv`)
+
+When orchestrating multi-agent tasks, subagent delegations, or worker routines:
+1. **Defensive Subagent Guardrails (`anthropic-quickstarts`)**:
+   - Prune intermediate vision/DOM tokens before context resumption.
+   - Enforce bounded tool-dispatch loops; never allow unbounded self-recursive tool calling without an explicit progress metric.
+2. **State Machine Isolation (`OpenDevin`)**:
+   - Separate the Task Orchestrator from the Worker Sandbox runtime.
+   - Externalize all worker state to repository files/checkpoints rather than agent volatile memory.
+3. **Hermetic Lockfile & Sub-Second Execution (`astral-sh/uv`)**:
+   - Prioritize `uv` for python environments, script runs, and tool execution to maintain zero-drift deterministic dependencies across nodes.
+
+---
+
+## 8. Supporting References & Verification
 
 - [`references/token-budget-and-scalability-governance.md`](references/token-budget-and-scalability-governance.md): Token governance.
 - [`references/skill-matrix.md`](references/skill-matrix.md): 9-archetype routing matrix.
