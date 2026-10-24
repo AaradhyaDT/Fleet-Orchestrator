@@ -739,13 +739,13 @@
       "name": "chat-archiver",
       "domain": "RESEARCH_ACADEMIC",
       "availability_tier": "ACCESSIBLE",
-      "description": ">- Universal AI chat archiver and transcript reader for reading, summarizing, and archiving conversations from Antigravity Brain (~/.gemini/antigravity/brain) and external AI share links (ChatGPT, Google Gemini) directly into the active repository, workspace, or research archives (e.g. brainstorm/research/transcripts).",
+      "description": ">- Universal AI chat archiver and transcript reader for reading, summarizing, and archiving conversations from Antigravity Brain (~/.gemini/antigravity/brain), OpenAI Codex threads (~/.codex/sessions), and external AI share links (ChatGPT, Google Gemini) directly into the active repository, workspace, or research archives.",
       "triggers": [
         "chat-archiver"
       ],
       "dependencies": [],
-      "byte_size": 4391,
-      "line_count": 123,
+      "byte_size": 3872,
+      "line_count": 115,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\chat-archiver",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -944,8 +944,8 @@
       "dependencies": [
         "scripts/verify.py"
       ],
-      "byte_size": 13479,
-      "line_count": 325,
+      "byte_size": 14795,
+      "line_count": 330,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\design-taste-frontend",
       "ssot_role": "SSOT_USER",
       "mirrors": [
@@ -1344,8 +1344,8 @@
         "github-workflow"
       ],
       "dependencies": [],
-      "byte_size": 26838,
-      "line_count": 460,
+      "byte_size": 27663,
+      "line_count": 462,
       "ssot_path": "C:\\Users\\Aaradhya\\.gemini\\config\\skills\\github-workflow",
       "ssot_role": "SSOT_USER",
       "mirrors": [

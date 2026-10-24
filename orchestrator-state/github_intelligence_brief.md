@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T10:19:01.413385+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T11:03:16.864276+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 4, Salience: 1.8)
@@ -30,7 +30,7 @@
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-24T06:52:32Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-24T09:33:14Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-24T10:16:08Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-24T10:37:05Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*

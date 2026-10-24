@@ -31,6 +31,14 @@ To avoid breaking branch tracking and prevent wasteful multi-step Git commands, 
   ```powershell
   .\sync.bat -PullOnly
   ```
+- **GitHub CLI Workflow Engine (`.\gh.bat` / `.\gh.ps1`)**:
+  Use `.\gh.bat` (or `.\gh.ps1`) for issue creation, checklist task toggling, GraphQL sub-issue linking, SHA-verified issue closing, and automatic `--body` to `--body-file` UTF-8 protection (`INV-GH-BODY-FILE`):
+  ```powershell
+  .\gh.bat --gh-help
+  .\gh.bat issue-create --title "[Feature] Summary" --assignee AaradhyaDT --label enhancement --type Feature --body "## Overview..."
+  .\gh.bat task --issue <id> --list
+  .\gh.bat close-verified <id> --comment "All verification gates passed."
+  ```
 
 ---
 
