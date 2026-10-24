@@ -1,5 +1,5 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T11:03:16.864276+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T11:33:58.761617+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
 - **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 4, Salience: 1.8)
