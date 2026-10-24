@@ -1,6 +1,6 @@
 {
-  "gear": "balanced",
-  "name": "Balanced (Auto-Managed)",
-  "set_at": "2026-10-24T03:59:27.012941+00:00",
-  "reason": "Tray Menu Selection"
+  "gear": "whisper",
+  "name": "Whisper (Low Power)",
+  "set_at": "2026-10-24T04:04:28.582398+00:00",
+  "reason": "Circuit Breaker tripped: Avail RAM 2.87GB < 3.0GB or Load 81% > 80%"
 }

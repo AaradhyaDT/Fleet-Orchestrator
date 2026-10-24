@@ -8,8 +8,13 @@ import os
 from pathlib import Path
 import re
 import shutil
+import socket
 import subprocess
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -189,6 +194,226 @@ class QAPromptRequest(BaseModel):
 
 class QALensRequest(BaseModel):
     image_base64: str  # Data URL or pure base64
+
+
+class QALocalSendRelayRequest(BaseModel):
+    target_host: str | None = None
+    target_port: int = 53317
+    protocol: str = "http"
+    pin: str | None = None
+    question: str
+    answer: str
+    option_letter: str | None = None
+    confidence: float = 0.95
+    provenance: list[str] | None = None
+
+
+LOCALSEND_MULTICAST_ADDR = "224.0.0.167"
+LOCALSEND_DEFAULT_PORT = 53317
+LOCALSEND_API_PREFIX = "/api/localsend/v2"
+
+
+def _discover_localsend_peers_sync(timeout_sec: float = 1.5) -> list[dict[str, Any]]:
+    """Broadcasts a LocalSend v2.1 UDP multicast announcement and collects LAN peer responses."""
+    peers: dict[str, dict[str, Any]] = {}
+    own_fp = f"screen-qa-{uuid.uuid4().hex[:16]}"
+    announcement = {
+        "alias": "Screen Q&A Relay",
+        "version": "2.1",
+        "deviceModel": "Screen Q&A Bridge",
+        "deviceType": "headless",
+        "fingerprint": own_fp,
+        "port": LOCALSEND_DEFAULT_PORT,
+        "protocol": "http",
+        "download": False,
+        "announce": True,
+    }
+    packet = json.dumps(announcement).encode("utf-8")
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    try:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 1)
+        sock.settimeout(0.25)
+        try:
+            sock.bind(("", 0))
+        except OSError:
+            pass
+
+        try:
+            sock.sendto(packet, (LOCALSEND_MULTICAST_ADDR, LOCALSEND_DEFAULT_PORT))
+        except OSError:
+            pass
+
+        deadline = time.monotonic() + max(0.2, min(timeout_sec, 5.0))
+        while time.monotonic() < deadline:
+            try:
+                data, addr = sock.recvfrom(4096)
+                host = addr[0]
+                parsed = json.loads(data.decode("utf-8", errors="ignore"))
+                if isinstance(parsed, dict) and parsed.get("fingerprint") != own_fp:
+                    port = int(parsed.get("port") or LOCALSEND_DEFAULT_PORT)
+                    peers[f"{host}:{port}"] = {
+                        "alias": str(parsed.get("alias") or host),
+                        "host": host,
+                        "port": port,
+                        "protocol": "http" if parsed.get("protocol") == "http" else "https",
+                        "deviceModel": parsed.get("deviceModel", ""),
+                        "deviceType": parsed.get("deviceType", ""),
+                        "fingerprint": str(parsed.get("fingerprint") or ""),
+                    }
+            except TimeoutError:
+                continue
+            except Exception:
+                break
+    finally:
+        sock.close()
+
+    return list(peers.values())
+
+
+def _probe_localsend_host_sync(host: str, port: int = LOCALSEND_DEFAULT_PORT, protocol: str = "http") -> dict[str, Any] | None:
+    """Probes a specific host:port via GET /api/localsend/v2/info."""
+    import ssl
+
+    schemes = [protocol] if protocol in ("http", "https") else ["http", "https"]
+    if "http" not in schemes:
+        schemes.append("http")
+    if "https" not in schemes:
+        schemes.append("https")
+
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+
+    for scheme in schemes:
+        url = f"{scheme}://{host}:{port}{LOCALSEND_API_PREFIX}/info"
+        try:
+            req = urllib.request.Request(url, method="GET")
+            with urllib.request.urlopen(req, timeout=1.2, context=ctx if scheme == "https" else None) as resp:
+                if resp.status == 200:
+                    body = json.loads(resp.read().decode("utf-8", errors="ignore"))
+                    return {
+                        "alias": str(body.get("alias") or host),
+                        "host": host,
+                        "port": int(body.get("port") or port),
+                        "protocol": scheme,
+                        "deviceModel": body.get("deviceModel", ""),
+                        "deviceType": body.get("deviceType", ""),
+                        "fingerprint": str(body.get("fingerprint") or ""),
+                    }
+        except Exception:
+            continue
+    return None
+
+
+def _send_localsend_payload_sync(req: QALocalSendRelayRequest, peer: dict[str, Any]) -> dict[str, Any]:
+    """Pushes a structured QA payload to a LocalSend v2 receiver via prepare-upload (+ upload if needed)."""
+    import ssl
+
+    host = peer["host"]
+    port = int(peer.get("port") or req.target_port or LOCALSEND_DEFAULT_PORT)
+    scheme = peer.get("protocol") or req.protocol or "http"
+
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+
+    payload_obj = {
+        "question": req.question,
+        "answer": req.answer,
+        "option_letter": req.option_letter or "",
+        "confidence": req.confidence,
+        "provenance": req.provenance or ["screen_qa"],
+        "timestamp": time.time(),
+    }
+    formatted_text = (
+        f"Q: {req.question}\n"
+        f"Answer: {req.option_letter + ' — ' if req.option_letter else ''}{req.answer}\n"
+        f"Confidence: {round(req.confidence * 100)}%\n\n"
+        f"--- JSON ---\n{json.dumps(payload_obj, ensure_ascii=False)}"
+    )
+    payload_bytes = formatted_text.encode("utf-8")
+    file_id = f"sqa-{int(time.time() * 1000)}"
+
+    prepare_body = json.dumps(
+        {
+            "info": {
+                "alias": "Screen Q&A",
+                "version": "2.1",
+                "deviceModel": "Screen Q&A Extension",
+                "deviceType": "headless",
+                "fingerprint": "screen-qa-extension",
+                "port": LOCALSEND_DEFAULT_PORT,
+                "protocol": scheme,
+                "download": False,
+            },
+            "files": {
+                file_id: {
+                    "id": file_id,
+                    "fileName": "screen-qa-answer.txt",
+                    "size": len(payload_bytes),
+                    "fileType": "text/plain",
+                    "preview": formatted_text[:500],
+                }
+            },
+        }
+    ).encode("utf-8")
+
+    pin_query = f"?pin={urllib.parse.quote(req.pin)}" if req.pin else ""
+    prepare_url = f"{scheme}://{host}:{port}{LOCALSEND_API_PREFIX}/prepare-upload{pin_query}"
+
+    http_req = urllib.request.Request(
+        prepare_url,
+        data=prepare_body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(http_req, timeout=4.0, context=ctx if scheme == "https" else None) as resp:
+        status_code = resp.status
+        raw_resp = resp.read().decode("utf-8", errors="ignore")
+
+    if status_code == 204:
+        return {
+            "ok": True,
+            "mode": "text_preview_204",
+            "peer": peer,
+            "session_id": "",
+            "bytes_sent": len(payload_bytes),
+        }
+
+    if status_code != 200:
+        raise RuntimeError(f"LocalSend prepare-upload returned HTTP {status_code}: {raw_resp[:120]}")
+
+    parsed = json.loads(raw_resp or "{}")
+    session_id = str(parsed.get("sessionId") or "")
+    token = (parsed.get("files") or {}).get(file_id, "")
+
+    if session_id and token:
+        upload_query = (
+            f"?sessionId={urllib.parse.quote(session_id)}"
+            f"&fileId={urllib.parse.quote(file_id)}"
+            f"&token={urllib.parse.quote(token)}"
+        )
+        upload_url = f"{scheme}://{host}:{port}{LOCALSEND_API_PREFIX}/upload{upload_query}"
+        up_req = urllib.request.Request(
+            upload_url,
+            data=payload_bytes,
+            headers={"Content-Type": "text/plain", "Content-Length": str(len(payload_bytes))},
+            method="POST",
+        )
+        with urllib.request.urlopen(up_req, timeout=5.0, context=ctx if scheme == "https" else None) as up_resp:
+            if up_resp.status != 200:
+                raise RuntimeError(f"LocalSend upload returned HTTP {up_resp.status}")
+
+    return {
+        "ok": True,
+        "mode": "file_upload_200",
+        "peer": peer,
+        "session_id": session_id,
+        "bytes_sent": len(payload_bytes),
+    }
 
 
 async def _query_omnivault_notes(query: str) -> str | None:
@@ -474,3 +699,66 @@ async def solve_mobile_lens_capture(req: QALensRequest) -> dict[str, Any]:
     except Exception as e:
         logger.error(f"[Mobile Lens Error] {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/localsend/discover")
+async def discover_localsend_peers(
+    timeout: float = 1.5,
+    host: str | None = None,
+    port: int = LOCALSEND_DEFAULT_PORT,
+    protocol: str = "http",
+) -> dict[str, Any]:
+    """Discovers LocalSend receivers on the LAN via UDP multicast (224.0.0.167:53317) and optional direct host probe."""
+    peers = await asyncio.to_thread(_discover_localsend_peers_sync, timeout)
+    if host:
+        probed = await asyncio.to_thread(_probe_localsend_host_sync, host, port, protocol)
+        if probed and not any(p["host"] == probed["host"] and p["port"] == probed["port"] for p in peers):
+            peers.insert(0, probed)
+    return {
+        "ok": True,
+        "count": len(peers),
+        "peers": peers,
+        "multicast_group": f"{LOCALSEND_MULTICAST_ADDR}:{LOCALSEND_DEFAULT_PORT}",
+    }
+
+
+@router.post("/localsend/relay")
+async def relay_answer_via_localsend(req: QALocalSendRelayRequest) -> dict[str, Any]:
+    """Relays a structured QA payload to a target or auto-discovered LocalSend receiver on LAN."""
+    peer: dict[str, Any] | None = None
+    if req.target_host:
+        probed = await asyncio.to_thread(
+            _probe_localsend_host_sync,
+            req.target_host,
+            req.target_port,
+            req.protocol,
+        )
+        peer = probed or {
+            "alias": req.target_host,
+            "host": req.target_host,
+            "port": req.target_port,
+            "protocol": req.protocol,
+        }
+    else:
+        peers = await asyncio.to_thread(_discover_localsend_peers_sync, 1.5)
+        if peers:
+            peer = peers[0]
+
+    if not peer:
+        return {
+            "ok": False,
+            "fallback": "pwa_route",
+            "reason": "No LocalSend receiver found on LAN; falling back to Screen Lens PWA route.",
+        }
+
+    try:
+        res = await asyncio.to_thread(_send_localsend_payload_sync, req, peer)
+        return res
+    except Exception as exc:
+        logger.warning(f"[LocalSend Relay Fallback] {exc}")
+        return {
+            "ok": False,
+            "fallback": "pwa_route",
+            "peer": peer,
+            "reason": str(exc),
+        }
