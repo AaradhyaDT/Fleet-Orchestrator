@@ -1,9 +1,38 @@
 {
-  "timestamp": "2026-10-24T14:42:23.623401+00:00",
-  "timestamp_epoch": 1792852929.4326217,
+  "timestamp": "2026-10-24T15:40:40.140098+00:00",
+  "timestamp_epoch": 1792856427.2406826,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "InferMatrixLab/system1-omni#114",
+        "title": "[RFC]: Native Rust/CUDA support for OmniJev-4B v1.1 and community help",
+        "repo": "InferMatrixLab/system1-omni",
+        "url": "https://github.com/InferMatrixLab/system1-omni/issues/114",
+        "labels": [
+          "help wanted",
+          "new model",
+          "RFC"
+        ],
+        "comments": 6,
+        "created_at": "2026-10-07T14:18:03Z",
+        "updated_at": "2026-10-24T15:30:44Z",
+        "salience": 2.0
+      },
+      {
+        "id": "InferMatrixLab/system1-omni#133",
+        "title": "[New Model]: Support internlm/Intern-Decision (4B / 2B / 0.8B) ? third Qwen3.5 decision family, single-prefill multi-field readout",
+        "repo": "InferMatrixLab/system1-omni",
+        "url": "https://github.com/InferMatrixLab/system1-omni/issues/133",
+        "labels": [
+          "help wanted",
+          "new model"
+        ],
+        "comments": 2,
+        "created_at": "2026-10-10T13:06:02Z",
+        "updated_at": "2026-10-24T15:30:42Z",
+        "salience": 1.4
+      },
       {
         "id": "MakazhanAlpamys/Soup#797",
         "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
@@ -32,37 +61,6 @@
         "comments": 6,
         "created_at": "2026-10-24T06:30:45Z",
         "updated_at": "2026-10-24T12:58:37Z",
-        "salience": 2.0
-      },
-      {
-        "id": "XHToken/Spark-X2.6#16",
-        "title": "HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????",
-        "repo": "XHToken/Spark-X2.6",
-        "url": "https://github.com/XHToken/Spark-X2.6/issues/16",
-        "labels": [
-          "good first issue",
-          "help wanted",
-          "HER Hack-Astron",
-          "reward",
-          "bounty"
-        ],
-        "comments": 8,
-        "created_at": "2026-10-23T03:43:51Z",
-        "updated_at": "2026-10-24T12:43:39Z",
-        "salience": 2.0
-      },
-      {
-        "id": "0xShug0/audio.cpp#34",
-        "title": "Roadmap: From More Models to Better Models (and Model Waiting List)",
-        "repo": "0xShug0/audio.cpp",
-        "url": "https://github.com/0xShug0/audio.cpp/issues/34",
-        "labels": [
-          "help wanted",
-          "announcement"
-        ],
-        "comments": 15,
-        "created_at": "2026-07-07T03:33:46Z",
-        "updated_at": "2026-10-24T01:39:49Z",
         "salience": 2.0
       },
       {

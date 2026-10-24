@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T14:42:23.623401+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T15:40:40.140098+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[InferMatrixLab/system1-omni]** [[RFC]: Native Rust/CUDA support for OmniJev-4B v1.1 and community help](https://github.com/InferMatrixLab/system1-omni/issues/114) (Comments: 6, Salience: 2.0)
+- **[InferMatrixLab/system1-omni]** [[New Model]: Support internlm/Intern-Decision (4B / 2B / 0.8B) ? third Qwen3.5 decision family, single-prefill multi-field readout](https://github.com/InferMatrixLab/system1-omni/issues/133) (Comments: 2, Salience: 1.4)
 - **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 14, Salience: 2.0)
 - **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 6, Salience: 2.0)
-- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 8, Salience: 2.0)
-- **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
