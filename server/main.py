@@ -138,6 +138,14 @@ async def serve_mobile_lens():
         return HTMLResponse(content=lens_path.read_text(encoding="utf-8"))
     raise HTTPException(status_code=404, detail="Lens PWA not found")
 
+@app.get("/exam", response_class=HTMLResponse)
+async def serve_mock_exam():
+    from pathlib import Path
+    exam_path = Path("F:/Aaradhya-Dev-Tamrakar/FuseAIF2026/docs/exam_prep/fellowship_exam_test_hub.html")
+    if exam_path.exists():
+        return HTMLResponse(content=exam_path.read_text(encoding="utf-8"))
+    raise HTTPException(status_code=404, detail="Exam test hub not found")
+
 # Mount the Streamable HTTP / SSE MCP Server directly into FastAPI with auth enforcement
 app.mount(settings.MCP_PATH, MCPAuthMiddleware(mcp_server.sse_app()))
 
