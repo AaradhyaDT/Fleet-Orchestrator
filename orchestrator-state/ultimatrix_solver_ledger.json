@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "tasks_attempted": 348,
-  "tasks_solved": 348,
+  "tasks_attempted": 350,
+  "tasks_solved": 350,
   "solved_slugs": [
     "acronyms",
     "anagrams",
@@ -350,22 +350,11 @@
     "penguin-dance",
     "permutation-shift",
     "piece-of-cake",
-    "pinball"
+    "pinball",
+    "play-time"
   ],
-  "last_solve_at": "2026-10-24T11:03:04.141784+00:00",
+  "last_solve_at": "2026-10-24T12:17:44.815639+00:00",
   "history": [
-    {
-      "timestamp": "2026-10-18T10:42:19.559084+00:00",
-      "slug": "lights-out",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 2
-    },
-    {
-      "timestamp": "2026-10-18T10:43:58.909143+00:00",
-      "slug": "losing-nim",
-      "status": "SOLVED_AND_VERIFIED",
-      "samples_passed": 4
-    },
     {
       "timestamp": "2026-10-18T10:44:51.368318+00:00",
       "slug": "lottery",
@@ -653,6 +642,18 @@
       "slug": "pinball",
       "status": "SOLVED_AND_VERIFIED",
       "samples_passed": 1
+    },
+    {
+      "timestamp": "2026-10-24T12:11:00.347370+00:00",
+      "slug": "play-time",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
+    },
+    {
+      "timestamp": "2026-10-24T12:17:44.815585+00:00",
+      "slug": "play-time",
+      "status": "SOLVED_AND_VERIFIED",
+      "samples_passed": 3
     }
   ],
   "attempted_slugs": {

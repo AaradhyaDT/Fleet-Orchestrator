@@ -1,11 +1,11 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T11:33:58.761617+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T12:17:58.988549+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
+- **[MakazhanAlpamys/Soup]** [training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`](https://github.com/MakazhanAlpamys/Soup/issues/797) (Comments: 13, Salience: 2.0)
 - **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 4, Salience: 1.8)
 - **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
 - **[smusali/echoChain]** [[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)](https://github.com/smusali/echoChain/issues/15) (Comments: 0, Salience: 1.0)
-- **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 7, Salience: 2.0)
 - **[sauravsingla/OligoArk]** [? Graph AI Benchmark Challenge: Can a smarter edge scorer beat the deterministic baseline?](https://github.com/sauravsingla/OligoArk/issues/18) (Comments: 1, Salience: 1.2)
 - **[kubestellar/kubestellar]** [[outreach] ADOPTERS.md growth campaign ? target 10+ orgs for CNCF Sandbox credibility](https://github.com/kubestellar/kubestellar/issues/3791) (Comments: 2, Salience: 1.4)
 - **[spiralgang/aGi-TEAM-FSMbot-]** [#### --- Finite State Machine(s) for Programming Code Enhancement(s) ; AI-Agent(s) Best Buddy --- ####
@@ -30,7 +30,7 @@
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-24T06:52:32Z`
 - **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-24T09:33:14Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-24T10:37:05Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-24T11:55:03Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*

@@ -1,9 +1,25 @@
 {
-  "timestamp": "2026-10-24T11:33:58.761617+00:00",
-  "timestamp_epoch": 1792841626.0945773,
+  "timestamp": "2026-10-24T12:17:58.988549+00:00",
+  "timestamp_epoch": 1792844266.5191646,
   "tokens_available": 30,
   "telemetry": {
     "opportunities": [
+      {
+        "id": "MakazhanAlpamys/Soup#797",
+        "title": "training.gradient_checkpointing is decided by the trainer, not the config: `false` cannot turn it off on any 4-bit run, and 9 trainers can drop `true`",
+        "repo": "MakazhanAlpamys/Soup",
+        "url": "https://github.com/MakazhanAlpamys/Soup/issues/797",
+        "labels": [
+          "bug",
+          "help wanted",
+          "difficulty:6",
+          "area:training"
+        ],
+        "comments": 13,
+        "created_at": "2026-09-11T11:08:01Z",
+        "updated_at": "2026-10-24T12:03:04Z",
+        "salience": 2.0
+      },
       {
         "id": "xaviercallens/HiveMind#130",
         "title": "[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck",
@@ -48,23 +64,6 @@
         "created_at": "2026-10-20T06:15:51Z",
         "updated_at": "2026-10-23T23:30:59Z",
         "salience": 1.0
-      },
-      {
-        "id": "XHToken/Spark-X2.6#16",
-        "title": "HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????",
-        "repo": "XHToken/Spark-X2.6",
-        "url": "https://github.com/XHToken/Spark-X2.6/issues/16",
-        "labels": [
-          "good first issue",
-          "help wanted",
-          "HER Hack-Astron",
-          "reward",
-          "bounty"
-        ],
-        "comments": 7,
-        "created_at": "2026-10-23T03:43:51Z",
-        "updated_at": "2026-10-23T21:27:33Z",
-        "salience": 2.0
       },
       {
         "id": "sauravsingla/OligoArk#18",
@@ -240,7 +239,7 @@
       {
         "repo": "AaradhyaDT/AaradhyaDT.github.io",
         "open_issues_count": 4,
-        "pushed_at": "2026-10-24T10:37:05Z",
+        "pushed_at": "2026-10-24T11:55:03Z",
         "stars": 1,
         "forks": 0
       }

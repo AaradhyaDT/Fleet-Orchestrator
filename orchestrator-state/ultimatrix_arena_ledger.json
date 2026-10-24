@@ -1,22 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-24T10:18:48.315810+00:00",
-  "tournaments_run": 1050,
+  "last_tournament_at": "2026-10-24T12:17:46.514897+00:00",
+  "tournaments_run": 1052,
   "alleles_benchmarked": 0,
-  "promotions": 393,
+  "promotions": 395,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:40:14.237322+00:00",
-      "genes": [
-        "TASK_LATE_EDGES"
-      ]
-    },
-    {
-      "timestamp": "2026-10-18T10:40:58.376235+00:00",
-      "genes": [
-        "TASK_LEAST_EVEN_DIGITS"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:41:36.078127+00:00",
       "genes": [
@@ -303,6 +291,18 @@
       "timestamp": "2026-10-24T10:18:48.315613+00:00",
       "genes": [
         "TASK_PIECE_OF_CAKE"
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T12:05:32.383611+00:00",
+      "genes": [
+        "TASK_PINBALL"
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T12:17:46.514774+00:00",
+      "genes": [
+        "TASK_PLAY_TIME"
       ]
     }
   ]
