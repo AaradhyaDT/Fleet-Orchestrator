@@ -18,6 +18,17 @@ Operational commands, architectural guidelines, and execution workflows for **Fl
 
 ---
 
+## 0. Operating Invariant: Context Firebreak Default (`INV-FIREBREAK-DEFAULT`)
+
+> [!IMPORTANT]
+> **Default Interaction Mode**: Whenever `/fleet-orchestrator` is invoked or fleet tasks are queued/dispatched, the agent **MUST default unconditionally to `Context Firebreak` mode**:
+> 1. **Zero main-thread chatter**: Do not output conversational preamble, long status narratives, or interactive speculation.
+> 2. **Token-Zero Delegation**: Handoff tasks immediately to background workers (`.\fleet.bat run-task`, `fleet_commander.py`, or `copilot_queue_worker.py`), emit a compact manifest receipt ($\le 300$ words), and yield execution control.
+> 3. **Reactive Wakeup**: Rely strictly on background task exit notifications (`run_command` completion) rather than token-burning in-turn polling loops.
+> 4. **Auto-Adaptation Gate**: Auto-adaptation / adaptive triage workflows run **ONLY if explicitly requested** by the user (e.g. "adapt workflow", "run triage", "how do I use the fleet?"). When asked to execute tasks, dive straight into dispatching to the worker fleet.
+
+---
+
 ## 1. Architecture Overview
 
 ```mermaid
