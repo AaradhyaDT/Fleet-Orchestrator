@@ -1,8 +1,8 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T09:14:31.589224+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T10:19:01.413385+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 2, Salience: 1.4)
+- **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 4, Salience: 1.8)
 - **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
 - **[smusali/echoChain]** [[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)](https://github.com/smusali/echoChain/issues/15) (Comments: 0, Salience: 1.0)
 - **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 7, Salience: 2.0)
@@ -28,9 +28,9 @@
 
 ## 4. Public Ecosystem Health (`U0`)
 - **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-24T06:52:32Z`
-- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-24T08:08:51Z`
+- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-24T09:33:14Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 6 open issues | Last push: `2026-10-24T08:33:41Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 4 open issues | Last push: `2026-10-24T10:16:08Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*

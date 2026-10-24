@@ -1,16 +1,10 @@
 {
   "version": 1,
-  "last_tournament_at": "2026-10-24T05:52:10.474237+00:00",
-  "tournaments_run": 1049,
+  "last_tournament_at": "2026-10-24T10:18:48.315810+00:00",
+  "tournaments_run": 1050,
   "alleles_benchmarked": 0,
-  "promotions": 392,
+  "promotions": 393,
   "history": [
-    {
-      "timestamp": "2026-10-18T10:38:06.667677+00:00",
-      "genes": [
-        "TASK_K_INVERSIONS"
-      ]
-    },
     {
       "timestamp": "2026-10-18T10:40:14.237322+00:00",
       "genes": [
@@ -303,6 +297,12 @@
       "timestamp": "2026-10-24T05:52:10.474145+00:00",
       "genes": [
         "TASK_PERMUTATION_SHIFT"
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T10:18:48.315613+00:00",
+      "genes": [
+        "TASK_PIECE_OF_CAKE"
       ]
     }
   ]
