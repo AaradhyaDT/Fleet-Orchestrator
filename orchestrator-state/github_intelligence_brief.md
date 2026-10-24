@@ -1,8 +1,8 @@
 # Azmuth GitHub Intelligence Radar Brief
-*Generated: 2026-10-24T06:34:04.114116+00:00 | Active Token Accounts: 30*
+*Generated: 2026-10-24T09:14:31.589224+00:00 | Active Token Accounts: 30*
 
 ## 1. High-Signal Lab & Career Opportunities (`U3`)
-- **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 0, Salience: 1.0)
+- **[xaviercallens/HiveMind]** [[Season 10 Community Model Hub & Dashboard: La Ruche + HiveMind@home] Beehive MoE Vault, SETI-Style Spectrum Analyzer & GCP Cloud Command Deck](https://github.com/xaviercallens/HiveMind/issues/130) (Comments: 2, Salience: 1.4)
 - **[0xShug0/audio.cpp]** [Roadmap: From More Models to Better Models (and Model Waiting List)](https://github.com/0xShug0/audio.cpp/issues/34) (Comments: 15, Salience: 2.0)
 - **[smusali/echoChain]** [[0.3.0] Harden runs: provider pinning, derived CSV export, crash-safe resume, data-handling docs, and property-based tests (B6, E5, E6, H3, G6)](https://github.com/smusali/echoChain/issues/15) (Comments: 0, Salience: 1.0)
 - **[XHToken/Spark-X2.6]** [HER Hack-Astron #7 | Spark-X2.6 Open Source AI for Good Challenge??????????](https://github.com/XHToken/Spark-X2.6/issues/16) (Comments: 7, Salience: 2.0)
@@ -23,14 +23,14 @@
 - **[ShahjalalShohag/code-library]** ⭐ 3735 - Templates, algorithms and data structures implemented and collected for programming contests. ([Repo](https://github.com/ShahjalalShohag/code-library))
 - **[kth-competitive-programming/kactl]** ⭐ 3578 - KTH Algorithm Competition Template Library (... eller KTHs AC-tillverkande lapp) ([Repo](https://github.com/kth-competitive-programming/kactl))
 - **[manishbisht/Competitive-Programming]** ⭐ 1769 - :pushpin: :books: Solution of competitive programming problems, code templates, Data Structures and Algorithms, hackathons, interviews and much more. ([Repo](https://github.com/manishbisht/Competitive-Programming))
-- **[Priyansh19077/CP-Templates]** ⭐ 1104 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
+- **[Priyansh19077/CP-Templates]** ⭐ 1105 - Here are my template codes for Competitive Programming with optimised implementations of various algorithms. I personally use them every day and have tested almost all of them in multiple competitive programming contests and practice problems ([Repo](https://github.com/Priyansh19077/CP-Templates))
 - **[mochow13/competitive-programming-library]** ⭐ 463 - Templates, algorithms and data structures implemented and collected for programming contests. Check README.md for an overview. ([Repo](https://github.com/mochow13/competitive-programming-library))
 
 ## 4. Public Ecosystem Health (`U0`)
-- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-23T06:57:31Z`
-- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-23T07:09:56Z`
+- **AaradhyaDT/brainstorm**: 0 open issues | Last push: `2026-10-24T06:52:32Z`
+- **AaradhyaDT/BiasAperture**: 9 open issues | Last push: `2026-10-24T08:08:51Z`
 - **AaradhyaDT/Alpha-SuperApp**: 0 open issues | Last push: `2026-06-14T06:46:22Z`
-- **AaradhyaDT/AaradhyaDT.github.io**: 3 open issues | Last push: `2026-10-23T15:49:44Z`
+- **AaradhyaDT/AaradhyaDT.github.io**: 6 open issues | Last push: `2026-10-24T08:33:41Z`
 
 ## 5. Frontier ATS Careers & High-Signal Roles (`U14`) - *100 Indexed*
 - **[Anthropic]** [Research Engineer / Performance Engineer, RL Distributed Systems](https://job-boards.greenhouse.io/anthropic/jobs/5438030008) (San Francisco, CA | New York City, NY | Seattle, WA) — *Salience: 3.0*
